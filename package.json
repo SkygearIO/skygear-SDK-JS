@@ -1,0 +1,36 @@
+{
+  "name": "jsourd",
+  "version": "0.0.0",
+  "description": "JS SDK of ourd services",
+  "homepage": "",
+  "repository": "oursky/jsourd",
+  "author": {
+    "name": "rickmak",
+    "email": "rick.mak@gmail.com",
+    "url": "https://oursky.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "keywords": [
+    "SDK",
+    "ourd"
+  ],
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-eslint": "^0.15.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-istanbul": "^0.9.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^0.4.5",
+    "gulp-babel": "^5.1.0",
+    "babel-core": "^5.5.0"
+  },
+  "scripts": {
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  },
+  "license": "MIT"
+}
