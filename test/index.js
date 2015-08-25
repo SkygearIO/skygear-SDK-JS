@@ -1,8 +1,10 @@
-import assert from 'assert';
+import {assert} from 'chai';
 import jsourd from '../lib';
 
+
 describe('jsourd', function () {
-  it('should have unit test!', function () {
-    assert(false, 'we expected this package author to add actual unit tests.');
+  it('can reconfigure end-point', function () {
+    jsourd.endPoint = 'https://myseployment.com/';
+    assert.equal(jsourd.endPoint, 'https://myseployment.com/');
   });
 });
