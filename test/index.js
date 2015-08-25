@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import jsourd from '../lib';
+import jsourd from '../lib/index';
 
 
 describe('jsourd', function () {

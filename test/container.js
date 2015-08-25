@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import Container from '../lib/container';
+import {Container} from '../lib/container';
 
 
 describe('Container', function () {

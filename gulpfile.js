@@ -35,11 +35,27 @@ gulp.task('test', ['pre-test'], function (cb) {
 
   gulp.src('test/**/*.js')
     .pipe(plumber())
-    .pipe(mocha({reporter: 'spec'}))
+    .pipe(mocha({
+      reporter: 'spec',
+      clearRequireCache: true,
+      quiet: false
+    }))
     .on('error', function (err) {
       mochaErr = err;
     })
-    .pipe(istanbul.writeReports())
+    .pipe(istanbul.writeReports({
+      reporters: ['lcovonly', 'text']
+    }))
+    .pipe(istanbul.enforceThresholds({
+      thresholds: {
+        global: {
+          statements: 70,
+          branches: 50,
+          functions: 70,
+          lines: 70
+        }
+      }
+    }))
     .on('end', function () {
       cb(mochaErr);
     });
