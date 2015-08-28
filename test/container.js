@@ -7,7 +7,7 @@ describe('Container', function () {
     let container = new Container();
     assert.equal(
       container.endPoint,
-      'http://ourd.pandawork.com/',
+      'http://ourd.dev/',
       'we expected default endpoint');
   });
 });
