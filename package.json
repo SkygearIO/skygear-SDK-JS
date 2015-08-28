@@ -27,9 +27,11 @@
     "gulp-istanbul": "^0.9.0",
     "gulp-mocha": "^2.0.0",
     "gulp-nsp": "^0.4.5",
-    "gulp-plumber": "^1.0.0"
+    "gulp-plumber": "^1.0.0",
+    "require-dir": "^0.3.0"
   },
   "scripts": {
+    "dev": "gulp dev",
     "prepublish": "gulp prepublish",
     "test": "gulp"
   },

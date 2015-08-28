@@ -1,71 +1,20 @@
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var excludeGitignore = require('gulp-exclude-gitignore');
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var nsp = require('gulp-nsp');
-var plumber = require('gulp-plumber');
-var babel = require('gulp-babel');
+/*
+  gulpfile.js
+  ===========
+  NOTE: adapted frombuild.
+  Rather than manage one giant configuration file responsible
+  for creating multiple tasks, each task has been broken out into
+  its own file in gulp/tasks. Any files in that directory get
+  automatically required below.
+  To add a new task, simply add a new task file that directory.
+  gulp/tasks/default.js specifies the default set of tasks to run
+  when you run `gulp`.
+*/
+var requireDir = require('require-dir');
 
 // Initialize the babel transpiler so ES2015 files gets compiled
 // when they're loaded
 require('babel-core/register');
 
-gulp.task('static', function () {
-  return gulp.src('**/*.js')
-    .pipe(excludeGitignore())
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
-
-gulp.task('nsp', function (cb) {
-  nsp('package.json', cb);
-});
-
-gulp.task('pre-test', function () {
-  return gulp.src('lib/**/*.js')
-    .pipe(babel())
-    .pipe(istanbul({includeUntested: true}))
-    .pipe(istanbul.hookRequire());
-});
-
-gulp.task('test', ['pre-test'], function (cb) {
-  var mochaErr;
-
-  gulp.src('test/**/*.js')
-    .pipe(plumber())
-    .pipe(mocha({
-      reporter: 'spec',
-      clearRequireCache: true,
-      quiet: false
-    }))
-    .on('error', function (err) {
-      mochaErr = err;
-    })
-    .pipe(istanbul.writeReports({
-      reporters: ['lcovonly', 'text']
-    }))
-    .pipe(istanbul.enforceThresholds({
-      thresholds: {
-        global: {
-          statements: 70,
-          branches: 50,
-          functions: 70,
-          lines: 70
-        }
-      }
-    }))
-    .on('end', function () {
-      cb(mochaErr);
-    });
-});
-
-gulp.task('babel', function () {
-  return gulp.src('lib/**/*.js')
-    .pipe(babel())
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('prepublish', ['nsp', 'babel']);
-gulp.task('default', ['static', 'test']);
+// Require all tasks in gulp/tasks, including subfolders
+requireDir('./gulp/tasks', { recurse: true });
