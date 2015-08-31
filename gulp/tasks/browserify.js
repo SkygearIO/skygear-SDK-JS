@@ -19,6 +19,11 @@ config.settings.transform.forEach(function(t) {
 
 gulp.task('browserify', bundle);
 bundler.on('update', bundle);
+bundler.on('time', function(time) {
+  if (gutil.env.type != "dev") {
+    this.close();
+  }
+});
 
 function bundle() {
   return bundler.bundle()
