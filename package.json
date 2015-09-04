@@ -33,6 +33,7 @@
     "gulp-plumber": "^1.0.0",
     "gulp-preprocess": "^1.2.0",
     "gulp-util": "^3.0.6",
+    "localStorage": "^1.0.3",
     "preprocessify": "0.0.6",
     "require-dir": "^0.3.0",
     "vinyl-buffer": "^1.0.0",
@@ -44,5 +45,10 @@
     "prepublish": "gulp --type production prepublish",
     "test": "gulp --type dev"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "store": "^1.3.17",
+    "superagent": "^1.3.0"
+  }
 }

@@ -6,12 +6,73 @@
 </head>
 <body>
   <div id="main">
-    <!-- Flux goes here -->
+    <p>
+      <label>End Point</label>
+      <span id="endpoint"></span>
+    </p>
+    <p>
+      <label>Token</label>
+      <span id="accessToken"></span>
+    </p>
+  </div>
+  <hr>
+  <div id="auth">
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Username</label>
+        <input id="username" type="text">
+      </p>
+      <p>
+        <label>Password</label>
+        <input id="password" type="password">
+      </p>
+      <button onclick="signup();">Signup</button>
+      <button onclick="login();">Login</button>
+    </form>
+    <p id="auth-token">Click the button to test</p>
+    <p><button onclick="logout();">Logout</button></p>
   </div>
   <script src="../dist/bundle.js"></script>
   <script type="text/javascript">
-    var m = document.getElementById("main");
+    var m = document.getElementById("endpoint");
     m.textContent = jsourd.endPoint;
+    jsourd.configApiKey('secretOURD');
+    var token = document.getElementById("accessToken");
+    token.innerText = jsourd.currentAccessToken;
+    signup = function() {
+      console.log('Signup');
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      jsourd.signup(username, username, password).then(function() {
+        console.log('Signup ok');
+        token.innerText = jsourd.currentAccessToken;
+      }, function(error) {
+        console.log('Signup failed');
+        console.log(error);
+        token.innerText = error;
+      });
+    };
+    login = function() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      console.log('Login');
+      jsourd.login(username, password).then(function() {
+        console.log('Login ok');
+        token.innerText = jsourd.currentAccessToken;
+      }, function(error) {
+        console.log('Login failed');
+        token.innerText = error;
+      });
+    };
+    logout = function() {
+      jsourd.logout().then(function() {
+        console.log('Logout ok');
+        token.innerText = 'Cleared accessToken';
+      }, function(error) {
+        console.log('Logout failed');
+        token.innerText = error;
+      });
+    }
   </script>
 </body>
 </html>
