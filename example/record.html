@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JS Ourd</title>
+</head>
+<body>
+  <div id="main">
+    <p>
+      <label>End Point</label>
+      <span id="endpoint"></span>
+    </p>
+    <p>
+      <label>Token</label>
+      <span id="accessToken">
+        <a href="index.html">Go to Login</a>
+      </span>
+    </p>
+  </div>
+  <hr>
+  <div id="record">
+    <h4>Create Record</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Record Type</label>
+        <input id="create-type" type="text">
+      </p>
+      <p>
+        <label>JSON payload</label>
+        <textarea id="create-payload"></textarea>
+      </p>
+      <p id="create-result"></p>
+      <button onclick="createRecord();">Create Record</button>
+    </form>
+  </div>
+  <hr>
+  <div id="record">
+    <h4>Query Record</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Record Type</label>
+        <input id="query-type" type="text">
+      </p>
+      <p>
+        <input id="type" type="text" placeholder="Key">
+        <select id="operator">
+          <option value="=">=</option>
+          <option value=">">&gt;</option>
+          <option value="<">&lt;</option>
+          <option value="<>">&lt;&gt;</option>
+        </select>
+        <input id="type" type="text" placeholder="operand">
+      </p>
+      <p>
+        <label>Sort</label>
+        <input id="sort" type="text">
+      </p>
+      <p>
+        <label>Offet</label>
+        <input id="offset" type="text">
+      </p>
+      <p>
+        <label>Limit</label>
+        <input id="limit" type="text">
+      </p>
+      <p id="query-count"></p>
+      <p id="query-result"></p>
+      <button onclick="queryRecord();">Query</button>
+    </form>
+  </div>
+  <hr>
+  <div>
+    <h4>Update Record</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Record Type</label>
+        <input id="update-type" type="text">
+      </p>
+      <p>
+        <label>Record ID</label>
+        <input id="update-id" type="text">
+      </p>
+      <p>
+        <input id="update-key" type="text" placeholder="Key">
+        <input id="update-value" type="text" placeholder="Value">
+      </p>
+      <p id="update-result"></p>
+      <button onclick="updateRecord();">Update Record</button>
+    </form>
+  </div>
+  <div>
+    <h4>Delete Record</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Record Type</label>
+        <input id="type" type="text">
+      </p>
+      <p>
+        <label>Record ID</label>
+        <input id="id" type="text">
+      </p>
+      <p id="delete-result"></p>
+      <button onclick="deleteRecord();">Delete</button>
+    </form>
+  </div>
+  <script src="../dist/bundle.js"></script>
+  <script type="text/javascript">
+    var m = document.getElementById("endpoint");
+    m.textContent = jsourd.endPoint;
+    jsourd.configApiKey('secretOURD');
+    var token = document.getElementById("accessToken");
+    token.innerText = jsourd.currentAccessToken;
+
+    function createRecord () {
+      console.log('Create');
+      var _type = document.getElementById("update-type").value;
+      var payload = document.getElementById("create-payload").value;
+      var createResult = document.getElementById("create-result");
+      jsourd.publicDB.save({
+        '_recordType': _type,
+        'yo': 'here'
+      }).then(function (record) {
+        console.log(record);
+        createResult.innerText = record.ID;
+      }, function (error) {
+        console.log(error);
+        createResult.innerText = error;
+      });
+    };
+
+    function queryRecord () {
+      console.log('Query');
+      var _type = document.getElementById("query-type").value;
+      var queryResult = document.getElementById("query-result");
+      var queryResultCount = document.getElementById("query-count");
+      var _Record = jsourd.Record.extend(_type, {
+        initialize: function(attrs, options) {
+          // noop
+        }
+      });
+      var query = new jsourd.Query(_Record);
+      jsourd.publicDB.query(query).then(function (records) {
+        queryResultCount.innerText = records.length;
+        queryResult.innerText = JSON.stringify(records);
+      }, function (error) {
+        console.log(error);
+        queryResult = error;
+      })
+    };
+
+    function updateRecord () {
+      console.log('Update');
+      var _type = document.getElementById("update-type").value;
+      var key = document.getElementById("update-key").value;
+      var value = document.getElementById("update-value").value;
+      var updateResult = document.getElementById("update-result");
+      r = new Record(_type, {});
+      jsourd.publicDB.save({
+        '_id': r.ID,
+        key: value
+      }).then(function (record) {
+        console.log(record);
+        updateResult.innerText = record.ID;
+      }, function (error) {
+        console.log(error);
+        updateResult.innerText = error;
+      });
+    };
+
+    function deleteRecord () {
+      console.log('Delete');
+      var deleteResult = document.getElementById("delete-result");
+      // jsourd.publicDB.del(r);
+      jsourd.publicDB.del(r.ID).then(function (record) {
+        console.log(record);
+        deleteResult.innerText = record.ID;
+      }, function (error) {
+        console.log(error);
+        deleteResult.innerText = error;
+      });
+
+    }
+  </script>
+</body>
+</html>
