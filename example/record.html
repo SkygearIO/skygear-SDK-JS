@@ -23,7 +23,7 @@
     <form action="#" onsubmit="return false;">
       <p>
         <label>Record Type</label>
-        <input id="create-type" type="text">
+        <input id="create-type" type="text" value="note">
       </p>
       <p>
         <label>JSON payload</label>
@@ -39,29 +39,49 @@
     <form action="#" onsubmit="return false;">
       <p>
         <label>Record Type</label>
-        <input id="query-type" type="text">
+        <input id="query-type" type="text" value="note">
       </p>
       <p>
-        <input id="type" type="text" placeholder="Key">
-        <select id="operator">
-          <option value="=">=</option>
-          <option value=">">&gt;</option>
-          <option value="<">&lt;</option>
-          <option value="<>">&lt;&gt;</option>
+        <input id="query-key" type="text" placeholder="Key">
+        <select id="query-operator">
+          <option value="like">like</option>
+          <option value="equalTo">=</option>
+          <option value="greaterThan">&gt;</option>
+          <option value="greaterThanOrEqualTo">&gt;=</option>
+          <option value="lessThan">&lt;</option>
+          <option value="lessThanOrEqualTo">&lt;=</option>
+          <option value="notEqualTo">&lt;&gt;</option>
         </select>
-        <input id="type" type="text" placeholder="operand">
+        <input id="query-operand" type="text" placeholder="operand">
+      </p>
+      <p>
+        <input id="query-key2" type="text" placeholder="Key">
+        <select id="query-operator2">
+          <option value="like">like</option>
+          <option value="equalTo">=</option>
+          <option value="greaterThan">&gt;</option>
+          <option value="greaterThanOrEqualTo">&gt;=</option>
+          <option value="lessThan">&lt;</option>
+          <option value="lessThanOrEqualTo">&lt;=</option>
+          <option value="notEqualTo">&lt;&gt;</option>
+        </select>
+        <input id="query-operand2" type="text" placeholder="operand">
       </p>
       <p>
         <label>Sort</label>
-        <input id="sort" type="text">
+        <input id="query-sort" type="text">
+        <select id="query-sort-order">
+          <option value="addAscending">acs</option>
+          <option value="addDescending">desc</option>
+        </select>
       </p>
       <p>
         <label>Offet</label>
-        <input id="offset" type="text">
+        <input id="query-offset" type="number">
       </p>
       <p>
         <label>Limit</label>
-        <input id="limit" type="text">
+        <input id="query-limit" type="number">
       </p>
       <p id="query-count"></p>
       <p id="query-result"></p>
@@ -74,7 +94,7 @@
     <form action="#" onsubmit="return false;">
       <p>
         <label>Record Type</label>
-        <input id="update-type" type="text">
+        <input id="update-type" type="text" value="note">
       </p>
       <p>
         <label>Record ID</label>
@@ -93,7 +113,7 @@
     <form action="#" onsubmit="return false;">
       <p>
         <label>Record Type</label>
-        <input id="type" type="text">
+        <input id="type" type="text" value="note">
       </p>
       <p>
         <label>Record ID</label>
@@ -131,6 +151,16 @@
     function queryRecord () {
       console.log('Query');
       var _type = document.getElementById("query-type").value;
+      var key = document.getElementById("query-key").value;
+      var operator = document.getElementById("query-operator").value;
+      var operand = document.getElementById("query-operand").value;
+      var key2 = document.getElementById("query-key2").value;
+      var operator2 = document.getElementById("query-operator2").value;
+      var operand2 = document.getElementById("query-operand2").value;
+      var querySort = document.getElementById("query-sort").value;
+      var querySortOrder = document.getElementById("query-sort-order").value;
+      var queryOffset = document.getElementById("query-offset").value;
+      var queryLimit = document.getElementById("query-limit").value;
       var queryResult = document.getElementById("query-result");
       var queryResultCount = document.getElementById("query-count");
       var _Record = jsourd.Record.extend(_type, {
@@ -139,6 +169,21 @@
         }
       });
       var query = new jsourd.Query(_Record);
+      if (operand) {
+        query[operator](key, operand);
+      }
+      if (operand2) {
+        query[operator2](key2, operand2);
+      }
+      if (querySort) {
+        query[querySortOrder](querySort);
+      }
+      if (queryOffset) {
+        query.offset = parseInt(queryOffset, 10);
+      }
+      if (queryLimit) {
+        query.limit = parseInt(queryLimit, 10);
+      }
       jsourd.publicDB.query(query).then(function (records) {
         queryResultCount.innerText = records.length;
         queryResult.innerText = JSON.stringify(records);
