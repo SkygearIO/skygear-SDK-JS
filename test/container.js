@@ -1,8 +1,8 @@
 import {assert} from 'chai';
-import {Container} from '../lib/container';
+import Container from '../lib/container';
 
-var request = require('superagent');
-require('./mock/superagent')(request, [{
+import mockSuperagent from './mock/superagent';
+let request = mockSuperagent([{
   pattern: 'http://ourd.dev/auth/signup',
   fixtures: function (match, params, headers, fn) {
     if (params['user_id'] === 'user@email.com' && params['password'] === 'passwd') {

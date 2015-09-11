@@ -1,5 +1,16 @@
+import _ from 'lodash';
+import superagent from 'superagent';
+
+var configs = [];
+
 // Temp fork of https://github.com/M6Web/superagent-mock
-function mock(superagent, config) {
+function mock(config) {
+  if (superagent.mocked) {
+    configs = _.union(configs, config)
+    return superagent;
+  }
+  superagent.mocked = true;
+  configs = config;
   var Request = superagent.Request;
   var parsers = Object.create(null);
 
@@ -17,7 +28,7 @@ function mock(superagent, config) {
       return parsers[url];
     }
 
-    var match = config.filter(function (parser) {
+    var match = configs.filter(function (parser) {
       return new RegExp(parser.pattern, 'g').test(url);
     })[0] || null;
 
@@ -74,6 +85,8 @@ function mock(superagent, config) {
       oldEnd.call(this, cb);
     }
   };
+
+  return superagent;
 }
 
 export default mock;

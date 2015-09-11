@@ -76,4 +76,15 @@ describe('Extended Record', function () {
     expect(r.attributeKeys).to.not.include('_key');
   });
 
+  it('serialize to payload', function() {
+    let r = new Note({
+      _id: 'note/uid',
+      content: 'hello world'
+    });
+    expect(r.toJSON()).to.be.eql({
+      _id: 'note/uid',
+      content: 'hello world'
+    })
+  });
+
 });

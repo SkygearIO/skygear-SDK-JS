@@ -27,7 +27,7 @@
       </p>
       <p>
         <label>JSON payload</label>
-        <textarea id="create-payload"></textarea>
+        <textarea id="create-payload">{}</textarea>
       </p>
       <p id="create-result"></p>
       <button onclick="createRecord();">Create Record</button>
@@ -108,16 +108,17 @@
       <button onclick="updateRecord();">Update Record</button>
     </form>
   </div>
+  <hr>
   <div>
     <h4>Delete Record</h4>
     <form action="#" onsubmit="return false;">
       <p>
         <label>Record Type</label>
-        <input id="type" type="text" value="note">
+        <input id="delete-type" type="text" value="note">
       </p>
       <p>
         <label>Record ID</label>
-        <input id="id" type="text">
+        <input id="delete-id" type="text">
       </p>
       <p id="delete-result"></p>
       <button onclick="deleteRecord();">Delete</button>
@@ -136,10 +137,9 @@
       var _type = document.getElementById("update-type").value;
       var payload = document.getElementById("create-payload").value;
       var createResult = document.getElementById("create-result");
-      jsourd.publicDB.save({
-        '_recordType': _type,
-        'yo': 'here'
-      }).then(function (record) {
+      var _Record = jsourd.Record.extend(_type);
+      var attrs = JSON.parse(payload);
+      jsourd.publicDB.save(new _Record(attrs)).then(function (record) {
         console.log(record);
         createResult.innerText = record.ID;
       }, function (error) {
@@ -196,14 +196,15 @@
     function updateRecord () {
       console.log('Update');
       var _type = document.getElementById("update-type").value;
+      var _id = document.getElementById("update-id").value;
       var key = document.getElementById("update-key").value;
       var value = document.getElementById("update-value").value;
       var updateResult = document.getElementById("update-result");
-      r = new Record(_type, {});
-      jsourd.publicDB.save({
-        '_id': r.ID,
-        key: value
-      }).then(function (record) {
+      var record = new jsourd.Record(_type, {
+        _id: _id
+      });
+      record[key] = value
+      jsourd.publicDB.save(record).then(function (record) {
         console.log(record);
         updateResult.innerText = record.ID;
       }, function (error) {
@@ -214,10 +215,14 @@
 
     function deleteRecord () {
       console.log('Delete');
+      var _type = document.getElementById("delete-type").value;
+      var _id = document.getElementById("delete-id").value;
       var deleteResult = document.getElementById("delete-result");
       // jsourd.publicDB.del(r);
-      jsourd.publicDB.del(r.ID).then(function (record) {
-        console.log(record);
+      var record = new jsourd.Record(_type, {
+        _id: _id
+      });
+      jsourd.publicDB.del(record).then(function () {
         deleteResult.innerText = record.ID;
       }, function (error) {
         console.log(error);
