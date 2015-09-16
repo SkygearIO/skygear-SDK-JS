@@ -12,7 +12,7 @@ var args = watchify.args;
 args.debug = config.debug;
 args.standalone = config.standalone;
 
-var bundler = watchify(browserify(config.src, args));
+var bundler = watchify(browserify(config.src, args).ignore('react-native'));
 config.settings.transform.forEach(function(t) {
   bundler.transform(t);
 });

@@ -130,7 +130,9 @@
     m.textContent = jsourd.endPoint;
     jsourd.configApiKey('secretOURD');
     var token = document.getElementById("accessToken");
-    token.innerText = jsourd.currentAccessToken;
+    jsourd.getCurrentAccessToken(function (value) {
+      token.innerText = value;
+    });
 
     function createRecord () {
       console.log('Create');

@@ -11,7 +11,7 @@ var context = require('../context');
 
 
 // For testing store.js
-global.localStorage = require('localStorage');
+global.window = false;
 
 gulp.task('pre-test', function () {
   return gulp.src(config.src)
