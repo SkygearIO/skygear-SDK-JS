@@ -12,18 +12,20 @@ var args = watchify.args;
 args.debug = config.debug;
 args.standalone = config.standalone;
 
-var bundler = watchify(browserify(config.src, args).ignore('react-native'));
+var bundler;
+
+if (gutil.env.type != "dev") {
+  bundler = browserify(config.src, args).ignore('react-native');
+} else {
+  bundler = watchify(browserify(config.src, args).ignore('react-native'));
+}
+
 config.settings.transform.forEach(function(t) {
   bundler.transform(t);
 });
 
 gulp.task('browserify', bundle);
 bundler.on('update', bundle);
-bundler.on('time', function(time) {
-  if (gutil.env.type != "dev") {
-    this.close();
-  }
-});
 
 function bundle() {
   return bundler.bundle()
