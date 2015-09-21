@@ -10,9 +10,6 @@ var config = require('../config');
 var context = require('../context');
 
 
-// For testing store.js
-global.window = false;
-
 gulp.task('pre-test', function () {
   return gulp.src(config.src)
     .pipe(preprocess({context: context[gutil.env.type]}))
