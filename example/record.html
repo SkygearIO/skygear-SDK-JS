@@ -127,11 +127,14 @@
   <script src="../dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
-    m.textContent = jsourd.endPoint;
-    jsourd.configApiKey('secretOURD');
     var token = document.getElementById("accessToken");
-    jsourd.getCurrentAccessToken(function (value) {
-      token.innerText = value;
+    jsourd.config({
+      'apiKey': 'secretOURD'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = container.currentAccessToken;
+    }, function(err) {
+      console.log(err);
     });
 
     function createRecord () {
@@ -224,12 +227,7 @@
       var record = new jsourd.Record(_type, {
         _id: _id
       });
-      jsourd.publicDB.del(record).then(function () {
-        deleteResult.innerText = record.ID;
-      }, function (error) {
-        console.log(error);
-        deleteResult.innerText = error;
-      });
+      jsourd.publicDB.del(record)
 
     }
   </script>

@@ -38,9 +38,17 @@
   <script src="../dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
+    var token = document.getElementById("accessToken");
+    jsourd.config({
+      'apiKey': 'secretOURD'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = jsourd.currentAccessToken;
+    }, function(err) {
+      console.log(err);
+    });
     m.textContent = jsourd.endPoint;
     jsourd.configApiKey('secretOURD');
-    var token = document.getElementById("accessToken");
     token.innerText = jsourd.currentAccessToken;
     signup = function() {
       console.log('Signup');
