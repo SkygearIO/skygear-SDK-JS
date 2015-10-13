@@ -56,24 +56,24 @@
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
-    jsourd.config({
+    skygear.config({
       'apiKey': 'secretOURD'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = jsourd.currentAccessToken;
+      token.innerText = skygear.currentAccessToken;
     }, function(err) {
       console.log(err);
     });
-    m.textContent = jsourd.endPoint;
-    jsourd.configApiKey('secretOURD');
-    token.innerText = jsourd.currentAccessToken;
+    m.textContent = skygear.endPoint;
+    skygear.configApiKey('secretOURD');
+    token.innerText = skygear.currentAccessToken;
     signup = function() {
       console.log('Signup');
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
-      jsourd.signup(username, username, password).then(function() {
+      skygear.signup(username, username, password).then(function() {
         console.log('Signup ok');
-        token.innerText = jsourd.currentAccessToken;
+        token.innerText = skygear.currentAccessToken;
       }, function(error) {
         console.log('Signup failed');
         console.log(error);
@@ -84,16 +84,16 @@
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
       console.log('Login');
-      jsourd.login(username, password).then(function() {
+      skygear.login(username, password).then(function() {
         console.log('Login ok');
-        token.innerText = jsourd.currentAccessToken;
+        token.innerText = skygear.currentAccessToken;
       }, function(error) {
         console.log('Login failed');
         token.innerText = error;
       });
     };
     logout = function() {
-      jsourd.logout().then(function() {
+      skygear.logout().then(function() {
         console.log('Logout ok');
         token.innerText = 'Cleared accessToken';
       }, function(error) {
@@ -105,7 +105,7 @@
       var oldPassword = document.getElementById("old-password").value;
       var newPassword = document.getElementById("new-password").value;
       var changeResult = document.getElementById("change-result");
-      jsourd.changePassword(oldPassword, newPassword).then(function(newToken) {
+      skygear.changePassword(oldPassword, newPassword).then(function(newToken) {
         console.log('Change password ok');
         changeResult.innerText = 'Change password ok';
         console.log(newToken);

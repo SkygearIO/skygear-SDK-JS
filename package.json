@@ -1,13 +1,13 @@
 {
-  "name": "jsourd",
+  "name": "skygear",
   "version": "0.0.0",
-  "description": "JS SDK of ourd services",
-  "homepage": "https://github.com/oursky/jsourd",
-  "repository": "oursky/jsourd",
+  "description": "JS SDK of Skygear services",
+  "homepage": "https://github.com/oursky/skygear-SKD-JS",
+  "repository": "oursky/skygear-SKD-JS",
   "author": {
     "name": "rickmak",
     "email": "rick.mak@gmail.com",
-    "url": "https://oursky.com"
+    "url": "https://skygear.io"
   },
   "files": [
     "dist"
@@ -15,7 +15,7 @@
   "main": "dist/index.js",
   "keywords": [
     "SDK",
-    "ourd"
+    "skygear"
   ],
   "devDependencies": {
     "babel-core": "^5.5.0",

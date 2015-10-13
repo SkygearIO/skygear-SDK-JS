@@ -11,7 +11,7 @@ module.exports = {
     settings: {
       transform: ['babelify', preprocessify(context[gutil.env.type])]
     },
-    standalone: 'jsourd',
+    standalone: 'skygear',
     src: './lib/index.js',
     dest: './dist',
     outputName: 'bundle.js',

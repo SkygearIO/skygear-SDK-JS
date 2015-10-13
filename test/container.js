@@ -3,7 +3,7 @@ import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
 let request = mockSuperagent([{
-  pattern: 'http://ourd.dev/auth/signup',
+  pattern: 'http://skygear.dev/auth/signup',
   fixtures: function (match, params, headers, fn) {
     if (params['user_id'] === 'user@email.com' && params['password'] === 'passwd') {
       return fn({
@@ -24,7 +24,7 @@ let request = mockSuperagent([{
     }
   }
 }, {
-  pattern: 'http://ourd.dev/auth/login',
+  pattern: 'http://skygear.dev/auth/login',
   fixtures: function (match, params, headers, fn) {
     if (params['user_id'] === 'registered' && params['password'] === 'passwd') {
       return fn({
@@ -49,7 +49,7 @@ describe('Container', function () {
     let container = new Container();
     assert.equal(
       container.endPoint,
-      'http://ourd.dev/',
+      'http://skygear.dev/',
       'we expected default endpoint');
   });
 });

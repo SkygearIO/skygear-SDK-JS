@@ -128,7 +128,7 @@
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
-    jsourd.config({
+    skygear.config({
       'apiKey': 'secretOURD'
     }).then(function(container) {
       m.textContent = container.endPoint;
@@ -142,9 +142,9 @@
       var _type = document.getElementById("update-type").value;
       var payload = document.getElementById("create-payload").value;
       var createResult = document.getElementById("create-result");
-      var _Record = jsourd.Record.extend(_type);
+      var _Record = skygear.Record.extend(_type);
       var attrs = JSON.parse(payload);
-      jsourd.publicDB.save(new _Record(attrs)).then(function (record) {
+      skygear.publicDB.save(new _Record(attrs)).then(function (record) {
         console.log(record);
         createResult.innerText = record.ID;
       }, function (error) {
@@ -168,12 +168,12 @@
       var queryLimit = document.getElementById("query-limit").value;
       var queryResult = document.getElementById("query-result");
       var queryResultCount = document.getElementById("query-count");
-      var _Record = jsourd.Record.extend(_type, {
+      var _Record = skygear.Record.extend(_type, {
         initialize: function(attrs, options) {
           // noop
         }
       });
-      var query = new jsourd.Query(_Record);
+      var query = new skygear.Query(_Record);
       if (operand) {
         query[operator](key, operand);
       }
@@ -189,7 +189,7 @@
       if (queryLimit) {
         query.limit = parseInt(queryLimit, 10);
       }
-      jsourd.publicDB.query(query).then(function (records) {
+      skygear.publicDB.query(query).then(function (records) {
         queryResultCount.innerText = records.length;
         queryResult.innerText = JSON.stringify(records);
       }, function (error) {
@@ -205,11 +205,11 @@
       var key = document.getElementById("update-key").value;
       var value = document.getElementById("update-value").value;
       var updateResult = document.getElementById("update-result");
-      var record = new jsourd.Record(_type, {
+      var record = new skygear.Record(_type, {
         _id: _id
       });
       record[key] = value
-      jsourd.publicDB.save(record).then(function (record) {
+      skygear.publicDB.save(record).then(function (record) {
         console.log(record);
         updateResult.innerText = record.ID;
       }, function (error) {
@@ -223,11 +223,11 @@
       var _type = document.getElementById("delete-type").value;
       var _id = document.getElementById("delete-id").value;
       var deleteResult = document.getElementById("delete-result");
-      // jsourd.publicDB.del(r);
-      var record = new jsourd.Record(_type, {
+      // skygear.publicDB.del(r);
+      var record = new skygear.Record(_type, {
         _id: _id
       });
-      jsourd.publicDB.del(record)
+      skygear.publicDB.del(record)
 
     }
   </script>

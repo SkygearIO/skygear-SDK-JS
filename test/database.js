@@ -7,7 +7,7 @@ import Container from '../lib/container';
 import mockSuperagent from './mock/superagent';
 
 let request = mockSuperagent([{
-  pattern: 'http://ourd.dev/record/query',
+  pattern: 'http://skygear.dev/record/query',
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public') {
       return fn({
@@ -25,7 +25,7 @@ let request = mockSuperagent([{
     }
   }
 }, {
-  pattern: 'http://ourd.dev/record/save',
+  pattern: 'http://skygear.dev/record/save',
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public') {
       return fn({
@@ -39,7 +39,7 @@ let request = mockSuperagent([{
     }
   }
 }, {
-  pattern: 'http://ourd.dev/record/delete',
+  pattern: 'http://skygear.dev/record/delete',
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public' && params['ids']) {
       return fn({
