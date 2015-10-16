@@ -82,7 +82,7 @@ describe('Query', function () {
     }, 10]);
   });
 
-  it('add less than to predicate', function () {
+  it('add less than or equal to to predicate', function () {
     let q = new Query(Note);
     q.lessThanOrEqualTo('price', 10);
     expect(q.predicate).to.deep.include.members(['lte', {
@@ -160,6 +160,63 @@ describe('Query', function () {
         $val: 'content'
       }, 'hello']
     })
-  })
+  });
+
+  it('serialize a simple or query', function () {
+    let con1 = new Query(Note);
+    con1.greaterThan('count', 100);
+    let con2 = new Query(Note);
+    con2.lessThan('count', 10);
+    let query = Query.or(con1, con2);
+    expect(query.toJSON()).to.eql({
+      record_type: 'note',
+      limit: 50,
+      sort: [],
+      predicate: [
+        'or',
+        ['gt', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 100],
+        ['lt', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 10]
+      ]
+    })
+  });
+
+  it('serialize a nested or/and query', function () {
+    let con1 = new Query(Note);
+    con1.equalTo('count', 0);
+    let con2 = new Query(Note);
+    con2.lessThan('count', 100);
+    con2.greaterThan('count', 10);
+    let query = Query.or(con1, con2);
+    expect(query.toJSON()).to.eql({
+      record_type: 'note',
+      limit: 50,
+      sort: [],
+      predicate: [
+        'or',
+        ['eq', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 0],
+        [
+          'and',
+          ['lt', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 100],
+          ['gt', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 10
+          ]
+        ]
+      ]
+    })
+  });
 
 });
