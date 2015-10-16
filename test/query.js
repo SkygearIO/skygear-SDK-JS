@@ -1,6 +1,7 @@
 import {expect, assert} from 'chai';
 import Query from '../lib/query';
 import Record from '../lib/Record';
+import Reference from '../lib/Reference';
 
 describe('Query', function () {
 
@@ -122,6 +123,22 @@ describe('Query', function () {
         $val: 'price'
       }, 100]
     ]);
+  });
+
+  it('serialize a reference inside', function() {
+    let q = new Query(Note);
+    let ref = new Reference('record/id');
+    q.equalTo('ref', ref);
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      predicate: [
+        'eq',
+        {$type: 'keypath', $val: 'ref'},
+        {$type: 'ref', $id: 'record/id'}
+      ],
+      sort: [],
+      limit: 50
+    });
   });
 
   it('serialize a simple query payload', function () {
