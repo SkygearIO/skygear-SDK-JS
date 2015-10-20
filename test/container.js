@@ -74,9 +74,9 @@ describe('Container auth', function () {
   it('should not signup duplicate account', function () {
     return container.signup('duplicated', 'passwd').then(function (token) {
       throw new Error('Signup duplicated user');
-    }, function (error) {
+    }, function (err) {
       assert.equal(
-        error.message,
+        err.error.message,
         'user duplicated');
     });
   });
@@ -94,9 +94,9 @@ describe('Container auth', function () {
   it('should fail to login with incorrect password', function () {
     return container.login('registered', 'wrong').then(function (token) {
       throw new Error('Login with wrong password');
-    }, function (error) {
+    }, function (err) {
       assert.equal(
-        error.message,
+        err.error.message,
         'invalid authentication information');
     });
   });
