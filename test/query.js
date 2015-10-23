@@ -1,7 +1,7 @@
 import {expect, assert} from 'chai';
 import Query from '../lib/query';
-import Record from '../lib/Record';
-import Reference from '../lib/Reference';
+import Record from '../lib/record';
+import Reference from '../lib/reference';
 
 describe('Query', function () {
 
@@ -131,6 +131,7 @@ describe('Query', function () {
     q.equalTo('ref', ref);
     expect(q.toJSON()).to.eql({
       record_type: 'note',
+      include: {},
       predicate: [
         'eq',
         {$type: 'keypath', $val: 'ref'},
@@ -149,6 +150,7 @@ describe('Query', function () {
     q.addDescending('noteOrder');
     expect(q.toJSON()).to.eql({
       record_type: 'note',
+      include: {},
       limit: 10,
       offset: 5,
       sort: [[{
@@ -170,6 +172,7 @@ describe('Query', function () {
     let query = Query.or(con1, con2);
     expect(query.toJSON()).to.eql({
       record_type: 'note',
+      include: {},
       limit: 50,
       sort: [],
       predicate: [
@@ -195,6 +198,7 @@ describe('Query', function () {
     let query = Query.or(con1, con2);
     expect(query.toJSON()).to.eql({
       record_type: 'note',
+      include: {},
       limit: 50,
       sort: [],
       predicate: [
