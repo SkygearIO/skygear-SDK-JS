@@ -27,4 +27,14 @@ describe('Geolocation', function() {
     });
   });
 
+  it('deserializes from JSON', function() {
+    let geo = Geolocation.fromJSON({
+      '$type': 'geo',
+      '$lat': 10,
+      '$lng': 20
+    });
+    expect(geo.latitude).to.equal(10);
+    expect(geo.longitude).to.equal(20);
+  });
+
 });
