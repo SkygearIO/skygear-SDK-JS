@@ -2,6 +2,7 @@ import {expect, assert} from 'chai';
 import Query from '../lib/query';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
+import Geolocation from '../lib/Geolocation';
 
 describe('Query', function () {
 
@@ -89,6 +90,83 @@ describe('Query', function () {
       $type: 'keypath',
       $val: 'price'
     }, 10]);
+  });
+
+  it('add less than distance to to predicate', function () {
+    let q = new Query(Note);
+    q.distanceLessThan("geo", new Geolocation(10, 20), 200);
+    expect(q.predicate).to.deep.include.members(['lt', [
+        "func",
+        "distance",
+        {$type: 'keypath', $val: 'geo'},
+
+        {$type: 'geo', $lng: 20, $lat: 10}
+      ], 200]);
+  });
+
+  it('add greater than distance to to predicate', function () {
+    let q = new Query(Note);
+    q.distanceGreaterThan("geo", new Geolocation(10, 20), 200);
+    expect(q.predicate).to.deep.include.members(['gt', [
+        "func",
+        "distance",
+        {$type: 'keypath', $val: 'geo'},
+        {$type: 'geo', $lng: 20, $lat: 10}
+      ], 200]);
+  });
+
+  it('sort by ascending distance', function () {
+    let q = new Query(Note);
+    q.addAscendingByDistance('geo', new Geolocation(10, 20))
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      sort: [
+        [
+          ['func', 'distance', {$type: 'keypath', $val: 'geo'}, {$type: 'geo', $lng: 20, $lat: 10}],
+          "asc"
+        ]
+      ],
+      limit: 50,
+    });
+  });
+
+  it('sort by descending distance', function () {
+    let q = new Query(Note);
+    q.addDescendingByDistance('geo', new Geolocation(10, 20))
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      sort: [
+        [
+          ['func', 'distance', {$type: 'keypath', $val: 'geo'}, {$type: 'geo', $lng: 20, $lat: 10}],
+          "desc"
+        ]
+      ],
+      limit: 50,
+    });
+  });
+
+  it('add transient include', function() {
+    let q = new Query(Note);
+    q.transientInclude('category', 'cat')
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {'cat': {$type: 'keypath', $val: 'category'}},
+      limit: 50,
+      sort: [],
+    });
+  });
+
+  it('add transient include distance', function() {
+    let q = new Query(Note);
+    q.transientIncludeDistance('location', 'my_distance', new Geolocation(10, 20))
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {'my_distance': ['func', 'distance', {$type: 'keypath', $val: 'location'}, {$type: 'geo', $lng: 20, $lat: 10}]},
+      limit: 50,
+      sort: [],
+    });
   });
 
   it('have multiple predicate with and', function () {

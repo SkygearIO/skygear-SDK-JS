@@ -15,6 +15,8 @@ let request = mockSuperagent([{
           '_id': 'note/6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
           'content':'hi ourd',
           'noteOrder': 1,
+          'ref': {$type: "ref", $id: "note/note1"},
+          'geo': {$type: "geo", $lat: 10, $lng: 20},
           'tags':[]
         }, {
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
