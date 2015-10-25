@@ -42,6 +42,35 @@ let request = mockSuperagent([{
       }
     }, 400);
   }
+}, {
+  pattern: 'http://skygear.dev/hello/world',
+  fixtures: function (match, params, headers, fn) {
+    return fn({
+      'result': {
+        'hello': 'world'
+      }
+    });
+  }
+}, {
+  pattern: 'http://skygear.dev/hello/args',
+  fixtures: function (match, params, headers, fn) {
+    return fn({
+      'result': {
+        'hello': params['args']
+      }
+    });
+  }
+}, {
+  pattern: 'http://skygear.dev/hello/failure',
+  fixtures: function (match, params, headers, fn) {
+    return fn({
+      'error': {
+        'type': 'UnknownError',
+        'code': 1,
+        'message': 'lambda error'
+      }
+    }, 400);
+  }
 }]);
 
 describe('Container', function () {
@@ -98,6 +127,44 @@ describe('Container auth', function () {
       assert.equal(
         err.error.message,
         'invalid authentication information');
+    });
+  });
+});
+
+describe('lambda', function () {
+  let container = new Container();
+  container.request = request;
+  container.configApiKey('correctApiKey');
+
+  it('should call lambda correctly', function () {
+    return container.lambda('hello:world').then(function (result) {
+      assert.deepEqual(result, {'hello': 'world'});
+    });
+  });
+
+  it('should pass dict parameters', function () {
+    return container.lambda('hello:args', {'name': 'world'}).then(function (result) {
+      assert.deepEqual(result, {
+        'hello': {
+          'name': 'world'
+        }
+      });
+    });
+  });
+
+  it('should pass array parameters', function () {
+    return container.lambda('hello:args', ['hello', 'world']).then(function (result) {
+      assert.deepEqual(result, {
+        'hello': ['hello', 'world']
+      });
+    });
+  });
+
+  it('should parse error', function () {
+    return container.lambda('hello:failure').then(function (result) {
+      throw new Error('Failed to parse erroneous lambda result');
+    }, function(err) {
+      assert.equal(err.error.message, 'lambda error');
     });
   });
 });
