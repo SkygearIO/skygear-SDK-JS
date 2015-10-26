@@ -2,76 +2,6 @@ import {assert} from 'chai';
 import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
-let request = mockSuperagent([{
-  pattern: 'http://skygear.dev/auth/signup',
-  fixtures: function (match, params, headers, fn) {
-    if (params['user_id'] === 'user@email.com' && params['password'] === 'passwd') {
-      return fn({
-        'result': {
-          'user_id': 'user:id1',
-          'access_token': 'uuid1'
-        }
-      });
-    }
-    if (params['user_id'] === 'duplicated') {
-      return fn({
-        'error': {
-          'type':'ResourceDuplicated',
-          'code':101,
-          'message':'user duplicated'
-        }
-      }, 400);
-    }
-  }
-}, {
-  pattern: 'http://skygear.dev/auth/login',
-  fixtures: function (match, params, headers, fn) {
-    if (params['user_id'] === 'registered' && params['password'] === 'passwd') {
-      return fn({
-        'result': {
-          'user_id': 'user:id1',
-          'access_token': 'uuid1'
-        }
-      });
-    }
-    return fn({
-      'error': {
-        'type': 'AuthenticationError',
-        'code': 102,
-        'message':'invalid authentication information'
-      }
-    }, 400);
-  }
-}, {
-  pattern: 'http://skygear.dev/hello/world',
-  fixtures: function (match, params, headers, fn) {
-    return fn({
-      'result': {
-        'hello': 'world'
-      }
-    });
-  }
-}, {
-  pattern: 'http://skygear.dev/hello/args',
-  fixtures: function (match, params, headers, fn) {
-    return fn({
-      'result': {
-        'hello': params['args']
-      }
-    });
-  }
-}, {
-  pattern: 'http://skygear.dev/hello/failure',
-  fixtures: function (match, params, headers, fn) {
-    return fn({
-      'error': {
-        'type': 'UnknownError',
-        'code': 1,
-        'message': 'lambda error'
-      }
-    }, 400);
-  }
-}]);
 
 describe('Container', function () {
   it('should have default end-point', function () {
@@ -85,7 +15,47 @@ describe('Container', function () {
 
 describe('Container auth', function () {
   let container = new Container();
-  container.request = request;
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/auth/signup',
+    fixtures: function (match, params, headers, fn) {
+      if (params['user_id'] === 'user@email.com' && params['password'] === 'passwd') {
+        return fn({
+          'result': {
+            'user_id': 'user:id1',
+            'access_token': 'uuid1'
+          }
+        });
+      }
+      if (params['user_id'] === 'duplicated') {
+        return fn({
+          'error': {
+            'type':'ResourceDuplicated',
+            'code':101,
+            'message':'user duplicated'
+          }
+        }, 400);
+      }
+    }
+  }, {
+    pattern: 'http://skygear.dev/auth/login',
+    fixtures: function (match, params, headers, fn) {
+      if (params['user_id'] === 'registered' && params['password'] === 'passwd') {
+        return fn({
+          'result': {
+            'user_id': 'user:id1',
+            'access_token': 'uuid1'
+          }
+        });
+      }
+      return fn({
+        'error': {
+          'type': 'AuthenticationError',
+          'code': 102,
+          'message':'invalid authentication information'
+        }
+      }, 400);
+    }
+  }]);
   container.configApiKey('correctApiKey');
 
   it('should signup successfully', function () {
@@ -133,7 +103,36 @@ describe('Container auth', function () {
 
 describe('lambda', function () {
   let container = new Container();
-  container.request = request;
+  container.request =   container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/hello/world',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        'result': {
+          'hello': 'world'
+        }
+      });
+    }
+  }, {
+    pattern: 'http://skygear.dev/hello/args',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        'result': {
+          'hello': params['args']
+        }
+      });
+    }
+  }, {
+    pattern: 'http://skygear.dev/hello/failure',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        'error': {
+          'type': 'UnknownError',
+          'code': 1,
+          'message': 'lambda error'
+        }
+      }, 400);
+    }
+  }]);;
   container.configApiKey('correctApiKey');
 
   it('should call lambda correctly', function () {
