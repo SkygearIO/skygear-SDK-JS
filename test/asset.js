@@ -24,4 +24,14 @@ describe('Asset', function() {
     });
   });
 
+  it('deserializes from JSON', function () {
+    let asset = Asset.fromJSON({
+      $type: 'asset',
+      $name: 'asset-name',
+      $url: 'http://skygear.dev/files/asset-name?expiredAt=1446034750\u0026signature=signature'
+    });
+    expect(asset.name).to.equal('asset-name');
+    expect(asset.url).to.equal('http://skygear.dev/files/asset-name?expiredAt=1446034750&signature=signature');
+  });
+
 });
