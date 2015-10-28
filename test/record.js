@@ -1,6 +1,7 @@
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
+import Geolocation from '../lib/geolocation';
 
 const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
 
@@ -85,6 +86,15 @@ describe('Extended Record', function () {
       _id: 'note/uid',
       content: 'hello world'
     })
+  });
+
+  it('deserialize from payload with geolocation', function() {
+    let payload = {
+      _id: 'note/uid',
+      geo: {$type: 'geo', $lat: 10, $lng: 20},
+    };
+    let r = new Record('note', payload);
+    expect(r['geo']).to.be.an.instanceof(Geolocation);
   });
 
 });
