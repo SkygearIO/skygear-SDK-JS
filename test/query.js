@@ -2,7 +2,7 @@ import {expect, assert} from 'chai';
 import Query from '../lib/query';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
-import Geolocation from '../lib/Geolocation';
+import Geolocation from '../lib/geolocation';
 
 describe('Query', function () {
 
