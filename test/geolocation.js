@@ -10,14 +10,22 @@ describe('Geolocation', function () {
 
   it('throw error with bad parameters', function () {
     expect(function () {
-      let geo = new Geolocation('a', 20);
-      expect(geo).to.be.an.instanceof(Geolocation);
+      new Geolocation('a', 20); //eslint-disable-line no-new
     }).to.throw('Latitude is not a number');
 
     expect(function () {
-      let geo = new Geolocation(10, 'b');
-      expect(geo).to.be.an.instanceof(Geolocation);
+      new Geolocation(10, 'b'); //eslint-disable-line no-new
     }).to.throw('Longitude is not a number');
+  });
+
+  it('throw error with out-of-range parameters', function () {
+    expect(function () {
+      new Geolocation(10, -190); //eslint-disable-line no-new
+    }).to.throw('Longitude is not in expected range (-180, 180)');
+
+    expect(function () {
+      new Geolocation(100, 20); //eslint-disable-line no-new
+    }).to.throw('Latitude is not in expected range (-90, 90)');
   });
 
   it('serializes to JSON', function () {
