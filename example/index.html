@@ -26,11 +26,21 @@
         <input id="username" type="text">
       </p>
       <p>
+        <label>Email</label>
+        <input id="email" type="email">
+      </p>
+      <p>
         <label>Password</label>
         <input id="password" type="password">
       </p>
-      <button onclick="signup();">Signup</button>
-      <button onclick="login();">Login</button>
+      <p>
+        <button onclick="signup();">Signup</button>
+        <button onclick="signup('email');">Signup With Email</button>
+      </p>
+      <p>
+        <button onclick="login();">Login</button>
+        <button onclick="login('email');">Login With Email</button>
+      </p>
     </form>
     <p id="auth-token">Click the button to test</p>
     <hr>
@@ -67,11 +77,18 @@
     m.textContent = skygear.endPoint;
     skygear.configApiKey('secretOURD');
     token.innerText = skygear.currentAccessToken;
-    signup = function() {
+    signup = function(identifier) {
       console.log('Signup');
       var username = document.getElementById("username").value;
+      var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
-      skygear.signup(username, username, password).then(function() {
+      var _signup = null;
+      if (identifier === 'email') {
+        _signup = skygear.signupWithEmail(email, password);
+      } else {
+        _signup = skygear.signup(username, password);
+      }
+      _signup.then(function() {
         console.log('Signup ok');
         token.innerText = skygear.currentAccessToken;
       }, function(error) {
@@ -80,11 +97,18 @@
         token.innerText = error;
       });
     };
-    login = function() {
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
+    login = function(identifier) {
       console.log('Login');
-      skygear.login(username, password).then(function() {
+      var username = document.getElementById("username").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var _login = null;
+      if (identifier === 'email') {
+        _login = skygear.loginWithEmail(email, password);
+      } else {
+        _login = skygear.login(username, password)
+      }
+      _login.then(function() {
         console.log('Login ok');
         token.innerText = skygear.currentAccessToken;
       }, function(error) {
