@@ -320,4 +320,46 @@ describe('Query', function () {
     })
   });
 
+  it('serialize a nested or/and query with first-level and', function () {
+    let con1 = new Query(Note);
+    con1.equalTo('count', 0);
+    let con2 = new Query(Note);
+    con2.lessThan('count', 100);
+    con2.greaterThan('count', 10);
+    let query = Query.or(con1, con2);
+    query.equalTo('name', 'hi');
+    expect(query.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'and',
+        ['eq', {
+          $type: 'keypath',
+          $val: 'name',
+        }, 'hi'],
+        [
+          'or',
+          ['eq', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 0],
+          [
+            'and',
+            ['lt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 100],
+            ['gt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 10
+            ]
+          ]
+        ]
+      ]
+    })
+  });
+
 });
