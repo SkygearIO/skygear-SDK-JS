@@ -18,9 +18,7 @@ describe('Container auth', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/signup',
     fixtures: function (match, params, headers, fn) {
-      const validUser = params['username'] === 'username' ||
-        params['email'] === 'user@email.com';
-      if (validUser && params['password'] === 'passwd') {
+      if (params['user_id'] === 'user@email.com' && params['password'] === 'passwd') {
         return fn({
           'result': {
             'user_id': 'user:id1',
@@ -28,7 +26,7 @@ describe('Container auth', function () {
           }
         });
       }
-      if (params['username'] === 'duplicated') {
+      if (params['user_id'] === 'duplicated') {
         return fn({
           'error': {
             'type':'ResourceDuplicated',
@@ -41,9 +39,7 @@ describe('Container auth', function () {
   }, {
     pattern: 'http://skygear.dev/auth/login',
     fixtures: function (match, params, headers, fn) {
-      const validUser = params['username'] === 'registered' ||
-        params['email'] === 'user@email.com';
-      if (validUser && params['password'] === 'passwd') {
+      if (params['user_id'] === 'registered' && params['password'] === 'passwd') {
         return fn({
           'result': {
             'user_id': 'user:id1',
@@ -64,19 +60,7 @@ describe('Container auth', function () {
 
   it('should signup successfully', function () {
     return container
-      .signup('username', 'passwd')
-      .then(function (token) {
-        assert.equal(
-          token,
-          'uuid1');
-      }, function () {
-        throw new Error('Signup failed');
-      });
-  });
-
-  it('should signup with email successfully', function () {
-    return container
-      .signupWithEmail('user@email.com', 'passwd')
+      .signup('user@email.com', 'user@email.com', 'passwd')
       .then(function (token) {
         assert.equal(
           token,
@@ -104,18 +88,6 @@ describe('Container auth', function () {
     }, function (error) {
       throw new Error('Failed to login with correct password');
     });
-  });
-
-  it('should login with email and correct password', function () {
-    return container
-      .loginWithEmail('user@email.com', 'passwd')
-      .then(function (token) {
-        assert.equal(
-          token,
-          'uuid1');
-      }, function (error) {
-        throw new Error('Failed to login with correct password');
-      });
   });
 
   it('should fail to login with incorrect password', function () {
