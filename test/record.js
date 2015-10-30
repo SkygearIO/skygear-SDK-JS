@@ -70,6 +70,25 @@ describe('Extended Record', function () {
     expect(r.attributeKeys).to.include('key');
   });
 
+  it('parse meta _created_at and _updated_at correctly', function () {
+    let r = new Note({
+      '_created_at': '2014-09-27T17:40:00.000Z',
+      '_updated_at': '2014-10-27T17:40:00.000Z',
+      'print_at': {$type: 'date', $date: '2014-11-27T17:40:00.000Z'},
+      'content': 'hi ourd',
+      'noteOrder': 1,
+      'ref': {$type: "ref", $id: "note/note1"},
+      'geo': {$type: "geo", $lat: 10, $lng: 20},
+      'tags':[]
+    });
+    expect(r.createdAt.getTime()).to.be.equal(
+      new Date('2014-09-27T17:40:00.000Z').getTime());
+    expect(r.updatedAt.getTime()).to.be.equal(
+      new Date('2014-10-27T17:40:00.000Z').getTime());
+    expect(r['print_at'].getTime()).to.be.equal(
+      new Date('2014-11-27T17:40:00.000Z').getTime());
+  });
+
   it('attributeKeys filter transient field', function () {
     let r = new Note();
     r['_key'] = 'impermanent';

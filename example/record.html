@@ -206,7 +206,7 @@
       var value = document.getElementById("update-value").value;
       var updateResult = document.getElementById("update-result");
       var record = new skygear.Record(_type, {
-        _id: _id
+        _id: _type + '/' + _id
       });
       record[key] = value
       skygear.publicDB.save(record).then(function (record) {
