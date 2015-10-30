@@ -13,6 +13,8 @@ let request = mockSuperagent([{
       return fn({
         'result': [{
           '_id': 'note/6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+          '_created_at': '2014-09-27T17:40:00.000Z',
+          'print_at': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
           'content':'hi ourd',
           'noteOrder': 1,
           'ref': {$type: "ref", $id: "note/note1"},
