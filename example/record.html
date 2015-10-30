@@ -124,6 +124,30 @@
       <button onclick="deleteRecord();">Delete</button>
     </form>
   </div>
+  <hr>
+  <div>
+    <h4>Upload Asset</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Record Type</label>
+        <input id="upload-type" type="text" value="note">
+      </p>
+      <p>
+        <label>File Field</label>
+        <input id="upload-field" type="text">
+      </p>
+      <p>
+        <label>File Name</label>
+        <input id="upload-name" type="text">
+      </p>
+      <p>
+        <label>File</label>
+        <input type="file" id="asset">
+      </p>
+      <pre id="upload-result"></pre>
+      <button onclick="uploadAsset();">Upload</button>
+    </form>
+  </div>
   <script src="../dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
@@ -136,6 +160,31 @@
     }, function(err) {
       console.log(err);
     });
+
+    function uploadAsset () {
+      console.log('Upload Asset');
+      var recordType = document.getElementById("upload-type").value;
+      var field = document.getElementById("upload-field").value;
+      var fileName = document.getElementById("upload-name").value;
+      var file = document.getElementById("asset").files[0];
+      var uploadResult = document.getElementById("upload-result");
+
+      var _Record = skygear.Record.extend(recordType);
+      var asset = new skygear.Asset({
+        file: file,
+        name: fileName
+      });
+      var record = new _Record();
+      record[field] = asset;
+
+      skygear.publicDB.save(record).then(function (record) {
+        console.log(record);
+        uploadResult.innerText = JSON.stringify(record.toJSON(), null, 2);
+      }, function (error) {
+        console.log(error);
+        uploadResult.innerText = error;
+      });
+    }
 
     function createRecord () {
       console.log('Create');
