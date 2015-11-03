@@ -1,6 +1,6 @@
 {
   "name": "skygear",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "JS SDK of Skygear services",
   "homepage": "https://github.com/oursky/skygear-SDK-JS",
   "repository": {
