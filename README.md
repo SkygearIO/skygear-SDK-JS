@@ -1,2 +1,2 @@
-# jsourd
-JS SDK of ourd
+# skygear
+JS SDK of Skygear.io
