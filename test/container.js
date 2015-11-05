@@ -129,6 +129,47 @@ describe('Container auth', function () {
   });
 });
 
+describe('Container device registration', function () {
+  let container = new Container();
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/device/register',
+    fixtures: function (match, params, headers, fn) {
+      if (params.id) {
+        return fn({
+          'result': {
+            'id': paramsid
+          }
+        });
+      } else {
+        return fn({
+          'result': {
+            'id': 'device-id'
+          }
+        });
+      }
+    }
+  }]);;
+  container.configApiKey('correctApiKey');
+
+  it('should save device id successfully', function() {
+    container.registerDevice('device-token', 'android').then(function (deviceID) {
+      assert(deviceID).to.equal('device-id');
+      assert(container.deviceID).to.equal('device-id');
+    }, function () {
+      throw 'failed to save device id';
+    });
+  });
+
+  it('should attach existing device id', function() {
+    container._setDeviceID('existing-device-id', 'ios').then(function () {
+      return container.registerDevice('ddevice-token');
+    }).then(function (deviceID) {
+      assert(deviceID).to.equal('existing-device-id');
+      assert(container.deviceID).to.equal('existing-device-id')
+    });
+  });
+});
+
 describe('lambda', function () {
   let container = new Container();
   container.request =   container.request = mockSuperagent([{
