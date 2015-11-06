@@ -41,4 +41,22 @@ describe('util', function() {
     expect(geo.longitude).to.equal(20);
   });
 
+  it('toJSON array with mixed objects', function() {
+    const array = [
+      null,
+      { 'name': 'handsome' },
+      [ '1', '2' ],
+      new Date(1411839600000),
+    ];
+    expect(toJSON(array)).to.eql([
+      null,
+      { 'name': 'handsome' },
+      [ '1', '2' ],
+      {
+        $type: 'date',
+        $date: '2014-09-27T17:40:00.000Z'
+      },
+    ]);
+  });
+
 });
