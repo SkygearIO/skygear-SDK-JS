@@ -141,7 +141,8 @@ describe('Query', function () {
           'asc'
         ]
       ],
-      limit: 50
+      limit: 50,
+      count: false
     });
   });
 
@@ -162,7 +163,8 @@ describe('Query', function () {
           'desc'
         ]
       ],
-      limit: 50
+      limit: 50,
+      count: false
     });
   });
 
@@ -173,7 +175,8 @@ describe('Query', function () {
       record_type: 'note',
       include: {cat: {$type: 'keypath', $val: 'category'}},
       limit: 50,
-      sort: []
+      sort: [],
+      count: false
     });
   });
 
@@ -193,7 +196,20 @@ describe('Query', function () {
         ]
       },
       limit: 50,
-      sort: []
+      sort: [],
+      count: false
+    });
+  });
+
+  it('get count', function () {
+    let q = new Query(Note);
+    q.overallCount = true;
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      count: true
     });
   });
 
@@ -244,7 +260,8 @@ describe('Query', function () {
         {$type: 'ref', $id: 'record/id'}
       ],
       sort: [],
-      limit: 50
+      limit: 50,
+      count: false
     });
   });
 
@@ -266,7 +283,8 @@ describe('Query', function () {
       predicate: ['like', {
         $type: 'keypath',
         $val: 'content'
-      }, 'hello']
+      }, 'hello'],
+      count: false
     })
   });
 
@@ -291,7 +309,8 @@ describe('Query', function () {
           $type: 'keypath',
           $val: 'count'
         }, 10]
-      ]
+      ],
+      count: false
     })
   });
 
@@ -325,7 +344,8 @@ describe('Query', function () {
           }, 10
           ]
         ]
-      ]
+      ],
+      count: false
     })
   });
 
@@ -367,7 +387,8 @@ describe('Query', function () {
             ]
           ]
         ]
-      ]
+      ],
+      count: false
     })
   });
 

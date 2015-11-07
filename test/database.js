@@ -24,7 +24,10 @@ let request = mockSuperagent([{
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
           'content':'limouren',
           'noteOrder': 2
-        }]
+        }],
+        'info': {
+          'count': 24
+        }
       });
     }
   }
@@ -77,6 +80,7 @@ describe('Database', function () {
     return db.query(q).then(function (records) {
       expect(records.length).to.be.equal(2);
       expect(records[0]).to.be.an.instanceof(Note);
+      expect(records.overallCount).to.be.equal(24);
     }, function (error) {
       throw Error();
     });
