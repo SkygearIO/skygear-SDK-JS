@@ -9,7 +9,7 @@ var preprocess = require('gulp-preprocess');
 var config = require('../config');
 var context = require('../context');
 
-gulp.task('static', function () {
+gulp.task('default', ['test'], function () {
   return gulp.src(config.src)
     .pipe(excludeGitignore())
     .pipe(eslint())
@@ -33,5 +33,4 @@ gulp.task('watch', ['browserify', 'babel'], function() {
 });
 
 gulp.task('prepublish', ['nsp', 'babel', 'browserify']);
-gulp.task('default', ['static', 'test']);
 gulp.task('dev', ['watch']);
