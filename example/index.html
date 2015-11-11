@@ -70,13 +70,13 @@
       'apiKey': 'secretOURD'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = skygear.currentAccessToken;
+      token.innerText = skygear.accessToken;
     }, function(err) {
       console.log(err);
     });
     m.textContent = skygear.endPoint;
     skygear.configApiKey('secretOURD');
-    token.innerText = skygear.currentAccessToken;
+    token.innerText = skygear.accessToken;
     signup = function(identifier) {
       console.log('Signup');
       var username = document.getElementById("username").value;
@@ -90,7 +90,7 @@
       }
       _signup.then(function() {
         console.log('Signup ok');
-        token.innerText = skygear.currentAccessToken;
+        token.innerText = skygear.accessToken;
       }, function(error) {
         console.log('Signup failed');
         console.log(error);
@@ -110,7 +110,7 @@
       }
       _login.then(function() {
         console.log('Login ok');
-        token.innerText = skygear.currentAccessToken;
+        token.innerText = skygear.accessToken;
       }, function(error) {
         console.log('Login failed');
         token.innerText = error;

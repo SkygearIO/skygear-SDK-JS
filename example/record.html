@@ -223,6 +223,7 @@
         }
       });
       var query = new skygear.Query(_Record);
+      query.overallCount = true;
       if (operand) {
         query[operator](key, operand);
       }
@@ -239,7 +240,7 @@
         query.limit = parseInt(queryLimit, 10);
       }
       skygear.publicDB.query(query).then(function (records) {
-        queryResultCount.innerText = records.length;
+        queryResultCount.innerText = records.overallCount;
         queryResult.innerText = JSON.stringify(records);
       }, function (error) {
         console.log(error);
