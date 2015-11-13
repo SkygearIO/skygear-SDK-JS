@@ -69,9 +69,9 @@ describe('Container auth', function () {
   it('should signup successfully', function () {
     return container
       .signup('username', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
@@ -86,9 +86,9 @@ describe('Container auth', function () {
   it('should signup with email successfully', function () {
     return container
       .signupWithEmail('user@email.com', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
@@ -101,7 +101,7 @@ describe('Container auth', function () {
   });
 
   it('should not signup duplicate account', function () {
-    return container.signup('duplicated', 'passwd').then(function (token) {
+    return container.signup('duplicated', 'passwd').then(function (user) {
       throw new Error('Signup duplicated user');
     }, function (err) {
       assert.equal(
@@ -111,9 +111,9 @@ describe('Container auth', function () {
   });
 
   it('should login with correct password', function () {
-    return container.login('registered', 'passwd').then(function (token) {
+    return container.login('registered', 'passwd').then(function (user) {
       assert.equal(
-        token,
+        container.accessToken,
         'uuid1');
       assert.instanceOf(container.currentUser, container.User);
       assert.equal(
@@ -128,9 +128,9 @@ describe('Container auth', function () {
   it('should login with email and correct password', function () {
     return container
       .loginWithEmail('user@email.com', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
@@ -143,7 +143,7 @@ describe('Container auth', function () {
   });
 
   it('should fail to login with incorrect password', function () {
-    return container.login('registered', 'wrong').then(function (token) {
+    return container.login('registered', 'wrong').then(function (user) {
       throw new Error('Login with wrong password');
     }, function (err) {
       assert.equal(
