@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JS Ourd</title>
+</head>
+<body>
+  <div id="main">
+    <p>
+      <label>End Point</label>
+      <span id="endpoint"></span>
+    </p>
+    <p>
+      <label>Token</label>
+      <span id="accessToken">
+        <a href="index.html">Go to Login</a>
+      </span>
+    </p>
+  </div>
+  <hr>
+  <div id="subscribe">
+    <h4>Subscribe Channel</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label for="subscribe-channel">Channel</label>
+        <input id="subscribe-channel" type="text" value="chat-event">
+      </p>
+      <p>
+        <textarea id="subscribe-data"></textarea>
+      </p>
+      <button onclick="subscribeChannel();">Subscribe Channel</button>
+      <button onclick="unsubscribeChannel();">Unsubscribe Channel</button>
+    </form>
+  </div>
+  <div id="publish">
+    <h4>Publish Message</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label for="publish-channel">Channel</label>
+        <input id="publish-channel" type="text" value="chat-event">
+      </p>
+      <p>
+        <label for="publish-data">Message (JSON payload)</label>
+        <textarea id="publish-data">{"content": "Hello World!"}</textarea>
+      </p>
+      <p id="publish-message"></p>
+      <button onclick="publishMessage();">Publish Message</button>
+    </form>
+  </div>
+  <script src="../dist/bundle.js"></script>
+  <script type="text/javascript">
+    var m = document.getElementById("endpoint");
+    var token = document.getElementById("accessToken");
+    skygear.config({
+      'apiKey': 'changeme'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = container.accessToken;
+    }, function(err) {
+      console.log(err);
+    });
+
+    function publishMessage () {
+      var _channel = document.getElementById("publish-channel").value;
+      var _data = document.getElementById("publish-data").value;
+      skygear.pubsub.publish(_channel, _data);
+    }
+
+    function subscribeChannel() {
+      var _channel = document.getElementById("subscribe-channel").value;
+      var _data = document.getElementById("subscribe-data");
+      skygear.on(_channel, function(data) {
+        _data.value += 'Channel "' + _channel + '": ' + data + '\n';
+      });
+    }
+
+    function unsubscribeChannel() {
+      var _channel = document.getElementById("subscribe-channel").value;
+      skygear.off(_channel);
+    }
+  </script>
+</body>
+</html>
