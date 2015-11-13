@@ -153,6 +153,47 @@ describe('Container auth', function () {
   });
 });
 
+describe('Container getUsers', function () {
+  let container = new Container();
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/user/query',
+    fixtures: function (match, params, headers, fn) {
+      if (params['emails'][0] === 'user1@skygear.io') {
+        return fn({
+          'result': [{
+            data: {
+                _id: "user:id1",
+                email: "user1@skygear.io",
+                username: "user1"
+            },
+            id: "user:id1",
+            type: "user"
+          }]
+        });
+      }
+    }
+  }]);
+  container.configApiKey('correctApiKey');
+
+  it('query user with email successfully', function () {
+    return container
+      .getUsersByEmail(['user1@skygear.io'])
+      .then(function (users) {
+        assert.instanceOf(users[0], container.User);
+        assert.equal(
+          users[0].ID,
+          'user:id1'
+        );
+        assert.equal(
+          users[0].username,
+          'user1'
+        );
+      }, function () {
+        throw new Error('getUsersByEmail failed');
+      });
+  });
+});
+
 describe('Container device registration', function () {
   let container = new Container();
   container.request = mockSuperagent([{
