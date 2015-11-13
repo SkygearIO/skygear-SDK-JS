@@ -24,7 +24,9 @@ describe('Container auth', function () {
         return fn({
           'result': {
             'user_id': 'user:id1',
-            'access_token': 'uuid1'
+            'access_token': 'uuid1',
+            'username': 'user1',
+            'email': 'user1@skygear.io'
           }
         });
       }
@@ -47,7 +49,9 @@ describe('Container auth', function () {
         return fn({
           'result': {
             'user_id': 'user:id1',
-            'access_token': 'uuid1'
+            'access_token': 'uuid1',
+            'username': 'user1',
+            'email': 'user1@skygear.io'
           }
         });
       }
@@ -69,6 +73,11 @@ describe('Container auth', function () {
         assert.equal(
           token,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function () {
         throw new Error('Signup failed');
       });
@@ -81,6 +90,11 @@ describe('Container auth', function () {
         assert.equal(
           token,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function () {
         throw new Error('Signup failed');
       });
@@ -101,6 +115,11 @@ describe('Container auth', function () {
       assert.equal(
         token,
         'uuid1');
+      assert.instanceOf(container.currentUser, container.User);
+      assert.equal(
+        container.currentUser.ID,
+        'user:id1'
+      )
     }, function (error) {
       throw new Error('Failed to login with correct password');
     });
@@ -113,6 +132,11 @@ describe('Container auth', function () {
         assert.equal(
           token,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function (error) {
         throw new Error('Failed to login with correct password');
       });
