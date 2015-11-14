@@ -32,6 +32,7 @@
     "gulp-plumber": "^1.0.0",
     "gulp-preprocess": "^1.2.0",
     "gulp-util": "^3.0.6",
+    "isparta": "^3.5.3",
     "localStorage": "^1.0.3",
     "preprocessify": "0.0.6",
     "require-dir": "^0.3.0",
