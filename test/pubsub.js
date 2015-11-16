@@ -5,17 +5,22 @@ import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import sinonChai from 'sinon-chai';
 import sinon from 'sinon';
 import Pubsub from '../lib/pubsub';
+import Container from '../lib/container';
 
 chai.use(sinonChai);
 
 describe('Pubsub', function () {
   var fn1 = function () { };
   var fn2 = function () { };
+  var container;
   var pubsub;
   var ws;
 
   beforeEach(function () {
-    pubsub = new Pubsub();
+    container = new Container();
+    container.autoPubsub = false;
+    container.configApiKey('API_KEY');
+    pubsub = new Pubsub(container, true);
     ws = {
       readyState: 1
     };
@@ -183,10 +188,16 @@ describe('Pubsub', function () {
 });
 
 describe('Pubsub connection', function () {
+  var container;
   var pubsub;
+  var internalPubsub;
 
   beforeEach(function () {
-    pubsub = new Pubsub();
+    container = new Container();
+    container.autoPubsub = false;
+    container.configApiKey('API_KEY');
+    pubsub = new Pubsub(container, false);
+    internalPubsub = new Pubsub(container, true);
   });
 
   it('close when disconnected', function () {
@@ -209,7 +220,7 @@ describe('Pubsub connection', function () {
     expect(pubsub._handlers).to.deep.equal({});
   });
 
-  it('configure', function () {
+  it('reconfigure not internal', function () {
     var spy = sinon.spy(function () {
       return { };
     });
@@ -218,11 +229,25 @@ describe('Pubsub connection', function () {
         return spy;
       }
     });
-    pubsub.configure('URL', 'API_KEY');
-    expect(spy).to.be.calledWith('URL?api_key=API_KEY');
+    pubsub.reconfigure();
+    expect(spy).to.be.calledWith('ws://skygear.dev/pubsub?api_key=API_KEY');
   });
 
-  it('call configure without api_key and url', function () {
+  it('reconfigure internal', function () {
+    var spy = sinon.spy(function () {
+      return { };
+    });
+    sinon.stub(internalPubsub, 'WebSocket', {
+      get: function () {
+        return spy;
+      }
+    });
+    internalPubsub.reconfigure();
+    expect(spy).to.be.calledWith('ws://skygear.dev/_/pubsub?api_key=API_KEY');
+  });
+
+  it('call reconfigure without api_key', function () {
+    container.configApiKey(null);
     var spy = sinon.spy(function () {
       return { };
     });
@@ -231,11 +256,12 @@ describe('Pubsub connection', function () {
         return spy;
       }
     });
-    pubsub.configure();
+    pubsub.reconfigure();
     expect(spy).not.to.be.called;
   });
 
-  it('call connect without api_key and url', function () {
+  it('call connect without api_key', function () {
+    container.configApiKey(null);
     var spy = sinon.spy();
     sinon.stub(pubsub, 'WebSocket', {
       get: spy
@@ -249,8 +275,6 @@ describe('Pubsub connection', function () {
       readyState: 2
     };
     pubsub._setWebSocket(ws);
-    pubsub._apiKey = 'API_KEY';
-    pubsub._url = 'URL';
     sinon.stub(pubsub, 'WebSocket', {
       get: function () {
         return function () {
