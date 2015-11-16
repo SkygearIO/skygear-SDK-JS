@@ -17,7 +17,7 @@ describe('Record', function () {
 
   it('generate with uuid v4 as id', function () {
     let r = new Record('note');
-    let tuple = r.ID.split("/");
+    let tuple = r.id.split("/");
     expect(v4Spec.test(tuple[1])).to.be.true;
     expect(tuple[0]).to.equal('note');
   });
@@ -58,7 +58,7 @@ describe('Extended Record', function () {
 
   it('generate with uuid v4 as id', function () {
     let r = new Note();
-    let tuple = r.ID.split("/");
+    let tuple = r.id.split("/");
     expect(v4Spec.test(tuple[1])).to.be.true;
     expect(tuple[0]).to.equal('note');
     expect(r.recordType).to.equal('note');

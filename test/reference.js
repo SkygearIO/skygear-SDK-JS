@@ -8,15 +8,15 @@ describe('Reference', function () {
   let ref = new Reference(record);
 
   it('constructs from Record', function () {
-    expect(ref.ID).to.equal('record/id');
+    expect(ref.id).to.equal('record/id');
   });
 
   it('constructs from string', function () {
     ref = new Reference('record/id');
-    expect(ref.ID).to.equal('record/id');
+    expect(ref.id).to.equal('record/id');
   });
 
-  it('throws exception if object.ID is empty', function () {
+  it('throws exception if object.id is empty', function () {
     let obj = {};
     expect(function () {
       new Reference(obj);

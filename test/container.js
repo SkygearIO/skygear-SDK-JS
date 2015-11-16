@@ -78,7 +78,7 @@ describe('Container auth', function () {
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
-          container.currentUser.ID,
+          container.currentUser.id,
           'user:id1'
         )
       }, function () {
@@ -95,7 +95,7 @@ describe('Container auth', function () {
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
-          container.currentUser.ID,
+          container.currentUser.id,
           'user:id1'
         )
       }, function () {
@@ -120,7 +120,7 @@ describe('Container auth', function () {
         'uuid1');
       assert.instanceOf(container.currentUser, container.User);
       assert.equal(
-        container.currentUser.ID,
+        container.currentUser.id,
         'user:id1'
       )
     }, function (error) {
@@ -137,7 +137,7 @@ describe('Container auth', function () {
           'uuid1');
         assert.instanceOf(container.currentUser, container.User);
         assert.equal(
-          container.currentUser.ID,
+          container.currentUser.id,
           'user:id1'
         )
       }, function (error) {
@@ -184,7 +184,7 @@ describe('Container getUsers', function () {
       .then(function (users) {
         assert.instanceOf(users[0], container.User);
         assert.equal(
-          users[0].ID,
+          users[0].id,
           'user:id1'
         );
         assert.equal(
