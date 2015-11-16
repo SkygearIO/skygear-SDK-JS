@@ -1,3 +1,4 @@
+/*eslint-disable dot-notation, no-new, no-unused-vars, quote-props, quotes */
 import {expect, assert} from 'chai';
 import Database from '../lib/database';
 import Record from '../lib/record';
@@ -15,14 +16,14 @@ let request = mockSuperagent([{
           '_id': 'note/6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
           '_created_at': '2014-09-27T17:40:00.000Z',
           'print_at': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
-          'content':'hi ourd',
+          'content': 'hi ourd',
           'noteOrder': 1,
           'ref': {$type: "ref", $id: "note/note1"},
           'geo': {$type: "geo", $lat: 10, $lng: 20},
-          'tags':[]
+          'tags': []
         }, {
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
-          'content':'limouren',
+          'content': 'limouren',
           'noteOrder': 2
         }],
         'info': {
@@ -51,8 +52,8 @@ let request = mockSuperagent([{
     if (params['database_id'] === '_public' && params['ids']) {
       return fn({
         'result': [{
-          '_id':'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-          '_type':'record'
+          '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+          '_type': 'record'
         }]
       });
     }
@@ -69,7 +70,7 @@ describe('Database', function () {
   let Note = Record.extend('note');
 
   it('Reject invalid database_id', function () {
-    expect(function() {
+    expect(function () {
       new Database('_invalid');
     }).to.throw(
       'Invalid database_id'
@@ -96,13 +97,14 @@ describe('Database', function () {
     });
   });
 
-  it('delete record at remote', function() {
+  it('delete record at remote', function () {
     let r = new Note();
     return db.del(r).then(function () {
       return;
     }, function (error) {
       throw Error();
     });
-  })
+  });
 
 });
+/*eslint-enable dot-notation, no-new, no-unused-vars, quote-props, quotes */

@@ -1,10 +1,11 @@
+/*eslint-disable no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import Geolocation from '../lib/geolocation';
 import {toJSON, fromJSON} from '../lib/util';
 
-describe('util', function() {
+describe('util', function () {
 
-  it('toJSON Date', function() {
+  it('toJSON Date', function () {
     const d = new Date(1411839600000);
     expect(toJSON(d)).to.eql({
       $type: 'date',
@@ -12,7 +13,7 @@ describe('util', function() {
     });
   });
 
-  it('toJSON geo', function() {
+  it('toJSON geo', function () {
     const geo = new Geolocation(10, 20);
     expect(toJSON(geo)).to.eql({
       $type: 'geo',
@@ -21,7 +22,7 @@ describe('util', function() {
     });
   });
 
-  it('fromJSON Date', function() {
+  it('fromJSON Date', function () {
     const d = fromJSON({
       $type: 'date',
       $date: '2014-09-27T17:40:00.000Z'
@@ -30,7 +31,7 @@ describe('util', function() {
     expect(d.toISOString());
   });
 
-  it('fromJSON geo', function() {
+  it('fromJSON geo', function () {
     const geo = fromJSON({
       $type: 'geo',
       $lat: 10,
@@ -41,22 +42,23 @@ describe('util', function() {
     expect(geo.longitude).to.equal(20);
   });
 
-  it('toJSON array with mixed objects', function() {
+  it('toJSON array with mixed objects', function () {
     const array = [
       null,
       { 'name': 'handsome' },
-      [ '1', '2' ],
-      new Date(1411839600000),
+      ['1', '2'],
+      new Date(1411839600000)
     ];
     expect(toJSON(array)).to.eql([
       null,
       { 'name': 'handsome' },
-      [ '1', '2' ],
+      ['1', '2'],
       {
         $type: 'date',
         $date: '2014-09-27T17:40:00.000Z'
-      },
+      }
     ]);
   });
 
 });
+/*eslint-enable no-unused-vars, quote-props */

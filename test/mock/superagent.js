@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars */
 import _ from 'lodash';
 import superagent from 'superagent';
 
@@ -6,7 +7,7 @@ var configs = [];
 // Temp fork of https://github.com/M6Web/superagent-mock
 function mock(config) {
   if (superagent.mocked) {
-    configs = _.union(configs, config)
+    configs = _.union(configs, config);
     return superagent;
   }
   superagent.mocked = true;
@@ -38,11 +39,11 @@ function mock(config) {
   }
 
   function callback(fn) {
-    return function(data, err) {
+    return function (data, err) {
       fn(err, {
         body: data
-      })
-    }
+      });
+    };
   }
 
   /**
@@ -90,3 +91,4 @@ function mock(config) {
 }
 
 export default mock;
+/*eslint-enable */

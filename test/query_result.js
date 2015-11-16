@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-expressions, quote-props */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import Record from '../lib/record';
 import QueryResult from '../lib/query_result';
@@ -29,3 +30,4 @@ describe('QueryResult', function () {
     expect(result.overallCount).to.be.equal(24);
   });
 });
+/*eslint-enable no-unused-expressions, quote-props */

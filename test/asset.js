@@ -1,15 +1,16 @@
+/*eslint-disable max-len, no-new */
 import {expect} from 'chai';
 import Asset from '../lib/asset';
 
-describe('Asset', function() {
+describe('Asset', function () {
 
   it('should throw error with bad parameters', function () {
     expect(function () {
-        new Asset();
+      new Asset();
     }).to.throw('Name should not be empty');
 
     expect(function () {
-        new Asset({name: 'asset-name'});
+      new Asset({name: 'asset-name'});
     }).to.throw('Either file or url should present');
   });
 
@@ -35,3 +36,4 @@ describe('Asset', function() {
   });
 
 });
+/*eslint-enable max-len, no-new */

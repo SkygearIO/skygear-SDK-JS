@@ -1,3 +1,4 @@
+/*eslint-disable dot-notation, max-len, no-undef, no-unused-vars, quote-props */
 import {assert} from 'chai';
 import Container from '../lib/container';
 
@@ -33,9 +34,9 @@ describe('Container auth', function () {
       if (params['username'] === 'duplicated') {
         return fn({
           'error': {
-            'type':'ResourceDuplicated',
-            'code':101,
-            'message':'user duplicated'
+            'type': 'ResourceDuplicated',
+            'code': 101,
+            'message': 'user duplicated'
           }
         }, 400);
       }
@@ -57,7 +58,7 @@ describe('Container auth', function () {
         'error': {
           'type': 'AuthenticationError',
           'code': 102,
-          'message':'invalid authentication information'
+          'message': 'invalid authentication information'
         }
       }, 400);
     }
@@ -151,10 +152,10 @@ describe('Container device registration', function () {
         });
       }
     }
-  }]);;
+  }]);
   container.configApiKey('correctApiKey');
 
-  it('should save device id successfully', function() {
+  it('should save device id successfully', function () {
     container.registerDevice('device-token', 'android').then(function (deviceID) {
       assert(deviceID).to.equal('device-id');
       assert(container.deviceID).to.equal('device-id');
@@ -163,12 +164,12 @@ describe('Container device registration', function () {
     });
   });
 
-  it('should attach existing device id', function() {
+  it('should attach existing device id', function () {
     container._setDeviceID('existing-device-id', 'ios').then(function () {
       return container.registerDevice('ddevice-token');
     }).then(function (deviceID) {
       assert(deviceID).to.equal('existing-device-id');
-      assert(container.deviceID).to.equal('existing-device-id')
+      assert(container.deviceID).to.equal('existing-device-id');
     });
   });
 });
@@ -176,7 +177,7 @@ describe('Container device registration', function () {
 describe('lambda', function () {
   let container = new Container();
   container.autoPubsub = false;
-  container.request =   container.request = mockSuperagent([{
+  container.request = container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/hello/world',
     fixtures: function (match, params, headers, fn) {
       return fn({
@@ -205,7 +206,7 @@ describe('lambda', function () {
         }
       }, 400);
     }
-  }]);;
+  }]);
   container.configApiKey('correctApiKey');
 
   it('should call lambda correctly', function () {
@@ -235,8 +236,9 @@ describe('lambda', function () {
   it('should parse error', function () {
     return container.lambda('hello:failure').then(function (result) {
       throw new Error('Failed to parse erroneous lambda result');
-    }, function(err) {
+    }, function (err) {
       assert.equal(err.error.message, 'lambda error');
     });
   });
 });
+/*eslint-enable dot-notation, max-len, no-undef, no-unused-vars, quote-props */

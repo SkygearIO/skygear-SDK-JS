@@ -10,7 +10,7 @@ var config = require('../config');
 var context = require('../context');
 
 gulp.task('default', ['test'], function () {
-  return gulp.src(config.src)
+  return gulp.src([config.src, config.testSrc])
     .pipe(excludeGitignore())
     .pipe(eslint())
     .pipe(eslint.format())

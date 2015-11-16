@@ -1,3 +1,4 @@
+/*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-expressions, no-unused-vars, quote-props, quotes */
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
@@ -7,7 +8,7 @@ const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{
 
 describe('Record', function () {
   it('reject invalid record type', function () {
-    expect(function() {
+    expect(function () {
       new Record('_notvalid');
     }).to.throw(
       'RecordType is not valid. Please start with alphanumeric string.'
@@ -40,15 +41,15 @@ describe('Record', function () {
     let r = new rCls();
     expect(r).to.be.an.instanceof(Record);
     expect(r).to.be.an.instanceof(rCls);
-  })
+  });
 
-  it('cannot extend with invalid type', function() {
-    expect(function() {
+  it('cannot extend with invalid type', function () {
+    expect(function () {
       Record.extend('_notvalid');
     }).to.throw(
       'RecordType is not valid. Please start with alphanumeric string.'
     );
-  })
+  });
 });
 
 describe('Extended Record', function () {
@@ -79,7 +80,7 @@ describe('Extended Record', function () {
       'noteOrder': 1,
       'ref': {$type: "ref", $id: "note/note1"},
       'geo': {$type: "geo", $lat: 10, $lng: 20},
-      'tags':[]
+      'tags': []
     });
     expect(r.createdAt.getTime()).to.be.equal(
       new Date('2014-09-27T17:40:00.000Z').getTime());
@@ -96,7 +97,7 @@ describe('Extended Record', function () {
     expect(r.attributeKeys).to.not.include('_key');
   });
 
-  it('serialize to payload', function() {
+  it('serialize to payload', function () {
     let r = new Note({
       _id: 'note/uid',
       content: 'hello world'
@@ -104,16 +105,17 @@ describe('Extended Record', function () {
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
       content: 'hello world'
-    })
+    });
   });
 
-  it('deserialize from payload with geolocation', function() {
+  it('deserialize from payload with geolocation', function () {
     let payload = {
       _id: 'note/uid',
-      geo: {$type: 'geo', $lat: 10, $lng: 20},
+      geo: {$type: 'geo', $lat: 10, $lng: 20}
     };
     let r = new Record('note', payload);
     expect(r['geo']).to.be.an.instanceof(Geolocation);
   });
 
 });
+/*eslint-enable dot-notation, max-len, new-cap, no-new, no-unused-expressions, no-unused-vars, quote-props, quotes */

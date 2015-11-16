@@ -1,3 +1,4 @@
+/*eslint-disable camelcase, no-new */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import Query from '../lib/query';
 import Record from '../lib/record';
@@ -9,13 +10,13 @@ describe('Query', function () {
   let Note = Record.extend('note');
 
   it('reject invalid recordType', function () {
-    expect(function() {
+    expect(function () {
       new Query({});
     }).to.throw(
       'RecordType is not valid. Please start with alphanumeric string.'
     );
 
-    expect(function() {
+    expect(function () {
       new Query('note');
     }).to.throw(
       'RecordType is not valid. Please start with alphanumeric string.'
@@ -247,7 +248,7 @@ describe('Query', function () {
     ]);
   });
 
-  it('serialize a reference inside', function() {
+  it('serialize a reference inside', function () {
     let q = new Query(Note);
     let ref = new Reference('record/id');
     q.equalTo('ref', ref);
@@ -285,7 +286,7 @@ describe('Query', function () {
         $val: 'content'
       }, 'hello'],
       count: false
-    })
+    });
   });
 
   it('serialize a simple or query', function () {
@@ -311,7 +312,7 @@ describe('Query', function () {
         }, 10]
       ],
       count: false
-    })
+    });
   });
 
   it('serialize a nested or/and query', function () {
@@ -346,7 +347,7 @@ describe('Query', function () {
         ]
       ],
       count: false
-    })
+    });
   });
 
   it('serialize a nested or/and query with first-level and', function () {
@@ -366,7 +367,7 @@ describe('Query', function () {
         'and',
         ['eq', {
           $type: 'keypath',
-          $val: 'name',
+          $val: 'name'
         }, 'hi'],
         [
           'or',
@@ -389,7 +390,8 @@ describe('Query', function () {
         ]
       ],
       count: false
-    })
+    });
   });
 
 });
+/*eslint-enable camelcase, no-new */
