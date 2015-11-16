@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>JS Ourd</title>
+  <title>Skygear-SKD-JS</title>
 </head>
 <body>
   <div id="main">
@@ -15,10 +15,21 @@
       <span id="accessToken"></span>
     </p>
     <p>
+      <label>Username</label>
+      <span id="currentUsername"></span>
+    </p>
+    <p>
+      <label>Email</label>
+      <span id="currentEmail"></span>
+    </p>
+    <p>
       <a href="record.html">Record CRUD</a>
     </p>
     <p>
       <a href="pubsub.html">Pubsub</a>
+    </p>
+    <p>
+      <a href="user.html">User discovery</a>
     </p>
   </div>
   <hr>
@@ -69,11 +80,17 @@
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
+    var currentUsername = document.getElementById("currentUsername");
+    var currentEmail = document.getElementById("currentEmail");
     skygear.config({
       'apiKey': 'secretOURD'
     }).then(function(container) {
       m.textContent = container.endPoint;
       token.innerText = skygear.accessToken;
+      if (skygear.currentUser) {
+        currentUsername.innerText = skygear.currentUser.username;
+        currentEmail.innerText = skygear.currentUser.email;
+      }
     }, function(err) {
       console.log(err);
     });
@@ -94,6 +111,8 @@
       _signup.then(function() {
         console.log('Signup ok');
         token.innerText = skygear.accessToken;
+        currentUsername.innerText = skygear.currentUser.username;
+        currentEmail.innerText = skygear.currentUser.email;
       }, function(error) {
         console.log('Signup failed');
         console.log(error);
@@ -114,6 +133,8 @@
       _login.then(function() {
         console.log('Login ok');
         token.innerText = skygear.accessToken;
+        currentUsername.innerText = skygear.currentUser.username;
+        currentEmail.innerText = skygear.currentUser.email;
       }, function(error) {
         console.log('Login failed');
         token.innerText = error;

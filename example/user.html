@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Skygear-SKD-JS</title>
+</head>
+<body>
+  <div id="main">
+    <p>
+      <label>End Point</label>
+      <span id="endpoint"></span>
+    </p>
+    <p>
+      <label>Token</label>
+      <span id="accessToken">
+        <a href="index.html">Go to Login</a>
+      </span>
+    </p>
+    <p>
+      <label>Username</label>
+      <span id="currentUsername"></span>
+    </p>
+    <p>
+      <label>Email</label>
+      <span id="currentEmail"></span>
+    </p>
+  </div>
+  <hr>
+  <div id="record">
+    <h4>User by Email</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Email</label>
+        <input id="email" type="email" placeholder="user@skygear.io">
+      </p>
+      <p id="user-result"></p>
+      <button onclick="getByEmail();">Get</button>
+    </form>
+  </div>
+  <hr>
+  <script src="../dist/bundle.js"></script>
+  <script type="text/javascript">
+    var m = document.getElementById("endpoint");
+    var token = document.getElementById("accessToken");
+    var currentUsername = document.getElementById("currentUsername");
+    var currentEmail = document.getElementById("currentEmail");
+    skygear.config({
+      'apiKey': 'secretOURD'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = skygear.accessToken;
+      if (skygear.currentUser) {
+        currentUsername.innerText = skygear.currentUser.username;
+        currentEmail.innerText = skygear.currentUser.email;
+      }
+    }, function(err) {
+      console.log(err);
+    });
+
+    function getByEmail () {
+      console.log('getUsersByEmail');
+      var email = document.getElementById("email").value;
+      var userInfo = document.getElementById("user-result");
+
+      skygear.getUsersByEmail([email]).then(function (users) {
+        console.log(users[0]);
+        userInfo.innerText = JSON.stringify(users[0].toJSON(), null, 2);
+      }, function(error) {
+        console.log(error);
+        userInfo.innerText = error;
+      });
+
+    }
+
+  </script>
+</body>
+</html>

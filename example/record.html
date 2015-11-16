@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>JS Ourd</title>
+  <title>Skygear-SKD-JS</title>
 </head>
 <body>
   <div id="main">
@@ -15,6 +15,14 @@
       <span id="accessToken">
         <a href="index.html">Go to Login</a>
       </span>
+    </p>
+    <p>
+      <label>Username</label>
+      <span id="currentUsername"></span>
+    </p>
+    <p>
+      <label>Email</label>
+      <span id="currentEmail"></span>
     </p>
   </div>
   <hr>
@@ -152,11 +160,17 @@
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
+    var currentUsername = document.getElementById("currentUsername");
+    var currentEmail = document.getElementById("currentEmail");
     skygear.config({
       'apiKey': 'secretOURD'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = container.currentAccessToken;
+      token.innerText = skygear.accessToken;
+      if (skygear.currentUser) {
+        currentUsername.innerText = skygear.currentUser.username;
+        currentEmail.innerText = skygear.currentUser.email;
+      }
     }, function(err) {
       console.log(err);
     });

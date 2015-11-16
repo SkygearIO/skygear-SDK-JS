@@ -27,7 +27,9 @@ describe('Container auth', function () {
         return fn({
           'result': {
             'user_id': 'user:id1',
-            'access_token': 'uuid1'
+            'access_token': 'uuid1',
+            'username': 'user1',
+            'email': 'user1@skygear.io'
           }
         });
       }
@@ -50,7 +52,9 @@ describe('Container auth', function () {
         return fn({
           'result': {
             'user_id': 'user:id1',
-            'access_token': 'uuid1'
+            'access_token': 'uuid1',
+            'username': 'user1',
+            'email': 'user1@skygear.io'
           }
         });
       }
@@ -68,10 +72,15 @@ describe('Container auth', function () {
   it('should signup successfully', function () {
     return container
       .signup('username', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function () {
         throw new Error('Signup failed');
       });
@@ -80,17 +89,22 @@ describe('Container auth', function () {
   it('should signup with email successfully', function () {
     return container
       .signupWithEmail('user@email.com', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function () {
         throw new Error('Signup failed');
       });
   });
 
   it('should not signup duplicate account', function () {
-    return container.signup('duplicated', 'passwd').then(function (token) {
+    return container.signup('duplicated', 'passwd').then(function (user) {
       throw new Error('Signup duplicated user');
     }, function (err) {
       assert.equal(
@@ -100,10 +114,15 @@ describe('Container auth', function () {
   });
 
   it('should login with correct password', function () {
-    return container.login('registered', 'passwd').then(function (token) {
+    return container.login('registered', 'passwd').then(function (user) {
       assert.equal(
-        token,
+        container.accessToken,
         'uuid1');
+      assert.instanceOf(container.currentUser, container.User);
+      assert.equal(
+        container.currentUser.ID,
+        'user:id1'
+      )
     }, function (error) {
       throw new Error('Failed to login with correct password');
     });
@@ -112,23 +131,69 @@ describe('Container auth', function () {
   it('should login with email and correct password', function () {
     return container
       .loginWithEmail('user@email.com', 'passwd')
-      .then(function (token) {
+      .then(function (user) {
         assert.equal(
-          token,
+          container.accessToken,
           'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.ID,
+          'user:id1'
+        )
       }, function (error) {
         throw new Error('Failed to login with correct password');
       });
   });
 
   it('should fail to login with incorrect password', function () {
-    return container.login('registered', 'wrong').then(function (token) {
+    return container.login('registered', 'wrong').then(function (user) {
       throw new Error('Login with wrong password');
     }, function (err) {
       assert.equal(
         err.error.message,
         'invalid authentication information');
     });
+  });
+});
+
+describe('Container getUsers', function () {
+  let container = new Container();
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/user/query',
+    fixtures: function (match, params, headers, fn) {
+      if (params['emails'][0] === 'user1@skygear.io') {
+        return fn({
+          'result': [{
+            data: {
+                _id: "user:id1",
+                email: "user1@skygear.io",
+                username: "user1"
+            },
+            id: "user:id1",
+            type: "user"
+          }]
+        });
+      }
+    }
+  }]);
+  container.configApiKey('correctApiKey');
+
+  it('query user with email successfully', function () {
+    return container
+      .getUsersByEmail(['user1@skygear.io'])
+      .then(function (users) {
+        assert.instanceOf(users[0], container.User);
+        assert.equal(
+          users[0].ID,
+          'user:id1'
+        );
+        assert.equal(
+          users[0].username,
+          'user1'
+        );
+      }, function () {
+        throw new Error('getUsersByEmail failed');
+      });
   });
 });
 
