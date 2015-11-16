@@ -62,6 +62,7 @@ let request = mockSuperagent([{
 describe('Database', function () {
 
   let container = new Container();
+  container.autoPubsub = false;
   container.request = request;
   container.configApiKey('correctApiKey');
   let db = new Database('_public', container);

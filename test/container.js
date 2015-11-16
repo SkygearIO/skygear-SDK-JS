@@ -6,6 +6,7 @@ import mockSuperagent from './mock/superagent';
 describe('Container', function () {
   it('should have default end-point', function () {
     let container = new Container();
+    container.autoPubsub = false;
     assert.equal(
       container.endPoint,
       'http://skygear.dev/',
@@ -15,6 +16,7 @@ describe('Container', function () {
 
 describe('Container auth', function () {
   let container = new Container();
+  container.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/signup',
     fixtures: function (match, params, headers, fn) {
@@ -131,6 +133,7 @@ describe('Container auth', function () {
 
 describe('Container device registration', function () {
   let container = new Container();
+  container.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/register',
     fixtures: function (match, params, headers, fn) {
@@ -172,6 +175,7 @@ describe('Container device registration', function () {
 
 describe('lambda', function () {
   let container = new Container();
+  container.autoPubsub = false;
   container.request =   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/hello/world',
     fixtures: function (match, params, headers, fn) {

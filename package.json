@@ -36,6 +36,8 @@
     "localStorage": "^1.0.3",
     "preprocessify": "0.0.6",
     "require-dir": "^0.3.0",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.3.1"
@@ -52,7 +54,8 @@
     "lodash": "^3.10.1",
     "superagent": "^1.3.0",
     "uuid": "^2.0.1",
-    "w3c-blob": "0.0.1"
+    "w3c-blob": "0.0.1",
+    "websocket": "^1.0.22"
   },
   "bugs": {
     "url": "https://github.com/oursky/skygear-SKD-JS/issues"
