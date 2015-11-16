@@ -10,6 +10,9 @@ var isparta = require('isparta');
 var config = require('../config');
 var context = require('../context');
 
+var chai = require('chai');
+var sinonChai = require('sinon-chai');
+chai.use(sinonChai);
 
 gulp.task('pre-test', function () {
   return gulp.src(config.src)
