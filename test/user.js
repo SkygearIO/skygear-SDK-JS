@@ -1,5 +1,5 @@
-import {expect, assert} from 'chai';
-import uuid from 'uuid';
+/*eslint-disable no-unused-expressions, no-new, camelcase */
+import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import User from '../lib/user';
 
 describe('User', function () {
@@ -14,10 +14,10 @@ describe('User', function () {
   });
 
   it('fails to create without user_id', function () {
-    expect(function() {
+    expect(function () {
       new User({
         username: 'rick'
-      });
+      }); //eslint-disable-line no-unused-vars
     }).to.throw(
       'Missing user_id.'
     );
@@ -33,10 +33,10 @@ describe('User', function () {
       user_id: 'non-uuid',
       username: 'rick',
       email: 'rick.mak@gmail.com'
-    })
+    });
   });
 
-  it('deserialize from json', function() {
+  it('deserialize from json', function () {
     const payload = {
       user_id: 'non-uuid',
       username: 'rick',

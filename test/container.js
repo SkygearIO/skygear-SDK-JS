@@ -80,7 +80,7 @@ describe('Container auth', function () {
         assert.equal(
           container.currentUser.id,
           'user:id1'
-        )
+        );
       }, function () {
         throw new Error('Signup failed');
       });
@@ -97,7 +97,7 @@ describe('Container auth', function () {
         assert.equal(
           container.currentUser.id,
           'user:id1'
-        )
+        );
       }, function () {
         throw new Error('Signup failed');
       });
@@ -122,7 +122,7 @@ describe('Container auth', function () {
       assert.equal(
         container.currentUser.id,
         'user:id1'
-      )
+      );
     }, function (error) {
       throw new Error('Failed to login with correct password');
     });
@@ -139,7 +139,7 @@ describe('Container auth', function () {
         assert.equal(
           container.currentUser.id,
           'user:id1'
-        )
+        );
       }, function (error) {
         throw new Error('Failed to login with correct password');
       });
@@ -165,12 +165,12 @@ describe('Container getUsers', function () {
         return fn({
           'result': [{
             data: {
-                _id: "user:id1",
-                email: "user1@skygear.io",
-                username: "user1"
+              _id: 'user:id1',
+              email: 'user1@skygear.io',
+              username: 'user1'
             },
-            id: "user:id1",
-            type: "user"
+            id: 'user:id1',
+            type: 'user'
           }]
         });
       }
