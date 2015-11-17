@@ -49,7 +49,8 @@ let request = mockSuperagent([{
           '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
           '_created_at': '2014-09-27T17:40:00.000Z',
           '_ownerID': 'rick.mak@gmail.com',
-          '_access': null
+          '_access': null,
+          'null': null
         }]
       });
     }
@@ -118,6 +119,7 @@ describe('Database', function () {
 
   it('save record to remote', function () {
     let r = new Note();
+    r.null = null;
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
