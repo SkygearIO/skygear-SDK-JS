@@ -40,6 +40,7 @@ let request = mockSuperagent([{
         'result': [{
           '_type': 'record',
           '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
+          '_created_at': '2014-09-27T17:40:00.000Z',
           '_ownerID': 'rick.mak@gmail.com',
           '_access': null
         }]
@@ -90,6 +91,22 @@ describe('Database', function () {
 
   it('save record to remote', function () {
     let r = new Note();
+    return db.save(r).then(function (record) {
+      expect(record).to.be.an.instanceof(Note);
+    }, function (error) {
+      throw Error();
+    });
+  });
+
+  it('save record with meta populated', function () {
+    let r = new Note();
+    r.update({
+      '_created_at': '2014-09-27T17:40:00.000Z'
+    });
+    expect(r.createdAt.toISOString()).to.equal('2014-09-27T17:40:00.000Z');
+    r.update({
+      '_created_at': '2014-09-27T17:40:00.000Z'
+    });
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
