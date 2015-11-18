@@ -24,8 +24,8 @@ let request = mockSuperagent([{
         }, {
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
           'content': 'limouren',
-          'noteOrder': 2
-          , '_transient': {
+          'noteOrder': 2,
+          '_transient': {
             'category': {
               '_created_at': '2015-11-17T07:41:57.461883Z',
               '_id': 'category/transientCategory',
