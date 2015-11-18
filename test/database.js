@@ -49,8 +49,7 @@ let request = mockSuperagent([{
           '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
           '_created_at': '2014-09-27T17:40:00.000Z',
           '_ownerID': 'rick.mak@gmail.com',
-          '_access': null,
-          'null': null
+          '_access': null
         }]
       });
     }
@@ -140,6 +139,15 @@ describe('Database', function () {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
       throw Error();
+    });
+  });
+
+  it('replace record field after saving', function () {
+    let r = new Note();
+    r.content = 'I shalt not exist';
+    return db.save(r).then(function (record) {
+      expect(record).to.be.an.instanceof(Note);
+      expect(record.content).to.be.undefined; // eslint-disable-line no-unused-expressions
     });
   });
 
