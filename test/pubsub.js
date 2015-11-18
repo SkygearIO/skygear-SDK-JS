@@ -1,13 +1,8 @@
 /*eslint-disable no-unused-expressions */
-const chai = require('chai');
-
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
-import sinonChai from 'sinon-chai';
 import sinon from 'sinon';
 import Pubsub from '../lib/pubsub';
 import Container from '../lib/container';
-
-chai.use(sinonChai);
 
 describe('Pubsub', function () {
   var fn1 = function () { };

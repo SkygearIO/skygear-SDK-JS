@@ -24,7 +24,14 @@ let request = mockSuperagent([{
         }, {
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
           'content': 'limouren',
-          'noteOrder': 2
+          'noteOrder': 2,
+          '_transient': {
+            'category': {
+              '_created_at': '2015-11-17T07:41:57.461883Z',
+              '_id': 'category/transientCategory',
+              'name': 'transient test'
+            }
+          }
         }],
         'info': {
           'count': 24
@@ -80,6 +87,26 @@ describe('Database', function () {
 
   it('query with Query object', function () {
     let q = new Query(Note);
+    q.transientInclude('category');
+    return db.query(q).then(function (records) {
+      expect(records.length).to.be.equal(2);
+      expect(records[0]).to.be.an.instanceof(Note);
+      expect(records.overallCount).to.be.equal(24);
+
+      let transientCategory = records[1].$transient.category;
+      expect(transientCategory.id).to.equal('category/transientCategory');
+      expect(transientCategory.createdAt.getTime())
+        .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
+      expect(transientCategory.name).to.equal('transient test');
+    }, function (error) {
+      throw Error();
+    });
+  });
+
+  it.skip('query with returns of unexpected _transient dict', function () {
+    let q = new Query(Note);
+    // this test case should work without calls to transientInclude
+    // q.transientInclude('category')
     return db.query(q).then(function (records) {
       expect(records.length).to.be.equal(2);
       expect(records[0]).to.be.an.instanceof(Note);
