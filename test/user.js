@@ -1,4 +1,4 @@
-/*eslint-disable no-unused-expressions, no-new, camelcase */
+/*eslint-disable no-new, camelcase */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import User from '../lib/user';
 
@@ -46,5 +46,5 @@ describe('User', function () {
     expect(user).to.be.an.instanceof(User);
   });
 
-
 });
+/*eslint-enable no-new, camelcase */

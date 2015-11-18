@@ -1,4 +1,4 @@
-/*eslint-disable no-unused-expressions, quote-props */
+/*eslint-disable quote-props */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import Record from '../lib/record';
 import QueryResult from '../lib/query_result';
@@ -15,7 +15,7 @@ describe('QueryResult', function () {
     expect(result.length).to.be.equal(2);
     expect(result[0]).to.be.equal(r1);
     expect(result[1]).to.be.equal(r2);
-    expect(result.overallCount).to.be.undefined;
+    expect(result.overallCount).to.be.undefined();
   });
 
   it('create query result with count info', function () {
@@ -30,4 +30,4 @@ describe('QueryResult', function () {
     expect(result.overallCount).to.be.equal(24);
   });
 });
-/*eslint-enable no-unused-expressions, quote-props */
+/*eslint-enable quote-props */

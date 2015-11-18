@@ -11,7 +11,12 @@ var config = require('../config');
 var context = require('../context');
 
 var chai = require('chai');
+var dirtyChai = require('dirty-chai');
 var sinonChai = require('sinon-chai');
+
+// NOTE: dirty-chai should be loaded before other chai plugins to properly
+// convert property assertions
+chai.use(dirtyChai);
 chai.use(sinonChai);
 
 gulp.task('pre-test', function () {

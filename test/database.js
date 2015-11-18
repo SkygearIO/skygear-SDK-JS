@@ -147,7 +147,7 @@ describe('Database', function () {
     r.content = 'I shalt not exist';
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
-      expect(record.content).to.be.undefined; // eslint-disable-line no-unused-expressions
+      expect(record.content).to.be.undefined();
     });
   });
 

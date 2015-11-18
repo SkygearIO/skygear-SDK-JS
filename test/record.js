@@ -1,4 +1,4 @@
-/*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-expressions, no-unused-vars, quote-props, quotes */
+/*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
@@ -18,7 +18,7 @@ describe('Record', function () {
   it('generate with uuid v4 as id', function () {
     let r = new Record('note');
     let tuple = r.id.split("/");
-    expect(v4Spec.test(tuple[1])).to.be.true;
+    expect(v4Spec.test(tuple[1])).to.be.true();
     expect(tuple[0]).to.equal('note');
   });
 
@@ -59,7 +59,7 @@ describe('Extended Record', function () {
   it('generate with uuid v4 as id', function () {
     let r = new Note();
     let tuple = r.id.split("/");
-    expect(v4Spec.test(tuple[1])).to.be.true;
+    expect(v4Spec.test(tuple[1])).to.be.true();
     expect(tuple[0]).to.equal('note');
     expect(r.recordType).to.equal('note');
   });
@@ -118,4 +118,4 @@ describe('Extended Record', function () {
   });
 
 });
-/*eslint-enable dot-notation, max-len, new-cap, no-new, no-unused-expressions, no-unused-vars, quote-props, quotes */
+/*eslint-enable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
