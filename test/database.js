@@ -118,6 +118,7 @@ describe('Database', function () {
 
   it('save record to remote', function () {
     let r = new Note();
+    r.null = null;
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
@@ -138,6 +139,15 @@ describe('Database', function () {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
       throw Error();
+    });
+  });
+
+  it('replace record field after saving', function () {
+    let r = new Note();
+    r.content = 'I shalt not exist';
+    return db.save(r).then(function (record) {
+      expect(record).to.be.an.instanceof(Note);
+      expect(record.content).to.be.undefined; // eslint-disable-line no-unused-expressions
     });
   });
 
