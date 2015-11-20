@@ -55,6 +55,7 @@
     "localforage": "~1.2.10",
     "lodash": "^3.10.1",
     "superagent": "^1.3.0",
+    "url": "^0.11.0",
     "uuid": "^2.0.1",
     "w3c-blob": "0.0.1",
     "websocket": "^1.0.22"
