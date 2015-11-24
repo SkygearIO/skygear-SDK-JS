@@ -51,7 +51,8 @@ let request = mockSuperagent([{
           '_ownerID': 'rick.mak@gmail.com',
           '_access': null,
           '_transient': {
-            'synced': true
+            'synced': true,
+            'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
           }
         }]
       });
@@ -148,6 +149,19 @@ describe('Database', function () {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
       throw Error();
+    });
+  });
+
+  it('merge transient field after save', function () {
+    let r = new Note();
+    r.$transient.custom = "CLIENT DATA";
+    r.$transient.synced = false;
+    return db.save(r).then(function (record) {
+      expect(record).to.be.an.instanceof(Note);
+      expect(record.$transient.synced).to.be.true();
+      expect(record.$transient.syncDate.toISOString())
+        .to.be.equal('2014-09-27T17:40:00.000Z');
+      expect(record.$transient.custom).to.be.equal("CLIENT DATA");
     });
   });
 
