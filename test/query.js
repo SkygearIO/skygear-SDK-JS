@@ -289,6 +289,18 @@ describe('Query', function () {
     });
   });
 
+  it('serialize like', function () {
+    let q = new Query(Note);
+    q.caseInsensitiveLike('content', 'hello');
+    expect(q.toJSON().predicate).to.eql([
+      'ilike',
+      {
+        $type: 'keypath',
+        $val: 'content'
+      },
+      'hello']);
+  });
+
   it('serialize a simple or query', function () {
     let con1 = new Query(Note);
     con1.greaterThan('count', 100);
