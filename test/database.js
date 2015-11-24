@@ -49,7 +49,11 @@ let request = mockSuperagent([{
           '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
           '_created_at': '2014-09-27T17:40:00.000Z',
           '_ownerID': 'rick.mak@gmail.com',
-          '_access': null
+          '_access': null,
+          '_transient': {
+            'synced': true,
+            'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+          }
         }]
       });
     }
@@ -103,7 +107,7 @@ describe('Database', function () {
     });
   });
 
-  it.skip('query with returns of unexpected _transient dict', function () {
+  it('query with returns of unexpected _transient dict', function () {
     let q = new Query(Note);
     // this test case should work without calls to transientInclude
     // q.transientInclude('category')
@@ -111,6 +115,12 @@ describe('Database', function () {
       expect(records.length).to.be.equal(2);
       expect(records[0]).to.be.an.instanceof(Note);
       expect(records.overallCount).to.be.equal(24);
+
+      let transientCategory = records[1].$transient.category;
+      expect(transientCategory.id).to.equal('category/transientCategory');
+      expect(transientCategory.createdAt.getTime())
+        .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
+      expect(transientCategory.name).to.equal('transient test');
     }, function (error) {
       throw Error();
     });
@@ -139,6 +149,19 @@ describe('Database', function () {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
       throw Error();
+    });
+  });
+
+  it('merge transient field after save', function () {
+    let r = new Note();
+    r.$transient.custom = "CLIENT DATA";
+    r.$transient.synced = false;
+    return db.save(r).then(function (record) {
+      expect(record).to.be.an.instanceof(Note);
+      expect(record.$transient.synced).to.be.true();
+      expect(record.$transient.syncDate.toISOString())
+        .to.be.equal('2014-09-27T17:40:00.000Z');
+      expect(record.$transient.custom).to.be.equal("CLIENT DATA");
     });
   });
 
