@@ -76,6 +76,17 @@
         <input id="query-operand2" type="text" placeholder="operand">
       </p>
       <p>
+        <input id="query-in1-value" type="text" placeholder="String value">
+        in
+        <input id="query-in1-keypath" type="text" placeholder="Key path">
+        <br/> 
+        <input id="query-in2-keypath" type="text" placeholder="Key path">
+        in
+        [<input id="query-in2-value1" type="text" placeholder="string value 1">,
+        <input id="query-in2-value2" type="text" placeholder="string value 2">,
+        <input id="query-in2-value3" type="text" placeholder="string value 3">]
+      </p>
+      <p>
         <label>Sort</label>
         <input id="query-sort" type="text">
         <select id="query-sort-order">
@@ -225,6 +236,9 @@
       var key2 = document.getElementById("query-key2").value;
       var operator2 = document.getElementById("query-operator2").value;
       var operand2 = document.getElementById("query-operand2").value;
+      var inValue1 = document.getElementById("query-in1-value").value;
+      var inKeyPath1 = document.getElementById("query-in1-keypath").value;
+      var inKeyPath2 = document.getElementById("query-in2-keypath").value;
       var querySort = document.getElementById("query-sort").value;
       var querySortOrder = document.getElementById("query-sort-order").value;
       var queryOffset = document.getElementById("query-offset").value;
@@ -243,6 +257,17 @@
       }
       if (operand2) {
         query[operator2](key2, operand2);
+      }
+      if (inValue1 != "" && inKeyPath1 != "") {
+        query.containsValue(inKeyPath1, inValue1);
+      }
+      if (inKeyPath2 != "") {
+        var lookupArray = [
+          document.getElementById('query-in2-value1').value,
+          document.getElementById('query-in2-value2').value,
+          document.getElementById('query-in2-value3').value
+        ];
+        query.contains(inKeyPath2, lookupArray);
       }
       if (querySort) {
         query[querySortOrder](querySort);
