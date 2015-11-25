@@ -125,6 +125,19 @@ describe('Query', function () {
     }, ['a', 'b']]);
   });
 
+  it('add containsValue to predicate', function () {
+    let q = new Query(Note);
+    q.containsValue('category', 'a');
+    expect(q.predicate).to.deep.include.members(['in',
+      'a',
+      {
+        $type: 'keypath',
+        $val: 'category'
+      }
+    ]);
+  });
+
+
   it('sort by ascending distance', function () {
     let q = new Query(Note);
     q.addAscendingByDistance('geo', new Geolocation(10, 20));
