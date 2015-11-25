@@ -26,7 +26,7 @@
     </p>
   </div>
   <hr>
-  <div id="record">
+  <div id="user">
     <h4>User by Email</h4>
     <form action="#" onsubmit="return false;">
       <p>
@@ -38,6 +38,61 @@
     </form>
   </div>
   <hr>
+  <div id="relation">
+    <h4>Query user relation</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Relation</label>
+        <select id="query-relation">
+          <option value="Follower">Follower</option>
+          <option value="Following">Following</option>
+          <option value="Friend">Friend</option>
+        </select>
+      </p>
+      <p id="relation-result"></p>
+      <button onclick="queryRelation();">Query</button>
+    </form>
+  </div>
+  <hr>
+  <div>
+    <h4>Add user relation</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Relation</label>
+        <select id="add-relation">
+          <option value="Follower">Follower</option>
+          <option value="Following">Following</option>
+          <option value="Friend">Friend</option>
+        </select>
+      </p>
+      <p>
+        <label>User id</label>
+        <input id="add-id" type="text" placeholder="user id">
+      </p>
+      <p id="add-result"></p>
+      <button onclick="addRelation();">Add</button>
+    </form>
+  </div>
+  <hr>
+  <div>
+    <h4>Remove user relation</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <label>Relation</label>
+        <select id="remove-relation">
+          <option value="Follower">Follower</option>
+          <option value="Following">Following</option>
+          <option value="Friend">Friend</option>
+        </select>
+      </p>
+      <p>
+        <label>User id</label>
+        <input id="remove-id" type="text" placeholder="user id">
+      </p>
+      <p id="remove-result"></p>
+      <button onclick="removeRelation();">Remove</button>
+    </form>
+  </div>
   <script src="../dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
@@ -70,6 +125,66 @@
         userInfo.innerText = error;
       });
 
+    }
+
+    function queryRelation () {
+      console.log('queryRelation');
+      var type = document.getElementById("query-relation").value;
+      var relationResult = document.getElementById("relation-result");
+      var method = "query" + type;
+      console.log(method);
+
+      skygear.Relation[method]().then(function (users) {
+        console.log(users[0]);
+        relationResult.innerText = users;
+      }, function (error) {
+        console.log(error);
+        relationResult.innerText = error;
+      })
+    }
+
+    function addRelation() {
+      console.log('addRelation');
+      var type = document.getElementById("add-relation").value;
+      var addResult = document.getElementById("add-result");
+      var userID = document.getElementById("add-id").value;
+      var user = new skygear.User({
+        user_id: userID
+      });
+      console.log(type);
+      console.log(user.id);
+
+      var relation = new skygear.Relation[type]([user]);
+
+      skygear.Relation.add(relation).then(function (result) {
+        console.log(result.targets);
+        addResult.innerText = result.success;
+      }, function (error) {
+        console.log(error);
+        addResult.innerText = error;
+      });
+    }
+
+    function removeRelation() {
+      console.log('removeRelation');
+      var type = document.getElementById("remove-relation").value;
+      var removeResult = document.getElementById("remove-result");
+      var userID = document.getElementById("remove-id").value;
+      var user = new skygear.User({
+        user_id: userID
+      });
+      console.log(type);
+      console.log(user.id);
+
+      var relation = new skygear.Relation[type]([user]);
+
+      skygear.Relation.remove(relation).then(function (result) {
+        console.log(result.success);
+        removeResult.innerText = result.success;
+      }, function (error) {
+        console.log(error);
+        removeResult.innerText = error;
+      });
     }
 
   </script>
