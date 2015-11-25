@@ -16,9 +16,17 @@ import {
 describe('Relation', function () {
   it('reject invalid direction', function () {
     expect(function () {
-      new Relation('friend-of-friend');
+      new Relation('', Outward);
     }).to.throw(
-      'Relation direction not support.'
+      'Relation identifier can only be [a-zA-Z]+'
+    );
+  });
+
+  it('reject invalid direction', function () {
+    expect(function () {
+      new Relation('friendOfFriend');
+    }).to.throw(
+      'Relation direction not supported.'
     );
   });
 
