@@ -1,4 +1,4 @@
-/*eslint-disable dot-notation, no-new, no-unused-vars, quote-props, quotes */
+/*eslint-disable dot-notation, no-new, no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import Database from '../lib/database';
 import Record from '../lib/record';
@@ -18,8 +18,8 @@ let request = mockSuperagent([{
           'print_at': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
           'content': 'hi ourd',
           'noteOrder': 1,
-          'ref': {$type: "ref", $id: "note/note1"},
-          'geo': {$type: "geo", $lat: 10, $lng: 20},
+          'ref': {$type: 'ref', $id: 'note/note1'},
+          'geo': {$type: 'geo', $lat: 10, $lng: 20},
           'tags': []
         }, {
           '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
@@ -42,7 +42,18 @@ let request = mockSuperagent([{
 }, {
   pattern: 'http://skygear.dev/record/save',
   fixtures: function (match, params, headers, fn) {
-    if (params['database_id'] === '_public') {
+    let id = params['records'][0]['_id'];
+    if (params['database_id'] === '_public' && id === 'note/failed-to-save') {
+      return fn({
+        'result': [{
+          '_id': 'note/failed-to-save',
+          '_type': 'error',
+          'code': 101,
+          'message': 'failed to save record id = note/failed-to-save',
+          'type': 'ResourceSaveFailure'
+        }]
+      });
+    } else {
       return fn({
         'result': [{
           '_type': 'record',
@@ -136,6 +147,23 @@ describe('Database', function () {
     });
   });
 
+  it('save fails with reject callback', function () {
+    let r = new Note({
+      _id: 'note/failed-to-save'
+    });
+    return db.save(r).then(function (record) {
+      throw Error();
+    }, function (error) {
+      expect(error).eql({
+        '_id': 'note/failed-to-save',
+        '_type': 'error',
+        'code': 101,
+        'message': 'failed to save record id = note/failed-to-save',
+        'type': 'ResourceSaveFailure'
+      });
+    });
+  });
+
   it('save record with meta populated', function () {
     let r = new Note();
     r.update({
@@ -154,14 +182,14 @@ describe('Database', function () {
 
   it('merge transient field after save', function () {
     let r = new Note();
-    r.$transient.custom = "CLIENT DATA";
+    r.$transient.custom = 'CLIENT DATA';
     r.$transient.synced = false;
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
       expect(record.$transient.synced).to.be.true();
       expect(record.$transient.syncDate.toISOString())
         .to.be.equal('2014-09-27T17:40:00.000Z');
-      expect(record.$transient.custom).to.be.equal("CLIENT DATA");
+      expect(record.$transient.custom).to.be.equal('CLIENT DATA');
     });
   });
 
@@ -184,4 +212,4 @@ describe('Database', function () {
   });
 
 });
-/*eslint-enable dot-notation, no-new, no-unused-vars, quote-props, quotes */
+/*eslint-enable dot-notation, no-new, no-unused-vars, quote-props */
