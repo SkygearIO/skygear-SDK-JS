@@ -106,7 +106,7 @@
       if (identifier === 'email') {
         _signup = skygear.signupWithEmail(email, password);
       } else {
-        _signup = skygear.signup(username, password);
+        _signup = skygear.signupWithUsername(username, password);
       }
       _signup.then(function() {
         console.log('Signup ok');
@@ -128,7 +128,7 @@
       if (identifier === 'email') {
         _login = skygear.loginWithEmail(email, password);
       } else {
-        _login = skygear.login(username, password)
+        _login = skygear.loginWithUsername(username, password)
       }
       _login.then(function() {
         console.log('Login ok');

@@ -71,7 +71,7 @@ describe('Container auth', function () {
 
   it('should signup successfully', function () {
     return container
-      .signup('username', 'passwd')
+      .signupWithUsername('username', 'passwd')
       .then(function (user) {
         assert.equal(
           container.accessToken,
@@ -104,7 +104,7 @@ describe('Container auth', function () {
   });
 
   it('should not signup duplicate account', function () {
-    return container.signup('duplicated', 'passwd').then(function (user) {
+    return container.signupWithUsername('duplicated', 'passwd').then(function (user) {
       throw new Error('Signup duplicated user');
     }, function (err) {
       assert.equal(
@@ -114,7 +114,7 @@ describe('Container auth', function () {
   });
 
   it('should login with correct password', function () {
-    return container.login('registered', 'passwd').then(function (user) {
+    return container.loginWithUsername('registered', 'passwd').then(function (user) {
       assert.equal(
         container.accessToken,
         'uuid1');
@@ -146,7 +146,7 @@ describe('Container auth', function () {
   });
 
   it('should fail to login with incorrect password', function () {
-    return container.login('registered', 'wrong').then(function (user) {
+    return container.loginWithUsername('registered', 'wrong').then(function (user) {
       throw new Error('Login with wrong password');
     }, function (err) {
       assert.equal(
