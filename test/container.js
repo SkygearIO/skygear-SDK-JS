@@ -1,4 +1,4 @@
-/*eslint-disable dot-notation, max-len, no-undef, no-unused-vars, quote-props */
+/*eslint-disable dot-notation, no-unused-vars, quote-props */
 import {assert} from 'chai';
 import Container from '../lib/container';
 
@@ -104,28 +104,32 @@ describe('Container auth', function () {
   });
 
   it('should not signup duplicate account', function () {
-    return container.signupWithUsername('duplicated', 'passwd').then(function (user) {
-      throw new Error('Signup duplicated user');
-    }, function (err) {
-      assert.equal(
-        err.error.message,
-        'user duplicated');
-    });
+    return container
+      .signupWithUsername('duplicated', 'passwd')
+      .then(function (user) {
+        throw new Error('Signup duplicated user');
+      }, function (err) {
+        assert.equal(
+          err.error.message,
+          'user duplicated');
+      });
   });
 
   it('should login with correct password', function () {
-    return container.loginWithUsername('registered', 'passwd').then(function (user) {
-      assert.equal(
-        container.accessToken,
-        'uuid1');
-      assert.instanceOf(container.currentUser, container.User);
-      assert.equal(
-        container.currentUser.id,
-        'user:id1'
-      );
-    }, function (error) {
-      throw new Error('Failed to login with correct password');
-    });
+    return container
+      .loginWithUsername('registered', 'passwd')
+      .then(function (user) {
+        assert.equal(
+          container.accessToken,
+          'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.id,
+          'user:id1'
+        );
+      }, function (error) {
+        throw new Error('Failed to login with correct password');
+      });
   });
 
   it('should login with email and correct password', function () {
@@ -146,13 +150,15 @@ describe('Container auth', function () {
   });
 
   it('should fail to login with incorrect password', function () {
-    return container.loginWithUsername('registered', 'wrong').then(function (user) {
-      throw new Error('Login with wrong password');
-    }, function (err) {
-      assert.equal(
-        err.error.message,
-        'invalid authentication information');
-    });
+    return container
+      .loginWithUsername('registered', 'wrong')
+      .then(function (user) {
+        throw new Error('Login with wrong password');
+      }, function (err) {
+        assert.equal(
+          err.error.message,
+          'invalid authentication information');
+      });
   });
 });
 
@@ -206,7 +212,7 @@ describe('Container device registration', function () {
       if (params.id) {
         return fn({
           'result': {
-            'id': paramsid
+            'id': params.id
           }
         });
       } else {
@@ -221,12 +227,14 @@ describe('Container device registration', function () {
   container.configApiKey('correctApiKey');
 
   it('should save device id successfully', function () {
-    container.registerDevice('device-token', 'android').then(function (deviceID) {
-      assert(deviceID).to.equal('device-id');
-      assert(container.deviceID).to.equal('device-id');
-    }, function () {
-      throw 'failed to save device id';
-    });
+    container
+      .registerDevice('device-token', 'android')
+      .then(function (deviceID) {
+        assert(deviceID).to.equal('device-id');
+        assert(container.deviceID).to.equal('device-id');
+      }, function () {
+        throw 'failed to save device id';
+      });
   });
 
   it('should attach existing device id', function () {
@@ -281,21 +289,25 @@ describe('lambda', function () {
   });
 
   it('should pass dict parameters', function () {
-    return container.lambda('hello:args', {'name': 'world'}).then(function (result) {
-      assert.deepEqual(result, {
-        'hello': {
-          'name': 'world'
-        }
+    return container
+      .lambda('hello:args', {'name': 'world'})
+      .then(function (result) {
+        assert.deepEqual(result, {
+          'hello': {
+            'name': 'world'
+          }
+        });
       });
-    });
   });
 
   it('should pass array parameters', function () {
-    return container.lambda('hello:args', ['hello', 'world']).then(function (result) {
-      assert.deepEqual(result, {
-        'hello': ['hello', 'world']
+    return container
+      .lambda('hello:args', ['hello', 'world'])
+      .then(function (result) {
+        assert.deepEqual(result, {
+          'hello': ['hello', 'world']
+        });
       });
-    });
   });
 
   it('should parse error', function () {
@@ -306,4 +318,4 @@ describe('lambda', function () {
     });
   });
 });
-/*eslint-enable dot-notation, max-len, no-undef, no-unused-vars, quote-props */
+/*eslint-enable dot-notation, no-unused-vars, quote-props */
