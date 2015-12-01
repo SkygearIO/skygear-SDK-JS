@@ -73,12 +73,24 @@ let request = mockSuperagent([{
   pattern: 'http://skygear.dev/record/delete',
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public' && params['ids']) {
-      return fn({
-        'result': [{
-          '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-          '_type': 'record'
-        }]
-      });
+      if (params['ids'][0] === 'note/not-found') {
+        return fn({
+          result: [{
+            _id: 'note/not-found',
+            _type: 'error',
+            code: 103,
+            message: 'record not found',
+            type: 'ResourceNotFound'
+          }]
+        });
+      } else {
+        return fn({
+          'result': [{
+            '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+            '_type': 'record'
+          }]
+        });
+      }
     }
   }
 }]);
@@ -208,6 +220,17 @@ describe('Database', function () {
       return;
     }, function (error) {
       throw Error();
+    });
+  });
+
+  it('delete record fails will reject', function () {
+    let r = new Note({
+      _id: 'note/not-found'
+    });
+    return db.del(r).then(function () {
+      throw Error();
+    }, function (error) {
+      return;
     });
   });
 
