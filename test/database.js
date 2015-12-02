@@ -230,7 +230,13 @@ describe('Database', function () {
     return db.del(r).then(function () {
       throw Error();
     }, function (error) {
-      return;
+      expect(error).eql({
+        _id: 'note/not-found',
+        _type: 'error',
+        code: 103,
+        message: 'record not found',
+        type: 'ResourceNotFound'
+      });
     });
   });
 
