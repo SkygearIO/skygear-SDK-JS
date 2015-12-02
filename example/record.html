@@ -79,7 +79,7 @@
         <input id="query-in1-value" type="text" placeholder="String value">
         in
         <input id="query-in1-keypath" type="text" placeholder="Key path">
-        <br/> 
+        <br/>
         <input id="query-in2-keypath" type="text" placeholder="Key path">
         in
         [<input id="query-in2-value1" type="text" placeholder="string value 1">,
@@ -316,7 +316,11 @@
       var record = new skygear.Record(_type, {
         _id: _id
       });
-      skygear.publicDB.del(record)
+      skygear.publicDB.del(record).then(function (ok) {
+        console.log(ok);
+      }, function (error) {
+        console.log(error);
+      })
 
     }
   </script>
