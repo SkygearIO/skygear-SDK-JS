@@ -200,6 +200,7 @@ describe('RelationAction', function () {
       expect(users.length).to.be.equal(1);
       expect(users[0]).to.be.instanceof(User);
       expect(users[0].id).to.be.equal('following1');
+      expect(users.overallCount).to.be.equal(1);
     }, function (error) {
       throw Error();
     });
@@ -210,6 +211,7 @@ describe('RelationAction', function () {
       expect(users.length).to.be.equal(2);
       expect(users[0]).to.be.instanceof(User);
       expect(users[0].id).to.be.equal('follower1');
+      expect(users.overallCount).to.be.equal(24);
     }, function (error) {
       throw Error();
     });

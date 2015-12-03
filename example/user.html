@@ -135,7 +135,7 @@
       console.log(method);
 
       skygear.relation[method]().then(function (users) {
-        console.log(users[0]);
+        console.log(users);
         relationResult.innerText = JSON.stringify(users);
       }, function (error) {
         console.log(error);
