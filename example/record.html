@@ -87,6 +87,16 @@
         <input id="query-in2-value3" type="text" placeholder="string value 3">]
       </p>
       <p>
+        <input id="query-relation-keypath" type="text" placeholder="Key path">
+        (e.g. <code>_owner</code>)
+        having relation
+        <select id="query-relation-name">
+          <option value="friend">friend</option>
+          <option value="following">following</option>
+          <option value="followed">followed</option>
+        </select>
+      </p>
+      <p>
         <label>Sort</label>
         <input id="query-sort" type="text">
         <select id="query-sort-order">
@@ -239,6 +249,8 @@
       var inValue1 = document.getElementById("query-in1-value").value;
       var inKeyPath1 = document.getElementById("query-in1-keypath").value;
       var inKeyPath2 = document.getElementById("query-in2-keypath").value;
+      var relationKeyPath = document.getElementById("query-relation-keypath").value;
+      var relationName = document.getElementById("query-relation-name").value;
       var querySort = document.getElementById("query-sort").value;
       var querySortOrder = document.getElementById("query-sort-order").value;
       var queryOffset = document.getElementById("query-offset").value;
@@ -268,6 +280,15 @@
           document.getElementById('query-in2-value3').value
         ];
         query.contains(inKeyPath2, lookupArray);
+      }
+      if (relationKeyPath != "") {
+        if (relationName == "friend") {
+          query.havingRelation(relationKeyPath, skygear.relation.Friend);
+        } else if (relationName == "following") {
+          query.havingRelation(relationKeyPath, skygear.relation.Following);
+        } else {
+          query.havingRelation(relationKeyPath, skygear.relation.Follower);
+        }
       }
       if (querySort) {
         query[querySortOrder](querySort);

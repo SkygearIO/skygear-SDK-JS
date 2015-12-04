@@ -4,6 +4,7 @@ import Query from '../lib/query';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
 import Geolocation from '../lib/geolocation';
+import {RelationAction, Mutual} from '../lib/relation';
 
 describe('Query', function () {
 
@@ -312,6 +313,25 @@ describe('Query', function () {
         $val: 'content'
       },
       'hello']);
+  });
+
+  it('serialize havingRelation', function () {
+    let q = new Query(Note);
+    let Friend = RelationAction.extend('friend', Mutual);
+    q.havingRelation('_owner', Friend);
+    expect(q.toJSON().predicate).to.eql([
+      'func',
+      'userRelation',
+      {
+        $type: 'keypath',
+        $val: '_owner'
+      },
+      {
+        $type: 'relation',
+        $name: '_friend',
+        $direction: 'mutual'
+      }
+    ]);
   });
 
   it('serialize a simple or query', function () {
