@@ -134,9 +134,9 @@
       var method = "query" + type;
       console.log(method);
 
-      skygear.Relation[method]().then(function (users) {
-        console.log(users[0]);
-        relationResult.innerText = users;
+      skygear.relation[method]().then(function (users) {
+        console.log(users);
+        relationResult.innerText = JSON.stringify(users);
       }, function (error) {
         console.log(error);
         relationResult.innerText = error;
@@ -154,11 +154,11 @@
       console.log(type);
       console.log(user.id);
 
-      var relation = new skygear.Relation[type]([user]);
+      var relation = new skygear.relation[type]([user]);
 
-      skygear.Relation.add(relation).then(function (result) {
+      skygear.relation.add(relation).then(function (result) {
         console.log(result.targets);
-        addResult.innerText = result.success;
+        addResult.innerText = JSON.stringify(result.success);
       }, function (error) {
         console.log(error);
         addResult.innerText = error;
@@ -176,11 +176,11 @@
       console.log(type);
       console.log(user.id);
 
-      var relation = new skygear.Relation[type]([user]);
+      var relation = new skygear.relation[type]([user]);
 
-      skygear.Relation.remove(relation).then(function (result) {
+      skygear.relation.remove(relation).then(function (result) {
         console.log(result.success);
-        removeResult.innerText = result.success;
+        removeResult.innerText = JSON.stringify(result.success);
       }, function (error) {
         console.log(error);
         removeResult.innerText = error;
