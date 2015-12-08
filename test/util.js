@@ -1,9 +1,17 @@
 /*eslint-disable no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import Geolocation from '../lib/geolocation';
+import {Sequence} from '../lib/type';
 import {toJSON, fromJSON} from '../lib/util';
 
 describe('util', function () {
+
+  it('toJSON Sequence', function () {
+    const seq = new Sequence();
+    expect(toJSON(seq)).to.eql({
+      $type: 'seq'
+    });
+  });
 
   it('toJSON Date', function () {
     const d = new Date(1411839600000);

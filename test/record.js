@@ -3,6 +3,7 @@ import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
 import Geolocation from '../lib/geolocation';
+import {Sequence} from '../lib/type';
 
 const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
 
@@ -105,6 +106,19 @@ describe('Extended Record', function () {
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
       content: 'hello world'
+    });
+  });
+
+  it('serialize to payload with sequence', function () {
+    let note = new Note({
+      _id: 'note/uid'
+    });
+    note.noteID = new Sequence();
+    expect(note.toJSON()).to.be.eql({
+      _id: 'note/uid',
+      noteID: {
+        $type: 'seq'
+      }
     });
   });
 
