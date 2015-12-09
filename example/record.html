@@ -37,6 +37,11 @@
         <label>JSON payload</label>
         <textarea id="create-payload">{}</textarea>
       </p>
+      <p>
+        <input id="auto-increment" type="checkbox"/>
+        <label for="auto-increment">Include auto increment ID</label>
+        <input id="auto-increment-id" type="text" value="noteID">
+      </p>
       <p id="create-result"></p>
       <button onclick="createRecord();">Create Record</button>
     </form>
@@ -85,6 +90,16 @@
         [<input id="query-in2-value1" type="text" placeholder="string value 1">,
         <input id="query-in2-value2" type="text" placeholder="string value 2">,
         <input id="query-in2-value3" type="text" placeholder="string value 3">]
+      </p>
+      <p>
+        <input id="query-relation-keypath" type="text" placeholder="Key path">
+        (e.g. <code>_owner</code>)
+        having relation
+        <select id="query-relation-name">
+          <option value="friend">friend</option>
+          <option value="following">following</option>
+          <option value="followed">followed</option>
+        </select>
       </p>
       <p>
         <label>Sort</label>
@@ -213,12 +228,18 @@
 
     function createRecord () {
       console.log('Create');
-      var _type = document.getElementById("update-type").value;
+      var _type = document.getElementById("create-type").value;
       var payload = document.getElementById("create-payload").value;
+      var sequence = document.getElementById("auto-increment").value;
+      var sequenceName = document.getElementById("auto-increment-id").value;
       var createResult = document.getElementById("create-result");
       var _Record = skygear.Record.extend(_type);
       var attrs = JSON.parse(payload);
-      skygear.publicDB.save(new _Record(attrs)).then(function (record) {
+      var record = new _Record(attrs);
+      if (sequence === 'on') {
+        record[sequenceName] = new skygear.Sequence();
+      }
+      skygear.publicDB.save(record).then(function (record) {
         console.log(record);
         createResult.innerText = record.ID;
       }, function (error) {
@@ -239,6 +260,8 @@
       var inValue1 = document.getElementById("query-in1-value").value;
       var inKeyPath1 = document.getElementById("query-in1-keypath").value;
       var inKeyPath2 = document.getElementById("query-in2-keypath").value;
+      var relationKeyPath = document.getElementById("query-relation-keypath").value;
+      var relationName = document.getElementById("query-relation-name").value;
       var querySort = document.getElementById("query-sort").value;
       var querySortOrder = document.getElementById("query-sort-order").value;
       var queryOffset = document.getElementById("query-offset").value;
@@ -268,6 +291,15 @@
           document.getElementById('query-in2-value3').value
         ];
         query.contains(inKeyPath2, lookupArray);
+      }
+      if (relationKeyPath != "") {
+        if (relationName == "friend") {
+          query.havingRelation(relationKeyPath, skygear.relation.Friend);
+        } else if (relationName == "following") {
+          query.havingRelation(relationKeyPath, skygear.relation.Following);
+        } else {
+          query.havingRelation(relationKeyPath, skygear.relation.Follower);
+        }
       }
       if (querySort) {
         query[querySortOrder](querySort);
