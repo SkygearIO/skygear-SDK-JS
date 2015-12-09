@@ -117,6 +117,10 @@
         <label>Limit</label>
         <input id="query-limit" type="number">
       </p>
+      <p>
+        <input id="display-cache" type="checkbox"/>
+        <label for="display-cache">Display cached result</label>
+      </p>
       <p id="query-count"></p>
       <p id="query-result"></p>
       <button onclick="queryRecord();">Query</button>
@@ -266,6 +270,7 @@
       var querySortOrder = document.getElementById("query-sort-order").value;
       var queryOffset = document.getElementById("query-offset").value;
       var queryLimit = document.getElementById("query-limit").value;
+      var displayCache = document.getElementById("display-cache").checked;
       var queryResult = document.getElementById("query-result");
       var queryResultCount = document.getElementById("query-count");
       var _Record = skygear.Record.extend(_type, {
@@ -310,13 +315,20 @@
       if (queryLimit) {
         query.limit = parseInt(queryLimit, 10);
       }
-      skygear.publicDB.query(query).then(function (records) {
-        queryResultCount.innerText = records.overallCount;
-        queryResult.innerText = JSON.stringify(records);
-      }, function (error) {
-        console.log(error);
-        queryResult = error;
-      })
+      if (displayCache) {
+        skygear.publicDB.query(query, function (records) {
+          queryResultCount.innerText = records.overallCount;
+          queryResult.innerText = JSON.stringify(records);
+        });
+      } else {
+        skygear.publicDB.query(query).then(function (records) {
+          queryResultCount.innerText = records.overallCount;
+          queryResult.innerText = JSON.stringify(records);
+        }, function (error) {
+          console.log(error);
+          queryResult = error;
+        });
+      }
     };
 
     function updateRecord () {
