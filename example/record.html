@@ -24,6 +24,9 @@
       <label>Email</label>
       <span id="currentEmail"></span>
     </p>
+    <p>
+      <button onclick="clearCache();">Clear Cache</button>
+    </p>
   </div>
   <hr>
   <div id="record">
@@ -365,7 +368,15 @@
       }, function (error) {
         console.log(error);
       })
+    };
 
+    function clearCache() {
+      console.log("clearCache");
+      skygear.clearCache().then(function (keys) {
+        console.log("Cache cleared.", keys);
+      }, function () {
+        console.log("Failed to clear cache.");
+      });
     }
   </script>
 </body>
