@@ -48,7 +48,7 @@
     "prepublish": "gulp --type production prepublish",
     "test": "gulp --type dev"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "Base64": "^0.3.0",
     "babel-polyfill": "^6.1.19",
