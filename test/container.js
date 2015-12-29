@@ -224,7 +224,15 @@ describe('Container device registration', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/register',
     fixtures: function (match, params, headers, fn) {
-      if (params.id) {
+      if (params.id && params.id === 'non-exist') {
+        return fn({
+          'error': {
+            'name': 'ResourceNotFound',
+            'code': 110,
+            'message': 'device not found'
+          }
+        });
+      } else if (params.id) {
         return fn({
           'result': {
             'id': params.id
@@ -253,11 +261,20 @@ describe('Container device registration', function () {
   });
 
   it('should attach existing device id', function () {
-    container._setDeviceID('existing-device-id', 'ios').then(function () {
-      return container.registerDevice('ddevice-token');
+    container._setDeviceID('existing-device-id').then(function () {
+      return container.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
       assert(deviceID).to.equal('existing-device-id');
       assert(container.deviceID).to.equal('existing-device-id');
+    });
+  });
+
+  it('should retry with null deviceID on first call fails', function () {
+    container._setDeviceID('non-exist').then(function () {
+      return container.registerDevice('ddevice-token', 'ios');
+    }).then(function (deviceID) {
+      assert(deviceID).to.equal('device-id');
+      assert(container.deviceID).to.equal('device-id');
     });
   });
 });
