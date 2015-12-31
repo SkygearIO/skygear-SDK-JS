@@ -1,4 +1,9 @@
 # skygear
+
+[![npm](https://img.shields.io/npm/v/skygear.svg)](https://www.npmjs.com/package/skygear)
+[![Build Status](https://travis-ci.org/SkygearIO/skygear-SDK-JS.svg?branch=master)](https://travis-ci.org/SkygearIO/skygear-SDK-JS)
+[![License](https://img.shields.io/npm/l/skygear.svg)](https://www.npmjs.com/package/skygear)
+
 JS SDK of Skygear.io
 
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues
