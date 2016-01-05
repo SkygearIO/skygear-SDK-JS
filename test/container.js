@@ -28,6 +28,31 @@ describe('Container', function () {
       'http://skygear.dev/',
       'we expected default endpoint');
   });
+
+  it('should clear access token on 104 AccessKeyNotAccepted', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.configApiKey('correctApiKey');
+    container._accessToken = 'incorrectApiKey';
+    container.request = mockSuperagent([{
+      pattern: 'http://skygear.dev/any/action',
+      fixtures: function (match, params, headers, fn) {
+        return fn({
+          error: {
+            name: 'AccessTokenNotAccepted',
+            code: 104,
+            message: 'token expired'
+          }
+        }, 401);
+      }
+    }]);
+
+    return container.makeRequest('any:action', {}).then(function () {
+      throw 'Expected to be reject by wrong access token';
+    }, function (err) {
+      assert.isNull(container.accessToken, 'accessToken not reset');
+    });
+  });
 });
 
 describe('Container auth', function () {
