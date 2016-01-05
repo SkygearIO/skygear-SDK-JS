@@ -51,6 +51,7 @@ describe('Container', function () {
       throw 'Expected to be reject by wrong access token';
     }, function (err) {
       assert.isNull(container.accessToken, 'accessToken not reset');
+      assert.isNull(container.currentUser, 'currentUser not reset');
     });
   });
 });
