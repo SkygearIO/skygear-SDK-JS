@@ -28,6 +28,52 @@ describe('Container', function () {
       'http://skygear.dev/',
       'we expected default endpoint');
   });
+
+  it('should clear access token on 104 AccessTokenNotAccepted', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.configApiKey('correctApiKey');
+    container._accessToken = 'incorrectApiKey';
+    container.request = mockSuperagent([{
+      pattern: 'http://skygear.dev/any/action',
+      fixtures: function (match, params, headers, fn) {
+        return fn({
+          error: {
+            name: 'AccessTokenNotAccepted',
+            code: 104,
+            message: 'token expired'
+          }
+        }, 401);
+      }
+    }]);
+
+    return container.makeRequest('any:action', {}).then(function () {
+      throw 'Expected to be reject by wrong access token';
+    }, function (err) {
+      assert.isNull(container.accessToken, 'accessToken not reset');
+      assert.isNull(container.currentUser, 'currentUser not reset');
+    });
+  });
+
+  it('should call userChange listener', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.onUserChanged(function (user) {
+      assert.instanceOf(user, container.User);
+      assert.equal(user.id, 'user:id1');
+    });
+    return container._setUser({_id: 'user:id1'});
+  });
+
+  it('should able to cancel a registered userChange listener', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    let handler = container.onUserChanged(function (user) {
+      throw 'Cancel of onUserChanged failed';
+    });
+    handler.cancel();
+    return container._setUser({_id: 'user:id1'});
+  });
 });
 
 describe('Container auth', function () {
