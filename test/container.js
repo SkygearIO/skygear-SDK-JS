@@ -54,6 +54,26 @@ describe('Container', function () {
       assert.isNull(container.currentUser, 'currentUser not reset');
     });
   });
+
+  it('should call userChange listener', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.onUserChanged(function (user) {
+      assert.instanceOf(user, container.User);
+      assert.equal(user.id, 'user:id1');
+    });
+    return container._setUser({_id: 'user:id1'});
+  });
+
+  it('should able to cancel a registered userChange listener', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    let handler = container.onUserChanged(function (user) {
+      throw 'Cancel of onUserChanged failed';
+    });
+    handler.cancel();
+    return container._setUser({_id: 'user:id1'});
+  });
 });
 
 describe('Container auth', function () {
