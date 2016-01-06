@@ -1,3 +1,14 @@
+## 0.3.0 (2016-01-06)
+
+### Features
+
+- Automatically logout user when access token is not accepted #129
+
+### Bug Fixes
+
+- Prevent uploaded asset from being uploaded again #109
+- Fix not able to register device if the existing device ID is not found #125
+
 ## 0.2.0 (2015-12-23)
 
 ### Bug Fixes
