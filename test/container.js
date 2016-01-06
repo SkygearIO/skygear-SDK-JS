@@ -29,7 +29,7 @@ describe('Container', function () {
       'we expected default endpoint');
   });
 
-  it('should clear access token on 104 AccessKeyNotAccepted', function () {
+  it('should clear access token on 104 AccessTokenNotAccepted', function () {
     let container = new Container();
     container.autoPubsub = false;
     container.configApiKey('correctApiKey');
