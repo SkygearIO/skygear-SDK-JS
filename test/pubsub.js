@@ -294,4 +294,45 @@ describe('Pubsub connection', function () {
     });
     ws.onclose();
   });
+
+  it('should call onOpen listener when ws opened', function () {
+    const listener = sinon.spy(function () {
+      return { };
+    });
+    pubsub.onOpen(listener);
+    pubsub._setWebSocket({
+      readyState: 1
+    });
+    pubsub._ws.onopen();
+    expect(listener).to.be.called();
+  });
+
+  it('should call onClose listener when ws closed', function () {
+    const listener = sinon.spy(function () {
+      return { };
+    });
+    pubsub.onClose(listener);
+    pubsub._setWebSocket({
+      readyState: 1
+    });
+    pubsub._ws.onclose();
+    expect(listener).to.be.called();
+  });
+
+  it('should not call a canceled onClose/onOpen listener', function () {
+    const listener = sinon.spy(function () {
+      return { };
+    });
+    const openHanlder = pubsub.onOpen(listener);
+    const closeHandler = pubsub.onClose(listener);
+    openHanlder.cancel();
+    closeHandler.cancel();
+    pubsub._setWebSocket({
+      readyState: 1
+    });
+    pubsub._ws.onopen();
+    pubsub._ws.onclose();
+    expect(listener).not.to.be.called();
+  });
+
 });
