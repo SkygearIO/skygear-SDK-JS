@@ -16,6 +16,10 @@
         <a href="index.html">Go to Login</a>
       </span>
     </p>
+    <p id="status">
+      <label>Pubsub Connection Status</label>
+      <span id="ws-status">Disconnected</span>
+    </p>
   </div>
   <hr>
   <div id="subscribe">
@@ -59,6 +63,20 @@
     }, function(err) {
       console.log(err);
     });
+
+    function onConnectionChanged(connected) {
+      var status = document.getElementById("ws-status");
+      if (connected) {
+        status.innerText = "Connected";
+        status.style.background = "green";
+      } else {
+        status.innerText = "Disconnected";
+        status.style.background = "red";
+      }
+    }
+
+    skygear.pubsub.onOpen(onConnectionChanged);
+    skygear.pubsub.onClose(onConnectionChanged);
 
     function publishMessage () {
       var _channel = document.getElementById("publish-channel").value;
