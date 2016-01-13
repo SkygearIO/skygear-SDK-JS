@@ -1,3 +1,9 @@
+## 0.4.0 (2016-01-13)
+
+### Features
+
+- Allow client to listen to pubsub open/close events. #132
+
 ## 0.3.0 (2016-01-06)
 
 ### Features
