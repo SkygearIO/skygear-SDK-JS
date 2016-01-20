@@ -145,6 +145,44 @@ describe('Database', function () {
     });
   });
 
+  it('cacheCallback will not called after remote returned', function (done) {
+    /*
+    This test case assume the callback will not delay more than 50ms
+    1. A mocked cache will return result 50ms after it got query
+    2. The test case will finished 100ms after it got executed.
+    3. The test case will fail if the cached query is called within 100ms.
+    */
+    let mockDB = new Database('_public', container);
+    let q = new Query(Note);
+    let result;
+    mockDB._cacheStore = {
+      get: function (params) {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            resolve(result);
+          }, 50);
+        });
+      },
+      set: function (parmas, body) {
+        result = body;
+      }
+    };
+    let callback = function (records, cached) {
+      if (cached) {
+        done(new Error('Unexpected call of cached query callback'));
+      }
+    };
+
+    return mockDB.query(q, callback).then(function () {
+      setTimeout(function () {
+        done();
+      }, 100);
+    }, function (error) {
+      throw Error();
+    });
+
+  });
+
   it('query with returns of unexpected _transient dict', function () {
     let q = new Query(Note);
     // this test case should work without calls to transientInclude
