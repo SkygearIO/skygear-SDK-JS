@@ -35,4 +35,20 @@ describe('role', function () {
     let AlsoStudent = Role.define('Student');
     expect(Student).to.equal(AlsoStudent);
   });
+
+  it('serialization', function () {
+    let Developer = Role.define('Developer');
+
+    expect(Developer.toJSON()).to.eql({
+      role_name: 'Developer'  //eslint-disable-line camelcase
+    });
+  });
+
+  it('deserialization', function () {
+    let Developer = Role.fromJSON({
+      role_name: 'Developer'  //eslint-disable-line camelcase
+    });
+
+    expect(Developer).to.equal(Role.define('Developer'));
+  });
 });
