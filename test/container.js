@@ -232,11 +232,11 @@ describe('Container getUsers', function () {
         return fn({
           'result': [{
             data: {
-              _id: 'user:id1',
+              _id: 'user:id',
               email: 'user1@skygear.io',
               username: 'user1'
             },
-            id: 'user:id1',
+            id: 'user:id',
             type: 'user'
           }]
         });
@@ -252,7 +252,7 @@ describe('Container getUsers', function () {
         assert.instanceOf(users[0], container.User);
         assert.equal(
           users[0].id,
-          'user:id1'
+          'user:id'
         );
         assert.equal(
           users[0].username,
@@ -261,6 +261,61 @@ describe('Container getUsers', function () {
       }, function () {
         throw new Error('getUsersByEmail failed');
       });
+  });
+});
+
+describe('Container role', function () {
+  let container = new Container();
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/role/admin',
+    fixtures: function (match, params, headers, fn) {
+      var roles = params['roles'];
+      if (roles.indexOf('Killer') !== -1 && roles.indexOf('Police') !== -1) {
+        return fn({
+          'result': [
+            'Killer',
+            'Police'
+          ]
+        });
+      }
+    }
+  }, {
+    pattern: 'http://skygear.dev/role/default',
+    fixtures: function (match, params, headers, fn) {
+      var roles = params['roles'];
+      if (roles.indexOf('Healer') !== -1) {
+        return fn({
+          'result': [
+            'Healer'
+          ]
+        });
+      }
+    }
+  }]);
+
+  it('set admin roles', function () {
+    var Killer = container.Role.define('Killer');
+    var Police = container.Role.define('Police');
+
+    return container.setAdminRole([Killer, Police])
+    .then(function (roles) {
+      assert.include(roles, 'Killer');
+      assert.include(roles, 'Police');
+    }, function (err) {
+      throw new Error('set admin roles failed');
+    });
+  });
+
+  it('set default role', function () {
+    var Healer = container.Role.define('Healer');
+
+    return container.setDefaultRole(Healer)
+    .then(function (roles) {
+      assert.include(roles, 'Healer');
+    }, function (err) {
+      throw new Error('set default role failed');
+    });
   });
 });
 
