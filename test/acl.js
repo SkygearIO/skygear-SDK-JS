@@ -30,7 +30,7 @@ describe('ACL', function () {
 
     let firstEntry = entries[0];
     expect(firstEntry.level).to.equal(AccessLevel.ReadLevel);
-    expect(firstEntry.role).to.equal(Role.publicRole);
+    expect(firstEntry.role).to.equal(Role.Public);
   });
 
   it('serialization', function () {

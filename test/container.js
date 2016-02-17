@@ -367,8 +367,8 @@ describe('Container acl', function () {
       let {type, access_roles: roles} = result; // eslint-disable-line camelcase
 
       assert.strictEqual(type, Script.recordType);
-      assert.include(roles, Writer.roleName);
-      assert.include(roles, WebMaster.roleName);
+      assert.include(roles, Writer.name);
+      assert.include(roles, WebMaster.name);
     }, function (err) {
       throw new Error('set record create access failed');
     });
