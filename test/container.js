@@ -334,6 +334,47 @@ describe('Container role', function () {
   });
 });
 
+describe('Container acl', function () {
+  let container = new Container();
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/record/create_access',
+    fixtures: function (match, params, headers, fn) {
+      let type = params['type'];
+      let accessRoles = params['access_roles'];
+
+      if (type === 'script' &&
+        accessRoles.indexOf('Writer') !== -1 &&
+        accessRoles.indexOf('Web Master') !== -1) {
+
+        return fn({
+          result: {
+            type: type,
+            access_roles: accessRoles   // eslint-disable-line camelcase
+          }
+        });
+      }
+    }
+  }]);
+
+  it('set record create access', function () {
+    let Writer = container.Role.define('Writer');
+    let WebMaster = container.Role.define('Web Master');
+    let Script = container.Record.extend('script');
+
+    return container.setRecordCreateAccess(Script, [Writer, WebMaster])
+    .then(function (result) {
+      let {type, access_roles: roles} = result; // eslint-disable-line camelcase
+
+      assert.strictEqual(type, Script.recordType);
+      assert.include(roles, Writer.roleName);
+      assert.include(roles, WebMaster.roleName);
+    }, function (err) {
+      throw new Error('set record create access failed');
+    });
+  });
+});
+
 describe('Container device registration', function () {
   let container = new Container();
   container.autoPubsub = false;
