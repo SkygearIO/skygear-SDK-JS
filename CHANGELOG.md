@@ -1,3 +1,10 @@
+## 0.5.0 (2016-02-17)
+
+### Bug Fixes
+
+- Reconfigure pubsub after login #135
+- Don't call cached query if remote query returned first #133
+
 ## 0.4.0 (2016-01-13)
 
 ### Features
