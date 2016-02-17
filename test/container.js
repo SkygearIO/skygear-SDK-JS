@@ -284,10 +284,11 @@ describe('Container role', function () {
     pattern: 'http://skygear.dev/role/default',
     fixtures: function (match, params, headers, fn) {
       var roles = params['roles'];
-      if (roles.indexOf('Healer') !== -1) {
+      if (roles.indexOf('Healer') !== -1 && roles.indexOf('Victim') !== -1) {
         return fn({
           'result': [
-            'Healer'
+            'Healer',
+            'Victim'
           ]
         });
       }
@@ -309,10 +310,12 @@ describe('Container role', function () {
 
   it('set default role', function () {
     var Healer = container.Role.define('Healer');
+    var Victim = container.Role.define('Victim');
 
-    return container.setDefaultRole(Healer)
+    return container.setDefaultRole([Victim, Healer])
     .then(function (roles) {
       assert.include(roles, 'Healer');
+      assert.include(roles, 'Victim');
     }, function (err) {
       throw new Error('set default role failed');
     });
