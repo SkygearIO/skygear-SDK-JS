@@ -138,5 +138,16 @@ describe('ACL', function () {
     expect(acl.hasReadAccess(Passenger)).to.be.false;
   });
 
+  it('default ACL', function () {
+    const acl = ACL.Default;
+    const entries = acl.entries;
+
+    expect(entries).to.have.length(1);
+
+    let firstEntry = entries[0];
+    expect(firstEntry.level).to.equal(AccessLevel.ReadLevel);
+    expect(firstEntry.role).to.equal(Role.Public);
+  });
+
 });
 /* eslint-enable no-unused-expressions */

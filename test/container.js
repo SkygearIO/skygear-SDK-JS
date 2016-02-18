@@ -16,6 +16,7 @@
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
 import {assert} from 'chai';
 import Container from '../lib/container';
+import {AccessLevel} from '../lib/acl';
 
 import mockSuperagent from './mock/superagent';
 
@@ -372,6 +373,33 @@ describe('Container acl', function () {
     }, function (err) {
       throw new Error('set record create access failed');
     });
+  });
+
+  it('get / set default ACL', function () {
+    let Admin = container.Role.define('Admin');
+    let ACL = container.ACL;
+    let acl = container.defaultACL;
+
+    assert.lengthOf(acl.entries, 1);
+
+    let aclEntry = acl.entries[0];
+    assert.equal(aclEntry.level, AccessLevel.ReadLevel);
+    assert.equal(aclEntry.role, container.Role.Public);
+
+    acl.removePublicReadAccess();
+    acl.addWriteAccess(Admin);
+    container.setDefaultACL(acl);
+
+    acl = container.defaultACL;
+
+    assert.lengthOf(acl.entries, 1);
+    aclEntry = acl.entries[0];
+
+    assert.equal(aclEntry.level, AccessLevel.WriteLevel);
+    assert.equal(aclEntry.role, Admin);
+
+    // set back to default
+    container.setDefaultACL(new ACL());
   });
 });
 
