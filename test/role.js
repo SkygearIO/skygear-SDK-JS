@@ -51,4 +51,32 @@ describe('Role', function () {
 
     expect(Developer).to.equal(Role.define('Developer'));
   });
+
+  it('union roles', function () {
+    let King = Role.define('King');
+    let Queen = Role.define('Queen');
+    let Knight = Role.define('Knight');
+
+    let roles = Role.union([King, Queen], Knight);
+    expect(roles).to.have.length(3);
+    expect(roles).to.contain(King);
+    expect(roles).to.contain(Queen);
+    expect(roles).to.contain(Knight);
+
+    expect(Role.union([King, Queen], Queen)).to.have.length(2);
+  });
+
+  it('subtract roles', function () {
+    let King = Role.define('King');
+    let Queen = Role.define('Queen');
+    let Knight = Role.define('Knight');
+
+    let roles = Role.subtract([King, Queen, Knight], Knight);
+    expect(roles).to.have.length(2);
+    expect(roles).to.contain(King);
+    expect(roles).to.contain(Queen);
+    expect(roles).to.not.contain(Knight);
+
+    expect(Role.subtract([King, Queen], Knight)).to.have.length(2);
+  });
 });
