@@ -19,6 +19,7 @@ import uuid from 'uuid';
 import Record from '../lib/record';
 import Geolocation from '../lib/geolocation';
 import {Sequence} from '../lib/type';
+import {AccessLevel} from '../lib/acl';
 
 const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
 
@@ -116,10 +117,30 @@ describe('Extended Record', function () {
   it('serialize to payload', function () {
     let r = new Note({
       _id: 'note/uid',
+      _acl: [
+        {
+          level: AccessLevel.ReadLevel,
+          role: '_public'
+        },
+        {
+          level: AccessLevel.WriteLevel,
+          role: 'Writer'
+        }
+      ],
       content: 'hello world'
     });
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
+      _acl: [
+        {
+          level: AccessLevel.ReadLevel,
+          role: '_public'
+        },
+        {
+          level: AccessLevel.WriteLevel,
+          role: 'Writer'
+        }
+      ],
       content: 'hello world'
     });
   });
@@ -131,6 +152,10 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
+      _acl: [{
+        level: AccessLevel.ReadLevel,
+        role: '_public'
+      }],
       noteID: {
         $type: 'seq'
       }
