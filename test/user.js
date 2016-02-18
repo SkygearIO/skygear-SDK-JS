@@ -74,7 +74,7 @@ describe('User', function () {
     user.addRole(Role.define('Developer'));
     user.addRole(Role.define('Designer'));
 
-    const roleNames = _.map(user.roles, 'roleName');
+    const roleNames = _.map(user.roles, 'name');
 
     expect(roleNames).to.contain('Developer');
     expect(roleNames).to.contain('Designer');
@@ -107,7 +107,7 @@ describe('User', function () {
     user.addRole(Developer);
     user.removeRole(Developer);
 
-    const roleNames = _.map(user.roles, 'roleName');
+    const roleNames = _.map(user.roles, 'name');
 
     expect(roleNames).to.not.contain('Developer');
   });
@@ -126,7 +126,7 @@ describe('User', function () {
     user.removeRole(Developer);
     user.removeRole(Developer);
 
-    const roleNames = _.map(user.roles, 'roleName');
+    const roleNames = _.map(user.roles, 'name');
 
     expect(roleNames).to.not.contain('Developer');
   });

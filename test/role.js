@@ -17,11 +17,11 @@
 import {expect} from 'chai';
 import Role from '../lib/role';
 
-describe('role', function () {
+describe('Role', function () {
   it('normally role definition', function () {
     let Boss = Role.define('Boss');
     expect(Boss).to.be.an.instanceof(Role);
-    expect(Boss.roleName).to.be.eql('Boss');
+    expect(Boss.name).to.be.eql('Boss');
   });
 
   it('should not allow invalid role name', function () {
@@ -40,13 +40,13 @@ describe('role', function () {
     let Developer = Role.define('Developer');
 
     expect(Developer.toJSON()).to.eql({
-      role_name: 'Developer'  //eslint-disable-line camelcase
+      name: 'Developer'
     });
   });
 
   it('deserialization', function () {
     let Developer = Role.fromJSON({
-      role_name: 'Developer'  //eslint-disable-line camelcase
+      name: 'Developer'
     });
 
     expect(Developer).to.equal(Role.define('Developer'));
