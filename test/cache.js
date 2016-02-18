@@ -48,4 +48,11 @@ describe('Cache', function () {
     expect(cache.keys).to.be.eql(['prefix:hash']);
   });
 
+  it('reset clears data', function () {
+    cache.reset();
+    expect(store.setItem).to.be.calledWithMatch('prefix:keys', '[]');
+    expect(cache.keys).to.be.eql([]);
+  });
+
+
 });
