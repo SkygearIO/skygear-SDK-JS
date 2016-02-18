@@ -79,4 +79,15 @@ describe('Role', function () {
 
     expect(Role.subtract([King, Queen], Knight)).to.have.length(2);
   });
+
+  it('contain roles', function () {
+    let King = Role.define('King');
+    let Queen = Role.define('Queen');
+    let Knight = Role.define('Knight');
+
+    /* eslint-disable no-unused-expressions */
+    expect(Role.contain([King, Queen], King)).to.be.true;
+    expect(Role.contain([King, Queen], Knight)).to.be.false;
+    /* eslint-enable no-unused-expressions */
+  });
 });
