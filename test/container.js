@@ -221,6 +221,12 @@ describe('Container auth', function () {
           'invalid authentication information');
       });
   });
+
+  it('should be able to set null accessToken', function () {
+    container._setAccessToken(null).then(function () {
+      assert(container.accessToken).to.equal(null);
+    });
+  });
 });
 
 describe('Container getUsers', function () {
@@ -261,6 +267,12 @@ describe('Container getUsers', function () {
       }, function () {
         throw new Error('getUsersByEmail failed');
       });
+  });
+
+  it('should be able to set null user', function () {
+    container._setUser(null).then(function () {
+      assert(container.currentUser).to.equal(null);
+    });
   });
 });
 
@@ -321,6 +333,12 @@ describe('Container device registration', function () {
     }).then(function (deviceID) {
       assert(deviceID).to.equal('device-id');
       assert(container.deviceID).to.equal('device-id');
+    });
+  });
+
+  it('should be able to set null deviceID', function () {
+    container._setDeviceID(null).then(function () {
+      assert(container.deviceID).to.equal(null);
     });
   });
 });
