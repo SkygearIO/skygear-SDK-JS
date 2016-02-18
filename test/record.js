@@ -17,6 +17,7 @@
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
+import Role from '../lib/role';
 import Geolocation from '../lib/geolocation';
 import {Sequence} from '../lib/type';
 import {AccessLevel} from '../lib/acl';
@@ -72,6 +73,8 @@ describe('Record', function () {
 describe('Extended Record', function () {
 
   let Note = Record.extend('note');
+  let Writer = Role.define('Writer');
+  let Editor = Role.define('Editor');
 
   it('generate with uuid v4 as id', function () {
     let r = new Note();
@@ -118,28 +121,16 @@ describe('Extended Record', function () {
     let r = new Note({
       _id: 'note/uid',
       _acl: [
-        {
-          level: AccessLevel.ReadLevel,
-          role: '_public'
-        },
-        {
-          level: AccessLevel.WriteLevel,
-          role: 'Writer'
-        }
+        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
     });
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
       _acl: [
-        {
-          level: AccessLevel.ReadLevel,
-          role: '_public'
-        },
-        {
-          level: AccessLevel.WriteLevel,
-          role: 'Writer'
-        }
+        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
     });
@@ -152,10 +143,7 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _acl: [{
-        level: AccessLevel.ReadLevel,
-        role: '_public'
-      }],
+      _acl: [{ level: AccessLevel.ReadLevel, role: '_public' }],
       noteID: {
         $type: 'seq'
       }
@@ -169,6 +157,48 @@ describe('Extended Record', function () {
     };
     let r = new Record('note', payload);
     expect(r['geo']).to.be.an.instanceof(Geolocation);
+  });
+
+  it('acl', function () {
+    let note = new Note({
+      _id: 'note/uid',
+      _acl: [
+        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.WriteLevel, role: 'Writer' }
+      ],
+      content: 'hello world'
+    });
+
+    expect(note.acl.toJSON()).to.be.eql([
+      { level: AccessLevel.ReadLevel, role: '_public' },
+      { level: AccessLevel.WriteLevel, role: 'Writer' }
+    ]);
+
+    note.addReadAccess(Writer);
+    expect(note.acl.toJSON()).to.be.eql([
+      { level: AccessLevel.ReadLevel, role: '_public' },
+      { level: AccessLevel.WriteLevel, role: 'Writer' },
+      { level: AccessLevel.ReadLevel, role: 'Writer' }
+    ]);
+
+    note.removeReadAccess(Role.Public);
+    expect(note.acl.toJSON()).to.be.eql([
+      { level: AccessLevel.WriteLevel, role: 'Writer' },
+      { level: AccessLevel.ReadLevel, role: 'Writer' }
+    ]);
+
+    note.addWriteAccess(Editor);
+    expect(note.acl.toJSON()).to.be.eql([
+      { level: AccessLevel.WriteLevel, role: 'Writer' },
+      { level: AccessLevel.ReadLevel, role: 'Writer' },
+      { level: AccessLevel.WriteLevel, role: 'Editor' }
+    ]);
+
+    note.removeWriteAccess(Writer);
+    expect(note.acl.toJSON()).to.be.eql([
+      { level: AccessLevel.ReadLevel, role: 'Writer' },
+      { level: AccessLevel.WriteLevel, role: 'Editor' }
+    ]);
   });
 
 });
