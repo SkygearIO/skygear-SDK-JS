@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 /*eslint-disable no-new, camelcase */
-import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
+import {expect} from 'chai';
+import _ from 'lodash';
 import User from '../lib/user';
+import Role from '../lib/role';
 
 describe('User', function () {
 
@@ -23,7 +25,8 @@ describe('User', function () {
     const user = new User({
       user_id: 'non-uuid',
       username: 'rick',
-      email: 'rick.mak@gmail.com'
+      email: 'rick.mak@gmail.com',
+      roles: []
     });
     expect(user).to.be.an.instanceof(User);
   });
@@ -39,26 +42,93 @@ describe('User', function () {
   });
 
   it('serialize for persist', function () {
-    const user = new User({
+    const payload = {
       user_id: 'non-uuid',
       username: 'rick',
-      email: 'rick.mak@gmail.com'
-    });
-    expect(user.toJSON()).eql({
-      user_id: 'non-uuid',
-      username: 'rick',
-      email: 'rick.mak@gmail.com'
-    });
+      email: 'rick.mak@gmail.com',
+      roles: []
+    };
+    const user = new User(payload);
+    expect(user.toJSON()).eql(payload);
   });
 
   it('deserialize from json', function () {
     const payload = {
       user_id: 'non-uuid',
       username: 'rick',
-      email: 'rick.mak@gmail.com'
+      email: 'rick.mak@gmail.com',
+      roles: []
     };
     const user = User.fromJSON(payload);
     expect(user).to.be.an.instanceof(User);
+  });
+
+  it('add role', function () {
+    const user = User.fromJSON({
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      roles: []
+    });
+
+    user.addRole(Role.define('Developer'));
+    user.addRole(Role.define('Designer'));
+
+    const roleNames = _.map(user.roles, 'name');
+
+    expect(roleNames).to.contain('Developer');
+    expect(roleNames).to.contain('Designer');
+  });
+
+  it('duplicated add role', function () {
+    const user = User.fromJSON({
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      roles: []
+    });
+
+    user.addRole(Role.define('Developer'));
+    user.addRole(Role.define('Developer'));
+
+    expect(user.roles).to.have.length(1);
+  });
+
+  it('remove role', function () {
+    const user = User.fromJSON({
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      roles: []
+    });
+
+    let Developer = Role.define('Developer');
+
+    user.addRole(Developer);
+    user.removeRole(Developer);
+
+    const roleNames = _.map(user.roles, 'name');
+
+    expect(roleNames).to.not.contain('Developer');
+  });
+
+  it('duplicated remove role', function () {
+    const user = User.fromJSON({
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      roles: []
+    });
+
+    let Developer = Role.define('Developer');
+
+    user.addRole(Developer);
+    user.removeRole(Developer);
+    user.removeRole(Developer);
+
+    const roleNames = _.map(user.roles, 'name');
+
+    expect(roleNames).to.not.contain('Developer');
   });
 
 });
