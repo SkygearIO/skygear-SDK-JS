@@ -134,7 +134,7 @@ describe('ACL', function () {
     expect(acl.hasReadAccess(Passenger)).to.be.false();
 
     acl.removeWriteAccess(Passenger);
-    expect(acl.hasReadAccess(Passenger)).to.be.false();
+    expect(acl.hasWriteAccess(Passenger)).to.be.false();
   });
 
   it('default ACL', function () {

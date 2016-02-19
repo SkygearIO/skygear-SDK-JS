@@ -120,7 +120,7 @@ describe('Extended Record', function () {
   it('serialize to payload', function () {
     let r = new Note({
       _id: 'note/uid',
-      _acl: [
+      _access: [
         { level: AccessLevel.ReadLevel, role: '_public' },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
@@ -128,7 +128,7 @@ describe('Extended Record', function () {
     });
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _acl: [
+      _access: [
         { level: AccessLevel.ReadLevel, role: '_public' },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
@@ -143,7 +143,7 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _acl: [{ level: AccessLevel.ReadLevel, role: '_public' }],
+      _access: [{ level: AccessLevel.ReadLevel, role: '_public' }],
       noteID: {
         $type: 'seq'
       }
@@ -162,40 +162,40 @@ describe('Extended Record', function () {
   it('acl', function () {
     let note = new Note({
       _id: 'note/uid',
-      _acl: [
+      _access: [
         { level: AccessLevel.ReadLevel, role: '_public' },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
     });
 
-    expect(note.acl.toJSON()).to.be.eql([
+    expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.ReadLevel, role: '_public' },
       { level: AccessLevel.WriteLevel, role: 'Writer' }
     ]);
 
     note.addReadAccess(Writer);
-    expect(note.acl.toJSON()).to.be.eql([
+    expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.ReadLevel, role: '_public' },
       { level: AccessLevel.WriteLevel, role: 'Writer' },
       { level: AccessLevel.ReadLevel, role: 'Writer' }
     ]);
 
     note.removeReadAccess(Role.Public);
-    expect(note.acl.toJSON()).to.be.eql([
+    expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.WriteLevel, role: 'Writer' },
       { level: AccessLevel.ReadLevel, role: 'Writer' }
     ]);
 
     note.addWriteAccess(Editor);
-    expect(note.acl.toJSON()).to.be.eql([
+    expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.WriteLevel, role: 'Writer' },
       { level: AccessLevel.ReadLevel, role: 'Writer' },
       { level: AccessLevel.WriteLevel, role: 'Editor' }
     ]);
 
     note.removeWriteAccess(Writer);
-    expect(note.acl.toJSON()).to.be.eql([
+    expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.ReadLevel, role: 'Writer' },
       { level: AccessLevel.WriteLevel, role: 'Editor' }
     ]);
