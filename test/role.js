@@ -85,9 +85,7 @@ describe('Role', function () {
     let Queen = Role.define('Queen');
     let Knight = Role.define('Knight');
 
-    /* eslint-disable no-unused-expressions */
-    expect(Role.contain([King, Queen], King)).to.be.true;
-    expect(Role.contain([King, Queen], Knight)).to.be.false;
-    /* eslint-enable no-unused-expressions */
+    expect(Role.contain([King, Queen], King)).to.be.true();
+    expect(Role.contain([King, Queen], Knight)).to.be.false();
   });
 });

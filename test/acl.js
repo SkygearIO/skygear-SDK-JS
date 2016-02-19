@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
 import {expect} from 'chai';
 import Role from '../lib/role';
 import ACL, {AccessLevel} from '../lib/acl';
@@ -85,9 +84,9 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Driver)).to.be.false;
-    expect(acl.hasReadAccess(Passenger)).to.be.true;
-    expect(acl.hasWriteAccess(Passenger)).to.be.true;
+    expect(acl.hasReadAccess(Driver)).to.be.false();
+    expect(acl.hasReadAccess(Passenger)).to.be.true();
+    expect(acl.hasWriteAccess(Passenger)).to.be.true();
   });
 
   it('add read / write access', function () {
@@ -102,14 +101,14 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Driver)).to.be.false;
-    expect(acl.hasWriteAccess(Driver)).to.be.false;
+    expect(acl.hasReadAccess(Driver)).to.be.false();
+    expect(acl.hasWriteAccess(Driver)).to.be.false();
 
     acl.addReadAccess(Driver);
-    expect(acl.hasReadAccess(Driver)).to.be.true;
+    expect(acl.hasReadAccess(Driver)).to.be.true();
 
     acl.addWriteAccess(Driver);
-    expect(acl.hasWriteAccess(Driver)).to.be.true;
+    expect(acl.hasWriteAccess(Driver)).to.be.true();
   });
 
   it('remove read / write access', function () {
@@ -128,14 +127,14 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Passenger)).to.be.true;
-    expect(acl.hasWriteAccess(Passenger)).to.be.true;
+    expect(acl.hasReadAccess(Passenger)).to.be.true();
+    expect(acl.hasWriteAccess(Passenger)).to.be.true();
 
     acl.removeReadAccess(Passenger);
-    expect(acl.hasReadAccess(Passenger)).to.be.false;
+    expect(acl.hasReadAccess(Passenger)).to.be.false();
 
     acl.removeWriteAccess(Passenger);
-    expect(acl.hasReadAccess(Passenger)).to.be.false;
+    expect(acl.hasReadAccess(Passenger)).to.be.false();
   });
 
   it('default ACL', function () {
@@ -150,4 +149,3 @@ describe('ACL', function () {
   });
 
 });
-/* eslint-enable no-unused-expressions */

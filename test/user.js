@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*eslint-disable no-new, camelcase, no-unused-expressions */
+/*eslint-disable no-new, camelcase */
 import {expect} from 'chai';
 import _ from 'lodash';
 import User from '../lib/user';
@@ -144,9 +144,9 @@ describe('User', function () {
 
     user.addRole(TechLeader);
 
-    expect(user.hasRole(TechLeader)).to.be.true;
-    expect(user.hasRole(Developer)).to.be.false;
+    expect(user.hasRole(TechLeader)).to.be.true();
+    expect(user.hasRole(Developer)).to.be.false();
   });
 
 });
-/*eslint-enable no-new, camelcase, no-unused-expressions */
+/*eslint-enable no-new, camelcase */
