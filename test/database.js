@@ -208,7 +208,7 @@ describe('Database', function () {
     return db.save(r).then(function (record) {
       expect(record).to.be.an.instanceof(Note);
     }, function (error) {
-      throw Error();
+      throw Error(error);
     });
   });
 

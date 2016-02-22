@@ -16,6 +16,7 @@
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
 import {assert} from 'chai';
 import Container from '../lib/container';
+import {AccessLevel} from '../lib/acl';
 
 import mockSuperagent from './mock/superagent';
 
@@ -331,6 +332,102 @@ describe('Container role', function () {
     }, function (err) {
       throw new Error('set default role failed');
     });
+  });
+});
+
+describe('Container acl', function () {
+  let container = new Container();
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/record/create_access',
+    fixtures: function (match, params, headers, fn) {
+      let type = params['type'];
+      let accessRoles = params['access_roles'];
+
+      if (type === 'script' &&
+        accessRoles.indexOf('Writer') !== -1 &&
+        accessRoles.indexOf('Web Master') !== -1) {
+
+        return fn({
+          result: {
+            type: type,
+            access_roles: accessRoles   // eslint-disable-line camelcase
+          }
+        });
+      }
+    }
+  }]);
+
+  it('set record create access', function () {
+    let Writer = container.Role.define('Writer');
+    let WebMaster = container.Role.define('Web Master');
+    let Script = container.Record.extend('script');
+
+    return container.setRecordCreateAccess(Script, [Writer, WebMaster])
+    .then(function (result) {
+      let {type, access_roles: roles} = result; // eslint-disable-line camelcase
+
+      assert.strictEqual(type, Script.recordType);
+      assert.include(roles, Writer.name);
+      assert.include(roles, WebMaster.name);
+    }, function (err) {
+      throw new Error('set record create access failed');
+    });
+  });
+
+  it('get / set default ACL', function () {
+    let Admin = container.Role.define('Admin');
+    let ACL = container.ACL;
+    let Note = container.Record.extend('note');
+
+    // Before changes
+    let acl = container.defaultACL;
+    assert.lengthOf(acl.entries, 1);
+
+    let aclEntry = acl.entries[0];
+    assert.equal(aclEntry.level, AccessLevel.ReadLevel);
+    assert.equal(aclEntry.role, container.Role.Public);
+
+    let aNote = new Note({
+      content: 'Hello World'
+    });
+
+    let recordACL = aNote.access;
+    assert.instanceOf(recordACL, ACL);
+    assert.lengthOf(recordACL.entries, 1);
+
+    let recordACLEntry = recordACL.entries[0];
+    assert.equal(recordACLEntry.level, AccessLevel.ReadLevel);
+    assert.equal(recordACLEntry.role, container.Role.Public);
+
+    // changes
+    acl.removePublicReadAccess();
+    acl.addWriteAccess(Admin);
+    container.setDefaultACL(acl);
+
+    // After changes
+    acl = container.defaultACL;
+
+    assert.lengthOf(acl.entries, 1);
+    aclEntry = acl.entries[0];
+
+    assert.equal(aclEntry.level, AccessLevel.WriteLevel);
+    assert.equal(aclEntry.role, Admin);
+
+    aNote = new Note({
+      content: 'Hello World Again'
+    });
+
+    recordACL = aNote.access;
+    assert.instanceOf(recordACL, ACL);
+    assert.lengthOf(recordACL.entries, 1);
+
+    recordACLEntry = recordACL.entries[0];
+    assert.equal(recordACLEntry.level, AccessLevel.WriteLevel);
+    assert.equal(recordACLEntry.role, Admin);
+
+    // set back to default
+    container.setDefaultACL(new ACL());
   });
 });
 

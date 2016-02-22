@@ -17,6 +17,7 @@
 import {expect, assert} from 'chai';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
+import {AccessLevel} from '../lib/acl';
 
 describe('Reference', function () {
   let record = new Record('record', {_id: 'record/id'});
@@ -54,6 +55,10 @@ describe('Reference', function () {
     record.key = ref;
     expect(record.toJSON()).to.eql({
       '_id': 'record/id',
+      '_access': [{
+        level: AccessLevel.ReadLevel,
+        role: '_public'
+      }],
       'key': {
         '$type': 'ref',
         '$id': 'record/id'

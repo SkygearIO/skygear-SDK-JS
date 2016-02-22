@@ -131,5 +131,22 @@ describe('User', function () {
     expect(roleNames).to.not.contain('Developer');
   });
 
+  it('has role', function () {
+    let Developer = Role.define('Developer');
+    let TechLeader = Role.define('Tech Leader');
+
+    const user = User.fromJSON({
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      roles: []
+    });
+
+    user.addRole(TechLeader);
+
+    expect(user.hasRole(TechLeader)).to.be.true();
+    expect(user.hasRole(Developer)).to.be.false();
+  });
+
 });
 /*eslint-enable no-new, camelcase */
