@@ -378,18 +378,34 @@ describe('Container acl', function () {
   it('get / set default ACL', function () {
     let Admin = container.Role.define('Admin');
     let ACL = container.ACL;
-    let acl = container.defaultACL;
+    let Note = container.Record.extend('note');
 
+    // Before changes
+    let acl = container.defaultACL;
     assert.lengthOf(acl.entries, 1);
 
     let aclEntry = acl.entries[0];
     assert.equal(aclEntry.level, AccessLevel.ReadLevel);
     assert.equal(aclEntry.role, container.Role.Public);
 
+    let aNote = new Note({
+      content: 'Hello World'
+    });
+
+    let recordACL = aNote.access;
+    assert.instanceOf(recordACL, ACL);
+    assert.lengthOf(recordACL.entries, 1);
+
+    let recordACLEntry = recordACL.entries[0];
+    assert.equal(recordACLEntry.level, AccessLevel.ReadLevel);
+    assert.equal(recordACLEntry.role, container.Role.Public);
+
+    // changes
     acl.removePublicReadAccess();
     acl.addWriteAccess(Admin);
     container.setDefaultACL(acl);
 
+    // After changes
     acl = container.defaultACL;
 
     assert.lengthOf(acl.entries, 1);
@@ -397,6 +413,18 @@ describe('Container acl', function () {
 
     assert.equal(aclEntry.level, AccessLevel.WriteLevel);
     assert.equal(aclEntry.role, Admin);
+
+    aNote = new Note({
+      content: 'Hello World Again'
+    });
+
+    recordACL = aNote.access;
+    assert.instanceOf(recordACL, ACL);
+    assert.lengthOf(recordACL.entries, 1);
+
+    recordACLEntry = recordACL.entries[0];
+    assert.equal(recordACLEntry.level, AccessLevel.WriteLevel);
+    assert.equal(recordACLEntry.role, Admin);
 
     // set back to default
     container.setDefaultACL(new ACL());
