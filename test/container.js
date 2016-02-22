@@ -300,9 +300,7 @@ describe('Container users', function () {
       /* eslint-enable camelcase */
       email: 'user2@skygear.io',
       username: 'user-2',
-      roles: [
-        { name: 'Tester' }
-      ]
+      roles: ['Tester']
     };
 
     let Tester = container.Role.define('Tester');
