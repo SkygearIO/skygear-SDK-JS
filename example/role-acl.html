@@ -149,7 +149,8 @@
 
       return skygear.publicDB.save(sampleObject);
     }).then(function (obj) {
-      window.onUpdateSampleObject(obj);
+      window.sampleObject = obj
+      window.onUpdateSampleObject();
     }, function (err) {
       console.log('Init error: ' + JSON.stringify(err));
       window.onUpdateSampleObject();
@@ -324,8 +325,8 @@
       return role;
     };
 
-    window.onUpdateSampleObject = function (obj) {
-      window.sampleObject = obj;
+    window.onUpdateSampleObject = function () {
+      obj = window.sampleObject;
       if (obj && obj.toJSON) {
         display.sampleObject.textContent = JSON.stringify(obj.toJSON());
       } else {
