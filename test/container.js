@@ -253,17 +253,18 @@ describe('Container users', function () {
     }, {
       pattern: 'http://skygear.dev/user/update',
       fixtures: function (match, params, headers, fn) {
-        let username = params['username'];
-        if (username === 'user-2') {
+        /* eslint-disable camelcase */
+        let user_id = params['_id'];
+        if (user_id === 'user2_id') {
           return fn({
             'result': {
-              _id: params.user_id,
-              username: params.username,
+              _id: params._id,
               email: params.email,
               roles: params.roles
             }
           });
         }
+        /* eslint-enable camelcase */
       }
     }
   ]);
@@ -296,10 +297,9 @@ describe('Container users', function () {
   it('update user record', function () {
     let payload = {
       /* eslint-disable camelcase */
-      user_id: 'DF67FC2B-CC91-414F-A584-85C2DF56CF2A',
+      _id: 'user2_id',
       /* eslint-enable camelcase */
       email: 'user2@skygear.io',
-      username: 'user-2',
       roles: ['Tester']
     };
 
