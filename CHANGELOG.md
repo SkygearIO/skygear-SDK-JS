@@ -1,3 +1,15 @@
+## 0.6.0 (2016-02-24)
+### Features
+
+- Add sample code for Role and ACL #143 #144
+- Add ACL Class and ACL controls for Record #14 #36 #37 #38 #39
+- Add Role Class and ACL Class #35 #38
+
+### Bug Fixes
+
+- Fix unable to reset cache when log out
+- Fix unable to logout user in React Native
+
 ## 0.5.0 (2016-02-17)
 
 ### Bug Fixes
