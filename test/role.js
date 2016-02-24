@@ -36,22 +36,6 @@ describe('Role', function () {
     expect(Student).to.equal(AlsoStudent);
   });
 
-  it('serialization', function () {
-    let Developer = Role.define('Developer');
-
-    expect(Developer.toJSON()).to.eql({
-      name: 'Developer'
-    });
-  });
-
-  it('deserialization', function () {
-    let Developer = Role.fromJSON({
-      name: 'Developer'
-    });
-
-    expect(Developer).to.equal(Role.define('Developer'));
-  });
-
   it('union roles', function () {
     let King = Role.define('King');
     let Queen = Role.define('Queen');

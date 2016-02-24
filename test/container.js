@@ -230,26 +230,44 @@ describe('Container auth', function () {
   });
 });
 
-describe('Container getUsers', function () {
+describe('Container users', function () {
   let container = new Container();
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/user/query',
-    fixtures: function (match, params, headers, fn) {
-      if (params['emails'][0] === 'user1@skygear.io') {
-        return fn({
-          'result': [{
-            data: {
-              _id: 'user:id',
-              email: 'user1@skygear.io',
-              username: 'user1'
-            },
-            id: 'user:id',
-            type: 'user'
-          }]
-        });
+  container.request = mockSuperagent([
+    {
+      pattern: 'http://skygear.dev/user/query',
+      fixtures: function (match, params, headers, fn) {
+        if (params['emails'][0] === 'user1@skygear.io') {
+          return fn({
+            'result': [{
+              data: {
+                _id: 'user:id',
+                email: 'user1@skygear.io',
+                username: 'user1'
+              },
+              id: 'user:id',
+              type: 'user'
+            }]
+          });
+        }
+      }
+    }, {
+      pattern: 'http://skygear.dev/user/update',
+      fixtures: function (match, params, headers, fn) {
+        /* eslint-disable camelcase */
+        let user_id = params['_id'];
+        if (user_id === 'user2_id') {
+          return fn({
+            'result': {
+              _id: params._id,
+              email: params.email,
+              roles: params.roles
+            }
+          });
+        }
+        /* eslint-enable camelcase */
       }
     }
-  }]);
+  ]);
   container.configApiKey('correctApiKey');
 
   it('query user with email successfully', function () {
@@ -271,8 +289,39 @@ describe('Container getUsers', function () {
   });
 
   it('should be able to set null user', function () {
-    container._setUser(null).then(function () {
-      assert(container.currentUser).to.equal(null);
+    return container._setUser(null).then(function () {
+      assert.isNull(container.currentUser);
+    });
+  });
+
+  it('update user record', function () {
+    let payload = {
+      /* eslint-disable camelcase */
+      _id: 'user2_id',
+      /* eslint-enable camelcase */
+      email: 'user2@skygear.io',
+      roles: ['Tester']
+    };
+
+    let Tester = container.Role.define('Tester');
+    let Developer = container.Role.define('Developer');
+
+    let user = container.User.fromJSON(payload);
+    let newEmail = 'user2-new@skygear.io';
+
+    user.email = newEmail;
+    user.addRole(Developer);
+
+    return container.saveUser(user)
+    .then(function (updatedUser) {
+      assert.equal(updatedUser.id, user.id);
+      assert.equal(updatedUser.username, user.username);
+      assert.equal(updatedUser.email, newEmail);
+
+      assert.equal(updatedUser.hasRole(Tester), true);
+      assert.equal(updatedUser.hasRole(Developer), true);
+    }, function (err) {
+      throw new Error('update user record error', JSON.stringify(err));
     });
   });
 });
