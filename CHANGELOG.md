@@ -1,4 +1,9 @@
+## 0.7.0 (2016-03-02)
+
+No change since last release
+
 ## 0.6.0 (2016-02-24)
+
 ### Features
 
 - Add sample code for Role and ACL #143 #144
