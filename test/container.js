@@ -388,19 +388,19 @@ describe('Container acl', function () {
   let container = new Container();
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/record/create_access',
+    pattern: 'http://skygear.dev/schema/access',
     fixtures: function (match, params, headers, fn) {
       let type = params['type'];
-      let accessRoles = params['access_roles'];
+      let createRoles = params['create_roles'];
 
       if (type === 'script' &&
-        accessRoles.indexOf('Writer') !== -1 &&
-        accessRoles.indexOf('Web Master') !== -1) {
+        createRoles.indexOf('Writer') !== -1 &&
+        createRoles.indexOf('Web Master') !== -1) {
 
         return fn({
           result: {
             type: type,
-            access_roles: accessRoles   // eslint-disable-line camelcase
+            create_roles: createRoles   // eslint-disable-line camelcase
           }
         });
       }
@@ -414,7 +414,7 @@ describe('Container acl', function () {
 
     return container.setRecordCreateAccess(Script, [Writer, WebMaster])
     .then(function (result) {
-      let {type, access_roles: roles} = result; // eslint-disable-line camelcase
+      let {type, create_roles: roles} = result; // eslint-disable-line camelcase
 
       assert.strictEqual(type, Script.recordType);
       assert.include(roles, Writer.name);
