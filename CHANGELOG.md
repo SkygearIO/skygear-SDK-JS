@@ -1,3 +1,9 @@
+## 0.8.0 (2016-03-09)
+
+### Other Notes
+
+- Update endpoint and payload for set record creationg access
+
 ## 0.7.0 (2016-03-02)
 
 No change since last release
