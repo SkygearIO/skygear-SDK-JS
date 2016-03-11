@@ -57,31 +57,84 @@ let request = mockSuperagent([{
 }, {
   pattern: 'http://skygear.dev/record/save',
   fixtures: function (match, params, headers, fn) {
-    let id = params['records'][0]['_id'];
-    if (params['database_id'] === '_public' && id === 'note/failed-to-save') {
-      return fn({
-        'result': [{
-          '_id': 'note/failed-to-save',
-          '_type': 'error',
-          'code': 101,
-          'message': 'failed to save record id = note/failed-to-save',
-          'type': 'ResourceSaveFailure'
-        }]
-      });
+    let records = params['records'];
+    let firstRecord = records[0];
+    if (records.length === 1) {
+      if (params['database_id'] === '_public' &&
+      firstRecord['_id'] === 'note/failed-to-save') {
+        return fn({
+          'result': [{
+            '_id': 'note/failed-to-save',
+            '_type': 'error',
+            'code': 101,
+            'message': 'failed to save record id = note/failed-to-save',
+            'type': 'ResourceSaveFailure'
+          }]
+        });
+      } else {
+        return fn({
+          'result': [{
+            '_type': 'record',
+            '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
+            '_created_at': '2014-09-27T17:40:00.000Z',
+            '_ownerID': 'rick.mak@gmail.com',
+            '_access': null,
+            '_transient': {
+              'synced': true,
+              'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+            }
+          }]
+        });
+      }
     } else {
-      return fn({
-        'result': [{
-          '_type': 'record',
-          '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
-          '_created_at': '2014-09-27T17:40:00.000Z',
-          '_ownerID': 'rick.mak@gmail.com',
-          '_access': null,
-          '_transient': {
-            'synced': true,
-            'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
-          }
-        }]
-      });
+      if (params['database_id'] === '_public' &&
+       firstRecord['_id'] === 'note/failed-to-save') {
+        return fn({
+          result: [
+            {
+              '_id': 'note/failed-to-save',
+              '_type': 'error',
+              'code': 101,
+              'message': 'failed to save record id = note/failed-to-save',
+              'type': 'ResourceSaveFailure'
+            }, {
+              '_type': 'record',
+              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              }
+            }]
+        });
+      } else {
+        return fn({
+          result: [
+            {
+              '_type': 'record',
+              '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+              }
+            }, {
+              '_type': 'record',
+              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              }
+            }]
+        });
+      }
     }
   }
 }, {
@@ -226,6 +279,56 @@ describe('Database', function () {
         'message': 'failed to save record id = note/failed-to-save',
         'type': 'ResourceSaveFailure'
       });
+    });
+  });
+
+  it('save multiple records to remote', function () {
+    let note1 = new Note();
+    let note2 = new Note();
+
+    return db.saveAll([note1, note2])
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(2);
+      expect(records[0]).to.be.an.instanceof(Note);
+      expect(records[1]).to.be.an.instanceof(Note);
+
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.be.undefined();
+      expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
+    });
+  });
+
+  it('save multiple records with some failures', function () {
+    let note1 = new Note({
+      _id: 'note/failed-to-save'
+    });
+    let note2 = new Note();
+
+    return db.saveAll([note1, note2])
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(2);
+      expect(records[0]).to.be.undefined();
+      expect(records[1]).to.be.an.instanceof(Note);
+
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.eql({
+        '_id': 'note/failed-to-save',
+        '_type': 'error',
+        'code': 101,
+        'message': 'failed to save record id = note/failed-to-save',
+        'type': 'ResourceSaveFailure'
+      });
+      expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
     });
   });
 
