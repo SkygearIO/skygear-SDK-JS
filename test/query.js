@@ -132,6 +132,64 @@ describe('Query', function () {
     ], 200]);
   });
 
+  it('add like to predicate', function () {
+    let q = new Query(Note);
+    q.like('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'like',
+      {
+        $type: 'keypath',
+        $val: 'name'
+      },
+      'funny'
+    ]);
+  });
+
+  it('add case insensitive like to predicate', function () {
+    let q = new Query(Note);
+    q.caseInsensitiveLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'ilike',
+      {
+        $type: 'keypath',
+        $val: 'name'
+      },
+      'funny'
+    ]);
+  });
+
+  it('add not like to predicate', function () {
+    let q = new Query(Note);
+    q.notLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'like',
+        {
+          $type: 'keypath',
+          $val: 'name'
+        },
+        'funny'
+      ]
+    ]);
+  });
+
+  it('add case insensitive not like to predicate', function () {
+    let q = new Query(Note);
+    q.caseInsensitiveNotLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'ilike',
+        {
+          $type: 'keypath',
+          $val: 'name'
+        },
+        'funny'
+      ]
+    ]);
+  });
+
   it('add contains to predicate', function () {
     let q = new Query(Note);
     q.contains('category', ['a', 'b']);
@@ -153,6 +211,31 @@ describe('Query', function () {
     ]);
   });
 
+  it('add not contains to predicate', function () {
+    let q = new Query(Note);
+    q.notContains('category', ['a', 'b']);
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'in',
+        {$type: 'keypath', $val: 'category'},
+        ['a', 'b']
+      ]
+    ]);
+  });
+
+  it('add not contains value to predicate', function () {
+    let q = new Query(Note);
+    q.notContainsValue('category', 'a');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'in',
+        'a',
+        {$type: 'keypath', $val: 'category'}
+      ]
+    ]);
+  });
 
   it('sort by ascending distance', function () {
     let q = new Query(Note);
@@ -346,6 +429,21 @@ describe('Query', function () {
         $name: '_friend',
         $direction: 'mutual'
       }
+    ]);
+  });
+
+  it('serialize notHavingRelation', function () {
+    let q = new Query(Note);
+    let Friend = RelationAction.extend('friend', Mutual);
+    q.notHavingRelation('_owner', Friend);
+    expect(q.toJSON().predicate).to.eql([
+      'not',
+      [
+        'func',
+        'userRelation',
+        {$type: 'keypath', $val: '_owner'},
+        {$type: 'relation', $name: '_friend', $direction: 'mutual'}
+      ]
     ]);
   });
 
