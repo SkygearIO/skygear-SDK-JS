@@ -453,6 +453,28 @@ describe('Query', function () {
     });
   });
 
+  it('serialize not query', function () {
+    let q1 = new Query(Note);
+    q1.equalTo('name', 'Hello');
+
+    expect(Query.not(q1).toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'not',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'name'
+          }, 'Hello'
+        ]
+      ],
+      count: false
+    });
+  });
+
   it('deserialize a simple query', function () {
 
     let json1 = {
@@ -554,6 +576,27 @@ describe('Query', function () {
             }, 10
             ]
           ]
+        ]
+      ],
+      count: false
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
+  });
+
+  it('deserialize a not query', function () {
+    let json = {
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'not',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'name'
+          }, 'Hello'
         ]
       ],
       count: false
