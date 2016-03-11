@@ -453,5 +453,114 @@ describe('Query', function () {
     });
   });
 
+  it('deserialize a simple query', function () {
+
+    let json1 = {
+      record_type: 'note',
+      include: {},
+      limit: 30,
+      sort: [],
+      predicate: [
+        'gt', {
+          $type: 'keypath',
+          $val: 'price'
+        }, 20
+      ],
+      count: true
+    };
+
+    expect(Query.fromJSON(json1).toJSON()).to.eql(json1);
+
+    let json2 = {
+      record_type: 'note',
+      include: {},
+      limit: 35,
+      sort: [],
+      predicate: [
+        'and',
+        [
+          'gt', {
+            $type: 'keypath',
+            $val: 'price'
+          }, 20
+        ],
+        [
+          'lt', {
+            $type: 'keypath',
+            $val: 'price'
+          }, 120
+        ]
+      ],
+      count: true
+    };
+
+    expect(Query.fromJSON(json2).toJSON()).to.eql(json2);
+  });
+
+  it('deserialize an or query', function () {
+    let json = {
+      count: false,
+      include: {},
+      limit: 50,
+      predicate: [
+        'or',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'starred'
+          }, true
+        ],
+        [
+          'gt', {
+            $type: 'keypath',
+            $val: 'rate'
+          }, 4
+        ]
+      ],
+      record_type: 'note',
+      sort: []
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
+  });
+
+  it('deserialize a complicated query', function () {
+    let json = {
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'and',
+        ['eq', {
+          $type: 'keypath',
+          $val: 'name'
+        }, 'hi'],
+        [
+          'or',
+          ['eq', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 0],
+          [
+            'and',
+            ['lt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 100],
+            ['gt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 10
+            ]
+          ]
+        ]
+      ],
+      count: false
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
+  });
+
 });
 /*eslint-enable camelcase, no-new */
