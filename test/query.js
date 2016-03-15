@@ -644,6 +644,38 @@ describe('Query', function () {
     expect(Query.fromJSON(json).toJSON()).to.eql(json);
   });
 
+  it('deserialize an or query with two not query', function () {
+    let q1 = new Query(Note);
+    q1.equalTo('name', 'Hello');
+    let q2 = new Query(Note);
+    q2.equalTo('name', 'World');
+    let finalJSON = Query.or(Query.not(q1), Query.not(q2)).toJSON();
+    expect(finalJSON.predicate).to.eql(
+      [
+        'or',
+        [
+          'not',
+          [
+            'eq', {
+              $type: 'keypath',
+              $val: 'name'
+            }, 'Hello'
+          ]
+        ],
+        [
+          'not',
+          [
+            'eq', {
+              $type: 'keypath',
+              $val: 'name'
+            }, 'World'
+          ]
+        ]
+      ]
+    );
+    expect(Query.fromJSON(finalJSON).toJSON()).to.eql(finalJSON);
+  });
+
   it('deserialize a complicated query', function () {
     let json = {
       record_type: 'note',
