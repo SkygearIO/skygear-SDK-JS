@@ -57,54 +57,136 @@ let request = mockSuperagent([{
 }, {
   pattern: 'http://skygear.dev/record/save',
   fixtures: function (match, params, headers, fn) {
-    let id = params['records'][0]['_id'];
-    if (params['database_id'] === '_public' && id === 'note/failed-to-save') {
-      return fn({
-        'result': [{
-          '_id': 'note/failed-to-save',
-          '_type': 'error',
-          'code': 101,
-          'message': 'failed to save record id = note/failed-to-save',
-          'type': 'ResourceSaveFailure'
-        }]
-      });
-    } else {
-      return fn({
-        'result': [{
-          '_type': 'record',
-          '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
-          '_created_at': '2014-09-27T17:40:00.000Z',
-          '_ownerID': 'rick.mak@gmail.com',
-          '_access': null,
-          '_transient': {
-            'synced': true,
-            'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
-          }
-        }]
-      });
-    }
-  }
-}, {
-  pattern: 'http://skygear.dev/record/delete',
-  fixtures: function (match, params, headers, fn) {
-    if (params['database_id'] === '_public' && params['ids']) {
-      if (params['ids'][0] === 'note/not-found') {
+    let records = params['records'];
+    let firstRecord = records[0];
+    if (records.length === 1) {
+      if (params['database_id'] === '_public' &&
+      firstRecord['_id'] === 'note/failed-to-save') {
         return fn({
-          result: [{
-            _id: 'note/not-found',
-            _type: 'error',
-            code: 103,
-            message: 'record not found',
-            type: 'ResourceNotFound'
+          'result': [{
+            '_id': 'note/failed-to-save',
+            '_type': 'error',
+            'code': 101,
+            'message': 'failed to save record id = note/failed-to-save',
+            'type': 'ResourceSaveFailure'
           }]
         });
       } else {
         return fn({
           'result': [{
-            '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-            '_type': 'record'
+            '_type': 'record',
+            '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
+            '_created_at': '2014-09-27T17:40:00.000Z',
+            '_ownerID': 'rick.mak@gmail.com',
+            '_access': null,
+            '_transient': {
+              'synced': true,
+              'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+            }
           }]
         });
+      }
+    } else {
+      if (params['database_id'] === '_public' &&
+       firstRecord['_id'] === 'note/failed-to-save') {
+        return fn({
+          result: [
+            {
+              '_id': 'note/failed-to-save',
+              '_type': 'error',
+              'code': 101,
+              'message': 'failed to save record id = note/failed-to-save',
+              'type': 'ResourceSaveFailure'
+            }, {
+              '_type': 'record',
+              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              }
+            }]
+        });
+      } else {
+        return fn({
+          result: [
+            {
+              '_type': 'record',
+              '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+              }
+            }, {
+              '_type': 'record',
+              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
+              '_created_at': '2014-09-27T17:40:00.000Z',
+              '_ownerID': 'rick.mak@gmail.com',
+              '_access': null,
+              '_transient': {
+                'synced': true,
+                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              }
+            }]
+        });
+      }
+    }
+  }
+}, {
+  pattern: 'http://skygear.dev/record/delete',
+  fixtures: function (match, params, headers, fn) {
+    let recordIds = params['ids'];
+    if (params['database_id'] === '_public' && recordIds) {
+      if (recordIds.length === 0) {
+        if (recordIds[0] === 'note/not-found') {
+          return fn({
+            result: [{
+              _id: 'note/not-found',
+              _type: 'error',
+              code: 103,
+              message: 'record not found',
+              type: 'ResourceNotFound'
+            }]
+          });
+        } else {
+          return fn({
+            'result': [{
+              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              '_type': 'record'
+            }]
+          });
+        }
+      } else {
+        let firstRecordId = recordIds[0];
+        if (firstRecordId === 'note/not-found') {
+          return fn({
+            result: [{
+              _id: 'note/not-found',
+              _type: 'error',
+              code: 103,
+              message: 'record not found',
+              type: 'ResourceNotFound'
+            }, {
+              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              '_type': 'record'
+            }]
+          });
+        } else {
+          return fn({
+            result: [{
+              '_id': 'note/de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577',
+              '_type': 'record'
+            }, {
+              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              '_type': 'record'
+            }]
+          });
+        }
       }
     }
   }
@@ -229,6 +311,56 @@ describe('Database', function () {
     });
   });
 
+  it('save multiple records to remote', function () {
+    let note1 = new Note();
+    let note2 = new Note();
+
+    return db.save([note1, note2])
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(2);
+      expect(records[0]).to.be.an.instanceof(Note);
+      expect(records[1]).to.be.an.instanceof(Note);
+
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.be.undefined();
+      expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
+    });
+  });
+
+  it('save multiple records with some failures', function () {
+    let note1 = new Note({
+      _id: 'note/failed-to-save'
+    });
+    let note2 = new Note();
+
+    return db.save([note1, note2])
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(2);
+      expect(records[0]).to.be.undefined();
+      expect(records[1]).to.be.an.instanceof(Note);
+
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.eql({
+        '_id': 'note/failed-to-save',
+        '_type': 'error',
+        'code': 101,
+        'message': 'failed to save record id = note/failed-to-save',
+        'type': 'ResourceSaveFailure'
+      });
+      expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
+    });
+  });
+
   it('save record with meta populated', function () {
     let r = new Note();
     r.update({
@@ -290,6 +422,40 @@ describe('Database', function () {
         message: 'record not found',
         type: 'ResourceNotFound'
       });
+    });
+  });
+
+  it('delete record multiple records at remote', function () {
+    let note1 = new Note();
+    let note2 = new Note();
+    return db.delete([note1, note2])
+    .then(function (errors) {
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.be.undefined();
+      expect(errors[1]).to.be.undefined();
+    }, function (error) {
+      throw Error();
+    });
+  });
+
+  it('delete record multiple records with some failures', function () {
+    let note1 = new Note({
+      _id: 'note/not-found'
+    });
+    let note2 = new Note();
+    return db.delete([note1, note2])
+    .then(function (errors) {
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.eql({
+        _id: 'note/not-found',
+        _type: 'error',
+        code: 103,
+        message: 'record not found',
+        type: 'ResourceNotFound'
+      });
+      expect(errors[1]).to.be.undefined();
+    }, function (error) {
+      throw Error();
     });
   });
 
