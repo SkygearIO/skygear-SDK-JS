@@ -132,6 +132,64 @@ describe('Query', function () {
     ], 200]);
   });
 
+  it('add like to predicate', function () {
+    let q = new Query(Note);
+    q.like('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'like',
+      {
+        $type: 'keypath',
+        $val: 'name'
+      },
+      'funny'
+    ]);
+  });
+
+  it('add case insensitive like to predicate', function () {
+    let q = new Query(Note);
+    q.caseInsensitiveLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'ilike',
+      {
+        $type: 'keypath',
+        $val: 'name'
+      },
+      'funny'
+    ]);
+  });
+
+  it('add not like to predicate', function () {
+    let q = new Query(Note);
+    q.notLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'like',
+        {
+          $type: 'keypath',
+          $val: 'name'
+        },
+        'funny'
+      ]
+    ]);
+  });
+
+  it('add case insensitive not like to predicate', function () {
+    let q = new Query(Note);
+    q.caseInsensitiveNotLike('name', 'funny');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'ilike',
+        {
+          $type: 'keypath',
+          $val: 'name'
+        },
+        'funny'
+      ]
+    ]);
+  });
+
   it('add contains to predicate', function () {
     let q = new Query(Note);
     q.contains('category', ['a', 'b']);
@@ -153,6 +211,31 @@ describe('Query', function () {
     ]);
   });
 
+  it('add not contains to predicate', function () {
+    let q = new Query(Note);
+    q.notContains('category', ['a', 'b']);
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'in',
+        {$type: 'keypath', $val: 'category'},
+        ['a', 'b']
+      ]
+    ]);
+  });
+
+  it('add not contains value to predicate', function () {
+    let q = new Query(Note);
+    q.notContainsValue('category', 'a');
+    expect(q.predicate).to.deep.include.members([
+      'not',
+      [
+        'in',
+        'a',
+        {$type: 'keypath', $val: 'category'}
+      ]
+    ]);
+  });
 
   it('sort by ascending distance', function () {
     let q = new Query(Note);
@@ -349,6 +432,21 @@ describe('Query', function () {
     ]);
   });
 
+  it('serialize notHavingRelation', function () {
+    let q = new Query(Note);
+    let Friend = RelationAction.extend('friend', Mutual);
+    q.notHavingRelation('_owner', Friend);
+    expect(q.toJSON().predicate).to.eql([
+      'not',
+      [
+        'func',
+        'userRelation',
+        {$type: 'keypath', $val: '_owner'},
+        {$type: 'relation', $name: '_friend', $direction: 'mutual'}
+      ]
+    ]);
+  });
+
   it('serialize a simple or query', function () {
     let con1 = new Query(Note);
     con1.greaterThan('count', 100);
@@ -451,6 +549,190 @@ describe('Query', function () {
       ],
       count: false
     });
+  });
+
+  it('serialize not query', function () {
+    let q1 = new Query(Note);
+    q1.equalTo('name', 'Hello');
+
+    expect(Query.not(q1).toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'not',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'name'
+          }, 'Hello'
+        ]
+      ],
+      count: false
+    });
+  });
+
+  it('deserialize a simple query', function () {
+
+    let json1 = {
+      record_type: 'note',
+      include: {},
+      limit: 30,
+      sort: [],
+      predicate: [
+        'gt', {
+          $type: 'keypath',
+          $val: 'price'
+        }, 20
+      ],
+      count: true
+    };
+
+    expect(Query.fromJSON(json1).toJSON()).to.eql(json1);
+
+    let json2 = {
+      record_type: 'note',
+      include: {},
+      limit: 35,
+      sort: [],
+      predicate: [
+        'and',
+        [
+          'gt', {
+            $type: 'keypath',
+            $val: 'price'
+          }, 20
+        ],
+        [
+          'lt', {
+            $type: 'keypath',
+            $val: 'price'
+          }, 120
+        ]
+      ],
+      count: true
+    };
+
+    expect(Query.fromJSON(json2).toJSON()).to.eql(json2);
+  });
+
+  it('deserialize an or query', function () {
+    let json = {
+      count: false,
+      include: {},
+      limit: 50,
+      predicate: [
+        'or',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'starred'
+          }, true
+        ],
+        [
+          'gt', {
+            $type: 'keypath',
+            $val: 'rate'
+          }, 4
+        ]
+      ],
+      record_type: 'note',
+      sort: []
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
+  });
+
+  it('deserialize an or query with two not query', function () {
+    let q1 = new Query(Note);
+    q1.equalTo('name', 'Hello');
+    let q2 = new Query(Note);
+    q2.equalTo('name', 'World');
+    let finalJSON = Query.or(Query.not(q1), Query.not(q2)).toJSON();
+    expect(finalJSON.predicate).to.eql(
+      [
+        'or',
+        [
+          'not',
+          [
+            'eq', {
+              $type: 'keypath',
+              $val: 'name'
+            }, 'Hello'
+          ]
+        ],
+        [
+          'not',
+          [
+            'eq', {
+              $type: 'keypath',
+              $val: 'name'
+            }, 'World'
+          ]
+        ]
+      ]
+    );
+    expect(Query.fromJSON(finalJSON).toJSON()).to.eql(finalJSON);
+  });
+
+  it('deserialize a complicated query', function () {
+    let json = {
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'and',
+        ['eq', {
+          $type: 'keypath',
+          $val: 'name'
+        }, 'hi'],
+        [
+          'or',
+          ['eq', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 0],
+          [
+            'and',
+            ['lt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 100],
+            ['gt', {
+              $type: 'keypath',
+              $val: 'count'
+            }, 10
+            ]
+          ]
+        ]
+      ],
+      count: false
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
+  });
+
+  it('deserialize a not query', function () {
+    let json = {
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'not',
+        [
+          'eq', {
+            $type: 'keypath',
+            $val: 'name'
+          }, 'Hello'
+        ]
+      ],
+      count: false
+    };
+
+    expect(Query.fromJSON(json).toJSON()).to.eql(json);
   });
 
 });
