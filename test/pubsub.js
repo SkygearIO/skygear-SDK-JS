@@ -74,7 +74,7 @@ describe('Pubsub', function () {
   });
 
   it('call send to publish message', function () {
-    ws.send = sinon.spy(function (data){
+    ws.send = sinon.spy(function (data) {
       expect(JSON.parse(data)).to.deep.equal({
         action: 'pub',
         channel: 'CHANNEL',
