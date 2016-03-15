@@ -315,7 +315,7 @@ describe('Database', function () {
     let note1 = new Note();
     let note2 = new Note();
 
-    return db.saveAll([note1, note2])
+    return db.save([note1, note2])
     .then((result) => {
       let records = result.savedRecords;
       let errors = result.errors;
@@ -338,7 +338,7 @@ describe('Database', function () {
     });
     let note2 = new Note();
 
-    return db.saveAll([note1, note2])
+    return db.save([note1, note2])
     .then((result) => {
       let records = result.savedRecords;
       let errors = result.errors;
@@ -428,7 +428,7 @@ describe('Database', function () {
   it('delete record multiple records at remote', function () {
     let note1 = new Note();
     let note2 = new Note();
-    return db.deleteAll([note1, note2])
+    return db.delete([note1, note2])
     .then(function (errors) {
       expect(errors).to.have.length(2);
       expect(errors[0]).to.be.undefined();
@@ -443,7 +443,7 @@ describe('Database', function () {
       _id: 'note/not-found'
     });
     let note2 = new Note();
-    return db.deleteAll([note1, note2])
+    return db.delete([note1, note2])
     .then(function (errors) {
       expect(errors).to.have.length(2);
       expect(errors[0]).to.eql({
