@@ -1,3 +1,10 @@
+## 0.9.0 (2016-03-16)
+
+### Feature
+
+- Add NOT operation and deserializer for query #148
+- Implement batch save / delete records #153
+
 ## 0.8.0 (2016-03-09)
 
 ### Other Notes
