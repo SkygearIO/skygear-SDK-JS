@@ -108,6 +108,17 @@ describe('Container auth', function () {
   }, {
     pattern: 'http://skygear.dev/auth/login',
     fixtures: function (match, params, headers, fn) {
+      if (params['provider'] === 'provider') {
+        return fn({
+          'result': {
+            'user_id': 'user:id1',
+            'access_token': 'uuid1',
+            'username': '',
+            'email': '',
+            'auth_data': params['auth_data']
+          }
+        });
+      }
       const validUser = params['username'] === 'registered' ||
         params['email'] === 'user@email.com';
       if (validUser && params['password'] === 'passwd') {
@@ -220,6 +231,23 @@ describe('Container auth', function () {
         assert.equal(
           err.error.message,
           'invalid authentication information');
+      });
+  });
+
+  it('should login with provider successfully', function () {
+    return container
+      .loginWithProvider('provider', {})
+      .then(function (user) {
+        assert.equal(
+          container.accessToken,
+          'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.id,
+          'user:id1'
+        );
+      }, function () {
+        throw new Error('Failed to login with provider');
       });
   });
 
