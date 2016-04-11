@@ -89,6 +89,31 @@ describe('ACL', function () {
     expect(acl.hasWriteAccess(Passenger)).to.be.true();
   });
 
+  it('public have access', function () {
+    const nobodyAccessiable = ACL.fromJSON([]);
+    const publicReadable = ACL.fromJSON();
+    const publicReadWritable = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadLevel,
+        public: true
+      },
+      {
+        level: AccessLevel.WriteLevel,
+        public: true
+      }
+    ]);
+
+    expect(nobodyAccessiable.hasReadAccess(Driver)).to.be.false();
+
+    expect(publicReadable.hasReadAccess(Passenger)).to.be.true();
+    expect(publicReadable.hasPublicReadAccess()).to.be.true();
+    expect(publicReadable.hasPublicWriteAccess()).to.be.false();
+
+    expect(publicReadWritable.hasWriteAccess(Passenger)).to.be.true();
+    expect(publicReadWritable.hasPublicReadAccess()).to.be.true();
+    expect(publicReadWritable.hasPublicWriteAccess()).to.be.true();
+  });
+
   it('add read / write access', function () {
     const acl = ACL.fromJSON([
       {
@@ -137,15 +162,69 @@ describe('ACL', function () {
     expect(acl.hasWriteAccess(Passenger)).to.be.false();
   });
 
+  it('add public read / write access', function () {
+    const acl = ACL.fromJSON([]);
+
+    expect(acl.hasPublicReadAccess()).to.be.false();
+    expect(acl.hasPublicWriteAccess()).to.be.false();
+
+    acl.addPublicReadAccess();
+    expect(acl.hasPublicReadAccess()).to.be.true();
+
+    acl.addPublicWriteAccess();
+    expect(acl.hasPublicWriteAccess()).to.be.true();
+
+    expect(acl.toJSON()).to.be.eql([
+      {
+        level: AccessLevel.ReadLevel,
+        public: true
+      },
+      {
+        level: AccessLevel.WriteLevel,
+        public: true
+      }
+    ]);
+  });
+
+  it('remove public read / write access', function () {
+    const acl = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadLevel,
+        public: true
+      },
+      {
+        level: AccessLevel.WriteLevel,
+        public: true
+      }
+    ]);
+
+    expect(acl.hasPublicReadAccess()).to.be.true();
+    expect(acl.hasPublicWriteAccess()).to.be.true();
+
+    acl.removePublicReadAccess();
+    expect(acl.hasPublicReadAccess()).to.be.false();
+
+    acl.removePublicWriteAccess();
+    expect(acl.hasPublicWriteAccess()).to.be.false();
+
+    expect(acl.toJSON()).to.be.eql([]);
+  });
+
   it('default ACL', function () {
-    const acl = ACL.Default;
+    const acl = new ACL();
     const entries = acl.entries;
 
     expect(entries).to.have.length(1);
 
     let firstEntry = entries[0];
     expect(firstEntry.level).to.equal(AccessLevel.ReadLevel);
-    expect(firstEntry.role).to.equal(Role.Public);
+    expect(firstEntry.role).to.be.undefined();
+    expect(firstEntry.public).to.be.true();
+
+    expect(acl.toJSON()).eql([{
+      level: AccessLevel.ReadLevel,
+      public: true
+    }]);
   });
 
 });

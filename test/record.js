@@ -121,7 +121,7 @@ describe('Extended Record', function () {
     let r = new Note({
       _id: 'note/uid',
       _access: [
-        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.ReadLevel, public: true },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
@@ -129,7 +129,7 @@ describe('Extended Record', function () {
     expect(r.toJSON()).to.be.eql({
       _id: 'note/uid',
       _access: [
-        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.ReadLevel, public: true },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
@@ -143,7 +143,7 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadLevel, role: '_public' }],
+      _access: [{ level: AccessLevel.ReadLevel, public: true }],
       noteID: {
         $type: 'seq'
       }
@@ -163,25 +163,25 @@ describe('Extended Record', function () {
     let note = new Note({
       _id: 'note/uid',
       _access: [
-        { level: AccessLevel.ReadLevel, role: '_public' },
+        { level: AccessLevel.ReadLevel, public: true },
         { level: AccessLevel.WriteLevel, role: 'Writer' }
       ],
       content: 'hello world'
     });
 
     expect(note.access.toJSON()).to.be.eql([
-      { level: AccessLevel.ReadLevel, role: '_public' },
+      { level: AccessLevel.ReadLevel, public: true },
       { level: AccessLevel.WriteLevel, role: 'Writer' }
     ]);
 
     note.addReadAccess(Writer);
     expect(note.access.toJSON()).to.be.eql([
-      { level: AccessLevel.ReadLevel, role: '_public' },
+      { level: AccessLevel.ReadLevel, public: true },
       { level: AccessLevel.WriteLevel, role: 'Writer' },
       { level: AccessLevel.ReadLevel, role: 'Writer' }
     ]);
 
-    note.removeReadAccess(Role.Public);
+    note.removePublicReadAccess();
     expect(note.access.toJSON()).to.be.eql([
       { level: AccessLevel.WriteLevel, role: 'Writer' },
       { level: AccessLevel.ReadLevel, role: 'Writer' }

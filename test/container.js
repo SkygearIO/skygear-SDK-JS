@@ -435,7 +435,8 @@ describe('Container acl', function () {
 
     let aclEntry = acl.entries[0];
     assert.equal(aclEntry.level, AccessLevel.ReadLevel);
-    assert.equal(aclEntry.role, container.Role.Public);
+    assert.equal(aclEntry.role, undefined);
+    assert.equal(aclEntry.public, true);
 
     let aNote = new Note({
       content: 'Hello World'
@@ -447,7 +448,8 @@ describe('Container acl', function () {
 
     let recordACLEntry = recordACL.entries[0];
     assert.equal(recordACLEntry.level, AccessLevel.ReadLevel);
-    assert.equal(recordACLEntry.role, container.Role.Public);
+    assert.equal(recordACLEntry.role, undefined);
+    assert.equal(recordACLEntry.public, true);
 
     // changes
     acl.removePublicReadAccess();

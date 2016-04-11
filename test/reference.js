@@ -57,7 +57,7 @@ describe('Reference', function () {
       '_id': 'record/id',
       '_access': [{
         level: AccessLevel.ReadLevel,
-        role: '_public'
+        public: true
       }],
       'key': {
         '$type': 'ref',
