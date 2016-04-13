@@ -556,7 +556,7 @@ describe('Container device registration', function () {
             'code': 110,
             'message': 'device not found'
           }
-        });
+        }, 400);
       } else if (params.id) {
         return fn({
           'result': {
@@ -575,37 +575,37 @@ describe('Container device registration', function () {
   container.configApiKey('correctApiKey');
 
   it('should save device id successfully', function () {
-    container
+    return container
       .registerDevice('device-token', 'android')
       .then(function (deviceID) {
-        assert(deviceID).to.equal('device-id');
-        assert(container.deviceID).to.equal('device-id');
+        assert.equal(deviceID, 'device-id');
+        assert.equal(container.deviceID, 'device-id');
       }, function () {
         throw 'failed to save device id';
       });
   });
 
   it('should attach existing device id', function () {
-    container._setDeviceID('existing-device-id').then(function () {
+    return container._setDeviceID('existing-device-id').then(function () {
       return container.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
-      assert(deviceID).to.equal('existing-device-id');
-      assert(container.deviceID).to.equal('existing-device-id');
+      assert.equal(deviceID, 'existing-device-id');
+      assert.equal(container.deviceID, 'existing-device-id');
     });
   });
 
   it('should retry with null deviceID on first call fails', function () {
-    container._setDeviceID('non-exist').then(function () {
+    return container._setDeviceID('non-exist').then(function () {
       return container.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
-      assert(deviceID).to.equal('device-id');
-      assert(container.deviceID).to.equal('device-id');
+      assert.equal(deviceID, 'device-id');
+      assert.equal(container.deviceID, 'device-id');
     });
   });
 
   it('should be able to set null deviceID', function () {
-    container._setDeviceID(null).then(function () {
-      assert(container.deviceID).to.equal(null);
+    return container._setDeviceID(null).then(function () {
+      assert.equal(container.deviceID, null);
     });
   });
 });
