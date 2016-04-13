@@ -139,6 +139,15 @@ describe('Container auth', function () {
         }
       }, 400);
     }
+  }, {
+    pattern: 'http://skygear.dev/auth/logout',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        'result': {
+          'status': 'OK'
+        }
+      });
+    }
   }]);
   container.configApiKey('correctApiKey');
 
@@ -252,9 +261,35 @@ describe('Container auth', function () {
   });
 
   it('should be able to set null accessToken', function () {
-    container._setAccessToken(null).then(function () {
-      assert(container.accessToken).to.equal(null);
+    return container._setAccessToken(null)
+    .then(function () {
+      assert.equal(container.accessToken, null);
     });
+  });
+
+  it('should clear current user and access token after logout', function () {
+    /* eslint-disable camelcase */
+    const aUserAttr = {
+      user_id: '68a2e6ce-9321-4561-8042-a8fa076e9214',
+      email: 'sky.user@skygear.dev',
+      access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
+    };
+
+    return Promise.all([
+      container._setAccessToken(aUserAttr.access_token),
+      container._setUser(aUserAttr)
+    ])
+    .then(() => {
+      assert.equal(container.accessToken, aUserAttr.access_token);
+      assert.isNotNull(container.currentUser, aUserAttr.currentUser);
+
+      return container.logout();
+    })
+    .then(() => {
+      assert.isNull(container.accessToken, aUserAttr.access_token);
+      assert.isNull(container.currentUser, aUserAttr.currentUser);
+    });
+    /* eslint-enable-line camelcase */
   });
 });
 
