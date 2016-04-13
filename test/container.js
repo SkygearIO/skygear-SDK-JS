@@ -139,6 +139,15 @@ describe('Container auth', function () {
         }
       }, 400);
     }
+  }, {
+    pattern: 'http://skygear.dev/auth/logout',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        'result': {
+          'status': 'OK'
+        }
+      });
+    }
   }]);
   container.configApiKey('correctApiKey');
 
@@ -252,9 +261,35 @@ describe('Container auth', function () {
   });
 
   it('should be able to set null accessToken', function () {
-    container._setAccessToken(null).then(function () {
-      assert(container.accessToken).to.equal(null);
+    return container._setAccessToken(null)
+    .then(function () {
+      assert.equal(container.accessToken, null);
     });
+  });
+
+  it('should clear current user and access token after logout', function () {
+    /* eslint-disable camelcase */
+    const aUserAttr = {
+      user_id: '68a2e6ce-9321-4561-8042-a8fa076e9214',
+      email: 'sky.user@skygear.dev',
+      access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
+    };
+
+    return Promise.all([
+      container._setAccessToken(aUserAttr.access_token),
+      container._setUser(aUserAttr)
+    ])
+    .then(() => {
+      assert.equal(container.accessToken, aUserAttr.access_token);
+      assert.isNotNull(container.currentUser, aUserAttr.currentUser);
+
+      return container.logout();
+    })
+    .then(() => {
+      assert.isNull(container.accessToken, aUserAttr.access_token);
+      assert.isNull(container.currentUser, aUserAttr.currentUser);
+    });
+    /* eslint-enable-line camelcase */
   });
 });
 
@@ -521,7 +556,7 @@ describe('Container device registration', function () {
             'code': 110,
             'message': 'device not found'
           }
-        });
+        }, 400);
       } else if (params.id) {
         return fn({
           'result': {
@@ -540,37 +575,37 @@ describe('Container device registration', function () {
   container.configApiKey('correctApiKey');
 
   it('should save device id successfully', function () {
-    container
+    return container
       .registerDevice('device-token', 'android')
       .then(function (deviceID) {
-        assert(deviceID).to.equal('device-id');
-        assert(container.deviceID).to.equal('device-id');
+        assert.equal(deviceID, 'device-id');
+        assert.equal(container.deviceID, 'device-id');
       }, function () {
         throw 'failed to save device id';
       });
   });
 
   it('should attach existing device id', function () {
-    container._setDeviceID('existing-device-id').then(function () {
+    return container._setDeviceID('existing-device-id').then(function () {
       return container.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
-      assert(deviceID).to.equal('existing-device-id');
-      assert(container.deviceID).to.equal('existing-device-id');
+      assert.equal(deviceID, 'existing-device-id');
+      assert.equal(container.deviceID, 'existing-device-id');
     });
   });
 
   it('should retry with null deviceID on first call fails', function () {
-    container._setDeviceID('non-exist').then(function () {
+    return container._setDeviceID('non-exist').then(function () {
       return container.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
-      assert(deviceID).to.equal('device-id');
-      assert(container.deviceID).to.equal('device-id');
+      assert.equal(deviceID, 'device-id');
+      assert.equal(container.deviceID, 'device-id');
     });
   });
 
   it('should be able to set null deviceID', function () {
-    container._setDeviceID(null).then(function () {
-      assert(container.deviceID).to.equal(null);
+    return container._setDeviceID(null).then(function () {
+      assert.equal(container.deviceID, null);
     });
   });
 });
