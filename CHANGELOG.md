@@ -1,3 +1,28 @@
+## 0.10.0 (2016-04-14)
+
+### Incompatible Changes
+- Correct the representation of public access and read/write level (oursky/skygear-SDK-JS#156)
+
+  The correct representation of public access serve want is:
+  `{ "level": "read", "public": true }`
+
+  The previous `addWriteAccess` interface imply write and read is separate access
+  entity. Which a record can be write, not not read (Something like Dropbox).
+  This is misleading and not align with our implementation. So we change the API
+  to `setReadWriteAccess` and `setReadOnlyAcces` to clear the ambiguity.
+
+- Expose Query as constructor
+
+  `skygear.Query` returns the query constructor.
+
+  To create a query, use `new skygear.Query(Note)`, instead of
+  `skygear.Query(Note)`
+
+### Bug fixes
+- Clear currentUser after logout (oursky/skygear-SDK-JS#162)
+- support auth provider signup and login (oursky/skygear-SDK-JS#155)
+
+
 ## 0.9.0 (2016-03-16)
 
 ### Feature
