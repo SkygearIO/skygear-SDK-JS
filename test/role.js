@@ -24,12 +24,6 @@ describe('Role', function () {
     expect(Boss.name).to.be.eql('Boss');
   });
 
-  it('should not allow invalid role name', function () {
-    expect(function () {
-      return Role.define('_Thief');
-    }).to.throw(Error);
-  });
-
   it('should not create duplicated role object', function () {
     let Student = Role.define('Student');
     let AlsoStudent = Role.define('Student');

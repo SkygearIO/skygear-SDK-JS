@@ -22,48 +22,47 @@ describe('ACL', function () {
   let Driver = Role.define('Driver');
   let Passenger = Role.define('Passenger');
 
-  it('create ACL', function () {
-    let acl = new ACL();
-    let entries = acl.entries;
-    expect(entries).to.have.length(1);
-
-    let firstEntry = entries[0];
-    expect(firstEntry.level).to.equal(AccessLevel.ReadLevel);
-    expect(firstEntry.role).to.equal(Role.Public);
-  });
-
   it('serialization', function () {
     const payload = [
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.WriteLevel,
+        level: AccessLevel.ReadWriteLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
       }
     ];
 
     const acl = ACL.fromJSON(payload);
-    expect(acl.toJSON()).eql(payload);
+    expect(acl.toJSON()).eql([
+      {
+        level: AccessLevel.ReadWriteLevel,
+        role: 'Passenger'
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        role: 'Driver'
+      }
+    ]);
   });
 
   it('deserialization', function () {
     const payload = [
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.WriteLevel,
+        level: AccessLevel.ReadWriteLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
       }
     ];
@@ -75,11 +74,11 @@ describe('ACL', function () {
   it('have access', function () {
     const acl = ACL.fromJSON([
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.WriteLevel,
+        level: AccessLevel.ReadWriteLevel,
         role: 'Passenger'
       }
     ]);
@@ -89,14 +88,39 @@ describe('ACL', function () {
     expect(acl.hasWriteAccess(Passenger)).to.be.true();
   });
 
-  it('add read / write access', function () {
-    const acl = ACL.fromJSON([
+  it('public have access', function () {
+    const nobodyAccessiable = ACL.fromJSON([]);
+    const publicReadable = ACL.fromJSON();
+    const publicReadWritable = ACL.fromJSON([
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
+        public: true
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        public: true
+      }
+    ]);
+
+    expect(nobodyAccessiable.hasReadAccess(Driver)).to.be.false();
+
+    expect(publicReadable.hasReadAccess(Passenger)).to.be.true();
+    expect(publicReadable.hasPublicReadAccess()).to.be.true();
+    expect(publicReadable.hasPublicWriteAccess()).to.be.false();
+
+    expect(publicReadWritable.hasWriteAccess(Passenger)).to.be.true();
+    expect(publicReadWritable.hasPublicReadAccess()).to.be.true();
+    expect(publicReadWritable.hasPublicWriteAccess()).to.be.true();
+  });
+
+  it('set access', function () {
+    let acl = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.WriteLevel,
+        level: AccessLevel.ReadWriteLevel,
         role: 'Passenger'
       }
     ]);
@@ -104,25 +128,23 @@ describe('ACL', function () {
     expect(acl.hasReadAccess(Driver)).to.be.false();
     expect(acl.hasWriteAccess(Driver)).to.be.false();
 
-    acl.addReadAccess(Driver);
+    acl.setReadOnlyForRole(Driver);
     expect(acl.hasReadAccess(Driver)).to.be.true();
 
-    acl.addWriteAccess(Driver);
+    acl.setReadWriteAccessForRole(Driver);
     expect(acl.hasWriteAccess(Driver)).to.be.true();
-  });
 
-  it('remove read / write access', function () {
-    const acl = ACL.fromJSON([
+    acl = ACL.fromJSON([
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
       },
       {
-        level: AccessLevel.ReadLevel,
+        level: AccessLevel.ReadOnlyLevel,
         role: 'Passenger'
       },
       {
-        level: AccessLevel.WriteLevel,
+        level: AccessLevel.ReadWriteLevel,
         role: 'Passenger'
       }
     ]);
@@ -130,22 +152,60 @@ describe('ACL', function () {
     expect(acl.hasReadAccess(Passenger)).to.be.true();
     expect(acl.hasWriteAccess(Passenger)).to.be.true();
 
-    acl.removeReadAccess(Passenger);
-    expect(acl.hasReadAccess(Passenger)).to.be.false();
-
-    acl.removeWriteAccess(Passenger);
+    acl.setReadOnlyForRole(Passenger);
     expect(acl.hasWriteAccess(Passenger)).to.be.false();
+
+    acl.setNoAccessForRole(Passenger);
+    expect(acl.hasReadAccess(Passenger)).to.be.false();
+  });
+
+  it('set public access', function () {
+    let acl = ACL.fromJSON([]);
+
+    expect(acl.hasPublicReadAccess()).to.be.false();
+    expect(acl.hasPublicWriteAccess()).to.be.false();
+
+    acl.setPublicReadOnly();
+    expect(acl.hasPublicReadAccess()).to.be.true();
+
+    acl.setPublicReadWriteAccess();
+    expect(acl.hasPublicWriteAccess()).to.be.true();
+
+    expect(acl.toJSON()).to.be.eql([
+      {
+        level: AccessLevel.ReadWriteLevel,
+        public: true
+      }
+    ]);
+
+    acl = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        public: true
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        public: true
+      }
+    ]);
+
+    expect(acl.hasPublicReadAccess()).to.be.true();
+    expect(acl.hasPublicWriteAccess()).to.be.true();
+
+    acl.setPublicReadOnly();
+    expect(acl.hasPublicWriteAccess()).to.be.false();
+
+    acl.setPublicNoAccess();
+    expect(acl.hasPublicReadAccess()).to.be.false();
+
+    expect(acl.toJSON()).to.be.eql([]);
   });
 
   it('default ACL', function () {
-    const acl = ACL.Default;
-    const entries = acl.entries;
+    const acl = new ACL();
 
-    expect(entries).to.have.length(1);
-
-    let firstEntry = entries[0];
-    expect(firstEntry.level).to.equal(AccessLevel.ReadLevel);
-    expect(firstEntry.role).to.equal(Role.Public);
+    expect(acl.public).to.equal(AccessLevel.ReadOnlyLevel);
+    expect(Object.keys(acl.roles)).to.have.length(0);
   });
 
 });
