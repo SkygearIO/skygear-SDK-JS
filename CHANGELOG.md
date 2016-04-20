@@ -1,3 +1,9 @@
+## 0.10.1 (2016-04-20)
+
+### Bug fixes
+- fix asset upload batch save
+
+
 ## 0.10.0 (2016-04-14)
 
 ### Incompatible Changes
