@@ -18,6 +18,7 @@ import {expect, assert} from 'chai';
 import uuid from 'uuid';
 import Record from '../lib/record';
 import Role from '../lib/role';
+import Reference from '../lib/reference';
 import Geolocation from '../lib/geolocation';
 import {Sequence} from '../lib/type';
 import {AccessLevel} from '../lib/acl';
@@ -167,6 +168,31 @@ describe('Extended Record', function () {
     expect(reminderTime).to.eql(new Date(Date.UTC(2016, 5, 3, 12, 0, 0)));
   });
 
+  it('serialize reference correctly', function () {
+    let n1 = new Note({
+      _id: 'note/note-1',
+      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      content: 'hello world'
+    });
+    let n2 = new Note({
+      _id: 'note/note-2',
+      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      content: 'foo bar'
+    });
+
+    n2.replyTo = new Reference(n1);
+
+    expect(n2.toJSON()).to.be.eql({
+      _id: 'note/note-2',
+      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      replyTo: {
+        "$id": "note/note-1",
+        "$type": "ref"
+      },
+      content: 'foo bar'
+    });
+  });
+
   it('serialize to payload with sequence', function () {
     let note = new Note({
       _id: 'note/uid'
@@ -188,6 +214,15 @@ describe('Extended Record', function () {
     };
     let r = new Record('note', payload);
     expect(r['geo']).to.be.an.instanceof(Geolocation);
+  });
+
+  it('deserialize from payload with reference', function () {
+    let payload = {
+      _id: 'note/note-2',
+      replyTo: {"$type": "ref", "$id": "note/note-1"}
+    };
+    let r = new Record('note', payload);
+    expect(r['replyTo']).to.be.an.instanceof(Reference);
   });
 
   it('acl', function () {
