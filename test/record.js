@@ -136,6 +136,37 @@ describe('Extended Record', function () {
     });
   });
 
+  it('serialize to payload with date', function () {
+    const note = new Note({
+      _id: 'note/uid'
+    });
+
+    note.reminderTime = new Date(Date.UTC(2016, 5, 3, 12, 0, 0));
+
+    expect(note.toJSON()).to.be.eql({
+      _id: 'note/uid',
+      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      reminderTime: {
+        $type: "date",
+        $date: "2016-06-03T12:00:00.000Z"
+      }
+    });
+  });
+
+  it('deserialize from payload with date', function () {
+    const note = new Note({
+      _id: 'note/uid',
+      reminderTime: {
+        $type: "date",
+        $date: "2016-06-03T12:00:00.000Z"
+      }
+    });
+
+    const reminderTime = note.reminderTime;
+    expect(reminderTime).to.be.an.instanceof(Date);
+    expect(reminderTime).to.eql(new Date(Date.UTC(2016, 5, 3, 12, 0, 0)));
+  });
+
   it('serialize to payload with sequence', function () {
     let note = new Note({
       _id: 'note/uid'
