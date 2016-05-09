@@ -1,3 +1,17 @@
+## 0.11.0 (2016-05-09)
+
+### Incompatible Changes
+- Return Reference type from Record field (#1)
+
+  This is a breaking change. Before this fix, the Record returns a plain
+  JSON object for reference field. Therefore the way to get the ID of
+  the referenced Record is changed.
+
+### Other Notes
+- Add test cases for serialize / deserialize date (#7)
+- Update slack notification token (SkygearIO/skygear-server#19)
+
+
 ## 0.10.1 (2016-04-20)
 
 ### Bug fixes
