@@ -16,12 +16,20 @@
 
 import {expect} from 'chai';
 import Role from '../lib/role';
+import User from '../lib/user';
 import ACL, {AccessLevel} from '../lib/acl';
 
 describe('ACL', function () {
   let Driver = Role.define('Driver');
   let Passenger = Role.define('Passenger');
-
+  let Alice = new User({
+    user_id: 'Alice', //eslint-disable-line
+    roles: ['Driver']
+  });
+  let Bob = new User({
+    user_id: 'Bob', //eslint-disable-line
+    roles: ['Passenger']
+  });
   it('serialization', function () {
     const payload = [
       {
@@ -35,6 +43,18 @@ describe('ACL', function () {
       {
         level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Alice' //eslint-disable-line
       }
     ];
 
@@ -47,6 +67,14 @@ describe('ACL', function () {
       {
         level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Alice' //eslint-disable-line
       }
     ]);
   });
@@ -64,6 +92,18 @@ describe('ACL', function () {
       {
         level: AccessLevel.ReadOnlyLevel,
         role: 'Driver'
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Alice' //eslint-disable-line
       }
     ];
 
@@ -71,7 +111,24 @@ describe('ACL', function () {
     expect(acl).to.be.an.instanceof(ACL);
   });
 
-  it('have access', function () {
+  it('user have access', function () {
+    const acl = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        user_id: 'Bob' //eslint-disable-line
+      }
+    ]);
+
+    expect(acl.hasReadAccessForUser(Alice)).to.be.false();
+    expect(acl.hasReadAccessForUser(Bob)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+  });
+
+  it('role have access', function () {
     const acl = ACL.fromJSON([
       {
         level: AccessLevel.ReadOnlyLevel,
@@ -83,9 +140,13 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Driver)).to.be.false();
-    expect(acl.hasReadAccess(Passenger)).to.be.true();
-    expect(acl.hasWriteAccess(Passenger)).to.be.true();
+    expect(acl.hasReadAccessForRole(Driver)).to.be.false();
+    expect(acl.hasReadAccessForRole(Passenger)).to.be.true();
+    expect(acl.hasWriteAccessForRole(Passenger)).to.be.true();
+    expect(acl.hasReadAccessForUser(Alice)).to.be.false();
+    expect(acl.hasReadAccessForUser(Bob)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+
   });
 
   it('public have access', function () {
@@ -102,18 +163,50 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(nobodyAccessiable.hasReadAccess(Driver)).to.be.false();
+    expect(nobodyAccessiable.hasReadAccessForRole(Driver)).to.be.false();
+    expect(nobodyAccessiable.hasReadAccessForUser(Alice)).to.be.false();
 
-    expect(publicReadable.hasReadAccess(Passenger)).to.be.true();
+    expect(publicReadable.hasReadAccessForRole(Passenger)).to.be.true();
+    expect(publicReadable.hasReadAccessForUser(Bob)).to.be.true();
     expect(publicReadable.hasPublicReadAccess()).to.be.true();
     expect(publicReadable.hasPublicWriteAccess()).to.be.false();
 
-    expect(publicReadWritable.hasWriteAccess(Passenger)).to.be.true();
+    expect(publicReadWritable.hasWriteAccessForRole(Passenger)).to.be.true();
+    expect(publicReadWritable.hasWriteAccessForUser(Bob)).to.be.true();
     expect(publicReadWritable.hasPublicReadAccess()).to.be.true();
     expect(publicReadWritable.hasPublicWriteAccess()).to.be.true();
   });
 
-  it('set access', function () {
+  it('set user access', function () {
+    let acl = ACL.fromJSON([
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Alice' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadOnlyLevel,
+        user_id: 'Bob' //eslint-disable-line
+      },
+      {
+        level: AccessLevel.ReadWriteLevel,
+        user_id: 'Bob' //eslint-disable-line
+      }
+    ]);
+
+    expect(acl.hasReadAccessForUser(Alice)).to.be.true();
+
+    acl.setReadOnlyForUser(Alice);
+    expect(acl.hasReadAccessForUser(Alice)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Alice)).to.be.false();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+
+    acl.setReadWriteAccessForUser(Alice);
+    expect(acl.hasReadAccessForUser(Alice)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Alice)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+  });
+
+  it('set role access', function () {
     let acl = ACL.fromJSON([
       {
         level: AccessLevel.ReadOnlyLevel,
@@ -125,14 +218,16 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Driver)).to.be.false();
-    expect(acl.hasWriteAccess(Driver)).to.be.false();
+    expect(acl.hasReadAccessForRole(Driver)).to.be.false();
+    expect(acl.hasWriteAccessForRole(Driver)).to.be.false();
 
     acl.setReadOnlyForRole(Driver);
-    expect(acl.hasReadAccess(Driver)).to.be.true();
+    expect(acl.hasReadAccessForRole(Driver)).to.be.true();
+    expect(acl.hasReadAccessForUser(Alice)).to.be.true();
 
     acl.setReadWriteAccessForRole(Driver);
-    expect(acl.hasWriteAccess(Driver)).to.be.true();
+    expect(acl.hasWriteAccessForRole(Driver)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Alice)).to.be.true();
 
     acl = ACL.fromJSON([
       {
@@ -149,14 +244,18 @@ describe('ACL', function () {
       }
     ]);
 
-    expect(acl.hasReadAccess(Passenger)).to.be.true();
-    expect(acl.hasWriteAccess(Passenger)).to.be.true();
+    expect(acl.hasReadAccessForRole(Passenger)).to.be.true();
+    expect(acl.hasWriteAccessForRole(Passenger)).to.be.true();
+    expect(acl.hasReadAccessForUser(Bob)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
 
     acl.setReadOnlyForRole(Passenger);
-    expect(acl.hasWriteAccess(Passenger)).to.be.false();
+    expect(acl.hasWriteAccessForRole(Passenger)).to.be.false();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.false();
 
     acl.setNoAccessForRole(Passenger);
-    expect(acl.hasReadAccess(Passenger)).to.be.false();
+    expect(acl.hasReadAccessForRole(Passenger)).to.be.false();
+    expect(acl.hasReadAccessForUser(Bob)).to.be.false();
   });
 
   it('set public access', function () {
