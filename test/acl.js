@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+ /*eslint camelcase: [2, {properties: "never"}]*/
 import {expect} from 'chai';
 import Role from '../lib/role';
 import User from '../lib/user';
@@ -23,11 +24,11 @@ describe('ACL', function () {
   let Driver = Role.define('Driver');
   let Passenger = Role.define('Passenger');
   let Alice = new User({
-    user_id: 'Alice', //eslint-disable-line
+    user_id: 'Alice',
     roles: ['Driver']
   });
   let Bob = new User({
-    user_id: 'Bob', //eslint-disable-line
+    user_id: 'Bob',
     roles: ['Passenger']
   });
   it('serialization', function () {
@@ -46,15 +47,15 @@ describe('ACL', function () {
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadWriteLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Alice' //eslint-disable-line
+        user_id: 'Alice'
       }
     ];
 
@@ -70,11 +71,11 @@ describe('ACL', function () {
       },
       {
         level: AccessLevel.ReadWriteLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Alice' //eslint-disable-line
+        user_id: 'Alice'
       }
     ]);
   });
@@ -95,15 +96,15 @@ describe('ACL', function () {
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadWriteLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Alice' //eslint-disable-line
+        user_id: 'Alice'
       }
     ];
 
@@ -115,11 +116,11 @@ describe('ACL', function () {
     const acl = ACL.fromJSON([
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadWriteLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       }
     ]);
 
@@ -181,15 +182,15 @@ describe('ACL', function () {
     let acl = ACL.fromJSON([
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Alice' //eslint-disable-line
+        user_id: 'Alice'
       },
       {
         level: AccessLevel.ReadOnlyLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       },
       {
         level: AccessLevel.ReadWriteLevel,
-        user_id: 'Bob' //eslint-disable-line
+        user_id: 'Bob'
       }
     ]);
 
