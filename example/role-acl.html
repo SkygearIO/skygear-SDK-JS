@@ -76,33 +76,51 @@
 
     <div>
       <span>Sample Object: </span><pre id="sample-obj-display">undefined</pre>
+      <br />
+    </div>
+    <hr />
+
+    <div>
       <span>Default ACL: </span><pre id="default-acl-display">undefined</pre>
       <br />
 
       <div>
         <form action="#" onsubmit="return false;">
+          <!-- public access settings -->
+          <label>Public: </label>
+          <input type="radio" value="no-access" name="public-access-toggle" id="public-no-access-toggle" />
+          <label>No Access</label>
+          <input type="radio" value="read-only" name="public-access-toggle" id="public-read-only-toggle" />
+          <label>Read Only</label>
+          <input type="radio" value="read-write" name="public-access-toggle" id="public-read-write-toggle" />
+          <label>Read Write</label>
+          <br />
+
+          <!-- role access settings -->
           <label>Role: </label>
           <input type="text" id="manage-access-role-input" placeholder="Role Name" />
-          <input type="checkbox" id="manage-public-access-toggle" onchange="onTogglePublicAccess();"/>
-          <label for="add-public-read-access-input">Public</label>
-          <p />
-
-          <!-- manage read / write access -->
-          <input type="button" value="Add Read Access" onclick="onAddReadAccess();" />
-          <input type="button" value="Add Write Access" onclick="onAddWriteAccess();" />
+          <input type="radio" value="no-access" name="role-access-toggle" id="role-no-access-toggle" />
+          <label>No Access</label>
+          <input type="radio" value="read-only" name="role-access-toggle" id="role-read-only-toggle" />
+          <label>Read Only</label>
+          <input type="radio" value="read-write" name="role-access-toggle" id="role-read-write-toggle" />
+          <label>Read Write</label>
           <br />
 
-          <input type="button" value="Remove Read Access" onclick="onRemoveReadAccess();" />
-          <input type="button" value="Remove Write Access" onclick="onRemoveWriteAccess();" />
-          <p />
-
-          <!-- default ACL -->
-          <input type="button" value="Add to Default ACL (Read)" onclick="onAddToDefaultACLReadAccess();" />
-          <input type="button" value="Add to Default ACL (Write)" onclick="onAddToDefaultACLWriteAccess();" />
+          <!-- user access settings -->
+          <label>User Email: </label>
+          <input type="text" id="manage-access-user-email-input" placeholder="User Email" />
+          <input type="radio" value="no-access" name="user-access-toggle" id="user-no-access-toggle" />
+          <label>No Access</label>
+          <input type="radio" value="read-only" name="user-access-toggle" id="user-read-only-toggle" />
+          <label>Read Only</label>
+          <input type="radio" value="read-write" name="user-access-toggle" id="user-read-write-toggle" />
+          <label>Read Write</label>
           <br />
 
-          <input type="button" value="Remove from Default ACL (Read)" onclick="onRemoveFromDefaultACLReadAccess();" />
-          <input type="button" value="Remove from Default ACL (Write)" onclick="onRemoveFromDefaultACLWriteAccess();" />
+          <!-- set access -->
+          <input type="button" value="Set Access" onclick="onSetAccess();" />
+          <input type="button" value="Set Default Access" onclick="onSetDefaultAccess();" />
           <p />
 
           <!-- create access -->
@@ -311,19 +329,101 @@
 
     var inputs = {
       manageAccessRole: document.getElementById('manage-access-role-input'),
-      managePublicAccess: document.getElementById('manage-public-access-toggle'),
+      manageAccessUser: document.getElementById('manage-access-user-email-input'),
       recordCreateAccess: document.getElementById('record-create-access-input')
     };
 
+    var getSelectedPublicAccess = function() {
+      var checkedElement = document.querySelector('input[name="public-access-toggle"]:checked');
+      if (checkedElement) {
+        return checkedElement.value;
+      } else {
+        return '';
+      }
+    }
+
+    var getSelectedRoleAccess = function() {
+      var checkedElement = document.querySelector('input[name="role-access-toggle"]:checked');
+      if (checkedElement) {
+        return checkedElement.value;
+      } else {
+        return '';
+      }
+    }
+
+    var getSelectedUserAccess = function() {
+      var checkedElement = document.querySelector('input[name="user-access-toggle"]:checked');
+      if (checkedElement) {
+        return checkedElement.value;
+      } else {
+        return '';
+      }
+    }
+
     var extractRole = function () {
       var role = skygear.Role.Public;
-      if (!inputs.managePublicAccess.checked) {
+      try {
         var name = inputs.manageAccessRole.value;
         role = skygear.Role.define(name);
+      } catch (error) {
+        role = null;
+        console.log(error);
       }
-
       return role;
     };
+
+    var getUser = function() {
+      var email = inputs.manageAccessUser.value;
+      return skygear.getUsersByEmail([email]).then((users) => {
+        return users[0];
+      }, (error) => {
+        console.log("Cannot find user with email: ", email);
+        console.log(error);
+      });
+    };
+
+    var setPublicAccess = function(obj, access) {
+      switch (access) {
+        case 'no-access':
+        obj.setPublicNoAccess();
+        break;
+        case 'read-only':
+        obj.setPublicReadOnly();
+        break;
+        case 'read-write':
+        obj.setPublicReadWriteAccess();
+        break;
+      }
+    }
+
+    var setAccessForRole = function(obj, access, role) {
+      var obj = window.sampleObject;
+      switch (access) {
+        case 'no-access':
+        obj.setNoAccessForRole(role);
+        break;
+        case 'read-only':
+        obj.setReadOnlyForRole(role);
+        break;
+        case 'read-write':
+        obj.setReadWriteAccessForRole(role);
+        break;
+      }
+    }
+
+    var setAccessForUser = function(obj, access, user) {
+      switch (access) {
+        case 'no-access':
+        obj.setNoAccessForUser(user);
+        break;
+        case 'read-only':
+        obj.setReadOnlyForUser(user);
+        break;
+        case 'read-write':
+        obj.setReadWriteAccessForUser(user);
+        break;
+      }
+    }
 
     window.onUpdateSampleObject = function () {
       obj = window.sampleObject;
@@ -339,106 +439,75 @@
       display.defaultACL.textContent = JSON.stringify(acl.toJSON());
     };
 
-    window.onTogglePublicAccess = function () {
-      inputs.manageAccessRole.style.display =
-        inputs.managePublicAccess.checked ? 'none' : 'inline';
-    };
-
-    window.onAddReadAccess = function () {
-      var role = extractRole();
+    window.onSetAccess = function() {
+      var publicAccess = getSelectedPublicAccess();
+      var roleAccess = getSelectedRoleAccess();
+      var userAccess = getSelectedUserAccess();
 
       if (window.sampleObject) {
-        window.sampleObject.addReadAccess(role);
-        skygear.publicDB.save(window.sampleObject)
-        .then(function (obj) {
-          window.sampleObject = obj;
-          window.onUpdateSampleObject();
-        })
+        setPublicAccess(window.sampleObject, publicAccess);
+
+        var role = extractRole();
+        if (role) {
+          setAccessForRole(window.sampleObject, roleAccess, role);
+        } else {
+          console.log('Invalid role');
+        }
+
+        getUser().then((user) => {
+          if (user) {
+            console.log(userAccess);
+            console.log(user);
+            setAccessForUser(window.sampleObject, userAccess, user);
+          } else {
+            console.log('Invalid user');
+          }
+        }, (error) => {
+          console.log(error);
+        }).then(() => {
+          skygear.publicDB.save(window.sampleObject)
+          .then(function (obj) {
+            window.sampleObject = obj;
+            window.onUpdateSampleObject();
+          });
+        });
       } else {
         console.log('No sample object');
       }
-    };
+    }
 
-    window.onAddWriteAccess = function () {
-      var role = extractRole();
+    window.onSetDefaultAccess = function() {
+      var acl = skygear.defaultACL;
+      var publicAccess = getSelectedPublicAccess();
+      var roleAccess = getSelectedRoleAccess();
+      var userAccess = getSelectedUserAccess();
 
       if (window.sampleObject) {
-        window.sampleObject.addWriteAccess(role);
-        skygear.publicDB.save(window.sampleObject)
-        .then(function (obj) {
-          window.sampleObject = obj;
-          window.onUpdateSampleObject();
-        })
+        setPublicAccess(acl, publicAccess);
+
+        var role = extractRole();
+        if (role) {
+          setAccessForRole(acl, roleAccess, role);
+        } else {
+          console.log('Invalid role');
+        }
+
+        getUser().then((user) => {
+          if (user) {
+            setAccessForUser(acl, userAccess, user);
+          } else {
+            console.log('Invalid user');
+          }
+        }, (error) => {
+          console.log(error);
+        }).then(() => {
+          skygear.setDefaultACL(acl);
+          window.onUpdateDefaultACL();
+        });
       } else {
         console.log('No sample object');
       }
-    };
-
-    window.onRemoveReadAccess = function () {
-      var role = extractRole();
-
-      if (window.sampleObject) {
-        window.sampleObject.removeReadAccess(role);
-        skygear.publicDB.save(window.sampleObject)
-        .then(function (obj) {
-          window.sampleObject = obj;
-          window.onUpdateSampleObject();
-        })
-      } else {
-        console.log('No sample object');
-      }
-    };
-
-    window.onRemoveWriteAccess = function () {
-      var role = extractRole();
-
-      if (window.sampleObject) {
-        window.sampleObject.removeWriteAccess(role);
-        skygear.publicDB.save(window.sampleObject)
-        .then(function (obj) {
-          window.sampleObject = obj;
-          window.onUpdateSampleObject();
-        })
-      } else {
-        console.log('No sample object');
-      }
-    };
-
-    window.onAddToDefaultACLReadAccess = function () {
-      var role = extractRole();
-      var acl = skygear.defaultACL;
-      acl.addReadAccess(role);
-
-      skygear.setDefaultACL(acl);
-      window.onUpdateDefaultACL();
-    };
-
-    window.onAddToDefaultACLWriteAccess = function () {
-      var role = extractRole();
-      var acl = skygear.defaultACL;
-      acl.addWriteAccess(role);
-
-      skygear.setDefaultACL(acl);
-      window.onUpdateDefaultACL();
-    };
-
-    window.onRemoveFromDefaultACLReadAccess = function () {
-      var role = extractRole();
-      var acl = skygear.defaultACL;
-      acl.removeReadAccess(role);
-
-      skygear.setDefaultACL(acl);
-      window.onUpdateDefaultACL();
-    };
-
-    window.onRemoveFromDefaultACLWriteAccess = function () {
-      var role = extractRole();
-      var acl = skygear.defaultACL;
-      acl.removeWriteAccess(role);
-
-      skygear.setDefaultACL(acl);
-      window.onUpdateDefaultACL();
-    };
+    }
 
     window.onSetCreateAccess = function () {
       var role = extractRole();
