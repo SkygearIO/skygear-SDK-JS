@@ -52,6 +52,7 @@
   "dependencies": {
     "Base64": "^0.3.0",
     "babel-polyfill": "^6.1.19",
+    "cookie-storage": "^1.0.4",
     "event-emitter": "^0.3.4",
     "localforage": "~1.2.10",
     "lodash": "^3.10.1",
