@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
- /*eslint camelcase: [2, {properties: "never"}]*/
+/*eslint-disable camelcase */
 import {expect} from 'chai';
 import Role from '../lib/role';
 import User from '../lib/user';
@@ -309,3 +308,4 @@ describe('ACL', function () {
   });
 
 });
+/*eslint-enable camelcase */
