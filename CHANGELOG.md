@@ -1,3 +1,12 @@
+## 0.12.0 (2016-05-30)
+
+### Features
+
+- Expose more meta attrs in record
+- Implement user based ACL
+- Fallback to cookie storage on localStorage unavailable to support Safari
+  private mode (#12)
+
 ## 0.11.0 (2016-05-09)
 
 ### Incompatible Changes
