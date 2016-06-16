@@ -5,6 +5,9 @@ var excludeGitignore = require('gulp-exclude-gitignore');
 var nsp = require('gulp-nsp');
 var babel = require('gulp-babel');
 var preprocess = require('gulp-preprocess');
+var uglify = require('gulp-uglify')
+var concat = require('gulp-concat')
+var sourcemaps = require('gulp-sourcemaps');
 
 var config = require('../config');
 var context = require('../context');
@@ -32,5 +35,14 @@ gulp.task('watch', ['browserify', 'babel'], function() {
   gulp.watch(config.src, ['browserify', 'babel']);
 });
 
-gulp.task('prepublish', ['nsp', 'babel', 'browserify']);
+gulp.task('prepublish', ['nsp', 'babel', 'browserify', 'minify']);
 gulp.task('dev', ['watch']);
+
+gulp.task('minify', ['browserify'], function() {
+  return gulp.src(config.browserify.dest + '/' + config.browserify.outputName)
+    .pipe(sourcemaps.init())
+      .pipe(concat('skygear.min.js'))
+      .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(config.dest))
+});
