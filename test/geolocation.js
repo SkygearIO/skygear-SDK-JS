@@ -39,6 +39,10 @@ describe('Geolocation', function () {
     }).to.throw('Longitude is not in expected range (-180, 180)');
 
     expect(function () {
+      new Geolocation(10, 190); //eslint-disable-line no-new
+    }).to.throw('Longitude is not in expected range (-180, 180)');
+
+    expect(function () {
       new Geolocation(100, 20); //eslint-disable-line no-new
     }).to.throw('Latitude is not in expected range (-90, 90)');
   });
