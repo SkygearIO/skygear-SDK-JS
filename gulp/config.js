@@ -16,5 +16,14 @@ module.exports = {
     dest: './dist',
     outputName: 'bundle.js',
     debug: gutil.env.type === 'dev'
-  }
+  },
+  minified: {
+    name: 'skygear.min.js'
+  },
+  cdn: {
+    region: 'us-east-1',
+    bucket: 'code.skygear.io',
+    path: 'js',
+    distribution: 'E1PUX937CX882Y'
+ }
 };

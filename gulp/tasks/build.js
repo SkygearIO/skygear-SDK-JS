@@ -41,7 +41,7 @@ gulp.task('dev', ['watch']);
 gulp.task('minify', ['browserify'], function() {
   return gulp.src(config.browserify.dest + '/' + config.browserify.outputName)
     .pipe(sourcemaps.init())
-      .pipe(concat('skygear.min.js'))
+      .pipe(concat(config.minified.name))
       .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.dest))
