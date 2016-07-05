@@ -1,3 +1,17 @@
+## 0.13.0 (2016-07-05)
+
+### Features
+
+- Build minified js file (#16)
+
+### Bug fixes
+
+- Fix geolocations.js validation on longtude (#23)
+
+### Other notes
+
+- Add deploy command to deploy skygear.min.js to CDN (#21)
+
 ## 0.12.0 (2016-05-30)
 
 ### Features
