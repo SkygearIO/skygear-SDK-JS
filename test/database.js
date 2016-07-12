@@ -284,6 +284,26 @@ describe('Database', function () {
     });
   });
 
+  it('reject with error on saving undefined', function () {
+    return db.save(undefined).then(function (record) {
+      throw Error();
+    }, function (error) {
+      expect(error).to.equal(
+        'Invalid input, unable to save undefined and null');
+    });
+  });
+
+  it('reject with error on saving records incldue undefined', function () {
+    let r = new Note();
+    r.null = null;
+    return db.save([r, undefined]).then(function (record) {
+      throw Error();
+    }, function (error) {
+      expect(error).to.equal(
+        'Invalid input, unable to save undefined and null');
+    });
+  });
+
   it('save record to remote', function () {
     let r = new Note();
     r.null = null;
