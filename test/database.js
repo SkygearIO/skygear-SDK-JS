@@ -89,6 +89,18 @@ let request = mockSuperagent([{
     } else {
       if (params['database_id'] === '_public' &&
        firstRecord['_id'] === 'note/failed-to-save') {
+        if (params.atomic) {
+          return fn({
+            'result': [{
+              '_type': 'error',
+              'code': 409,
+              'type': 'AtomicOperationFailure',
+              'message':
+                'Atomic Operation rolled back due to one or more errors'
+            }]
+          });
+        }
+
         return fn({
           result: [
             {
@@ -376,6 +388,53 @@ describe('Database', function () {
         'type': 'ResourceSaveFailure'
       });
       expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
+    });
+  });
+
+  it('save atomically multiple records to remote', function () {
+    let note1 = new Note();
+    let note2 = new Note();
+
+    return db.save([note1, note2], {'atomic': true})
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(2);
+      expect(records[0]).to.be.an.instanceof(Note);
+      expect(records[1]).to.be.an.instanceof(Note);
+
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.be.undefined();
+      expect(errors[1]).to.be.undefined();
+    }, (error) => {
+      throw Error(error);
+    });
+  });
+
+  it('save atomically multiple records with some failures', function () {
+    let note1 = new Note({
+      _id: 'note/failed-to-save'
+    });
+    let note2 = new Note();
+
+    return db.save([note1, note2], {'atomic': true})
+    .then((result) => {
+      let records = result.savedRecords;
+      let errors = result.errors;
+
+      expect(records).to.have.length(1);
+      expect(records[0]).to.be.undefined();
+
+      expect(errors).to.have.length(1);
+      expect(errors[0]).to.eql({
+        '_type': 'error',
+        'code': 409,
+        'message': 'Atomic Operation rolled back due to one or more errors',
+        'type': 'AtomicOperationFailure'
+      });
     }, (error) => {
       throw Error(error);
     });
