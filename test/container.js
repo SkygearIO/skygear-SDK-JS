@@ -326,6 +326,14 @@ describe('Container users', function () {
               roles: params.roles
             }
           });
+        } else if (user_id === 'current_user') {
+          return fn({
+            result: {
+              _id: 'current_user',
+              email: 'current_user_new_email@skygear.io',
+              username: 'current_user_name'
+            }
+          });
         }
         /* eslint-enable camelcase */
       }
@@ -385,6 +393,27 @@ describe('Container users', function () {
       assert.equal(updatedUser.hasRole(Developer), true);
     }, function (err) {
       throw new Error('update user record error', JSON.stringify(err));
+    });
+  });
+
+  it('should able to update current user', function () {
+    let payload = {
+      _id: 'current_user',
+      email: 'current_user@skygear.io',
+      username: 'current_user_name'
+    };
+
+    container._user = container.User.fromJSON(payload);
+
+    let user = container.User.fromJSON(payload);
+    user.email = 'current_user_new_email@skygear.io';
+
+    return container.saveUser(user)
+    .then(function () {
+      assert.equal(container.currentUser.email, user.email);
+    }, function (err) {
+      console.error(err);
+      throw new Error('update current user error', JSON.stringify(err));
     });
   });
 });
