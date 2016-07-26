@@ -1,3 +1,20 @@
+## 0.14.0 (2016-07-26)
+### Features
+
+- Enable updating current user (#34)
+- Make skygear easier to include in a webpack project
+- Enable skygear to run in node by using memory localstorage
+- Support Batch Atomic saving (#29)
+- Reject with error message on trying to save undefined (#19)
+
+### Bug fixes
+
+- Add exception for invalid pubsub data (#27)
+
+### Other Notes
+
+- Remove unused count variable in RelationResult
+
 ## 0.13.0 (2016-07-05)
 
 ### Features
