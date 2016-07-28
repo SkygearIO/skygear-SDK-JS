@@ -27,14 +27,19 @@
   </div>
   <hr>
   <div id="user">
-    <h4>User by Email</h4>
+    <h4>Discover User</h4>
     <form action="#" onsubmit="return false;">
       <p>
         <label>Email</label>
         <input id="email" type="email" placeholder="user@skygear.io">
+        <button onclick="getByEmail();">Get</button>
+      </p>
+      <p>
+        <label>Username</label>
+        <input id="username" type="username" placeholder="username">
+        <button onclick="getByUsername();">Get</button>
       </p>
       <p id="user-result"></p>
-      <button onclick="getByEmail();">Get</button>
     </form>
   </div>
   <hr>
@@ -113,11 +118,33 @@
     });
 
     function getByEmail () {
-      console.log('getUsersByEmail');
+      console.log('discoverUserByEmails');
       var email = document.getElementById("email").value;
       var userInfo = document.getElementById("user-result");
 
-      skygear.getUsersByEmail([email]).then(function (users) {
+      skygear.discoverUserByEmails([email]).then(function (users) {
+        if (users.length ==  0) { 
+          userInfo.innerText = "no user found";
+          return
+        }
+        console.log(users[0]);
+        userInfo.innerText = JSON.stringify(users[0].toJSON(), null, 2);
+      }, function(error) {
+        console.log(error);
+        userInfo.innerText = error;
+      });
+    }
+
+    function getByUsername () {
+      console.log('discoverUserByUsernames');
+      var username = document.getElementById("username").value;
+      var userInfo = document.getElementById("user-result");
+
+      skygear.discoverUserByUsernames([username]).then(function (users) {
+        if (users.length ==  0) { 
+          userInfo.innerText = "no user found";
+          return
+        }
         console.log(users[0]);
         userInfo.innerText = JSON.stringify(users[0].toJSON(), null, 2);
       }, function(error) {
