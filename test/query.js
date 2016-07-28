@@ -24,6 +24,7 @@ import {RelationAction, Mutual} from '../lib/relation';
 describe('Query', function () {
 
   let Note = Record.extend('note');
+  let User = Record.extend('user');
 
   it('reject invalid recordType', function () {
     expect(function () {
@@ -444,6 +445,46 @@ describe('Query', function () {
         {$type: 'keypath', $val: '_owner'},
         {$type: 'relation', $name: '_friend', $direction: 'mutual'}
       ]
+    ]);
+  });
+
+  it('serialize havingEmails', function () {
+    let q = new Query(User);
+    q.havingEmails(['john.doe@example.com', 'jane.doe@example.com']);
+    expect(q.toJSON().predicate).to.eql([
+      'func',
+      'userDiscover',
+      {emails: ['john.doe@example.com', 'jane.doe@example.com']}
+    ]);
+  });
+
+  it('serialize havingEmails with one email', function () {
+    let q = new Query(User);
+    q.havingEmails('john.doe@example.com');
+    expect(q.toJSON().predicate).to.eql([
+      'func',
+      'userDiscover',
+      {emails: ['john.doe@example.com']}
+    ]);
+  });
+
+  it('serialize havingUsernames', function () {
+    let q = new Query(User);
+    q.havingUsernames(['john.doe', 'jane.doe']);
+    expect(q.toJSON().predicate).to.eql([
+      'func',
+      'userDiscover',
+      {usernames: ['john.doe', 'jane.doe']}
+    ]);
+  });
+
+  it('serialize havingUsernames', function () {
+    let q = new Query(User);
+    q.havingUsernames('john.doe');
+    expect(q.toJSON().predicate).to.eql([
+      'func',
+      'userDiscover',
+      {usernames: ['john.doe']}
     ]);
   });
 
