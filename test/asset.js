@@ -32,11 +32,12 @@ describe('Asset', function () {
   it('serializes to JSON', function () {
     let asset = new Asset({
       name: 'asset-name',
-      url: 'http://you-shalt-not-see.me/'
+      url: 'http://server-will-ignore.me/'
     });
     expect(asset.toJSON()).to.eql({
       $type: 'asset',
-      $name: 'asset-name'
+      $name: 'asset-name',
+      $url: 'http://server-will-ignore.me/'
     });
   });
 
@@ -50,5 +51,14 @@ describe('Asset', function () {
     expect(asset.url).to.equal('http://skygear.dev/files/asset-name?expiredAt=1446034750&signature=signature');
   });
 
+  it('serializes and deserializes is mirror', function () {
+    let resp = {
+      $type: 'asset',
+      $name: 'asset-name',
+      $url: 'http://skygear.dev/files/asset-name?expiredAt=1446034750\u0026signature=signature'
+    };
+    let asset = Asset.fromJSON(resp);
+    expect(asset.toJSON()).eql(resp);
+  });
 });
 /*eslint-enable max-len, no-new */
