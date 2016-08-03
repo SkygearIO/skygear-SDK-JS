@@ -1,0 +1,5 @@
+Host git.skygeario.com
+  IdentityFile=/tmp/portal_rsa
+  StrictHostKeyChecking=no
+  PasswordAuthentication=no
+  CheckHostIP=no
