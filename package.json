@@ -50,6 +50,7 @@
   },
   "scripts": {
     "dev": "gulp --type dev dev",
+    "minify": "gulp --type production minify",
     "prepublish": "gulp --type production prepublish",
     "test": "gulp --type dev",
     "deploy": "gulp deploy --type production",
