@@ -17,7 +17,7 @@ deploy:
   script: scripts/deploy-example.sh
   skip_cleanup: true
   on:
-    branch: travis
+    branch: master
     node_js: 4
 
 notifications:
