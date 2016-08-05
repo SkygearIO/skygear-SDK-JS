@@ -105,7 +105,8 @@
     var currentUsername = document.getElementById("currentUsername");
     var currentEmail = document.getElementById("currentEmail");
     skygear.config({
-      'apiKey': 'secretOURD'
+      'endPoint': 'https://sdkjsexample.skygeario.com/',
+      'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function(container) {
       m.textContent = container.endPoint;
       token.innerText = skygear.accessToken;
@@ -123,7 +124,7 @@
       var userInfo = document.getElementById("user-result");
 
       skygear.discoverUserByEmails([email]).then(function (users) {
-        if (users.length ==  0) { 
+        if (users.length ==  0) {
           userInfo.innerText = "no user found";
           return
         }
@@ -141,7 +142,7 @@
       var userInfo = document.getElementById("user-result");
 
       skygear.discoverUserByUsernames([username]).then(function (users) {
-        if (users.length ==  0) { 
+        if (users.length ==  0) {
           userInfo.innerText = "no user found";
           return
         }
