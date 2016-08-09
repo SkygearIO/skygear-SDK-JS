@@ -402,6 +402,29 @@ describe('Query', function () {
     });
   });
 
+  it('serialize a query with pagination', function () {
+    let q = new Query(Note);
+    q.like('content', 'hello');
+    q.limit = 10;
+    q.page = 2;
+    q.addDescending('noteOrder');
+    expect(q.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 10,
+      page: 2,
+      sort: [[{
+        $type: 'keypath',
+        $val: 'noteOrder'
+      }, 'desc']],
+      predicate: ['like', {
+        $type: 'keypath',
+        $val: 'content'
+      }, 'hello'],
+      count: false
+    });
+  });
+
   it('serialize like', function () {
     let q = new Query(Note);
     q.caseInsensitiveLike('content', 'hello');
@@ -656,6 +679,25 @@ describe('Query', function () {
     };
 
     expect(Query.fromJSON(json2).toJSON()).to.eql(json2);
+  });
+
+  it('deserialize a query with page', function () {
+    let json1 = {
+      record_type: 'note',
+      include: {},
+      limit: 30,
+      page: 2,
+      sort: [],
+      predicate: [
+        'gt', {
+          $type: 'keypath',
+          $val: 'price'
+        }, 20
+      ],
+      count: true
+    };
+
+    expect(Query.fromJSON(json1).toJSON()).to.eql(json1);
   });
 
   it('deserialize an or query', function () {
