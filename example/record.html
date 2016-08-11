@@ -113,7 +113,11 @@
         </select>
       </p>
       <p>
-        <label>Offet</label>
+        <label>Page</label>
+        <input id="query-page" type="number">
+      </p>
+      <p>
+        <label>Offset</label>
         <input id="query-offset" type="number">
       </p>
       <p>
@@ -273,6 +277,7 @@
       var querySort = document.getElementById("query-sort").value;
       var querySortOrder = document.getElementById("query-sort-order").value;
       var queryOffset = document.getElementById("query-offset").value;
+      var queryPage = document.getElementById("query-page").value;
       var queryLimit = document.getElementById("query-limit").value;
       var displayCache = document.getElementById("display-cache").checked;
       var queryResult = document.getElementById("query-result");
@@ -315,6 +320,9 @@
       }
       if (queryOffset) {
         query.offset = parseInt(queryOffset, 10);
+      }
+      if (queryPage) {
+        query.page = parseInt(queryPage, 10);
       }
       if (queryLimit) {
         query.limit = parseInt(queryLimit, 10);
