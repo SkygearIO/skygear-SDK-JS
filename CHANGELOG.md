@@ -1,4 +1,19 @@
+## 0.15.0 (2016-08-17)
+
+### Features
+
+- Support `page` property on query (#45)
+- Add getRecordByID method to database object (#22)
+- Support user discovery with username (SkygearIO/skygear-server#90, SkygearIO/skygear-SDK-JS#32)
+
+### Other Notes
+
+- Fix error code list to match server side (#49)
+- Add auto deploy example to https://sdkjsexample.skygeario.com/static/example/index.html (#15)
+- Make the asset toJSON and fromJSON mirror on $url key (#10)
+
 ## 0.14.0 (2016-07-26)
+
 ### Features
 
 - Enable updating current user (#34)
