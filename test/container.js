@@ -77,6 +77,64 @@ describe('Container', function () {
   });
 });
 
+describe('Container me', function () {
+  let container = new Container();
+  container.autoPubsub = false;
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/me',
+    fixtures: function (match, params, headers, fn) {
+      const token = params['access_token'];
+      if (token) {
+        if (token === 'token-1') {
+          return fn({
+            result: {
+              user_id: 'user-id-1', // eslint-disable-line camelcase
+              username: 'user1',
+              email: 'user1@skygear.dev',
+              roles: ['Normal-User']
+            }
+          });
+        }
+      } else {
+        return fn({
+          error: {
+            name: 'NotAuthenticated',
+            code: 101,
+            message: 'Authentication is needed to get current user'
+          }
+        });
+      }
+    }
+  }]);
+
+  it('should get me correctly', function () {
+    container._accessToken = 'token-1';
+    return container.whoami()
+    .then(function (user) {
+      assert.instanceOf(user, container.User);
+      assert.equal(user.id, 'user-id-1');
+      assert.equal(user.username, 'user1');
+      assert.equal(user.email, 'user1@skygear.dev');
+
+      assert.lengthOf(user.roles, 1);
+      assert.equal(user.roles[0], container.Role.define('Normal-User'));
+    }, function (err) {
+      throw new Error('Get me fail');
+    });
+  });
+
+  it('should handle error properly', function () {
+    container._accessToken = null;
+    return container.whoami()
+    .then(function (user) {
+      throw new Error('Should not get me without access token');
+    }, function (err) {
+      assert.isNotNull(err);
+    });
+  });
+});
+
 describe('Container auth', function () {
   let container = new Container();
   container.autoPubsub = false;

@@ -21,14 +21,22 @@ import Role from '../lib/role';
 
 describe('User', function () {
 
-  it('create with userid, email and username', function () {
+  it('create with userid, email, username and roles', function () {
     const user = new User({
       user_id: 'non-uuid',
       username: 'rick',
       email: 'rick.mak@gmail.com',
-      roles: []
+      roles: [
+        'Developer',
+        'Designer'
+      ]
     });
+
     expect(user).to.be.an.instanceof(User);
+
+    const roleNames = _.map(user.roles, 'name');
+    expect(roleNames).to.contain('Developer');
+    expect(roleNames).to.contain('Designer');
   });
 
   it('fails to create without user_id', function () {
