@@ -377,11 +377,12 @@ describe('Container users', function () {
         /* eslint-disable camelcase */
         let user_id = params['_id'];
         if (user_id === 'user2_id') {
+          let roles = params.roles ? params.roles : ['existing'];
           return fn({
             'result': {
               _id: params._id,
               email: params.email,
-              roles: params.roles
+              roles: roles
             }
           });
         } else if (user_id === 'current_user') {
@@ -449,6 +450,33 @@ describe('Container users', function () {
 
       assert.equal(updatedUser.hasRole(Tester), true);
       assert.equal(updatedUser.hasRole(Developer), true);
+    }, function (err) {
+      throw new Error('update user record error', JSON.stringify(err));
+    });
+  });
+
+  it('update user record without update role', function () {
+    let payload = {
+      /* eslint-disable camelcase */
+      id: 'user2_id',
+      /* eslint-enable camelcase */
+      email: 'user2@skygear.io'
+    };
+
+    let Existing = container.Role.define('existing');
+    let Developer = container.Role.define('Developer');
+
+    let newEmail = 'user2-new@skygear.io';
+
+    payload.email = newEmail;
+
+    return container.saveUser(payload)
+    .then(function (updatedUser) {
+      assert.equal(updatedUser.id, payload.id);
+      assert.equal(updatedUser.email, newEmail);
+      console.warn('roles', updatedUser.roles);
+      assert.equal(updatedUser.hasRole(Existing), true);
+      assert.equal(updatedUser.hasRole(Developer), false);
     }, function (err) {
       throw new Error('update user record error', JSON.stringify(err));
     });
