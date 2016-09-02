@@ -1,3 +1,19 @@
+## 0.16.0 (2016-09-02)
+
+### Features
+
+- Support new asset upload mechanism (SkygearIO/skygear-server#107)
+- Add `whoami` API for querying and update currentUser from server (SkygearIO/skygear-server#111)
+
+### Bug Fixes
+
+- `skygear.saveUser` do not clear roles by default (#56)
+- Enable to handle relative asset POST path
+
+### Other Notes
+
+- Add github issue template
+
 ## 0.15.0 (2016-08-17)
 
 ### Features
