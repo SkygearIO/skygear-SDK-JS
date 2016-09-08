@@ -26,6 +26,16 @@
     </p>
   </div>
   <hr>
+  <div id="whoami">
+    <h4>Who am I?</h4>
+    <form action="#" onsubmit="return false;">
+      <p>
+        <button onclick="whoami();">Me</button>
+      </p>
+      <p id="whoami-result"></p>
+    </form>
+  </div>
+  <hr>
   <div id="user">
     <h4>Discover User</h4>
     <form action="#" onsubmit="return false;">
@@ -117,6 +127,23 @@
     }, function(err) {
       console.log(err);
     });
+
+    function whoami () {
+      console.log('Who am I?');
+      var iam = document.getElementById("whoami-result");
+
+      skygear.whoami().then(function (user) {
+        if (user.length ==  0) {
+          iam.innerText = "no user found";
+          return
+        }
+        console.log(user);
+        iam.innerText = JSON.stringify(user.toJSON(), null, 2);
+      }, function(error) {
+        console.log(error);
+        iam.innerText = error;
+      });
+    }
 
     function getByEmail () {
       console.log('discoverUserByEmails');

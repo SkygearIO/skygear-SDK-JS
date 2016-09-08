@@ -71,6 +71,32 @@ describe('User', function () {
     expect(user).to.be.an.instanceof(User);
   });
 
+  it('serialize with meta for persist', function () {
+    const payload = {
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      last_login_at: '2016-09-08T06:45:59.000Z',
+      last_seen_at: '2016-09-08T06:45:59.000Z',
+      roles: []
+    };
+    const user = new User(payload);
+    expect(user.toJSON()).eql(payload);
+  });
+
+  it('deserialize from json with meta', function () {
+    const payload = {
+      user_id: 'non-uuid',
+      username: 'rick',
+      email: 'rick.mak@gmail.com',
+      last_login_at: '2016-09-08T06:45:59Z',
+      last_seen_at: '2016-09-08T06:45:59Z',
+      roles: []
+    };
+    const user = User.fromJSON(payload);
+    expect(user.lastLoginAt).to.be.an.instanceof(Date);
+  });
+
   it('add role', function () {
     const user = User.fromJSON({
       user_id: 'non-uuid',
