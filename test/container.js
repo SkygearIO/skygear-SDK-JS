@@ -381,6 +381,7 @@ describe('Container users', function () {
           return fn({
             'result': {
               _id: params._id,
+              username: params.username,
               email: params.email,
               roles: roles
             }
@@ -429,6 +430,7 @@ describe('Container users', function () {
       /* eslint-disable camelcase */
       _id: 'user2_id',
       /* eslint-enable camelcase */
+      username: 'user2',
       email: 'user2@skygear.io',
       roles: ['Tester']
     };
@@ -437,15 +439,17 @@ describe('Container users', function () {
     let Developer = container.Role.define('Developer');
 
     let user = container.User.fromJSON(payload);
+    let newUsername = 'user2-new';
     let newEmail = 'user2-new@skygear.io';
 
+    user.username = newUsername;
     user.email = newEmail;
     user.addRole(Developer);
 
     return container.saveUser(user)
     .then(function (updatedUser) {
       assert.equal(updatedUser.id, user.id);
-      assert.equal(updatedUser.username, user.username);
+      assert.equal(updatedUser.username, newUsername);
       assert.equal(updatedUser.email, newEmail);
 
       assert.equal(updatedUser.hasRole(Tester), true);
