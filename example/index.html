@@ -49,8 +49,9 @@
         <input id="password" type="password">
       </p>
       <p>
-        <button onclick="signup();">Signup</button>
+        <button onclick="signup('username');">Signup</button>
         <button onclick="signup('email');">Signup With Email</button>
+        <button onclick="signup('anonymous');">Signup Anonymously</button>
       </p>
       <p>
         <button onclick="login();">Login</button>
@@ -106,14 +107,21 @@
       var _signup = null;
       if (identifier === 'email') {
         _signup = skygear.signupWithEmail(email, password);
-      } else {
+      } else if (identifier === 'username') {
         _signup = skygear.signupWithUsername(username, password);
+      } else {
+        _signup = skygear.signupAnonymously();
       }
       _signup.then(function() {
         console.log('Signup ok');
         token.innerText = skygear.accessToken;
-        currentUsername.innerText = skygear.currentUser.username;
-        currentEmail.innerText = skygear.currentUser.email;
+        if (identifier === 'anonymous') {
+          currentUsername.innerText = '(anonymous)';
+          currentEmail.innerText = '(anonymous)';
+        } else {
+          currentUsername.innerText = skygear.currentUser.username;
+          currentEmail.innerText = skygear.currentUser.email;
+        }
       }, function(error) {
         console.log('Signup failed');
         console.log(error);

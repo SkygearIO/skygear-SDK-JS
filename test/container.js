@@ -162,6 +162,19 @@ describe('Container auth', function () {
           }
         }, 400);
       }
+      if (params['username'] === null &&
+        params['password'] === null &&
+        params['email'] === null) {
+
+        return fn({
+          'result': {
+            'user_id': 'user:id2',
+            'access_token': 'uuid2',
+            'username': 'user2',
+            'email': 'user2@skygear.io'
+          }
+        });
+      }
     }
   }, {
     pattern: 'http://skygear.dev/auth/login',
@@ -237,6 +250,23 @@ describe('Container auth', function () {
         assert.equal(
           container.currentUser.id,
           'user:id1'
+        );
+      }, function () {
+        throw new Error('Signup failed');
+      });
+  });
+
+  it('should signup anonymously', function () {
+    return container
+      .signupAnonymously()
+      .then(function (user) {
+        assert.equal(
+          container.accessToken,
+          'uuid2');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.id,
+          'user:id2'
         );
       }, function () {
         throw new Error('Signup failed');
