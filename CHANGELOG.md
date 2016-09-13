@@ -1,3 +1,9 @@
+## 0.12.1 (2016-09-13)
+
+### Bug Fixes
+
+- Fix crash on IE 10 when using `Array.from`, refs #66
+
 ## 0.12.0 (2016-05-30)
 
 ### Features
