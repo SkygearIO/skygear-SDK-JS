@@ -1,3 +1,16 @@
+## 0.17.0 (2016-09-15)
+
+### Features
+
+- Support last login and last seen at user object (SkygearIO/skygear-server#110)
+- Allow sign up anonymously (#61)
+- Update username of a user in saveUser (#83)
+
+### Bug Fixes
+
+- Fix crash on IE 10 when using `Array.from` (#66)
+
+
 ## 0.16.0 (2016-09-02)
 
 ### Features
@@ -14,6 +27,7 @@
 
 - Add github issue template
 
+
 ## 0.15.0 (2016-08-17)
 
 ### Features
@@ -27,6 +41,7 @@
 - Fix error code list to match server side (#49)
 - Add auto deploy example to https://sdkjsexample.skygeario.com/static/example/index.html (#15)
 - Make the asset toJSON and fromJSON mirror on $url key (#10)
+
 
 ## 0.14.0 (2016-07-26)
 
@@ -46,6 +61,7 @@
 
 - Remove unused count variable in RelationResult
 
+
 ## 0.13.0 (2016-07-05)
 
 ### Features
@@ -60,6 +76,7 @@
 
 - Add deploy command to deploy skygear.min.js to CDN (#21)
 
+
 ## 0.12.0 (2016-05-30)
 
 ### Features
@@ -68,6 +85,7 @@
 - Implement user based ACL
 - Fallback to cookie storage on localStorage unavailable to support Safari
   private mode (#12)
+
 
 ## 0.11.0 (2016-05-09)
 
@@ -121,15 +139,18 @@
 - Add NOT operation and deserializer for query #148
 - Implement batch save / delete records #153
 
+
 ## 0.8.0 (2016-03-09)
 
 ### Other Notes
 
 - Update endpoint and payload for set record creationg access
 
+
 ## 0.7.0 (2016-03-02)
 
 No change since last release
+
 
 ## 0.6.0 (2016-02-24)
 
@@ -144,6 +165,7 @@ No change since last release
 - Fix unable to reset cache when log out
 - Fix unable to logout user in React Native
 
+
 ## 0.5.0 (2016-02-17)
 
 ### Bug Fixes
@@ -151,11 +173,13 @@ No change since last release
 - Reconfigure pubsub after login #135
 - Don't call cached query if remote query returned first #133
 
+
 ## 0.4.0 (2016-01-13)
 
 ### Features
 
 - Allow client to listen to pubsub open/close events. #132
+
 
 ## 0.3.0 (2016-01-06)
 
@@ -168,6 +192,7 @@ No change since last release
 - Prevent uploaded asset from being uploaded again #109
 - Fix not able to register device if the existing device ID is not found #125
 
+
 ## 0.2.0 (2015-12-23)
 
 ### Bug Fixes
@@ -178,6 +203,7 @@ No change since last release
 - Fix bug on platform detection in react-native for iOS
 - Use the pass in value to resolve the store promise in container
 - Fix store not usable in react-native
+
 
 ## 0.1.0 (2015-12-16)
 
