@@ -24,7 +24,7 @@ gulp.task('pre-test', function () {
     .pipe(preprocess({context: context[gutil.env.type]}))
     .pipe(istanbul({
       includeUntested: true,
-      instrumenter: isparta.Instrumenter,
+      instrumenter: isparta.Instrumenter
     }))
     .pipe(istanbul.hookRequire());
 });
@@ -33,6 +33,7 @@ gulp.task('test', ['pre-test'], function (cb) {
   var mochaErr;
 
   gulp.src(config.testSrc)
+    .pipe(babel())
     .pipe(plumber())
     .pipe(mocha({
       reporter: 'spec',
@@ -44,7 +45,7 @@ gulp.task('test', ['pre-test'], function (cb) {
       mochaErr = err;
     })
     .pipe(istanbul.writeReports({
-      reporters: ['lcov', 'text', 'text-summary'],
+      reporters: ['lcov', 'text', 'text-summary']
     }))
     .pipe(istanbul.enforceThresholds({
       thresholds: {
