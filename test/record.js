@@ -85,6 +85,34 @@ describe('Extended Record', function () {
     expect(r.recordType).to.equal('note');
   });
 
+  it('accept _id without type', function () {
+    let r = new Note({
+      _id: '1'
+    });
+    expect(r.id).to.equal('note/1');
+    expect(r.recordType).to.equal('note');
+    expect(r._id).to.equal('1');
+  });
+
+  it('accept _id with type', function () {
+    let r = new Note({
+      _id: 'note/1'
+    });
+    expect(r.id).to.equal('note/1');
+    expect(r.recordType).to.equal('note');
+    expect(r._id).to.equal('1');
+  });
+
+  it('reject _id with different type', function () {
+    expect(function () {
+      let r = new Note({
+        _id: 'box/2'
+      });
+    }).to.throw(
+      '_id is not valid. RecordType mismatch.'
+    );
+  });
+
   it('support subscription', function () {
     let r = new Note();
     r['key'] = 'okay';
