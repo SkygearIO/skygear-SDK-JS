@@ -387,7 +387,11 @@ describe('Container users', function () {
     {
       pattern: 'http://skygear.dev/user/query',
       fixtures: function (match, params, headers, fn) {
-        if (params['emails'][0] === 'user1@skygear.io') {
+        const emailMatch =
+          params['emails'] && params['emails'][0] === 'user1@skygear.io';
+        const usernameMatch =
+          params['usernames'] && params['usernames'][0] === 'user1';
+        if (emailMatch || usernameMatch) {
           return fn({
             'result': [{
               data: {
@@ -446,6 +450,24 @@ describe('Container users', function () {
         );
       }, function () {
         throw new Error('getUsersByEmail failed');
+      });
+  });
+
+  it('query user with username successfully', function () {
+    return container
+      .getUsersByUsername(['user1'])
+      .then(function (users) {
+        assert.instanceOf(users[0], container.User);
+        assert.equal(
+          users[0].id,
+          'user:id'
+        );
+        assert.equal(
+          users[0].username,
+          'user1'
+        );
+      }, function () {
+        throw new Error('getUsersByUsername failed');
       });
   });
 
