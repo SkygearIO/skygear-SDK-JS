@@ -195,7 +195,7 @@ let request = mockSuperagent([{
     if (params['name'] === 'follow') {
       return fn({
         result: [{
-          id: 'following1'
+          id: 'ben'
         }]
       });
     }
@@ -249,9 +249,10 @@ describe('RelationAction', function () {
     let relation = new relationAction.Following([new User({
       user_id: 'ben'
     })]);
-    return relationAction.add(relation).then(function (result) {
+    return relationAction.remove(relation).then(function (result) {
+      console.log(result);
       expect(result.success.length).to.be.equal(1);
-      expect(result.success[0].id).to.be.equal('ben');
+      expect(result.success[0]).to.be.equal('ben');
       expect(result.fails.length).to.be.equal(0);
     }, function (error) {
       throw Error();
