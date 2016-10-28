@@ -1,3 +1,19 @@
+## 0.18.0 (2016-10-28)
+
+### Features
+
+- Add getUsersByUsername to container
+
+### Bug Fixes
+
+- Remove relation success return array of ids (#80)
+- Fix change password not handling auth response (#90, #91)
+
+### Other Notes
+
+- Remove unused comment in Record
+- Update to babel 6 and support node6 (#69)
+
 ## 0.17.0 (2016-09-15)
 
 ### Features
