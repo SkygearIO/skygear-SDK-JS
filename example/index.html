@@ -162,10 +162,10 @@
       var oldPassword = document.getElementById("old-password").value;
       var newPassword = document.getElementById("new-password").value;
       var changeResult = document.getElementById("change-result");
-      skygear.changePassword(oldPassword, newPassword).then(function(newToken) {
+      skygear.changePassword(oldPassword, newPassword).then(function(user) {
         console.log('Change password ok');
         changeResult.innerText = 'Change password ok';
-        console.log(newToken);
+        console.log(user);
       }, function(error) {
         console.log('Change password failed');
         console.log(error);

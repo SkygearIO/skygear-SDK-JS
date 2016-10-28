@@ -211,6 +211,27 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
+    pattern: 'http://skygear.dev/auth/password',
+    fixtures: function (match, params, headers, fn) {
+      if (params['old_password'] === params['password']) {
+        return fn({
+          'result': {
+            'user_id': 'user:id1',
+            'access_token': 'uuid1',
+            'username': '',
+            'email': ''
+          }
+        });
+      }
+      return fn({
+        'error': {
+          'type': 'AuthenticationError',
+          'code': 102,
+          'message': 'invalid authentication information'
+        }
+      }, 400);
+    }
+  }, {
     pattern: 'http://skygear.dev/auth/logout',
     fixtures: function (match, params, headers, fn) {
       return fn({
@@ -378,6 +399,29 @@ describe('Container auth', function () {
       assert.isNull(container.currentUser, aUserAttr.currentUser);
     });
     /* eslint-enable-line camelcase */
+  });
+
+  it('should change password successfully', function () {
+    return container
+      .changePassword('supersecret', 'supersecret')
+      .then(function (user) {
+        assert.equal(container.accessToken, 'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(container.currentUser.id, 'user:id1');
+        assert.instanceOf(user, container.User);
+      }, function (error) {
+        throw new Error('Failed to change password');
+      });
+  });
+
+  it('should fail to change password if not match', function () {
+    return container
+      .changePassword('supersecret', 'wrongsecret')
+      .then(function (user) {
+        throw new Error('Change password when not match');
+      }, function (error) {
+        assert.equal(error.error.message, 'invalid authentication information');
+      });
   });
 });
 
