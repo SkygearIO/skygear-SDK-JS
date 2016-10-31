@@ -74,6 +74,7 @@ describe('Record', function () {
 describe('Extended Record', function () {
 
   let Note = Record.extend('note');
+  let Memo = Record.extend('memo');
   let Writer = Role.define('Writer');
   let Editor = Role.define('Editor');
 
@@ -83,15 +84,6 @@ describe('Extended Record', function () {
     expect(v4Spec.test(tuple[1])).to.be.true();
     expect(tuple[0]).to.equal('note');
     expect(r.recordType).to.equal('note');
-  });
-
-  it('accept _id without type', function () {
-    let r = new Note({
-      _id: '1'
-    });
-    expect(r.id).to.equal('note/1');
-    expect(r.recordType).to.equal('note');
-    expect(r._id).to.equal('1');
   });
 
   it('accept _id with type', function () {
@@ -108,6 +100,27 @@ describe('Extended Record', function () {
       let r = new Note({
         _id: 'box/2'
       });
+    }).to.throw(
+      '_id is not valid. RecordType mismatch.'
+    );
+  });
+
+  it('accept same object type in constructor', function () {
+    let r0 = new Note({
+      _id: 'note/1'
+    });
+    let r = new Note(r0);
+    expect(r.id).to.equal('note/1');
+    expect(r.recordType).to.equal('note');
+    expect(r._id).to.equal('1');
+  });
+
+  it('reject different object type in constructor', function () {
+    let e = new Memo({
+      _id: 'memo/1'
+    });
+    expect(function () {
+      let r = new Note(e);
     }).to.throw(
       '_id is not valid. RecordType mismatch.'
     );
