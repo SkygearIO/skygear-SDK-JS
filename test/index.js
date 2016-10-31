@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import {assert} from 'chai';
-import jsourd from '../lib/index';
+import skygear from '../lib/index';
 
 
-describe('jsourd', function () {
+describe('skygear', function () {
   it('can reconfigure end-point', function () {
-    jsourd.endPoint = 'https://myseployment.com/';
-    assert.equal(jsourd.endPoint, 'https://myseployment.com/');
+    skygear.endPoint = 'https://myseployment.com/';
+    assert.equal(skygear.endPoint, 'https://myseployment.com/');
   });
 });
