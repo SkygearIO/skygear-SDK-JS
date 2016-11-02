@@ -61,6 +61,9 @@
     "deploy": "gulp deploy --type production",
     "deploy-latest": "gulp deploy --type production --latest"
   },
+  "bin": {
+    "skygear-node": "./dist/bin.js"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "Base64": "^0.3.0",
