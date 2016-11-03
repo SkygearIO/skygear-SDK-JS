@@ -19,6 +19,7 @@
   ],
   "devDependencies": {
     "babel-core": "^6.14.0",
+    "babel-eslint": "^7.1.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
     "babel-preset-es2015": "^6.14.0",
@@ -63,7 +64,7 @@
     "deploy-latest": "gulp deploy --type production --latest"
   },
   "bin": {
-    "skygear-node": "./dist/bin.js"
+    "skygear-node": "./bin.js"
   },
   "license": "Apache-2.0",
   "dependencies": {
