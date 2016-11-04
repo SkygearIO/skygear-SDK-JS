@@ -31,3 +31,11 @@ build:
 .PHONY: doc
 doc:
 	$(DOCKER_RUN) npm run doc
+
+.PHONY: docker-build
+docker-build:
+	make -C scripts/docker-images/release docker-build
+
+.PHONY: docker-build
+docker-push:
+	make -C scripts/docker-images/release docker-push
