@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  db:
+    image: mdillon/postgis:9.5
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    ports:
+    - "5432:5432"
+
+  app:
+    image: quay.io/skygeario/skygear-server:canary
+    ports:
+    - "3000:3000"
+    volumes:
+    - app_data:/go/src/app/data
+    depends_on:
+    - db
+    command: skygear-server
+    environment:
+      DATABASE_URL: postgresql://postgres:@db/postgres?sslmode=disable
+      API_KEY: changeme
+      MASTER_KEY: secret
+      APP_NAME: _
+      PLUGINS: JS
+      JS_TRANSPORT: http
+      JS_PATH: http://plugin:9000
+
+  plugin:
+    build:
+      context: .
+      dockerfile: Dockerfile-development
+    command: skygear-node
+    volumes:
+    - .:/usr/src/app
+    environment:
+      DATABASE_URL: postgres://postgres@db/postgres?sslmode=disable
+      API_KEY: changeme
+      MASTER_KEY: secret
+      APP_NAME: _
+      PUBSUB_URL: ws://app:3000/pubsub
+      SKYGEAR_ENDPOINT: http://app:3000
+      HTTP: "true"
+
+volumes:
+  db_data:
+    driver: local
+  app_data:
+    driver: local

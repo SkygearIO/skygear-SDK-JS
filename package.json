@@ -10,6 +10,7 @@
   "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
   "files": [
     "cloud.js",
+    "bin.js",
     "dist"
   ],
   "main": "dist/index.js",
