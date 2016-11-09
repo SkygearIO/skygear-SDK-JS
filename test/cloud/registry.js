@@ -22,6 +22,7 @@ describe('Registry', function () {
     const registry = new Registry();
     expect(registry.funcList()).to.be.eql({
       op: [],
+      event: [],
       handler: [],
       hook: [],
       timer: [],
