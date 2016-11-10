@@ -115,6 +115,15 @@ describe('Registry', function () {
     expect(registry.getHandler('pubHandler', 'GET')).to.be.eql(pubHandler);
   });
 
+  it('add static asset collect func', function () {
+    const registry = new Registry();
+    function staticAsset() {}
+    registry.registerAsset('/static/css', staticAsset);
+    expect(registry.staticAsset).to.be.eql({
+      '/static/css': staticAsset
+    });
+  });
+
   it('add various func type to funcList', function () {
     const registry = new Registry();
     function perHour() {}
