@@ -1,0 +1,15 @@
+FROM node:6
+
+RUN \
+    wget https://github.com/krallin/tini/releases/download/v0.13.0/tini && \
+    mv tini /usr/local/bin/tini && \
+    chmod +x /usr/local/bin/tini
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+RUN (cd /usr/src/app; npm install && npm link)
+
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
+CMD ["skygear-node"]
