@@ -1,3 +1,14 @@
+## 0.19.0 (2016-11-10)
+
+## Features
+
+- Add support for JS cloud code
+- Accept same type of record instance in Record constructor (#73)
+
+## Other Notes
+
+- Change ourd to skygear
+
 ## 0.18.0 (2016-10-28)
 
 ### Features
