@@ -196,6 +196,33 @@ describe('CommonTransport', function () {
       result: initInfo
     });
   });
+
+  it('should call with providerHandler', function () {
+    const registry = new Registry();
+    const providerFunc = {
+      handleAction: sinon.spy()
+    };
+    registry.getProvider = sinon.stub().returns(providerFunc);
+    const transport = new CommonTransport(registry);
+    transport.providerHandler({
+      kind: 'provider',
+      name: 'io.skygear',
+      param: {
+        action: 'login',
+        auth_data: {
+          token: 'uuid-from-io.skygear',
+          expiry: 1478677997870
+        }
+      }
+    });
+    expect(providerFunc.handleAction).to.be.calledWithMatch('login', {
+      action: 'login',
+      auth_data: {
+        token: 'uuid-from-io.skygear',
+        expiry: 1478677997870
+      }
+    });
+  });
 });
 
 /*eslint-enable camelcase, dot-notation, no-unused-vars, quote-props */
