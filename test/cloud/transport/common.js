@@ -49,10 +49,10 @@ describe('CommonTransport', function () {
   it('should call with eventHandler', function () {
     const registry = new Registry();
     const eventFunc = sinon.stub().returns('event result');
-    registry.getFunc =
+    registry.getEventFunctions =
       sinon.stub()
-      .withArgs('event', 'hello')
-      .returns(eventFunc);
+      .withArgs('hello')
+      .returns([eventFunc]);
 
     const transport = new CommonTransport(registry);
     const result = transport.eventHandler({
@@ -67,6 +67,37 @@ describe('CommonTransport', function () {
     });
     expect(result).to.be.eql({
       result: 'event result'
+    });
+  });
+
+  it('should call with multiple eventHandlers', function () {
+    const registry = new Registry();
+    const eventFunc1 = sinon.stub().returns('event result 1');
+    const eventFunc2 = sinon.stub().returns('event result 2');
+    registry.getEventFunctions =
+      sinon.stub()
+      .withArgs('hello')
+      .returns([eventFunc1, eventFunc2]);
+
+    const transport = new CommonTransport(registry);
+    const result = transport.eventHandler({
+      kind: 'event',
+      name: 'hello',
+      param: {
+        hello: 'world'
+      }
+    });
+    expect(eventFunc1).to.be.calledWithMatch({
+      hello: 'world'
+    });
+    expect(eventFunc2).to.be.calledWithMatch({
+      hello: 'world'
+    });
+    expect(result).to.be.eql({
+      result: [
+        'event result 1',
+        'event result 2'
+      ]
     });
   });
 
