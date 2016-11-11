@@ -20,33 +20,38 @@ import {Registry} from '../../../lib/cloud/registry';
 import CommonTransport from '../../../lib/cloud/transport/common';
 
 describe('CommonTransport', function () {
-  it('should throw Error initHandler', function () {
+  it('should throw Error initHandler', function (done) {
     const registry = new Registry();
     const transport = new CommonTransport(registry);
-    expect(() => transport.initHandler()).to.throw(Error);
+    return transport.initHandler().catch((err) => {
+      expect(err).not.to.be.null();
+      done();
+    });
   });
 
-  it('should call with opHandler', function () {
+  it('should call with opHandler', function (done) {
     const registry = new Registry();
     const opFunc = sinon.stub().returns('op result');
     registry.getFunc = sinon.stub().returns(opFunc);
     const transport = new CommonTransport(registry);
-    const result = transport.opHandler({
+    return transport.opHandler({
       kind: 'op',
       name: 'lambda',
       param: {
         key: 'value'
       }
-    });
-    expect(opFunc).to.be.calledWithMatch({
-      key: 'value'
-    });
-    expect(result).to.be.eql({
-      result: 'op result'
+    }).then((result) => {
+      expect(opFunc).to.be.calledWithMatch({
+        key: 'value'
+      });
+      expect(result).to.be.eql({
+        result: 'op result'
+      });
+      done();
     });
   });
 
-  it('should call with eventHandler', function () {
+  it('should call with eventHandler', function (done) {
     const registry = new Registry();
     const eventFunc = sinon.stub().returns('event result');
     registry.getEventFunctions =
@@ -55,22 +60,24 @@ describe('CommonTransport', function () {
       .returns([eventFunc]);
 
     const transport = new CommonTransport(registry);
-    const result = transport.eventHandler({
+    return transport.eventHandler({
       kind: 'event',
       name: 'hello',
       param: {
         hello: 'world'
       }
-    });
-    expect(eventFunc).to.be.calledWithMatch({
-      hello: 'world'
-    });
-    expect(result).to.be.eql({
-      result: 'event result'
+    }).then((result) => {
+      expect(eventFunc).to.be.calledWithMatch({
+        hello: 'world'
+      });
+      expect(result).to.be.eql({
+        result: 'event result'
+      });
+      done();
     });
   });
 
-  it('should call with multiple eventHandlers', function () {
+  it('should call with multiple eventHandlers', function (done) {
     const registry = new Registry();
     const eventFunc1 = sinon.stub().returns('event result 1');
     const eventFunc2 = sinon.stub().returns('event result 2');
@@ -80,46 +87,50 @@ describe('CommonTransport', function () {
       .returns([eventFunc1, eventFunc2]);
 
     const transport = new CommonTransport(registry);
-    const result = transport.eventHandler({
+    return transport.eventHandler({
       kind: 'event',
       name: 'hello',
       param: {
         hello: 'world'
       }
-    });
-    expect(eventFunc1).to.be.calledWithMatch({
-      hello: 'world'
-    });
-    expect(eventFunc2).to.be.calledWithMatch({
-      hello: 'world'
-    });
-    expect(result).to.be.eql({
-      result: [
-        'event result 1',
-        'event result 2'
-      ]
+    }).then((result) => {
+      expect(eventFunc1).to.be.calledWithMatch({
+        hello: 'world'
+      });
+      expect(eventFunc2).to.be.calledWithMatch({
+        hello: 'world'
+      });
+      expect(result).to.be.eql({
+        result: [
+          'event result 1',
+          'event result 2'
+        ]
+      });
+      done();
     });
   });
 
-  it('should call with timerHandler', function () {
+  it('should call with timerHandler', function (done) {
     const registry = new Registry();
     const timerFunc = sinon.spy();
     registry.getFunc = sinon.stub().returns(timerFunc);
     const transport = new CommonTransport(registry);
-    transport.timerHandler({
+    return transport.timerHandler({
       kind: 'timer',
       name: 'every30s'
+    }).then(() => {
+      expect(timerFunc).to.be.called();
+      done();
     });
-    expect(timerFunc).to.be.called();
   });
 
-  it('should call with hookHandler', function () {
+  it('should call with hookHandler', function (done) {
     const registry = new Registry();
     const hookFunc = sinon.stub().returns(undefined);
     registry.getFunc = sinon.stub().returns(hookFunc);
     registry.getHookType = sinon.stub().returns('note');
     const transport = new CommonTransport(registry);
-    const result = transport.hookHandler({
+    return transport.hookHandler({
       kind: 'hook',
       name: 'beforeNote',
       param: {
@@ -128,25 +139,27 @@ describe('CommonTransport', function () {
         },
         original: null
       }
-    });
-    expect(hookFunc).to.be.called();
-    expect(result).to.be.eql({
-      result: {
-        _access: [{
-          level: 'read',
-          public: true
-        }],
-        _id: 'note/uuid'
-      }
+    }).then((result) => {
+      expect(hookFunc).to.be.called();
+      expect(result).to.be.eql({
+        result: {
+          _access: [{
+            level: 'read',
+            public: true
+          }],
+          _id: 'note/uuid'
+        }
+      });
+      done();
     });
   });
 
-  it('should call with handlerHandler', function () {
+  it('should call with handlerHandler', function (done) {
     const registry = new Registry();
     const handlerFunc = sinon.spy();
-    registry.getFunc = sinon.stub().returns(handlerFunc);
+    registry.getHandler = sinon.stub().returns(handlerFunc);
     const transport = new CommonTransport(registry);
-    transport.timerHandler({
+    return transport.handlerHandler({
       kind: 'handler',
       name: 'pubHandler',
       param: {
@@ -159,11 +172,13 @@ describe('CommonTransport', function () {
         path: '/handler1',
         query_string: 'q=1'
       }
+    }).then(() => {
+      expect(handlerFunc).to.be.called();
+      done();
     });
-    expect(handlerFunc).to.be.called();
   });
 
-  it('should call init event handler properly', function () {
+  it('should call init event handler properly', function (done) {
     const initInfo = {
       op: [],
       event: [
@@ -179,7 +194,7 @@ describe('CommonTransport', function () {
     registry.funcList = sinon.stub().returns(initInfo);
 
     const transport = new CommonTransport(registry);
-    const result = transport.eventHandler({
+    return transport.eventHandler({
       kind: 'event',
       name: 'init',
       param: {
@@ -188,23 +203,24 @@ describe('CommonTransport', function () {
           hostname: 'https://demo.skygeario.com/'
         }
       }
-    });
-
-    // TODO(benlei): Check whether config is properly saved
-    expect(registry.funcList).to.be.calledOnce();
-    expect(result).to.be.eql({
-      result: initInfo
+    }).then((result) => {
+      // TODO(benlei): Check whether config is properly saved
+      expect(registry.funcList).to.be.calledOnce();
+      expect(result).to.be.eql({
+        result: initInfo
+      });
+      done();
     });
   });
 
-  it('should call with providerHandler', function () {
+  it('should call with providerHandler', function (done) {
     const registry = new Registry();
     const providerFunc = {
       handleAction: sinon.spy()
     };
     registry.getProvider = sinon.stub().returns(providerFunc);
     const transport = new CommonTransport(registry);
-    transport.providerHandler({
+    return transport.providerHandler({
       kind: 'provider',
       name: 'io.skygear',
       param: {
@@ -214,13 +230,15 @@ describe('CommonTransport', function () {
           expiry: 1478677997870
         }
       }
-    });
-    expect(providerFunc.handleAction).to.be.calledWithMatch('login', {
-      action: 'login',
-      auth_data: {
-        token: 'uuid-from-io.skygear',
-        expiry: 1478677997870
-      }
+    }).then(() => {
+      expect(providerFunc.handleAction).to.be.calledWithMatch('login', {
+        action: 'login',
+        auth_data: {
+          token: 'uuid-from-io.skygear',
+          expiry: 1478677997870
+        }
+      });
+      done();
     });
   });
 });
