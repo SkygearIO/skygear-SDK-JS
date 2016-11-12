@@ -1,5 +1,7 @@
 FROM node:6
 
+ENV NODE_PATH /usr/local/lib/node_modules
+
 RUN \
     wget https://github.com/krallin/tini/releases/download/v0.13.0/tini && \
     mv tini /usr/local/bin/tini && \
