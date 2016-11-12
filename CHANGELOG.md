@@ -1,3 +1,13 @@
+## 0.19.1 (2016-11-12)
+
+### Features
+
+- Support returning Promise in Cloud Function (#121)
+
+### Bug Fixes
+
+- Handle empty queryString in SkygearRequest
+
 ## 0.19.0 (2016-11-10)
 
 ## Features
