@@ -25,6 +25,8 @@ services:
       PLUGINS: JS
       JS_TRANSPORT: http
       JS_PATH: http://plugin:9000
+      TOKEN_STORE: jwt
+      TOKEN_STORE_SECRET: jwt_secret
 
   plugin:
     build:
