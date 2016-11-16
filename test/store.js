@@ -159,4 +159,112 @@ describe('Store', function () {
     expect(store._selectKeysToPurge(['a', 'b'])).to.be.eql(['b']);
     expect(store._selectKeysToPurge(['a', 'b', 'c'])).to.be.eql(['b', 'c']);
   });
+
+  it('should retry when write fails', function () {
+    store._purgeableKeys = ['a', 'b', 'c'];
+    store._driver = {};
+    store._driver.setItem = sinon.stub();
+    store._driver.multiRemove = sinon.stub();
+
+    store._driver.setItem.onCall(0).returns(Promise.reject(new Error()));
+    store._driver.multiRemove.returns(Promise.resolve());
+    store._driver.setItem.onCall(1).returns(Promise.resolve());
+    store._driver.setItem.onCall(2).returns(Promise.resolve());
+
+    return store._setItemWithRetry('d', 'd').then(function () {
+      expect(
+        store._driver.setItem.getCall(0).calledWithExactly('d', 'd')
+      ).to.be.true();
+
+      expect(store._driver.multiRemove.withArgs(['b', 'c'])).to.be.callCount(1);
+
+      expect(
+        store._driver.setItem.getCall(1).calledWithExactly(
+          '_skygear_purgeable_keys_',
+          '["a"]'
+        )
+      );
+
+      expect(store._purgeableKeys).to.be.eql(['a']);
+    });
+  });
+
+  it('stops retrying when retry count exceeds', function () {
+    store._purgeableKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    store._maxRetryCount = 3;
+    store._driver = {};
+    store._driver.setItem = sinon.stub();
+    store._driver.multiRemove = sinon.stub();
+
+    store._driver.multiRemove.returns(Promise.resolve());
+    store._driver.setItem.onCall(0).returns(Promise.reject(new Error()));
+
+    store._driver.setItem.onCall(1).returns(Promise.resolve());
+    store._driver.setItem.onCall(2).returns(Promise.reject(new Error()));
+
+    store._driver.setItem.onCall(3).returns(Promise.resolve());
+    store._driver.setItem.onCall(4).returns(Promise.reject(new Error()));
+
+    store._driver.setItem.onCall(5).returns(Promise.resolve());
+    store._driver.setItem.onCall(6).returns(Promise.reject(new Error()));
+
+    return store._setItemWithRetry('11', '11').then(function () {
+      // unreachable
+      expect(1).to.be.eql(2);
+    }, function (e) {
+      // the first attempt is not considered as retry
+      expect(store._driver.setItem).to.be.callCount(1 + 2 * 3);
+
+      expect(
+        store._driver.setItem.getCall(0).calledWithExactly('11', '11')
+      ).to.be.true();
+      expect(
+        store._driver.multiRemove.getCall(0).calledWithExactly([
+          '6', '7', '8', '9', '10'
+        ])
+      ).to.be.true();
+      expect(
+        store._driver.setItem.getCall(1).calledWithExactly(
+          '_skygear_purgeable_keys_',
+          '["1","2","3","4","5"]'
+        )
+      ).to.be.true();
+
+      expect(
+        store._driver.setItem.getCall(2).calledWithExactly('11', '11')
+      ).to.be.true();
+      expect(
+        store._driver.multiRemove.getCall(1).calledWithExactly([
+          '3', '4', '5'
+        ])
+      ).to.be.true();
+      expect(
+        store._driver.setItem.getCall(3).calledWithExactly(
+          '_skygear_purgeable_keys_',
+          '["1","2"]'
+        )
+      ).to.be.true();
+
+      expect(
+        store._driver.setItem.getCall(4).calledWithExactly('11', '11')
+      ).to.be.true();
+      expect(
+        store._driver.multiRemove.getCall(2).calledWithExactly([
+          '2'
+        ])
+      ).to.be.true();
+      expect(
+        store._driver.setItem.getCall(5).calledWithExactly(
+          '_skygear_purgeable_keys_',
+          '["1"]'
+        )
+      ).to.be.true();
+
+      expect(
+        store._driver.setItem.getCall(6).calledWithExactly('11', '11')
+      ).to.be.true();
+
+      expect(e.message).to.be.eql('exceeded max retry count');
+    });
+  });
 });
