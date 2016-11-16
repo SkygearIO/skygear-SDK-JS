@@ -123,4 +123,11 @@ describe('Store', function () {
       expect(store._purgeableKeys).to.be.eql(['d', 'a', 'b', 'c']);
     });
   });
+
+  it('selects least recently used keys to purge', function () {
+    expect(store._selectKeysToPurge([])).to.be.eql([]);
+    expect(store._selectKeysToPurge(['a'])).to.be.eql(['a']);
+    expect(store._selectKeysToPurge(['a', 'b'])).to.be.eql(['b']);
+    expect(store._selectKeysToPurge(['a', 'b', 'c'])).to.be.eql(['b', 'c']);
+  });
 });
