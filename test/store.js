@@ -86,4 +86,41 @@ describe('Store', function () {
     });
 
   });
+
+  it('store metadata when storing purgeable key-value pair', function () {
+    store._purgeableKeys = ['a', 'b', 'c'];
+    store._driver = {};
+    store._driver.multiGet = sinon.stub();
+    store._driver.multiSet = sinon.stub();
+
+    const keys = ['d', '_skygear_purgeable_keys_'];
+    const keyValuePairs = [
+      {
+        key: 'd',
+        value: 'd'
+      },
+      {
+        key: '_skygear_purgeable_keys_',
+        value: '["d","a","b","c"]'
+      }
+    ];
+
+    store._driver.multiGet.withArgs(keys).returns(Promise.resolve([
+      {
+        key: 'd',
+        value: null
+      },
+      {
+        key: '_skygear_purgeable_keys_',
+        value: '["a","b","c"]'
+      }
+    ]));
+    store._driver.multiSet.withArgs(keyValuePairs).returns(Promise.resolve());
+
+    return store.setPurgeableItem('d', 'd').then(function () {
+      expect(store._driver.multiGet.withArgs(keys)).to.be.callCount(1);
+      expect(store._driver.multiSet.withArgs(keyValuePairs)).to.be.callCount(1);
+      expect(store._purgeableKeys).to.be.eql(['d', 'a', 'b', 'c']);
+    });
+  });
 });
