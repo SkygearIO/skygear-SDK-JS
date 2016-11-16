@@ -18,6 +18,33 @@ import sinon from 'sinon';
 import store from '../lib/store';
 
 describe('Store', function () {
+  it('maintains purgeable keys in LRU order', function () {
+    expect(store._maintainLRUOrder([], [])).to.be.eql(
+      []
+    );
+
+    expect(store._maintainLRUOrder([], ['d'])).to.be.eql(
+      ['d']
+    );
+
+    expect(store._maintainLRUOrder(['a'], [])).to.be.eql(
+      ['a']
+    );
+
+    expect(store._maintainLRUOrder(['a', 'b', 'c'], ['b'])).to.be.eql(
+      ['b', 'a', 'c']
+    );
+
+    expect(store._maintainLRUOrder(['a', 'b', 'c'], ['d'])).to.be.eql(
+      ['d', 'a', 'b', 'c']
+    );
+
+    expect(store._maintainLRUOrder(['a', 'b', 'c', 'd'], ['d', 'b'])).to.be.eql(
+      ['d', 'b', 'a', 'c']
+    );
+
+  });
+
   it('emulates transaction', function () {
 
     store._driver = {};
