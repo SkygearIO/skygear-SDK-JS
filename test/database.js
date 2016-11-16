@@ -15,6 +15,7 @@
  */
 /*eslint-disable dot-notation, no-new, no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
+import sinon from 'sinon';
 import Database from '../lib/database';
 import Record from '../lib/record';
 import Query from '../lib/query';
@@ -221,6 +222,11 @@ describe('Database', function () {
     );
   });
 
+  it('caches response by default', function () {
+    let d = new Database('_public', container);
+    expect(d.cacheResponse).to.be.true();
+  });
+
   it('query with Query object', function () {
     let q = new Query(Note);
     q.transientInclude('category');
@@ -275,6 +281,34 @@ describe('Database', function () {
       throw Error();
     });
 
+  });
+
+  it('respects container.cacheResponse', function (done) {
+    let localContainer = new Container();
+    localContainer.autoPubsub = false;
+    localContainer.request = request;
+    localContainer.configApiKey('correctApiKey');
+
+    let mockDB = new Database('_public', localContainer);
+
+    let q = new Query(Note);
+
+    Promise.resolve().then(function () {
+      localContainer.cacheResponse = false;
+      mockDB._cacheStore = {};
+      mockDB._cacheStore.set = sinon.spy();
+      mockDB.query(q).then(function (records) {
+        expect(mockDB._cacheStore.set).to.be.callCount(0);
+      });
+    }).then(function () {
+      localContainer.cacheResponse = true;
+      mockDB._cacheStore = {};
+      mockDB._cacheStore.set = sinon.spy();
+      mockDB.query(q).then(function (records) {
+        expect(mockDB._cacheStore.set).to.be.callCount(1);
+        done();
+      });
+    });
   });
 
   it('query with returns of unexpected _transient dict', function () {

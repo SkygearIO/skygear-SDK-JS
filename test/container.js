@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
-import {assert} from 'chai';
+import {assert, expect} from 'chai';
 import Container from '../lib/container';
 import {AccessLevel} from '../lib/acl';
 
@@ -28,6 +28,30 @@ describe('Container', function () {
       container.endPoint,
       'http://skygear.dev/',
       'we expected default endpoint');
+  });
+
+  it('caches response by default', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    expect(container.cacheResponse).to.be.true();
+  });
+
+  it('forwards cacheResponse to its databases', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container._accessToken = 'dummy-access-token-to-enable-private-db';
+
+    container.cacheResponse = false;
+    expect(container.publicDB.cacheResponse).to.be.false();
+    expect(container.privateDB.cacheResponse).to.be.false();
+
+    container.cacheResponse = true;
+    expect(container.publicDB.cacheResponse).to.be.true();
+    expect(container.privateDB.cacheResponse).to.be.true();
+
+    container.cacheResponse = false;
+    expect(container.publicDB.cacheResponse).to.be.false();
+    expect(container.privateDB.cacheResponse).to.be.false();
   });
 
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
