@@ -45,6 +45,35 @@ describe('Store', function () {
 
   });
 
+  it('removes purgeable keys in LRU order', function () {
+    expect(store._removeKeysInLRUOrder([], [])).to.be.eql(
+      []
+    );
+
+    expect(store._removeKeysInLRUOrder([], ['d'])).to.be.eql(
+      []
+    );
+
+    expect(store._removeKeysInLRUOrder(['a'], [])).to.be.eql(
+      ['a']
+    );
+
+    expect(store._removeKeysInLRUOrder(['a', 'b', 'c'], ['b'])).to.be.eql(
+      ['a', 'c']
+    );
+
+    expect(store._removeKeysInLRUOrder(['a', 'b', 'c'], ['d'])).to.be.eql(
+      ['a', 'b', 'c']
+    );
+
+    expect(store._removeKeysInLRUOrder(
+      ['a', 'b', 'c', 'd'],
+      ['d', 'b'])
+    ).to.be.eql(
+      ['a', 'c']
+    );
+  });
+
   it('emulates transaction', function () {
 
     store._driver = {};
