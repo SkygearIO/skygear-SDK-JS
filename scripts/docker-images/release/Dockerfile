@@ -10,5 +10,6 @@ RUN find /tmp -name "skygear-*.tgz" -exec npm install -g "{}" \;
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+ENV NODE_PATH /usr/local/lib/node_modules
 ENTRYPOINT ["/usr/local/bin/tini", "--"]
 CMD ["skygear-node"]
