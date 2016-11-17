@@ -11,4 +11,5 @@ WORKDIR /go/src/app
 RUN mkdir -p /home/node && \
     chown -R node:node /home/node
 
+ENV NODE_PATH /usr/local/lib/node_modules
 USER node
