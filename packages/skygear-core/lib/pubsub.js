@@ -82,10 +82,17 @@ export default class Pubsub {
       this._sendSubscription(channel);
     });
 
-    // Flushed queued messages to the server
-    _.forEach(this._queue, (data)=> {
+    if (this.connected) {
+      // Flushed queued messages to the server
+      this._consumeQueuedMessages();
+    }
+  }
+
+  _consumeQueuedMessages() {
+    for (let i = 0; i < this._queue.length; ++i) {
+      const data = this._queue[i];
       this._ws.send(JSON.stringify(data));
-    });
+    }
     this._queue = [];
   }
 
@@ -133,10 +140,9 @@ export default class Pubsub {
       channel,
       data
     };
+    this._queue.push(publishData);
     if (this.connected) {
-      this._ws.send(JSON.stringify(publishData));
-    } else {
-      this._queue.push(publishData);
+      this._consumeQueuedMessages();
     }
   }
 
