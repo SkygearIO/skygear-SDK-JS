@@ -156,7 +156,9 @@ describe('CommonTransport', function () {
 
   it('should call with handlerHandler', function (done) {
     const registry = new Registry();
-    const handlerFunc = sinon.spy();
+    const handlerFunc = sinon.spy(function (req) {
+      return req.json.data;
+    });
     registry.getHandler = sinon.stub().returns(handlerFunc);
     const transport = new CommonTransport(registry);
     return transport.handlerHandler({
@@ -168,14 +170,15 @@ describe('CommonTransport', function () {
           'Content-Type': ['application/json'],
           'Content-Length': ['16']
         },
-        body: 'eyJkYXRhIjoidmFsdWUifQ==', // {"data":"value"}
+        body: 'eyJkYXRhIjoi4pyTIn0=', // {"data":"✓"}
         path: '/handler1',
         query_string: 'q=1'
       }
-    }).then(() => {
+    }).then((result) => {
+      expect(result.result.body).to.eql('4pyT'); // ✓
       expect(handlerFunc).to.be.called();
       done();
-    });
+    }).catch(done);
   });
 
   it('should call init event handler properly', function (done) {
