@@ -267,4 +267,47 @@ describe('Store', function () {
       expect(e.message).to.be.eql('exceeded max retry count');
     });
   });
+
+  it('retries when error happens when setting purgeable item', function () {
+    store._maxRetryCount = 1;
+    store._purgeableKeys = ['1', '2', '3', '4'];
+    const multiSetTransactionally =
+      sinon.stub(store, 'multiSetTransactionally');
+    multiSetTransactionally.onCall(0).returns(Promise.reject(new Error()));
+    multiSetTransactionally.onCall(1).returns(Promise.resolve());
+    const _performRecovery = sinon.stub(store, '_performRecovery');
+    _performRecovery.returns(Promise.resolve());
+
+    return store.setPurgeableItem('2', 'value:2').then(function () {
+      expect(
+        multiSetTransactionally.getCall(0).calledWithExactly([
+          {
+            key: '2',
+            value: 'value:2'
+          },
+          {
+            key: '_skygear_purgeable_keys_',
+            value: '["2","1","3","4"]'
+          }
+        ])
+      ).to.be.true();
+      expect(_performRecovery).to.be.callCount(1);
+      expect(
+        multiSetTransactionally.getCall(1).calledWithExactly([
+          {
+            key: '2',
+            value: 'value:2'
+          },
+          {
+            key: '_skygear_purgeable_keys_',
+            value: '["2","1","3","4"]'
+          }
+        ])
+      ).to.be.true();
+
+      multiSetTransactionally.restore();
+      _performRecovery.restore();
+    });
+
+  });
 });
