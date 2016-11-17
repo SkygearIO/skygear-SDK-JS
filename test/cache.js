@@ -25,34 +25,40 @@ describe('Cache', function () {
   beforeEach(function () {
     cache = new Cache('prefix');
     store = {};
-    store.getItem = sinon.spy();
-    store.setItem = sinon.spy();
     cache.store = store;
   });
 
   it('save value with prefix', function () {
-    cache.set('hash', 'value');
-    expect(store.setItem).to.be.calledWithMatch('prefix:hash', 'value');
+    store.setPurgeableItem = sinon.stub();
+    store.setPurgeableItem.returns(Promise.resolve());
+
+    return cache.set('hash', {some: 'json'}).then(function () {
+      expect(store.setPurgeableItem)
+        .to.be.calledWithMatch('prefix:hash', '{"some":"json"}');
+    });
   });
 
   it('get value with prefix', function () {
-    cache.get('hash');
-    expect(store.getItem).to.be.calledWithMatch('prefix:hash');
+    store.getItem = sinon.stub();
+    store.getItem.returns(Promise.resolve('{"some":"json"}'));
+
+    return cache.get('hash').then(function (myValue) {
+      expect(store.getItem).to.be.calledWithMatch('prefix:hash');
+      expect(myValue).to.be.eql({
+        some: 'json'
+      });
+    });
   });
 
-  it('cache keys is unique', function () {
-    cache.set('hash', 'dump');
-    cache.set('hash', 'realvalue');
-    expect(store.setItem).to.be.calledWithMatch('prefix:hash', 'dump');
-    expect(store.setItem).to.be.calledWithMatch('prefix:hash', 'realvalue');
-    expect(cache.keys).to.be.eql(['prefix:hash']);
-  });
+  it('rejects when cache is not found', function () {
+    store.getItem = sinon.stub();
+    store.getItem.returns(Promise.resolve(null));
 
-  it('reset clears data', function () {
-    cache.reset();
-    expect(store.setItem).to.be.calledWithMatch('prefix:keys', '[]');
-    expect(cache.keys).to.be.eql([]);
+    return cache.get('hash').then(function () {
+      expect(1).to.be.eql(2);
+    }, function () {
+      expect(1).to.be.eql(1);
+    });
   });
-
 
 });
