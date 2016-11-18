@@ -11,6 +11,7 @@
   "files": [
     "cloud.js",
     "bin.js",
+    "asset.js",
     "dist"
   ],
   "main": "dist/index.js",
