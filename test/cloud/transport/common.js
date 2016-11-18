@@ -110,6 +110,24 @@ describe('CommonTransport', function () {
     });
   });
 
+  it('should return empty array if no event handlers', function (done) {
+    const registry = new Registry();
+
+    const transport = new CommonTransport(registry);
+    return transport.eventHandler({
+      kind: 'event',
+      name: 'hello',
+      param: {
+        hello: 'world'
+      }
+    }).then((result) => {
+      expect(result).to.be.eql({
+        result: []
+      });
+      done();
+    }).catch(done);
+  });
+
   it('should call with timerHandler', function (done) {
     const registry = new Registry();
     const timerFunc = sinon.spy();
