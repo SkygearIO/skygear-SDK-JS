@@ -7,7 +7,7 @@
   "plugins": [
     "add-module-exports",
     ["transform-builtin-extend", {
-      "globals": ["Array"],
+      "globals": ["Error", "Array"],
       "approximate": true
     }]
   ]
