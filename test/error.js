@@ -15,14 +15,18 @@
  */
 /*eslint-disable camelcase */
 import {expect} from 'chai';
-import {BadRequest, UnexpectedError, SkygearError} from '../lib/error';
+import {ErrorCodes, SkygearError} from '../lib/error';
 
 describe('SkygearError', function () {
   it('constructor with all parameters', function () {
-    const err = new SkygearError('a bad request', BadRequest, {content: 'bad'});
+    const err = new SkygearError(
+      'a bad request',
+      ErrorCodes.BadRequest,
+      {content: 'bad'}
+    );
     expect(err).to.be.an.instanceof(SkygearError);
     expect(err.toString()).eql('SkygearError: a bad request');
-    expect(err.code).eql(BadRequest);
+    expect(err.code).eql(ErrorCodes.BadRequest);
     expect(err.message).eql('a bad request');
     expect(err.info).eql({content: 'bad'});
   });
@@ -30,13 +34,17 @@ describe('SkygearError', function () {
   it('constructor with message', function () {
     const err = new SkygearError('unknown error');
     expect(err.toString()).eql('SkygearError: unknown error');
-    expect(err.code).eql(UnexpectedError);
+    expect(err.code).eql(ErrorCodes.UnexpectedError);
     expect(err.message).eql('unknown error');
     expect(err.info).eql(null);
   });
 
   it('toJSON', function () {
-    const err = new SkygearError('a bad request', BadRequest, {content: 'bad'});
+    const err = new SkygearError(
+      'a bad request',
+      ErrorCodes.BadRequest,
+      {content: 'bad'}
+    );
     expect(err.toJSON()).eql({
       code: 107,
       name: 'BadRequest',
@@ -53,7 +61,7 @@ describe('SkygearError', function () {
       info: {content: 'bad'}
     });
     expect(err.toString()).eql('SkygearError: a bad request');
-    expect(err.code).eql(BadRequest);
+    expect(err.code).eql(ErrorCodes.BadRequest);
     expect(err.message).eql('a bad request');
     expect(err.info).eql({content: 'bad'});
   });
