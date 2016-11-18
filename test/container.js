@@ -36,14 +36,34 @@ describe('Container', function () {
     expect(container.cacheResponse).to.be.true();
   });
 
+  it('does not eagerly initialize db when setting cacheResponse', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+
+    container.cacheResponse = false;
+    expect(container._publicDB).to.be.null();
+    expect(container._privateDB).to.be.null();
+  });
+
+  it('initializes db with current cacheResponse setting', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+
+    container.cacheResponse = false;
+    expect(container._publicDB).to.be.null();
+    expect(container._privateDB).to.be.null();
+
+    expect(container.publicDB.cacheResponse).to.be.false();
+
+    container._accessToken = 'access-token';
+    expect(container.privateDB.cacheResponse).to.be.false();
+  });
+
   it('forwards cacheResponse to its databases', function () {
     let container = new Container();
     container.autoPubsub = false;
-    container._accessToken = 'dummy-access-token-to-enable-private-db';
-
     container.cacheResponse = false;
-    expect(container.publicDB.cacheResponse).to.be.false();
-    expect(container.privateDB.cacheResponse).to.be.false();
+    container._accessToken = 'dummy-access-token-to-enable-private-db';
 
     container.cacheResponse = true;
     expect(container.publicDB.cacheResponse).to.be.true();
@@ -52,6 +72,10 @@ describe('Container', function () {
     container.cacheResponse = false;
     expect(container.publicDB.cacheResponse).to.be.false();
     expect(container.privateDB.cacheResponse).to.be.false();
+
+    container.cacheResponse = true;
+    expect(container.publicDB.cacheResponse).to.be.true();
+    expect(container.privateDB.cacheResponse).to.be.true();
   });
 
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
