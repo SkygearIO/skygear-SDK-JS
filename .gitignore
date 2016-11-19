@@ -4,3 +4,4 @@ dist
 tmp
 esdoc
 skygear-*.tgz
+npm-debug.log
