@@ -1,3 +1,23 @@
+## 0.19.2 (2016-11-19)
+
+### Features
+
+- Exposing skygear error codes (#51)
+- Allow opt-out cache (#76)
+- cloud: Support static asset
+- Expose pg pool, settings and CloudCodeContainer
+
+### Bug Fixes
+
+- cloud: Return error to skygear-server in correct format (#127)
+- cloud: Fix undefined result with no event handlers
+- cloud: Fix base64 encoding error with utf-16 characters (#126)
+
+### Other Notes
+
+- Remove dep on localforage (#39)
+- cloud: Update Dockerfile to add NODE_PATH
+
 ## 0.19.1 (2016-11-12)
 
 ### Features
