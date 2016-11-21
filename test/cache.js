@@ -61,4 +61,27 @@ describe('Cache', function () {
     });
   });
 
+  function testRetryForMaxRetryCount(maxRetryCount) {
+    const description =
+      'retries ' + maxRetryCount + ' times when write failed with ' +
+      '_maxRetryCount = ' + maxRetryCount;
+
+    it(description, function () {
+      cache._maxRetryCount = maxRetryCount;
+      store.setPurgeableItem = sinon.stub();
+
+      for (let i = 0; i < maxRetryCount; ++i) {
+        store.setPurgeableItem.onCall(i).returns(Promise.reject(new Error()));
+      }
+      store.setPurgeableItem.onCall(maxRetryCount).returns(Promise.resolve());
+
+      return cache.set('hash', {some: 'json'}).then(function () {
+        expect(store.setPurgeableItem).to.be.callCount(maxRetryCount + 1);
+      });
+    });
+  }
+  for (let i = 0; i < 4; ++i) {
+    testRetryForMaxRetryCount(i);
+  }
+
 });
