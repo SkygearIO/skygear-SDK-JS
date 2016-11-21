@@ -160,7 +160,7 @@ describe('Store', function () {
     expect(store._selectKeysToPurge(['a', 'b', 'c'])).to.be.eql(['b', 'c']);
   });
 
-  it('should retry when write fails', function () {
+  it('purges purgeable items when write fails', function () {
     store._purgeableKeys = ['a', 'b', 'c'];
     store._driver = {};
     store._driver.setItem = sinon.stub();
@@ -169,9 +169,13 @@ describe('Store', function () {
     store._driver.setItem.onCall(0).returns(Promise.reject(new Error()));
     store._driver.multiRemove.returns(Promise.resolve());
     store._driver.setItem.onCall(1).returns(Promise.resolve());
-    store._driver.setItem.onCall(2).returns(Promise.resolve());
 
-    return store._setItemWithRetry('d', 'd').then(function () {
+    return store.setItem('d', 'd').then(function () {
+      expect(1).to.be.eql(2);
+    }, function () {
+      expect(store._driver.setItem).to.be.callCount(2);
+      expect(store._driver.multiRemove).to.be.callCount(1);
+
       expect(
         store._driver.setItem.getCall(0).calledWithExactly('d', 'd')
       ).to.be.true();
@@ -189,125 +193,4 @@ describe('Store', function () {
     });
   });
 
-  it('stops retrying when retry count exceeds', function () {
-    store._purgeableKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-    store._maxRetryCount = 3;
-    store._driver = {};
-    store._driver.setItem = sinon.stub();
-    store._driver.multiRemove = sinon.stub();
-
-    store._driver.multiRemove.returns(Promise.resolve());
-    store._driver.setItem.onCall(0).returns(Promise.reject(new Error()));
-
-    store._driver.setItem.onCall(1).returns(Promise.resolve());
-    store._driver.setItem.onCall(2).returns(Promise.reject(new Error()));
-
-    store._driver.setItem.onCall(3).returns(Promise.resolve());
-    store._driver.setItem.onCall(4).returns(Promise.reject(new Error()));
-
-    store._driver.setItem.onCall(5).returns(Promise.resolve());
-    store._driver.setItem.onCall(6).returns(Promise.reject(new Error()));
-
-    return store._setItemWithRetry('11', '11').then(function () {
-      // unreachable
-      expect(1).to.be.eql(2);
-    }, function (e) {
-      // the first attempt is not considered as retry
-      expect(store._driver.setItem).to.be.callCount(1 + 2 * 3);
-
-      expect(
-        store._driver.setItem.getCall(0).calledWithExactly('11', '11')
-      ).to.be.true();
-      expect(
-        store._driver.multiRemove.getCall(0).calledWithExactly([
-          '6', '7', '8', '9', '10'
-        ])
-      ).to.be.true();
-      expect(
-        store._driver.setItem.getCall(1).calledWithExactly(
-          '_skygear_purgeable_keys_',
-          '["1","2","3","4","5"]'
-        )
-      ).to.be.true();
-
-      expect(
-        store._driver.setItem.getCall(2).calledWithExactly('11', '11')
-      ).to.be.true();
-      expect(
-        store._driver.multiRemove.getCall(1).calledWithExactly([
-          '3', '4', '5'
-        ])
-      ).to.be.true();
-      expect(
-        store._driver.setItem.getCall(3).calledWithExactly(
-          '_skygear_purgeable_keys_',
-          '["1","2"]'
-        )
-      ).to.be.true();
-
-      expect(
-        store._driver.setItem.getCall(4).calledWithExactly('11', '11')
-      ).to.be.true();
-      expect(
-        store._driver.multiRemove.getCall(2).calledWithExactly([
-          '2'
-        ])
-      ).to.be.true();
-      expect(
-        store._driver.setItem.getCall(5).calledWithExactly(
-          '_skygear_purgeable_keys_',
-          '["1"]'
-        )
-      ).to.be.true();
-
-      expect(
-        store._driver.setItem.getCall(6).calledWithExactly('11', '11')
-      ).to.be.true();
-
-      expect(e.message).to.be.eql('exceeded max retry count');
-    });
-  });
-
-  it('retries when error happens when setting purgeable item', function () {
-    store._maxRetryCount = 1;
-    store._purgeableKeys = ['1', '2', '3', '4'];
-    const multiSetTransactionally =
-      sinon.stub(store, 'multiSetTransactionally');
-    multiSetTransactionally.onCall(0).returns(Promise.reject(new Error()));
-    multiSetTransactionally.onCall(1).returns(Promise.resolve());
-    const _performRecovery = sinon.stub(store, '_performRecovery');
-    _performRecovery.returns(Promise.resolve());
-
-    return store.setPurgeableItem('2', 'value:2').then(function () {
-      expect(
-        multiSetTransactionally.getCall(0).calledWithExactly([
-          {
-            key: '2',
-            value: 'value:2'
-          },
-          {
-            key: '_skygear_purgeable_keys_',
-            value: '["2","1","3","4"]'
-          }
-        ])
-      ).to.be.true();
-      expect(_performRecovery).to.be.callCount(1);
-      expect(
-        multiSetTransactionally.getCall(1).calledWithExactly([
-          {
-            key: '2',
-            value: 'value:2'
-          },
-          {
-            key: '_skygear_purgeable_keys_',
-            value: '["2","1","3","4"]'
-          }
-        ])
-      ).to.be.true();
-
-      multiSetTransactionally.restore();
-      _performRecovery.restore();
-    });
-
-  });
 });
