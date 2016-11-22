@@ -20,7 +20,7 @@ import Record from '../lib/record';
 import Role from '../lib/role';
 import Reference from '../lib/reference';
 import Geolocation from '../lib/geolocation';
-import {Sequence} from '../lib/type';
+import {Sequence, UnknownValue} from '../lib/type';
 import {AccessLevel} from '../lib/acl';
 
 const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
@@ -248,6 +248,21 @@ describe('Extended Record', function () {
     });
   });
 
+  it('serialize to payload with unknown value', function () {
+    let note = new Note({
+      _id: 'note/uid'
+    });
+    note.noteID = new UnknownValue('money');
+    expect(note.toJSON()).to.be.eql({
+      _id: 'note/uid',
+      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      noteID: {
+        $type: 'unknown',
+        '$underlying_type': 'money'
+      }
+    });
+  });
+
   it('deserialize from payload with geolocation', function () {
     let payload = {
       _id: 'note/uid',
@@ -264,6 +279,16 @@ describe('Extended Record', function () {
     };
     let r = new Record('note', payload);
     expect(r['replyTo']).to.be.an.instanceof(Reference);
+  });
+
+  it('deserialize from payload with unknown value', function () {
+    let payload = {
+      _id: 'note/note-2',
+      money: {"$type": "unknown", "$underlying_type": "money"}
+    };
+    let r = new Record('note', payload);
+    expect(r['money']).to.be.an.instanceof(UnknownValue);
+    expect(r['money'].underlyingType).to.equal('money');
   });
 
   it('acl', function () {

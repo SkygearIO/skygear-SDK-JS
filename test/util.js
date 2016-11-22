@@ -16,7 +16,7 @@
 /*eslint-disable no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import Geolocation from '../lib/geolocation';
-import {Sequence} from '../lib/type';
+import {Sequence, UnknownValue} from '../lib/type';
 import {toJSON, fromJSON} from '../lib/util';
 
 describe('util', function () {
@@ -45,6 +45,14 @@ describe('util', function () {
     });
   });
 
+  it('toJSON unknown value', function () {
+    const unknownValue = new UnknownValue('money');
+    expect(toJSON(unknownValue)).to.eql({
+      $type: 'unknown',
+      $underlying_type: 'money' //eslint-disable-line camelcase
+    });
+  });
+
   it('fromJSON Date', function () {
     const d = fromJSON({
       $type: 'date',
@@ -63,6 +71,15 @@ describe('util', function () {
     expect(geo).to.be.an.instanceof(Geolocation);
     expect(geo.latitude).to.equal(10);
     expect(geo.longitude).to.equal(20);
+  });
+
+  it('fromJSON unknown value', function () {
+    const unknownValue = fromJSON({
+      $type: 'unknown',
+      $underlying_type: 'money' //eslint-disable-line camelcase
+    });
+    expect(unknownValue).to.be.an.instanceof(UnknownValue);
+    expect(unknownValue.underlyingType).to.equal('money');
   });
 
   it('toJSON array with mixed objects', function () {
