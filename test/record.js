@@ -95,6 +95,15 @@ describe('Extended Record', function () {
     expect(r._id).to.equal('1');
   });
 
+  it('accept id with type', function () {
+    let r = new Note({
+      id: 'note/1'
+    });
+    expect(r.id).to.equal('note/1');
+    expect(r.recordType).to.equal('note');
+    expect(r._id).to.equal('1');
+  });
+
   it('reject _id with different type', function () {
     expect(function () {
       let r = new Note({
