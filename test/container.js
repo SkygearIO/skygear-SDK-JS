@@ -288,6 +288,30 @@ describe('Container auth', function () {
         }
       });
     }
+  }, {
+    pattern: 'http://skygear.dev/device/unregister',
+    fixtures: function (match, params, headers, fn) {
+      if (params && params.id) {
+        return fn({
+          'result': {
+            'id': params.id
+          }
+        });
+      } else {
+        return fn({
+          'error': {
+            'name': 'InvalidArgument',
+            'code': 108,
+            'message': 'Missing device id',
+            'info': {
+              'arguments': [
+                'id'
+              ]
+            }
+          }
+        });
+      }
+    }
   }]);
   container.configApiKey('correctApiKey');
 
