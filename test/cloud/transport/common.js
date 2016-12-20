@@ -39,10 +39,17 @@ describe('CommonTransport', function () {
       name: 'lambda',
       param: {
         key: 'value'
+      },
+      context: {
+        user_id: '0383f77599f1412e938f29ae79c3dcc8'
       }
     }).then((result) => {
       expect(opFunc).to.be.calledWithMatch({
         key: 'value'
+      }, {
+        context: {
+          user_id: '0383f77599f1412e938f29ae79c3dcc8'
+        }
       });
       expect(result).to.be.eql({
         result: 'op result'
@@ -156,9 +163,21 @@ describe('CommonTransport', function () {
           '_id': 'note/uuid'
         },
         original: null
+      },
+      context: {
+        user_id: '0383f77599f1412e938f29ae79c3dcc8'
       }
     }).then((result) => {
-      expect(hookFunc).to.be.called();
+      expect(hookFunc).to.be.calledWith(
+        sinon.match.any,
+        sinon.match(null),
+        sinon.match.any,
+        sinon.match({
+          context: {
+            user_id: '0383f77599f1412e938f29ae79c3dcc8'
+          }
+        })
+      );
       expect(result).to.be.eql({
         result: {
           _access: [{
@@ -191,10 +210,20 @@ describe('CommonTransport', function () {
         body: 'eyJkYXRhIjoi4pyTIn0=', // {"data":"✓"}
         path: '/handler1',
         query_string: 'q=1'
+      },
+      context: {
+        user_id: '0383f77599f1412e938f29ae79c3dcc8'
       }
     }).then((result) => {
       expect(result.result.body).to.eql('4pyT'); // ✓
-      expect(handlerFunc).to.be.called();
+      expect(handlerFunc).to.be.calledWith(
+        sinon.match.any,
+        sinon.match({
+          context: {
+            user_id: '0383f77599f1412e938f29ae79c3dcc8'
+          }
+        })
+      );
       done();
     }).catch(done);
   });
