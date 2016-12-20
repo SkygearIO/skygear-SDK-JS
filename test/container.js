@@ -288,6 +288,30 @@ describe('Container auth', function () {
         }
       });
     }
+  }, {
+    pattern: 'http://skygear.dev/device/unregister',
+    fixtures: function (match, params, headers, fn) {
+      if (params && params.id) {
+        return fn({
+          'result': {
+            'id': params.id
+          }
+        });
+      } else {
+        return fn({
+          'error': {
+            'name': 'InvalidArgument',
+            'code': 108,
+            'message': 'Missing device id',
+            'info': {
+              'arguments': [
+                'id'
+              ]
+            }
+          }
+        });
+      }
+    }
   }]);
   container.configApiKey('correctApiKey');
 
@@ -857,6 +881,81 @@ describe('Container device registration', function () {
   it('should be able to set null deviceID', function () {
     return container._setDeviceID(null).then(function () {
       assert.equal(container.deviceID, null);
+    });
+  });
+});
+
+describe('Container device unregistration', function () {
+  let container = new Container();
+  container.autoPubsub = false;
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/device/unregister',
+    fixtures: function (match, params, headers, fn) {
+      if (params.id && params.id === 'non-exist') {
+        return fn({
+          'error': {
+            'name': 'ResourceNotFound',
+            'code': 110,
+            'message': 'device not found'
+          }
+        }, 400);
+      } else if (params.id) {
+        return fn({
+          'result': {
+            'id': params.id
+          }
+        });
+      } else {
+        return fn({
+          'error': {
+            'name': 'InvalidArgument',
+            'code': 108,
+            'message': 'Missing device id',
+            'info': {
+              'arguments': [
+                'id'
+              ]
+            }
+          }
+        });
+      }
+    }
+  }]);
+
+  it('should success with correct device id', function (done) {
+    return container._setDeviceID('device_1')
+    .then(function () {
+      return container.unregisterDevice();
+    })
+    .then(function () {
+      done();
+    }, function () {
+      throw new Error('Should not fail with correct device id');
+    });
+  });
+
+  it('should regard as success with non-exist device id', function (done) {
+    return container._setDeviceID('non-exist')
+    .then(function () {
+      return container.unregisterDevice();
+    })
+    .then(function () {
+      done();
+    }, function () {
+      throw new Error('Should not fail with non-exist device id');
+    });
+  });
+
+  it('should fail when no device id', function (done) {
+    return container._setDeviceID(null)
+    .then(function () {
+      return container.unregisterDevice();
+    })
+    .then(function () {
+      throw new Error('Should not success without device id');
+    }, function () {
+      done();
     });
   });
 });
