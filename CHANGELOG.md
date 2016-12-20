@@ -1,3 +1,40 @@
+## 0.20.0 (2016-12-20)
+
+### Features
+
+- Set request context when calling cloud code (#143)
+- Support unregister device (SkygearIO/skygear-server#245, SkygearIO/skygear-server#249)
+- Support union database for cloud code development
+- Export SkygearRequest and SkygearResponse
+- Add poolConnect to select the app's database schema
+- Implement server unknown type (SkygearIO/skygear-server#231)
+- Make the cache become LRU cache (#130, #128)
+
+### Bug Fixes
+
+- Fix binary static asset encoding
+
+    The existing implementation cannot send binary static asset through
+    a handler. The new static asset handler returns a buffer so that
+    that the transport layer uses the buffer's base64 encoding to fix this problem.
+
+- Fix not able to create Record with `id` attr
+
+    The constructor of Record prefers `id` to pass record ID, but it is not
+    possible to use this attr as the update function will set the record ID
+    to `id` property, which is readonly.
+
+    Not having this change will result in TypeError:
+
+    ```
+    TypeError: Cannot set property id of #<Record> which has only a getter
+    ```
+
+### Other Notes
+
+-  Fix nodedev Dockerfile working directory
+
+
 ## 0.19.2 (2016-11-19)
 
 ### Features
@@ -18,6 +55,7 @@
 - Remove dep on localforage (#39)
 - cloud: Update Dockerfile to add NODE_PATH
 
+
 ## 0.19.1 (2016-11-12)
 
 ### Features
@@ -27,6 +65,7 @@
 ### Bug Fixes
 
 - Handle empty queryString in SkygearRequest
+
 
 ## 0.19.0 (2016-11-10)
 
@@ -38,6 +77,7 @@
 ## Other Notes
 
 - Change ourd to skygear
+
 
 ## 0.18.0 (2016-10-28)
 
@@ -54,6 +94,7 @@
 
 - Remove unused comment in Record
 - Update to babel 6 and support node6 (#69)
+
 
 ## 0.17.0 (2016-09-15)
 
