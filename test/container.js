@@ -838,6 +838,12 @@ describe('Container device registration', function () {
             'id': params.id
           }
         });
+      } else if (params.topic) {
+        return fn({
+          'result': {
+            'id': 'topic-device-id'
+          }
+        });
       } else {
         return fn({
           'result': {
@@ -850,14 +856,27 @@ describe('Container device registration', function () {
   container.configApiKey('correctApiKey');
 
   it('should save device id successfully', function () {
-    return container
-      .registerDevice('device-token', 'android')
-      .then(function (deviceID) {
-        assert.equal(deviceID, 'device-id');
-        assert.equal(container.deviceID, 'device-id');
-      }, function () {
-        throw 'failed to save device id';
-      });
+    return container._setDeviceID(null).then(function () {
+      return container.registerDevice('device-token', 'android');
+    })
+    .then(function (deviceID) {
+      assert.equal(deviceID, 'device-id');
+      assert.equal(container.deviceID, 'device-id');
+    }, function () {
+      throw 'failed to save device id';
+    });
+  });
+
+  it('should send app bundle name', function () {
+    return container._setDeviceID(null).then(function () {
+      return container.registerDevice('device-token', 'android', 'bundle-name');
+    })
+    .then(function (deviceID) {
+      assert.equal(deviceID, 'topic-device-id');
+      assert.equal(container.deviceID, 'topic-device-id');
+    }, function () {
+      throw 'failed to send app bundle name';
+    });
   });
 
   it('should attach existing device id', function () {
