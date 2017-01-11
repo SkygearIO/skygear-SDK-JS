@@ -1,3 +1,20 @@
+## 0.21.0 (2017-01-11)
+
+### Features
+
+- Call includeme in index.js for user cloud code
+- Add support for LOAD_MODULES and includeme (#155)
+- Accept bundle name when register device (SkygearIO/skygear-server#239)
+
+### Bug Fixes
+
+- Fix unable to start when LOAD_MODULES is not set
+
+    This happens because when LOAD_MODULES is not set the parsed module
+    list will be an array with an empty string. This causes configModule
+    to be called with an empty string.
+
+
 ## 0.20.0 (2016-12-20)
 
 ### Features
