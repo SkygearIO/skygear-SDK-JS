@@ -1,3 +1,13 @@
+## 0.22.1 (2017-02-15)
+
+### Bug Fixes
+
+- Fix timeout to container request (SkygearIO/skygear-server#271)
+
+### Other Notes
+
+- Update superagent version to ^3.4 (#166)
+
 ## 0.22.0 (2017-02-10)
 
 ### Features
