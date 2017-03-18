@@ -183,6 +183,12 @@ describe('Extended Record', function () {
         { level: AccessLevel.ReadOnlyLevel, public: true },
         { level: AccessLevel.ReadWriteLevel, role: 'Writer' }
       ],
+      "_default_access": [
+        {
+          "level": "read",
+          "public": true
+        }
+      ],
       content: 'hello world'
     });
   });
@@ -196,7 +202,8 @@ describe('Extended Record', function () {
 
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
+      _default_access: [{ level: AccessLevel.ReadOnlyLevel, public: true }], //eslint-disable-line
       reminderTime: {
         $type: "date",
         $date: "2016-06-03T12:00:00.000Z"
@@ -235,6 +242,12 @@ describe('Extended Record', function () {
     expect(n2.toJSON()).to.be.eql({
       _id: 'note/note-2',
       _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      "_default_access": [
+        {
+          "level": "read",
+          "public": true
+        }
+      ],
       replyTo: {
         "$id": "note/note-1",
         "$type": "ref"
@@ -250,7 +263,8 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
+      _default_access: [{ level: AccessLevel.ReadOnlyLevel, public: true }], //eslint-disable-line
       noteID: {
         $type: 'seq'
       }
@@ -264,7 +278,8 @@ describe('Extended Record', function () {
     note.noteID = new UnknownValue('money');
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
+      _default_access: [{ level: AccessLevel.ReadOnlyLevel, public: true }], //eslint-disable-line
       noteID: {
         $type: 'unknown',
         '$underlying_type': 'money'
