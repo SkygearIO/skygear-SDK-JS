@@ -196,7 +196,7 @@ describe('Extended Record', function () {
 
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
       reminderTime: {
         $type: "date",
         $date: "2016-06-03T12:00:00.000Z"
@@ -250,7 +250,7 @@ describe('Extended Record', function () {
     note.noteID = new Sequence();
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
       noteID: {
         $type: 'seq'
       }
@@ -264,7 +264,7 @@ describe('Extended Record', function () {
     note.noteID = new UnknownValue('money');
     expect(note.toJSON()).to.be.eql({
       _id: 'note/uid',
-      _access: [{ level: AccessLevel.ReadOnlyLevel, public: true }],
+      _access: null,
       noteID: {
         $type: 'unknown',
         '$underlying_type': 'money'

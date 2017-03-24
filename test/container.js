@@ -755,6 +755,25 @@ describe('Container acl', function () {
         });
       }
     }
+  }, {
+    pattern: 'http://skygear.dev/schema/default_access',
+    fixtures: function (match, params, headers, fn) {
+      let type = params['type'];
+      let defaultAccess = params['default_access'];
+      let acl = container.ACL.fromJSON(defaultAccess);
+      let Admin = container.Role.define('Admin');
+      if (type === 'note' &&
+        acl.hasPublicReadAccess() &&
+        acl.hasWriteAccessForRole(Admin)) {
+
+        return fn({
+          result: {
+            type: type,
+            default_access: defaultAccess   // eslint-disable-line camelcase
+          }
+        });
+      }
+    }
   }]);
 
   it('set record create access', function () {
@@ -774,47 +793,24 @@ describe('Container acl', function () {
     });
   });
 
-  it('get / set default ACL', function () {
-    let Admin = container.Role.define('Admin');
-    let ACL = container.ACL;
+  it('set default ACL', function () {
     let Note = container.Record.extend('note');
-
-    // Before changes
-    let acl = container.defaultACL;
-    assert.isTrue(acl.public);
-    assert.lengthOf(Object.keys(acl.roles), 0);
-
-    let aNote = new Note({
-      content: 'Hello World'
-    });
-
-    let recordACL = aNote.access;
-    assert.isTrue(recordACL.public);
-    assert.lengthOf(Object.keys(recordACL.roles), 0);
-
-    // changes
-    acl.setPublicNoAccess();
+    let Admin = container.Role.define('Admin');
+    let acl = new container.ACL();
+    acl.setPublicReadOnly();
     acl.setReadWriteAccessForRole(Admin);
-    container.setDefaultACL(acl);
 
-    // After changes
-    acl = container.defaultACL;
+    return container.setRecordDefaultAccess(Note, acl)
+      .then((result)=> {
+        let {type, default_access: defaultAccess} = result;
+        let responseACL = container.ACL.fromJSON(defaultAccess);
 
-    assert.isNotTrue(acl.public);
-    assert.lengthOf(Object.keys(acl.roles), 1);
-    assert.equal(acl.roles[Admin.name], AccessLevel.ReadWriteLevel);
-
-    aNote = new Note({
-      content: 'Hello World Again'
-    });
-
-    recordACL = aNote.access;
-    assert.isNotTrue(recordACL.public);
-    assert.lengthOf(Object.keys(recordACL.roles), 1);
-    assert.equal(recordACL.roles[Admin.name], AccessLevel.ReadWriteLevel);
-
-    // set back to default
-    container.setDefaultACL(new ACL());
+        assert.strictEqual(type, Note.recordType);
+        assert.ok(responseACL.hasPublicReadAccess());
+        assert.ok(responseACL.hasWriteAccessForRole(Admin));
+      }, function (err) {
+        throw new Error('set record default access failed', err);
+      });
   });
 });
 
