@@ -1,3 +1,16 @@
+## 0.22.2 (2017-03-31)
+
+### Features
+- Add url signing function to cloud (#165)
+
+### Bug Fixes
+- Fix request object's action only replace first `:` to `/`
+- Put content type from server to asset objec
+
+### Other Notes
+- Add documentation on container pubsub on/off (#177)
+
+
 ## 0.22.1 (2017-02-15)
 
 ### Bug Fixes
