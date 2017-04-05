@@ -180,7 +180,8 @@ describe('CommonTransport', function () {
       );
       expect(result).to.be.eql({
         result: {
-          _access: [{
+          _access: null,
+          _default_access: [{
             level: 'read',
             public: true
           }],

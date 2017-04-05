@@ -788,7 +788,7 @@ describe('Container acl', function () {
       content: 'Hello World'
     });
 
-    let recordACL = aNote.access;
+    let recordACL = aNote.defaultAccess;
     assert.isTrue(recordACL.public);
     assert.lengthOf(Object.keys(recordACL.roles), 0);
 
@@ -808,7 +808,7 @@ describe('Container acl', function () {
       content: 'Hello World Again'
     });
 
-    recordACL = aNote.access;
+    recordACL = aNote.defaultAccess;
     assert.isNotTrue(recordACL.public);
     assert.lengthOf(Object.keys(recordACL.roles), 1);
     assert.equal(recordACL.roles[Admin.name], AccessLevel.ReadWriteLevel);
