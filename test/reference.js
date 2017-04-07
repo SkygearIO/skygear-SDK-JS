@@ -55,10 +55,7 @@ describe('Reference', function () {
     record.key = ref;
     expect(record.toJSON()).to.eql({
       '_id': 'record/id',
-      '_access': [{
-        level: AccessLevel.ReadOnlyLevel,
-        public: true
-      }],
+      '_access': null,
       'key': {
         '$type': 'ref',
         '$id': 'record/id'
