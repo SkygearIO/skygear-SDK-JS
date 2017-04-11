@@ -349,6 +349,46 @@ describe('Container auth', function () {
       });
   });
 
+  it('should signup with profile successfully', function () {
+    return container
+      .signupWithUsernameAndProfile('username', 'passwd', {
+        'key': 'value'
+      })
+      .then(function (profile) {
+        assert.equal(
+          container.accessToken,
+          'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.id,
+          'user:id1'
+        );
+        assert.equal(profile.key, 'value');
+      }, function () {
+        throw new Error('Signup failed');
+      });
+  });
+
+  it('should signup with email and profile successfully', function () {
+    return container
+      .signupWithEmailAndProfile('user@email.com', 'passwd', {
+        'key': 'value'
+      })
+      .then(function (profile) {
+        assert.equal(
+          container.accessToken,
+          'uuid1');
+        assert.instanceOf(container.currentUser, container.User);
+        assert.equal(
+          container.currentUser.id,
+          'user:id1'
+        );
+        assert.equal(profile.key, 'value');
+      }, function () {
+        throw new Error('Signup failed');
+      });
+  });
+
   it('should signup anonymously', function () {
     return container
       .signupAnonymously()

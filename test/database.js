@@ -61,7 +61,21 @@ let request = mockSuperagent([{
     let records = params['records'];
     let firstRecord = records[0];
     if (records.length === 1) {
-      if (params['database_id'] === '_public' &&
+      if (firstRecord._id.indexOf('user/') === 0) {
+        return fn({
+          'result': [{
+            '_type': 'record',
+            '_created_at': '2014-09-27T17:40:00.000Z',
+            '_ownerID': 'rick.mak@gmail.com',
+            '_access': null,
+            '_transient': {
+              'synced': true,
+              'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+            },
+            ...firstRecord
+          }]
+        });
+      } else if (params['database_id'] === '_public' &&
       firstRecord['_id'] === 'note/failed-to-save') {
         return fn({
           'result': [{
