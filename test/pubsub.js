@@ -194,6 +194,30 @@ describe('Pubsub', function () {
     expect(ws.send).to.be.calledOnce();
   });
 
+  it('once should subscribe channel and return promise', function () {
+    sinon.spy(pubsub, 'subscribe');
+    const promise = pubsub.once('CHANNEL');
+    promise.catch(function (err) {
+      throw err;
+    });
+    assert(pubsub.subscribe.calledOnce);
+    assert(promise instanceof Promise);
+  });
+
+  it('once should unsubscribe on message and resolve promise', function () {
+    ws.send = function () {};
+    sinon.spy(pubsub, 'unsubscribe');
+    const promise = pubsub.once('CHANNEL');
+    promise.catch(function (err) {
+      throw err;
+    });
+    ws.onmessage({data: '{"channel": "CHANNEL", "data": "DATA"}'});
+    assert(pubsub.unsubscribe.calledOnce);
+    promise.then(function (data) {
+      assert(data === 'DATA');
+    });
+  });
+
 });
 
 describe('Pubsub connection', function () {
