@@ -1,4 +1,14 @@
 {
   "source": "./lib",
-  "destination": "./esdoc"
+  "destination": "./esdoc",
+  "experimentalProposal": {
+    "classProperties": true,
+    "objectRestSpread": true,
+    "decorators": true,
+    "doExpressions": true,
+    "functionBind": true,
+    "asyncGenerators": true,
+    "exportExtensions": true,
+    "dynamicImport": true
+  }
 }
