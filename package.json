@@ -31,7 +31,7 @@
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "dirty-chai": "^1.2.2",
-    "esdoc": "^0.4.8",
+    "esdoc": "^0.5.2",
     "gulp": "^3.6.0",
     "gulp-awspublish": "^3.2.0",
     "gulp-babel": "^6.1.2",
