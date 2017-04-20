@@ -26,6 +26,26 @@ describe('Query', function () {
   let Note = Record.extend('note');
   let User = Record.extend('user');
 
+  it('limit results', function () {
+    let q = new Query(Note);
+    q.limitResults(20);
+    expect(q.limit).to.be.equal(20);
+  });
+
+  it('skip results', function () {
+    let q = new Query(Note);
+    q.skipResults(42);
+    expect(q.offset).to.be.equal(42);
+    expect(q.limit).to.be.equal(50);
+  });
+
+  it('retrieve page', function () {
+    let q = new Query(Note);
+    q.retrievePage(3);
+    expect(q.page).to.be.equal(3);
+    expect(q.limit).to.be.equal(50);
+  });
+
   it('reject invalid recordType', function () {
     expect(function () {
       new Query({});
