@@ -30,6 +30,26 @@ describe('Container', function () {
       'we expected default endpoint');
   });
 
+  it('should set end-point', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.endPoint = 'https://skygear.example.com/';
+    assert.equal(
+      container.endPoint,
+      'https://skygear.example.com/',
+      'we expected endpoint to be set');
+  });
+
+  it('should auto append slash to end-point', function () {
+    let container = new Container();
+    container.autoPubsub = false;
+    container.endPoint = 'https://skygear.example.com';
+    assert.equal(
+      container.endPoint,
+      'https://skygear.example.com/',
+      'we expected endpoint to ends with slash');
+  });
+
   it('caches response by default', function () {
     let container = new Container();
     container.autoPubsub = false;
