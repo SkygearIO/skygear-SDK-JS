@@ -15,9 +15,11 @@
  */
 import {expect} from 'chai';
 import sinon from 'sinon';
-import store from '../lib/store';
+import getStore from '../lib/store';
 
 describe('Store', function () {
+  const store = getStore();
+
   it('maintains purgeable keys in LRU order', function () {
     expect(store._maintainLRUOrder([], [])).to.be.eql(
       []
