@@ -12,6 +12,7 @@
     "cloud.js",
     "bin.js",
     "asset.js",
+    "react-native.js",
     "dist"
   ],
   "main": "dist/index.js",
