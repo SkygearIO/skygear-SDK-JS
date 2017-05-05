@@ -1,4 +1,5 @@
 VERSION := $(shell git describe --always --tags)
+PG_POOL_MIN := 0
 
 DOCKER_COMPOSE_CMD := docker-compose \
 	-f docker-compose.dev.yml \
@@ -18,7 +19,7 @@ vendor:
 
 .PHONY: test
 test:
-	$(DOCKER_RUN) npm run test
+	$(DOCKER_RUN) PG_POOL_MIN=$(PG_POOL_MIN) npm run test
 	$(DOCKER_RUN) sh -c "npm run doc | grep -A 10 \"warning:\"; test \$$? -eq 1"
 
 .PHONY: clean
