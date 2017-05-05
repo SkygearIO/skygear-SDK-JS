@@ -347,8 +347,6 @@ describe('Container auth', function () {
           container.currentUser.id,
           'user:id1'
         );
-      }, function () {
-        throw new Error('Signup failed');
       });
   });
 
@@ -364,8 +362,6 @@ describe('Container auth', function () {
           container.currentUser.id,
           'user:id1'
         );
-      }, function () {
-        throw new Error('Signup failed');
       });
   });
 
@@ -384,8 +380,6 @@ describe('Container auth', function () {
           'user:id1'
         );
         assert.equal(profile.key, 'value');
-      }, function () {
-        throw new Error('Signup failed');
       });
   });
 
@@ -404,8 +398,6 @@ describe('Container auth', function () {
           'user:id1'
         );
         assert.equal(profile.key, 'value');
-      }, function () {
-        throw new Error('Signup failed');
       });
   });
 
@@ -421,8 +413,6 @@ describe('Container auth', function () {
           container.currentUser.id,
           'user:id2'
         );
-      }, function () {
-        throw new Error('Signup failed');
       });
   });
 
