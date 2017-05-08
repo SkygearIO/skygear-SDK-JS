@@ -118,15 +118,45 @@ describe('Asset Signer', function () {
     it('signs url', function () {
       const signer = new S3Signer(options);
       const clock = sinon.useFakeTimers(1481095934000);
-      const signed = signer.sign('index.html');
+      const signed = signer.sign('an evil name with spaces');
       return signed.then((value)=> {
         clock.restore();
         expect(value).to.equal('http://s3-mock-s3-region.amazonaws.com/'
-          + 'mock-s3-bucket/index.html'
+          + 'mock-s3-bucket/an%20evil%20name%20with%20spaces'
           + '?Expires=1481149934'
           + '&AWSAccessKeyId=mock_s3_access_key'
-          + '&Signature=GCm5jGJRy9KT7TDAAJHC6JeqL9k%3D');
+          + '&Signature=5%2FVXqVwWFllMifaVWugTuMNR5FI%3D');
       });
+    });
+
+    it('respects url prefix protocol', function () {
+      const cases = [
+        'https://your-domain.com/static/',
+        'https://your-domain.com/static'
+      ];
+      const expected = 'https://your-domain.com/static/'
+        + 'an%20evil%20name%20with%20spaces'
+        + '?Expires=1481149934'
+        + '&AWSAccessKeyId=mock_s3_access_key'
+        + '&Signature=5%2FVXqVwWFllMifaVWugTuMNR5FI%3D';
+
+      let p = Promise.resolve();
+      for (let i = 0; i < cases.length; ++i) {
+        const c = cases[i];
+        p = p.then(() => {
+          const newOptions = Object.assign({}, options, {
+            assetStoreS3URLPrefix: c
+          });
+          const signer = new S3Signer(newOptions);
+          const clock = sinon.useFakeTimers(1481095934000);
+          const signed = signer.sign('an evil name with spaces');
+          return signed.then((value) => {
+            clock.restore();
+            expect(value).to.equal(expected);
+          });
+        });
+      }
+      return p;
     });
   });
 
