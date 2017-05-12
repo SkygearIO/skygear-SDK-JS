@@ -1,5 +1,5 @@
 {
-  "name": "skygear",
+  "name": "skygear-build",
   "version": "0.23.0",
   "description": "JS SDK of Skygear services",
   "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",

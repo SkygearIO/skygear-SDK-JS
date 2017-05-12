@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./dist/asset_collect.js');
+require('skygear-core/dist/asset_collect.js');
