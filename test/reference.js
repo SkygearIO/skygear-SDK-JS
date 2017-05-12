@@ -15,9 +15,9 @@
  */
 /*eslint-disable no-new, no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
-import Record from '../lib/record';
-import Reference from '../lib/reference';
-import {AccessLevel} from '../lib/acl';
+import Record from '../packages/skygear-core/lib/record';
+import Reference from '../packages/skygear-core/lib/reference';
+import {AccessLevel} from '../packages/skygear-core/lib/acl';
 
 describe('Reference', function () {
   let record = new Record('record', {_id: 'record/id'});

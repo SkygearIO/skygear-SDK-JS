@@ -15,7 +15,7 @@
  */
 /*eslint-disable camelcase */
 import {expect} from 'chai';
-import {ErrorCodes, SkygearError} from '../lib/error';
+import {ErrorCodes, SkygearError} from '../packages/skygear-core/lib/error';
 
 describe('SkygearError', function () {
   it('constructor with all parameters', function () {

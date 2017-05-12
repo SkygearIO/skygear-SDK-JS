@@ -16,12 +16,12 @@
 /*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
-import Record from '../lib/record';
-import Role from '../lib/role';
-import Reference from '../lib/reference';
-import Geolocation from '../lib/geolocation';
-import {Sequence, UnknownValue} from '../lib/type';
-import {AccessLevel} from '../lib/acl';
+import Record from '../packages/skygear-core/lib/record';
+import Role from '../packages/skygear-core/lib/role';
+import Reference from '../packages/skygear-core/lib/reference';
+import Geolocation from '../packages/skygear-core/lib/geolocation';
+import {Sequence, UnknownValue} from '../packages/skygear-core/lib/type';
+import {AccessLevel} from '../packages/skygear-core/lib/acl';
 
 const v4Spec = /[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
 

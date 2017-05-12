@@ -15,8 +15,8 @@
  */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import sinon from 'sinon';
-import Pubsub from '../lib/pubsub';
-import Container from '../lib/container';
+import Pubsub from '../packages/skygear-core/lib/pubsub';
+import Container from '../packages/skygear-core/lib/container';
 
 describe('Pubsub', function () {
   var fn1 = function () { };
