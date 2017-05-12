@@ -1,5 +1,5 @@
 {
-  "source": "./lib",
+  "source": "./packages/skygear-core/lib",
   "destination": "./esdoc",
   "experimentalProposal": {
     "classProperties": true,
