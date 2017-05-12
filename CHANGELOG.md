@@ -1,3 +1,17 @@
+## 0.23.1 (2017-05-12)
+
+### Incompatible Changes
+
+Separate react-native related logic from main code (#160)
+
+Skygear has special integration with React Native to leverage the
+extended capability of the platform. Instead of just importing the normal
+skygear, you should do this
+
+```js
+import skygear from ‘skygear/react-native’
+```
+
 ## 0.23.0 (2017-04-20)
 
 ### Features
