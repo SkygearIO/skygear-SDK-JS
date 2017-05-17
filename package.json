@@ -70,7 +70,7 @@
     "test": "gulp --type dev",
     "deploy": "gulp deploy --type production",
     "deploy-latest": "gulp deploy --type production --latest",
-    "bootstrap": "lerna bootstrap"
+    "lerna": "lerna"
   },
   "bin": {
     "skygear-node": "./bin.js",
