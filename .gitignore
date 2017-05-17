@@ -5,3 +5,4 @@ tmp
 esdoc
 skygear-*.tgz
 npm-debug.log
+lerna-debug.log
