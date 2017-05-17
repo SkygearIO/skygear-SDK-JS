@@ -15,9 +15,9 @@
  */
 /*eslint-disable camelcase */
 import {expect} from 'chai';
-import Role from '../lib/role';
-import User from '../lib/user';
-import ACL, {AccessLevel} from '../lib/acl';
+import Role from '../packages/skygear-core/lib/role';
+import User from '../packages/skygear-core/lib/user';
+import ACL, {AccessLevel} from '../packages/skygear-core/lib/acl';
 
 describe('ACL', function () {
   let Driver = Role.define('Driver');

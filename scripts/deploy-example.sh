@@ -8,7 +8,7 @@ cat ssh_config >> ~/.ssh/config
 # Put the example into /public_html
 mkdir -p /tmp/example/public_html
 cp -r example/ /tmp/example/public_html
-cp -r dist/ /tmp/example/public_html
+cp -r ./packages/skygear/dist/ /tmp/example/public_html
 
 cd /tmp/example
 echo "import skygear" > __init__.py

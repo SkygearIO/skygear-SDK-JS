@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
-import Geolocation from '../lib/geolocation';
+import Geolocation from '../packages/skygear-core/lib/geolocation';
 
 describe('Geolocation', function () {
   it('construct Geolocation', function () {

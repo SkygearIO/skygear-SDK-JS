@@ -15,6 +15,7 @@ endif
 .PHONY: vendor
 vendor:
 	$(DOCKER_RUN) npm install
+	$(DOCKER_RUN) npm run bootstrap
 
 .PHONY: test
 test:
@@ -23,11 +24,11 @@ test:
 
 .PHONY: clean
 clean:
-	-rm -rf dist
+	-rm -rf packages/*/dist
 
 .PHONY: build
 build:
-	$(DOCKER_RUN) npm pack
+	$(DOCKER_RUN) sh -c "cd packages/skygear && npm pack"
 
 .PHONY: doc
 doc:

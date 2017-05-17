@@ -1,12 +1,14 @@
 var gulp = require('gulp');
+var path = require('path');
 
 var awsinvalidate = require('gulp-cloudfront-invalidate-aws-publish');
 var awspublish = require('gulp-awspublish');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
+var merge = require('merge-stream');
 
 var config = require('../config');
-var packagejson = require('../../package.json')
+var packagejson = require('../../package.json');
 
 gulp.task('deploy', ['minify'], function() {
   var publisher = awspublish.create({
@@ -16,19 +18,23 @@ gulp.task('deploy', ['minify'], function() {
     }
   });
 
-  return gulp.src(config.dest + '/' + config.minified.name + '*')
-    .pipe(rename(function(path) {
-      var version = packagejson.version;
-      if (gutil.env.latest) {
-        version = 'latest';
-      }
+  var packageConfigs = config.getPackageConfigs();
+  var streams = packageConfigs.map(function(packageConfigs) {
+    return gulp.src(config.minifiedDest + '*')
+      .pipe(rename(function(filePath) {
+        var version = packagejson.version;
+        if (gutil.env.latest) {
+          version = 'latest';
+        }
 
-      path.dirname = config.cdn.path + '/skygear/' + version;
-    }))
-    .pipe(publisher.publish())
-    .pipe(awspublish.reporter())
-    .pipe(awsinvalidate({
-      distribution: config.cdn.distribution
-    }));
+        filePath.dirname = path.join(config.cdnPath, version);
+      }))
+      .pipe(publisher.publish())
+      .pipe(awspublish.reporter())
+      .pipe(awsinvalidate({
+        distribution: config.cdn.distribution
+      }));
+  });
+  return merge(streams);
 });
 
