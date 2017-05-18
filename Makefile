@@ -29,7 +29,7 @@ clean:
 
 .PHONY: build
 build:
-	$(DOCKER_RUN) sh -c "cd packages/skygear && npm pack"
+	$(DOCKER_RUN) sh -c "lerna exec -- npm pack"
 
 .PHONY: doc
 doc:

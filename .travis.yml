@@ -15,7 +15,8 @@ script:
   - make test
 
 before_deploy:
-  - npm pack
+  - npm run lerna bootstrap
+  - npm run lerna exec -- npm pack
 
 deploy:
   - provider: releases
