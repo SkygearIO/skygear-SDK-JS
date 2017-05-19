@@ -104,26 +104,140 @@ class SkygearRequest {
  * interface for setting response headers and body.
  */
 export class SkygearResponse {
-  constructor(options) {
+  /**
+   * Creates an instance of SkygearResponse.
+   *
+   * @param {Object} [options={}] - options to initialize the response
+   * @param {number} [options.statusCode=200] - HTTP status code of the response
+   * @param {string} [options.body=''] - HTTP response body
+   * @param {Object} [options.headers={}] - HTTP response headers
+   */
+  constructor(options = {}) {
+    /**
+     * The HTTP status code of the response.
+     *
+     * @type {number}
+     */
     this.statusCode = options.statusCode || 200;
+
+    /**
+     * The HTTP headers of the response.
+     *
+     * @type {Object}
+     */
     this.headers = options.headers || {};
+
+    /**
+     * The HTTP body of the response.
+     *
+     * @type {string}
+     */
     this.body = options.body || '';
+
+    this._isSkygearResponse = true;
   }
 
+  /**
+   * Set a HTTP header to the response.
+   *
+   * @param {string} name - HTTP header name
+   * @param {string} value - HTTP header value
+   */
   setHeader(name, value) {
     this.headers[name] = value;
   }
 
+  /**
+   * Get a HTTP header from the response.
+   *
+   * @param {string} name - HTTP header name
+   * @return {string} HTTP header value
+   */
   getHeader(name) {
     return this.headers[name];
   }
 
+  /**
+   * Remove a HTTP header from the response.
+   *
+   * @param {string} name - HTTP header name
+   */
   removeHeader(name) {
     delete this.headers[name];
   }
 
+  /**
+   * Write a chunk of data into the response. The chunk will be appended
+   * to any existing data in the response body.
+   *
+   * @param {string} chunk - data to append to the response body
+   */
   write(chunk) {
     this.body += chunk;
+  }
+
+  /**
+   * Convert the response to a result JSON that is suitable for plugin
+   * transport.
+   *
+   * @return {Object} result JSON for plugin transport
+   */
+  toResultJSON() {
+    const header = {};
+    const status = this.statusCode || 200;
+    const body = b64EncodeUnicode(this.body);
+
+    Object.keys(this.headers).forEach((perKey) => {
+      header[perKey] = this.headers[perKey];
+    });
+
+    return {
+      header,
+      status,
+      body
+    };
+  }
+
+  /**
+   * Wrap response body into a SkygearResponse.
+   *
+   * If the specified value is a SkygearResponse, the same object will
+   * be returned.
+   *
+   * @param result - SkygearResponse or response body
+   * @return {!SkygearResponse} a SkygearResponse
+   */
+  static wrap(result) {
+    if (SkygearResponse.isInstance(result)) {
+      return result;
+    } else if (typeof result === 'string') {
+      return new SkygearResponse({
+        statusCode: 200,
+        body: result,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8'
+        }
+      });
+    }
+
+    return new SkygearResponse({
+      statusCode: 200,
+      body: JSON.stringify(result),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  /**
+   * Returns whether the specified object is a SkygearResponse.
+   *
+   * @param obj - object to be determined
+   * @return {boolean} true if the object is a SkygearResponse
+   *
+   */
+  static isInstance(obj) {
+    return obj instanceof SkygearResponse || !!obj._isSkygearResponse;
   }
 }
 
@@ -275,29 +389,8 @@ export default class CommonTransport {
       req,
       options
     ).then((result) => {
-      const headers = {};
-      let body;
-      let statusCode = 200;
-      if (result instanceof SkygearResponse) {
-        statusCode = result.statusCode;
-        Object.keys(result.headers).forEach((perKey) => {
-          headers[perKey] = result.headers[perKey];
-        });
-        body = b64EncodeUnicode(result.body);
-      } else if (typeof result === 'string') {
-        headers['Content-Type'] = ['text/plain; charset=utf-8'];
-        body = b64EncodeUnicode(result);
-      } else {
-        headers['Content-Type'] = ['application/json'];
-        body = b64EncodeUnicode(JSON.stringify(result));
-      }
-
       return {
-        result: {
-          status: statusCode,
-          header: headers,
-          body: body
-        }
+        result: SkygearResponse.wrap(result).toResultJSON()
       };
     });
   }

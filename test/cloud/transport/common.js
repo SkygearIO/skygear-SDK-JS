@@ -19,6 +19,8 @@ import sinon from 'sinon';
 import {Registry} from '../../../packages/skygear-core/lib/cloud/registry';
 import CommonTransport
   from '../../../packages/skygear-core/lib/cloud/transport/common';
+import { SkygearResponse }
+  from '../../../packages/skygear-core/lib/cloud/transport/common';
 
 describe('CommonTransport', function () {
   it('should throw Error initHandler', function (done) {
@@ -288,6 +290,111 @@ describe('CommonTransport', function () {
       });
       done();
     });
+  });
+});
+
+describe('SkygearResponse', function () {
+  it('should create default response', function () {
+    const r = new SkygearResponse();
+    expect(r.statusCode).to.equal(200);
+    expect(r.body).to.equal('');
+    expect(r.headers).to.eql({});
+  });
+
+  it('should create response with options', function () {
+    const r = new SkygearResponse({
+      statusCode: 400,
+      body: 'Hello World',
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
+    expect(r.statusCode).to.equal(400);
+    expect(r.body).to.equal('Hello World');
+    expect(r.headers).to.eql({
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  it('should get header', function () {
+    const r = new SkygearResponse({
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
+    expect(r.getHeader('Content-Type')).to.eql('text/plain');
+  });
+
+  it('should set header', function () {
+    const r = new SkygearResponse();
+    r.setHeader('Content-Type', 'text/plain');
+    expect(r.headers).to.eql({
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  it('should remove header', function () {
+    const r = new SkygearResponse({
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
+    r.removeHeader('Content-Type');
+    expect(r.headers).to.eql({});
+  });
+
+  it('should write body', function () {
+    const r = new SkygearResponse();
+    r.write('Hello');
+    r.write(' World');
+    expect(r.body).to.eql('Hello World');
+  });
+
+  it('should return result JSON', function () {
+    const r = new SkygearResponse({
+      statusCode: 400,
+      body: 'Hello World',
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
+    expect(r.toResultJSON()).to.eql({
+      header: {
+        'Content-Type': 'text/plain'
+      },
+      status: 400,
+      body: 'SGVsbG8gV29ybGQ=' // 'Hello World'
+    });
+  });
+
+  it('should wrap another SkygearResponse', function () {
+    const r = new SkygearResponse();
+    expect(SkygearResponse.wrap(r)).to.eql(r);
+  });
+
+  it('should wrap plain object', function () {
+    const r = SkygearResponse.wrap({
+      success: 'OK'
+    });
+    expect(r.statusCode).to.equal(200);
+    expect(r.body).to.equal('{"success":"OK"}');
+    expect(r.headers).to.eql({
+      'Content-Type': 'application/json'
+    });
+  });
+
+  it('should wrap string', function () {
+    const r = SkygearResponse.wrap('Hello World');
+    expect(r.statusCode).to.equal(200);
+    expect(r.body).to.equal('Hello World');
+    expect(r.headers).to.eql({
+      'Content-Type': 'text/plain; charset=utf-8'
+    });
+  });
+
+  it('should check if obj is a SkygearResponse', function () {
+    expect(SkygearResponse.isInstance(new SkygearResponse())).to.equal(true);
+    expect(SkygearResponse.isInstance({})).to.equal(false);
   });
 });
 
