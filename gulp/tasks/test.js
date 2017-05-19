@@ -6,6 +6,7 @@ var plumber = require('gulp-plumber');
 var babel = require('gulp-babel');
 var preprocess = require('gulp-preprocess');
 var isparta = require('isparta');
+var merge = require('merge-stream');
 
 var config = require('../config');
 var context = require('../context');
@@ -20,13 +21,17 @@ chai.use(dirtyChai);
 chai.use(sinonChai);
 
 gulp.task('pre-test', function () {
-  return gulp.src(config.src)
+  var packageConfigs = config.getPackageConfigs();
+  var streams = packageConfigs.map(function(packageConfig) {
+  return gulp.src(packageConfig.src)
     .pipe(preprocess({context: context[gutil.env.type]}))
     .pipe(istanbul({
       includeUntested: true,
       instrumenter: isparta.Instrumenter
     }))
     .pipe(istanbul.hookRequire());
+  });
+  return merge(streams);
 });
 
 gulp.task('test', ['pre-test'], function (cb) {

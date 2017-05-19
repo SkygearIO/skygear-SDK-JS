@@ -14,6 +14,8 @@ endif
 
 .PHONY: vendor
 vendor:
+	$(DOCKER_RUN) npm install lerna
+	$(DOCKER_RUN) npm run lerna bootstrap
 	$(DOCKER_RUN) npm install
 
 .PHONY: test
@@ -23,11 +25,11 @@ test:
 
 .PHONY: clean
 clean:
-	-rm -rf dist
+	-rm -rf packages/*/dist
 
 .PHONY: build
 build:
-	$(DOCKER_RUN) npm pack
+	$(DOCKER_RUN) sh -c "lerna exec -- npm pack"
 
 .PHONY: doc
 doc:

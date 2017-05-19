@@ -15,7 +15,7 @@
  */
 import {expect} from 'chai';
 import sinon from 'sinon';
-import Cache from '../lib/cache';
+import Cache from '../packages/skygear-core/lib/cache';
 
 describe('Cache', function () {
 

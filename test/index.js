@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {assert} from 'chai';
-import skygear from '../lib/index';
+import skygear from '../packages/skygear-core/lib/index';
 
 
 describe('skygear', function () {

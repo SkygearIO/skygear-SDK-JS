@@ -15,9 +15,9 @@
  */
 /*eslint-disable no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
-import Geolocation from '../lib/geolocation';
-import {Sequence, UnknownValue} from '../lib/type';
-import {toJSON, fromJSON} from '../lib/util';
+import Geolocation from '../packages/skygear-core/lib/geolocation';
+import {Sequence, UnknownValue} from '../packages/skygear-core/lib/type';
+import {toJSON, fromJSON} from '../packages/skygear-core/lib/util';
 
 describe('util', function () {
 

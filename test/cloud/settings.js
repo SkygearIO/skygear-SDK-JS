@@ -15,7 +15,7 @@
  */
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
-import {parseInteger} from '../../lib/cloud/settings';
+import {parseInteger} from '../../packages/skygear-core/lib/cloud/settings';
 
 describe('setting', function () {
   it('parseInteger with default', function () {

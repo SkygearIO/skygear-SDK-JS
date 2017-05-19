@@ -6,7 +6,8 @@ RUN \
     chmod +x /usr/local/bin/tini
 
 COPY skygear-*.tgz /tmp/
-RUN find /tmp -name "skygear-*.tgz" -exec npm install -g "{}" \;
+RUN find /tmp -regex ".*/skygear-core-[^-]*.tgz" -exec npm install -g "{}" \;
+RUN find /tmp -regex ".*/skygear-[^-]*.tgz" -exec npm install -g "{}" \;
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
