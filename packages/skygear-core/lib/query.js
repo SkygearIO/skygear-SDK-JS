@@ -32,11 +32,11 @@ import Record from './record';
 */
 
 export default class Query {
- 
+
   /**
    * constructor - Create Query object from a Record Class
    * @param {Record} recordCls - Record Class
-   * 
+   *
    */
   constructor(recordCls) {
     if (!Record.validType(recordCls.recordType)) {
@@ -56,10 +56,9 @@ export default class Query {
     this.page = 0;
   }
 
-
   /**
    * like - Set a like predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -71,7 +70,7 @@ export default class Query {
 
   /**
    * notLike - Set a negated like predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -87,10 +86,10 @@ export default class Query {
 
   /**
    * caseInsensitiveLike - Set a case-insensitive like predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
-   */ 
+   */
 
   caseInsensitiveLike(key, value) {
     this._predicate.push(['ilike', {$type: 'keypath', $val: key}, value]);
@@ -99,7 +98,7 @@ export default class Query {
 
   /**
    * caseInsensitiveNotLike - Set a case-insensitive negated like predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -114,7 +113,7 @@ export default class Query {
 
   /**
    * equalTo - Set an equal predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -126,7 +125,7 @@ export default class Query {
 
   /**
    * notEqualTo - Set a not equal predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -136,14 +135,13 @@ export default class Query {
     return this;
   }
 
-
   /**
    * greaterThan - Set a greater than predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
- 
+
   greaterThan(key, value) {
     this._predicate.push(['gt', {$type: 'keypath', $val: key}, value]);
     return this;
@@ -152,7 +150,7 @@ export default class Query {
 
   /**
    * greaterThanOrEqualTo - Set a greater than or equal to predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -164,7 +162,7 @@ export default class Query {
 
   /**
    * lessThan - Set a less than predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -176,7 +174,7 @@ export default class Query {
 
   /**
    * lessThanOrEqualTo - Set a less than or equal to predicate
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
    */
@@ -186,10 +184,9 @@ export default class Query {
     return this;
   }
 
-
   /**
    * distanceLessThan - Set a distance less than query
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {Geolocation} loc
    * @param  {Number}  distance
    * @return {Query}  self
@@ -211,7 +208,7 @@ export default class Query {
 
   /**
    * distanceGreaterThan - Set a distance greater than query
-   * @param  {string} key 
+   * @param  {string} key
    * @param  {geolocation} loc
    * @param  {Number}  distance
    * @return {Query}  self
@@ -298,12 +295,12 @@ export default class Query {
   }
 
 
-  /** 
-   * notContainsValue - Set a not contains value predicate 
-   * @throws {Error}  Throws Error if needle is not a string. 
-   * @param  {string} key 
-   * @param  {string} needle 
-   * @return {Query}  self 
+  /**
+   * notContainsValue - Set a not contains value predicate
+   * @throws {Error}  Throws Error if needle is not a string.
+   * @param  {string} key
+   * @param  {string} needle
+   * @return {Query}  self
    */
 
   notContainsValue(key, needle) {
@@ -322,12 +319,11 @@ export default class Query {
     return this;
   }
 
-
-  /** 
-   * havingRelation - Set a having relation predicate 
-   * @param  {string} key 
+  /**
+   * havingRelation - Set a having relation predicate
+   * @param  {string} key
    * @param  {string} rel - relationship, either 'friend' or 'follow'
-   * @return {Query}  self 
+   * @return {Query}  self
    */
 
   havingRelation(key, rel) {
@@ -347,11 +343,11 @@ export default class Query {
     return this;
   }
 
-  /** 
-   * notHavingRelation - Set a not having relation predicate 
-   * @param  {string} key 
+  /**
+   * notHavingRelation - Set a not having relation predicate
+   * @param  {string} key
    * @param  {string} rel - relationship, either 'friend' or 'follow'
-   * @return {Query}  self 
+   * @return {Query}  self
    */
 
   notHavingRelation(key, rel) {
@@ -374,14 +370,12 @@ export default class Query {
     return this;
   }
 
-  /** 
+  /**
    * havingEmails - Set a having email predicate, for {user} record only.
    * @throw  {Error}  throw Error if record type is not 'user'
    * @param  {Array}  emails - emails of users.
-   * @return {Query}  self 
+   * @return {Query}  self
    */
-
-
 
   havingEmails(emails) {
     if (this.recordType !== 'user') {
@@ -399,11 +393,11 @@ export default class Query {
     return this;
   }
 
-  /** 
+  /**
    * havingUsernames - Set a having username predicate, for {user} record only.
    * @throw  {Error}  throw Error if record type is not 'user'
    * @param  {Array}  usernames - usernames of users.
-   * @return {Query}  self 
+   * @return {Query}  self
    */
 
   havingUsernames(usernames) {
@@ -425,8 +419,8 @@ export default class Query {
   /**
    * addDescending -  Set descending predicate
    * @param {string} key
-   * @return {Query} self 
-   */ 
+   * @return {Query} self
+   */
 
   addDescending(key) {
     this._sort.push([
@@ -436,12 +430,11 @@ export default class Query {
     return this;
   }
 
-
   /**
    * addAscending -  Set ascending predicate
    * @param {string} key
-   * @return {Query} self 
-   */ 
+   * @return {Query} self
+   */
   addAscending(key) {
     this._sort.push([
       {$type: 'keypath', $val: key},
@@ -450,14 +443,12 @@ export default class Query {
     return this;
   }
 
-
-
   /**
    * addDescendingByDistance -  Set descending by distance predicate
    * @param {string} key
    * @param {Geolocation} loc
-   * @return {Query} self 
-   */ 
+   * @return {Query} self
+   */
   addDescendingByDistance(key, loc) {
     this._sort.push([
       [
@@ -471,13 +462,12 @@ export default class Query {
     return this;
   }
 
-
   /**
    * addAscendingByDistance -  Set ascending by distance predicate
    * @param {string} key
    * @param {Geolocation} loc
-   * @return {Query} self 
-   */ 
+   * @return {Query} self
+   */
   addAscendingByDistance(key, loc) {
     this._sort.push([
       [
@@ -492,11 +482,11 @@ export default class Query {
   }
 
   /**
-   * transientInclude - transient include 
+   * transientInclude - transient include
    * @param {string} key
    * @param {string} mapToKey
    * @return {Query} this
-   */ 
+   */
 
   transientInclude(key, mapToKey) {
     mapToKey = mapToKey || key;
@@ -507,14 +497,13 @@ export default class Query {
     return this;
   }
 
-
   /**
    * transientIncludeDistance - transient include distance
    * @param {string} key
    * @param {string} mapToKey
    * @param {Geolocation} loc
    * @return {Query} this
-   */ 
+   */
 
   transientIncludeDistance(key, mapToKey, loc) {
     mapToKey = mapToKey || key;
@@ -549,7 +538,7 @@ export default class Query {
   /**
    * predicate - Preicate Function
    * @return {Array} Array of {precidate}
-   */ 
+   */
 
   get predicate() {
     const _predicate = _.clone(this._predicate);
@@ -572,16 +561,15 @@ export default class Query {
     }
   }
 
-
   /**
    * hash - Compute Query object hash code
    * @return {string} md5 digest of serialized JSON
-   */ 
+   */
 
   get hash() {
     return md5(JSON.stringify(this.toJSON()));
   }
-  
+
   /**
    * toJSON - Serialize Query object
    * @return {object}
@@ -681,7 +669,6 @@ export default class Query {
 
     return query;
   }
-
 
   /**
    * or - Return a disjunctive query from queries.
