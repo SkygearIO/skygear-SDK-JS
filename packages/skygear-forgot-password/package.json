@@ -1,33 +1,22 @@
 {
-  "name": "skygear",
+  "name": "skygear-forgot-password",
   "version": "0.23.0",
-  "description": "JS SDK of Skygear services",
+  "description": "Forgot password for Skygear JS SDK",
   "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SkygearIO/skygear-SDK-JS.git"
   },
   "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
-  "files": [
-    "cloud.js",
-    "bin.js",
-    "asset.js",
-    "react-native.js",
-    "dist"
-  ],
   "main": "dist/index.js",
   "keywords": [
     "SDK",
-    "skygear"
+    "skygear",
+    "forgot password"
   ],
-  "bin": {
-    "skygear-node": "./bin.js",
-    "skygear-asset": "./asset.js"
-  },
   "license": "Apache-2.0",
   "dependencies": {
-    "skygear-core": "^0.23.0",
-    "skygear-forgot-password": "^0.23.0"
+    "skygear-core": "^0.23.0"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
