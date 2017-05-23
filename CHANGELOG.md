@@ -1,3 +1,38 @@
+## 0.24.1 (2017-05-23)
+
+### Incompatible Changes
+
+Separate react-native related logic from main code (#160)
+
+Skygear has special integration with React Native to leverage the
+extended capability of the platform. Instead of just importing the normal
+skygear, you should do this
+
+```js
+import skygear from ‘skygear/react-native’
+```
+
+### Features
+
+- Using lerna to make repo ready for multiple-packages (#192)
+- Support plugin only request during plugin initialization (#189)
+- Make S3 signer respect url prefix (#214)
+- Read `.env` as in skygear-server (#179)
+- Allow config of pg pool size (#201)
+- Separate react-native related logic from main code
+
+### Bug Fixes
+
+- Fix unable to use SkygearResponse returned from handler
+
+### Other Notes
+
+- Fix formating for lint
+- Query doc updated
+- Refactor the usage of closure and promise
+- Upgrade to loadash v4
+- Add trailing slash to end-point if missing
+
 ## 0.23.0 (2017-04-20)
 
 ### Features
