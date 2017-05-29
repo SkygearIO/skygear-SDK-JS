@@ -52,3 +52,7 @@ Object.keys(registry.staticAsset).forEach(function (key) {
     console.log(`Copied ${src} into ${dest}`);
   });
 });
+
+// Force the process to exit because we might have imported code
+// that queued a callback.
+process.exit();
