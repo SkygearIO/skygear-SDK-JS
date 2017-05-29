@@ -9,7 +9,7 @@ extended capability of the platform. Instead of just importing the normal
 skygear, you should do this
 
 ```js
-import skygear from ‘skygear/react-native’
+import skygear from 'skygear/react-native'
 ```
 
 ### Features
