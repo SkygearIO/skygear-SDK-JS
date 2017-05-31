@@ -98,7 +98,7 @@ export default class Database {
   _presave(record) {
     // for every (key, value) pair, process the pair in a Promise
     // the Promise should be resolved by the transformed [key, value] pair
-    let tasks = _.map(record, function (value, key) {
+    let tasks = _.map(record, (value, key)=> {
       if (value instanceof Asset) {
         return this._presaveAssetTask(key, value);
       } else {
