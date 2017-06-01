@@ -34,6 +34,8 @@ import {Sequence} from './type';
 import {ErrorCodes, SkygearError} from './error';
 import {EventHandle} from './util';
 
+import {AuthContainer} from './auth';
+
 export const USER_CHANGED = 'userChanged';
 
 export default class Container {
@@ -42,10 +44,7 @@ export default class Container {
     this.url = '/* @echo API_URL */';
     this.apiKey = null;
     this.token = null;
-    this._accessToken = null;
-    this._user = null;
     this._deviceID = null;
-    this._getAccessToken();
     this._getDeviceID();
     this._privateDB = null;
     this._publicDB = null;
@@ -56,6 +55,8 @@ export default class Container {
     this.autoPubsub = true;
     this._cacheResponse = true;
     this.ee = ee({});
+
+    this._auth = new AuthContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -72,6 +73,10 @@ export default class Container {
     };
   }
 
+  get auth() {
+    return this._auth;
+  }
+
   config(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
@@ -81,8 +86,8 @@ export default class Container {
     }
 
     let promises = [
-      this._getUser(),
-      this._getAccessToken(),
+      this.auth._getUser(),
+      this.auth._getAccessToken(),
       this._getDeviceID()
     ];
     return Promise.all(promises).then(()=> {
@@ -104,173 +109,6 @@ export default class Container {
   onUserChanged(listener) {
     this.ee.on(USER_CHANGED, listener);
     return new EventHandle(this.ee, USER_CHANGED, listener);
-  }
-
-  signupWithUsername(username, password) {
-    return this._signup(username, null, password);
-  }
-
-  signupWithEmail(email, password) {
-    return this._signup(null, email, password);
-  }
-
-  signupWithUsernameAndProfile(username, password, profile = {}) {
-    return this.signupWithUsername(username, password)
-    .then((user)=>
-      this._createProfile(user, profile)
-    );
-  }
-
-  signupWithEmailAndProfile(email, password, profile = {}) {
-    return this.signupWithEmail(email, password)
-    .then((user)=>
-      this._createProfile(user, profile)
-    );
-  }
-
-  signupAnonymously() {
-    return this._signup(null, null, null);
-  }
-
-  _signup(username, email, password) {
-    return this.makeRequest('auth:signup', {
-      username: username,
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
-  }
-
-  _createProfile(user, profile) {
-    let record = new this.UserRecord({
-      _id: 'user/' + user.id,
-      ...profile
-    });
-    return this.publicDB.save(record);
-  }
-
-  _authResolve(body) {
-    return Promise.all([
-      this._setUser(body.result),
-      this._setAccessToken(body.result.access_token)
-    ]).then(()=> {
-      this.reconfigurePubsubIfNeeded();
-      return this.currentUser;
-    });
-  }
-
-  loginWithUsername(username, password) {
-    return this.makeRequest('auth:login', {
-      username: username,
-      password: password
-    }).then(this._authResolve.bind(this));
-  }
-
-  loginWithEmail(email, password) {
-    return this.makeRequest('auth:login', {
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
-  }
-
-  loginWithProvider(provider, authData) {
-    return this.makeRequest('auth:login', {
-      provider: provider,
-      auth_data: authData
-    }).then(this._authResolve.bind(this));
-  }
-
-  logout() {
-    return this.unregisterDevice()
-    .then(()=> {
-      this.clearCache();
-      return this.makeRequest('auth:logout', {});
-    }, (error)=> {
-      if (error.code === ErrorCodes.InvalidArgument &&
-          error.message === 'Missing device id'
-      ) {
-        this.clearCache();
-        return this.makeRequest('auth:logout', {});
-      }
-      return Promise.reject(error);
-    })
-    .then(()=> {
-      return Promise.all([
-        this._setAccessToken(null),
-        this._setUser(null)
-      ]).then(()=> null);
-    }, (err)=> {
-      return this._setAccessToken(null).then(()=> {
-        return Promise.reject(err);
-      });
-    });
-  }
-
-  whoami() {
-    return this.makeRequest('me', {})
-    .then(this._authResolve.bind(this));
-  }
-
-  changePassword(oldPassword, newPassword, invalidate = false) {
-    if (invalidate) {
-      throw Error('Invalidate is not yet implemented');
-    }
-    return this.makeRequest('auth:password', {
-      old_password: oldPassword,
-      password: newPassword
-    })
-    .then(this._authResolve.bind(this));
-  }
-
-  saveUser(user) {
-    const payload = {
-      _id: user.id,     // eslint-disable-line camelcase
-      email: user.email,
-      username: user.username
-    };
-    if (user.roles) {
-      payload.roles = _.map(user.roles, function (perRole) {
-        return perRole.name;
-      });
-    }
-    return this.makeRequest('user:update', payload).then((body)=> {
-      const newUser = this.User.fromJSON(body.result);
-      const currentUser = this.currentUser;
-
-      if (newUser && currentUser && newUser.id === currentUser.id) {
-        return this._setUser(body.result);
-      } else {
-        return newUser;
-      }
-    });
-  }
-
-  _getUsersBy(emails, usernames) {
-    return this.makeRequest('user:query', {
-      emails: emails,
-      usernames: usernames
-    }).then((body)=> {
-      return body.result.map(r => new this.User(r.data));
-    });
-  }
-
-  getUsersByEmail(emails) {
-    return this._getUsersBy(emails, null);
-  }
-
-  getUsersByUsername(usernames) {
-    return this._getUsersBy(null, usernames);
-  }
-
-  discoverUserByEmails(emails) {
-    return this.publicDB.query(
-      new Query(this.UserRecord).havingEmails(emails)
-    );
-  }
-
-  discoverUserByUsernames(usernames) {
-    return this.publicDB.query(
-      new Query(this.UserRecord).havingUsernames(usernames)
-    );
   }
 
   setAdminRole(roles) {
@@ -452,13 +290,13 @@ export default class Container {
     let _data = _.assign({
       action: action,
       api_key: this.apiKey,
-      access_token: this.accessToken
+      access_token: this.auth.accessToken
     }, data);
     let _action = action.replace(/:/g, '/');
     let req = this.request
       .post(this.url + _action)
       .set('X-Skygear-API-Key', this.apiKey)
-      .set('X-Skygear-Access-Token', this.accessToken)
+      .set('X-Skygear-Access-Token', this.auth.accessToken)
       .set('Accept', 'application/json');
     if (this.timeoutOptions !== undefined && this.timeoutOptions !== null) {
       req = req.timeout(this.timeoutOptions);
@@ -479,8 +317,8 @@ export default class Container {
           let skyErr = body.error || err;
           if (skyErr.code === this.ErrorCodes.AccessTokenNotAccepted) {
             return Promise.all([
-              this._setAccessToken(null),
-              this._setUser(null)
+              this.auth._setAccessToken(null),
+              this.auth._setUser(null)
             ]).then(function () {
               reject({
                 status: err.status,
@@ -543,10 +381,6 @@ export default class Container {
     return ErrorCodes;
   }
 
-  get currentUser() {
-    return this._user;
-  }
-
   get cacheResponse() {
     return this._cacheResponse;
   }
@@ -560,66 +394,6 @@ export default class Container {
     if (this._privateDB) {
       this._privateDB.cacheResponse = b;
     }
-  }
-
-  _getUser() {
-    return this.store.getItem('skygear-user').then((userJSON)=> {
-      let attrs = JSON.parse(userJSON);
-      this._user = this.User.fromJSON(attrs);
-    }, (err)=> {
-      console.warn('Failed to get user', err);
-      this._user = null;
-      return null;
-    });
-  }
-
-  _setUser(attrs) {
-    let value;
-    if (attrs !== null) {
-      this._user = new this.User(attrs);
-      value = JSON.stringify(this._user.toJSON());
-    } else {
-      this._user = null;
-      value = null;
-    }
-
-    const setItem = value === null ? this.store.removeItem('skygear-user')
-        : this.store.setItem('skygear-user', value);
-    return setItem.then(()=> {
-      this.ee.emit(USER_CHANGED, this._user);
-      return value;
-    }, (err)=> {
-      console.warn('Failed to persist user', err);
-      return value;
-    });
-  }
-
-  get accessToken() {
-    return this._accessToken;
-  }
-
-  _getAccessToken() {
-    return this.store.getItem('skygear-accesstoken').then((token)=> {
-      this._accessToken = token;
-      return token;
-    }, (err)=> {
-      console.warn('Failed to get access', err);
-      this._accessToken = null;
-      return null;
-    });
-  }
-
-  _setAccessToken(value) {
-    this._accessToken = value;
-    const setItem = value === null
-        ? this.store.removeItem('skygear-accesstoken')
-        : this.store.setItem('skygear-accesstoken', value);
-    return setItem.then(()=> {
-      return value;
-    }, (err)=> {
-      console.warn('Failed to persist accesstoken', err);
-      return value;
-    });
   }
 
   get deviceID() {
