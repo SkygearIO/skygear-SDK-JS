@@ -78,19 +78,19 @@ export default class Pubsub {
     this.ee.emit(ON_OPEN, true);
 
     // Resubscribe previously subscribed channels
-    _.forEach(this._handlers, (handlers, channel)=> {
+    _.forEach(this._handlers, (handlers, channel) => {
       this._sendSubscription(channel);
     });
 
     // Flushed queued messages to the server
-    _.forEach(this._queue, (data)=> {
+    _.forEach(this._queue, (data) => {
       this._ws.send(JSON.stringify(data));
     });
     this._queue = [];
   }
 
   _onmessage(data) {
-    _.forEach(this._handlers[data.channel], (handler)=> {
+    _.forEach(this._handlers[data.channel], (handler) => {
       handler(data.data);
     });
   }
@@ -110,8 +110,8 @@ export default class Pubsub {
    * @return {Promise} Promise of next message in this channel
    */
   once(channel) {
-    return new Promise((resolve)=> {
-      const handler = (data)=> {
+    return new Promise((resolve) => {
+      const handler = (data) => {
         this.unsubscribe(channel, handler);
         resolve(data);
       };
@@ -193,7 +193,7 @@ export default class Pubsub {
       handlersToRemove = this._handlers[channel];
     }
 
-    _.forEach(handlersToRemove, (handlerToRemove)=> {
+    _.forEach(handlersToRemove, (handlerToRemove) => {
       this._unregister(channel, handlerToRemove);
     });
 
@@ -228,7 +228,7 @@ export default class Pubsub {
 
   _reconnect() {
     let interval = _.min([this._reconnectWait * this._retryCount, 60000]);
-    _.delay(()=> {
+    _.delay(() => {
       this._retryCount += 1;
       this.connect();
     }, interval);
@@ -262,15 +262,15 @@ export default class Pubsub {
       return;
     }
 
-    this._ws.onopen = ()=> {
+    this._ws.onopen = () => {
       this._retryCount = 0;
       this._onopen();
     };
-    this._ws.onclose = ()=> {
+    this._ws.onclose = () => {
       emitter.emit(ON_CLOSE, false);
       this._reconnect();
     };
-    this._ws.onmessage = (evt)=> {
+    this._ws.onmessage = (evt) => {
       var message;
       try {
         message = JSON.parse(evt.data);

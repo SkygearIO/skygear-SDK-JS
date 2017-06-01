@@ -224,15 +224,15 @@ class Store {
     if (this.keyWhiteList && this.keyWhiteList.indexOf(key) < 0) {
       return Promise.reject(new Error('Saving key is not permitted'));
     }
-    return this._driver.setItem(key, value).then(()=> {
+    return this._driver.setItem(key, value).then(() => {
       if (callback) {
         callback(null);
       }
       return Promise.resolve();
-    }, (error)=>
-      this._purge().then(()=> Promise.reject(error))
+    }, (error) =>
+      this._purge().then(() => Promise.reject(error))
     )
-    .catch((error)=> {
+    .catch((error) => {
       if (callback) {
         callback(error);
       }
@@ -258,15 +258,15 @@ class Store {
         value: JSON.stringify(this._purgeableKeys)
       }
     ];
-    return this.multiSetTransactionally(keyValuePairs).then(()=> {
+    return this.multiSetTransactionally(keyValuePairs).then(() => {
       if (callback) {
         callback(null);
       }
       return Promise.resolve();
-    }, (error)=>
-      this._purge().then(()=> Promise.reject(error))
+    }, (error) =>
+      this._purge().then(() => Promise.reject(error))
     )
-    .catch((error)=> {
+    .catch((error) => {
       if (callback) {
         callback(error);
       }
@@ -309,15 +309,15 @@ class Store {
       keys.push(key);
     }
 
-    return this._driver.multiGet(keys).then((original)=> {
-      return this._driver.multiSet(keyValuePairs).then(()=> {
+    return this._driver.multiGet(keys).then((original) => {
+      return this._driver.multiSet(keyValuePairs).then(() => {
         if (callback) {
           callback(null);
         }
         return Promise.resolve();
-      }, (e)=> {
-        return this._driver.multiRemove(keys).then(()=> {
-          return this._driver.multiSet(original).then(()=> {
+      }, (e) => {
+        return this._driver.multiRemove(keys).then(() => {
+          return this._driver.multiSet(original).then(() => {
             if (callback) {
               callback(e);
             }
@@ -356,7 +356,7 @@ export const setStore = (_store) => {
   store = _store;
 };
 
-export default ()=> {
+export default () => {
   if (store) {
     return store;
   }

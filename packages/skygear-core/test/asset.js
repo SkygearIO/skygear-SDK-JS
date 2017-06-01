@@ -84,7 +84,7 @@ describe('Asset Signer', function () {
       const clock = sinon.useFakeTimers(1481095934000);
       const signer = new FSSigner(options);
       const signed = signer.sign('index.html');
-      return signed.then((value)=> {
+      return signed.then((value) => {
         clock.restore();
         expect(value).to.equal('http://skygear.dev/files/index.html'
         + '?expiredAt=1481096834'
@@ -119,7 +119,7 @@ describe('Asset Signer', function () {
       const signer = new S3Signer(options);
       const clock = sinon.useFakeTimers(1481095934000);
       const signed = signer.sign('an evil name with spaces');
-      return signed.then((value)=> {
+      return signed.then((value) => {
         clock.restore();
         expect(value).to.equal('http://s3-mock-s3-region.amazonaws.com/'
           + 'mock-s3-bucket/an%20evil%20name%20with%20spaces'
@@ -202,7 +202,7 @@ describe('Asset Signer', function () {
         }
       }]);
       return signer.refreshSignerToken()
-        .then(()=> {
+        .then(() => {
           expect(signer.signerSecret).to.equal('mock-token-value');
           expect(signer.expiredAt.getTime()).to.equal(1481095934000);
           expect(signer.extra).to.equal('mock-token-extra');
@@ -220,7 +220,7 @@ describe('Asset Signer', function () {
       });
 
       const signed = signer.sign('index.html');
-      return signed.then((value)=> {
+      return signed.then((value) => {
         clock.restore();
         expect(value).to.equal('http://mock-cloud-asset.dev/'
           + 'private/skygear-test/index.html'

@@ -58,7 +58,7 @@ describe('Cloud container', function () {
       container1.signupWithUsername('username', 'passwd'),
       container2.signupAnonymously()
     ])
-    .then(([user1, user2])=> {
+    .then(([user1, user2]) => {
       assert.equal(container1.accessToken, 'uuid1');
       assert.instanceOf(container1.currentUser, container1.User);
       assert.equal(container1.currentUser.id, 'user:id1');

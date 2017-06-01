@@ -125,11 +125,11 @@ export default class Record {
   }
 
   update(attrs) {
-    _.each(this.attributeKeys, (key)=> {
+    _.each(this.attributeKeys, (key) => {
       delete this[key];
     });
 
-    _.each(attrs, (value, key)=> {
+    _.each(attrs, (value, key) => {
       if (key.indexOf('_') !== 0) {
         if (_.isObject(value)) {
           this[key] = fromJSON(value);
@@ -232,7 +232,7 @@ export default class Record {
       _id: this.id,
       _access: this.access && this.access.toJSON()
     };
-    _.each(this.attributeKeys, (key)=> {
+    _.each(this.attributeKeys, (key) => {
       payload[key] = toJSON(this[key]);
     });
 

@@ -85,10 +85,10 @@ export default class Container {
       this._getAccessToken(),
       this._getDeviceID()
     ];
-    return Promise.all(promises).then(()=> {
+    return Promise.all(promises).then(() => {
       this.reconfigurePubsubIfNeeded();
       return this;
-    }, ()=> {
+    }, () => {
       return this;
     });
   }
@@ -116,14 +116,14 @@ export default class Container {
 
   signupWithUsernameAndProfile(username, password, profile = {}) {
     return this.signupWithUsername(username, password)
-    .then((user)=>
+    .then((user) =>
       this._createProfile(user, profile)
     );
   }
 
   signupWithEmailAndProfile(email, password, profile = {}) {
     return this.signupWithEmail(email, password)
-    .then((user)=>
+    .then((user) =>
       this._createProfile(user, profile)
     );
   }
@@ -152,7 +152,7 @@ export default class Container {
     return Promise.all([
       this._setUser(body.result),
       this._setAccessToken(body.result.access_token)
-    ]).then(()=> {
+    ]).then(() => {
       this.reconfigurePubsubIfNeeded();
       return this.currentUser;
     });
@@ -181,10 +181,10 @@ export default class Container {
 
   logout() {
     return this.unregisterDevice()
-    .then(()=> {
+    .then(() => {
       this.clearCache();
       return this.makeRequest('auth:logout', {});
-    }, (error)=> {
+    }, (error) => {
       if (error.code === ErrorCodes.InvalidArgument &&
           error.message === 'Missing device id'
       ) {
@@ -193,13 +193,13 @@ export default class Container {
       }
       return Promise.reject(error);
     })
-    .then(()=> {
+    .then(() => {
       return Promise.all([
         this._setAccessToken(null),
         this._setUser(null)
-      ]).then(()=> null);
-    }, (err)=> {
-      return this._setAccessToken(null).then(()=> {
+      ]).then(() => null);
+    }, (err) => {
+      return this._setAccessToken(null).then(() => {
         return Promise.reject(err);
       });
     });
@@ -232,7 +232,7 @@ export default class Container {
         return perRole.name;
       });
     }
-    return this.makeRequest('user:update', payload).then((body)=> {
+    return this.makeRequest('user:update', payload).then((body) => {
       const newUser = this.User.fromJSON(body.result);
       const currentUser = this.currentUser;
 
@@ -248,7 +248,7 @@ export default class Container {
     return this.makeRequest('user:query', {
       emails: emails,
       usernames: usernames
-    }).then((body)=> {
+    }).then((body) => {
       return body.result.map(r => new this.User(r.data));
     });
   }
@@ -280,7 +280,7 @@ export default class Container {
 
     return this.makeRequest('role:admin', {
       roles: roleNames
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   setDefaultRole(roles) {
@@ -290,7 +290,7 @@ export default class Container {
 
     return this.makeRequest('role:default', {
       roles: roleNames
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   get defaultACL() {
@@ -309,14 +309,14 @@ export default class Container {
     return this.makeRequest('schema:access', {
       type: recordClass.recordType,
       create_roles: roleNames
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   setRecordDefaultAccess(recordClass, acl) {
     return this.makeRequest('schema:default_access', {
       type: recordClass.recordType,
       default_access: acl.toJSON()
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   inferDeviceType() {
@@ -351,9 +351,9 @@ export default class Container {
       id: deviceID,
       topic: topic,
       device_token: token
-    }).then((body)=> {
+    }).then((body) => {
       return this._setDeviceID(body.result.id);
-    }, (error)=> {
+    }, (error) => {
       // Will set the deviceID to null and try again iff deviceID is not null.
       // The deviceID can be deleted remotely, by apns feedback.
       // If the current deviceID is already null, will regards as server fail.
@@ -362,7 +362,7 @@ export default class Container {
         errorCode = error.error.code;
       }
       if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
-        return this._setDeviceID(null).then(()=> {
+        return this._setDeviceID(null).then(() => {
           return this.registerDevice(token, type);
         });
       } else {
@@ -380,10 +380,10 @@ export default class Container {
 
     return this.makeRequest('device:unregister', {
       id: this.deviceID
-    }).then(()=> {
+    }).then(() => {
       // do nothing
       return;
-    }, (error)=> {
+    }, (error) => {
       let errorCode = null;
       if (error.error) {
         errorCode = error.error.code;
@@ -400,17 +400,17 @@ export default class Container {
   lambda(name, data) {
     return this.makeRequest(name, {
       args: data
-    }).then((resp)=> resp.result);
+    }).then((resp) => resp.result);
   }
 
   makeUploadAssetRequest(asset) {
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.makeRequest('asset:put', {
         filename: asset.name,
         'content-type': asset.contentType,
         'content-size': asset.file.size
       })
-      .then((res)=> {
+      .then((res) => {
         const newAsset = Asset.fromJSON(res.result.asset);
         const postRequest = res.result['post-request'];
 
@@ -426,12 +426,12 @@ export default class Container {
           .post(postUrl)
           .set('X-Skygear-API-Key', this.apiKey);
         if (postRequest['extra-fields']) {
-          _.forEach(postRequest['extra-fields'], (value, key)=> {
+          _.forEach(postRequest['extra-fields'], (value, key) => {
             _request = _request.field(key, value);
           });
         }
 
-        _request.attach('file', asset.file).end((err)=> {
+        _request.attach('file', asset.file).end((err) => {
           if (err) {
             reject(err);
             return;
@@ -439,7 +439,7 @@ export default class Container {
 
           resolve(newAsset);
         });
-      }, (err)=> {
+      }, (err) => {
         reject(err);
       });
     });
@@ -468,8 +468,8 @@ export default class Container {
 
   makeRequest(action, data) {
     let _request = this.sendRequestObject(action, data);
-    return new Promise((resolve, reject)=> {
-      _request.end((err, res)=> {
+    return new Promise((resolve, reject) => {
+      _request.end((err, res) => {
         // Do an application JSON parse because in some condition, the
         // content-type header will got strip and it will not deserial
         // the json for us.
@@ -563,10 +563,10 @@ export default class Container {
   }
 
   _getUser() {
-    return this.store.getItem('skygear-user').then((userJSON)=> {
+    return this.store.getItem('skygear-user').then((userJSON) => {
       let attrs = JSON.parse(userJSON);
       this._user = this.User.fromJSON(attrs);
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get user', err);
       this._user = null;
       return null;
@@ -585,10 +585,10 @@ export default class Container {
 
     const setItem = value === null ? this.store.removeItem('skygear-user')
         : this.store.setItem('skygear-user', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       this.ee.emit(USER_CHANGED, this._user);
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist user', err);
       return value;
     });
@@ -599,10 +599,10 @@ export default class Container {
   }
 
   _getAccessToken() {
-    return this.store.getItem('skygear-accesstoken').then((token)=> {
+    return this.store.getItem('skygear-accesstoken').then((token) => {
       this._accessToken = token;
       return token;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get access', err);
       this._accessToken = null;
       return null;
@@ -614,9 +614,9 @@ export default class Container {
     const setItem = value === null
         ? this.store.removeItem('skygear-accesstoken')
         : this.store.setItem('skygear-accesstoken', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist accesstoken', err);
       return value;
     });
@@ -627,10 +627,10 @@ export default class Container {
   }
 
   _getDeviceID() {
-    return this.store.getItem('skygear-deviceid').then((deviceID)=> {
+    return this.store.getItem('skygear-deviceid').then((deviceID) => {
       this._deviceID = deviceID;
       return deviceID;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get deviceid', err);
       this._deviceID = null;
       return null;
@@ -641,12 +641,12 @@ export default class Container {
     this._deviceID = value;
     const setItem = value === null ? this.store.removeItem('skygear-deviceid')
         : this.store.setItem('skygear-deviceid', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist deviceid', err);
       return value;
-    }).then((deviceID)=> {
+    }).then((deviceID) => {
       this.reconfigurePubsubIfNeeded();
       return deviceID;
     });

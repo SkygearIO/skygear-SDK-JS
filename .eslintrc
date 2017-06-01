@@ -35,6 +35,13 @@
       2,
       "always"
     ],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
     "array-bracket-spacing": [
       2,
       "never"

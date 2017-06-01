@@ -73,7 +73,7 @@ export default class Database {
         console.log('No cache found', err);
       });
     }
-    return this.container.makeRequest('record:query', payload).then((body)=> {
+    return this.container.makeRequest('record:query', payload).then((body) => {
       let records = _.map(body.result, function (attrs) {
         return new Cls(attrs);
       });
@@ -89,7 +89,7 @@ export default class Database {
   _presaveAssetTask(key, asset) {
     if (asset.file) {
       return this.container.makeUploadAssetRequest(asset)
-        .then((a)=> [key, a]);
+        .then((a) => [key, a]);
     } else {
       return Promise.resolve([key, asset]);
     }
@@ -98,7 +98,7 @@ export default class Database {
   _presave(record) {
     // for every (key, value) pair, process the pair in a Promise
     // the Promise should be resolved by the transformed [key, value] pair
-    let tasks = _.map(record, (value, key)=> {
+    let tasks = _.map(record, (value, key) => {
       if (value instanceof Asset) {
         return this._presaveAssetTask(key, value);
       } else {
@@ -106,8 +106,8 @@ export default class Database {
       }
     });
 
-    return Promise.all(tasks).then((keyvalues)=> {
-      _.each(keyvalues, ([key, value])=> {
+    return Promise.all(tasks).then((keyvalues) => {
+      _.each(keyvalues, ([key, value]) => {
         record[key] = value;
       });
       return record;
@@ -132,7 +132,7 @@ export default class Database {
 
     const presaveTasks = _.map(records, this._presave.bind(this));
     return Promise.all(presaveTasks)
-    .then((processedRecords)=> {
+    .then((processedRecords) => {
       let payload = {
         database_id: this.dbID //eslint-disable-line
       };
@@ -146,7 +146,7 @@ export default class Database {
       });
 
       return this.container.makeRequest('record:save', payload);
-    }).then((body)=> {
+    }).then((body) => {
       let results = body.result;
       let savedRecords = [];
       let errors = [];
@@ -187,7 +187,7 @@ export default class Database {
     };
 
     return this.container.makeRequest('record:delete', payload)
-      .then((body)=> {
+      .then((body) => {
         let results = body.result;
         let errors = [];
 
