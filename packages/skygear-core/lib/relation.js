@@ -135,7 +135,7 @@ export class RelationQueryResult extends Array {
 
 }
 
-export class RelationAction {
+export class RelationContainer {
 
   constructor(container) {
     this.container = container;
@@ -198,15 +198,15 @@ export class RelationAction {
   }
 
   get Friend() {
-    return RelationAction.extend('friend', Mutual);
+    return RelationContainer.extend('friend', Mutual);
   }
 
   get Follower() {
-    return RelationAction.extend('follow', Inward);
+    return RelationContainer.extend('follow', Inward);
   }
 
   get Following() {
-    return RelationAction.extend('follow', Outward);
+    return RelationContainer.extend('follow', Outward);
   }
 
   static extend(identifier, direction) {

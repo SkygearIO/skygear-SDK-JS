@@ -27,7 +27,6 @@ import Reference from './reference';
 import Query from './query';
 import Database from './database';
 import Pubsub from './pubsub';
-import {RelationAction} from './relation';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -35,6 +34,7 @@ import {ErrorCodes, SkygearError} from './error';
 import {EventHandle} from './util';
 
 import {AuthContainer} from './auth';
+import {RelationContainer} from './relation';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -50,13 +50,13 @@ export default class Container {
     this._publicDB = null;
     this.request = request;
     this._internalPubsub = new Pubsub(this, true);
-    this._relation = new RelationAction(this);
     this._pubsub = new Pubsub(this, false);
     this.autoPubsub = true;
     this._cacheResponse = true;
     this.ee = ee({});
 
     this._auth = new AuthContainer(this);
+    this._relation = new RelationContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -75,6 +75,10 @@ export default class Container {
 
   get auth() {
     return this._auth;
+  }
+
+  get relation() {
+    return this._relation;
   }
 
   config(options) {
@@ -468,10 +472,6 @@ export default class Container {
 
   get Database() {
     return Database;
-  }
-
-  get relation() {
-    return this._relation;
   }
 
   get pubsub() {
