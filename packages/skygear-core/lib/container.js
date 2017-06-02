@@ -25,7 +25,7 @@ import ACL from './acl';
 import Record from './record';
 import Reference from './reference';
 import Query from './query';
-import Database from './database';
+import {Database} from './database';
 import Pubsub from './pubsub';
 import Geolocation from './geolocation';
 import getStore from './store';
@@ -35,6 +35,7 @@ import {EventHandle} from './util';
 
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
+import {DatabaseContainer} from './database';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -46,17 +47,15 @@ export default class Container {
     this.token = null;
     this._deviceID = null;
     this._getDeviceID();
-    this._privateDB = null;
-    this._publicDB = null;
     this.request = request;
     this._internalPubsub = new Pubsub(this, true);
     this._pubsub = new Pubsub(this, false);
     this.autoPubsub = true;
-    this._cacheResponse = true;
     this.ee = ee({});
 
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
+    this._db = new DatabaseContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -79,6 +78,10 @@ export default class Container {
 
   get relation() {
     return this._relation;
+  }
+
+  get db() {
+    return this._db;
   }
 
   config(options) {
@@ -113,52 +116,6 @@ export default class Container {
   onUserChanged(listener) {
     this.ee.on(USER_CHANGED, listener);
     return new EventHandle(this.ee, USER_CHANGED, listener);
-  }
-
-  setAdminRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    return this.makeRequest('role:admin', {
-      roles: roleNames
-    }).then((body)=> body.result);
-  }
-
-  setDefaultRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    return this.makeRequest('role:default', {
-      roles: roleNames
-    }).then((body)=> body.result);
-  }
-
-  get defaultACL() {
-    return this.Record.defaultACL;
-  }
-
-  setDefaultACL(acl) {
-    this.Record.defaultACL = acl;
-  }
-
-  setRecordCreateAccess(recordClass, roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    return this.makeRequest('schema:access', {
-      type: recordClass.recordType,
-      create_roles: roleNames
-    }).then((body)=> body.result);
-  }
-
-  setRecordDefaultAccess(recordClass, acl) {
-    return this.makeRequest('schema:default_access', {
-      type: recordClass.recordType,
-      default_access: acl.toJSON()
-    }).then((body)=> body.result);
   }
 
   inferDeviceType() {
@@ -385,21 +342,6 @@ export default class Container {
     return ErrorCodes;
   }
 
-  get cacheResponse() {
-    return this._cacheResponse;
-  }
-
-  set cacheResponse(value) {
-    const b = !!value;
-    this._cacheResponse = b;
-    if (this._publicDB) {
-      this._publicDB.cacheResponse = b;
-    }
-    if (this._privateDB) {
-      this._privateDB.cacheResponse = b;
-    }
-  }
-
   get deviceID() {
     return this._deviceID;
   }
@@ -449,25 +391,6 @@ export default class Container {
       this._store = getStore();
     }
     return this._store;
-  }
-
-  get publicDB() {
-    if (this._publicDB === null) {
-      this._publicDB = new Database('_public', this);
-      this._publicDB.cacheResponse = this._cacheResponse;
-    }
-    return this._publicDB;
-  }
-
-  get privateDB() {
-    if (this.accessToken === null) {
-      throw new Error('You must login before access to privateDB');
-    }
-    if (this._privateDB === null) {
-      this._privateDB = new Database('_private', this);
-      this._privateDB.cacheResponse = this._cacheResponse;
-    }
-    return this._privateDB;
   }
 
   get Database() {

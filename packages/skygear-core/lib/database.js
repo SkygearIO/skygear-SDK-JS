@@ -21,7 +21,7 @@ import Record from './record';
 import Query from './query';
 import QueryResult from './query_result';
 
-export default class Database {
+export class Database {
 
   constructor(dbID, container) {
     if (dbID !== '_public' && dbID !== '_private' && dbID !== '_union') {
@@ -31,6 +31,10 @@ export default class Database {
     this.container = container;
     this._cacheStore = new Cache(this.dbID);
     this._cacheResponse = true;
+  }
+
+  get Record() {
+    return this.container.Record;
   }
 
   getRecordByID(id) {
@@ -220,6 +224,102 @@ export default class Database {
   set cacheResponse(value) {
     const b = !!value;
     this._cacheResponse = b;
+  }
+
+}
+
+export class PublicDatabase extends Database {
+
+  setAdminRole(roles) {
+    let roleNames = _.map(roles, function (perRole) {
+      return perRole.name;
+    });
+
+    return this.container.makeRequest('role:admin', {
+      roles: roleNames
+    }).then((body)=> body.result);
+  }
+
+  setDefaultRole(roles) {
+    let roleNames = _.map(roles, function (perRole) {
+      return perRole.name;
+    });
+
+    return this.container.makeRequest('role:default', {
+      roles: roleNames
+    }).then((body)=> body.result);
+  }
+
+  get defaultACL() {
+    return this.Record.defaultACL;
+  }
+
+  setDefaultACL(acl) {
+    this.Record.defaultACL = acl;
+  }
+
+  setRecordCreateAccess(recordClass, roles) {
+    let roleNames = _.map(roles, function (perRole) {
+      return perRole.name;
+    });
+
+    return this.container.makeRequest('schema:access', {
+      type: recordClass.recordType,
+      create_roles: roleNames
+    }).then((body)=> body.result);
+  }
+
+  setRecordDefaultAccess(recordClass, acl) {
+    return this.container.makeRequest('schema:default_access', {
+      type: recordClass.recordType,
+      default_access: acl.toJSON()
+    }).then((body)=> body.result);
+  }
+
+}
+
+export class DatabaseContainer {
+
+  constructor(container) {
+    this.container = container;
+
+    this._public = null;
+    this._private = null;
+    this._cacheResponse = true;
+  }
+
+  get public() {
+    if (this._public === null) {
+      this._public = new PublicDatabase('_public', this.container);
+      this._public.cacheResponse = this._cacheResponse;
+    }
+    return this._public;
+  }
+
+  get private() {
+    if (this.container.accessToken === null) {
+      throw new Error('You must login before access to privateDB');
+    }
+    if (this._private === null) {
+      this._private = new Database('_private', this.container);
+      this._private.cacheResponse = this._cacheResponse;
+    }
+    return this._private;
+  }
+
+  get cacheResponse() {
+    return this._cacheResponse;
+  }
+
+  set cacheResponse(value) {
+    const b = !!value;
+    this._cacheResponse = b;
+    if (this._public) {
+      this._public.cacheResponse = b;
+    }
+    if (this._private) {
+      this._private.cacheResponse = b;
+    }
   }
 
 }
