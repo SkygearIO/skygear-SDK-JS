@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 import _ from 'lodash';
+import {EventHandle} from './util';
+import {ErrorCodes} from './error';
+
+export const USER_CHANGED = 'userChanged';
 
 export class AuthContainer {
   constructor(container) {
@@ -30,6 +34,23 @@ export class AuthContainer {
 
   get accessToken() {
     return this._accessToken;
+  }
+
+  get User() {
+    return this.container.User;
+  }
+
+  get Query() {
+    return this.container.Query;
+  }
+
+  get publicDB() {
+    return this.container.db.public;
+  }
+
+  onUserChanged(listener) {
+    this.container.ee.on(USER_CHANGED, listener);
+    return new EventHandle(this.container.ee, USER_CHANGED, listener);
   }
 
   signupWithUsername(username, password) {
@@ -80,26 +101,26 @@ export class AuthContainer {
   }
 
   logout() {
-    return this.unregisterDevice()
+    return this.container.push.unregisterDevice()
     .then(()=> {
-      this.clearCache();
+      this.container.clearCache();
       return this.container.makeRequest('auth:logout', {});
     }, (error)=> {
       if (error.code === ErrorCodes.InvalidArgument &&
           error.message === 'Missing device id'
       ) {
-        this.clearCache();
+        this.container.clearCache();
         return this.container.makeRequest('auth:logout', {});
       }
       return Promise.reject(error);
     })
     .then(()=> {
       return Promise.all([
-        this.container._setAccessToken(null),
+        this._setAccessToken(null),
         this._setUser(null)
       ]).then(()=> null);
     }, (err)=> {
-      return this.container._setAccessToken(null).then(()=> {
+      return this._setAccessToken(null).then(()=> {
         return Promise.reject(err);
       });
     });
@@ -154,13 +175,13 @@ export class AuthContainer {
 
   discoverUserByEmails(emails) {
     return this.publicDB.query(
-      new Query(this.container.UserRecord).havingEmails(emails)
+      new this.Query(this.container.UserRecord).havingEmails(emails)
     );
   }
 
   discoverUserByUsernames(usernames) {
     return this.publicDB.query(
-      new Query(this.container.UserRecord).havingUsernames(usernames)
+      new this.Query(this.container.UserRecord).havingUsernames(usernames)
     );
   }
 
@@ -199,9 +220,9 @@ export class AuthContainer {
   _authResolve(body) {
     return Promise.all([
       this._setUser(body.result),
-      this.container._setAccessToken(body.result.access_token)
+      this._setAccessToken(body.result.access_token)
     ]).then(()=> {
-      this.reconfigurePubsubIfNeeded();
+      this.container.pubsub._reconfigurePubsubIfNeeded();
       return this.currentUser;
     });
   }

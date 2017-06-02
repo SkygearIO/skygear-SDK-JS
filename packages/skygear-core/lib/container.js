@@ -30,15 +30,12 @@ import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
 import {ErrorCodes, SkygearError} from './error';
-import {EventHandle} from './util';
 
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
 import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
-
-export const USER_CHANGED = 'userChanged';
 
 export default class Container {
 
@@ -116,11 +113,6 @@ export default class Container {
 
   clearCache() {
     return this.store.clearPurgeableItems();
-  }
-
-  onUserChanged(listener) {
-    this.ee.on(USER_CHANGED, listener);
-    return new EventHandle(this.ee, USER_CHANGED, listener);
   }
 
   lambda(name, data) {
