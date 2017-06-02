@@ -26,7 +26,6 @@ import Record from './record';
 import Reference from './reference';
 import Query from './query';
 import {Database} from './database';
-import Pubsub from './pubsub';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -36,6 +35,7 @@ import {EventHandle} from './util';
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
 import {DatabaseContainer} from './database';
+import {PubsubContainer} from './pubsub';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -48,14 +48,12 @@ export default class Container {
     this._deviceID = null;
     this._getDeviceID();
     this.request = request;
-    this._internalPubsub = new Pubsub(this, true);
-    this._pubsub = new Pubsub(this, false);
-    this.autoPubsub = true;
     this.ee = ee({});
 
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
     this._db = new DatabaseContainer(this);
+    this._pubsub = new PubsubContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -84,6 +82,10 @@ export default class Container {
     return this._db;
   }
 
+  get pubsub() {
+    return this._pubsub;
+  }
+
   config(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
@@ -98,7 +100,7 @@ export default class Container {
       this._getDeviceID()
     ];
     return Promise.all(promises).then(()=> {
-      this.reconfigurePubsubIfNeeded();
+      this.pubsub._reconfigurePubsubIfNeeded();
       return this;
     }, ()=> {
       return this;
@@ -367,7 +369,7 @@ export default class Container {
       console.warn('Failed to persist deviceid', err);
       return value;
     }).then((deviceID)=> {
-      this.reconfigurePubsubIfNeeded();
+      this.pubsub._reconfigurePubsubIfNeeded();
       return deviceID;
     });
   }
@@ -397,50 +399,6 @@ export default class Container {
     return Database;
   }
 
-  get pubsub() {
-    return this._pubsub;
-  }
-
-  reconfigurePubsubIfNeeded() {
-    if (!this.autoPubsub) {
-      return;
-    }
-
-    this._internalPubsub.reset();
-    if (this.deviceID !== null) {
-      this._internalPubsub.subscribe('_sub_' + this.deviceID, function (data) {
-        console.log('Receivied data for subscription: ' + data);
-      });
-    }
-    this._internalPubsub.reconfigure();
-    this._pubsub.reconfigure();
-  }
-
-  /**
-   * Subscribe a function callback on receiving message at the specified
-   * channel.
-   *
-   * @param {string} channel - Name of the channel to subscribe
-   * @param {function(object:*)} callback - function to be trigger with
-   * incoming data.
-   **/
-  on(channel, callback) {
-    return this.pubsub.on(channel, callback);
-  }
-
-  /**
-   * Unsubscribe a function callback on the specified channel.
-   *
-   * If pass in `callback` is null, all callbacks in the specified channel
-   * will be removed.
-   *
-   * @param {string} channel - Name of the channel to unsubscribe
-   * @param {function(object:*)=} callback - function to be trigger with
-   * incoming data.
-   **/
-  off(channel, callback = null) {
-    this.pubsub.off(channel, callback);
-  }
 }
 
 function getRespJSON(res) {

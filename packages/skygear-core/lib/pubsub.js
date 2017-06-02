@@ -29,7 +29,7 @@ import {EventHandle} from './util';
 const ON_OPEN = 'onOpen';
 const ON_CLOSE = 'onClose';
 
-export default class Pubsub {
+export class Pubsub {
 
   constructor(container, internal = false) {
     this._container = container;
@@ -291,4 +291,81 @@ export default class Pubsub {
     let ws = new this.WebSocket(pubsubUrl);
     this._setWebSocket(ws);
   }
+}
+
+export class PubsubContainer {
+
+  constructor(container) {
+    this.container = container;
+
+    this._pubsub = new Pubsub(this.container, false);
+    this._internalPubsub = new Pubsub(this.container, true);
+    this.autoPubsub = true;
+  }
+
+  /**
+   * Subscribe a function callback on receiving message at the specified
+   * channel.
+   *
+   * @param {string} channel - Name of the channel to subscribe
+   * @param {function(object:*)} callback - function to be trigger with
+   * incoming data.
+   **/
+  on(channel, callback) {
+    return this._pubsub.on(channel, callback);
+  }
+
+  /**
+   * Unsubscribe a function callback on the specified channel.
+   *
+   * If pass in `callback` is null, all callbacks in the specified channel
+   * will be removed.
+   *
+   * @param {string} channel - Name of the channel to unsubscribe
+   * @param {function(object:*)=} callback - function to be trigger with
+   * incoming data.
+   **/
+  off(channel, callback = null) {
+    this._pubsub.off(channel, callback);
+  }
+
+  once(channel) {
+    this._pubsub.once(channel);
+  }
+
+  onOpen(listener) {
+    this._pubsub.onOpen(listener);
+  }
+
+  onClose(listener) {
+    this._pubsub.onClose(listener);
+  }
+
+  publish(channel, data) {
+    this._pubsub.publish(channel, data);
+  }
+
+  hasHandlers(channel) {
+    this._pubsub.hasHandlers(channel);
+  }
+
+  get deviceID() {
+    return this.container.push.deviceID;
+  }
+
+  _reconfigurePubsubIfNeeded() {
+    if (!this.autoPubsub) {
+      return;
+    }
+
+    this._internalPubsub.reset();
+    if (this.deviceID !== null) {
+      this._internalPubsub.subscribe('_sub_' + this.deviceID, function (data) {
+        console.log('Receivied data for subscription: ' + data);
+      });
+    }
+    this._internalPubsub.reconfigure();
+    this._pubsub.reconfigure();
+  }
+
 }
