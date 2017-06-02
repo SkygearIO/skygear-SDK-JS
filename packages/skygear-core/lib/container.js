@@ -45,7 +45,6 @@ export default class Container {
   constructor() {
     this.url = '/* @echo API_URL */';
     this.apiKey = null;
-    this.token = null;
     this.request = request;
     this.ee = ee({});
 
