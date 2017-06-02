@@ -36,6 +36,7 @@ import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
 import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
+import {PushContainer} from './push';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -45,8 +46,6 @@ export default class Container {
     this.url = '/* @echo API_URL */';
     this.apiKey = null;
     this.token = null;
-    this._deviceID = null;
-    this._getDeviceID();
     this.request = request;
     this.ee = ee({});
 
@@ -54,6 +53,7 @@ export default class Container {
     this._relation = new RelationContainer(this);
     this._db = new DatabaseContainer(this);
     this._pubsub = new PubsubContainer(this);
+    this._push = new PushContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -86,6 +86,10 @@ export default class Container {
     return this._pubsub;
   }
 
+  get push() {
+    return this._push;
+  }
+
   config(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
@@ -97,7 +101,7 @@ export default class Container {
     let promises = [
       this.auth._getUser(),
       this.auth._getAccessToken(),
-      this._getDeviceID()
+      this.push._getDeviceID()
     ];
     return Promise.all(promises).then(()=> {
       this.pubsub._reconfigurePubsubIfNeeded();
@@ -118,84 +122,6 @@ export default class Container {
   onUserChanged(listener) {
     this.ee.on(USER_CHANGED, listener);
     return new EventHandle(this.ee, USER_CHANGED, listener);
-  }
-
-  inferDeviceType() {
-    // To be implmented by subclass
-    // TODO: probably web / node, handle it later
-    throw new Error('Failed to infer type, please supply a value');
-  }
-
-  /**
-   * You can register your device for receiving push notifications.
-   *
-   * @param {string} token - The device token
-   * @param {string} type - The device type (either 'ios' or 'android')
-   * @param {string} topic - The device topic, refer to application bundle
-   * identifier on iOS and application package name on Android.
-   **/
-  registerDevice(token, type, topic) {
-    if (!token) {
-      throw new Error('Token cannot be empty');
-    }
-    if (!type) {
-      type = this.inferDeviceType();
-    }
-
-    let deviceID;
-    if (this.deviceID) {
-      deviceID = this.deviceID;
-    }
-
-    return this.makeRequest('device:register', {
-      type: type,
-      id: deviceID,
-      topic: topic,
-      device_token: token
-    }).then((body)=> {
-      return this._setDeviceID(body.result.id);
-    }, (error)=> {
-      // Will set the deviceID to null and try again iff deviceID is not null.
-      // The deviceID can be deleted remotely, by apns feedback.
-      // If the current deviceID is already null, will regards as server fail.
-      let errorCode = null;
-      if (error.error) {
-        errorCode = error.error.code;
-      }
-      if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
-        return this._setDeviceID(null).then(()=> {
-          return this.registerDevice(token, type);
-        });
-      } else {
-        return Promise.reject(error);
-      }
-    });
-  }
-
-  unregisterDevice() {
-    if (!this.deviceID) {
-      return Promise.reject(
-        new SkygearError('Missing device id', ErrorCodes.InvalidArgument)
-      );
-    }
-
-    return this.makeRequest('device:unregister', {
-      id: this.deviceID
-    }).then(()=> {
-      // do nothing
-      return;
-    }, (error)=> {
-      let errorCode = null;
-      if (error.error) {
-        errorCode = error.error.code;
-      }
-      if (errorCode === ErrorCodes.ResourceNotFound) {
-        // regard it as success
-        return this._setDeviceID(null);
-      } else {
-        return Promise.reject(error);
-      }
-    });
   }
 
   lambda(name, data) {
@@ -342,36 +268,6 @@ export default class Container {
 
   get ErrorCodes() {
     return ErrorCodes;
-  }
-
-  get deviceID() {
-    return this._deviceID;
-  }
-
-  _getDeviceID() {
-    return this.store.getItem('skygear-deviceid').then((deviceID)=> {
-      this._deviceID = deviceID;
-      return deviceID;
-    }, (err)=> {
-      console.warn('Failed to get deviceid', err);
-      this._deviceID = null;
-      return null;
-    });
-  }
-
-  _setDeviceID(value) {
-    this._deviceID = value;
-    const setItem = value === null ? this.store.removeItem('skygear-deviceid')
-        : this.store.setItem('skygear-deviceid', value);
-    return setItem.then(()=> {
-      return value;
-    }, (err)=> {
-      console.warn('Failed to persist deviceid', err);
-      return value;
-    }).then((deviceID)=> {
-      this.pubsub._reconfigurePubsubIfNeeded();
-      return deviceID;
-    });
   }
 
   get endPoint() {
