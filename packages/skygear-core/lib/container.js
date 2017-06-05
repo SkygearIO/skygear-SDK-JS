@@ -205,6 +205,18 @@ export class BaseContainer {
     return Geolocation;
   }
 
+  get Friend() {
+    return this.relation.Friend;
+  }
+
+  get Follower() {
+    return this.relation.Follower;
+  }
+
+  get Following() {
+    return this.relation.Following;
+  }
+
   get ErrorCodes() {
     return ErrorCodes;
   }
