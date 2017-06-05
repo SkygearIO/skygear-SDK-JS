@@ -16,7 +16,7 @@
 /*eslint-disable dot-notation, no-new, no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import sinon from 'sinon';
-import Database from '../lib/database';
+import {Database} from '../lib/database';
 import Record from '../lib/record';
 import Query from '../lib/query';
 import Container from '../lib/container';
@@ -222,7 +222,7 @@ let request = mockSuperagent([{
 describe('Database', function () {
 
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = request;
   container.configApiKey('correctApiKey');
   let db = new Database('_public', container);

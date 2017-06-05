@@ -23,7 +23,7 @@ import mockSuperagent from './mock/superagent';
 describe('Container', function () {
   it('should have default end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     assert.equal(
       container.endPoint,
       'http://skygear.dev/',
@@ -32,7 +32,7 @@ describe('Container', function () {
 
   it('should set end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com/';
     assert.equal(
       container.endPoint,
@@ -42,7 +42,7 @@ describe('Container', function () {
 
   it('should auto append slash to end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com';
     assert.equal(
       container.endPoint,
@@ -52,57 +52,57 @@ describe('Container', function () {
 
   it('caches response by default', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    expect(container.cacheResponse).to.be.true();
+    container.pubsub.autoPubsub = false;
+    expect(container.db.cacheResponse).to.be.true();
   });
 
   it('does not eagerly initialize db when setting cacheResponse', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
 
-    container.cacheResponse = false;
-    expect(container._publicDB).to.be.null();
-    expect(container._privateDB).to.be.null();
+    container.db.cacheResponse = false;
+    expect(container.db._public).to.be.null();
+    expect(container.db._private).to.be.null();
   });
 
   it('initializes db with current cacheResponse setting', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
 
-    container.cacheResponse = false;
-    expect(container._publicDB).to.be.null();
-    expect(container._privateDB).to.be.null();
+    container.db.cacheResponse = false;
+    expect(container.db._public).to.be.null();
+    expect(container.db._private).to.be.null();
 
-    expect(container.publicDB.cacheResponse).to.be.false();
+    expect(container.db.public.cacheResponse).to.be.false();
 
-    container._accessToken = 'access-token';
-    expect(container.privateDB.cacheResponse).to.be.false();
+    container.auth._accessToken = 'access-token';
+    expect(container.db.private.cacheResponse).to.be.false();
   });
 
   it('forwards cacheResponse to its databases', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    container.cacheResponse = false;
-    container._accessToken = 'dummy-access-token-to-enable-private-db';
+    container.pubsub.autoPubsub = false;
+    container.db.cacheResponse = false;
+    container.auth._accessToken = 'dummy-access-token-to-enable-private-db';
 
-    container.cacheResponse = true;
-    expect(container.publicDB.cacheResponse).to.be.true();
-    expect(container.privateDB.cacheResponse).to.be.true();
+    container.db.cacheResponse = true;
+    expect(container.db.public.cacheResponse).to.be.true();
+    expect(container.db.private.cacheResponse).to.be.true();
 
-    container.cacheResponse = false;
-    expect(container.publicDB.cacheResponse).to.be.false();
-    expect(container.privateDB.cacheResponse).to.be.false();
+    container.db.cacheResponse = false;
+    expect(container.db.public.cacheResponse).to.be.false();
+    expect(container.db.private.cacheResponse).to.be.false();
 
-    container.cacheResponse = true;
-    expect(container.publicDB.cacheResponse).to.be.true();
-    expect(container.privateDB.cacheResponse).to.be.true();
+    container.db.cacheResponse = true;
+    expect(container.db.public.cacheResponse).to.be.true();
+    expect(container.db.private.cacheResponse).to.be.true();
   });
 
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.configApiKey('correctApiKey');
-    container._accessToken = 'incorrectApiKey';
+    container.auth._accessToken = 'incorrectApiKey';
     container.request = mockSuperagent([{
       pattern: 'http://skygear.dev/any/action',
       fixtures: function (match, params, headers, fn) {
@@ -119,35 +119,35 @@ describe('Container', function () {
     return container.makeRequest('any:action', {}).then(function () {
       throw 'Expected to be reject by wrong access token';
     }, function (err) {
-      assert.isNull(container.accessToken, 'accessToken not reset');
-      assert.isNull(container.currentUser, 'currentUser not reset');
+      assert.isNull(container.auth.accessToken, 'accessToken not reset');
+      assert.isNull(container.auth.currentUser, 'currentUser not reset');
     });
   });
 
   it('should call userChange listener', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    container.onUserChanged(function (user) {
+    container.pubsub.autoPubsub = false;
+    container.auth.onUserChanged(function (user) {
       assert.instanceOf(user, container.User);
       assert.equal(user.id, 'user:id1');
     });
-    return container._setUser({_id: 'user:id1'});
+    return container.auth._setUser({_id: 'user:id1'});
   });
 
   it('should able to cancel a registered userChange listener', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    let handler = container.onUserChanged(function (user) {
+    container.pubsub.autoPubsub = false;
+    let handler = container.auth.onUserChanged(function (user) {
       throw 'Cancel of onUserChanged failed';
     });
     handler.cancel();
-    return container._setUser({_id: 'user:id1'});
+    return container.auth._setUser({_id: 'user:id1'});
   });
 });
 
 describe('Container me', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/me',
@@ -177,8 +177,8 @@ describe('Container me', function () {
   }]);
 
   it('should get me correctly', function () {
-    container._accessToken = 'token-1';
-    return container.whoami()
+    container.auth._accessToken = 'token-1';
+    return container.auth.whoami()
     .then(function (user) {
       assert.instanceOf(user, container.User);
       assert.equal(user.id, 'user-id-1');
@@ -193,8 +193,8 @@ describe('Container me', function () {
   });
 
   it('should handle error properly', function () {
-    container._accessToken = null;
-    return container.whoami()
+    container.auth._accessToken = null;
+    return container.auth.whoami()
     .then(function (user) {
       throw new Error('Should not get me without access token');
     }, function (err) {
@@ -205,7 +205,7 @@ describe('Container me', function () {
 
 describe('Container auth', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/signup',
     fixtures: function (match, params, headers, fn) {
@@ -336,47 +336,47 @@ describe('Container auth', function () {
   container.configApiKey('correctApiKey');
 
   it('should signup successfully', function () {
-    return container
+    return container.auth
       .signupWithUsername('username', 'passwd')
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
       });
   });
 
   it('should signup with email successfully', function () {
-    return container
+    return container.auth
       .signupWithEmail('user@email.com', 'passwd')
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
       });
   });
 
   it('should signup with profile successfully', function () {
-    return container
+    return container.auth
       .signupWithUsernameAndProfile('username', 'passwd', {
         'key': 'value'
       })
       .then(function (profile) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
         assert.equal(profile.key, 'value');
@@ -384,17 +384,17 @@ describe('Container auth', function () {
   });
 
   it('should signup with email and profile successfully', function () {
-    return container
+    return container.auth
       .signupWithEmailAndProfile('user@email.com', 'passwd', {
         'key': 'value'
       })
       .then(function (profile) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
         assert.equal(profile.key, 'value');
@@ -402,22 +402,22 @@ describe('Container auth', function () {
   });
 
   it('should signup anonymously', function () {
-    return container
+    return container.auth
       .signupAnonymously()
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid2');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id2'
         );
       });
   });
 
   it('should not signup duplicate account', function () {
-    return container
+    return container.auth
       .signupWithUsername('duplicated', 'passwd')
       .then(function (user) {
         throw new Error('Signup duplicated user');
@@ -429,15 +429,15 @@ describe('Container auth', function () {
   });
 
   it('should login with correct password', function () {
-    return container
+    return container.auth
       .loginWithUsername('registered', 'passwd')
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
       }, function (error) {
@@ -446,15 +446,15 @@ describe('Container auth', function () {
   });
 
   it('should login with email and correct password', function () {
-    return container
+    return container.auth
       .loginWithEmail('user@email.com', 'passwd')
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
       }, function (error) {
@@ -463,7 +463,7 @@ describe('Container auth', function () {
   });
 
   it('should fail to login with incorrect password', function () {
-    return container
+    return container.auth
       .loginWithUsername('registered', 'wrong')
       .then(function (user) {
         throw new Error('Login with wrong password');
@@ -475,15 +475,15 @@ describe('Container auth', function () {
   });
 
   it('should login with provider successfully', function () {
-    return container
+    return container.auth
       .loginWithProvider('provider', {})
       .then(function (user) {
         assert.equal(
-          container.accessToken,
+          container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.User);
         assert.equal(
-          container.currentUser.id,
+          container.auth.currentUser.id,
           'user:id1'
         );
       }, function () {
@@ -492,9 +492,9 @@ describe('Container auth', function () {
   });
 
   it('should be able to set null accessToken', function () {
-    return container._setAccessToken(null)
+    return container.auth._setAccessToken(null)
     .then(function () {
-      assert.equal(container.accessToken, null);
+      assert.equal(container.auth.accessToken, null);
     });
   });
 
@@ -507,29 +507,29 @@ describe('Container auth', function () {
     };
 
     return Promise.all([
-      container._setAccessToken(aUserAttr.access_token),
-      container._setUser(aUserAttr)
+      container.auth._setAccessToken(aUserAttr.access_token),
+      container.auth._setUser(aUserAttr)
     ])
     .then(() => {
-      assert.equal(container.accessToken, aUserAttr.access_token);
-      assert.isNotNull(container.currentUser, aUserAttr.currentUser);
+      assert.equal(container.auth.accessToken, aUserAttr.access_token);
+      assert.isNotNull(container.auth.currentUser, aUserAttr.currentUser);
 
-      return container.logout();
+      return container.auth.logout();
     })
     .then(() => {
-      assert.isNull(container.accessToken, aUserAttr.access_token);
-      assert.isNull(container.currentUser, aUserAttr.currentUser);
+      assert.isNull(container.auth.accessToken, aUserAttr.access_token);
+      assert.isNull(container.auth.currentUser, aUserAttr.currentUser);
     });
     /* eslint-enable-line camelcase */
   });
 
   it('should change password successfully', function () {
-    return container
+    return container.auth
       .changePassword('supersecret', 'supersecret')
       .then(function (user) {
-        assert.equal(container.accessToken, 'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(container.currentUser.id, 'user:id1');
+        assert.equal(container.auth.accessToken, 'uuid1');
+        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.equal(container.auth.currentUser.id, 'user:id1');
         assert.instanceOf(user, container.User);
       }, function (error) {
         throw new Error('Failed to change password');
@@ -537,7 +537,7 @@ describe('Container auth', function () {
   });
 
   it('should fail to change password if not match', function () {
-    return container
+    return container.auth
       .changePassword('supersecret', 'wrongsecret')
       .then(function (user) {
         throw new Error('Change password when not match');
@@ -602,7 +602,7 @@ describe('Container users', function () {
   container.configApiKey('correctApiKey');
 
   it('query user with email successfully', function () {
-    return container
+    return container.auth
       .getUsersByEmail(['user1@skygear.io'])
       .then(function (users) {
         assert.instanceOf(users[0], container.User);
@@ -620,7 +620,7 @@ describe('Container users', function () {
   });
 
   it('query user with username successfully', function () {
-    return container
+    return container.auth
       .getUsersByUsername(['user1'])
       .then(function (users) {
         assert.instanceOf(users[0], container.User);
@@ -638,8 +638,8 @@ describe('Container users', function () {
   });
 
   it('should be able to set null user', function () {
-    return container._setUser(null).then(function () {
-      assert.isNull(container.currentUser);
+    return container.auth._setUser(null).then(function () {
+      assert.isNull(container.auth.currentUser);
     });
   });
 
@@ -664,7 +664,7 @@ describe('Container users', function () {
     user.email = newEmail;
     user.addRole(Developer);
 
-    return container.saveUser(user)
+    return container.auth.saveUser(user)
     .then(function (updatedUser) {
       assert.equal(updatedUser.id, user.id);
       assert.equal(updatedUser.username, newUsername);
@@ -692,7 +692,7 @@ describe('Container users', function () {
 
     payload.email = newEmail;
 
-    return container.saveUser(payload)
+    return container.auth.saveUser(payload)
     .then(function (updatedUser) {
       assert.equal(updatedUser.id, payload.id);
       assert.equal(updatedUser.email, newEmail);
@@ -711,14 +711,14 @@ describe('Container users', function () {
       username: 'current_user_name'
     };
 
-    container._user = container.User.fromJSON(payload);
+    container.auth._user = container.User.fromJSON(payload);
 
     let user = container.User.fromJSON(payload);
     user.email = 'current_user_new_email@skygear.io';
 
-    return container.saveUser(user)
+    return container.auth.saveUser(user)
     .then(function () {
-      assert.equal(container.currentUser.email, user.email);
+      assert.equal(container.auth.currentUser.email, user.email);
     }, function (err) {
       console.error(err);
       throw new Error('update current user error', JSON.stringify(err));
@@ -761,7 +761,7 @@ describe('Container role', function () {
     var Killer = container.Role.define('Killer');
     var Police = container.Role.define('Police');
 
-    return container.setAdminRole([Killer, Police])
+    return container.db.public.setAdminRole([Killer, Police])
     .then(function (roles) {
       assert.include(roles, 'Killer');
       assert.include(roles, 'Police');
@@ -774,7 +774,7 @@ describe('Container role', function () {
     var Healer = container.Role.define('Healer');
     var Victim = container.Role.define('Victim');
 
-    return container.setDefaultRole([Victim, Healer])
+    return container.db.public.setDefaultRole([Victim, Healer])
     .then(function (roles) {
       assert.include(roles, 'Healer');
       assert.include(roles, 'Victim');
@@ -831,7 +831,7 @@ describe('Container acl', function () {
     let WebMaster = container.Role.define('Web Master');
     let Script = container.Record.extend('script');
 
-    return container.setRecordCreateAccess(Script, [Writer, WebMaster])
+    return container.db.public.setRecordCreateAccess(Script, [Writer, WebMaster])
     .then(function (result) {
       let {type, create_roles: roles} = result; // eslint-disable-line camelcase
 
@@ -850,7 +850,7 @@ describe('Container acl', function () {
     acl.setPublicReadOnly();
     acl.setReadWriteAccessForRole(Admin);
 
-    return container.setRecordDefaultAccess(Note, acl)
+    return container.db.public.setRecordDefaultAccess(Note, acl)
       .then((result)=> {
         let {type, default_access: defaultAccess} = result;
         let responseACL = container.ACL.fromJSON(defaultAccess);
@@ -866,7 +866,7 @@ describe('Container acl', function () {
 
 describe('Container device registration', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/register',
     fixtures: function (match, params, headers, fn) {
@@ -902,57 +902,57 @@ describe('Container device registration', function () {
   container.configApiKey('correctApiKey');
 
   it('should save device id successfully', function () {
-    return container._setDeviceID(null).then(function () {
-      return container.registerDevice('device-token', 'android');
+    return container.push._setDeviceID(null).then(function () {
+      return container.push.registerDevice('device-token', 'android');
     })
     .then(function (deviceID) {
       assert.equal(deviceID, 'device-id');
-      assert.equal(container.deviceID, 'device-id');
+      assert.equal(container.push.deviceID, 'device-id');
     }, function () {
       throw 'failed to save device id';
     });
   });
 
   it('should send app bundle name', function () {
-    return container._setDeviceID(null).then(function () {
-      return container.registerDevice('device-token', 'android', 'bundle-name');
+    return container.push._setDeviceID(null).then(function () {
+      return container.push.registerDevice('device-token', 'android', 'bundle-name');
     })
     .then(function (deviceID) {
       assert.equal(deviceID, 'topic-device-id');
-      assert.equal(container.deviceID, 'topic-device-id');
+      assert.equal(container.push.deviceID, 'topic-device-id');
     }, function () {
       throw 'failed to send app bundle name';
     });
   });
 
   it('should attach existing device id', function () {
-    return container._setDeviceID('existing-device-id').then(function () {
-      return container.registerDevice('ddevice-token', 'ios');
+    return container.push._setDeviceID('existing-device-id').then(function () {
+      return container.push.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
       assert.equal(deviceID, 'existing-device-id');
-      assert.equal(container.deviceID, 'existing-device-id');
+      assert.equal(container.push.deviceID, 'existing-device-id');
     });
   });
 
   it('should retry with null deviceID on first call fails', function () {
-    return container._setDeviceID('non-exist').then(function () {
-      return container.registerDevice('ddevice-token', 'ios');
+    return container.push._setDeviceID('non-exist').then(function () {
+      return container.push.registerDevice('ddevice-token', 'ios');
     }).then(function (deviceID) {
       assert.equal(deviceID, 'device-id');
-      assert.equal(container.deviceID, 'device-id');
+      assert.equal(container.push.deviceID, 'device-id');
     });
   });
 
   it('should be able to set null deviceID', function () {
-    return container._setDeviceID(null).then(function () {
-      assert.equal(container.deviceID, null);
+    return container.push._setDeviceID(null).then(function () {
+      assert.equal(container.push.deviceID, null);
     });
   });
 });
 
 describe('Container device unregistration', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/unregister',
@@ -989,9 +989,9 @@ describe('Container device unregistration', function () {
   }]);
 
   it('should success with correct device id', function (done) {
-    return container._setDeviceID('device_1')
+    return container.push._setDeviceID('device_1')
     .then(function () {
-      return container.unregisterDevice();
+      return container.push.unregisterDevice();
     })
     .then(function () {
       done();
@@ -1001,9 +1001,9 @@ describe('Container device unregistration', function () {
   });
 
   it('should regard as success with non-exist device id', function (done) {
-    return container._setDeviceID('non-exist')
+    return container.push._setDeviceID('non-exist')
     .then(function () {
-      return container.unregisterDevice();
+      return container.push.unregisterDevice();
     })
     .then(function () {
       done();
@@ -1013,9 +1013,9 @@ describe('Container device unregistration', function () {
   });
 
   it('should fail when no device id', function (done) {
-    return container._setDeviceID(null)
+    return container.push._setDeviceID(null)
     .then(function () {
-      return container.unregisterDevice();
+      return container.push.unregisterDevice();
     })
     .then(function () {
       throw new Error('Should not success without device id');
@@ -1027,7 +1027,7 @@ describe('Container device unregistration', function () {
 
 describe('lambda', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/hello/world',
     fixtures: function (match, params, headers, fn) {

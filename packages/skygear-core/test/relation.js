@@ -24,7 +24,7 @@ import {
   Relation,
   RelationResult,
   RelationQuery,
-  RelationAction
+  RelationContainer
 } from '../lib/relation';
 
 
@@ -56,7 +56,7 @@ describe('Relation', function () {
 });
 
 describe('RelationQuery', function () {
-  let Following = RelationAction.extend('follow', Outward);
+  let Following = RelationContainer.extend('follow', Outward);
 
   it('create with default', function () {
     let relationQuery = new RelationQuery(Following);
@@ -202,13 +202,13 @@ let request = mockSuperagent([{
   }
 }]);
 
-describe('RelationAction', function () {
+describe('RelationContainer', function () {
 
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = request;
   container.configApiKey('correctApiKey');
-  let relationAction = new RelationAction(container);
+  let relationAction = new RelationContainer(container);
 
   it('query following with helper method', function () {
     return relationAction.queryFollowing().then(function (users) {

@@ -15,7 +15,7 @@
  */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
 import sinon from 'sinon';
-import Pubsub from '../lib/pubsub';
+import {Pubsub} from '../lib/pubsub';
 import Container from '../lib/container';
 
 describe('Pubsub', function () {
@@ -27,7 +27,7 @@ describe('Pubsub', function () {
 
   beforeEach(function () {
     container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.configApiKey('API_KEY');
     pubsub = new Pubsub(container, true);
     ws = {
@@ -227,7 +227,7 @@ describe('Pubsub connection', function () {
 
   beforeEach(function () {
     container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.configApiKey('API_KEY');
     pubsub = new Pubsub(container, false);
     internalPubsub = new Pubsub(container, true);
