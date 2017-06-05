@@ -15,7 +15,7 @@
  */
 
 import {expect} from 'chai';
-import Role from '../packages/skygear-core/lib/role';
+import Role from '../lib/role';
 
 describe('Role', function () {
   it('normally role definition', function () {

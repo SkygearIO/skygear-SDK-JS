@@ -15,7 +15,7 @@
  */
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
-import {Registry} from '../../packages/skygear-core/lib/cloud/registry';
+import {Registry} from '../../lib/cloud/registry';
 
 describe('Registry', function () {
   it('init with empty funcList', function () {

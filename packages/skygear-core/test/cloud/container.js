@@ -16,7 +16,7 @@
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
 import CloudCodeContainer
-  from '../../packages/skygear-core/lib/cloud/container';
+  from '../../lib/cloud/container';
 import mockSuperagent from '../mock/superagent';
 
 describe('Cloud container', function () {

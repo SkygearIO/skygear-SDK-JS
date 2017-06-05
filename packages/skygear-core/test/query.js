@@ -15,11 +15,11 @@
  */
 /*eslint-disable camelcase, no-new */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
-import Query from '../packages/skygear-core/lib/query';
-import Record from '../packages/skygear-core/lib/record';
-import Reference from '../packages/skygear-core/lib/reference';
-import Geolocation from '../packages/skygear-core/lib/geolocation';
-import {RelationAction, Mutual} from '../packages/skygear-core/lib/relation';
+import Query from '../lib/query';
+import Record from '../lib/record';
+import Reference from '../lib/reference';
+import Geolocation from '../lib/geolocation';
+import {RelationAction, Mutual} from '../lib/relation';
 
 describe('Query', function () {
 

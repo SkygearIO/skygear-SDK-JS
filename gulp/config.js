@@ -9,7 +9,7 @@ module.exports = {
   packages: './packages/*',
   srcInPackage: './lib/**/*.js',
   destInPackage: './dist',
-  testSrc: './test/**/*.js',
+  testInPackage: './test/**/*.js',
   browserify: {
     settings: {
       transform: ['babelify', preprocessify(context[gutil.env.type])]
@@ -47,6 +47,7 @@ module.exports = {
         path: packagePath,
         src: path.join(packagePath, this.srcInPackage),
         dest: path.join(packagePath, this.destInPackage),
+        test: path.join(packagePath, this.testInPackage),
         standalone: this.browserify.standalone[basename] || 'skygear',
         browserifySrc: path.join(packagePath, this.browserify.src),
         browserifyDest: path.join(packagePath, this.browserify.dest),

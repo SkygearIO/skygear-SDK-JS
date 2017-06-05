@@ -16,8 +16,8 @@
 /*eslint-disable no-new, camelcase */
 import {expect} from 'chai';
 import _ from 'lodash';
-import User from '../packages/skygear-core/lib/user';
-import Role from '../packages/skygear-core/lib/role';
+import User from '../lib/user';
+import Role from '../lib/role';
 
 describe('User', function () {
 

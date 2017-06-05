@@ -15,7 +15,7 @@
  */
 import {expect} from 'chai';
 import sinon from 'sinon';
-import getStore from '../packages/skygear-core/lib/store';
+import getStore from '../lib/store';
 
 describe('Store', function () {
   const store = getStore();

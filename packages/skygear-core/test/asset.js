@@ -16,8 +16,8 @@
 /*eslint-disable max-len, no-new, camelcase */
 import {expect} from 'chai';
 import sinon from 'sinon';
-import Asset from '../packages/skygear-core/lib/asset';
-import {CloudSigner, FSSigner, S3Signer} from '../packages/skygear-core/lib/cloud/asset';
+import Asset from '../lib/asset';
+import {CloudSigner, FSSigner, S3Signer} from '../lib/cloud/asset';
 import mockSuperagent from './mock/superagent';
 
 describe('Asset', function () {

@@ -15,8 +15,8 @@
  */
 /*eslint-disable camelcase, no-unused-vars, dot-notation, no-new */
 import {expect, assert} from 'chai';
-import Container from '../packages/skygear-core/lib/container';
-import User from '../packages/skygear-core/lib/user';
+import Container from '../lib/container';
+import User from '../lib/user';
 import {
   Outward,
   Inward,
@@ -25,7 +25,7 @@ import {
   RelationResult,
   RelationQuery,
   RelationAction
-} from '../packages/skygear-core/lib/relation';
+} from '../lib/relation';
 
 
 describe('Relation', function () {

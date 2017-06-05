@@ -22,25 +22,29 @@ chai.use(sinonChai);
 gulp.task('pre-test', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
-  return gulp.src(packageConfig.src)
-    .pipe(preprocess({context: context[gutil.env.type]}))
-    .pipe(istanbul({
-      includeUntested: true,
-      instrumenter: isparta.Instrumenter
-    }))
-    .pipe(istanbul.hookRequire());
+    return gulp.src(packageConfig.src)
+      .pipe(preprocess({context: context[gutil.env.type]}))
+      .pipe(istanbul({
+        includeUntested: true,
+        instrumenter: isparta.Instrumenter
+      }))
+      .pipe(istanbul.hookRequire());
   });
   return merge(streams);
 });
 
 gulp.task('test', ['pre-test'], function () {
-  return gulp.src(config.testSrc)
-    .pipe(babel())
-    .pipe(mocha({
-      reporter: 'spec',
-      clearRequireCache: true,
-      quiet: false
-    }))
+  var packageConfigs = config.getPackageConfigs();
+  var streams = packageConfigs.map(function(packageConfig) {
+    return gulp.src(packageConfig.test)
+      .pipe(babel())
+      .pipe(mocha({
+        reporter: 'spec',
+        clearRequireCache: true,
+        quiet: false
+      }))
+  });
+  return merge(streams)
     .pipe(istanbul.writeReports({
       reporters: ['lcov', 'text', 'text-summary']
     }))
@@ -53,5 +57,5 @@ gulp.task('test', ['pre-test'], function () {
           lines: 70
         }
       }
-    }))
+    }));
 });
