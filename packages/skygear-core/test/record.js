@@ -338,5 +338,10 @@ describe('Extended Record', function () {
     ]);
   });
 
+  it('set acl on new record', function () {
+    let note = new Note();
+    note.setPublicNoAccess();
+    expect(note.access.toJSON()).to.be.eql([]);
+  });
 });
 /*eslint-enable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
