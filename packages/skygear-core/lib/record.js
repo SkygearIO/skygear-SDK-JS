@@ -106,6 +106,9 @@ export default class Record {
   }
 
   get access() {
+    if (this._access === null || this._access === undefined) {
+      this._access = new ACL();
+    }
     return this._access;
   }
 
@@ -230,7 +233,7 @@ export default class Record {
   toJSON() {
     let payload = {
       _id: this.id,
-      _access: this.access && this.access.toJSON()
+      _access: this._access && this._access.toJSON()
     };
     _.each(this.attributeKeys, (key)=> {
       payload[key] = toJSON(this[key]);
