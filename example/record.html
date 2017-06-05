@@ -370,7 +370,7 @@
       var deleteResult = document.getElementById("delete-result");
       // skygear.publicDB.del(r);
       var record = new skygear.Record(_type, {
-        _id: _id
+        _id: _type + '/' + _id
       });
       skygear.db.public.del(record).then(function (ok) {
         console.log(ok);
