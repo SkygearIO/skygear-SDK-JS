@@ -16,10 +16,10 @@
 /*eslint-disable dot-notation, no-new, no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import sinon from 'sinon';
-import Database from '../packages/skygear-core/lib/database';
-import Record from '../packages/skygear-core/lib/record';
-import Query from '../packages/skygear-core/lib/query';
-import Container from '../packages/skygear-core/lib/container';
+import Database from '../lib/database';
+import Record from '../lib/record';
+import Query from '../lib/query';
+import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
 

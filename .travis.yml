@@ -11,6 +11,9 @@ node_js:
   - '6'
   - '4'
 
+install:
+  - make vendor
+
 script:
   - make test
 

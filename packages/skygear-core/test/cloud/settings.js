@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {assert} from 'chai';
-import skygear from '../packages/skygear-core/lib/index';
+/*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
+import {assert, expect} from 'chai';
+import {parseInteger} from '../../lib/cloud/settings';
 
-
-describe('skygear', function () {
-  it('can reconfigure end-point', function () {
-    skygear.endPoint = 'https://myseployment.com/';
-    assert.equal(skygear.endPoint, 'https://myseployment.com/');
+describe('setting', function () {
+  it('parseInteger with default', function () {
+    const zero = parseInteger('99', 10);
+    expect(zero).to.be.eql(99);
   });
+
+  it('parseInteger will handle 0', function () {
+    const zero = parseInteger('0', 10);
+    expect(zero).to.be.eql(0);
+  });
+
 });
+
+/*eslint-enable camelcase, dot-notation, no-unused-vars, quote-props */

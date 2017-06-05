@@ -17,9 +17,8 @@ var context = require('../context');
 gulp.task('default', ['test'], function () {
   var packageConfigs = config.getPackageConfigs();
   var packagesSrc = packageConfigs.map(function(config) {
-    return config.src;
+    return config.src.concat(config.test);
   });
-  packagesSrc.push(config.testSrc);
   var streams = packagesSrc.map(function(src) {
     return gulp.src(src)
       .pipe(excludeGitignore())

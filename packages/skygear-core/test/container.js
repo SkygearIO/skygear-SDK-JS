@@ -15,8 +15,8 @@
  */
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
-import Container from '../packages/skygear-core/lib/container';
-import {AccessLevel} from '../packages/skygear-core/lib/acl';
+import Container from '../lib/container';
+import {AccessLevel} from '../lib/acl';
 
 import mockSuperagent from './mock/superagent';
 

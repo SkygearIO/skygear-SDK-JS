@@ -16,11 +16,11 @@
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
 import sinon from 'sinon';
-import {Registry} from '../../../packages/skygear-core/lib/cloud/registry';
+import {Registry} from '../../../lib/cloud/registry';
 import CommonTransport
-  from '../../../packages/skygear-core/lib/cloud/transport/common';
+  from '../../../lib/cloud/transport/common';
 import { SkygearResponse }
-  from '../../../packages/skygear-core/lib/cloud/transport/common';
+  from '../../../lib/cloud/transport/common';
 
 describe('CommonTransport', function () {
   it('should throw Error initHandler', function (done) {

@@ -15,8 +15,8 @@
  */
 /*eslint-disable quote-props */
 import {expect, assert} from 'chai'; //eslint-disable-line no-unused-vars
-import Record from '../packages/skygear-core/lib/record';
-import QueryResult from '../packages/skygear-core/lib/query_result';
+import Record from '../lib/record';
+import QueryResult from '../lib/query_result';
 
 describe('QueryResult', function () {
 
