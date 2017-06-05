@@ -151,9 +151,9 @@
       'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function (container) {
       display.endPoint.textContent = container.endPoint;
-      display.token.textContent = container.accessToken;
+      display.token.textContent = container.auth.accessToken;
 
-      var currentUser = skygear.currentUser;
+      var currentUser = skygear.auth.currentUser;
       if (currentUser) {
         display.username.textContent = currentUser.username;
         display.email.textContent = currentUser.email;
@@ -166,7 +166,7 @@
         timestamp: (+new Date())
       });
 
-      return skygear.publicDB.save(sampleObject);
+      return skygear.db.public.save(sampleObject);
     }).then(function (obj) {
       window.sampleObject = obj
       window.onUpdateSampleObject();
@@ -220,7 +220,7 @@
       console.log('Assign role ' + roleName + ' to ' + userEmail);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.getUsersByEmail([userEmail])
+      skygear.auth.getUsersByEmail([userEmail])
       .then(function (users) {
         if (users.length == 0) {
           return Promise.reject(
@@ -231,7 +231,7 @@
         var theUser = users[0];
         theUser.addRole(theRole);
 
-        return skygear.saveUser(theUser)
+        return skygear.auth.saveUser(theUser)
       }).then(function () {
         console.log('Assign role success');
       }, function (err) {
@@ -246,7 +246,7 @@
       console.log('Remove role ' + roleName + ' from ' + userEmail);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.getUsersByEmail([userEmail])
+      skygear.auth.getUsersByEmail([userEmail])
       .then(function (users) {
         if (users.length == 0) {
           return Promise.reject(
@@ -257,7 +257,7 @@
         var theUser = users[0];
         theUser.removeRole(theRole);
 
-        return skygear.saveUser(theUser)
+        return skygear.auth.saveUser(theUser)
       }).then(function () {
         console.log('Remove role success');
       }, function (err) {
@@ -271,7 +271,7 @@
 
       display.checkUserRole.textContent = "";
 
-      skygear.getUsersByEmail([userEmail])
+      skygear.auth.getUsersByEmail([userEmail])
       .then(function (users) {
         if (users.length == 0) {
           display.checkUserRole.textContent = "No such user";
@@ -292,7 +292,7 @@
       console.log('Set Admin Role', roleName);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.setAdminRole([theRole])
+      skygear.db.public.setAdminRole([theRole])
       .then(function (roleNames) {
         console.log('Set Admin Role success', roleNames);
       }, function (err) {
@@ -305,7 +305,7 @@
       console.log('Set Default Role', roleName);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.setDefaultRole([theRole])
+      skygear.db.public.setDefaultRole([theRole])
       .then(function (roleNames) {
         console.log('Set Default Role success', roleNames);
       }, function (err) {
@@ -375,7 +375,7 @@
 
     var getUser = function() {
       var email = inputs.manageAccessUser.value;
-      return skygear.getUsersByEmail([email]).then((users) => {
+      return skygear.auth.getUsersByEmail([email]).then((users) => {
         return users[0];
       }, (error) => {
         console.log("Cannot find user with email: ", email);
@@ -436,7 +436,7 @@
     };
 
     window.onUpdateDefaultACL = function () {
-      var acl = skygear.defaultACL;
+      var acl = skygear.db.public.defaultACL;
       display.defaultACL.textContent = JSON.stringify(acl.toJSON());
     };
 
@@ -466,7 +466,7 @@
         }, (error) => {
           console.log(error);
         }).then(() => {
-          skygear.publicDB.save(window.sampleObject)
+          skygear.db.public.save(window.sampleObject)
           .then(function (obj) {
             window.sampleObject = obj;
             window.onUpdateSampleObject();
@@ -478,7 +478,7 @@
     }
 
     window.onSetDefaultAccess = function() {
-      var acl = skygear.defaultACL;
+      var acl = skygear.db.public.defaultACL;
       var publicAccess = getSelectedPublicAccess();
       var roleAccess = getSelectedRoleAccess();
       var userAccess = getSelectedUserAccess();
@@ -502,7 +502,7 @@
         }, (error) => {
           console.log(error);
         }).then(() => {
-          skygear.setDefaultACL(acl);
+          skygear.db.public.setDefaultACL(acl);
           window.onUpdateDefaultACL();
         });
       } else {
@@ -517,7 +517,7 @@
       var CustomRecord = skygear.Record.extend(recordType);
 
       console.log('Set create access for ' + CustomRecord.recordType + ' to ' + role.name);
-      skygear.setRecordCreateAccess(CustomRecord, [role])
+      skygear.db.public.setRecordCreateAccess(CustomRecord, [role])
       .then(function () {
         console.log('Success');
       }, function (err) {

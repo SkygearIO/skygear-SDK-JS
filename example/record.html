@@ -204,10 +204,10 @@
       'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = skygear.accessToken;
-      if (skygear.currentUser) {
-        currentUsername.innerText = skygear.currentUser.username;
-        currentEmail.innerText = skygear.currentUser.email;
+      token.innerText = skygear.auth.accessToken;
+      if (skygear.auth.currentUser) {
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
       }
     }, function(err) {
       console.log(err);
@@ -229,7 +229,7 @@
       var record = new _Record();
       record[field] = asset;
 
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.db.public.save(record).then(function (record) {
         console.log(record);
         uploadResult.innerText = JSON.stringify(record.toJSON(), null, 2);
       }, function (error) {
@@ -251,7 +251,7 @@
       if (sequence === 'on') {
         record[sequenceName] = new skygear.Sequence();
       }
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.db.public.save(record).then(function (record) {
         console.log(record);
         createResult.innerText = record.ID;
       }, function (error) {
@@ -328,12 +328,12 @@
         query.limit = parseInt(queryLimit, 10);
       }
       if (displayCache) {
-        skygear.publicDB.query(query, function (records) {
+        skygear.db.public.query(query, function (records) {
           queryResultCount.innerText = records.overallCount;
           queryResult.innerText = JSON.stringify(records);
         });
       } else {
-        skygear.publicDB.query(query).then(function (records) {
+        skygear.db.public.query(query).then(function (records) {
           queryResultCount.innerText = records.overallCount;
           queryResult.innerText = JSON.stringify(records);
         }, function (error) {
@@ -354,7 +354,7 @@
         _id: _type + '/' + _id
       });
       record[key] = value
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.db.public.save(record).then(function (record) {
         console.log(record);
         updateResult.innerText = record.ID;
       }, function (error) {
@@ -372,7 +372,7 @@
       var record = new skygear.Record(_type, {
         _id: _id
       });
-      skygear.publicDB.del(record).then(function (ok) {
+      skygear.db.public.del(record).then(function (ok) {
         console.log(ok);
       }, function (error) {
         console.log(error);
