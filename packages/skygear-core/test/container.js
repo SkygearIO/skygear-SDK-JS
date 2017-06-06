@@ -53,49 +53,49 @@ describe('Container', function () {
   it('caches response by default', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
-    expect(container.db.cacheResponse).to.be.true();
+    expect(container._db.cacheResponse).to.be.true();
   });
 
   it('does not eagerly initialize db when setting cacheResponse', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
 
-    container.db.cacheResponse = false;
-    expect(container.db._public).to.be.null();
-    expect(container.db._private).to.be.null();
+    container._db.cacheResponse = false;
+    expect(container._db._public).to.be.null();
+    expect(container._db._private).to.be.null();
   });
 
   it('initializes db with current cacheResponse setting', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
 
-    container.db.cacheResponse = false;
-    expect(container.db._public).to.be.null();
-    expect(container.db._private).to.be.null();
+    container._db.cacheResponse = false;
+    expect(container._db._public).to.be.null();
+    expect(container._db._private).to.be.null();
 
-    expect(container.db.public.cacheResponse).to.be.false();
+    expect(container.publicDB.cacheResponse).to.be.false();
 
     container.auth._accessToken = 'access-token';
-    expect(container.db.private.cacheResponse).to.be.false();
+    expect(container.privateDB.cacheResponse).to.be.false();
   });
 
   it('forwards cacheResponse to its databases', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
-    container.db.cacheResponse = false;
+    container._db.cacheResponse = false;
     container.auth._accessToken = 'dummy-access-token-to-enable-private-db';
 
-    container.db.cacheResponse = true;
-    expect(container.db.public.cacheResponse).to.be.true();
-    expect(container.db.private.cacheResponse).to.be.true();
+    container._db.cacheResponse = true;
+    expect(container.publicDB.cacheResponse).to.be.true();
+    expect(container.privateDB.cacheResponse).to.be.true();
 
-    container.db.cacheResponse = false;
-    expect(container.db.public.cacheResponse).to.be.false();
-    expect(container.db.private.cacheResponse).to.be.false();
+    container._db.cacheResponse = false;
+    expect(container.publicDB.cacheResponse).to.be.false();
+    expect(container.privateDB.cacheResponse).to.be.false();
 
-    container.db.cacheResponse = true;
-    expect(container.db.public.cacheResponse).to.be.true();
-    expect(container.db.private.cacheResponse).to.be.true();
+    container._db.cacheResponse = true;
+    expect(container.publicDB.cacheResponse).to.be.true();
+    expect(container.privateDB.cacheResponse).to.be.true();
   });
 
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
@@ -761,7 +761,7 @@ describe('Container role', function () {
     var Killer = container.Role.define('Killer');
     var Police = container.Role.define('Police');
 
-    return container.db.public.setAdminRole([Killer, Police])
+    return container.publicDB.setAdminRole([Killer, Police])
     .then(function (roles) {
       assert.include(roles, 'Killer');
       assert.include(roles, 'Police');
@@ -774,7 +774,7 @@ describe('Container role', function () {
     var Healer = container.Role.define('Healer');
     var Victim = container.Role.define('Victim');
 
-    return container.db.public.setDefaultRole([Victim, Healer])
+    return container.publicDB.setDefaultRole([Victim, Healer])
     .then(function (roles) {
       assert.include(roles, 'Healer');
       assert.include(roles, 'Victim');
@@ -831,7 +831,7 @@ describe('Container acl', function () {
     let WebMaster = container.Role.define('Web Master');
     let Script = container.Record.extend('script');
 
-    return container.db.public.setRecordCreateAccess(Script, [Writer, WebMaster])
+    return container.publicDB.setRecordCreateAccess(Script, [Writer, WebMaster])
     .then(function (result) {
       let {type, create_roles: roles} = result; // eslint-disable-line camelcase
 
@@ -850,7 +850,7 @@ describe('Container acl', function () {
     acl.setPublicReadOnly();
     acl.setReadWriteAccessForRole(Admin);
 
-    return container.db.public.setRecordDefaultAccess(Note, acl)
+    return container.publicDB.setRecordDefaultAccess(Note, acl)
       .then((result)=> {
         let {type, default_access: defaultAccess} = result;
         let responseACL = container.ACL.fromJSON(defaultAccess);

@@ -166,7 +166,7 @@
         timestamp: (+new Date())
       });
 
-      return skygear.db.public.save(sampleObject);
+      return skygear.publicDB.save(sampleObject);
     }).then(function (obj) {
       window.sampleObject = obj
       window.onUpdateSampleObject();
@@ -292,7 +292,7 @@
       console.log('Set Admin Role', roleName);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.db.public.setAdminRole([theRole])
+      skygear.publicDB.setAdminRole([theRole])
       .then(function (roleNames) {
         console.log('Set Admin Role success', roleNames);
       }, function (err) {
@@ -305,7 +305,7 @@
       console.log('Set Default Role', roleName);
 
       var theRole = skygear.Role.define(roleName);
-      skygear.db.public.setDefaultRole([theRole])
+      skygear.publicDB.setDefaultRole([theRole])
       .then(function (roleNames) {
         console.log('Set Default Role success', roleNames);
       }, function (err) {
@@ -436,7 +436,7 @@
     };
 
     window.onUpdateDefaultACL = function () {
-      var acl = skygear.db.public.defaultACL;
+      var acl = skygear.publicDB.defaultACL;
       display.defaultACL.textContent = JSON.stringify(acl.toJSON());
     };
 
@@ -466,7 +466,7 @@
         }, (error) => {
           console.log(error);
         }).then(() => {
-          skygear.db.public.save(window.sampleObject)
+          skygear.publicDB.save(window.sampleObject)
           .then(function (obj) {
             window.sampleObject = obj;
             window.onUpdateSampleObject();
@@ -478,7 +478,7 @@
     }
 
     window.onSetDefaultAccess = function() {
-      var acl = skygear.db.public.defaultACL;
+      var acl = skygear.publicDB.defaultACL;
       var publicAccess = getSelectedPublicAccess();
       var roleAccess = getSelectedRoleAccess();
       var userAccess = getSelectedUserAccess();
@@ -502,7 +502,7 @@
         }, (error) => {
           console.log(error);
         }).then(() => {
-          skygear.db.public.setDefaultACL(acl);
+          skygear.publicDB.setDefaultACL(acl);
           window.onUpdateDefaultACL();
         });
       } else {
@@ -517,7 +517,7 @@
       var CustomRecord = skygear.Record.extend(recordType);
 
       console.log('Set create access for ' + CustomRecord.recordType + ' to ' + role.name);
-      skygear.db.public.setRecordCreateAccess(CustomRecord, [role])
+      skygear.publicDB.setRecordCreateAccess(CustomRecord, [role])
       .then(function () {
         console.log('Success');
       }, function (err) {

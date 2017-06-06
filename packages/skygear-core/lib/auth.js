@@ -45,7 +45,7 @@ export class AuthContainer {
   }
 
   get publicDB() {
-    return this.container.db.public;
+    return this.container.publicDB;
   }
 
   onUserChanged(listener) {
