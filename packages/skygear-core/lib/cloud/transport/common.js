@@ -77,6 +77,7 @@ class SkygearRequest {
     } else {
       this.url = parse(`${this.path}`, true);
     }
+    this.params = param.params; //parameters in url
   }
 
   get query() {
@@ -381,6 +382,7 @@ export default class CommonTransport {
     if (!func) {
       return Promise.reject(new Error('Handler not exist'));
     }
+    param.params = this.registry.parseParamsInUrl(name);
 
     const options = { context };
     const req = new SkygearRequest(param);

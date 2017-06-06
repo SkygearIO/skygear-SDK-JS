@@ -228,6 +228,41 @@ describe('CommonTransport', function () {
     }).catch(done);
   });
 
+  it('call with handlerHandler with params in req', function () {
+    const registry = new Registry();
+    registry.registerHandler('user/:id', function(req) {
+      return req;
+    }, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    const transport = new CommonTransport(registry);
+    return transport.handlerHandler({
+      kind: 'handler',
+      name: 'user/12345678',
+      param: {
+        method: 'GET',
+        header: {
+          'Content-Type': ['application/json'],
+          'Content-Length': ['16']
+        },
+        body: 'eyJkYXRhIjoi4pyTIn0=', // {"data":"✓"}
+        path: '/user/12345678',
+        query_string: 'q=1'
+      },
+      context: {
+        user_id: '0383f77599f1412e938f29ae79c3dcc8'
+      }
+    }).then((result) => {
+      const buf = Buffer.from(result.result.body, 'base64');
+      const body = JSON.parse(buf);
+      expect(body.params).to.deep.equal({
+        id: '12345678'
+      });
+    })
+  });
+
   it('should call init event handler properly', function (done) {
     const initInfo = {
       op: [],
