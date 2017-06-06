@@ -115,6 +115,23 @@ describe('Registry', function () {
     expect(registry.getHandler('pubHandler', 'GET')).to.be.eql(pubHandler);
   });
 
+  it('add handler with parameters to funcList', function() {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler('download/:platform/:version', handlerWithParams, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    expect(registry.funcList().handler).to.be.eql([{
+      name: 'download/:platform/:version',
+      methods: ['GET'],
+      auth_required: false,
+      user_required: true
+    }]);
+    expect(registry.getHandler('download/osx/1.0.0', 'GET')).to.be.eql(handlerWithParams);
+  });
+
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}
