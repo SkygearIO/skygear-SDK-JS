@@ -407,7 +407,7 @@ export default class CommonTransport {
     if (!func) {
       return Promise.reject(new Error('Handler not exist'));
     }
-    param.params = this.registry.parseParamsInUrl(name);
+    param.params = this.registry.parseParamsInPath(name);
 
     const options = {
       context,
