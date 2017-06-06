@@ -149,7 +149,7 @@ describe('Registry', function () {
     expect(registry.getHandler('hello/foo/world/bar', 'GET')).to.be.eql(handlerWithParams);
   });
 
-  it('parse parameters in url', function() {
+  it('parse parameters in path', function() {
     const registry = new Registry();
     function handlerWithParams() {}
     registry.registerHandler('download/:platform/:version', handlerWithParams, {
@@ -157,13 +157,13 @@ describe('Registry', function () {
       authRequired: false,
       userRequired: true
     });
-    expect(registry.parseParamsInUrl('download/osx/1.0.0')).to.be.deep.eql({
+    expect(registry.parseParamsInPath('download/osx/1.0.0')).to.be.deep.eql({
       platform: 'osx',
       version: '1.0.0'
     });
   });
 
-  it('parse parameters in url, calacala parameters', function() {
+  it('parse parameters in path, calacala parameters', function() {
     const registry = new Registry();
     function handlerWithParams() {}
     registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
@@ -171,13 +171,13 @@ describe('Registry', function () {
       authRequired: false,
       userRequired: true
     });
-    expect(registry.parseParamsInUrl('hello/foo/world/bar')).to.be.deep.eql({
+    expect(registry.parseParamsInPath('hello/foo/world/bar')).to.be.deep.eql({
       param1: 'foo',
       param2: 'bar'
     });
   });
 
-  it('parse parameters in non parameterized url', function() {
+  it('parse parameters in non parameterized path', function() {
     const registry = new Registry();
     function handlerWithParams() {}
     registry.registerHandler('a/normal/url', handlerWithParams, {
@@ -185,7 +185,7 @@ describe('Registry', function () {
       authRequired: false,
       userRequired: true
     });
-    expect(registry.parseParamsInUrl('a/normal/url')).to.be.deep.eql({});
+    expect(registry.parseParamsInPath('a/normal/url')).to.be.deep.eql({});
   });
 
   it('add static asset collect func', function () {

@@ -144,30 +144,31 @@ export class Registry {
 
   getHandler(name, method) {
     for (let k in this.handlers) {
-      const handlerPattern = /\/:((?!\/).)+/g;
-      const namePattern = new RegExp('^' + k.replace(handlerPattern, '/((?!/).)+') + '$');
-      if (name.match(namePattern) !== null)
+      if (this._matchHandler(k, name))
         return this.handlers[k][method];
     }
     return undefined;
   }
 
-  parseParamsInUrl(url) {
+  parseParamsInPath(path) {
     for (let k in this.handlers) {
-      const handlerPattern = /\/:((?!\/).)+/g;
-      const namePattern = new RegExp('^' + k.replace(handlerPattern, '/((?!/).)+') + '$');
-      if (url.match(namePattern) !== null) {
+      if (this._matchHandler(k, path)) {
         let params = {};
         const handlerParts = k.split('/');
-        const urlParts = url.split('/');
+        const pathParts = path.split('/');
         for (let i = 0; i < handlerParts.length; i++) {
           if (handlerParts[i].startsWith(':'))
-            params[handlerParts[i].replace(':', '')] = urlParts[i];
+            params[handlerParts[i].replace(':', '')] = pathParts[i];
         }
         return params;
       }
     }
     return undefined;
+  }
+
+  _matchHandler(handlerName, path) {
+    const namePattern = new RegExp('^' + handlerName.replace(/\/:((?!\/).)+/g, '/((?!/).)+') + '$');
+    return path.match(namePattern) !== null;
   }
 
   getProvider(name) {
