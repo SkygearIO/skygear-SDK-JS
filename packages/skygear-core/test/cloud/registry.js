@@ -132,6 +132,20 @@ describe('Registry', function () {
     expect(registry.getHandler('download/osx/1.0.0', 'GET')).to.be.eql(handlerWithParams);
   });
 
+  it('parse parameters in url', function() {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler('download/:platform/:version', handlerWithParams, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    expect(registry.parseParamsInUrl('download/osx/1.0.0')).to.be.deep.eql({
+      platform: 'osx',
+      version: '1.0.0'
+    });
+  });
+
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}
