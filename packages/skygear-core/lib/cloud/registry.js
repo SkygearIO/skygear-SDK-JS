@@ -152,6 +152,24 @@ export class Registry {
     return undefined;
   }
 
+  parseParamsInUrl(url) {
+    for (let k in this.handlers) {
+      const handlerPattern = /\/:((?!\/).)+/g;
+      const namePattern = new RegExp('^' + k.replace(handlerPattern, '/((?!/).)+') + '$');
+      if (url.match(namePattern) !== null) {
+        let params = {};
+        const handlerParts = k.split('/');
+        const urlParts = url.split('/');
+        for (let i = 0; i < handlerParts.length; i++) {
+          if (handlerParts[i].startsWith(':'))
+            params[handlerParts[i].replace(':', '')] = urlParts[i];
+        }
+        return params;
+      }
+    }
+    return undefined;
+  }
+
   getProvider(name) {
     return this.providers[name];
   }
