@@ -143,7 +143,13 @@ export class Registry {
   }
 
   getHandler(name, method) {
-    return this.handlers[name][method];
+    for (let k in this.handlers) {
+      const handlerPattern = /\/:((?!\/).)+/g;
+      const namePattern = new RegExp('^' + k.replace(handlerPattern, '/((?!/).)+') + '$');
+      if (name.match(namePattern) !== null)
+        return this.handlers[k][method];
+    }
+    return undefined;
   }
 
   getProvider(name) {
