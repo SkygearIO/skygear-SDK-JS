@@ -132,6 +132,23 @@ describe('Registry', function () {
     expect(registry.getHandler('download/osx/1.0.0', 'GET')).to.be.eql(handlerWithParams);
   });
 
+  it('add handler with parameters to funcList, calacala parameters', function() {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    expect(registry.funcList().handler).to.be.eql([{
+      name: 'hello/:param1/world/:param2',
+      methods: ['GET'],
+      auth_required: false,
+      user_required: true
+    }]);
+    expect(registry.getHandler('hello/foo/world/bar', 'GET')).to.be.eql(handlerWithParams);
+  });
+
   it('parse parameters in url', function() {
     const registry = new Registry();
     function handlerWithParams() {}
@@ -144,6 +161,31 @@ describe('Registry', function () {
       platform: 'osx',
       version: '1.0.0'
     });
+  });
+
+  it('parse parameters in url, calacala parameters', function() {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    expect(registry.parseParamsInUrl('hello/foo/world/bar')).to.be.deep.eql({
+      param1: 'foo',
+      param2: 'bar'
+    });
+  });
+
+  it('parse parameters in non parameterized url', function() {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler('a/normal/url', handlerWithParams, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    expect(registry.parseParamsInUrl('a/normal/url')).to.be.deep.eql({});
   });
 
   it('add static asset collect func', function () {
