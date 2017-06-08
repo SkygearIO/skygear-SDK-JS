@@ -308,11 +308,11 @@
       }
       if (relationKeyPath != "") {
         if (relationName == "friend") {
-          query.havingRelation(relationKeyPath, skygear.relation.Friend);
+          query.havingRelation(relationKeyPath, skygear.Friend);
         } else if (relationName == "following") {
-          query.havingRelation(relationKeyPath, skygear.relation.Following);
+          query.havingRelation(relationKeyPath, skygear.Following);
         } else {
-          query.havingRelation(relationKeyPath, skygear.relation.Follower);
+          query.havingRelation(relationKeyPath, skygear.Follower);
         }
       }
       if (querySort) {
