@@ -56,7 +56,7 @@ describe('Relation', function () {
 });
 
 describe('RelationQuery', function () {
-  let Following = RelationContainer.extend('follow', Outward);
+  let Following = Relation.extend('follow', Outward);
 
   it('create with default', function () {
     let relationQuery = new RelationQuery(Following);
