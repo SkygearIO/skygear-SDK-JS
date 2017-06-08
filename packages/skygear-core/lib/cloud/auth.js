@@ -23,7 +23,7 @@ export class CloudCodeAuthContainer extends AuthContainer {
 
   _setUser(attrs) {
     if (attrs !== null) {
-      this._user = new this.User(attrs);
+      this._user = new this._User(attrs);
     } else {
       this._user = null;
     }

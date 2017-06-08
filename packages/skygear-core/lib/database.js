@@ -17,7 +17,6 @@ const _ = require('lodash');
 
 import Cache from './cache';
 import Asset from './asset';
-import Record from './record';
 import Query from './query';
 import QueryResult from './query_result';
 
@@ -33,11 +32,8 @@ export class Database {
     this._cacheResponse = true;
   }
 
-  get Record() {
-    return this.container.Record;
-  }
-
   getRecordByID(id) {
+    let Record = this._Record;
     let [recordType, recordId] = Record.parseID(id);
     let query = new Query(Record.extend(recordType)).equalTo('_id', recordId);
     return this.query(query).then((users) => {
@@ -226,6 +222,9 @@ export class Database {
     this._cacheResponse = b;
   }
 
+  get _Record() {
+    return this.container.Record;
+  }
 }
 
 export class PublicDatabase extends Database {
@@ -251,11 +250,11 @@ export class PublicDatabase extends Database {
   }
 
   get defaultACL() {
-    return this.Record.defaultACL;
+    return this._Record.defaultACL;
   }
 
   setDefaultACL(acl) {
-    this.Record.defaultACL = acl;
+    this._Record.defaultACL = acl;
   }
 
   setRecordCreateAccess(recordClass, roles) {

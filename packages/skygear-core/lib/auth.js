@@ -36,18 +36,6 @@ export class AuthContainer {
     return this._accessToken;
   }
 
-  get User() {
-    return this.container.User;
-  }
-
-  get Query() {
-    return this.container.Query;
-  }
-
-  get publicDB() {
-    return this.container.publicDB;
-  }
-
   onUserChanged(listener) {
     this.container.ee.on(USER_CHANGED, listener);
     return new EventHandle(this.container.ee, USER_CHANGED, listener);
@@ -154,7 +142,7 @@ export class AuthContainer {
       });
     }
     return this.container.makeRequest('user:update', payload).then((body)=> {
-      const newUser = this.User.fromJSON(body.result);
+      const newUser = this._User.fromJSON(body.result);
       const currentUser = this.currentUser;
 
       if (newUser && currentUser && newUser.id === currentUser.id) {
@@ -174,14 +162,14 @@ export class AuthContainer {
   }
 
   discoverUserByEmails(emails) {
-    return this.publicDB.query(
-      new this.Query(this.container.UserRecord).havingEmails(emails)
+    return this.container.publicDB.query(
+      new this._Query(this.container.UserRecord).havingEmails(emails)
     );
   }
 
   discoverUserByUsernames(usernames) {
-    return this.publicDB.query(
-      new this.Query(this.container.UserRecord).havingUsernames(usernames)
+    return this.container.publicDB.query(
+      new this._Query(this.container.UserRecord).havingUsernames(usernames)
     );
   }
 
@@ -232,7 +220,7 @@ export class AuthContainer {
       _id: 'user/' + user.id,
       ...profile
     });
-    return this.publicDB.save(record);
+    return this.container.publicDB.save(record);
   }
 
   _getUsersBy(emails, usernames) {
@@ -240,14 +228,14 @@ export class AuthContainer {
       emails: emails,
       usernames: usernames
     }).then((body)=> {
-      return body.result.map(r => new this.User(r.data));
+      return body.result.map(r => new this._User(r.data));
     });
   }
 
   _getUser() {
     return this.container.store.getItem('skygear-user').then((userJSON)=> {
       let attrs = JSON.parse(userJSON);
-      this._user = this.User.fromJSON(attrs);
+      this._user = this._User.fromJSON(attrs);
     }, (err)=> {
       console.warn('Failed to get user', err);
       this._user = null;
@@ -258,7 +246,7 @@ export class AuthContainer {
   _setUser(attrs) {
     let value;
     if (attrs !== null) {
-      this._user = new this.User(attrs);
+      this._user = new this._User(attrs);
       value = JSON.stringify(this._user.toJSON());
     } else {
       this._user = null;
@@ -275,6 +263,14 @@ export class AuthContainer {
       console.warn('Failed to persist user', err);
       return value;
     });
+  }
+
+  get _User() {
+    return this.container.User;
+  }
+
+  get _Query() {
+    return this.container.Query;
   }
 
 }
