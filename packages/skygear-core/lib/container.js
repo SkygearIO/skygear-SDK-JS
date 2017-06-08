@@ -165,54 +165,100 @@ export class BaseContainer {
     });
   }
 
+  /**
+   * @type {Query}
+   */
   get Query() {
     return Query;
   }
 
+  /**
+   * @type {User}
+   */
   get User() {
     return User;
   }
 
+  /**
+   * @type {Role}
+   */
   get Role() {
     return Role;
   }
 
+  /**
+   * @type {ACL}
+   */
   get ACL() {
     return ACL;
   }
 
+  /**
+   * @type {Record}
+   */
   get Record() {
     return Record;
   }
 
+  /**
+   * @type {Record}
+   */
   get UserRecord() {
     return Record.extend('user');
   }
 
+  /**
+   * @type {Sequence}
+   */
   get Sequence() {
     return Sequence;
   }
 
+  /**
+   * @type {Asset}
+   */
   get Asset() {
     return Asset;
   }
 
+  /**
+   * @type {Reference}
+   */
   get Reference() {
     return Reference;
   }
 
+  /**
+   * @type {Geolocation}
+   */
   get Geolocation() {
     return Geolocation;
   }
 
+  /**
+   * @type {Database}
+   */
+  get Database() {
+    return Database;
+  }
+
+  /**
+   * @type {Relation}
+   */
   get Friend() {
     return this.relation.Friend;
   }
 
+  /**
+   * @type {Relation}
+   */
   get Follower() {
     return this.relation.Follower;
   }
 
+  /**
+   * @type {Relation}
+   */
   get Following() {
     return this.relation.Following;
   }
@@ -246,10 +292,6 @@ export class BaseContainer {
     return this.store.clearPurgeableItems();
   }
 
-  get Database() {
-    return Database;
-  }
-
 }
 
 export default class Container extends BaseContainer {
@@ -278,26 +320,44 @@ export default class Container extends BaseContainer {
     };
   }
 
+  /**
+   * @type {AuthContainer}
+   */
   get auth() {
     return this._auth;
   }
 
+  /**
+   * @type {RelationContainer}
+   */
   get relation() {
     return this._relation;
   }
 
+  /**
+   * @type {PublicDatabase}
+   */
   get publicDB() {
     return this._db.public;
   }
 
+  /**
+   * @type {Database}
+   */
   get privateDB() {
     return this._db.private;
   }
 
+  /**
+   * @type {PubsubContainer}
+   */
   get pubsub() {
     return this._pubsub;
   }
 
+  /**
+   * @type {PushContainer}
+   */
   get push() {
     return this._push;
   }
