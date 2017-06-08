@@ -86,9 +86,51 @@ export class Database {
     });
   }
 
+  _makeUploadAssetRequest(asset) {
+    return new Promise((resolve, reject)=> {
+      this.container.makeRequest('asset:put', {
+        filename: asset.name,
+        'content-type': asset.contentType,
+        'content-size': asset.file.size
+      })
+      .then((res)=> {
+        const newAsset = Asset.fromJSON(res.result.asset);
+        const postRequest = res.result['post-request'];
+
+        let postUrl = postRequest.action;
+        if (postUrl.indexOf('/') === 0) {
+          postUrl = postUrl.substring(1);
+        }
+        if (postUrl.indexOf('http') !== 0) {
+          postUrl = this.container.url + postUrl;
+        }
+
+        let _request = this.container.request
+          .post(postUrl)
+          .set('X-Skygear-API-Key', this.container.apiKey);
+        if (postRequest['extra-fields']) {
+          _.forEach(postRequest['extra-fields'], (value, key)=> {
+            _request = _request.field(key, value);
+          });
+        }
+
+        _request.attach('file', asset.file).end((err)=> {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve(newAsset);
+        });
+      }, (err)=> {
+        reject(err);
+      });
+    });
+  }
+
   _presaveAssetTask(key, asset) {
     if (asset.file) {
-      return this.container.makeUploadAssetRequest(asset)
+      return this._makeUploadAssetRequest(asset)
         .then((a)=> [key, a]);
     } else {
       return Promise.resolve([key, asset]);

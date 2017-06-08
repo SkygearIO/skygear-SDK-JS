@@ -75,48 +75,6 @@ export class BaseContainer {
     }));
   }
 
-  makeUploadAssetRequest(asset) {
-    return new Promise((resolve, reject)=> {
-      this.makeRequest('asset:put', {
-        filename: asset.name,
-        'content-type': asset.contentType,
-        'content-size': asset.file.size
-      })
-      .then((res)=> {
-        const newAsset = Asset.fromJSON(res.result.asset);
-        const postRequest = res.result['post-request'];
-
-        let postUrl = postRequest.action;
-        if (postUrl.indexOf('/') === 0) {
-          postUrl = postUrl.substring(1);
-        }
-        if (postUrl.indexOf('http') !== 0) {
-          postUrl = this.url + postUrl;
-        }
-
-        let _request = this.request
-          .post(postUrl)
-          .set('X-Skygear-API-Key', this.apiKey);
-        if (postRequest['extra-fields']) {
-          _.forEach(postRequest['extra-fields'], (value, key)=> {
-            _request = _request.field(key, value);
-          });
-        }
-
-        _request.attach('file', asset.file).end((err)=> {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          resolve(newAsset);
-        });
-      }, (err)=> {
-        reject(err);
-      });
-    });
-  }
-
   lambda(name, data) {
     return this.makeRequest(name, {
       args: data
