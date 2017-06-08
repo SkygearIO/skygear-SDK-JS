@@ -263,6 +263,9 @@ export class BaseContainer {
     return this.relation.Following;
   }
 
+  /**
+   * @type {ErrorCodes}
+   */
   get ErrorCodes() {
     return ErrorCodes;
   }
