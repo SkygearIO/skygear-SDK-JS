@@ -21,30 +21,39 @@ before_deploy:
   - npm run lerna bootstrap
   - npm run lerna exec -- npm pack
 
-deploy:
-  - provider: releases
-    api-key: "$GITHUB_RELEASE_TOKEN"
-    file:
-      - "skygear-*.tgz"
-    skip_cleanup: true
-    file_glob: true
-    on:
-      repo: SkygearIO/skygear-SDK-JS
-      tags: true
-      node_js: 6
-  - provider: script
-    script: scripts/deploy-example.sh
-    skip_cleanup: true
-    on:
-      branch: master
-      node_js: 6
-  - provider: script
-    script: ./scripts/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: SkygearIO/skygear-SDK-JS
-      all_branches: true
-      node_js: 6
+jobs:
+  include:
+  - stage: deploy
+    node_js: 6
+    script: skip
+    deploy:
+      provider: releases
+      api-key: "$GITHUB_RELEASE_TOKEN"
+      file:
+        - "skygear-*.tgz"
+      skip_cleanup: true
+      file_glob: true
+      on:
+        repo: SkygearIO/skygear-SDK-JS
+        tags: true
+  - node_js: 6
+    script: skip
+    deploy:
+      provider: script
+      script: scripts/deploy-example.sh
+      skip_cleanup: true
+      on:
+        branch: master
+  - node_js: 6
+    script: skip
+    deploy:
+      provider: script
+      script: ./scripts/deploy.sh
+      skip_cleanup: true
+      on:
+        repo: SkygearIO/skygear-SDK-JS
+        all_branches: true
+        node_js: 6
 
 notifications:
   slack:
