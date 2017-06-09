@@ -56,6 +56,23 @@ export class Relation {
   static validName(identifier) {
     return format.test(identifier);
   }
+
+  static extend(identifier, direction) {
+    if (!Relation.validName(identifier)) {
+      throw new Error(
+        'Relation identifier can only be [a-zA-Z]+');
+    }
+    let RelationProto = {
+      identifier: identifier,
+      direction: direction
+    };
+    function RelationCls(targets = []) {
+      Relation.call(this, identifier, direction);
+      this.targets = targets;
+    }
+    RelationCls.prototype = _.create(Relation.prototype, RelationProto);
+    return RelationCls;
+  }
 }
 
 export class RelationQuery {
@@ -135,7 +152,7 @@ export class RelationQueryResult extends Array {
 
 }
 
-export class RelationAction {
+export class RelationContainer {
 
   constructor(container) {
     this.container = container;
@@ -198,32 +215,15 @@ export class RelationAction {
   }
 
   get Friend() {
-    return RelationAction.extend('friend', Mutual);
+    return Relation.extend('friend', Mutual);
   }
 
   get Follower() {
-    return RelationAction.extend('follow', Inward);
+    return Relation.extend('follow', Inward);
   }
 
   get Following() {
-    return RelationAction.extend('follow', Outward);
-  }
-
-  static extend(identifier, direction) {
-    if (!Relation.validName(identifier)) {
-      throw new Error(
-        'Relation identifier can only be [a-zA-Z]+');
-    }
-    let RelationProto = {
-      identifier: identifier,
-      direction: direction
-    };
-    function RelationCls(targets = []) {
-      Relation.call(this, identifier, direction);
-      this.targets = targets;
-    }
-    RelationCls.prototype = _.create(Relation.prototype, RelationProto);
-    return RelationCls;
+    return Relation.extend('follow', Outward);
   }
 
 }

@@ -23,7 +23,7 @@ import mockSuperagent from './mock/superagent';
 describe('Container', function () {
   it('should have default end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     assert.equal(
       container.endPoint,
       'http://skygear.dev/',
@@ -32,7 +32,7 @@ describe('Container', function () {
 
   it('should set end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com/';
     assert.equal(
       container.endPoint,
@@ -42,7 +42,7 @@ describe('Container', function () {
 
   it('should auto append slash to end-point', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com';
     assert.equal(
       container.endPoint,
@@ -52,57 +52,57 @@ describe('Container', function () {
 
   it('caches response by default', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    expect(container.cacheResponse).to.be.true();
+    container.pubsub.autoPubsub = false;
+    expect(container._db.cacheResponse).to.be.true();
   });
 
   it('does not eagerly initialize db when setting cacheResponse', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
 
-    container.cacheResponse = false;
-    expect(container._publicDB).to.be.null();
-    expect(container._privateDB).to.be.null();
+    container._db.cacheResponse = false;
+    expect(container._db._public).to.be.null();
+    expect(container._db._private).to.be.null();
   });
 
   it('initializes db with current cacheResponse setting', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
 
-    container.cacheResponse = false;
-    expect(container._publicDB).to.be.null();
-    expect(container._privateDB).to.be.null();
+    container._db.cacheResponse = false;
+    expect(container._db._public).to.be.null();
+    expect(container._db._private).to.be.null();
 
     expect(container.publicDB.cacheResponse).to.be.false();
 
-    container._accessToken = 'access-token';
+    container.auth._accessToken = 'access-token';
     expect(container.privateDB.cacheResponse).to.be.false();
   });
 
   it('forwards cacheResponse to its databases', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    container.cacheResponse = false;
-    container._accessToken = 'dummy-access-token-to-enable-private-db';
+    container.pubsub.autoPubsub = false;
+    container._db.cacheResponse = false;
+    container.auth._accessToken = 'dummy-access-token-to-enable-private-db';
 
-    container.cacheResponse = true;
+    container._db.cacheResponse = true;
     expect(container.publicDB.cacheResponse).to.be.true();
     expect(container.privateDB.cacheResponse).to.be.true();
 
-    container.cacheResponse = false;
+    container._db.cacheResponse = false;
     expect(container.publicDB.cacheResponse).to.be.false();
     expect(container.privateDB.cacheResponse).to.be.false();
 
-    container.cacheResponse = true;
+    container._db.cacheResponse = true;
     expect(container.publicDB.cacheResponse).to.be.true();
     expect(container.privateDB.cacheResponse).to.be.true();
   });
 
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
     let container = new Container();
-    container.autoPubsub = false;
+    container.pubsub.autoPubsub = false;
     container.configApiKey('correctApiKey');
-    container._accessToken = 'incorrectApiKey';
+    container.auth._accessToken = 'incorrectApiKey';
     container.request = mockSuperagent([{
       pattern: 'http://skygear.dev/any/action',
       fixtures: function (match, params, headers, fn) {
@@ -119,610 +119,29 @@ describe('Container', function () {
     return container.makeRequest('any:action', {}).then(function () {
       throw 'Expected to be reject by wrong access token';
     }, function (err) {
-      assert.isNull(container.accessToken, 'accessToken not reset');
-      assert.isNull(container.currentUser, 'currentUser not reset');
+      assert.isNull(container.auth.accessToken, 'accessToken not reset');
+      assert.isNull(container.auth.currentUser, 'currentUser not reset');
     });
   });
 
   it('should call userChange listener', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    container.onUserChanged(function (user) {
+    container.pubsub.autoPubsub = false;
+    container.auth.onUserChanged(function (user) {
       assert.instanceOf(user, container.User);
       assert.equal(user.id, 'user:id1');
     });
-    return container._setUser({_id: 'user:id1'});
+    return container.auth._setUser({_id: 'user:id1'});
   });
 
   it('should able to cancel a registered userChange listener', function () {
     let container = new Container();
-    container.autoPubsub = false;
-    let handler = container.onUserChanged(function (user) {
+    container.pubsub.autoPubsub = false;
+    let handler = container.auth.onUserChanged(function (user) {
       throw 'Cancel of onUserChanged failed';
     });
     handler.cancel();
-    return container._setUser({_id: 'user:id1'});
-  });
-});
-
-describe('Container me', function () {
-  let container = new Container();
-  container.autoPubsub = false;
-  container.configApiKey('correctApiKey');
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/me',
-    fixtures: function (match, params, headers, fn) {
-      const token = params['access_token'];
-      if (token) {
-        if (token === 'token-1') {
-          return fn({
-            result: {
-              user_id: 'user-id-1', // eslint-disable-line camelcase
-              username: 'user1',
-              email: 'user1@skygear.dev',
-              roles: ['Normal-User']
-            }
-          });
-        }
-      } else {
-        return fn({
-          error: {
-            name: 'NotAuthenticated',
-            code: 101,
-            message: 'Authentication is needed to get current user'
-          }
-        });
-      }
-    }
-  }]);
-
-  it('should get me correctly', function () {
-    container._accessToken = 'token-1';
-    return container.whoami()
-    .then(function (user) {
-      assert.instanceOf(user, container.User);
-      assert.equal(user.id, 'user-id-1');
-      assert.equal(user.username, 'user1');
-      assert.equal(user.email, 'user1@skygear.dev');
-
-      assert.lengthOf(user.roles, 1);
-      assert.equal(user.roles[0], container.Role.define('Normal-User'));
-    }, function (err) {
-      throw new Error('Get me fail');
-    });
-  });
-
-  it('should handle error properly', function () {
-    container._accessToken = null;
-    return container.whoami()
-    .then(function (user) {
-      throw new Error('Should not get me without access token');
-    }, function (err) {
-      assert.isNotNull(err);
-    });
-  });
-});
-
-describe('Container auth', function () {
-  let container = new Container();
-  container.autoPubsub = false;
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/signup',
-    fixtures: function (match, params, headers, fn) {
-      const validUser = params['username'] === 'username' ||
-        params['email'] === 'user@email.com';
-      if (validUser && params['password'] === 'passwd') {
-        return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'username': 'user1',
-            'email': 'user1@skygear.io'
-          }
-        });
-      }
-      if (params['username'] === 'duplicated') {
-        return fn({
-          'error': {
-            'type': 'ResourceDuplicated',
-            'code': 101,
-            'message': 'user duplicated'
-          }
-        }, 400);
-      }
-      if (params['username'] === null &&
-        params['password'] === null &&
-        params['email'] === null) {
-
-        return fn({
-          'result': {
-            'user_id': 'user:id2',
-            'access_token': 'uuid2',
-            'username': 'user2',
-            'email': 'user2@skygear.io'
-          }
-        });
-      }
-    }
-  }, {
-    pattern: 'http://skygear.dev/auth/login',
-    fixtures: function (match, params, headers, fn) {
-      if (params['provider'] === 'provider') {
-        return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'username': '',
-            'email': '',
-            'auth_data': params['auth_data']
-          }
-        });
-      }
-      const validUser = params['username'] === 'registered' ||
-        params['email'] === 'user@email.com';
-      if (validUser && params['password'] === 'passwd') {
-        return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'username': 'user1',
-            'email': 'user1@skygear.io'
-          }
-        });
-      }
-      return fn({
-        'error': {
-          'type': 'AuthenticationError',
-          'code': 102,
-          'message': 'invalid authentication information'
-        }
-      }, 400);
-    }
-  }, {
-    pattern: 'http://skygear.dev/auth/password',
-    fixtures: function (match, params, headers, fn) {
-      if (params['old_password'] === params['password']) {
-        return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'username': '',
-            'email': ''
-          }
-        });
-      }
-      return fn({
-        'error': {
-          'type': 'AuthenticationError',
-          'code': 102,
-          'message': 'invalid authentication information'
-        }
-      }, 400);
-    }
-  }, {
-    pattern: 'http://skygear.dev/auth/logout',
-    fixtures: function (match, params, headers, fn) {
-      return fn({
-        'result': {
-          'status': 'OK'
-        }
-      });
-    }
-  }, {
-    pattern: 'http://skygear.dev/device/unregister',
-    fixtures: function (match, params, headers, fn) {
-      if (params && params.id) {
-        return fn({
-          'result': {
-            'id': params.id
-          }
-        });
-      } else {
-        return fn({
-          'error': {
-            'name': 'InvalidArgument',
-            'code': 108,
-            'message': 'Missing device id',
-            'info': {
-              'arguments': [
-                'id'
-              ]
-            }
-          }
-        });
-      }
-    }
-  }]);
-  container.configApiKey('correctApiKey');
-
-  it('should signup successfully', function () {
-    return container
-      .signupWithUsername('username', 'passwd')
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-      });
-  });
-
-  it('should signup with email successfully', function () {
-    return container
-      .signupWithEmail('user@email.com', 'passwd')
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-      });
-  });
-
-  it('should signup with profile successfully', function () {
-    return container
-      .signupWithUsernameAndProfile('username', 'passwd', {
-        'key': 'value'
-      })
-      .then(function (profile) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-        assert.equal(profile.key, 'value');
-      });
-  });
-
-  it('should signup with email and profile successfully', function () {
-    return container
-      .signupWithEmailAndProfile('user@email.com', 'passwd', {
-        'key': 'value'
-      })
-      .then(function (profile) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-        assert.equal(profile.key, 'value');
-      });
-  });
-
-  it('should signup anonymously', function () {
-    return container
-      .signupAnonymously()
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid2');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id2'
-        );
-      });
-  });
-
-  it('should not signup duplicate account', function () {
-    return container
-      .signupWithUsername('duplicated', 'passwd')
-      .then(function (user) {
-        throw new Error('Signup duplicated user');
-      }, function (err) {
-        assert.equal(
-          err.error.message,
-          'user duplicated');
-      });
-  });
-
-  it('should login with correct password', function () {
-    return container
-      .loginWithUsername('registered', 'passwd')
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-      }, function (error) {
-        throw new Error('Failed to login with correct password');
-      });
-  });
-
-  it('should login with email and correct password', function () {
-    return container
-      .loginWithEmail('user@email.com', 'passwd')
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-      }, function (error) {
-        throw new Error('Failed to login with correct password');
-      });
-  });
-
-  it('should fail to login with incorrect password', function () {
-    return container
-      .loginWithUsername('registered', 'wrong')
-      .then(function (user) {
-        throw new Error('Login with wrong password');
-      }, function (err) {
-        assert.equal(
-          err.error.message,
-          'invalid authentication information');
-      });
-  });
-
-  it('should login with provider successfully', function () {
-    return container
-      .loginWithProvider('provider', {})
-      .then(function (user) {
-        assert.equal(
-          container.accessToken,
-          'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(
-          container.currentUser.id,
-          'user:id1'
-        );
-      }, function () {
-        throw new Error('Failed to login with provider');
-      });
-  });
-
-  it('should be able to set null accessToken', function () {
-    return container._setAccessToken(null)
-    .then(function () {
-      assert.equal(container.accessToken, null);
-    });
-  });
-
-  it('should clear current user and access token after logout', function () {
-    /* eslint-disable camelcase */
-    const aUserAttr = {
-      user_id: '68a2e6ce-9321-4561-8042-a8fa076e9214',
-      email: 'sky.user@skygear.dev',
-      access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
-    };
-
-    return Promise.all([
-      container._setAccessToken(aUserAttr.access_token),
-      container._setUser(aUserAttr)
-    ])
-    .then(() => {
-      assert.equal(container.accessToken, aUserAttr.access_token);
-      assert.isNotNull(container.currentUser, aUserAttr.currentUser);
-
-      return container.logout();
-    })
-    .then(() => {
-      assert.isNull(container.accessToken, aUserAttr.access_token);
-      assert.isNull(container.currentUser, aUserAttr.currentUser);
-    });
-    /* eslint-enable-line camelcase */
-  });
-
-  it('should change password successfully', function () {
-    return container
-      .changePassword('supersecret', 'supersecret')
-      .then(function (user) {
-        assert.equal(container.accessToken, 'uuid1');
-        assert.instanceOf(container.currentUser, container.User);
-        assert.equal(container.currentUser.id, 'user:id1');
-        assert.instanceOf(user, container.User);
-      }, function (error) {
-        throw new Error('Failed to change password');
-      });
-  });
-
-  it('should fail to change password if not match', function () {
-    return container
-      .changePassword('supersecret', 'wrongsecret')
-      .then(function (user) {
-        throw new Error('Change password when not match');
-      }, function (error) {
-        assert.equal(error.error.message, 'invalid authentication information');
-      });
-  });
-});
-
-describe('Container users', function () {
-  let container = new Container();
-  container.request = mockSuperagent([
-    {
-      pattern: 'http://skygear.dev/user/query',
-      fixtures: function (match, params, headers, fn) {
-        const emailMatch =
-          params['emails'] && params['emails'][0] === 'user1@skygear.io';
-        const usernameMatch =
-          params['usernames'] && params['usernames'][0] === 'user1';
-        if (emailMatch || usernameMatch) {
-          return fn({
-            'result': [{
-              data: {
-                _id: 'user:id',
-                email: 'user1@skygear.io',
-                username: 'user1'
-              },
-              id: 'user:id',
-              type: 'user'
-            }]
-          });
-        }
-      }
-    }, {
-      pattern: 'http://skygear.dev/user/update',
-      fixtures: function (match, params, headers, fn) {
-        /* eslint-disable camelcase */
-        let user_id = params['_id'];
-        if (user_id === 'user2_id') {
-          let roles = params.roles ? params.roles : ['existing'];
-          return fn({
-            'result': {
-              _id: params._id,
-              username: params.username,
-              email: params.email,
-              roles: roles
-            }
-          });
-        } else if (user_id === 'current_user') {
-          return fn({
-            result: {
-              _id: 'current_user',
-              email: 'current_user_new_email@skygear.io',
-              username: 'current_user_name'
-            }
-          });
-        }
-        /* eslint-enable camelcase */
-      }
-    }
-  ]);
-  container.configApiKey('correctApiKey');
-
-  it('query user with email successfully', function () {
-    return container
-      .getUsersByEmail(['user1@skygear.io'])
-      .then(function (users) {
-        assert.instanceOf(users[0], container.User);
-        assert.equal(
-          users[0].id,
-          'user:id'
-        );
-        assert.equal(
-          users[0].username,
-          'user1'
-        );
-      }, function () {
-        throw new Error('getUsersByEmail failed');
-      });
-  });
-
-  it('query user with username successfully', function () {
-    return container
-      .getUsersByUsername(['user1'])
-      .then(function (users) {
-        assert.instanceOf(users[0], container.User);
-        assert.equal(
-          users[0].id,
-          'user:id'
-        );
-        assert.equal(
-          users[0].username,
-          'user1'
-        );
-      }, function () {
-        throw new Error('getUsersByUsername failed');
-      });
-  });
-
-  it('should be able to set null user', function () {
-    return container._setUser(null).then(function () {
-      assert.isNull(container.currentUser);
-    });
-  });
-
-  it('update user record', function () {
-    let payload = {
-      /* eslint-disable camelcase */
-      _id: 'user2_id',
-      /* eslint-enable camelcase */
-      username: 'user2',
-      email: 'user2@skygear.io',
-      roles: ['Tester']
-    };
-
-    let Tester = container.Role.define('Tester');
-    let Developer = container.Role.define('Developer');
-
-    let user = container.User.fromJSON(payload);
-    let newUsername = 'user2-new';
-    let newEmail = 'user2-new@skygear.io';
-
-    user.username = newUsername;
-    user.email = newEmail;
-    user.addRole(Developer);
-
-    return container.saveUser(user)
-    .then(function (updatedUser) {
-      assert.equal(updatedUser.id, user.id);
-      assert.equal(updatedUser.username, newUsername);
-      assert.equal(updatedUser.email, newEmail);
-
-      assert.equal(updatedUser.hasRole(Tester), true);
-      assert.equal(updatedUser.hasRole(Developer), true);
-    }, function (err) {
-      throw new Error('update user record error', JSON.stringify(err));
-    });
-  });
-
-  it('update user record without update role', function () {
-    let payload = {
-      /* eslint-disable camelcase */
-      id: 'user2_id',
-      /* eslint-enable camelcase */
-      email: 'user2@skygear.io'
-    };
-
-    let Existing = container.Role.define('existing');
-    let Developer = container.Role.define('Developer');
-
-    let newEmail = 'user2-new@skygear.io';
-
-    payload.email = newEmail;
-
-    return container.saveUser(payload)
-    .then(function (updatedUser) {
-      assert.equal(updatedUser.id, payload.id);
-      assert.equal(updatedUser.email, newEmail);
-      console.warn('roles', updatedUser.roles);
-      assert.equal(updatedUser.hasRole(Existing), true);
-      assert.equal(updatedUser.hasRole(Developer), false);
-    }, function (err) {
-      throw new Error('update user record error', JSON.stringify(err));
-    });
-  });
-
-  it('should able to update current user', function () {
-    let payload = {
-      _id: 'current_user',
-      email: 'current_user@skygear.io',
-      username: 'current_user_name'
-    };
-
-    container._user = container.User.fromJSON(payload);
-
-    let user = container.User.fromJSON(payload);
-    user.email = 'current_user_new_email@skygear.io';
-
-    return container.saveUser(user)
-    .then(function () {
-      assert.equal(container.currentUser.email, user.email);
-    }, function (err) {
-      console.error(err);
-      throw new Error('update current user error', JSON.stringify(err));
-    });
+    return container.auth._setUser({_id: 'user:id1'});
   });
 });
 
@@ -761,7 +180,7 @@ describe('Container role', function () {
     var Killer = container.Role.define('Killer');
     var Police = container.Role.define('Police');
 
-    return container.setAdminRole([Killer, Police])
+    return container.publicDB.setAdminRole([Killer, Police])
     .then(function (roles) {
       assert.include(roles, 'Killer');
       assert.include(roles, 'Police');
@@ -774,7 +193,7 @@ describe('Container role', function () {
     var Healer = container.Role.define('Healer');
     var Victim = container.Role.define('Victim');
 
-    return container.setDefaultRole([Victim, Healer])
+    return container.publicDB.setDefaultRole([Victim, Healer])
     .then(function (roles) {
       assert.include(roles, 'Healer');
       assert.include(roles, 'Victim');
@@ -831,7 +250,7 @@ describe('Container acl', function () {
     let WebMaster = container.Role.define('Web Master');
     let Script = container.Record.extend('script');
 
-    return container.setRecordCreateAccess(Script, [Writer, WebMaster])
+    return container.publicDB.setRecordCreateAccess(Script, [Writer, WebMaster])
     .then(function (result) {
       let {type, create_roles: roles} = result; // eslint-disable-line camelcase
 
@@ -850,7 +269,7 @@ describe('Container acl', function () {
     acl.setPublicReadOnly();
     acl.setReadWriteAccessForRole(Admin);
 
-    return container.setRecordDefaultAccess(Note, acl)
+    return container.publicDB.setRecordDefaultAccess(Note, acl)
       .then((result)=> {
         let {type, default_access: defaultAccess} = result;
         let responseACL = container.ACL.fromJSON(defaultAccess);
@@ -864,170 +283,9 @@ describe('Container acl', function () {
   });
 });
 
-describe('Container device registration', function () {
-  let container = new Container();
-  container.autoPubsub = false;
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/device/register',
-    fixtures: function (match, params, headers, fn) {
-      if (params.id && params.id === 'non-exist') {
-        return fn({
-          'error': {
-            'name': 'ResourceNotFound',
-            'code': 110,
-            'message': 'device not found'
-          }
-        }, 400);
-      } else if (params.id) {
-        return fn({
-          'result': {
-            'id': params.id
-          }
-        });
-      } else if (params.topic) {
-        return fn({
-          'result': {
-            'id': 'topic-device-id'
-          }
-        });
-      } else {
-        return fn({
-          'result': {
-            'id': 'device-id'
-          }
-        });
-      }
-    }
-  }]);
-  container.configApiKey('correctApiKey');
-
-  it('should save device id successfully', function () {
-    return container._setDeviceID(null).then(function () {
-      return container.registerDevice('device-token', 'android');
-    })
-    .then(function (deviceID) {
-      assert.equal(deviceID, 'device-id');
-      assert.equal(container.deviceID, 'device-id');
-    }, function () {
-      throw 'failed to save device id';
-    });
-  });
-
-  it('should send app bundle name', function () {
-    return container._setDeviceID(null).then(function () {
-      return container.registerDevice('device-token', 'android', 'bundle-name');
-    })
-    .then(function (deviceID) {
-      assert.equal(deviceID, 'topic-device-id');
-      assert.equal(container.deviceID, 'topic-device-id');
-    }, function () {
-      throw 'failed to send app bundle name';
-    });
-  });
-
-  it('should attach existing device id', function () {
-    return container._setDeviceID('existing-device-id').then(function () {
-      return container.registerDevice('ddevice-token', 'ios');
-    }).then(function (deviceID) {
-      assert.equal(deviceID, 'existing-device-id');
-      assert.equal(container.deviceID, 'existing-device-id');
-    });
-  });
-
-  it('should retry with null deviceID on first call fails', function () {
-    return container._setDeviceID('non-exist').then(function () {
-      return container.registerDevice('ddevice-token', 'ios');
-    }).then(function (deviceID) {
-      assert.equal(deviceID, 'device-id');
-      assert.equal(container.deviceID, 'device-id');
-    });
-  });
-
-  it('should be able to set null deviceID', function () {
-    return container._setDeviceID(null).then(function () {
-      assert.equal(container.deviceID, null);
-    });
-  });
-});
-
-describe('Container device unregistration', function () {
-  let container = new Container();
-  container.autoPubsub = false;
-  container.configApiKey('correctApiKey');
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/device/unregister',
-    fixtures: function (match, params, headers, fn) {
-      if (params.id && params.id === 'non-exist') {
-        return fn({
-          'error': {
-            'name': 'ResourceNotFound',
-            'code': 110,
-            'message': 'device not found'
-          }
-        }, 400);
-      } else if (params.id) {
-        return fn({
-          'result': {
-            'id': params.id
-          }
-        });
-      } else {
-        return fn({
-          'error': {
-            'name': 'InvalidArgument',
-            'code': 108,
-            'message': 'Missing device id',
-            'info': {
-              'arguments': [
-                'id'
-              ]
-            }
-          }
-        });
-      }
-    }
-  }]);
-
-  it('should success with correct device id', function (done) {
-    return container._setDeviceID('device_1')
-    .then(function () {
-      return container.unregisterDevice();
-    })
-    .then(function () {
-      done();
-    }, function () {
-      throw new Error('Should not fail with correct device id');
-    });
-  });
-
-  it('should regard as success with non-exist device id', function (done) {
-    return container._setDeviceID('non-exist')
-    .then(function () {
-      return container.unregisterDevice();
-    })
-    .then(function () {
-      done();
-    }, function () {
-      throw new Error('Should not fail with non-exist device id');
-    });
-  });
-
-  it('should fail when no device id', function (done) {
-    return container._setDeviceID(null)
-    .then(function () {
-      return container.unregisterDevice();
-    })
-    .then(function () {
-      throw new Error('Should not success without device id');
-    }, function () {
-      done();
-    });
-  });
-});
-
 describe('lambda', function () {
   let container = new Container();
-  container.autoPubsub = false;
+  container.pubsub.autoPubsub = false;
   container.request = container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/hello/world',
     fixtures: function (match, params, headers, fn) {

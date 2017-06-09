@@ -52,19 +52,19 @@ describe('Cloud container', function () {
         }
       }]);
       container.configApiKey('correctApiKey');
-      container.autoPubsub = false;
+      container.pubsub.autoPubsub = false;
     }
     return Promise.all([
-      container1.signupWithUsername('username', 'passwd'),
-      container2.signupAnonymously()
+      container1.auth.signupWithUsername('username', 'passwd'),
+      container2.auth.signupAnonymously()
     ])
     .then(([user1, user2])=> {
-      assert.equal(container1.accessToken, 'uuid1');
-      assert.instanceOf(container1.currentUser, container1.User);
-      assert.equal(container1.currentUser.id, 'user:id1');
-      assert.equal(container2.accessToken, 'uuid2');
-      assert.instanceOf(container2.currentUser, container2.User);
-      assert.equal(container2.currentUser.id, 'user:id2');
+      assert.equal(container1.auth.accessToken, 'uuid1');
+      assert.instanceOf(container1.auth.currentUser, container1.User);
+      assert.equal(container1.auth.currentUser.id, 'user:id1');
+      assert.equal(container2.auth.accessToken, 'uuid2');
+      assert.instanceOf(container2.auth.currentUser, container2.User);
+      assert.equal(container2.auth.currentUser.id, 'user:id2');
     });
   });
 });

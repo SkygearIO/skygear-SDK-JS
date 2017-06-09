@@ -78,7 +78,7 @@
     <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
-  <script src="../dist/bundle.js"></script>
+  <script src="../packages/skygear-core/dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
@@ -89,16 +89,16 @@
       'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = skygear.accessToken;
-      if (skygear.currentUser) {
-        currentUsername.innerText = skygear.currentUser.username;
-        currentEmail.innerText = skygear.currentUser.email;
+      token.innerText = skygear.auth.accessToken;
+      if (skygear.auth.currentUser) {
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
       }
     }, function(err) {
       console.log(err);
     });
     m.textContent = skygear.endPoint;
-    token.innerText = skygear.accessToken;
+    token.innerText = skygear.auth.accessToken;
     signup = function(identifier) {
       console.log('Signup');
       var username = document.getElementById("username").value;
@@ -106,21 +106,21 @@
       var password = document.getElementById("password").value;
       var _signup = null;
       if (identifier === 'email') {
-        _signup = skygear.signupWithEmail(email, password);
+        _signup = skygear.auth.signupWithEmail(email, password);
       } else if (identifier === 'username') {
-        _signup = skygear.signupWithUsername(username, password);
+        _signup = skygear.auth.signupWithUsername(username, password);
       } else {
-        _signup = skygear.signupAnonymously();
+        _signup = skygear.auth.signupAnonymously();
       }
       _signup.then(function() {
         console.log('Signup ok');
-        token.innerText = skygear.accessToken;
+        token.innerText = skygear.auth.accessToken;
         if (identifier === 'anonymous') {
           currentUsername.innerText = '(anonymous)';
           currentEmail.innerText = '(anonymous)';
         } else {
-          currentUsername.innerText = skygear.currentUser.username;
-          currentEmail.innerText = skygear.currentUser.email;
+          currentUsername.innerText = skygear.auth.currentUser.username;
+          currentEmail.innerText = skygear.auth.currentUser.email;
         }
       }, function(error) {
         console.log('Signup failed');
@@ -135,22 +135,22 @@
       var password = document.getElementById("password").value;
       var _login = null;
       if (identifier === 'email') {
-        _login = skygear.loginWithEmail(email, password);
+        _login = skygear.auth.loginWithEmail(email, password);
       } else {
-        _login = skygear.loginWithUsername(username, password)
+        _login = skygear.auth.loginWithUsername(username, password)
       }
       _login.then(function() {
         console.log('Login ok');
-        token.innerText = skygear.accessToken;
-        currentUsername.innerText = skygear.currentUser.username;
-        currentEmail.innerText = skygear.currentUser.email;
+        token.innerText = skygear.auth.accessToken;
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
       }, function(error) {
         console.log('Login failed');
         token.innerText = error;
       });
     };
     logout = function() {
-      skygear.logout().then(function() {
+      skygear.auth.logout().then(function() {
         console.log('Logout ok');
         token.innerText = 'Cleared accessToken';
       }, function(error) {
@@ -162,7 +162,7 @@
       var oldPassword = document.getElementById("old-password").value;
       var newPassword = document.getElementById("new-password").value;
       var changeResult = document.getElementById("change-result");
-      skygear.changePassword(oldPassword, newPassword).then(function(user) {
+      skygear.auth.changePassword(oldPassword, newPassword).then(function(user) {
         console.log('Change password ok');
         changeResult.innerText = 'Change password ok';
         console.log(user);

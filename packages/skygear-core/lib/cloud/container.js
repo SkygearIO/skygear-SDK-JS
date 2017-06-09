@@ -17,35 +17,65 @@
 /* eslint camelcase: 0 */
 import _ from 'lodash';
 
-import Container, {USER_CHANGED} from '../container';
+import {BaseContainer} from '../container';
 
-export default class CloudCodeContainer extends Container {
+import {CloudCodeAuthContainer} from './auth';
+import {RelationContainer} from '../relation';
+import {DatabaseContainer} from '../database';
+import {PubsubContainer} from '../pubsub';
+import {CloudCodePushContainer} from './push';
+
+export default class CloudCodeContainer extends BaseContainer {
 
   constructor({ sendPluginRequest, asUserId } = {}) {
     super();
+
     this.asUserId = asUserId;
     this.sendPluginRequest = !!sendPluginRequest;
+
+    this._auth = new CloudCodeAuthContainer(this);
+    this._relation = new RelationContainer(this);
+    this._db = new DatabaseContainer(this);
+    this._pubsub = new PubsubContainer(this);
+    this._push = new CloudCodePushContainer(this);
   }
 
-  sendRequestObject(action, data) {
-    if (this.apiKey === null) {
-      throw Error('Please config ApiKey');
+  get auth() {
+    return this._auth;
+  }
+
+  get relation() {
+    return this._relation;
+  }
+
+  get db() {
+    return this._db;
+  }
+
+  get pubsub() {
+    return this._pubsub;
+  }
+
+  get push() {
+    return this._push;
+  }
+
+  _prepareRequestObject(action, data) {
+    let requestObject = super._prepareRequestObject(action, data);
+
+    if (this.auth.accessToken) {
+      request.set('X-Skygear-Access-Token', this.auth.accessToken);
     }
 
-    const extraData = {
-      action: action,
-      api_key: this.apiKey
-    };
+    return requestObject;
+  }
 
-    const route = action.replace(':', '/');
-    const request = this.request
-      .post(this.url + route)
-      .set('X-Skygear-API-Key', this.apiKey)
-      .set('Accept', 'application/json');
+  _prepareRequestData(action, data) {
+    let requestData = super._prepareRequestData(action, data);
+    let extraData = {};
 
-    if (this.accessToken) {
-      extraData.access_token = this.accessToken;
-      request.set('X-Skygear-Access-Token', this.accessToken);
+    if (this.auth.accessToken) {
+      extraData.access_token = this.auth.accessToken;
     }
 
     if (this.asUserId) {
@@ -56,38 +86,7 @@ export default class CloudCodeContainer extends Container {
       extraData._from_plugin = true;
     }
 
-    return request.send(_.assign(extraData, data));
+    return _.assign(extraData, requestData);
   }
 
-  _getUser() {
-    return this._user;
-  }
-
-  _setUser(attrs) {
-    if (attrs !== null) {
-      this._user = new this.User(attrs);
-    } else {
-      this._user = null;
-    }
-    this.ee.emit(USER_CHANGED, this._user);
-    return Promise.resolve(this._user);
-  }
-
-  _getAccessToken() {
-    return Promise.resolve(this._accessToken);
-  }
-
-  _setAccessToken(value) {
-    this._accessToken = value;
-    return Promise.resolve(value);
-  }
-
-  _getDeviceID() {
-    return Promise.resolve(this._deviceID);
-  }
-
-  _setDeviceID(value) {
-    this._deviceID = value;
-    return Promise.resolve(value);
-  }
 }

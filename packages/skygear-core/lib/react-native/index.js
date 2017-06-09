@@ -1,15 +1,17 @@
 import reactNative from 'react-native';
 import Container from '../container';
+import {ReactNativePushContainer} from './push';
 import {setStore} from '../store';
 import reactNativeStore from './store';
 
 class ReactNativeContainer extends Container {
-  inferDeviceType() {
-    if (reactNative.Platform.OS === 'ios') {
-      return 'ios';
-    }
-    return 'android';
+
+  constructor() {
+    super();
+
+    this._push = new ReactNativePushContainer(this);
   }
+
 }
 
 setStore(reactNativeStore);

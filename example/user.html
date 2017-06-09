@@ -108,7 +108,7 @@
       <button onclick="removeRelation();">Remove</button>
     </form>
   </div>
-  <script src="../dist/bundle.js"></script>
+  <script src="../packages/skygear-core/dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
@@ -119,10 +119,10 @@
       'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = skygear.accessToken;
-      if (skygear.currentUser) {
-        currentUsername.innerText = skygear.currentUser.username;
-        currentEmail.innerText = skygear.currentUser.email;
+      token.innerText = skygear.auth.accessToken;
+      if (skygear.auth.currentUser) {
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
       }
     }, function(err) {
       console.log(err);
@@ -132,7 +132,7 @@
       console.log('Who am I?');
       var iam = document.getElementById("whoami-result");
 
-      skygear.whoami().then(function (user) {
+      skygear.auth.whoami().then(function (user) {
         if (user.length ==  0) {
           iam.innerText = "no user found";
           return
@@ -150,7 +150,7 @@
       var email = document.getElementById("email").value;
       var userInfo = document.getElementById("user-result");
 
-      skygear.discoverUserByEmails([email]).then(function (users) {
+      skygear.auth.discoverUserByEmails([email]).then(function (users) {
         if (users.length ==  0) {
           userInfo.innerText = "no user found";
           return
@@ -168,7 +168,7 @@
       var username = document.getElementById("username").value;
       var userInfo = document.getElementById("user-result");
 
-      skygear.discoverUserByUsernames([username]).then(function (users) {
+      skygear.auth.discoverUserByUsernames([username]).then(function (users) {
         if (users.length ==  0) {
           userInfo.innerText = "no user found";
           return

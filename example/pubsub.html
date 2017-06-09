@@ -51,7 +51,7 @@
       <button onclick="publishMessage();">Publish Message</button>
     </form>
   </div>
-  <script src="../dist/bundle.js"></script>
+  <script src="../packages/skygear-core/dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
@@ -60,7 +60,7 @@
       'apiKey': '363826633dc44161a11e9135b1546539'
     }).then(function(container) {
       m.textContent = container.endPoint;
-      token.innerText = container.accessToken;
+      token.innerText = container.auth.accessToken;
     }, function(err) {
       console.log(err);
     });
@@ -88,14 +88,14 @@
     function subscribeChannel() {
       var _channel = document.getElementById("subscribe-channel").value;
       var _data = document.getElementById("subscribe-data");
-      skygear.on(_channel, function(data) {
+      skygear.pubsub.on(_channel, function(data) {
         _data.value += 'Channel "' + _channel + '": ' + data + '\n';
       });
     }
 
     function unsubscribeChannel() {
       var _channel = document.getElementById("subscribe-channel").value;
-      skygear.off(_channel);
+      skygear.pubsub.off(_channel);
     }
   </script>
 </body>

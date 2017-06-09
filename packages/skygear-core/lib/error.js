@@ -15,6 +15,11 @@
  */
 import _ from 'lodash';
 
+/**
+ * Enum for error codes
+ * @readonly
+ * @enum {number}
+ */
 export const ErrorCodes = {
   NotAuthenticated: 101,
   PermissionDenied: 102,

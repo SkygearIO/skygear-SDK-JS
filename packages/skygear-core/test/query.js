@@ -19,7 +19,7 @@ import Query from '../lib/query';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
 import Geolocation from '../lib/geolocation';
-import {RelationAction, Mutual} from '../lib/relation';
+import {Relation, Mutual} from '../lib/relation';
 
 describe('Query', function () {
 
@@ -439,7 +439,7 @@ describe('Query', function () {
 
   it('serialize havingRelation', function () {
     let q = new Query(Note);
-    let Friend = RelationAction.extend('friend', Mutual);
+    let Friend = Relation.extend('friend', Mutual);
     q.havingRelation('_owner', Friend);
     expect(q.toJSON().predicate).to.eql([
       'func',
@@ -458,7 +458,7 @@ describe('Query', function () {
 
   it('serialize notHavingRelation', function () {
     let q = new Query(Note);
-    let Friend = RelationAction.extend('friend', Mutual);
+    let Friend = Relation.extend('friend', Mutual);
     q.notHavingRelation('_owner', Friend);
     expect(q.toJSON().predicate).to.eql([
       'not',
