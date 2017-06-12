@@ -84,7 +84,7 @@ export class AuthContainer {
   loginWithProvider(provider, authData) {
     return this.container.makeRequest('auth:login', {
       provider: provider,
-      auth_data: authData
+      auth_data: authData // eslint-disable-line camelcase
     }).then(this._authResolve.bind(this));
   }
 
@@ -124,7 +124,7 @@ export class AuthContainer {
       throw Error('Invalidate is not yet implemented');
     }
     return this.container.makeRequest('auth:password', {
-      old_password: oldPassword,
+      old_password: oldPassword, // eslint-disable-line camelcase
       password: newPassword
     })
     .then(this._authResolve.bind(this));

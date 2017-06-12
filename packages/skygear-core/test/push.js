@@ -70,7 +70,8 @@ describe('Container device registration', function () {
 
   it('should send app bundle name', function () {
     return container.push._setDeviceID(null).then(function () {
-      return container.push.registerDevice('device-token', 'android', 'bundle-name');
+      return container.push.registerDevice(
+        'device-token', 'android', 'bundle-name');
     })
     .then(function (deviceID) {
       assert.equal(deviceID, 'topic-device-id');

@@ -306,14 +306,14 @@ export class PublicDatabase extends Database {
 
     return this.container.makeRequest('schema:access', {
       type: recordClass.recordType,
-      create_roles: roleNames
+      create_roles: roleNames //eslint-disable-line camelcase
     }).then((body)=> body.result);
   }
 
   setRecordDefaultAccess(recordClass, acl) {
     return this.container.makeRequest('schema:default_access', {
       type: recordClass.recordType,
-      default_access: acl.toJSON()
+      default_access: acl.toJSON() //eslint-disable-line camelcase
     }).then((body)=> body.result);
   }
 

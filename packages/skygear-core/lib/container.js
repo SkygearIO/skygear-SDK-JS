@@ -29,7 +29,7 @@ import {Database} from './database';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
-import {ErrorCodes, SkygearError} from './error';
+import {ErrorCodes} from './error';
 
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
@@ -69,7 +69,7 @@ export class BaseContainer {
       requestObject.send(requestData).end((err, res)=> {
         resolve({
           err: err,
-          res: res,
+          res: res
         });
       });
     }));
@@ -81,7 +81,7 @@ export class BaseContainer {
     }).then((resp)=> resp.result);
   }
 
-  _prepareRequestObject(action, data) {
+  _prepareRequestObject(action) {
     if (this.apiKey === null) {
       throw Error('Please config ApiKey');
     }
@@ -100,7 +100,7 @@ export class BaseContainer {
 
     return _.assign({
       action: action,
-      api_key: this.apiKey,
+      api_key: this.apiKey
     }, data);
   }
 

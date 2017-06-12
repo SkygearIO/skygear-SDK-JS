@@ -55,7 +55,7 @@ export class PushContainer {
       type: type,
       id: deviceID,
       topic: topic,
-      device_token: token
+      device_token: token //eslint-disable-line camelcase
     }).then((body)=> {
       return this._setDeviceID(body.result.id);
     }, (error)=> {
