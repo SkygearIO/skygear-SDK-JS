@@ -270,7 +270,7 @@ describe('Container acl', function () {
     acl.setReadWriteAccessForRole(Admin);
 
     return container.publicDB.setRecordDefaultAccess(Note, acl)
-      .then((result)=> {
+      .then((result) => {
         let {type, default_access: defaultAccess} = result;
         let responseACL = container.ACL.fromJSON(defaultAccess);
 

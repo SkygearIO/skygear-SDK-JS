@@ -37,7 +37,7 @@ export default class Cache {
 
   _setWithRetry(namespacedKey, stringifiedValue, attempt = 0) {
     return this.store.setPurgeableItem(namespacedKey, stringifiedValue)
-      .catch((error)=> {
+      .catch((error) => {
         // base case
         if (attempt >= this._maxRetryCount) {
           return Promise.reject(error);

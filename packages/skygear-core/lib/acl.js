@@ -43,7 +43,7 @@ export default class ACL {
     if (attrs) {
       this.public = AccessLevel.NoAccessLevel;
 
-      _.forEach(attrs, (perAttr)=> {
+      _.forEach(attrs, (perAttr) => {
         perAttr.level = perAttr.level || AccessLevel.ReadOnlyLevel;
         if (perAttr.public) {
           if (accessLevelNumber(perAttr.level) >

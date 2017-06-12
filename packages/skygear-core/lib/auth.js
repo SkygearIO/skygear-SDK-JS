@@ -51,14 +51,14 @@ export class AuthContainer {
 
   signupWithUsernameAndProfile(username, password, profile = {}) {
     return this.signupWithUsername(username, password)
-    .then((user)=>
+    .then((user) =>
       this._createProfile(user, profile)
     );
   }
 
   signupWithEmailAndProfile(email, password, profile = {}) {
     return this.signupWithEmail(email, password)
-    .then((user)=>
+    .then((user) =>
       this._createProfile(user, profile)
     );
   }
@@ -90,10 +90,10 @@ export class AuthContainer {
 
   logout() {
     return this.container.push.unregisterDevice()
-    .then(()=> {
+    .then(() => {
       this.container.clearCache();
       return this.container.makeRequest('auth:logout', {});
-    }, (error)=> {
+    }, (error) => {
       if (error.code === ErrorCodes.InvalidArgument &&
           error.message === 'Missing device id'
       ) {
@@ -102,13 +102,13 @@ export class AuthContainer {
       }
       return Promise.reject(error);
     })
-    .then(()=> {
+    .then(() => {
       return Promise.all([
         this._setAccessToken(null),
         this._setUser(null)
-      ]).then(()=> null);
-    }, (err)=> {
-      return this._setAccessToken(null).then(()=> {
+      ]).then(() => null);
+    }, (err) => {
+      return this._setAccessToken(null).then(() => {
         return Promise.reject(err);
       });
     });
@@ -141,7 +141,7 @@ export class AuthContainer {
         return perRole.name;
       });
     }
-    return this.container.makeRequest('user:update', payload).then((body)=> {
+    return this.container.makeRequest('user:update', payload).then((body) => {
       const newUser = this._User.fromJSON(body.result);
       const currentUser = this.currentUser;
 
@@ -174,10 +174,10 @@ export class AuthContainer {
   }
 
   _getAccessToken() {
-    return this.container.store.getItem('skygear-accesstoken').then((token)=> {
+    return this.container.store.getItem('skygear-accesstoken').then((token) => {
       this._accessToken = token;
       return token;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get access', err);
       this._accessToken = null;
       return null;
@@ -189,9 +189,9 @@ export class AuthContainer {
     const setItem = value === null
         ? this.container.store.removeItem('skygear-accesstoken')
         : this.container.store.setItem('skygear-accesstoken', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist accesstoken', err);
       return value;
     });
@@ -209,7 +209,7 @@ export class AuthContainer {
     return Promise.all([
       this._setUser(body.result),
       this._setAccessToken(body.result.access_token)
-    ]).then(()=> {
+    ]).then(() => {
       this.container.pubsub._reconfigurePubsubIfNeeded();
       return this.currentUser;
     });
@@ -227,16 +227,16 @@ export class AuthContainer {
     return this.container.makeRequest('user:query', {
       emails: emails,
       usernames: usernames
-    }).then((body)=> {
+    }).then((body) => {
       return body.result.map(r => new this._User(r.data));
     });
   }
 
   _getUser() {
-    return this.container.store.getItem('skygear-user').then((userJSON)=> {
+    return this.container.store.getItem('skygear-user').then((userJSON) => {
       let attrs = JSON.parse(userJSON);
       this._user = this._User.fromJSON(attrs);
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get user', err);
       this._user = null;
       return null;
@@ -256,10 +256,10 @@ export class AuthContainer {
     const setItem = value === null ?
         this.container.store.removeItem('skygear-user') :
         this.container.store.setItem('skygear-user', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       this.container.ee.emit(USER_CHANGED, this._user);
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist user', err);
       return value;
     });

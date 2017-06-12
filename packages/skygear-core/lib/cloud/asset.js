@@ -138,7 +138,7 @@ export class CloudSigner extends Signer {
   sign(name) {
     if (this.needRefreshSignerToken()) {
       return this.refreshSignerToken()
-        .then(()=> this.sign(name));
+        .then(() => this.sign(name));
     }
     const appName = this.appName;
     const duration = parseInt(this.assetStoreURLExpireDuration);

@@ -73,7 +73,7 @@ export class Database {
         console.log('No cache found', err);
       });
     }
-    return this.container.makeRequest('record:query', payload).then((body)=> {
+    return this.container.makeRequest('record:query', payload).then((body) => {
       let records = _.map(body.result, function (attrs) {
         return new Cls(attrs);
       });
@@ -87,13 +87,13 @@ export class Database {
   }
 
   _makeUploadAssetRequest(asset) {
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.container.makeRequest('asset:put', {
         filename: asset.name,
         'content-type': asset.contentType,
         'content-size': asset.file.size
       })
-      .then((res)=> {
+      .then((res) => {
         const newAsset = Asset.fromJSON(res.result.asset);
         const postRequest = res.result['post-request'];
 
@@ -109,12 +109,12 @@ export class Database {
           .post(postUrl)
           .set('X-Skygear-API-Key', this.container.apiKey);
         if (postRequest['extra-fields']) {
-          _.forEach(postRequest['extra-fields'], (value, key)=> {
+          _.forEach(postRequest['extra-fields'], (value, key) => {
             _request = _request.field(key, value);
           });
         }
 
-        _request.attach('file', asset.file).end((err)=> {
+        _request.attach('file', asset.file).end((err) => {
           if (err) {
             reject(err);
             return;
@@ -122,7 +122,7 @@ export class Database {
 
           resolve(newAsset);
         });
-      }, (err)=> {
+      }, (err) => {
         reject(err);
       });
     });
@@ -131,7 +131,7 @@ export class Database {
   _presaveAssetTask(key, asset) {
     if (asset.file) {
       return this._makeUploadAssetRequest(asset)
-        .then((a)=> [key, a]);
+        .then((a) => [key, a]);
     } else {
       return Promise.resolve([key, asset]);
     }
@@ -140,7 +140,7 @@ export class Database {
   _presave(record) {
     // for every (key, value) pair, process the pair in a Promise
     // the Promise should be resolved by the transformed [key, value] pair
-    let tasks = _.map(record, (value, key)=> {
+    let tasks = _.map(record, (value, key) => {
       if (value instanceof Asset) {
         return this._presaveAssetTask(key, value);
       } else {
@@ -148,8 +148,8 @@ export class Database {
       }
     });
 
-    return Promise.all(tasks).then((keyvalues)=> {
-      _.each(keyvalues, ([key, value])=> {
+    return Promise.all(tasks).then((keyvalues) => {
+      _.each(keyvalues, ([key, value]) => {
         record[key] = value;
       });
       return record;
@@ -174,7 +174,7 @@ export class Database {
 
     const presaveTasks = _.map(records, this._presave.bind(this));
     return Promise.all(presaveTasks)
-    .then((processedRecords)=> {
+    .then((processedRecords) => {
       let payload = {
         database_id: this.dbID //eslint-disable-line
       };
@@ -188,7 +188,7 @@ export class Database {
       });
 
       return this.container.makeRequest('record:save', payload);
-    }).then((body)=> {
+    }).then((body) => {
       let results = body.result;
       let savedRecords = [];
       let errors = [];
@@ -229,7 +229,7 @@ export class Database {
     };
 
     return this.container.makeRequest('record:delete', payload)
-      .then((body)=> {
+      .then((body) => {
         let results = body.result;
         let errors = [];
 
@@ -278,7 +278,7 @@ export class PublicDatabase extends Database {
 
     return this.container.makeRequest('role:admin', {
       roles: roleNames
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   setDefaultRole(roles) {
@@ -288,7 +288,7 @@ export class PublicDatabase extends Database {
 
     return this.container.makeRequest('role:default', {
       roles: roleNames
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   get defaultACL() {
@@ -307,14 +307,14 @@ export class PublicDatabase extends Database {
     return this.container.makeRequest('schema:access', {
       type: recordClass.recordType,
       create_roles: roleNames //eslint-disable-line camelcase
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
   setRecordDefaultAccess(recordClass, acl) {
     return this.container.makeRequest('schema:default_access', {
       type: recordClass.recordType,
       default_access: acl.toJSON() //eslint-disable-line camelcase
-    }).then((body)=> body.result);
+    }).then((body) => body.result);
   }
 
 }
