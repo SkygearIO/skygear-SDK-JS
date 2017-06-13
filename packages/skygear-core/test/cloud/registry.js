@@ -149,45 +149,6 @@ describe('Registry', function () {
     expect(registry.getHandler('hello/foo/world/bar', 'GET')).to.be.eql(handlerWithParams);
   });
 
-  it('parse parameters in path', function() {
-    const registry = new Registry();
-    function handlerWithParams() {}
-    registry.registerHandler('download/:platform/:version', handlerWithParams, {
-      method: ['GET'],
-      authRequired: false,
-      userRequired: true
-    });
-    expect(registry.parseParamsInPath('download/osx/1.0.0')).to.be.deep.eql({
-      platform: 'osx',
-      version: '1.0.0'
-    });
-  });
-
-  it('parse parameters in path, calacala parameters', function() {
-    const registry = new Registry();
-    function handlerWithParams() {}
-    registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
-      method: ['GET'],
-      authRequired: false,
-      userRequired: true
-    });
-    expect(registry.parseParamsInPath('hello/foo/world/bar')).to.be.deep.eql({
-      param1: 'foo',
-      param2: 'bar'
-    });
-  });
-
-  it('parse parameters in non parameterized path', function() {
-    const registry = new Registry();
-    function handlerWithParams() {}
-    registry.registerHandler('a/normal/url', handlerWithParams, {
-      method: ['GET'],
-      authRequired: false,
-      userRequired: true
-    });
-    expect(registry.parseParamsInPath('a/normal/url')).to.be.deep.eql({});
-  });
-
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}
