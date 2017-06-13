@@ -229,27 +229,30 @@ describe('CommonTransport', function () {
     }).catch(done);
   });
 
-  it('parse parameters in path', function() {
-    expect(SkygearRequest._parseParamsInPath('download/:platform/:version', '/download/osx/1.0.0')).to.be.deep.eql({
-      platform: 'osx',
-      version: '1.0.0'
-    });
+  it('parse parameters in path', function () {
+    expect(SkygearRequest._parseParamsInPath('download/:platform/:version',
+      '/download/osx/1.0.0')).to.be.deep.eql({
+        platform: 'osx',
+        version: '1.0.0'
+      });
   });
 
-  it('parse parameters in path, calacala parameters', function() {
-    expect(SkygearRequest._parseParamsInPath('hello/:param1/world/:param2', '/hello/foo/world/bar')).to.be.deep.eql({
-      param1: 'foo',
-      param2: 'bar'
-    });
+  it('parse parameters in path, calacala parameters', function () {
+    expect(SkygearRequest._parseParamsInPath('hello/:param1/world/:param2',
+      '/hello/foo/world/bar')).to.be.deep.eql({
+        param1: 'foo',
+        param2: 'bar'
+      });
   });
 
-  it('parse parameters in non parameterized path', function() {
-    expect(SkygearRequest._parseParamsInPath('a/normal/url', '/a/normal/url')).to.be.deep.eql({});
+  it('parse parameters in non parameterized path', function () {
+    expect(SkygearRequest._parseParamsInPath('a/normal/url',
+      '/a/normal/url')).to.be.deep.eql({});
   });
 
   it('call with handlerHandler with params in req', function () {
     const registry = new Registry();
-    registry.registerHandler('user/:id', function(req) {
+    registry.registerHandler('user/:id', function (req) {
       return req;
     }, {
       method: ['GET'],
@@ -279,7 +282,7 @@ describe('CommonTransport', function () {
       expect(body.params).to.deep.equal({
         id: '12345678'
       });
-    })
+    });
   });
 
   it('should call init event handler properly', function (done) {
