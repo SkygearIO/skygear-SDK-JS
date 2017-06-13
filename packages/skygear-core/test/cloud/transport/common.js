@@ -19,7 +19,7 @@ import sinon from 'sinon';
 import {Registry} from '../../../lib/cloud/registry';
 import CommonTransport
   from '../../../lib/cloud/transport/common';
-import { SkygearResponse }
+import { SkygearResponse, SkygearRequest }
   from '../../../lib/cloud/transport/common';
 
 describe('CommonTransport', function () {
@@ -196,6 +196,7 @@ describe('CommonTransport', function () {
     const handlerFunc = sinon.spy(function (req) {
       return req.json.data;
     });
+    handlerFunc.handlerName = 'handler1';
     registry.getHandler = sinon.stub().returns(handlerFunc);
     const transport = new CommonTransport(registry);
     return transport.handlerHandler({
@@ -226,6 +227,24 @@ describe('CommonTransport', function () {
       );
       done();
     }).catch(done);
+  });
+
+  it('parse parameters in path', function() {
+    expect(SkygearRequest._parseParamsInPath('download/:platform/:version', '/download/osx/1.0.0')).to.be.deep.eql({
+      platform: 'osx',
+      version: '1.0.0'
+    });
+  });
+
+  it('parse parameters in path, calacala parameters', function() {
+    expect(SkygearRequest._parseParamsInPath('hello/:param1/world/:param2', '/hello/foo/world/bar')).to.be.deep.eql({
+      param1: 'foo',
+      param2: 'bar'
+    });
+  });
+
+  it('parse parameters in non parameterized path', function() {
+    expect(SkygearRequest._parseParamsInPath('a/normal/url', '/a/normal/url')).to.be.deep.eql({});
   });
 
   it('call with handlerHandler with params in req', function () {

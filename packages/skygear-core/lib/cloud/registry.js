@@ -142,25 +142,12 @@ export class Registry {
     return this._hookTypeMap[name];
   }
 
-  getHandler(name, method) {
-    for (let k in this.handlers) {
-      if (this._matchHandler(k, name))
-        return this.handlers[k][method];
-    }
-    return undefined;
-  }
-
-  parseParamsInPath(path) {
+  getHandler(path, method) {
     for (let k in this.handlers) {
       if (this._matchHandler(k, path)) {
-        let params = {};
-        const handlerParts = k.split('/');
-        const pathParts = path.split('/');
-        for (let i = 0; i < handlerParts.length; i++) {
-          if (handlerParts[i].startsWith(':'))
-            params[handlerParts[i].replace(':', '')] = pathParts[i];
-        }
-        return params;
+        let func = this.handlers[k][method];
+        func.handlerName = k;
+        return func;
       }
     }
     return undefined;
