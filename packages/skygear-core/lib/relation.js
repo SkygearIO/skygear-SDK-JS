@@ -195,7 +195,7 @@ export class RelationContainer {
       name: relation.identifier,
       direction: relation.direction,
       targets: relation.targetsID
-    }).then((body)=>
+    }).then((body) =>
       new RelationResult(body.result)
     );
   }
@@ -205,7 +205,7 @@ export class RelationContainer {
       name: relation.identifier,
       direction: relation.direction,
       targets: relation.targetsID
-    }).then((body)=>
+    }).then((body) =>
       new RelationRemoveResult(body.result)
     );
   }

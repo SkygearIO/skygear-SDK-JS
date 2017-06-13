@@ -108,7 +108,7 @@ export class Registry {
     if (!this.handlers[name]) {
       this.handlers[name] = {};
     }
-    m.forEach((_m)=> {
+    m.forEach((_m) => {
       this.handlers[name][_m] = func;
     });
   }

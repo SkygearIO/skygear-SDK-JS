@@ -1,4 +1,3 @@
-import reactNative from 'react-native';
 import Container from '../container';
 import {ReactNativePushContainer} from './push';
 import {setStore} from '../store';

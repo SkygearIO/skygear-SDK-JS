@@ -55,10 +55,10 @@ export class PushContainer {
       type: type,
       id: deviceID,
       topic: topic,
-      device_token: token
-    }).then((body)=> {
+      device_token: token //eslint-disable-line camelcase
+    }).then((body) => {
       return this._setDeviceID(body.result.id);
-    }, (error)=> {
+    }, (error) => {
       // Will set the deviceID to null and try again iff deviceID is not null.
       // The deviceID can be deleted remotely, by apns feedback.
       // If the current deviceID is already null, will regards as server fail.
@@ -67,7 +67,7 @@ export class PushContainer {
         errorCode = error.error.code;
       }
       if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
-        return this._setDeviceID(null).then(()=> {
+        return this._setDeviceID(null).then(() => {
           return this.registerDevice(token, type);
         });
       } else {
@@ -85,10 +85,10 @@ export class PushContainer {
 
     return this.container.makeRequest('device:unregister', {
       id: this.deviceID
-    }).then(()=> {
+    }).then(() => {
       // do nothing
       return;
-    }, (error)=> {
+    }, (error) => {
       let errorCode = null;
       if (error.error) {
         errorCode = error.error.code;
@@ -107,10 +107,10 @@ export class PushContainer {
   }
 
   _getDeviceID() {
-    return this.container.store.getItem('skygear-deviceid').then((deviceID)=> {
+    return this.container.store.getItem('skygear-deviceid').then((deviceID) => {
       this._deviceID = deviceID;
       return deviceID;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to get deviceid', err);
       this._deviceID = null;
       return null;
@@ -122,12 +122,12 @@ export class PushContainer {
     const store = this.container.store;
     const setItem = value === null ? store.removeItem('skygear-deviceid')
         : store.setItem('skygear-deviceid', value);
-    return setItem.then(()=> {
+    return setItem.then(() => {
       return value;
-    }, (err)=> {
+    }, (err) => {
       console.warn('Failed to persist deviceid', err);
       return value;
-    }).then((deviceID)=> {
+    }).then((deviceID) => {
       this.container.pubsub._reconfigurePubsubIfNeeded();
       return deviceID;
     });

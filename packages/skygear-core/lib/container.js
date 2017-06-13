@@ -29,7 +29,7 @@ import {Database} from './database';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
-import {ErrorCodes, SkygearError} from './error';
+import {ErrorCodes} from './error';
 
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
@@ -65,11 +65,11 @@ export class BaseContainer {
     let requestObject = this._prepareRequestObject(action, data);
     let requestData = this._prepareRequestData(action, data);
 
-    return this._handleResponse(new Promise((resolve)=> {
-      requestObject.send(requestData).end((err, res)=> {
+    return this._handleResponse(new Promise((resolve) => {
+      requestObject.send(requestData).end((err, res) => {
         resolve({
           err: err,
-          res: res,
+          res: res
         });
       });
     }));
@@ -78,10 +78,10 @@ export class BaseContainer {
   lambda(name, data) {
     return this.makeRequest(name, {
       args: data
-    }).then((resp)=> resp.result);
+    }).then((resp) => resp.result);
   }
 
-  _prepareRequestObject(action, data) {
+  _prepareRequestObject(action) {
     if (this.apiKey === null) {
       throw Error('Please config ApiKey');
     }
@@ -100,12 +100,12 @@ export class BaseContainer {
 
     return _.assign({
       action: action,
-      api_key: this.apiKey,
+      api_key: this.apiKey
     }, data);
   }
 
   _handleResponse(responsePromise) {
-    return responsePromise.then(({err, res})=> {
+    return responsePromise.then(({err, res}) => {
       // Do an application JSON parse because in some condition, the
       // content-type header will got strip and it will not deserial
       // the json for us.
@@ -324,17 +324,17 @@ export default class Container extends BaseContainer {
   }
 
   config(options) {
-    return super.config(options).then(()=> {
+    return super.config(options).then(() => {
       let promises = [
         this.auth._getUser(),
         this.auth._getAccessToken(),
         this.push._getDeviceID()
       ];
       return Promise.all(promises);
-    }).then(()=> {
+    }).then(() => {
       this.pubsub._reconfigurePubsubIfNeeded();
       return this;
-    }, ()=> {
+    }, () => {
       return this;
     });
   }
@@ -362,7 +362,7 @@ export default class Container extends BaseContainer {
 
   _handleResponse(responsePromise) {
     return super._handleResponse(responsePromise)
-      .catch((err)=> {
+      .catch((err) => {
         // Logout user implicitly if
         let errorCode = err.error.code;
         if (errorCode === this.ErrorCodes.AccessTokenNotAccepted) {

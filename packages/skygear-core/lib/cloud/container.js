@@ -64,7 +64,8 @@ export default class CloudCodeContainer extends BaseContainer {
     let requestObject = super._prepareRequestObject(action, data);
 
     if (this.auth.accessToken) {
-      request.set('X-Skygear-Access-Token', this.auth.accessToken);
+      requestObject = requestObject.set(
+        'X-Skygear-Access-Token', this.auth.accessToken);
     }
 
     return requestObject;
