@@ -77,7 +77,7 @@ function containerFromContext(context) {
  * This is thin request object trying to provide a http.IncomingMessage like
  * object for access http request properties.
  */
-class SkygearRequest {
+export class SkygearRequest {
   constructor(param) {
     this.headers = param.header;
     this.method = param.method;
@@ -89,7 +89,7 @@ class SkygearRequest {
     } else {
       this.url = parse(`${this.path}`, true);
     }
-    this.params = param.params; //parameters in url
+    this.params = SkygearRequest._parseParamsInPath(param.handlerName, param.path)
   }
 
   get query() {
@@ -109,6 +109,17 @@ class SkygearRequest {
 
   get json() {
     return JSON.parse(this.body);
+  }
+
+  static _parseParamsInPath(handlerName, path) {
+    let params = {};
+    const handlerParts = handlerName.split('/');
+    const pathParts = path.split('/');
+    for (let i = 0; i < handlerParts.length; i++) {
+      if (handlerParts[i].startsWith(':'))
+        params[handlerParts[i].replace(':', '')] = pathParts[i+1];
+    }
+    return params;
   }
 }
 
@@ -407,12 +418,12 @@ export default class CommonTransport {
     if (!func) {
       return Promise.reject(new Error('Handler not exist'));
     }
-    param.params = this.registry.parseParamsInPath(name);
 
     const options = {
       context,
       container: containerFromContext(context)
     };
+    param.handlerName = func.handlerName;
     const req = new SkygearRequest(param);
     return this._promisify(
       func,
