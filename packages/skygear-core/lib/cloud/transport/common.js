@@ -89,7 +89,9 @@ export class SkygearRequest {
     } else {
       this.url = parse(`${this.path}`, true);
     }
-    this.params = SkygearRequest._parseParamsInPath(param.handlerName, param.path)
+    this.params = SkygearRequest._parseParamsInPath(
+      param.handlerName, param.path
+    );
   }
 
   get query() {
@@ -116,8 +118,9 @@ export class SkygearRequest {
     const handlerParts = handlerName.split('/');
     const pathParts = path.split('/');
     for (let i = 0; i < handlerParts.length; i++) {
-      if (handlerParts[i].startsWith(':'))
-        params[handlerParts[i].replace(':', '')] = pathParts[i+1];
+      if (handlerParts[i].startsWith(':')) {
+        params[handlerParts[i].replace(':', '')] = pathParts[i + 1];
+      }
     }
     return params;
   }
