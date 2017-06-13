@@ -149,6 +149,22 @@ describe('Registry', function () {
     expect(registry.getHandler('hello/foo/world/bar', 'GET')).to.be.eql(handlerWithParams);
   });
 
+  it('match handler with normal path', function() {
+    expect(Registry._matchHandler('foo/bar', 'foo/bar')).to.eql(true);
+  });
+
+  it('match handler with parameterized path', function() {
+    expect(Registry._matchHandler('download/:platform/:version', 'download/osx/1.0.0')).to.eql(true);
+  });
+
+  it('match handler with parameterized path - false', function() {
+    expect(Registry._matchHandler('download/:platform/:version', 'sthelse/osx/1.0.0')).to.eql(false);
+  });
+
+  it('match handler with calacala parameterized path', function() {
+    expect(Registry._matchHandler('hello/:foo/world/:bar', 'hello/1/world/2')).to.eql(true);
+  });
+
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}

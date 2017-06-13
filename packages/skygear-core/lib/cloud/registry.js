@@ -144,7 +144,7 @@ export class Registry {
 
   getHandler(path, method) {
     for (let k in this.handlers) {
-      if (this._matchHandler(k, path)) {
+      if (Registry._matchHandler(k, path)) {
         let func = this.handlers[k][method];
         func.handlerName = k;
         return func;
@@ -153,7 +153,7 @@ export class Registry {
     return undefined;
   }
 
-  _matchHandler(handlerName, path) {
+  static _matchHandler(handlerName, path) {
     const namePattern = new RegExp('^' + handlerName.replace(/\/:((?!\/).)+/g, '/((?!/).)+') + '$');
     return path.match(namePattern) !== null;
   }
