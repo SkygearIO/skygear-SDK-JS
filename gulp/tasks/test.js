@@ -27,10 +27,10 @@ gulp.task('pre-test', function () {
       .pipe(istanbul({
         includeUntested: true,
         instrumenter: isparta.Instrumenter
-      }))
-      .pipe(istanbul.hookRequire());
+      }));
   });
-  return merge(streams);
+  return merge(streams)
+    .pipe(istanbul.hookRequire());
 });
 
 gulp.task('test', ['pre-test'], function () {
