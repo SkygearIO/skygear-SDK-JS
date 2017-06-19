@@ -76,9 +76,25 @@
       <button onclick="changePassword();">Change</button>
     </form>
     <hr>
+    <h4>Forgot password</h4>
+    <form action="#" onsubmit="return false;">
+      <label>Email</label>
+      <input id="forgotpassword-email" type="email"><br>
+      <p><button onclick="forgotPassword();">Forget Password</button></p>
+      <label>userID</label>
+      <input id="forgotpassword-userID"><br>
+      <label>code</label>
+      <input id="forgotpassword-code"><br>
+      <label>expireAt</label>
+      <input id="forgotpassword-expireAt"><br>
+      <label>newPassword</label>
+      <input id="forgotpassword-newPassword"><br>
+      <p><button onclick="resetPassword();">Reset Password</button></p>
+    </form>
+    <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
-  <script src="../packages/skygear-core/dist/bundle.js"></script>
+  <script src="../packages/skygear/dist/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
@@ -168,6 +184,34 @@
         console.log(user);
       }, function(error) {
         console.log('Change password failed');
+        console.log(error);
+        changeResult.innerText = error;
+      });
+    }
+    forgotPassword = function() {
+      var email = document.getElementById("forgotpassword-email").value;
+      var changeResult = document.getElementById("change-result");
+      skygear.auth.forgotPassword(email).then(function() {
+        console.log('Forgot password ok');
+        changeResult.innerText = 'Forgot password ok';
+      }, function(error) {
+        console.log('Forgot password failed');
+        console.log(error);
+        changeResult.innerText = error;
+      });
+    }
+    resetPassword = function() {
+      var userID = document.getElementById("forgotpassword-userID").value;
+      var code = document.getElementById("forgotpassword-code").value;
+      var expireAt = document.getElementById("forgotpassword-expireAt").value;
+      var newPassword = document.getElementById("forgotpassword-newPassword").value;
+      var changeResult = document.getElementById("change-result");
+      skygear.auth.resetPassword(userID, code, expireAt, newPassword).then(function(user) {
+        console.log('Reset password ok');
+        changeResult.innerText = 'Reset password ok';
+        console.log(user);
+      }, function(error) {
+        console.log('Reset password failed');
         console.log(error);
         changeResult.innerText = error;
       });
