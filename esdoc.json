@@ -10,5 +10,8 @@
     "asyncGenerators": true,
     "exportExtensions": true,
     "dynamicImport": true
-  }
+  },
+  "plugins": [
+    {"name": "./esdoc-plugins/injectTo/index.js"}
+  ]
 }
