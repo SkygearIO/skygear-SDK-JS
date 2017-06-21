@@ -1,5 +1,7 @@
 {
-  "source": "./packages/skygear-core/lib",
+  "source": "./packages",
+  "includes": [".*lib\/.*"],
+  "excludes": [".*node_modules\/.*"],
   "destination": "./esdoc",
   "experimentalProposal": {
     "classProperties": true,
@@ -10,5 +12,8 @@
     "asyncGenerators": true,
     "exportExtensions": true,
     "dynamicImport": true
-  }
+  },
+  "plugins": [
+    {"name": "./esdoc-plugins/injectTo/index.js"}
+  ]
 }
