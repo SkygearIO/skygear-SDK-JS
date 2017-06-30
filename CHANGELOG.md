@@ -1,3 +1,24 @@
+## 1.0.0 (2017-06-30)
+
+### Incompatible Changes
+
+- Update container API grouping (#231, SkygearIO/features#70)
+
+### Features
+
+- Add forgot password functions to skygear.auth (#237, SkygearIO/features#70)
+
+### Bug Fixes
+
+- Fix unable to get/set ACL for new record (#203)
+- Fixing issue with undefined this when saving asset #225
+- Fix asset collector does not exit
+
+### Other Notes
+
+- Inject non-core function to core class in esdoc
+- Fix various issues with lerna, gulp and lint
+
 ## 0.24.1 (2017-05-23)
 
 ### Incompatible Changes
