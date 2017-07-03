@@ -18,6 +18,7 @@ import {expect, assert} from 'chai';
 import sinon from 'sinon';
 import {Database} from '../lib/database';
 import Record from '../lib/record';
+import QueryResult from '../lib/query_result';
 import Query from '../lib/query';
 import Container from '../lib/container';
 
@@ -556,6 +557,20 @@ describe('Database', function () {
     let note1 = new Note();
     let note2 = new Note();
     return db.delete([note1, note2])
+    .then(function (errors) {
+      expect(errors).to.have.length(2);
+      expect(errors[0]).to.be.undefined();
+      expect(errors[1]).to.be.undefined();
+    }, function (error) {
+      throw Error();
+    });
+  });
+
+  it('delete accept QueryResult and delete records at remote', function () {
+    let note1 = new Note();
+    let note2 = new Note();
+    let queryResult = QueryResult.createFromResult([note1, note2], {});
+    return db.delete(queryResult)
     .then(function (errors) {
       expect(errors).to.have.length(2);
       expect(errors[0]).to.be.undefined();

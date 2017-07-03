@@ -218,7 +218,8 @@ export class Database {
 
   delete(_records) {
     let records = _records;
-    if (!_.isArray(records)) {
+    let isQueryResult = records instanceof QueryResult;
+    if (!_.isArray(records) && !isQueryResult) {
       records = [records];
     }
 
