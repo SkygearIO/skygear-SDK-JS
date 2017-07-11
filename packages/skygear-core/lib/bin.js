@@ -26,7 +26,8 @@ if (cmd === '--help') {
   - APP_NAME: Application name of the skygear daemon
   - LOG_LEVEL: Log level
   - HTTP: Trigger http web server
-  - HTTP_ADDR: Address where htp web server listen to
+  - HTTP_ADDR: Address where http web server listen to. In the format
+    of {HOST}:{PORT}
   - DEBUG: Enable debugging features
   - SERVE_STATIC_ASSETS: Enable to serve static asset from plugin process
   - PUBSUB_URL: The URL of the pubsub server, should start with ws://
