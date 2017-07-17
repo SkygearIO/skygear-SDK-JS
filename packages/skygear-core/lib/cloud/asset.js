@@ -5,7 +5,6 @@ import mime from 'mime-types';
 import {SkygearResponse} from './transport/common';
 import registry from './registry';
 import {settings} from './settings';
-import URLSafeBase64 from 'urlsafe-base64';
 import S3URLSigner from 'amazon-s3-url-signer';
 import request from 'superagent';
 import URL from 'url';
@@ -78,11 +77,9 @@ export class FSSigner extends Signer {
     const hash = crypto.createHmac('sha256', secret)
       .update(name)
       .update(expire.toString())
-      .digest()
-      .slice(0, -1);
-    const encoded = URLSafeBase64.encode(hash);
+      .digest('base64');
     const fullURL =
-      `${prefix}/${name}?expiredAt=${expire.toString()}&signature=${encoded}`;
+      `${prefix}/${name}?expiredAt=${expire.toString()}&signature=${hash}`;
     return Promise.resolve(fullURL);
   }
 }
