@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 import {EventHandle} from './util';
 import {ErrorCodes} from './error';
 
@@ -171,7 +170,7 @@ export class AuthContainer {
 
   _authResolve(body) {
     return Promise.all([
-      this._setUser(body.result),
+      this._setUser(body.result.profile),
       this._setAccessToken(body.result.access_token)
     ]).then(() => {
       this.container.pubsub._reconfigurePubsubIfNeeded();
@@ -182,7 +181,7 @@ export class AuthContainer {
   _getUser() {
     return this.container.store.getItem('skygear-user').then((userJSON) => {
       let attrs = JSON.parse(userJSON);
-      this._user = this._User.fromJSON(attrs);
+      this._user = new this._User(attrs);
     }, (err) => {
       console.warn('Failed to get user', err);
       this._user = null;
@@ -213,7 +212,7 @@ export class AuthContainer {
   }
 
   get _User() {
-    return this.container.User;
+    return this.container.UserRecord;
   }
 
   get _Query() {
