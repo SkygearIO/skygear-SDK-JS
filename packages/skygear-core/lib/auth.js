@@ -133,14 +133,6 @@ export class AuthContainer {
     .then(this._authResolve.bind(this));
   }
 
-  getUsersByEmail(emails) {
-    return this._getUsersBy(emails, null);
-  }
-
-  getUsersByUsername(usernames) {
-    return this._getUsersBy(null, usernames);
-  }
-
   discoverUserByEmails(emails) {
     return this.container.publicDB.query(
       new this._Query(this.container.UserRecord).havingEmails(emails)
@@ -184,15 +176,6 @@ export class AuthContainer {
     ]).then(() => {
       this.container.pubsub._reconfigurePubsubIfNeeded();
       return this.currentUser;
-    });
-  }
-
-  _getUsersBy(emails, usernames) {
-    return this.container.makeRequest('user:query', {
-      emails: emails,
-      usernames: usernames
-    }).then((body) => {
-      return body.result.map(r => new this._User(r.data));
     });
   }
 
