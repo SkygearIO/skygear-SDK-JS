@@ -41,50 +41,53 @@ export class AuthContainer {
     return new EventHandle(this.container.ee, USER_CHANGED, listener);
   }
 
-  signupWithUsername(username, password) {
-    return this._signup(username, null, password);
+  signup(authData, password, profile = {}) {
+    return this.container.makeRequest('auth:signup', {
+      auth_data: authData, // eslint-disable-line camelcase
+      password: password,
+      profile: profile
+    }).then(this._authResolve.bind(this));
   }
 
-  signupWithEmail(email, password) {
-    return this._signup(null, email, password);
+  signupWithUsername(username, password, profile = {}) {
+    return this.signup({
+      username: username
+    }, password, profile);
   }
 
-  signupWithUsernameAndProfile(username, password, profile = {}) {
-    return this.signupWithUsername(username, password)
-    .then((user) =>
-      this._createProfile(user, profile)
-    );
-  }
-
-  signupWithEmailAndProfile(email, password, profile = {}) {
-    return this.signupWithEmail(email, password)
-    .then((user) =>
-      this._createProfile(user, profile)
-    );
+  signupWithEmail(email, password, profile = {}) {
+    return this.signup({
+      email: email
+    }, password, profile);
   }
 
   signupAnonymously() {
-    return this._signup(null, null, null);
+    return this.signup(null, null, null);
+  }
+
+  login(authData, password) {
+    return this.container.makeRequest('auth:login', {
+      auth_data: authData, // eslint-disable-line camelcase
+      password: password
+    }).then(this._authResolve.bind(this));
   }
 
   loginWithUsername(username, password) {
-    return this.container.makeRequest('auth:login', {
-      username: username,
-      password: password
-    }).then(this._authResolve.bind(this));
+    return this.login({
+      username: username
+    }, password);
   }
 
   loginWithEmail(email, password) {
-    return this.container.makeRequest('auth:login', {
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
+    return this.login({
+      email: email
+    }, password);
   }
 
   loginWithProvider(provider, authData) {
     return this.container.makeRequest('auth:login', {
       provider: provider,
-      auth_data: authData // eslint-disable-line camelcase
+      provider_auth_data: authData // eslint-disable-line camelcase
     }).then(this._authResolve.bind(this));
   }
 
@@ -197,14 +200,6 @@ export class AuthContainer {
     });
   }
 
-  _signup(username, email, password) {
-    return this.container.makeRequest('auth:signup', {
-      username: username,
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
-  }
-
   _authResolve(body) {
     return Promise.all([
       this._setUser(body.result),
@@ -213,14 +208,6 @@ export class AuthContainer {
       this.container.pubsub._reconfigurePubsubIfNeeded();
       return this.currentUser;
     });
-  }
-
-  _createProfile(user, profile) {
-    let record = new this.container.UserRecord({
-      _id: 'user/' + user.id,
-      ...profile
-    });
-    return this.container.publicDB.save(record);
   }
 
   _getUsersBy(emails, usernames) {
