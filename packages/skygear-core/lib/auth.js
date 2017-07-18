@@ -133,29 +133,6 @@ export class AuthContainer {
     .then(this._authResolve.bind(this));
   }
 
-  saveUser(user) {
-    const payload = {
-      _id: user.id,     // eslint-disable-line camelcase
-      email: user.email,
-      username: user.username
-    };
-    if (user.roles) {
-      payload.roles = _.map(user.roles, function (perRole) {
-        return perRole.name;
-      });
-    }
-    return this.container.makeRequest('user:update', payload).then((body) => {
-      const newUser = this._User.fromJSON(body.result);
-      const currentUser = this.currentUser;
-
-      if (newUser && currentUser && newUser.id === currentUser.id) {
-        return this._setUser(body.result);
-      } else {
-        return newUser;
-      }
-    });
-  }
-
   getUsersByEmail(emails) {
     return this._getUsersBy(emails, null);
   }
