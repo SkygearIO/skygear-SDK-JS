@@ -27,25 +27,36 @@ describe('Cloud container', function () {
       container.request = mockSuperagent([{
         pattern: 'http://skygear.dev/auth/login',
         fixtures: function (match, params, headers, fn) {
-          if (params['username'] === 'user1' &&
+          if (params['auth_data'] &&
+            params['auth_data']['username'] === 'user1' &&
             params['password'] === 'passwd'
           ) {
             return fn({
               'result': {
                 'user_id': 'user:id1',
                 'access_token': 'uuid1',
-                'username': 'user1',
-                'email': 'user1@skygear.io'
+                'profile': {
+                  '_type': 'record', // eslint-disable-line camelcase
+                  '_id': 'user/user:id1', // eslint-disable-line camelcase
+                  '_access': null, // eslint-disable-line camelcase
+                  'username': 'user1',
+                  'email': 'user1@skygear.io'
+                }
               }
             });
           }
-          if (params['username'] === null && params['password'] === null) {
+          if (params['auth_data'] === null && params['password'] === null) {
             return fn({
               'result': {
                 'user_id': 'user:id2',
                 'access_token': 'uuid2',
-                'username': 'user2',
-                'email': 'user2@skygear.io'
+                'profile': {
+                  '_type': 'record', // eslint-disable-line camelcase
+                  '_id': 'user/user:id2', // eslint-disable-line camelcase
+                  '_access': null, // eslint-disable-line camelcase
+                  'username': 'user2',
+                  'email': 'user2@skygear.io'
+                }
               }
             });
           }
@@ -60,11 +71,11 @@ describe('Cloud container', function () {
     ])
     .then(([user1, user2]) => {
       assert.equal(container1.auth.accessToken, 'uuid1');
-      assert.instanceOf(container1.auth.currentUser, container1.User);
-      assert.equal(container1.auth.currentUser.id, 'user:id1');
+      assert.instanceOf(container1.auth.currentUser, container1.UserRecord);
+      assert.equal(container1.auth.currentUser.id, 'user/user:id1');
       assert.equal(container2.auth.accessToken, 'uuid2');
-      assert.instanceOf(container2.auth.currentUser, container2.User);
-      assert.equal(container2.auth.currentUser.id, 'user:id2');
+      assert.instanceOf(container2.auth.currentUser, container2.UserRecord);
+      assert.equal(container2.auth.currentUser.id, 'user/user:id2');
     });
   });
 });

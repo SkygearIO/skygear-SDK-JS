@@ -16,20 +16,20 @@
 /*eslint-disable camelcase */
 import {expect} from 'chai';
 import Role from '../lib/role';
-import User from '../lib/user';
+import {UserRecord} from '../lib/container';
 import ACL, {AccessLevel} from '../lib/acl';
 
 describe('ACL', function () {
   let Driver = Role.define('Driver');
   let Passenger = Role.define('Passenger');
-  let Alice = new User({
-    user_id: 'Alice',
-    roles: ['Driver']
+  let Alice = new UserRecord({
+    _id: 'user/Alice'
   });
-  let Bob = new User({
-    user_id: 'Bob',
-    roles: ['Passenger']
+  let AliceRoles = [Driver];
+  let Bob = new UserRecord({
+    _id: 'user/Bob'
   });
+  let BobRoles = [Passenger];
   it('serialization', function () {
     const payload = [
       {
@@ -143,9 +143,9 @@ describe('ACL', function () {
     expect(acl.hasReadAccessForRole(Driver)).to.be.false();
     expect(acl.hasReadAccessForRole(Passenger)).to.be.true();
     expect(acl.hasWriteAccessForRole(Passenger)).to.be.true();
-    expect(acl.hasReadAccessForUser(Alice)).to.be.false();
-    expect(acl.hasReadAccessForUser(Bob)).to.be.true();
-    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+    expect(acl.hasReadAccess(Alice, AliceRoles)).to.be.false();
+    expect(acl.hasReadAccess(Bob, BobRoles)).to.be.true();
+    expect(acl.hasWriteAccess(Bob, BobRoles)).to.be.true();
 
   });
 
@@ -165,14 +165,17 @@ describe('ACL', function () {
 
     expect(nobodyAccessiable.hasReadAccessForRole(Driver)).to.be.false();
     expect(nobodyAccessiable.hasReadAccessForUser(Alice)).to.be.false();
+    expect(nobodyAccessiable.hasReadAccess(Alice, AliceRoles)).to.be.false();
 
     expect(publicReadable.hasReadAccessForRole(Passenger)).to.be.true();
     expect(publicReadable.hasReadAccessForUser(Bob)).to.be.true();
+    expect(publicReadable.hasReadAccess(Bob, BobRoles)).to.be.true();
     expect(publicReadable.hasPublicReadAccess()).to.be.true();
     expect(publicReadable.hasPublicWriteAccess()).to.be.false();
 
     expect(publicReadWritable.hasWriteAccessForRole(Passenger)).to.be.true();
     expect(publicReadWritable.hasWriteAccessForUser(Bob)).to.be.true();
+    expect(publicReadWritable.hasWriteAccess(Bob, BobRoles)).to.be.true();
     expect(publicReadWritable.hasPublicReadAccess()).to.be.true();
     expect(publicReadWritable.hasPublicWriteAccess()).to.be.true();
   });
@@ -194,6 +197,7 @@ describe('ACL', function () {
     ]);
 
     expect(acl.hasReadAccessForUser(Alice)).to.be.true();
+    expect(acl.hasReadAccess(Alice, AliceRoles)).to.be.true();
 
     acl.setReadOnlyForUser(Alice);
     expect(acl.hasReadAccessForUser(Alice)).to.be.true();
@@ -223,11 +227,13 @@ describe('ACL', function () {
 
     acl.setReadOnlyForRole(Driver);
     expect(acl.hasReadAccessForRole(Driver)).to.be.true();
-    expect(acl.hasReadAccessForUser(Alice)).to.be.true();
+    expect(acl.hasReadAccessForUser(Alice)).to.be.false();
+    expect(acl.hasReadAccess(Alice, AliceRoles)).to.be.true();
 
     acl.setReadWriteAccessForRole(Driver);
     expect(acl.hasWriteAccessForRole(Driver)).to.be.true();
-    expect(acl.hasWriteAccessForUser(Alice)).to.be.true();
+    expect(acl.hasWriteAccessForUser(Alice)).to.be.false();
+    expect(acl.hasWriteAccess(Alice, AliceRoles)).to.be.true();
 
     acl = ACL.fromJSON([
       {
@@ -246,16 +252,20 @@ describe('ACL', function () {
 
     expect(acl.hasReadAccessForRole(Passenger)).to.be.true();
     expect(acl.hasWriteAccessForRole(Passenger)).to.be.true();
-    expect(acl.hasReadAccessForUser(Bob)).to.be.true();
-    expect(acl.hasWriteAccessForUser(Bob)).to.be.true();
+    expect(acl.hasReadAccessForUser(Bob)).to.be.false();
+    expect(acl.hasWriteAccessForUser(Bob)).to.be.false();
+    expect(acl.hasReadAccess(Bob, BobRoles)).to.be.true();
+    expect(acl.hasWriteAccess(Bob, BobRoles)).to.be.true();
 
     acl.setReadOnlyForRole(Passenger);
     expect(acl.hasWriteAccessForRole(Passenger)).to.be.false();
     expect(acl.hasWriteAccessForUser(Bob)).to.be.false();
+    expect(acl.hasWriteAccess(Bob, BobRoles)).to.be.false();
 
     acl.setNoAccessForRole(Passenger);
     expect(acl.hasReadAccessForRole(Passenger)).to.be.false();
     expect(acl.hasReadAccessForUser(Bob)).to.be.false();
+    expect(acl.hasReadAccess(Bob, BobRoles)).to.be.false();
   });
 
   it('set public access', function () {
