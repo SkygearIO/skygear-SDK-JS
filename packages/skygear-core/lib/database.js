@@ -318,6 +318,35 @@ export class PublicDatabase extends Database {
     }).then((body) => body.result);
   }
 
+  assignUserRole(users, roles) {
+    let userIds = _.map(users, function (perUser) {
+      return perUser._id;
+    });
+
+    let roleNames = _.map(roles, function (perRole) {
+      return perRole.name;
+    });
+
+    return this.container.makeRequest('role:assign', {
+      users: userIds,
+      roles: roleNames
+    }).then((body) => body.result);
+  }
+
+  revokeUserRole(users, roles) {
+    let userIds = _.map(users, function (perUser) {
+      return perUser._id;
+    });
+
+    let roleNames = _.map(roles, function (perRole) {
+      return perRole.name;
+    });
+
+    return this.container.makeRequest('role:revoke', {
+      users: userIds,
+      roles: roleNames
+    }).then((body) => body.result);
+  }
 }
 
 export class DatabaseContainer {
