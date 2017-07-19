@@ -92,24 +92,26 @@ export class AuthContainer {
 
   logout() {
     return this.container.push.unregisterDevice()
-    .then(() => {
-      this.container.clearCache();
-      return this.container.makeRequest('auth:logout', {});
-    }, (error) => {
+    .catch((error) => {
       if (error.code === ErrorCodes.InvalidArgument &&
           error.message === 'Missing device id'
       ) {
-        this.container.clearCache();
-        return this.container.makeRequest('auth:logout', {});
+        return Promise.resolve();
       }
+
       return Promise.reject(error);
+    })
+    .then(() => {
+      this.container.clearCache();
+      return this.container.makeRequest('auth:logout', {});
     })
     .then(() => {
       return Promise.all([
         this._setAccessToken(null),
         this._setUser(null)
       ]).then(() => null);
-    }, (err) => {
+    })
+    .catch((err) => {
       return this._setAccessToken(null).then(() => {
         return Promise.reject(err);
       });
