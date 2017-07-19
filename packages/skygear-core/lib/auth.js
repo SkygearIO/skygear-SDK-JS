@@ -134,18 +134,6 @@ export class AuthContainer {
     .then(this._authResolve.bind(this));
   }
 
-  discoverUserByEmails(emails) {
-    return this.container.publicDB.query(
-      new this._Query(this.container.UserRecord).havingEmails(emails)
-    );
-  }
-
-  discoverUserByUsernames(usernames) {
-    return this.container.publicDB.query(
-      new this._Query(this.container.UserRecord).havingUsernames(usernames)
-    );
-  }
-
   _getAccessToken() {
     return this.container.store.getItem('skygear-accesstoken').then((token) => {
       this._accessToken = token;
