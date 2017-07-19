@@ -19,7 +19,6 @@ const _ = require('lodash');
 const ee = require('event-emitter');
 
 import Asset from './asset';
-import User from './user';
 import Role from './role';
 import ACL from './acl';
 import Record from './record';
@@ -128,13 +127,6 @@ export class BaseContainer {
    */
   get Query() {
     return Query;
-  }
-
-  /**
-   * @type {User}
-   */
-  get User() {
-    return User;
   }
 
   /**
