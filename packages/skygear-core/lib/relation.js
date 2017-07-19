@@ -15,7 +15,7 @@
  */
 const _ = require('lodash');
 
-import User from './user';
+import {UserRecord} from './container';
 
 export const Outward = 'outward';
 export const Inward = 'inward';
@@ -43,7 +43,7 @@ export class Relation {
 
   get targetsID() {
     return _.map(this.targets, function (user) {
-      return user.id;
+      return user._id;
     });
   }
 
@@ -107,7 +107,7 @@ export class RelationResult {
         this.fails.push(results[i]);
         this.partialError = true;
       } else {
-        this.success.push(new User(results[i].data));
+        this.success.push(new UserRecord(results[i].data));
       }
     }
   }
@@ -137,7 +137,7 @@ export class RelationQueryResult extends Array {
 
   static createFromBody(body) {
     let users = _.map(body.result, function (attrs) {
-      return new User(attrs.data);
+      return new UserRecord(attrs.data);
     });
     let result = new RelationQueryResult();
     users.forEach((val) => result.push(val));

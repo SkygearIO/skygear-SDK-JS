@@ -36,6 +36,8 @@ import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
 
+export const UserRecord = Record.extend('user');
+
 export class BaseContainer {
 
   constructor() {
@@ -154,7 +156,7 @@ export class BaseContainer {
    * @type {Record}
    */
   get UserRecord() {
-    return Record.extend('user');
+    return UserRecord;
   }
 
   /**
