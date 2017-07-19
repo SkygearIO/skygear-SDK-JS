@@ -19,6 +19,7 @@ import Cache from './cache';
 import Asset from './asset';
 import Query from './query';
 import QueryResult from './query_result';
+import Role from './role';
 
 export class Database {
 
@@ -316,6 +317,24 @@ export class PublicDatabase extends Database {
       type: recordClass.recordType,
       default_access: acl.toJSON() //eslint-disable-line camelcase
     }).then((body) => body.result);
+  }
+
+  getUserRole(users) {
+    let userIds = _.map(users, function (perUser) {
+      return perUser._id;
+    });
+
+    return this.container.makeRequest('role:get', {
+      users: userIds
+    })
+    .then((body) =>
+      Object.keys(body.result)
+      .map((key) => [key, body.result[key]])
+      .reduce((acc, pairs) => ({
+        ...acc || {},
+        [pairs[0]]: pairs[1].map((name) => new Role(name))
+      }), null)
+    );
   }
 
   assignUserRole(users, roles) {
