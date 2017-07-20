@@ -88,7 +88,7 @@ describe('Asset Signer', function () {
         clock.restore();
         expect(value).to.equal('http://skygear.dev/files/index.html'
         + '?expiredAt=1481096834'
-        + '&signature=R5kMq2neUkCGBjQD6zSv99PajRvI0EqMesuRHQS4hA');
+        + '&signature=R5kMq2neUkCGBjQD6zSv99PajRvI0EqMesuRHQS4hNA=');
       });
     });
   });
