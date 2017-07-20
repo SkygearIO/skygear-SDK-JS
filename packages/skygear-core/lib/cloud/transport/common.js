@@ -17,6 +17,7 @@ import {
   btoa,
   atob
 } from 'Base64';
+import _ from 'lodash';
 import stream from 'stream';
 import { IncomingForm } from 'formidable';
 import { parse } from 'url';
@@ -188,7 +189,11 @@ export class SkygearResponse {
     const body = b64EncodeUnicode(this.body);
 
     Object.keys(this.headers).forEach((perKey) => {
-      header[perKey] = this.headers[perKey];
+      var headerValue = this.headers[perKey];
+      if (!_.isArray(headerValue)) {
+        headerValue = [headerValue];
+      }
+      header[perKey] = headerValue;
     });
 
     return {

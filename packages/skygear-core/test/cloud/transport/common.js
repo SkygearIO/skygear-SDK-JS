@@ -355,12 +355,14 @@ describe('SkygearResponse', function () {
       statusCode: 400,
       body: 'Hello World',
       headers: {
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+        'X-Skygear-Test': ['hello-world']
       }
     });
     expect(r.toResultJSON()).to.eql({
       header: {
-        'Content-Type': 'text/plain'
+        'Content-Type': ['application/json'],
+        'X-Skygear-Test': ['hello-world']
       },
       status: 400,
       body: 'SGVsbG8gV29ybGQ=' // 'Hello World'
