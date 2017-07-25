@@ -397,6 +397,8 @@ describe('SkygearResponse', function () {
   it('should check if obj is a SkygearResponse', function () {
     expect(SkygearResponse.isInstance(new SkygearResponse())).to.equal(true);
     expect(SkygearResponse.isInstance({})).to.equal(false);
+    expect(SkygearResponse.isInstance(undefined)).to.equal(false);
+    expect(SkygearResponse.isInstance(null)).to.equal(false);
   });
 });
 

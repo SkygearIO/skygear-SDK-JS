@@ -242,6 +242,9 @@ export class SkygearResponse {
    *
    */
   static isInstance(obj) {
+    if (obj === undefined || obj === null) {
+      return false;
+    }
     return obj instanceof SkygearResponse || !!obj._isSkygearResponse;
   }
 }
