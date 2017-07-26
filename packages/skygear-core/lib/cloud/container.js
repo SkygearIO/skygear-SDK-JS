@@ -48,8 +48,12 @@ export default class CloudCodeContainer extends BaseContainer {
     return this._relation;
   }
 
-  get db() {
-    return this._db;
+  get publicDB() {
+    return this._db.public;
+  }
+
+  get privateDB() {
+    return this._db.private;
   }
 
   get pubsub() {
