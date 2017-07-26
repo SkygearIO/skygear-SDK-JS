@@ -49,12 +49,14 @@
         <input id="password" type="password">
       </p>
       <p>
-        <button onclick="signup('username');">Signup</button>
+        <button onclick="signup();">Signup</button>
+        <button onclick="signup('username');">Signup With Username</button>
         <button onclick="signup('email');">Signup With Email</button>
         <button onclick="signup('anonymous');">Signup Anonymously</button>
       </p>
       <p>
         <button onclick="login();">Login</button>
+        <button onclick="login('username');">Login with Username</button>
         <button onclick="login('email');">Login With Email</button>
       </p>
     </form>
@@ -125,8 +127,13 @@
         _signup = skygear.auth.signupWithEmail(email, password);
       } else if (identifier === 'username') {
         _signup = skygear.auth.signupWithUsername(username, password);
-      } else {
+      } else if (identifier === 'anonymous') {
         _signup = skygear.auth.signupAnonymously();
+      } else {
+        _signup = skygear.auth.signup({
+          username: username,
+          email: email
+        }, password);
       }
       _signup.then(function() {
         console.log('Signup ok');
@@ -152,8 +159,13 @@
       var _login = null;
       if (identifier === 'email') {
         _login = skygear.auth.loginWithEmail(email, password);
-      } else {
+      } else if (identifier === 'username') {
         _login = skygear.auth.loginWithUsername(username, password)
+      } else {
+        _login = skygear.auth.login({
+          username: username,
+          email: email
+        }, password);
       }
       _login.then(function() {
         console.log('Login ok');
