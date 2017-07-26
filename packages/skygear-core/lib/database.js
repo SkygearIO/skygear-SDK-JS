@@ -321,7 +321,8 @@ export class PublicDatabase extends Database {
 
   getUserRole(users) {
     let userIds = _.map(users, function (perUser) {
-      return perUser._id;
+      // accept either user record or user id
+      return perUser._id || perUser;
     });
 
     return this.container.makeRequest('role:get', {
@@ -339,11 +340,13 @@ export class PublicDatabase extends Database {
 
   assignUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
-      return perUser._id;
+      // accept either user record or user id
+      return perUser._id || perUser;
     });
 
     let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
+      // accept either role object or role name
+      return perRole.name || perRole;
     });
 
     return this.container.makeRequest('role:assign', {
@@ -354,11 +357,13 @@ export class PublicDatabase extends Database {
 
   revokeUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
-      return perUser._id;
+      // accept either user record or user id
+      return perUser._id || perUser;
     });
 
     let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
+      // accept either role object or role name
+      return perRole.name || perRole;
     });
 
     return this.container.makeRequest('role:revoke', {

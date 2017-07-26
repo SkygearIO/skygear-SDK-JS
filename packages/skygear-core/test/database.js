@@ -621,7 +621,7 @@ describe('Database', function () {
     let users = [
       new UserRecord({_id: 'user/user1'}),
       new UserRecord({_id: 'user/user2'}),
-      new UserRecord({_id: 'user/user3'})
+      'user3'
     ];
     return db.getUserRole(users)
     .then(function (result) {
