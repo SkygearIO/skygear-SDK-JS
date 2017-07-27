@@ -19,7 +19,6 @@ const _ = require('lodash');
 const ee = require('event-emitter');
 
 import Asset from './asset';
-import User from './user';
 import Role from './role';
 import ACL from './acl';
 import Record from './record';
@@ -36,6 +35,8 @@ import {RelationContainer} from './relation';
 import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
+
+export const UserRecord = Record.extend('user');
 
 export class BaseContainer {
 
@@ -131,13 +132,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {User}
-   */
-  get User() {
-    return User;
-  }
-
-  /**
    * @type {Role}
    */
   get Role() {
@@ -162,7 +156,7 @@ export class BaseContainer {
    * @type {Record}
    */
   get UserRecord() {
-    return Record.extend('user');
+    return UserRecord;
   }
 
   /**

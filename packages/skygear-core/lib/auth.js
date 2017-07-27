@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
 import {EventHandle} from './util';
 import {ErrorCodes} from './error';
 
@@ -41,73 +40,78 @@ export class AuthContainer {
     return new EventHandle(this.container.ee, USER_CHANGED, listener);
   }
 
-  signupWithUsername(username, password) {
-    return this._signup(username, null, password);
+  signup(authData, password, profile = {}) {
+    return this.container.makeRequest('auth:signup', {
+      auth_data: authData, // eslint-disable-line camelcase
+      password: password,
+      profile: profile
+    }).then(this._authResolve.bind(this));
   }
 
-  signupWithEmail(email, password) {
-    return this._signup(null, email, password);
+  signupWithUsername(username, password, profile = {}) {
+    return this.signup({
+      username: username
+    }, password, profile);
   }
 
-  signupWithUsernameAndProfile(username, password, profile = {}) {
-    return this.signupWithUsername(username, password)
-    .then((user) =>
-      this._createProfile(user, profile)
-    );
-  }
-
-  signupWithEmailAndProfile(email, password, profile = {}) {
-    return this.signupWithEmail(email, password)
-    .then((user) =>
-      this._createProfile(user, profile)
-    );
+  signupWithEmail(email, password, profile = {}) {
+    return this.signup({
+      email: email
+    }, password, profile);
   }
 
   signupAnonymously() {
-    return this._signup(null, null, null);
+    return this.signup(null, null, null);
+  }
+
+  login(authData, password) {
+    return this.container.makeRequest('auth:login', {
+      auth_data: authData, // eslint-disable-line camelcase
+      password: password
+    }).then(this._authResolve.bind(this));
   }
 
   loginWithUsername(username, password) {
-    return this.container.makeRequest('auth:login', {
-      username: username,
-      password: password
-    }).then(this._authResolve.bind(this));
+    return this.login({
+      username: username
+    }, password);
   }
 
   loginWithEmail(email, password) {
-    return this.container.makeRequest('auth:login', {
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
+    return this.login({
+      email: email
+    }, password);
   }
 
   loginWithProvider(provider, authData) {
     return this.container.makeRequest('auth:login', {
       provider: provider,
-      auth_data: authData // eslint-disable-line camelcase
+      provider_auth_data: authData // eslint-disable-line camelcase
     }).then(this._authResolve.bind(this));
   }
 
   logout() {
     return this.container.push.unregisterDevice()
-    .then(() => {
-      this.container.clearCache();
-      return this.container.makeRequest('auth:logout', {});
-    }, (error) => {
+    .catch((error) => {
       if (error.code === ErrorCodes.InvalidArgument &&
           error.message === 'Missing device id'
       ) {
-        this.container.clearCache();
-        return this.container.makeRequest('auth:logout', {});
+        return Promise.resolve();
       }
+
       return Promise.reject(error);
+    })
+    .then(() => {
+      this.container.clearCache();
+      return this.container.makeRequest('auth:logout', {});
     })
     .then(() => {
       return Promise.all([
         this._setAccessToken(null),
         this._setUser(null)
       ]).then(() => null);
-    }, (err) => {
+    })
+    .catch((err) => {
       return this._setAccessToken(null).then(() => {
         return Promise.reject(err);
       });
@@ -128,49 +132,6 @@ export class AuthContainer {
       password: newPassword
     })
     .then(this._authResolve.bind(this));
-  }
-
-  saveUser(user) {
-    const payload = {
-      _id: user.id,     // eslint-disable-line camelcase
-      email: user.email,
-      username: user.username
-    };
-    if (user.roles) {
-      payload.roles = _.map(user.roles, function (perRole) {
-        return perRole.name;
-      });
-    }
-    return this.container.makeRequest('user:update', payload).then((body) => {
-      const newUser = this._User.fromJSON(body.result);
-      const currentUser = this.currentUser;
-
-      if (newUser && currentUser && newUser.id === currentUser.id) {
-        return this._setUser(body.result);
-      } else {
-        return newUser;
-      }
-    });
-  }
-
-  getUsersByEmail(emails) {
-    return this._getUsersBy(emails, null);
-  }
-
-  getUsersByUsername(usernames) {
-    return this._getUsersBy(null, usernames);
-  }
-
-  discoverUserByEmails(emails) {
-    return this.container.publicDB.query(
-      new this._Query(this.container.UserRecord).havingEmails(emails)
-    );
-  }
-
-  discoverUserByUsernames(usernames) {
-    return this.container.publicDB.query(
-      new this._Query(this.container.UserRecord).havingUsernames(usernames)
-    );
   }
 
   _getAccessToken() {
@@ -197,17 +158,9 @@ export class AuthContainer {
     });
   }
 
-  _signup(username, email, password) {
-    return this.container.makeRequest('auth:signup', {
-      username: username,
-      email: email,
-      password: password
-    }).then(this._authResolve.bind(this));
-  }
-
   _authResolve(body) {
     return Promise.all([
-      this._setUser(body.result),
+      this._setUser(body.result.profile),
       this._setAccessToken(body.result.access_token)
     ]).then(() => {
       this.container.pubsub._reconfigurePubsubIfNeeded();
@@ -215,27 +168,10 @@ export class AuthContainer {
     });
   }
 
-  _createProfile(user, profile) {
-    let record = new this.container.UserRecord({
-      _id: 'user/' + user.id,
-      ...profile
-    });
-    return this.container.publicDB.save(record);
-  }
-
-  _getUsersBy(emails, usernames) {
-    return this.container.makeRequest('user:query', {
-      emails: emails,
-      usernames: usernames
-    }).then((body) => {
-      return body.result.map(r => new this._User(r.data));
-    });
-  }
-
   _getUser() {
     return this.container.store.getItem('skygear-user').then((userJSON) => {
       let attrs = JSON.parse(userJSON);
-      this._user = this._User.fromJSON(attrs);
+      this._user = new this._User(attrs);
     }, (err) => {
       console.warn('Failed to get user', err);
       this._user = null;
@@ -266,7 +202,7 @@ export class AuthContainer {
   }
 
   get _User() {
-    return this.container.User;
+    return this.container.UserRecord;
   }
 
   get _Query() {

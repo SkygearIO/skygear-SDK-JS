@@ -128,10 +128,10 @@ describe('Container', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
     container.auth.onUserChanged(function (user) {
-      assert.instanceOf(user, container.User);
-      assert.equal(user.id, 'user:id1');
+      assert.instanceOf(user, container.Record);
+      assert.equal(user.id, 'user/user:id1');
     });
-    return container.auth._setUser({_id: 'user:id1'});
+    return container.auth._setUser({_id: 'user/user:id1'});
   });
 
   it('should able to cancel a registered userChange listener', function () {
@@ -141,7 +141,7 @@ describe('Container', function () {
       throw 'Cancel of onUserChanged failed';
     });
     handler.cancel();
-    return container.auth._setUser({_id: 'user:id1'});
+    return container.auth._setUser({_id: 'user/user:id1'});
   });
 });
 

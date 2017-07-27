@@ -32,9 +32,14 @@ describe('Container me', function () {
           return fn({
             result: {
               user_id: 'user-id-1', // eslint-disable-line camelcase
-              username: 'user1',
-              email: 'user1@skygear.dev',
-              roles: ['Normal-User']
+              roles: ['Normal-User'],
+              profile: {
+                _type: 'record', // eslint-disable-line camelcase
+                _id: 'user/user-id-1', // eslint-disable-line camelcase
+                _access: null, // eslint-disable-line camelcase
+                username: 'user1',
+                email: 'user1@skygear.dev'
+              }
             }
           });
         }
@@ -54,13 +59,10 @@ describe('Container me', function () {
     container.auth._accessToken = 'token-1';
     return container.auth.whoami()
     .then(function (user) {
-      assert.instanceOf(user, container.User);
-      assert.equal(user.id, 'user-id-1');
+      assert.instanceOf(user, container.Record);
+      assert.equal(user.id, 'user/user-id-1');
       assert.equal(user.username, 'user1');
       assert.equal(user.email, 'user1@skygear.dev');
-
-      assert.lengthOf(user.roles, 1);
-      assert.equal(user.roles[0], container.Role.define('Normal-User'));
     }, function (err) {
       throw new Error('Get me fail');
     });
@@ -83,19 +85,27 @@ describe('Container auth', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/signup',
     fixtures: function (match, params, headers, fn) {
-      const validUser = params['username'] === 'username' ||
-        params['email'] === 'user@email.com';
+      const validUser = params['auth_data'] &&
+        (params['auth_data']['username'] === 'username' ||
+        params['auth_data']['email'] === 'user@email.com');
       if (validUser && params['password'] === 'passwd') {
         return fn({
           'result': {
             'user_id': 'user:id1',
             'access_token': 'uuid1',
-            'username': 'user1',
-            'email': 'user1@skygear.io'
+            'profile': {
+              '_type': 'record', // eslint-disable-line camelcase
+              '_id': 'user/user:id1', // eslint-disable-line camelcase
+              '_access': null, // eslint-disable-line camelcase
+              'username': 'user1',
+              'email': 'user1@skygear.io',
+              ...params['profile'] || {}
+            }
           }
         });
       }
-      if (params['username'] === 'duplicated') {
+      if (params['auth_data'] &&
+        params['auth_data']['username'] === 'duplicated') {
         return fn({
           'error': {
             'type': 'ResourceDuplicated',
@@ -104,16 +114,20 @@ describe('Container auth', function () {
           }
         }, 400);
       }
-      if (params['username'] === null &&
-        params['password'] === null &&
-        params['email'] === null) {
+      if (params['auth_data'] === null &&
+        params['password'] === null) {
 
         return fn({
           'result': {
             'user_id': 'user:id2',
             'access_token': 'uuid2',
-            'username': 'user2',
-            'email': 'user2@skygear.io'
+            'profile': {
+              '_type': 'record', // eslint-disable-line camelcase
+              '_id': 'user/user:id2', // eslint-disable-line camelcase
+              '_access': null, // eslint-disable-line camelcase
+              'username': 'user2',
+              'email': 'user2@skygear.io'
+            }
           }
         });
       }
@@ -126,21 +140,29 @@ describe('Container auth', function () {
           'result': {
             'user_id': 'user:id1',
             'access_token': 'uuid1',
-            'username': '',
-            'email': '',
-            'auth_data': params['auth_data']
+            'provider_auth_data': params['provider_auth_data'],
+            'profile': {
+              '_type': 'record', // eslint-disable-line camelcase
+              '_id': 'user/user:id1', // eslint-disable-line camelcase
+              '_access': null // eslint-disable-line camelcase
+            }
           }
         });
       }
-      const validUser = params['username'] === 'registered' ||
-        params['email'] === 'user@email.com';
+      const validUser = params['auth_data']['username'] === 'registered' ||
+        params['auth_data']['email'] === 'user@email.com';
       if (validUser && params['password'] === 'passwd') {
         return fn({
           'result': {
             'user_id': 'user:id1',
             'access_token': 'uuid1',
-            'username': 'user1',
-            'email': 'user1@skygear.io'
+            'profile': {
+              '_type': 'record', // eslint-disable-line camelcase
+              '_id': 'user/user:id1', // eslint-disable-line camelcase
+              '_access': null, // eslint-disable-line camelcase
+              'username': 'user1',
+              'email': 'user1@skygear.io'
+            }
           }
         });
       }
@@ -160,8 +182,11 @@ describe('Container auth', function () {
           'result': {
             'user_id': 'user:id1',
             'access_token': 'uuid1',
-            'username': '',
-            'email': ''
+            'profile': {
+              '_type': 'record', // eslint-disable-line camelcase
+              '_id': 'user/user:id1', // eslint-disable-line camelcase
+              '_access': null // eslint-disable-line camelcase
+            }
           }
         });
       }
@@ -209,17 +234,61 @@ describe('Container auth', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should signup successfully', function () {
+  it('should serialize and deserlize user correctly', function () {
+    const userAttrs = {
+      _id: 'user/user1',
+      name: 'user1',
+      age: 100
+    };
+    return container.auth._setUser(userAttrs)
+    .then(() => {
+      assert.instanceOf(container.auth.currentUser, container.Record);
+      assert.equal(container.auth.currentUser.id, 'user/user1');
+      assert.equal(container.auth.currentUser.name, 'user1');
+      assert.equal(container.auth.currentUser.age, 100);
+
+      return container.auth._getUser();
+    })
+    .then(() => {
+      assert.instanceOf(container.auth.currentUser, container.Record);
+      assert.equal(container.auth.currentUser.id, 'user/user1');
+      assert.equal(container.auth.currentUser.name, 'user1');
+      assert.equal(container.auth.currentUser.age, 100);
+    });
+  });
+
+  it('should signup with profile successfully', function () {
+    return container.auth
+      .signup({
+        username: 'username',
+        email: 'user@email.com'
+      }, 'passwd', {
+        age: 100
+      })
+      .then(function (user) {
+        assert.equal(
+          container.auth.accessToken,
+          'uuid1');
+        assert.instanceOf(container.auth.currentUser, container.Record);
+        assert.equal(
+          container.auth.currentUser.id,
+          'user/user:id1'
+        );
+        assert.equal(container.auth.currentUser.age, 100);
+      });
+  });
+
+  it('should signup with username successfully', function () {
     return container.auth
       .signupWithUsername('username', 'passwd')
       .then(function (user) {
         assert.equal(
           container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id1'
+          'user/user:id1'
         );
       });
   });
@@ -231,47 +300,11 @@ describe('Container auth', function () {
         assert.equal(
           container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id1'
+          'user/user:id1'
         );
-      });
-  });
-
-  it('should signup with profile successfully', function () {
-    return container.auth
-      .signupWithUsernameAndProfile('username', 'passwd', {
-        'key': 'value'
-      })
-      .then(function (profile) {
-        assert.equal(
-          container.auth.accessToken,
-          'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
-        assert.equal(
-          container.auth.currentUser.id,
-          'user:id1'
-        );
-        assert.equal(profile.key, 'value');
-      });
-  });
-
-  it('should signup with email and profile successfully', function () {
-    return container.auth
-      .signupWithEmailAndProfile('user@email.com', 'passwd', {
-        'key': 'value'
-      })
-      .then(function (profile) {
-        assert.equal(
-          container.auth.accessToken,
-          'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
-        assert.equal(
-          container.auth.currentUser.id,
-          'user:id1'
-        );
-        assert.equal(profile.key, 'value');
       });
   });
 
@@ -282,10 +315,10 @@ describe('Container auth', function () {
         assert.equal(
           container.auth.accessToken,
           'uuid2');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id2'
+          'user/user:id2'
         );
       });
   });
@@ -309,10 +342,10 @@ describe('Container auth', function () {
         assert.equal(
           container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id1'
+          'user/user:id1'
         );
       }, function (error) {
         throw new Error('Failed to login with correct password');
@@ -326,10 +359,10 @@ describe('Container auth', function () {
         assert.equal(
           container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id1'
+          'user/user:id1'
         );
       }, function (error) {
         throw new Error('Failed to login with correct password');
@@ -355,10 +388,10 @@ describe('Container auth', function () {
         assert.equal(
           container.auth.accessToken,
           'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
         assert.equal(
           container.auth.currentUser.id,
-          'user:id1'
+          'user/user:id1'
         );
       }, function () {
         throw new Error('Failed to login with provider');
@@ -397,14 +430,48 @@ describe('Container auth', function () {
     /* eslint-enable-line camelcase */
   });
 
+  it('should clear access token if logout fail', function () {
+    /* eslint-disable camelcase */
+    const aUserAttr = {
+      user_id: '68a2e6ce-9321-4561-8042-a8fa076e9214',
+      email: 'sky.user@skygear.dev',
+      access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
+    };
+
+    container.push.unregisterDevice = () => {
+      return Promise.reject({
+        code: 10000,
+        message: 'unknown error'
+      });
+    };
+
+    return Promise.all([
+      container.auth._setAccessToken(aUserAttr.access_token),
+      container.auth._setUser(aUserAttr)
+    ])
+    .then(() => {
+      assert.equal(container.auth.accessToken, aUserAttr.access_token);
+      assert.isNotNull(container.auth.currentUser);
+
+      return container.auth.logout();
+    })
+    .then(() => {
+      assert.equal(true, false);
+    }, () => {
+      assert.isNull(container.auth.accessToken);
+      assert.isNotNull(container.auth.currentUser);
+    });
+    /* eslint-enable-line camelcase */
+  });
+
   it('should change password successfully', function () {
     return container.auth
       .changePassword('supersecret', 'supersecret')
       .then(function (user) {
         assert.equal(container.auth.accessToken, 'uuid1');
-        assert.instanceOf(container.auth.currentUser, container.User);
-        assert.equal(container.auth.currentUser.id, 'user:id1');
-        assert.instanceOf(user, container.User);
+        assert.instanceOf(container.auth.currentUser, container.Record);
+        assert.equal(container.auth.currentUser.id, 'user/user:id1');
+        assert.instanceOf(user, container.Record);
       }, function (error) {
         throw new Error('Failed to change password');
       });
@@ -418,185 +485,6 @@ describe('Container auth', function () {
       }, function (error) {
         assert.equal(error.error.message, 'invalid authentication information');
       });
-  });
-});
-
-describe('Container users', function () {
-  let container = new Container();
-  container.request = mockSuperagent([
-    {
-      pattern: 'http://skygear.dev/user/query',
-      fixtures: function (match, params, headers, fn) {
-        const emailMatch =
-          params['emails'] && params['emails'][0] === 'user1@skygear.io';
-        const usernameMatch =
-          params['usernames'] && params['usernames'][0] === 'user1';
-        if (emailMatch || usernameMatch) {
-          return fn({
-            'result': [{
-              data: {
-                _id: 'user:id',
-                email: 'user1@skygear.io',
-                username: 'user1'
-              },
-              id: 'user:id',
-              type: 'user'
-            }]
-          });
-        }
-      }
-    }, {
-      pattern: 'http://skygear.dev/user/update',
-      fixtures: function (match, params, headers, fn) {
-        /* eslint-disable camelcase */
-        let user_id = params['_id'];
-        if (user_id === 'user2_id') {
-          let roles = params.roles ? params.roles : ['existing'];
-          return fn({
-            'result': {
-              _id: params._id,
-              username: params.username,
-              email: params.email,
-              roles: roles
-            }
-          });
-        } else if (user_id === 'current_user') {
-          return fn({
-            result: {
-              _id: 'current_user',
-              email: 'current_user_new_email@skygear.io',
-              username: 'current_user_name'
-            }
-          });
-        }
-        /* eslint-enable camelcase */
-      }
-    }
-  ]);
-  container.configApiKey('correctApiKey');
-
-  it('query user with email successfully', function () {
-    return container.auth
-      .getUsersByEmail(['user1@skygear.io'])
-      .then(function (users) {
-        assert.instanceOf(users[0], container.User);
-        assert.equal(
-          users[0].id,
-          'user:id'
-        );
-        assert.equal(
-          users[0].username,
-          'user1'
-        );
-      }, function () {
-        throw new Error('getUsersByEmail failed');
-      });
-  });
-
-  it('query user with username successfully', function () {
-    return container.auth
-      .getUsersByUsername(['user1'])
-      .then(function (users) {
-        assert.instanceOf(users[0], container.User);
-        assert.equal(
-          users[0].id,
-          'user:id'
-        );
-        assert.equal(
-          users[0].username,
-          'user1'
-        );
-      }, function () {
-        throw new Error('getUsersByUsername failed');
-      });
-  });
-
-  it('should be able to set null user', function () {
-    return container.auth._setUser(null).then(function () {
-      assert.isNull(container.auth.currentUser);
-    });
-  });
-
-  it('update user record', function () {
-    let payload = {
-      /* eslint-disable camelcase */
-      _id: 'user2_id',
-      /* eslint-enable camelcase */
-      username: 'user2',
-      email: 'user2@skygear.io',
-      roles: ['Tester']
-    };
-
-    let Tester = container.Role.define('Tester');
-    let Developer = container.Role.define('Developer');
-
-    let user = container.User.fromJSON(payload);
-    let newUsername = 'user2-new';
-    let newEmail = 'user2-new@skygear.io';
-
-    user.username = newUsername;
-    user.email = newEmail;
-    user.addRole(Developer);
-
-    return container.auth.saveUser(user)
-    .then(function (updatedUser) {
-      assert.equal(updatedUser.id, user.id);
-      assert.equal(updatedUser.username, newUsername);
-      assert.equal(updatedUser.email, newEmail);
-
-      assert.equal(updatedUser.hasRole(Tester), true);
-      assert.equal(updatedUser.hasRole(Developer), true);
-    }, function (err) {
-      throw new Error('update user record error', JSON.stringify(err));
-    });
-  });
-
-  it('update user record without update role', function () {
-    let payload = {
-      /* eslint-disable camelcase */
-      id: 'user2_id',
-      /* eslint-enable camelcase */
-      email: 'user2@skygear.io'
-    };
-
-    let Existing = container.Role.define('existing');
-    let Developer = container.Role.define('Developer');
-
-    let newEmail = 'user2-new@skygear.io';
-
-    payload.email = newEmail;
-
-    return container.auth.saveUser(payload)
-    .then(function (updatedUser) {
-      assert.equal(updatedUser.id, payload.id);
-      assert.equal(updatedUser.email, newEmail);
-      console.warn('roles', updatedUser.roles);
-      assert.equal(updatedUser.hasRole(Existing), true);
-      assert.equal(updatedUser.hasRole(Developer), false);
-    }, function (err) {
-      throw new Error('update user record error', JSON.stringify(err));
-    });
-  });
-
-  it('should able to update current user', function () {
-    let payload = {
-      _id: 'current_user',
-      email: 'current_user@skygear.io',
-      username: 'current_user_name'
-    };
-
-    container.auth._user = container.User.fromJSON(payload);
-
-    let user = container.User.fromJSON(payload);
-    user.email = 'current_user_new_email@skygear.io';
-
-    return container.auth.saveUser(user)
-    .then(function () {
-      assert.equal(container.auth.currentUser.email, user.email);
-    }, function (err) {
-      console.error(err);
-      throw new Error('update current user error', JSON.stringify(err));
-    });
   });
 });
 /*eslint-enable dot-notation, no-unused-vars, quote-props */

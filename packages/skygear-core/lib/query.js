@@ -371,52 +371,6 @@ export default class Query {
   }
 
   /**
-   * havingEmails - Set a having email predicate, for {user} record only.
-   * @throw  {Error}  throw Error if record type is not 'user'
-   * @param  {Array}  emails - emails of users.
-   * @return {Query}  self
-   */
-
-  havingEmails(emails) {
-    if (this.recordType !== 'user') {
-      throw new Error('havingEmails predicate only works on user record');
-    }
-    if (!_.isArray(emails)) {
-      emails = [emails];
-    }
-
-    this._predicate.push([
-      'func',
-      'userDiscover',
-      {emails: emails}
-    ]);
-    return this;
-  }
-
-  /**
-   * havingUsernames - Set a having username predicate, for {user} record only.
-   * @throw  {Error}  throw Error if record type is not 'user'
-   * @param  {Array}  usernames - usernames of users.
-   * @return {Query}  self
-   */
-
-  havingUsernames(usernames) {
-    if (this.recordType !== 'user') {
-      throw new Error('havingUsernames predicate only works on user record');
-    }
-    if (!_.isArray(usernames)) {
-      usernames = [usernames];
-    }
-
-    this._predicate.push([
-      'func',
-      'userDiscover',
-      {usernames: usernames}
-    ]);
-    return this;
-  }
-
-  /**
    * addDescending -  Set descending predicate
    * @param {string} key
    * @return {Query} self

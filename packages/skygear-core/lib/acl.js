@@ -15,7 +15,7 @@
  */
 import _ from 'lodash';
 import Role from './role';
-import User from './user';
+import Record from './record';
 
 export const AccessLevel = {
   NoAccessLevel: null,
@@ -60,12 +60,11 @@ export default class ACL {
             this.roles[theRole.name] = perAttr.level;
           }
         } else if (perAttr.user_id) {
-          let theUser = new User({user_id: perAttr.user_id}); //eslint-disable-line
-          let currentLevel = this.users[theUser.id];
+          let currentLevel = this.users[perAttr.user_id];
           if (accessLevelNumber(perAttr.level) >
             accessLevelNumber(currentLevel)
           ) {
-            this.users[theUser.id] = perAttr.level;
+            this.users[perAttr.user_id] = perAttr.level;
           }
         } else {
           throw new Error('Invalid ACL Entry: ' + JSON.stringify(perAttr));
@@ -141,27 +140,27 @@ export default class ACL {
   }
 
   setNoAccessForUser(user) {
-    if (!user || !(user instanceof User)) {
+    if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user.id] = AccessLevel.NoAccessLevel;
+    this.users[user._id] = AccessLevel.NoAccessLevel;
   }
 
   setReadOnlyForUser(user) {
-    if (!user || !(user instanceof User)) {
+    if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user.id] = AccessLevel.ReadOnlyLevel;
+    this.users[user._id] = AccessLevel.ReadOnlyLevel;
   }
 
   setReadWriteAccessForUser(user) {
-    if (!user || !(user instanceof User)) {
+    if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user.id] = AccessLevel.ReadWriteLevel;
+    this.users[user._id] = AccessLevel.ReadWriteLevel;
   }
 
   hasPublicReadAccess() {
@@ -203,15 +202,27 @@ export default class ACL {
   }
 
   hasReadAccessForUser(user) {
-    if (!user || !(user instanceof User)) {
+    if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
     }
 
-    const roles = user.roles;
+    return this.hasPublicReadAccess() ||
+      accessLevelNumber(this.users[user._id]) >=
+        accessLevelNumber(AccessLevel.ReadOnlyLevel);
+  }
 
-    if (this.hasPublicReadAccess() ||
-    accessLevelNumber(this.users[user.id]) >=
-    accessLevelNumber(AccessLevel.ReadOnlyLevel)) {
+  hasWriteAccessForUser(user) {
+    if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
+      throw new Error(user + ' is not a user.');
+    }
+
+    return this.hasPublicWriteAccess() ||
+      accessLevelNumber(this.users[user._id]) >=
+        accessLevelNumber(AccessLevel.ReadWriteLevel);
+  }
+
+  hasReadAccess(user, roles) {
+    if (this.hasReadAccessForUser(user)) {
       return true;
     }
 
@@ -224,16 +235,8 @@ export default class ACL {
     return false;
   }
 
-  hasWriteAccessForUser(user) {
-    if (!user || !(user instanceof User)) {
-      throw new Error(user + ' is not a user.');
-    }
-
-    const roles = user.roles;
-
-    if (this.hasPublicWriteAccess() ||
-    accessLevelNumber(this.users[user.id]) >=
-    accessLevelNumber(AccessLevel.ReadWriteLevel)) {
+  hasWriteAccess(user, roles) {
+    if (this.hasWriteAccessForUser(user)) {
       return true;
     }
 
