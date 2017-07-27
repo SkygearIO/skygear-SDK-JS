@@ -41,12 +41,36 @@ export const UserRecord = Record.extend('user');
 export class BaseContainer {
 
   constructor() {
+    /**
+     * @private
+     */
     this.url = '/* @echo API_URL */';
+
+    /**
+     * API key of the skygear container
+     * @type {String}
+     */
     this.apiKey = null;
+
+    /**
+     * @private
+     */
     this.request = request;
+
+    /**
+     * @private
+     */
     this.ee = ee({});
   }
 
+  /**
+   * Sets a new end point and new API key to the container.
+   *
+   * @param {Object} options - configuration options of the skygear container
+   * @param {String} options.apiKey - api key
+   * @param {String} options.endPoint - end point
+   * @return {Promise} promise with the skygear container
+   */
   config(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
@@ -58,10 +82,18 @@ export class BaseContainer {
     return Promise.resolve(this);
   }
 
-  configApiKey(ApiKey) {
-    this.apiKey = ApiKey;
+  /**
+   * Sets a new API key to the container.
+   *
+   * @param  {String} apiKey - api key of the skygear container
+   */
+  configApiKey(apiKey) {
+    this.apiKey = apiKey;
   }
 
+  /**
+   * @private
+   */
   makeRequest(action, data) {
     let requestObject = this._prepareRequestObject(action, data);
     let requestData = this._prepareRequestData(action, data);
@@ -76,6 +108,13 @@ export class BaseContainer {
     }));
   }
 
+  /**
+   * Calls a registered lambda function without arguments.
+   *
+   * @param  {String} name - name of the lambda function being called
+   * @param  {Object} data - data passed to the lambda function
+   * @return {Promise} promise with result of the lambda function
+   */
   lambda(name, data) {
     return this.makeRequest(name, {
       args: data
@@ -257,10 +296,20 @@ export class BaseContainer {
     return PushContainer;
   }
 
+  /**
+   * Endpoint of the skygear container
+   *
+   * @type {String}
+   */
   get endPoint() {
     return this.url;
   }
 
+  /**
+   * Endpoint of the skygear container
+   *
+   * @type {String}
+   */
   set endPoint(newEndPoint) {
     // TODO: Check the format
     if (newEndPoint) {
@@ -271,6 +320,9 @@ export class BaseContainer {
     }
   }
 
+  /**
+   * @private
+   */
   get store() {
     if (!this._store) {
       this._store = getStore();
@@ -278,6 +330,11 @@ export class BaseContainer {
     return this._store;
   }
 
+  /**
+   * Clears all cache in skygear container store
+   *
+   * @return {Promise} resolve when cache is cleared successfully
+   */
   clearCache() {
     return this.store.clearPurgeableItems();
   }
