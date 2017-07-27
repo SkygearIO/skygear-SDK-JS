@@ -24,6 +24,11 @@ export class PushContainer {
     this._getDeviceID();
   }
 
+  /**
+   * @private
+   *
+   * Subsclass should override the implementation and provide the device type
+   */
   inferDeviceType() {
     // To be implmented by subclass
     // TODO: probably web / node, handle it later
@@ -76,6 +81,10 @@ export class PushContainer {
     });
   }
 
+  /**
+   * Unregister the current user from the current device.
+   * This should be called when the user logouts.
+   **/
   unregisterDevice() {
     if (!this.deviceID) {
       return Promise.reject(
@@ -102,6 +111,11 @@ export class PushContainer {
     });
   }
 
+  /**
+   * The device ID.
+   *
+   * @return {String}
+   */
   get deviceID() {
     return this._deviceID;
   }
