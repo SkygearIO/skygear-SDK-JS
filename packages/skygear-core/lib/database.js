@@ -22,16 +22,44 @@ import QueryResult from './query_result';
 
 export class Database {
 
+  /**
+   * Create a Skygear database
+   *
+   * @param  {String} dbID - database ID
+   * @param  {Container} container - Skygear Container
+   * @return {Database}
+   */
   constructor(dbID, container) {
     if (dbID !== '_public' && dbID !== '_private' && dbID !== '_union') {
       throw new Error('Invalid database_id');
     }
+
+    /**
+     * The database ID
+     * @type {String}
+     */
     this.dbID = dbID;
+
+    /**
+     * @private
+     */
     this.container = container;
     this._cacheStore = new Cache(this.dbID);
     this._cacheResponse = true;
   }
 
+
+  /**
+   * Fetches a single record with the specified id from Skygear.
+   *
+   * Use this method to fetch a single record from Skygear by specifying a
+   * record ID in the format of `type/id`. The fetch will be performed
+   * asynchronously and the returned promise will be resolved when the
+   * operation completes.
+   *
+   * @param  {String} id - record ID with format `type/id`
+   * @return {Promise} promise with the fetched Record
+   */
   getRecordByID(id) {
     let Record = this._Record;
     let [recordType, recordId] = Record.parseID(id);
@@ -45,6 +73,19 @@ export class Database {
     });
   }
 
+  /**
+   * Fetches records that match the Query from Skygear.
+   *
+   * Use this method to fetch records from Skygear by specifying a Query.
+   * The fetch will be performed asynchronously and the returned promise will
+   * be resolved when the operation completes.
+   *
+   * If cacheCallback is specified, Skygear would try
+   *
+   * @param  {Query} query
+   * @param  {function(queryResult:QueryResult,isCached:boolean)} cacheCallback
+   * @return {Promise} promise with the QueryResult
+   */
   query(query, cacheCallback = false) {
     let remoteReturned = false;
     let cacheStore = this.cacheStore;
@@ -114,10 +155,36 @@ export class Database {
     });
   }
 
+  /**
+   * Same as {@link Database#delete}
+   *
+   * @param  {Record|Record[]|QueryResult} record - the record(s) to delete
+   * @return {Promise} promise with the delete result
+   * @see Database#delete
+   */
   del(record) {
     return this.delete(record);
   }
 
+  /**
+   * Saves a record or records to Skygear.
+   *
+   * Use this method to save a record or records to Skygear.
+   * The save will be performed asynchronously and the returned promise will
+   * be resolved when the operation completes.
+   *
+   * New record will be created in the database while existing
+   * record will be modified.
+   *
+   * options.atomic can be set to true, which makes the operation either
+   * success or failure, but not partially success.
+   *
+   * @param {Record|Record[]} _records - the record(s) to save
+   * @param {Object} [options={}] options - options for saving the records
+   * @param {boolean} options.atomic - specify if the save request should be
+   * atomic.
+   * @return {Promise} promise with saved records
+   */
   save(_records, options = {}) {
     let records = _records;
     if (!_.isArray(records)) {
@@ -174,6 +241,16 @@ export class Database {
     });
   }
 
+  /**
+   * Deletes a record or records to Skygear.
+   *
+   * Use this method to delete a record or records to Skygear.
+   * The delete will be performed asynchronously and the returned promise will
+   * be resolved when the operation completes.
+   *
+   * @param  {Record|Record[]|QueryResult} _records - the records to delete
+   * @return {Promise} promise with the delete result
+   */
   delete(_records) {
     let records = _records;
     let isQueryResult = records instanceof QueryResult;
@@ -210,14 +287,27 @@ export class Database {
       });
   }
 
+  /**
+   * @type {Store}
+   */
   get cacheStore() {
     return this._cacheStore;
   }
 
+  /**
+   * Indicates if query result should be cached in local
+   *
+   * @type {boolean}
+   */
   get cacheResponse() {
     return this._cacheResponse;
   }
 
+  /**
+   * Indicates if query result should be cached in local
+   *
+   * @type {boolean}
+   */
   set cacheResponse(value) {
     const b = !!value;
     this._cacheResponse = b;
