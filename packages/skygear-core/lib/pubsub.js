@@ -358,6 +358,10 @@ export class PubsubContainer {
       return;
     }
 
+    this.reconfigure();
+  }
+ 
+  reconfigure() {
     this._internalPubsub.reset();
     if (this.deviceID !== null) {
       this._internalPubsub.subscribe('_sub_' + this.deviceID, function (data) {
