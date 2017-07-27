@@ -92,6 +92,15 @@ export class BaseContainer {
   }
 
   /**
+   * Sets a new end point to the container.
+   *
+   * @param  {String} endPoint - end point of the skygear container
+   */
+  configEndPoint(endPoint) {
+    this.endPoint = endPoint;
+  }
+
+  /**
    * @private
    */
   makeRequest(action, data) {
