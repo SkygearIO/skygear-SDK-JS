@@ -319,7 +319,7 @@ export class PublicDatabase extends Database {
     }).then((body) => body.result);
   }
 
-  getUserRole(users) {
+  fetchUserRole(users) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
       return perUser._id || perUser;
