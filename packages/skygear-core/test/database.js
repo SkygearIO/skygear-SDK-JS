@@ -219,21 +219,6 @@ let request = mockSuperagent([{
       }
     }
   }
-}, {
-  pattern: 'http://skygear.dev/role/get',
-  fixtures: function (match, params, headers, fn) {
-    let userIds = params['users'];
-    if (userIds.length === 3 && userIds[0] === 'user1' &&
-      userIds[1] === 'user2' && userIds[2] === 'user3') {
-      return fn({
-        result: {
-          user1: ['Developer'],
-          user2: ['Admin', 'Tester'],
-          user3: []
-        }
-      });
-    }
-  }
 }]);
 
 describe('Database', function () {
@@ -612,28 +597,6 @@ describe('Database', function () {
         type: 'ResourceNotFound'
       });
       expect(errors[1]).to.be.undefined();
-    }, function (error) {
-      throw Error();
-    });
-  });
-
-  it('get user roles', function () {
-    let users = [
-      new UserRecord({_id: 'user/user1'}),
-      new UserRecord({_id: 'user/user2'}),
-      'user3'
-    ];
-    return db.getUserRole(users)
-    .then(function (result) {
-      console.log(result);
-      expect(Object.keys(result)).to.have.length(3);
-      expect(result['user1']).to.have.length(1);
-      expect(result['user1'][0]).to.be.instanceof(Role);
-      expect(result['user1'][0].name).to.eql('Developer');
-      expect(result['user2']).to.have.length(2);
-      expect(result['user2'][0].name).to.eql('Admin');
-      expect(result['user2'][1].name).to.eql('Tester');
-      expect(result['user3']).to.have.length(0);
     }, function (error) {
       throw Error();
     });

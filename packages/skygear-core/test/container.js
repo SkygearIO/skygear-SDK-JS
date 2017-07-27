@@ -15,8 +15,9 @@
  */
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
-import Container from '../lib/container';
+import Container, {UserRecord} from '../lib/container';
 import {AccessLevel} from '../lib/acl';
+import Role from '../lib/role';
 
 import mockSuperagent from './mock/superagent';
 
@@ -174,13 +175,28 @@ describe('Container role', function () {
         });
       }
     }
+  }, {
+    pattern: 'http://skygear.dev/role/get',
+    fixtures: function (match, params, headers, fn) {
+      let userIds = params['users'];
+      if (userIds.length === 3 && userIds[0] === 'user1' &&
+        userIds[1] === 'user2' && userIds[2] === 'user3') {
+        return fn({
+          result: {
+            user1: ['Developer'],
+            user2: ['Admin', 'Tester'],
+            user3: []
+          }
+        });
+      }
+    }
   }]);
 
   it('set admin roles', function () {
     var Killer = container.Role.define('Killer');
     var Police = container.Role.define('Police');
 
-    return container.publicDB.setAdminRole([Killer, Police])
+    return container.auth.setAdminRole([Killer, Police])
     .then(function (roles) {
       assert.include(roles, 'Killer');
       assert.include(roles, 'Police');
@@ -193,12 +209,33 @@ describe('Container role', function () {
     var Healer = container.Role.define('Healer');
     var Victim = container.Role.define('Victim');
 
-    return container.publicDB.setDefaultRole([Victim, Healer])
+    return container.auth.setDefaultRole([Victim, Healer])
     .then(function (roles) {
       assert.include(roles, 'Healer');
       assert.include(roles, 'Victim');
     }, function (err) {
       throw new Error('set default role failed');
+    });
+  });
+
+  it('should fetch user roles', function () {
+    let users = [
+      new UserRecord({_id: 'user/user1'}),
+      new UserRecord({_id: 'user/user2'}),
+      'user3'
+    ];
+    return container.auth.fetchUserRole(users)
+    .then(function (result) {
+      expect(Object.keys(result)).to.have.length(3);
+      expect(result['user1']).to.have.length(1);
+      expect(result['user1'][0]).to.be.instanceof(Role);
+      expect(result['user1'][0].name).to.eql('Developer');
+      expect(result['user2']).to.have.length(2);
+      expect(result['user2'][0].name).to.eql('Admin');
+      expect(result['user2'][1].name).to.eql('Tester');
+      expect(result['user3']).to.have.length(0);
+    }, function (error) {
+      throw Error();
     });
   });
 });
