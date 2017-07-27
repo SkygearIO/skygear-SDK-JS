@@ -99,16 +99,6 @@ export class Pubsub {
     return this.subscribe(channel, callback);
   }
 
-  /**
-   * Subscribe the channel for just one message.
-   *
-   * This function takes one message off from a pubsub channel,
-   * returning a promise of that message. When a message
-   * is received from the channel, the channel will be unsubscribed.
-   *
-   * @param {string} channel Channel to listen on
-   * @return {Promise} Promise of next message in this channel
-   */
   once(channel) {
     return new Promise((resolve) => {
       const handler = (data) => {
@@ -295,11 +285,24 @@ export class Pubsub {
 
 export class PubsubContainer {
 
+  /**
+   * @param  {Container} container
+   * @return {PubsubContainer}
+   */
   constructor(container) {
+    /**
+     * @private
+     */
     this.container = container;
 
     this._pubsub = new Pubsub(this.container, false);
     this._internalPubsub = new Pubsub(this.container, true);
+
+    /**
+     * Indicates if the pubsub client should connect to server automatically.
+     *
+     * @type {Boolean}
+     */
     this.autoPubsub = true;
   }
 
@@ -308,8 +311,9 @@ export class PubsubContainer {
    * channel.
    *
    * @param {string} channel - Name of the channel to subscribe
-   * @param {function(object:*)} callback - function to be trigger with
+   * @param {function(object:*)} callback - Function to be trigger with
    * incoming data.
+   * @return {function(object:*)} The callback function
    **/
   on(channel, callback) {
     return this._pubsub.on(channel, callback);
@@ -322,33 +326,71 @@ export class PubsubContainer {
    * will be removed.
    *
    * @param {string} channel - Name of the channel to unsubscribe
-   * @param {function(object:*)=} callback - function to be trigger with
+   * @param {function(object:*)=} callback - Function to be trigger with
    * incoming data.
    **/
   off(channel, callback = null) {
     this._pubsub.off(channel, callback);
   }
 
+  /**
+   * Subscribe the channel for just one message.
+   *
+   * This function takes one message off from a pubsub channel,
+   * returning a promise of that message. When a message
+   * is received from the channel, the channel will be unsubscribed.
+   *
+   * @param {string} channel Channel to listen on
+   * @return {Promise} Promise of next message in this channel
+   */
   once(channel) {
     this._pubsub.once(channel);
   }
 
+  /**
+   * Register listener on connection between pubsub client and server is open.
+   *
+   * @param  {function()} listener - Function to be triggered when connection
+   * open
+   */
   onOpen(listener) {
     this._pubsub.onOpen(listener);
   }
 
+  /**
+   * Register listener on connection between pubsub client and  server is
+   * closed.
+   *
+   * @param  {function()} listener - Function to be triggered when connection
+   * closed
+   */
   onClose(listener) {
     this._pubsub.onClose(listener);
   }
 
+  /**
+   * Publish message to a channel.
+   *
+   * @param {String} channel
+   * @param {Object} data
+   */
   publish(channel, data) {
     this._pubsub.publish(channel, data);
   }
 
+  /**
+   * Check if the channel is subscribed with any handler.
+   *
+   * @param {String} channel - Name of the channel
+   * @return {Boolean}
+   */
   hasHandlers(channel) {
     this._pubsub.hasHandlers(channel);
   }
 
+  /**
+   * @private
+   */
   get deviceID() {
     return this.container.push.deviceID;
   }
