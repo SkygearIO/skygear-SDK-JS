@@ -13,7 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 export default class QueryResult extends Array {
+  /**
+   * Create an QueryResult from records and info, including query overall count
+   *
+   * @param {Record[]} records
+   * @param {Object} info
+   * @return {QueryResult}
+   */
   static createFromResult(records, info) {
     let result = new QueryResult();
     records.forEach((val) => result.push(val));
@@ -21,6 +29,12 @@ export default class QueryResult extends Array {
     return result;
   }
 
+  /**
+   * The count would return the number of all matching records, and ignore the
+   * offset and limit of the query.
+   *
+   * @type {Number} the number of all matching records
+   */
   get overallCount() {
     return this._overallCount;
   }
