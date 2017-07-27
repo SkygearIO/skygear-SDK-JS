@@ -19,7 +19,6 @@ import Cache from './cache';
 import Asset from './asset';
 import Query from './query';
 import QueryResult from './query_result';
-import Role from './role';
 
 export class Database {
 
@@ -273,26 +272,6 @@ export class Database {
 
 export class PublicDatabase extends Database {
 
-  setAdminRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    return this.container.makeRequest('role:admin', {
-      roles: roleNames
-    }).then((body) => body.result);
-  }
-
-  setDefaultRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    return this.container.makeRequest('role:default', {
-      roles: roleNames
-    }).then((body) => body.result);
-  }
-
   get defaultACL() {
     return this._Record.defaultACL;
   }
@@ -319,58 +298,6 @@ export class PublicDatabase extends Database {
     }).then((body) => body.result);
   }
 
-  fetchUserRole(users) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
-    return this.container.makeRequest('role:get', {
-      users: userIds
-    })
-    .then((body) =>
-      Object.keys(body.result)
-      .map((key) => [key, body.result[key]])
-      .reduce((acc, pairs) => ({
-        ...acc || {},
-        [pairs[0]]: pairs[1].map((name) => new Role(name))
-      }), null)
-    );
-  }
-
-  assignUserRole(users, roles) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
-    let roleNames = _.map(roles, function (perRole) {
-      // accept either role object or role name
-      return perRole.name || perRole;
-    });
-
-    return this.container.makeRequest('role:assign', {
-      users: userIds,
-      roles: roleNames
-    }).then((body) => body.result);
-  }
-
-  revokeUserRole(users, roles) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
-    let roleNames = _.map(roles, function (perRole) {
-      // accept either role object or role name
-      return perRole.name || perRole;
-    });
-
-    return this.container.makeRequest('role:revoke', {
-      users: userIds,
-      roles: roleNames
-    }).then((body) => body.result);
-  }
 }
 
 export class DatabaseContainer {
