@@ -418,6 +418,18 @@ export default class Container extends BaseContainer {
     return this._push;
   }
 
+  /**
+   * Sets a new end point and new API key to the container.
+   *
+   * After configuration,
+   * - it tries to restore the user, access token and device id, and,
+   * - the pubsub client connects to skygear server if a user is restored.
+   *
+   * @param {Object} options - configuration options of the skygear container
+   * @param {String} options.apiKey - api key
+   * @param {String} options.endPoint - end point
+   * @return {Promise} promise with the skygear container
+   */
   config(options) {
     return super.config(options).then(() => {
       let promises = [
