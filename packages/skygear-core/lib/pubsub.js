@@ -36,20 +36,20 @@ export class Pubsub {
     this._ws = null;
     this._internal = internal;
     this._queue = [];
-    this.ee = ee({});
+    this._ee = ee({});
     this._handlers = {};
     this._reconnectWait = 5000;
     this._retryCount = 0;
   }
 
   onOpen(listener) {
-    this.ee.on(ON_OPEN, listener);
-    return new EventHandle(this.ee, ON_OPEN, listener);
+    this._ee.on(ON_OPEN, listener);
+    return new EventHandle(this._ee, ON_OPEN, listener);
   }
 
   onClose(listener) {
-    this.ee.on(ON_CLOSE, listener);
-    return new EventHandle(this.ee, ON_CLOSE, listener);
+    this._ee.on(ON_CLOSE, listener);
+    return new EventHandle(this._ee, ON_CLOSE, listener);
   }
 
   _pubsubUrl(internal = false) {
@@ -75,7 +75,7 @@ export class Pubsub {
 
   _onopen() {
     // Trigger registed onOpen callback
-    this.ee.emit(ON_OPEN, true);
+    this._ee.emit(ON_OPEN, true);
 
     // Resubscribe previously subscribed channels
     _.forEach(this._handlers, (handlers, channel) => {
@@ -245,7 +245,7 @@ export class Pubsub {
   }
 
   _setWebSocket(ws) {
-    const emitter = this.ee;
+    const emitter = this._ee;
     this._ws = ws;
 
     if (!this._ws) {
