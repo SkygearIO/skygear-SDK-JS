@@ -163,30 +163,18 @@ export class RelationContainer {
       .then(RelationQueryResult.createFromBody);
   }
 
-  queryFriend(actor) {
-    if (actor === null) {
-      actor = this.container.currentUser;
-    }
+  queryFriend() {
     let query = new RelationQuery(this.Friend);
-    query.user = actor;
     return this.query(query);
   }
 
-  queryFollower(actor) {
-    if (actor === null) {
-      actor = this.container.currentUser;
-    }
+  queryFollower() {
     let query = new RelationQuery(this.Follower);
-    query.user = actor;
     return this.query(query);
   }
 
-  queryFollowing(actor) {
-    if (actor === null) {
-      actor = this.container.currentUser;
-    }
+  queryFollowing() {
     let query = new RelationQuery(this.Following);
-    query.user = actor;
     return this.query(query);
   }
 
