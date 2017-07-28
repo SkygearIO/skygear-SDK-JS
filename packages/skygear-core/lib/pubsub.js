@@ -360,7 +360,7 @@ export class PubsubContainer {
 
     this.reconfigure();
   }
- 
+
   reconfigure() {
     this._internalPubsub.reset();
     if (this.deviceID !== null) {
