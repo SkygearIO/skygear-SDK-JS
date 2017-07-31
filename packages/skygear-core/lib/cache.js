@@ -15,6 +15,9 @@
  */
 import getStore from './store';
 
+/**
+ * @private
+ */
 export default class Cache {
 
   constructor(prefix) {
