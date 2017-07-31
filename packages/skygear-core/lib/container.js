@@ -38,6 +38,20 @@ import {PushContainer} from './push';
 
 export const UserRecord = Record.extend('user');
 
+/**
+ * BaseContainer provides the basic configuration for connecting to a
+ * Skygear server.
+ *
+ * For development under different environments, developer may refer to these
+ * classes:
+ * - Web developement: {@link Container}
+ * - React Native: {@link ReactNativeContainer}
+ * - Cloud development: {@link CloudCodeContainer}
+ *
+ * It also proxies other Skygear classes, like {@link BaseContainer#Query}.
+ * Thus developer who install Skygear with <script> tag in browser can have
+ * access to those classes.
+ */
 export class BaseContainer {
 
   constructor() {
@@ -350,6 +364,21 @@ export class BaseContainer {
 
 }
 
+/**
+ * Container provides configuration for connecting to Skygear server, and
+ * accessors to other containers, providing various functionalities:
+ * - `skygear.auth` - {@link AuthContainer}: User authentications and user
+ * roles API.
+ * - `skygear.relation` - {@link RelationContainer}: User relation API, like
+ * add and query Friends.
+ * - `skygear.privateDB` - {@link Database}: Private database to the current
+ * user, with record API, like query, save and delete.
+ * - `skygear.publicDB` - {@link PublicDatabase}: Public database, provide the
+ * same record API as {@link Database}, but with additional record role API.
+ * - `skygear.pubsub` - {@link PubsubContainer}: A publish-subscribe interface,
+ * providing real-time message-based communication with other users.
+ * - `skygear.push` - {@link PushContainer}: Push Notifications.
+ */
 export default class Container extends BaseContainer {
 
   constructor() {
