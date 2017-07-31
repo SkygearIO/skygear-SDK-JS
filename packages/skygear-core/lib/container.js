@@ -222,6 +222,41 @@ export class BaseContainer {
     return ErrorCodes;
   }
 
+  /**
+   * @type {AuthContainer}
+   */
+  get AuthContainer() {
+    return AuthContainer;
+  }
+
+  /**
+   * @type {RelationContainer}
+   */
+  get RelationContainer() {
+    return RelationContainer;
+  }
+
+  /**
+   * @type {DatabaseContainer}
+   */
+  get DatabaseContainer() {
+    return DatabaseContainer;
+  }
+
+  /**
+   * @type {PubsubContainer}
+   */
+  get PubsubContainer() {
+    return PubsubContainer;
+  }
+
+  /**
+   * @type {PushContainer}
+   */
+  get PushContainer() {
+    return PushContainer;
+  }
+
   get endPoint() {
     return this.url;
   }
