@@ -38,10 +38,10 @@ export class PushContainer {
   /**
    * You can register your device for receiving push notifications.
    *
-   * @param {string} token - The device token
-   * @param {string} type - The device type (either 'ios' or 'android')
-   * @param {string} topic - The device topic, refer to application bundle
-   * identifier on iOS and application package name on Android.
+   * @param {string} token - the device token
+   * @param {string} type - the device type (either 'ios' or 'android')
+   * @param {string} topic - the device topic, refer to application bundle
+   * identifier on iOS and application package name on Android
    **/
   registerDevice(token, type, topic) {
     if (!token) {
@@ -82,7 +82,7 @@ export class PushContainer {
   }
 
   /**
-   * Unregister the current user from the current device.
+   * Unregisters the current user from the current device.
    * This should be called when the user logouts.
    **/
   unregisterDevice() {
@@ -112,7 +112,7 @@ export class PushContainer {
   }
 
   /**
-   * The device ID.
+   * The device ID
    *
    * @return {String}
    */

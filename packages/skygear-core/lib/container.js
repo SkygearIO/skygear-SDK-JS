@@ -83,7 +83,7 @@ export class BaseContainer {
    * @param {Object} options - configuration options of the skygear container
    * @param {String} options.apiKey - api key
    * @param {String} options.endPoint - end point
-   * @return {Promise} promise with the skygear container
+   * @return {Promise<BaseContainer>} promise with the skygear container
    */
   config(options) {
     if (options.apiKey) {
@@ -136,7 +136,7 @@ export class BaseContainer {
    *
    * @param  {String} name - name of the lambda function being called
    * @param  {Object} data - data passed to the lambda function
-   * @return {Promise} promise with result of the lambda function
+   * @return {Promise<Object>} promise with result of the lambda function
    */
   lambda(name, data) {
     return this.makeRequest(name, {
@@ -354,7 +354,7 @@ export class BaseContainer {
   }
 
   /**
-   * Clears all cache in skygear container store
+   * Clears all cache in skygear container store.
    *
    * @return {Promise} resolve when cache is cleared successfully
    */
@@ -371,10 +371,11 @@ export class BaseContainer {
  * roles API.
  * - `skygear.relation` - {@link RelationContainer}: User relation API, like
  * add and query Friends.
- * - `skygear.privateDB` - {@link Database}: Private database to the current
+ * - `skygear.privateDB` - {@link Database}: Private database of the current
  * user, with record API, like query, save and delete.
- * - `skygear.publicDB` - {@link PublicDatabase}: Public database, provide the
- * same record API as {@link Database}, but with additional record role API.
+ * - `skygear.publicDB` - {@link PublicDatabase}: Public database, providing
+ * the same record API as {@link Database}, but with additional record role
+ * API.
  * - `skygear.pubsub` - {@link PubsubContainer}: A publish-subscribe interface,
  * providing real-time message-based communication with other users.
  * - `skygear.push` - {@link PushContainer}: Push Notifications.
@@ -457,7 +458,7 @@ export default class Container extends BaseContainer {
    * @param {Object} options - configuration options of the skygear container
    * @param {String} options.apiKey - api key
    * @param {String} options.endPoint - end point
-   * @return {Promise} promise with the skygear container
+   * @return {Promise<Container>} promise with the skygear container
    */
   config(options) {
     return super.config(options).then(() => {

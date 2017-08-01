@@ -299,7 +299,7 @@ export class PubsubContainer {
     this._internalPubsub = new Pubsub(this.container, true);
 
     /**
-     * Indicates if the pubsub client should connect to server automatically.
+     * Indicating if the pubsub client should connect to server automatically.
      *
      * @type {Boolean}
      */
@@ -307,12 +307,12 @@ export class PubsubContainer {
   }
 
   /**
-   * Subscribe a function callback on receiving message at the specified
+   * Subscribes a function callback on receiving message at the specified
    * channel.
    *
-   * @param {string} channel - Name of the channel to subscribe
-   * @param {function(object:*)} callback - Function to be trigger with
-   * incoming data.
+   * @param {string} channel - name of the channel to subscribe
+   * @param {function(object:*)} callback - function to be trigger with
+   * incoming data
    * @return {function(object:*)} The callback function
    **/
   on(channel, callback) {
@@ -320,37 +320,37 @@ export class PubsubContainer {
   }
 
   /**
-   * Unsubscribe a function callback on the specified channel.
+   * Unsubscribes a function callback on the specified channel.
    *
    * If pass in `callback` is null, all callbacks in the specified channel
    * will be removed.
    *
-   * @param {string} channel - Name of the channel to unsubscribe
-   * @param {function(object:*)=} callback - Function to be trigger with
-   * incoming data.
+   * @param {string} channel - name of the channel to unsubscribe
+   * @param {function(object:*)=} callback - function to be trigger with
+   * incoming data
    **/
   off(channel, callback = null) {
     this._pubsub.off(channel, callback);
   }
 
   /**
-   * Subscribe the channel for just one message.
+   * Subscribes the channel for just one message.
    *
    * This function takes one message off from a pubsub channel,
    * returning a promise of that message. When a message
    * is received from the channel, the channel will be unsubscribed.
    *
-   * @param {string} channel Channel to listen on
-   * @return {Promise} Promise of next message in this channel
+   * @param {string} channel - name of the channel
+   * @return {Promise<Object>} promise of next message in this channel
    */
   once(channel) {
-    this._pubsub.once(channel);
+    return this._pubsub.once(channel);
   }
 
   /**
-   * Register listener on connection between pubsub client and server is open.
+   * Registers listener on connection between pubsub client and server is open.
    *
-   * @param  {function()} listener - Function to be triggered when connection
+   * @param  {function()} listener - function to be triggered when connection
    * open
    */
   onOpen(listener) {
@@ -358,10 +358,10 @@ export class PubsubContainer {
   }
 
   /**
-   * Register listener on connection between pubsub client and  server is
+   * Registers listener on connection between pubsub client and server is
    * closed.
    *
-   * @param  {function()} listener - Function to be triggered when connection
+   * @param  {function()} listener - function to be triggered when connection
    * closed
    */
   onClose(listener) {
@@ -369,20 +369,20 @@ export class PubsubContainer {
   }
 
   /**
-   * Publish message to a channel.
+   * Publishes message to a channel.
    *
-   * @param {String} channel
-   * @param {Object} data
+   * @param {String} channel - name of the channel
+   * @param {Object} data - data to be published
    */
   publish(channel, data) {
     this._pubsub.publish(channel, data);
   }
 
   /**
-   * Check if the channel is subscribed with any handler.
+   * Checks if the channel is subscribed with any handler.
    *
-   * @param {String} channel - Name of the channel
-   * @return {Boolean}
+   * @param {String} channel - name of the channel
+   * @return {Boolean} true if the channel has handlers
    */
   hasHandlers(channel) {
     this._pubsub.hasHandlers(channel);

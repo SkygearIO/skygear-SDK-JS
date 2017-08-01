@@ -146,7 +146,7 @@ export default class Record {
   }
 
   /**
-   * Get all keys of attributes of the records. Skygear reserved keys, ie.
+   * Gets all keys of attributes of the records. Skygear reserved keys, that is
    * underscore prefixed keys, are excluded.
    *
    * @type {String[]} [description]
@@ -162,7 +162,7 @@ export default class Record {
    * Returns a dictionary of transient fields.
    *
    * Transient fields are attached to an instance of Record and it is never
-   * persisted on server, but they maybe returned as extra data about the
+   * persisted on server, but they may be returned as extra data about the
    * record when fetched or queried from server with
    * {@link Query#transientInclude}.
    *
@@ -173,7 +173,7 @@ export default class Record {
   }
 
   /**
-   * Update record attributes with a dictionary.
+   * Updates record attributes with a dictionary.
    *
    * @param  {Object} attrs
    */

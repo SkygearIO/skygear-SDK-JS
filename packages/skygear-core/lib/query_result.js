@@ -16,7 +16,8 @@
 
 export default class QueryResult extends Array {
   /**
-   * Create an QueryResult from records and info, including query overall count
+   * Creates an QueryResult from records and info, including query overall
+   * count.
    *
    * @param {Record[]} records
    * @param {Object} info

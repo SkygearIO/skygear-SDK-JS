@@ -159,10 +159,10 @@ export class RelationContainer {
   }
 
   /**
-   * Query users with a relation query object.
+   * Queries users with a relation query object.
    *
    * @param  {RelationQuery} queryObj
-   * @return {Promise} promise with user records
+   * @return {Promise<RelationQueryResult>} promise with user records
    */
   query(queryObj) {
     return this.container.makeRequest('relation:query', queryObj.toJSON())
@@ -170,10 +170,10 @@ export class RelationContainer {
   }
 
   /**
-   * Query friends of current user. Convenient method of
+   * Queries friends of current user. Convenient method of
    * {@link RelationContainer#query}.
    *
-   * @return {Promise} promise with user records
+   * @return {Promise<RelationQueryResult>} promise with user records
    */
   queryFriend() {
     let query = new RelationQuery(this.Friend);
@@ -181,10 +181,10 @@ export class RelationContainer {
   }
 
   /**
-   * Query followers of current user. Convenient method of
+   * Queries followers of current user. Convenient method of
    * {@link RelationContainer#query}.
    *
-   * @return {Promise} promise with user records
+   * @return {Promise<RelationQueryResult>} promise with user records
    */
   queryFollower() {
     let query = new RelationQuery(this.Follower);
@@ -192,10 +192,10 @@ export class RelationContainer {
   }
 
   /**
-   * Query users that the current user is following. Convenient method of
+   * Queries users that the current user is following. Convenient method of
    * {@link RelationContainer#query}.
    *
-   * @return {Promise} promise with user records
+   * @return {Promise<RelationQueryResult>} promise with user records
    */
   queryFollowing() {
     let query = new RelationQuery(this.Following);
@@ -203,10 +203,10 @@ export class RelationContainer {
   }
 
   /**
-   * Add relation to the current user.
+   * Adds relation to the current user.
    *
    * @param {Relation} relation
-   * @return {Promise} promise with user records
+   * @return {Promise<RelationResult>} promise with user records
    */
   add(relation) {
     return this.container.makeRequest('relation:add', {
@@ -219,10 +219,10 @@ export class RelationContainer {
   }
 
   /**
-   * Remove relation from the current user.
+   * Removes relation from the current user.
    *
    * @param {Relation} relation
-   * @return {Promise} promise with user id
+   * @return {Promise<RelationRemoveResult>} promise with user id
    */
   remove(relation) {
     return this.container.makeRequest('relation:remove', {

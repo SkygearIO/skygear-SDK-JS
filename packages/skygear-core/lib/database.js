@@ -23,7 +23,7 @@ import QueryResult from './query_result';
 export class Database {
 
   /**
-   * Create a Skygear database
+   * Creates a Skygear database.
    *
    * @param  {String} dbID - database ID
    * @param  {Container} container - Skygear Container
@@ -58,7 +58,7 @@ export class Database {
    * operation completes.
    *
    * @param  {String} id - record ID with format `type/id`
-   * @return {Promise} promise with the fetched Record
+   * @return {Promise<Record>} promise with the fetched Record
    */
   getRecordByID(id) {
     let Record = this._Record;
@@ -80,11 +80,13 @@ export class Database {
    * The fetch will be performed asynchronously and the returned promise will
    * be resolved when the operation completes.
    *
-   * If cacheCallback is specified, Skygear would try
+   * If cacheCallback is provided, the SDK would try to fetch result of the
+   * query from local cache, before issuing query request to the server, and
+   * trigger the cacheCallback function if cached result is found.
    *
    * @param  {Query} query
    * @param  {function(queryResult:QueryResult,isCached:boolean)} cacheCallback
-   * @return {Promise} promise with the QueryResult
+   * @return {Promise<QueryResult>} promise with the QueryResult
    */
   query(query, cacheCallback = false) {
     let remoteReturned = false;
@@ -156,10 +158,10 @@ export class Database {
   }
 
   /**
-   * Same as {@link Database#delete}
+   * Same as {@link Database#delete}.
    *
    * @param  {Record|Record[]|QueryResult} record - the record(s) to delete
-   * @return {Promise} promise with the delete result
+   * @return {Promise<Record>} promise with the delete result
    * @see Database#delete
    */
   del(record) {
@@ -181,9 +183,9 @@ export class Database {
    *
    * @param {Record|Record[]} _records - the record(s) to save
    * @param {Object} [options={}] options - options for saving the records
-   * @param {boolean} options.atomic - specify if the save request should be
-   * atomic.
-   * @return {Promise} promise with saved records
+   * @param {Boolean} [options.atomic] - true if the save request should be
+   * atomic
+   * @return {Promise<Record>} promise with saved records
    */
   save(_records, options = {}) {
     let records = _records;
@@ -249,7 +251,7 @@ export class Database {
    * be resolved when the operation completes.
    *
    * @param  {Record|Record[]|QueryResult} _records - the records to delete
-   * @return {Promise} promise with the delete result
+   * @return {Promise} promise
    */
   delete(_records) {
     let records = _records;
@@ -295,7 +297,7 @@ export class Database {
   }
 
   /**
-   * Indicates if query result should be cached in local
+   * Indicating if query result should be cached locally
    *
    * @type {boolean}
    */
@@ -304,7 +306,7 @@ export class Database {
   }
 
   /**
-   * Indicates if query result should be cached in local
+   * Indicating if query result should be cached locally
    *
    * @type {boolean}
    */
