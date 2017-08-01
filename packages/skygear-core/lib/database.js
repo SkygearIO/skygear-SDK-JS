@@ -288,7 +288,7 @@ export class DatabaseContainer {
   }
 
   uploadAsset(asset) {
-    return makeUploadAssetRequest(asset);
+    return makeUploadAssetRequest(this.container, asset);
   }
 
   get cacheResponse() {
