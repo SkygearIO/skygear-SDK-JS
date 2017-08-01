@@ -36,20 +36,20 @@ export class Pubsub {
     this._ws = null;
     this._internal = internal;
     this._queue = [];
-    this.ee = ee({});
+    this._ee = ee({});
     this._handlers = {};
     this._reconnectWait = 5000;
     this._retryCount = 0;
   }
 
   onOpen(listener) {
-    this.ee.on(ON_OPEN, listener);
-    return new EventHandle(this.ee, ON_OPEN, listener);
+    this._ee.on(ON_OPEN, listener);
+    return new EventHandle(this._ee, ON_OPEN, listener);
   }
 
   onClose(listener) {
-    this.ee.on(ON_CLOSE, listener);
-    return new EventHandle(this.ee, ON_CLOSE, listener);
+    this._ee.on(ON_CLOSE, listener);
+    return new EventHandle(this._ee, ON_CLOSE, listener);
   }
 
   _pubsubUrl(internal = false) {
@@ -75,7 +75,7 @@ export class Pubsub {
 
   _onopen() {
     // Trigger registed onOpen callback
-    this.ee.emit(ON_OPEN, true);
+    this._ee.emit(ON_OPEN, true);
 
     // Resubscribe previously subscribed channels
     _.forEach(this._handlers, (handlers, channel) => {
@@ -99,16 +99,6 @@ export class Pubsub {
     return this.subscribe(channel, callback);
   }
 
-  /**
-   * Subscribe the channel for just one message.
-   *
-   * This function takes one message off from a pubsub channel,
-   * returning a promise of that message. When a message
-   * is received from the channel, the channel will be unsubscribed.
-   *
-   * @param {string} channel Channel to listen on
-   * @return {Promise} Promise of next message in this channel
-   */
   once(channel) {
     return new Promise((resolve) => {
       const handler = (data) => {
@@ -255,7 +245,7 @@ export class Pubsub {
   }
 
   _setWebSocket(ws) {
-    const emitter = this.ee;
+    const emitter = this._ee;
     this._ws = ws;
 
     if (!this._ws) {
@@ -295,60 +285,112 @@ export class Pubsub {
 
 export class PubsubContainer {
 
+  /**
+   * @param  {Container} container
+   * @return {PubsubContainer}
+   */
   constructor(container) {
+    /**
+     * @private
+     */
     this.container = container;
 
     this._pubsub = new Pubsub(this.container, false);
     this._internalPubsub = new Pubsub(this.container, true);
+
+    /**
+     * Indicating if the pubsub client should connect to server automatically.
+     *
+     * @type {Boolean}
+     */
     this.autoPubsub = true;
   }
 
   /**
-   * Subscribe a function callback on receiving message at the specified
+   * Subscribes a function callback on receiving message at the specified
    * channel.
    *
-   * @param {string} channel - Name of the channel to subscribe
+   * @param {string} channel - name of the channel to subscribe
    * @param {function(object:*)} callback - function to be trigger with
-   * incoming data.
+   * incoming data
+   * @return {function(object:*)} The callback function
    **/
   on(channel, callback) {
     return this._pubsub.on(channel, callback);
   }
 
   /**
-   * Unsubscribe a function callback on the specified channel.
+   * Unsubscribes a function callback on the specified channel.
    *
    * If pass in `callback` is null, all callbacks in the specified channel
    * will be removed.
    *
-   * @param {string} channel - Name of the channel to unsubscribe
+   * @param {string} channel - name of the channel to unsubscribe
    * @param {function(object:*)=} callback - function to be trigger with
-   * incoming data.
+   * incoming data
    **/
   off(channel, callback = null) {
     this._pubsub.off(channel, callback);
   }
 
+  /**
+   * Subscribes the channel for just one message.
+   *
+   * This function takes one message off from a pubsub channel,
+   * returning a promise of that message. When a message
+   * is received from the channel, the channel will be unsubscribed.
+   *
+   * @param {string} channel - name of the channel
+   * @return {Promise<Object>} promise of next message in this channel
+   */
   once(channel) {
-    this._pubsub.once(channel);
+    return this._pubsub.once(channel);
   }
 
+  /**
+   * Registers listener on connection between pubsub client and server is open.
+   *
+   * @param  {function()} listener - function to be triggered when connection
+   * open
+   */
   onOpen(listener) {
     this._pubsub.onOpen(listener);
   }
 
+  /**
+   * Registers listener on connection between pubsub client and server is
+   * closed.
+   *
+   * @param  {function()} listener - function to be triggered when connection
+   * closed
+   */
   onClose(listener) {
     this._pubsub.onClose(listener);
   }
 
+  /**
+   * Publishes message to a channel.
+   *
+   * @param {String} channel - name of the channel
+   * @param {Object} data - data to be published
+   */
   publish(channel, data) {
     this._pubsub.publish(channel, data);
   }
 
+  /**
+   * Checks if the channel is subscribed with any handler.
+   *
+   * @param {String} channel - name of the channel
+   * @return {Boolean} true if the channel has handlers
+   */
   hasHandlers(channel) {
     this._pubsub.hasHandlers(channel);
   }
 
+  /**
+   * @private
+   */
   get deviceID() {
     return this.container.push.deviceID;
   }

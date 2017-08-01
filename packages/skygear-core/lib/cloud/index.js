@@ -45,10 +45,46 @@ function funcName(func) {
   return incSuffix(name);
 }
 
+/**
+ * You can register the cloud code as lambda, with JSON input and output.
+ *
+ * This is a convenient way to inject custom logic to Skygear server and can
+ * be called easily with `skygear.lambda` in the client side.
+ *
+ * @example
+ * const skygearCloud = require('skygear/cloud');
+ * skygearCloud.op('greeting', function(param) {
+ *     return {
+ *       'content': 'Hello, ' + param.name,
+ *     };
+ * }, {
+ *     userRequired: false
+ * });
+ *
+ * @param {String} name - lambda name
+ * @param {function(param:Object, options:*)} func - function to be registered
+ * @param {Object} [options]
+ * @param {Boolean} [options.authRequired] - require api key to call the lambda
+ * @param {Boolean} [options.userRequired] - require user to call the lambda
+ */
 export function op(name, func, options = {}) {
   registry.registerOp(name, func, options);
 }
 
+/**
+ * You can register the cloud code to get run at specific time intervals like
+ * a cron job.
+ *
+ * @example
+ * const skygearCloud = require('skygear/cloud');
+ * skygearCloud.every('@daily', function() {
+ *   console.log('Meow');
+ * });
+ *
+ * @param  {String} cron - time interval in cron job syntax
+ * @param  {function(param: *)} func - function to be registered
+ * @param  {Object} [options]
+ */
 export function every(cron, func, options = {}) {
   // TODO: check cron format
   options.spec = cron;
@@ -56,6 +92,19 @@ export function every(cron, func, options = {}) {
   registry.registerTimer(name, func, options);
 }
 
+/**
+ * You can register the cloud code to run at skygear life cycle event.
+ *
+ * @example
+ * const skygearCloud = require('skygear/cloud');
+ * skygearCloud.event('after-plugins-ready', function() {
+ *   console.log('Meow');
+ * });
+ *
+ * @param {String} name - skygear life cycle event name
+ * @param {function(param: *)} func - function to be registered
+ * @param {Object} [options]
+ */
 export function event(name, func, options = {}) {
   registry.registerEvent(name, func, options);
 }
@@ -99,8 +148,9 @@ export function event(name, func, options = {}) {
  * @param {string} path - The path of the handler to be mount.
  * @param {function(request:*, options:*): object} func - function to be
  * registered.
- * @param {object} [options] - options for setting method, userRequired and
- * keyRequired.
+ * @param {Object} [options]
+ * @param {Boolean} [options.authRequired] - require api key to call the lambda
+ * @param {Boolean} [options.userRequired] - require user to call the lambda
  */
 export function handler(path, func, options = {}) {
   if (typeof options.method === 'string') {
@@ -191,6 +241,26 @@ export class BaseAuthProvider {
   }
 }
 
+/**
+ * You can register the cloud code to run at database event.
+ *
+ * @example
+ * const skygearCloud = require('skygear/cloud');
+ * skygearCloud.hook('before-save', function(newRecord, oldRecord, pool) {
+ *   console.log('Meow');
+ *   return newRecord;
+ * });
+ *
+ * @param {String} name - function name
+ * @param {function(newRecord:*, oldRecord:*, pool:*, options: *)} func -
+ * function to be registered
+ * @param {Object} [options]
+ * @param {String} [options.type] - record type
+ * @param {String} [options.trigger] - type of database event that trigger the
+ * hook
+ * @param {Boolean} [options.async] - true if the function triggered
+ * asynchronously
+ */
 export function hook(name, func, options = {}) {
   registry.registerHook(name, func, options);
 }
@@ -210,7 +280,9 @@ export function hook(name, func, options = {}) {
  *
  * @param {string} recordType - The type of the record.
  * @param {function(record: lib/record.js~Record, originalRecord: lib/record.js~Record, pool: pool, options: *): *} func - function to be registered.
- * @param {object} [options] - options for hook: async
+ * @param {Object} [options]
+ * @param {Boolean} [options.async] - true if the function triggered
+ * asynchronously
  */
 export function beforeSave(recordType, func, options = {}) {
   let name = funcName(func);
@@ -234,7 +306,8 @@ export function beforeSave(recordType, func, options = {}) {
  *
  * @param {string} recordType - The type of the record.
  * @param {function(record: lib/record.js~Record, originalRecord: lib/record.js~Record, pool: pool, options: *): *} func - function to be registered.
- * @param {object} [options] - options for hook: async
+ * @param {Object} [options]
+ * @param {Boolean} [options.async] - true if the function triggered
  */
 export function afterSave(recordType, func, options = {}) {
   let name = funcName(func);
@@ -258,7 +331,8 @@ export function afterSave(recordType, func, options = {}) {
  *
  * @param {string} recordType - The type of the record.
  * @param {function(record: lib/record.js~Record, originalRecord: lib/record.js~Record, pool: pool, options: *): *} func - function to be registered.
- * @param {object} [options] - options for hook: async
+ * @param {Object} [options]
+ * @param {Boolean} [options.async] - true if the function triggered
  */
 export function beforeDelete(recordType, func, options = {}) {
   let name = funcName(func);
@@ -282,7 +356,8 @@ export function beforeDelete(recordType, func, options = {}) {
  *
  * @param {string} recordType - The type of the record.
  * @param {function(record: lib/record.js~Record, originalRecord: lib/record.js~Record, pool: pool, options: *): *} func - function to be registered.
- * @param {object} [options] - options for hook: async
+ * @param {Object} [options]
+ * @param {Boolean} [options.async] - true if the function triggered
  */
 export function afterDelete(recordType, func, options = {}) {
   let name = funcName(func);

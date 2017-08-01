@@ -24,6 +24,11 @@ export class PushContainer {
     this._getDeviceID();
   }
 
+  /**
+   * @private
+   *
+   * Subsclass should override the implementation and provide the device type
+   */
   inferDeviceType() {
     // To be implmented by subclass
     // TODO: probably web / node, handle it later
@@ -33,10 +38,10 @@ export class PushContainer {
   /**
    * You can register your device for receiving push notifications.
    *
-   * @param {string} token - The device token
-   * @param {string} type - The device type (either 'ios' or 'android')
-   * @param {string} topic - The device topic, refer to application bundle
-   * identifier on iOS and application package name on Android.
+   * @param {string} token - the device token
+   * @param {string} type - the device type (either 'ios' or 'android')
+   * @param {string} topic - the device topic, refer to application bundle
+   * identifier on iOS and application package name on Android
    **/
   registerDevice(token, type, topic) {
     if (!token) {
@@ -76,6 +81,10 @@ export class PushContainer {
     });
   }
 
+  /**
+   * Unregisters the current user from the current device.
+   * This should be called when the user logouts.
+   **/
   unregisterDevice() {
     if (!this.deviceID) {
       return Promise.reject(
@@ -102,6 +111,11 @@ export class PushContainer {
     });
   }
 
+  /**
+   * The device ID
+   *
+   * @return {String}
+   */
   get deviceID() {
     return this._deviceID;
   }

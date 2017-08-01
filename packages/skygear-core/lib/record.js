@@ -70,6 +70,12 @@ const _metaKey = _.map(_metaAttrs, function (obj) {
   return obj.newKey;
 });
 
+/**
+ * Record provides the model for Skygear {@link Database} to interact with
+ * server.
+ *
+ * Developer may use {@link Record.extend} to create custom record type.
+ */
 export default class Record {
 
   constructor(recordType, attrs = defaultAttrs) {
@@ -97,14 +103,25 @@ export default class Record {
     this.updateTransient(attrs._transient);
   }
 
+  /**
+   * @type {String}
+   */
   get recordType() {
     return this._recordType;
   }
 
+  /**
+   * Record id in the format of `type/id`
+   *
+   * @type {String}
+   */
   get id() {
     return this._recordType + '/' + this._id;
   }
 
+  /**
+   * @type {ACL}
+   */
   get access() {
     if (this._access === null || this._access === undefined) {
       this._access = new ACL();
@@ -112,10 +129,28 @@ export default class Record {
     return this._access;
   }
 
-  setAccess(acl) {
+  /**
+   * @type {ACL}
+   */
+  set access(acl) {
     this._access = acl;
   }
 
+  /**
+   * Set ACL of the record.
+   *
+   * @param {ACL} acl
+   */
+  setAccess(acl) {
+    this.access = acl;
+  }
+
+  /**
+   * Gets all keys of attributes of the records. Skygear reserved keys, that is
+   * underscore prefixed keys, are excluded.
+   *
+   * @type {String[]} [description]
+   */
   get attributeKeys() {
     let keys = Object.keys(this);
     return _.filter(keys, function (value) {
@@ -123,10 +158,25 @@ export default class Record {
     });
   }
 
+  /**
+   * Returns a dictionary of transient fields.
+   *
+   * Transient fields are attached to an instance of Record and it is never
+   * persisted on server, but they may be returned as extra data about the
+   * record when fetched or queried from server with
+   * {@link Query#transientInclude}.
+   *
+   * @type {Object}
+   */
   get $transient() {
     return this._transient;
   }
 
+  /**
+   * Updates record attributes with a dictionary.
+   *
+   * @param  {Object} attrs
+   */
   update(attrs) {
     _.each(this.attributeKeys, (key) => {
       delete this[key];
@@ -242,10 +292,16 @@ export default class Record {
     return payload;
   }
 
+  /**
+   * @private
+   */
   static validType(recordType) {
     return recordType && recordType.indexOf('_') !== 0;
   }
 
+  /**
+   * @private
+   */
   static parseID(id) {
     let tuple = id.split('/');
     if (tuple.length < 2) {

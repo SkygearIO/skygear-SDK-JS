@@ -158,26 +158,56 @@ export class RelationContainer {
     this.container = container;
   }
 
+  /**
+   * Queries users with a relation query object.
+   *
+   * @param  {RelationQuery} queryObj
+   * @return {Promise<RelationQueryResult>} promise with user records
+   */
   query(queryObj) {
     return this.container.makeRequest('relation:query', queryObj.toJSON())
       .then(RelationQueryResult.createFromBody);
   }
 
+  /**
+   * Queries friends of current user. Convenient method of
+   * {@link RelationContainer#query}.
+   *
+   * @return {Promise<RelationQueryResult>} promise with user records
+   */
   queryFriend() {
     let query = new RelationQuery(this.Friend);
     return this.query(query);
   }
 
+  /**
+   * Queries followers of current user. Convenient method of
+   * {@link RelationContainer#query}.
+   *
+   * @return {Promise<RelationQueryResult>} promise with user records
+   */
   queryFollower() {
     let query = new RelationQuery(this.Follower);
     return this.query(query);
   }
 
+  /**
+   * Queries users that the current user is following. Convenient method of
+   * {@link RelationContainer#query}.
+   *
+   * @return {Promise<RelationQueryResult>} promise with user records
+   */
   queryFollowing() {
     let query = new RelationQuery(this.Following);
     return this.query(query);
   }
 
+  /**
+   * Adds relation to the current user.
+   *
+   * @param {Relation} relation
+   * @return {Promise<RelationResult>} promise with user records
+   */
   add(relation) {
     return this.container.makeRequest('relation:add', {
       name: relation.identifier,
@@ -188,6 +218,12 @@ export class RelationContainer {
     );
   }
 
+  /**
+   * Removes relation from the current user.
+   *
+   * @param {Relation} relation
+   * @return {Promise<RelationRemoveResult>} promise with user id
+   */
   remove(relation) {
     return this.container.makeRequest('relation:remove', {
       name: relation.identifier,
@@ -198,18 +234,32 @@ export class RelationContainer {
     );
   }
 
+  /**
+   * Relation query class.
+   *
+   * @type {RelationQuery}
+   */
   get Query() {
     return RelationQuery;
   }
 
+  /**
+   * @type {Relation}
+   */
   get Friend() {
     return Relation.extend('friend', Mutual);
   }
 
+  /**
+   * @type {Relation}
+   */
   get Follower() {
     return Relation.extend('follow', Inward);
   }
 
+  /**
+   * @type {Relation}
+   */
   get Following() {
     return Relation.extend('follow', Outward);
   }

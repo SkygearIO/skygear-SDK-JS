@@ -23,6 +23,9 @@ export const USER_CHANGED = 'userChanged';
 
 export class AuthContainer {
   constructor(container) {
+    /**
+     * @private
+     */
     this.container = container;
 
     this._accessToken = null;
@@ -30,43 +33,97 @@ export class AuthContainer {
     this._getAccessToken();
   }
 
+  /**
+   * Currently logged-in user
+   * @type {Record}
+   */
   get currentUser() {
     return this._user;
   }
 
+  /**
+   * Current access token
+   * @type {String}
+   */
   get accessToken() {
     return this._accessToken;
   }
 
+  /**
+   * Registers listener which user record changed.
+   *
+   * @param  {function()} listener
+   * @return {EventHandle}
+   */
   onUserChanged(listener) {
     this.container.ee.on(USER_CHANGED, listener);
     return new EventHandle(this.container.ee, USER_CHANGED, listener);
   }
 
-  signup(authData, password, profile = {}) {
+  /**
+   * Creates a user account with the specified auth data, password and user
+   * record data.
+   *
+   * @param  {Object} authData - unique identifier of the user
+   * @param  {String} password - password of the user
+   * @param  {Object} [data={}] - data saved to the user record
+   * @return {Promise<Record>} promise with created user record
+   */
+  signup(authData, password, data = {}) {
     return this.container.makeRequest('auth:signup', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password,
-      profile: profile
+      profile: data
     }).then(this._authResolve.bind(this));
   }
 
-  signupWithUsername(username, password, profile = {}) {
+  /**
+   * Creates a user account with the specified username, password and user
+   * record data.
+   *
+   * @param  {String} username - username of the user
+   * @param  {String} password - password of the user
+   * @param  {Object} [data={}] - data saved to the user record
+   * @return {Promise<Record>} promise with the created user record
+   */
+  signupWithUsername(username, password, data = {}) {
     return this.signup({
       username: username
-    }, password, profile);
+    }, password, data);
   }
 
-  signupWithEmail(email, password, profile = {}) {
+  /**
+   * Creates a user account with the specified email, password and user record
+   * data.
+   *
+   * @param  {String} email - email of the user
+   * @param  {String} password - password of the user
+   * @param  {Object} [data={}] - data saved to the user record
+   * @return {Promise<Record>} promise with the created user record
+   */
+  signupWithEmail(email, password, data = {}) {
     return this.signup({
       email: email
-    }, password, profile);
+    }, password, data);
   }
 
+  /**
+   * Creates an anonymous user account and log in as the created user.
+   *
+   * @return {Promise<Record>} promise with the created user record
+   */
   signupAnonymously() {
     return this.signup(null, null, null);
   }
 
+  /**
+   * Logs in to an existing user account with the specified auth data and
+   * password.
+   *
+   * @param  {Object} authData - unique identifier of the user
+   * @param  {String} password - password of the user
+   * @return {Promise<Record>} promise with the logged in user record
+   */
   login(authData, password) {
     return this.container.makeRequest('auth:login', {
       auth_data: authData, // eslint-disable-line camelcase
@@ -74,18 +131,42 @@ export class AuthContainer {
     }).then(this._authResolve.bind(this));
   }
 
+  /**
+   * Logs in to an existing user account with the specified username and
+   * password.
+   *
+   * @param  {String} username - username of the user
+   * @param  {String} password - password of the user
+   * @return {Promise<Record>} promise with the logged in user record
+   */
   loginWithUsername(username, password) {
     return this.login({
       username: username
     }, password);
   }
 
+  /**
+   * Logs in to an existing user account with the specified email and
+   * password.
+   *
+   * @param  {String} email - email of the user
+   * @param  {String} password - password of the user
+   * @return {Promise<Record>} promise with the logged in user record
+   */
   loginWithEmail(email, password) {
     return this.login({
       email: email
     }, password);
   }
 
+
+  /**
+   * Logs in to an existing user account with custom auth provider.
+   *
+   * @param  {String} provider - provider name
+   * @param  {Object} authData - provider auth data
+   * @return {Promise<Record>} promise with the logged in user record
+   */
   loginWithProvider(provider, authData) {
     return this.container.makeRequest('auth:login', {
       provider: provider,
@@ -93,6 +174,11 @@ export class AuthContainer {
     }).then(this._authResolve.bind(this));
   }
 
+  /**
+   * Logs out the current user of this container.
+   *
+   * @return {Promise} promise
+   */
   logout() {
     return this.container.push.unregisterDevice()
     .catch((error) => {
@@ -121,11 +207,24 @@ export class AuthContainer {
     });
   }
 
+  /**
+   * Retrieves current user record from server.
+   *
+   * @return {Promise<Record>} promise with current user record
+   */
   whoami() {
     return this.container.makeRequest('me', {})
     .then(this._authResolve.bind(this));
   }
 
+  /**
+   * Changes the password of the current user.
+   *
+   * @param  {String}  oldPassword - old password of current user
+   * @param  {String}  newPassword - new password of current user
+   * @param  {Boolean} [invalidate=false] - not implemented
+   * @return {Promise<Record>} promise with current user record
+   */
   changePassword(oldPassword, newPassword, invalidate = false) {
     if (invalidate) {
       throw Error('Invalidate is not yet implemented');
@@ -137,6 +236,12 @@ export class AuthContainer {
     .then(this._authResolve.bind(this));
   }
 
+  /**
+   * Defines roles to have admin right.
+   *
+   * @param {Role[]} roles - roles to have admin right
+   * @return {Promise<String[]>} promise with role names
+   */
   setAdminRole(roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
@@ -147,6 +252,12 @@ export class AuthContainer {
     }).then((body) => body.result);
   }
 
+  /**
+   * Sets default roles for new registered users.
+   *
+   * @param {Role[]} roles - default roles
+   * @return {Promise<String[]>} promise with role names
+   */
   setDefaultRole(roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
@@ -157,6 +268,12 @@ export class AuthContainer {
     }).then((body) => body.result);
   }
 
+  /**
+   * Gets roles of users from server.
+   *
+   * @param  {Record[]|String[]} users - user records or user ids
+   * @return {Promise<Object>} promise with userIDs-to-roles map
+   */
   fetchUserRole(users) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
@@ -176,6 +293,13 @@ export class AuthContainer {
     );
   }
 
+  /**
+   * Assigns roles to users.
+   *
+   * @param  {Record[]|String[]} users - target users
+   * @param  {Role[]|String[]} roles - roles to be assigned
+   * @return {Promise<String[]>} proimse with the target users
+   */
   assignUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
@@ -193,6 +317,13 @@ export class AuthContainer {
     }).then((body) => body.result);
   }
 
+  /**
+   * Revokes roles from users.
+   *
+   * @param  {Record[]|String[]} users - target users
+   * @param  {Role[]|String[]} roles - roles to be revoked
+   * @return {Promise<String[]>} promise with target users
+   */
   revokeUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id

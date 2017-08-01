@@ -34,7 +34,7 @@ import Record from './record';
 export default class Query {
 
   /**
-   * constructor - Create Query object from a Record Class
+   * Creates Query object from a Record Class.
    * @param {Record} recordCls - Record Class
    *
    */
@@ -57,7 +57,7 @@ export default class Query {
   }
 
   /**
-   * like - Set a like predicate
+   * Sets a like predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -69,7 +69,7 @@ export default class Query {
   }
 
   /**
-   * notLike - Set a negated like predicate
+   * Sets a negated like predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -85,7 +85,7 @@ export default class Query {
   }
 
   /**
-   * caseInsensitiveLike - Set a case-insensitive like predicate
+   * Sets a case-insensitive like predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -97,7 +97,7 @@ export default class Query {
   }
 
   /**
-   * caseInsensitiveNotLike - Set a case-insensitive negated like predicate
+   * Sets a case-insensitive negated like predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -112,7 +112,7 @@ export default class Query {
   }
 
   /**
-   * equalTo - Set an equal predicate
+   * Sets an equal predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -124,7 +124,7 @@ export default class Query {
   }
 
   /**
-   * notEqualTo - Set a not equal predicate
+   * Sets a not equal predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -136,7 +136,7 @@ export default class Query {
   }
 
   /**
-   * greaterThan - Set a greater than predicate
+   * Sets a greater than predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -149,7 +149,7 @@ export default class Query {
 
 
   /**
-   * greaterThanOrEqualTo - Set a greater than or equal to predicate
+   * Sets a greater than or equal to predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -161,7 +161,7 @@ export default class Query {
   }
 
   /**
-   * lessThan - Set a less than predicate
+   * Sets a less than predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -173,7 +173,7 @@ export default class Query {
   }
 
   /**
-   * lessThanOrEqualTo - Set a less than or equal to predicate
+   * Sets a less than or equal to predicate.
    * @param  {string} key
    * @param  {string} value
    * @return {Query}  self
@@ -185,7 +185,7 @@ export default class Query {
   }
 
   /**
-   * distanceLessThan - Set a distance less than query
+   * Sets a distance less than query.
    * @param  {string} key
    * @param  {Geolocation} loc
    * @param  {Number}  distance
@@ -207,7 +207,7 @@ export default class Query {
   }
 
   /**
-   * distanceGreaterThan - Set a distance greater than query
+   * Sets a distance greater than query.
    * @param  {string} key
    * @param  {geolocation} loc
    * @param  {Number}  distance
@@ -229,7 +229,7 @@ export default class Query {
   }
 
   /**
-   * contains - Set a contains predicate
+   * Sets a contains predicate.
    * @throws {Error}  Throws Error if lookupArray is not an array.
    * @param  {string} key
    * @param  {Array}   lookupArray - values
@@ -250,7 +250,7 @@ export default class Query {
   }
 
   /**
-   * notContains - Set a not contains predicate
+   * Sets a not contains predicate.
    * @throws {Error}  Throws Error if lookupArray is not an array.
    * @param  {string} key
    * @param  {Array}   lookupArray - values
@@ -274,7 +274,7 @@ export default class Query {
   }
 
   /**
-   * containsValue - Set a contains value predicate
+   * Sets a contains value predicate.
    * @throws {Error}  Throws Error if needle is not a string.
    * @param  {string} key
    * @param  {string} needle
@@ -296,7 +296,7 @@ export default class Query {
 
 
   /**
-   * notContainsValue - Set a not contains value predicate
+   * Sets a not contains value predicate.
    * @throws {Error}  Throws Error if needle is not a string.
    * @param  {string} key
    * @param  {string} needle
@@ -320,7 +320,7 @@ export default class Query {
   }
 
   /**
-   * havingRelation - Set a having relation predicate
+   * Sets a having relation predicate.
    * @param  {string} key
    * @param  {string} rel - relationship, either 'friend' or 'follow'
    * @return {Query}  self
@@ -344,7 +344,7 @@ export default class Query {
   }
 
   /**
-   * notHavingRelation - Set a not having relation predicate
+   * Sets a not having relation predicate.
    * @param  {string} key
    * @param  {string} rel - relationship, either 'friend' or 'follow'
    * @return {Query}  self
@@ -371,7 +371,7 @@ export default class Query {
   }
 
   /**
-   * addDescending -  Set descending predicate
+   * Sets descending predicate.
    * @param {string} key
    * @return {Query} self
    */
@@ -385,7 +385,7 @@ export default class Query {
   }
 
   /**
-   * addAscending -  Set ascending predicate
+   * Sets ascending predicate.
    * @param {string} key
    * @return {Query} self
    */
@@ -398,7 +398,7 @@ export default class Query {
   }
 
   /**
-   * addDescendingByDistance -  Set descending by distance predicate
+   * Sets descending by distance predicate.
    * @param {string} key
    * @param {Geolocation} loc
    * @return {Query} self
@@ -417,7 +417,7 @@ export default class Query {
   }
 
   /**
-   * addAscendingByDistance -  Set ascending by distance predicate
+   * Sets ascending by distance predicate.
    * @param {string} key
    * @param {Geolocation} loc
    * @return {Query} self
@@ -436,7 +436,7 @@ export default class Query {
   }
 
   /**
-   * transientInclude - transient include
+   * Sets transient include.
    * @param {string} key
    * @param {string} mapToKey
    * @return {Query} this
@@ -452,7 +452,7 @@ export default class Query {
   }
 
   /**
-   * transientIncludeDistance - transient include distance
+   * Sets transient include distance.
    * @param {string} key
    * @param {string} mapToKey
    * @param {Geolocation} loc
@@ -490,7 +490,7 @@ export default class Query {
 
 
   /**
-   * predicate - Preicate Function
+   * Preicate Function
    * @return {Array} Array of {precidate}
    */
 
@@ -516,7 +516,7 @@ export default class Query {
   }
 
   /**
-   * hash - Compute Query object hash code
+   * The computed Query object hash code
    * @return {string} md5 digest of serialized JSON
    */
 
@@ -525,7 +525,7 @@ export default class Query {
   }
 
   /**
-   * toJSON - Serialize Query object
+   * Serializes Query object.
    * @return {object}
    */
 
@@ -551,7 +551,7 @@ export default class Query {
   }
 
   /**
-   * clone — clone a Query object from a Query object.
+   * Clones a Query object from a Query object.
    * @param {Query} query - query to be cloned.
    */
 
@@ -560,7 +560,7 @@ export default class Query {
   }
 
   /**
-   * fromJSON — clone a Query object from payload.
+   * Clones a Query object from payload.
    * @param payload - Payload
    */
 
@@ -625,7 +625,7 @@ export default class Query {
   }
 
   /**
-   * or - Return a disjunctive query from queries.
+   * Returns a disjunctive query from queries.
    * @param {Query} queries - Queries
    */
 
@@ -649,7 +649,7 @@ export default class Query {
   }
 
   /**
-   * not - Return a negated query
+   * Returns a negated query.
    * @param {Query} query - Query
    */
 
