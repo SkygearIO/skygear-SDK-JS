@@ -9,8 +9,8 @@ class InjectToPlugin {
     this._classToTag = {};
   }
 
-  onHandleTag(ev) {
-    const tags = ev.data.tag;
+  onHandleDocs(ev) {
+    const tags = ev.data.docs;
     tags.forEach((tag) => {
       this.parseInjectTo(tag);
       this.findClass(tag);
