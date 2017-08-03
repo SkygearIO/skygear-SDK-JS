@@ -20,7 +20,7 @@ script:
 before_deploy:
   - npm run lerna bootstrap
   - npm run lerna exec -- npm pack
-  - sudo pip install --user awscli
+  - sudo pip install awscli
   - aws configure set preview.cloudfront true
 
 deploy:
