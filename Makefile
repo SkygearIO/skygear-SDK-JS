@@ -1,4 +1,11 @@
-VERSION := $(shell git describe --always --tags)
+VERSION := $(shell git describe --always --tags --dirty)
+DOCS_AWS_BUCKET := docs.skygear.io
+DOCS_AWS_DISTRIBUTION := E31J8XF8IPV2V
+DOCS_PREFIX = /js/reference
+
+ifeq ($(VERSION),)
+$(error VERSION is empty)
+endif
 
 DOCKER_COMPOSE_CMD := docker-compose \
 	-f docker-compose.dev.yml \
@@ -34,10 +41,32 @@ build:
 doc:
 	$(DOCKER_RUN) npm run doc
 
+.PHONY: doc-clean
+doc-clean:
+	-rm -rf esdoc
+
+.PHONY: doc-upload
+doc-upload:
+	$(DOCKER_RUN) aws s3 sync esdoc s3://$(DOCS_AWS_BUCKET)$(DOCS_PREFIX)/$(VERSION) --delete
+
+.PHONY: doc-trigger-esdoc
+doc-trigger-esdoc:
+	curl 'https://doc.esdoc.org/api/create' \
+		-XPOST \
+		-H 'Content-Type: application/x-www-form-urlencoded' \
+		--data 'gitUrl=git%40github.com%3Askygeario%2Fskygear-SDK-JS.git'
+
+.PHONY: doc-invalidate
+doc-invalidate:
+	$(DOCKER_RUN) aws cloudfront create-invalidation --distribution-id $(DOCS_AWS_DISTRIBUTION) --paths "$(DOCS_PREFIX)/$(VERSION)/*"
+
+.PHONY: doc-deploy
+doc-deploy: doc-clean doc doc-upload doc-invalidate
+
 .PHONY: docker-build
 docker-build:
 	make -C scripts/docker-images/release docker-build
 
-.PHONY: docker-build
+.PHONY: docker-push
 docker-push:
 	make -C scripts/docker-images/release docker-push

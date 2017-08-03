@@ -34,8 +34,13 @@ fi
 # Notify doc.esdoc.org to regenerate esdoc
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
-    curl 'https://doc.esdoc.org/api/create' \
-        -XPOST \
-        -H 'Content-Type: application/x-www-form-urlencoded' \
-        --data 'gitUrl=git%40github.com%3Askygeario%2Fskygear-SDK-JS.git'
+    make doc-trigger-esdoc
+fi
+
+# Update docs.skygear.io
+
+if [ -n "$TRAVIS_TAG" ]; then
+    make doc-deploy VERSION="$TRAVIS_TAG"
+else
+    make doc-deploy VERSION="${TRAVIS_BRANCH/master/canary}"
 fi

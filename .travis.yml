@@ -20,6 +20,8 @@ script:
 before_deploy:
   - npm run lerna bootstrap
   - npm run lerna exec -- npm pack
+  - sudo pip install --user awscli
+  - aws configure set preview.cloudfront true
 
 deploy:
   - provider: releases
@@ -39,7 +41,7 @@ deploy:
       branch: master
       node_js: 6
   - provider: script
-    script: ./scripts/deploy.sh
+    script: scripts/deploy.sh
     skip_cleanup: true
     on:
       repo: SkygearIO/skygear-SDK-JS
