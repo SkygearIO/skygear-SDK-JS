@@ -1,19 +1,31 @@
 {
   "source": "./packages",
-  "includes": [".*lib\/.*"],
-  "excludes": [".*node_modules\/.*"],
+  "includes": [
+    ".*lib/.*"
+  ],
+  "excludes": [
+    ".*node_modules/.*"
+  ],
   "destination": "./esdoc",
-  "experimentalProposal": {
-    "classProperties": true,
-    "objectRestSpread": true,
-    "decorators": true,
-    "doExpressions": true,
-    "functionBind": true,
-    "asyncGenerators": true,
-    "exportExtensions": true,
-    "dynamicImport": true
-  },
   "plugins": [
-    {"name": "./esdoc-plugins/injectTo/index.js"}
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "accessor": {
+          "access": [
+            "public"
+          ]
+        }
+      }
+    },
+    {
+      "name": "esdoc-ecmascript-proposal-plugin",
+      "option": {
+        "all": true
+      }
+    },
+    {
+      "name": "./esdoc-plugins/injectTo/index.js"
+    }
   ]
 }

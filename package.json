@@ -32,7 +32,9 @@
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "dirty-chai": "^1.2.2",
-    "esdoc": "^0.5.2",
+    "esdoc": "^1.0.1",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "glob": "^7.1.1",
     "gulp": "^3.6.0",
     "gulp-awspublish": "^3.2.0",
@@ -77,8 +79,7 @@
     "skygear-asset": "./asset.js"
   },
   "license": "Apache-2.0",
-  "dependencies": {
-  },
+  "dependencies": {},
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
   },
