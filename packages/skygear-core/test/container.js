@@ -22,6 +22,13 @@ import Role from '../lib/role';
 import mockSuperagent from './mock/superagent';
 
 describe('Container', function () {
+  it('should have version number injected to the container', function () {
+    let container = new Container();
+    expect(container.VERSION).to.eql(Container.VERSION);
+    expect(container.VERSION).to.exist();
+    expect(container.VERSION).to.not.be.empty();
+  });
+
   it('should have default end-point', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
