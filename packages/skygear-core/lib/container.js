@@ -78,6 +78,24 @@ export class BaseContainer {
   }
 
   /**
+   * The version of Skygear.
+   *
+   * @type {String}
+   */
+  static get VERSION() {
+    return '/* @echo SKYGEAR_VERSION */';
+  }
+
+  /**
+   * The version of Skygear. Convenient getter.
+   *
+   * @type {String}
+   */
+  get VERSION() {
+    return this.constructor.VERSION;
+  }
+
+  /**
    * Sets a new end point and new API key to the container.
    *
    * @param {Object} options - configuration options of the skygear container
