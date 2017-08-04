@@ -15,8 +15,18 @@
  */
 import Record from './record';
 
+/**
+ * Reference
+ *
+ * A model representing a record reference in Skygear record.
+ */
 export default class Reference {
 
+  /**
+   * Constructs a new Reference object.
+   *
+   * @param {Record|String} attrs - the referenced record or record id
+   */
   constructor(attrs) {
     var id;
     if (typeof attrs === 'string') {
@@ -38,10 +48,20 @@ export default class Reference {
     this._id = id;
   }
 
+  /**
+   * ID of the referenced record
+   *
+   * @type {String}
+   */
   get id() {
     return this._id;
   }
 
+  /**
+   * Serializes Reference to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     return {
       $id: this._id,

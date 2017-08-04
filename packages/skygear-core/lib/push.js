@@ -15,9 +15,19 @@
  */
 import {ErrorCodes, SkygearError} from './error';
 
+/**
+ * Push container
+ */
 export class PushContainer {
 
+  /**
+   * @param  {Container} container - the Skygear container
+   * @return {PushContainer}
+   */
   constructor(container) {
+    /**
+     * @private
+     */
     this.container = container;
 
     this._deviceID = null;

@@ -24,6 +24,9 @@ const PURGEABLE_KEYS_KEY = '_skygear_purgeable_keys_';
 import {CookieStorage} from 'cookie-storage';
 import {isLocalStorageValid} from './util';
 
+/**
+ * @private
+ */
 class SyncStorageDriver {
 
   constructor(syncImpl) {
@@ -146,6 +149,9 @@ class SyncStorageDriver {
 
 }
 
+/**
+ * @private
+ */
 class Store {
   constructor(driver, keyWhiteList) {
     this._driver = driver;
@@ -352,10 +358,16 @@ class Store {
 
 }
 
+/**
+ * @private
+ */
 export const setStore = (_store) => {
   store = _store;
 };
 
+/**
+ * @private
+ */
 export default () => {
   if (store) {
     return store;

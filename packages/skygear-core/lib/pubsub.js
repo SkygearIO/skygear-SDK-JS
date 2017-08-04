@@ -29,8 +29,18 @@ import {EventHandle} from './util';
 const ON_OPEN = 'onOpen';
 const ON_CLOSE = 'onClose';
 
+/**
+ * The Pubsub client
+ */
 export class Pubsub {
 
+  /**
+   * Constructs a new Pubsub object.
+   *
+   * @param  {container} container - the Skygear container
+   * @param  {Boolean} internal - true if it is an internal pubsub client
+   * @return {Pubsub} pubsub client
+   */
   constructor(container, internal = false) {
     this._container = container;
     this._ws = null;
@@ -42,11 +52,23 @@ export class Pubsub {
     this._retryCount = 0;
   }
 
+  /**
+   * Registers a connection open listener
+   *
+   * @param  {function()} listener - the listener
+   * @return {EventHandler} event handler
+   */
   onOpen(listener) {
     this._ee.on(ON_OPEN, listener);
     return new EventHandle(this._ee, ON_OPEN, listener);
   }
 
+  /**
+   * Registers a connection close listener
+   *
+   * @param  {function()} listener - the listener
+   * @return {EventHandler} event handler
+   */
   onClose(listener) {
     this._ee.on(ON_CLOSE, listener);
     return new EventHandle(this._ee, ON_CLOSE, listener);
@@ -64,6 +86,10 @@ export class Pubsub {
     return !!this._container.apiKey;
   }
 
+  /**
+   * Connects to server if the Skygear container has credential, otherwise
+   * close the connection.
+   */
   reconfigure() {
     if (!this._hasCredentials()) {
       this.close();
@@ -95,10 +121,29 @@ export class Pubsub {
     });
   }
 
+  /**
+   * Subscribes a function callback on receiving message at the specified
+   * channel.
+   *
+   * @param {string} channel - name of the channel to subscribe
+   * @param {function(object:*)} callback - function to be trigger with
+   * incoming data
+   * @return {function(object:*)} The callback function
+   **/
   on(channel, callback) {
     return this.subscribe(channel, callback);
   }
 
+  /**
+   * Subscribes the channel for just one message.
+   *
+   * This function takes one message off from a pubsub channel,
+   * returning a promise of that message. When a message
+   * is received from the channel, the channel will be unsubscribed.
+   *
+   * @param {string} channel - name of the channel
+   * @return {Promise<Object>} promise of next message in this channel
+   */
   once(channel) {
     return new Promise((resolve) => {
       const handler = (data) => {
@@ -109,6 +154,12 @@ export class Pubsub {
     });
   }
 
+  /**
+   * Publishes message to a channel.
+   *
+   * @param {String} channel - name of the channel
+   * @param {Object} data - data to be published
+   */
   publish(channel, data) {
     if (!channel) {
       throw new Error('Missing channel to publish');
@@ -150,10 +201,29 @@ export class Pubsub {
     }
   }
 
+  /**
+   * Unsubscribes a function callback on the specified channel.
+   *
+   * If pass in `callback` is null, all callbacks in the specified channel
+   * will be removed.
+   *
+   * @param {string} channel - name of the channel to unsubscribe
+   * @param {function(object:*)=} callback - function to be trigger with
+   * incoming data
+   **/
   off(channel, callback = null) {
     this.unsubscribe(channel, callback);
   }
 
+  /**
+   * Subscribes a function callback on receiving message at the specified
+   * channel.
+   *
+   * @param {string} channel - name of the channel to subscribe
+   * @param {function(object:*)} handler - function to be trigger with
+   * incoming data
+   * @return {function(object:*)} The callback function
+   **/
   subscribe(channel, handler) {
     if (!channel) {
       throw new Error('Missing channel to subscribe');
@@ -167,6 +237,16 @@ export class Pubsub {
     return handler;
   }
 
+  /**
+   * Unsubscribes a function callback on the specified channel.
+   *
+   * If pass in `callback` is null, all callbacks in the specified channel
+   * will be removed.
+   *
+   * @param {string} channel - name of the channel to unsubscribe
+   * @param {function(object:*)=} [handler] - function to be trigger with
+   * incoming data
+   **/
   unsubscribe(channel, handler = null) {
     if (!channel) {
       throw new Error('Missing channel to unsubscribe');
@@ -192,6 +272,12 @@ export class Pubsub {
     }
   }
 
+  /**
+   * Checks if the channel is subscribed with any handler.
+   *
+   * @param {String} channel - name of the channel
+   * @return {Boolean} true if the channel has handlers
+   */
   hasHandlers(channel) {
     let handlers = this._handlers[channel];
     return handlers ? handlers.length > 0 : false;
@@ -224,15 +310,26 @@ export class Pubsub {
     }, interval);
   }
 
+  /**
+   * True if it is connected to the server.
+   *
+   * @type {Boolean}
+   */
   get connected() {
     return this._ws && this._ws.readyState === 1;
   }
 
+  /**
+   * Closes connection and clear all handlers.
+   */
   reset() {
     this.close();
     this._handlers = {};
   }
 
+  /**
+   * Closes connection.
+   */
   close() {
     if (this._ws) {
       this._ws.close();
@@ -240,6 +337,9 @@ export class Pubsub {
     }
   }
 
+  /**
+   * @type {WebSocket}
+   */
   get WebSocket() {
     return WebSocket;
   }
@@ -272,6 +372,10 @@ export class Pubsub {
     };
   }
 
+  /**
+   * Connects to server if the Skygear container has credentials and not
+   * connected.
+   */
   connect() {
     if (!this._hasCredentials() || this.connected) {
       return;
@@ -283,10 +387,16 @@ export class Pubsub {
   }
 }
 
+/**
+ * Pubsub container
+ *
+ * A publish-subscribe interface, providing real-time message-based
+ * communication with other users.
+ */
 export class PubsubContainer {
 
   /**
-   * @param  {Container} container
+   * @param  {Container} container - the Skygear container
    * @return {PubsubContainer}
    */
   constructor(container) {
@@ -403,6 +513,10 @@ export class PubsubContainer {
     this.reconfigure();
   }
 
+  /**
+   * Connects to server if the Skygear container has credential, otherwise
+   * close the connection.
+   */
   reconfigure() {
     this._internalPubsub.reset();
     if (this.deviceID !== null) {

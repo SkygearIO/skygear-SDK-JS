@@ -76,10 +76,20 @@ export class SkygearError extends Error {
     this.info = info || null;
   }
 
+  /**
+   * Description of the error
+   *
+   * @return {String} description
+   */
   toString() {
     return `SkygearError: ${this.message}`;
   }
 
+  /**
+   * Description of the error code of the error
+   *
+   * @return {String} description
+   */
   /* eslint-disable complexity */
   toLocaleString() {
     switch (this.code) {
@@ -126,6 +136,11 @@ export class SkygearError extends Error {
   }
   /* eslint-enable complexity */
 
+  /**
+   * Serializes SkyearError to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     const result = {
       name: codeToString(this.code),
@@ -138,6 +153,15 @@ export class SkygearError extends Error {
     return result;
   }
 
+  /**
+   * Constructs a new SkyearError object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   * @param {String} attrs.message - an error message
+   * @param {Number} [attrs.code] - a code for the error condition
+   * @param {Object} [attrs.info] - more information about the error
+   * @return {SkyearError} the created SkyearError object
+   */
   static fromJSON(attrs) {
     return new SkygearError(
       attrs.message,

@@ -13,11 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * Sequence
+ *
+ * A model representing a auto-incrementing sequence in Skygear record.
+ */
 export class Sequence {
 
+  /**
+   * Constructs a new Sequence object.
+   */
   constructor() {
   }
 
+  /**
+   * Serializes Sequence to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     return {
       $type: 'seq'
@@ -26,12 +40,27 @@ export class Sequence {
 
 }
 
+/**
+ * UnknownValue
+ *
+ * A model representing an unknown type of value in Skygear record.
+ */
 export class UnknownValue {
 
+  /**
+   * Constructs a new UnknownValue object.
+   *
+   * @param {String} underlyingType - underlying type of the value
+   */
   constructor(underlyingType) {
     this.underlyingType = underlyingType;
   }
 
+  /**
+   * Serializes UnknownValue to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     return {
       $type: 'unknown',
@@ -39,6 +68,12 @@ export class UnknownValue {
     };
   }
 
+  /**
+   * Constructs a new UnknownValue object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   * @param {String} attrs.$underlying_type - underlying type of the value
+   */
   static fromJSON(attrs) {
     return new UnknownValue(attrs.$underlying_type);
   }
