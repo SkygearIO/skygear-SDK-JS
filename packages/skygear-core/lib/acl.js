@@ -173,14 +173,6 @@ export default class ACL {
       accessLevelNumber(AccessLevel.ReadWriteLevel);
   }
 
-  hasReadAccess(role) {
-    return this.hasReadAccessForRole(role);
-  }
-
-  hasWriteAccess(role) {
-    return this.hasWriteAccessForRole(role);
-  }
-
   hasReadAccessForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
