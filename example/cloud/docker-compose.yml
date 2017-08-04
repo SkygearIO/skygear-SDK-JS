@@ -38,6 +38,7 @@ services:
     command: node_modules/.bin/skygear-node
     volumes:
     - .:/usr/src/app
+    - ../../packages/skygear:/usr/src/app/skygear
     environment:
       DATABASE_URL: postgres://postgres@db/postgres?sslmode=disable
       PUBSUB_URL: PUBSUB_URL=ws://app:3000/pubsub

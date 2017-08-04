@@ -14,6 +14,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "skygear": "file:../../packages/skygear"
+    "skygear": "file:skygear"
   }
 }
