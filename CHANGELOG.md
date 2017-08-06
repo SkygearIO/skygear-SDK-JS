@@ -1,3 +1,41 @@
+## Changes since 1.0.0
+
+### Incompatible Changes
+
+- Authentication-related function will return record instead of user object
+
+  In previous version of SKYKit, authentication methods return a user object
+  which contains user-related information such as User ID, username and
+  email. These information is moved to user record and the authentication
+  methods are updated to return record instead.
+
+### Features
+
+- Add containers class getter to BaseContainer
+- Add api uploadAsset to skygear database
+- Move user related role api to AuthContainer
+- New signup login, remove user object (#250)
+- Accepting QueryResult as arguments at database.delete (#141)
+
+
+### Bug Fixes
+
+- Add back pubsub.reconfigure() (#260)
+- Fix cloud container public and private db getter
+- Fix exception on server fails to bind address and return meaningful message
+- Handle null and undefined on SkygearResponse.isInstance checking
+- Fix response header not wrapped in array
+- Sign FS Asset URL correctly (SkygearIO/skygear-server#427)
+
+### Other Notes
+
+- Inject version string to skygear container with preprocess
+- Update esdoc plugin to esdoc 1.0.1 syntax (#276)
+- Upload doc prefixed with version to s3 bucket for CI
+- Update API reference (SkygearIO/features#54)
+- Remove the unused param actor in relation query api
+- Update the description on HTTP_ADDR settings
+
 ## 1.0.0 (2017-06-30)
 
 ### Incompatible Changes
