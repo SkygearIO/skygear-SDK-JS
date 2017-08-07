@@ -1,4 +1,4 @@
-## Changes since 1.0.0
+## 1.1.0 (2017-08-07)
 
 ### Incompatible Changes
 
