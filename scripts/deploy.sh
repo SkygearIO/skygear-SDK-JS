@@ -27,7 +27,7 @@ if [ -n "$TRAVIS_TAG" ]; then
     npm run deploy
 fi
 
-if [ "$TRAVIS_BRANCH" == "latest" ]; then
+if [ "$TRAVIS_TAG" == "latest" ]; then
     npm run deploy-latest
 fi
 
