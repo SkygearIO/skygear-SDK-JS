@@ -11,6 +11,9 @@ node_js:
   - '6'
   - '4'
 
+before_install:
+  - npm i -g npm@5.3.0
+
 install:
   - make vendor
 
