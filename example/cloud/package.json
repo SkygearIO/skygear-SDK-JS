@@ -1,0 +1,19 @@
+{
+  "name": "skygear-cloud-example",
+  "version": "1.0.0",
+  "description": "Cloud example of Skygear JS SDK",
+  "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkygearIO/skygear-SDK-JS.git"
+  },
+  "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "skygear": "file:skygear"
+  }
+}
