@@ -22,7 +22,6 @@ endif
 .PHONY: vendor
 vendor:
 	$(DOCKER_RUN) npm install
-	$(DOCKER_RUN) npm run lerna bootstrap
 
 .PHONY: test
 test:
