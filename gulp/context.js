@@ -1,6 +1,4 @@
-var execSync = require('child_process').execSync;
-var version = execSync('git describe --always --tags --dirty') + "";
-version = version.trim();
+var version = process.env.VERSION;
 
 module.exports = {
   "dev": {

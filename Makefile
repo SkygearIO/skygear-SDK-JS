@@ -34,7 +34,7 @@ clean:
 
 .PHONY: build
 build:
-	$(DOCKER_RUN) sh -c "npm run lerna exec -- npm pack"
+	$(DOCKER_RUN) sh -c "npm run lerna exec -- VERSION=$(VERSION) npm pack"
 
 .PHONY: doc
 doc:
