@@ -171,7 +171,8 @@ export class BaseContainer {
     return this.request
       .post(this.url + _action)
       .set('X-Skygear-API-Key', this.apiKey)
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('X-Skygear-SDK-Version', `skygear-SDK-JS/${this.VERSION}`);
   }
 
   _prepareRequestData(action, data) {
