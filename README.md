@@ -9,7 +9,7 @@ JS SDK of Skygear.io
 
 You may visit a live [demo](https://sdkjsexample.skygeario.com/static/example/index.html)
 
-[API doc](https://doc.esdoc.org/github.com/skygeario/skygear-SDK-JS/)
+[API doc](https://docs.skygear.io/js/reference/latest/)
 
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues
 
