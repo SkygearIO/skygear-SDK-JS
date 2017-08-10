@@ -34,7 +34,11 @@ clean:
 
 .PHONY: build
 build:
-	$(DOCKER_RUN) sh -c "npm run lerna exec -- VERSION=$(VERSION) npm pack"
+	$(DOCKER_RUN) sh -c "npm run lerna exec -- npm pack"
+
+.PHONY: update-version
+update-version:
+	sed -i "" "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
 
 .PHONY: doc
 doc:

@@ -1,4 +1,4 @@
-var version = process.env.VERSION;
+var version = "1.1.0";
 
 module.exports = {
   "dev": {
