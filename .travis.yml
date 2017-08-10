@@ -21,6 +21,7 @@ script:
   - make test
 
 before_deploy:
+  - make update-version
   - npm run lerna bootstrap
   - npm run lerna exec -- npm pack
   - sudo pip install awscli
