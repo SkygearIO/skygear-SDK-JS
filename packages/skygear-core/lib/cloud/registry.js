@@ -68,7 +68,7 @@ export class Registry {
   registerOp(name, func, options) {
     const opts = {
       name: name,
-      auth_required: options.authRequired,
+      key_required: options.keyRequired,
       user_required: options.userRequired
     };
     this._addParam('op', opts);
@@ -101,7 +101,7 @@ export class Registry {
     const opts = {
       name: name,
       methods: m,
-      auth_required: options.authRequired,
+      key_required: options.keyRequired,
       user_required: options.userRequired
     };
     this._addParam('handler', opts);

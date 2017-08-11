@@ -35,11 +35,11 @@ describe('Registry', function () {
     function op() {}
     registry.registerOp('lambda', op, {
       userRequired: true,
-      authRequired: false
+      keyRequired: false
     });
     expect(registry.funcList().op).to.be.eql([{
       name: 'lambda',
-      auth_required: false,
+      key_required: false,
       user_required: true
     }]);
 
@@ -82,15 +82,15 @@ describe('Registry', function () {
     function op2() {}
     registry.registerOp('lambda', op, {
       userRequired: true,
-      authRequired: false
+      keyRequired: false
     });
     registry.registerOp('lambda', op2, {
       userRequired: true,
-      authRequired: false
+      keyRequired: false
     });
     expect(registry.funcList().op).to.be.eql([{
       name: 'lambda',
-      auth_required: false,
+      key_required: false,
       user_required: true
     }]);
 
@@ -102,13 +102,13 @@ describe('Registry', function () {
     function pubHandler() {}
     registry.registerHandler('pubHandler', pubHandler, {
       method: ['GET'],
-      authRequired: false,
+      keyRequired: false,
       userRequired: true
     });
     expect(registry.funcList().handler).to.be.eql([{
       name: 'pubHandler',
       methods: ['GET'],
-      auth_required: false,
+      key_required: false,
       user_required: true
     }]);
 

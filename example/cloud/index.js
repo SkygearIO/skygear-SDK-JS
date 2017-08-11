@@ -6,7 +6,7 @@ function includeme(skygearCloud) {
       'content': 'Hello, ' + param.name,
     };
   }, {
-    authRequired: true,
+    keyRequired: true,
     userRequired: false,
   });
 }
