@@ -115,7 +115,7 @@ export class Pubsub {
     }
 
     const dataType = typeof data;
-    if (dataType !== 'object' || data === null) {
+    if (dataType !== 'object' || data === null || _.isArray(data)) {
       throw new Error('Data must be object');
     }
 
