@@ -286,7 +286,11 @@ export default class Record {
       _access: this._access && this._access.toJSON()
     };
     _.each(this.attributeKeys, (key) => {
-      payload[key] = toJSON(this[key]);
+      const value = this[key];
+      if (value === undefined) {
+        throw new Error(`Unsupported undefined value of record key: ${key}`);
+      }
+      payload[key] = toJSON(value);
     });
 
     return payload;

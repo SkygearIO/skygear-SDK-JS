@@ -100,5 +100,10 @@ describe('util', function () {
     ]);
   });
 
+  it('toJSON undefined', function () {
+    expect(() => toJSON(undefined))
+      .to.throw('toJSON does not support undefined value');
+  });
+
 });
 /*eslint-enable no-unused-vars, quote-props */
