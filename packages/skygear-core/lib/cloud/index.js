@@ -64,10 +64,17 @@ function funcName(func) {
  * @param {String} name - lambda name
  * @param {function(param:Object, options:*)} func - function to be registered
  * @param {Object} [options]
- * @param {Boolean} [options.authRequired] - require api key to call the lambda
+ * @param {Boolean} [options.keyRequired] - require api key to call the lambda
  * @param {Boolean} [options.userRequired] - require user to call the lambda
  */
 export function op(name, func, options = {}) {
+  // move authRequired to keyRequired, if keyRequired not specified
+  if (options.keyRequired === undefined &&
+      options.authRequired !== undefined) {
+    console.warn('authRequired is deprecated, use keyRequired instead');
+    options.keyRequired = options.authRequired;
+  }
+
   registry.registerOp(name, func, options);
 }
 
@@ -149,13 +156,22 @@ export function event(name, func, options = {}) {
  * @param {function(request:*, options:*): object} func - function to be
  * registered.
  * @param {Object} [options]
- * @param {Boolean} [options.authRequired] - require api key to call the lambda
+ * @param {String[]|String} [options.method] - handler methods, e.g. GET, POST
+ * @param {Boolean} [options.keyRequired] - require api key to call the lambda
  * @param {Boolean} [options.userRequired] - require user to call the lambda
  */
 export function handler(path, func, options = {}) {
   if (typeof options.method === 'string') {
     options.method = [options.method];
   }
+
+  // move authRequired to keyRequired, if keyRequired not specified
+  if (options.keyRequired === undefined &&
+      options.authRequired !== undefined) {
+    console.warn('authRequired is deprecated, use keyRequired instead');
+    options.keyRequired = options.authRequired;
+  }
+
   registry.registerHandler(path, func, options);
 }
 
