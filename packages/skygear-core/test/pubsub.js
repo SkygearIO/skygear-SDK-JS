@@ -78,10 +78,12 @@ describe('Pubsub', function () {
       expect(JSON.parse(data)).to.deep.equal({
         action: 'pub',
         channel: 'CHANNEL',
-        data: 'DATA'
+        data: {
+          content: 'DATA'
+        }
       });
     });
-    pubsub.publish('CHANNEL', 'DATA');
+    pubsub.publish('CHANNEL', {content: 'DATA'});
     expect(ws.send).to.be.calledOnce();
   });
 
@@ -164,12 +166,14 @@ describe('Pubsub', function () {
 
   it('resend queued messages on open when no websocket', function () {
     pubsub._setWebSocket(null);
-    pubsub.publish('CHANNEL', 'MESSAGE');
+    pubsub.publish('CHANNEL', {content: 'MESSAGE'});
     ws.send = sinon.spy(function (data) {
       expect(JSON.parse(data)).to.deep.equal({
         action: 'pub',
         channel: 'CHANNEL',
-        data: 'MESSAGE'
+        data: {
+          content: 'MESSAGE'
+        }
       });
     });
     pubsub._setWebSocket(ws);
@@ -180,14 +184,16 @@ describe('Pubsub', function () {
   it('resend queued messages on open after disconnected', function () {
     ws.readyState = 2;
     ws.send = sinon.spy();
-    pubsub.publish('CHANNEL', 'MESSAGE');
+    pubsub.publish('CHANNEL', {content: 'MESSAGE'});
     expect(ws.send).not.to.be.called();
     ws.readyState = 1;
     ws.send = sinon.spy(function (data) {
       expect(JSON.parse(data)).to.deep.equal({
         action: 'pub',
         channel: 'CHANNEL',
-        data: 'MESSAGE'
+        data: {
+          content: 'MESSAGE'
+        }
       });
     });
     ws.onopen();
