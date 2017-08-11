@@ -114,8 +114,9 @@ export class Pubsub {
       throw new Error('Missing channel to publish');
     }
 
-    if (!data) {
-      throw new Error('Missing data to publish');
+    const dataType = typeof data;
+    if (dataType !== 'object' || data === null || _.isArray(data)) {
+      throw new Error('Data must be object');
     }
 
     let publishData = {
