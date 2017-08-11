@@ -20,6 +20,10 @@ import Geolocation from './geolocation';
 import {UnknownValue} from './type';
 
 export function toJSON(v) {
+  if (v === undefined) {
+    throw new Error('toJSON does not support undefined value');
+  }
+
   if (v === null) {
     return null;
   } else if (_.isArray(v)) {

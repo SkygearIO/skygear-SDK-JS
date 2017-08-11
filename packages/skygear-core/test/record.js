@@ -204,6 +204,16 @@ describe('Extended Record', function () {
     });
   });
 
+  it('serialize with undefined value', function () {
+    const note = new Note({
+      _id: 'note/uid',
+      content: undefined
+    });
+
+    expect(() => note.toJSON())
+      .to.throw('Unsupported undefined value of record key: content');
+  });
+
   it('deserialize from payload with date', function () {
     const note = new Note({
       _id: 'note/uid',
