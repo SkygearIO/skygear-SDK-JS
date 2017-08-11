@@ -66,15 +66,17 @@ class HTTPTransport extends CommonTransport {
       body += chunk.toString();
     });
     req.on('end', () => {
-      const data = JSON.parse(body);
+      let data;
+      try {
+        data = JSON.parse(body);
+      } catch (e) {
+        this.writeError(res, 400, 'Invalid request body', e);
+        return;
+      }
       try {
         this.dispatch(data, res);
       } catch (e) {
-        res.writeHead(500, {
-          'Content-Type': 'application/json'
-        });
-        res.write(`Internal server error\r\n${e}`);
-        res.end();
+        this.writeError(res, 500, 'Internal server error', e);
         console.warn(e.stack);
         return;
       }
@@ -84,12 +86,8 @@ class HTTPTransport extends CommonTransport {
   dispatch(payload, res) {
     const handlerName = payload.kind + 'Handler';
     if (!this[handlerName]) {
-      res.writeHead(400, {
-        'Content-Type': 'application/json'
-      });
+      this.writeError(res, 400, `func kind ${payload.kind} is not supported`);
       console.log(`func kind ${payload.kind} is not supported`);
-      res.write(`func kind ${payload.kind} is not supported`);
-      res.end();
       return;
     }
 
@@ -116,6 +114,14 @@ class HTTPTransport extends CommonTransport {
       'Content-Type': 'application/json'
     });
     res.write(JSON.stringify(result));
+    res.end();
+  }
+
+  writeError(res, code, message, error) {
+    res.writeHead(code, {
+      'Content-Type': 'application/json'
+    });
+    res.write(error ? `${message}\r\n${error}` : message);
     res.end();
   }
 }
