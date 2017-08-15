@@ -2,10 +2,18 @@ VERSION := $(shell git describe --always)
 DOCS_AWS_BUCKET := docs.skygear.io
 DOCS_AWS_DISTRIBUTION := E31J8XF8IPV2V
 DOCS_PREFIX = /js/reference
+OS = $(shell uname -s)
+
+ifeq ($(OS),Darwin)
+ SED := sed -i ""
+else
+ SED := sed -i""
+endif
 
 ifeq ($(VERSION),)
 $(error VERSION is empty)
 endif
+
 
 DOCKER_COMPOSE_CMD := docker-compose \
 	-f docker-compose.dev.yml \
@@ -38,7 +46,7 @@ build:
 
 .PHONY: update-version
 update-version:
-	sed -i "" "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
+	$(SED) "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
 
 .PHONY: doc
 doc:
