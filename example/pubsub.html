@@ -82,14 +82,15 @@
     function publishMessage () {
       var _channel = document.getElementById("publish-channel").value;
       var _data = document.getElementById("publish-data").value;
-      skygear.pubsub.publish(_channel, _data);
+      skygear.pubsub.publish(_channel, JSON.parse(_data));
     }
 
     function subscribeChannel() {
       var _channel = document.getElementById("subscribe-channel").value;
       var _data = document.getElementById("subscribe-data");
       skygear.pubsub.on(_channel, function(data) {
-        _data.value += 'Channel "' + _channel + '": ' + data + '\n';
+        var stringifyData = JSON.stringify(data);
+        _data.value += 'Channel "' + _channel + '": ' + stringifyData + '\n';
       });
     }
 
