@@ -196,74 +196,142 @@ export default class Record {
     });
   }
 
+  /**
+   * Sets public to have no access.
+   */
   setPublicNoAccess() {
     this.access.setPublicNoAccess();
   }
 
+  /**
+   * Sets public to have read access only.
+   */
   setPublicReadOnly() {
     this.access.setPublicReadOnly();
   }
 
+  /**
+   * Sets the record readable and writable to public.
+   */
   setPublicReadWriteAccess() {
     this.access.setPublicReadWriteAccess();
   }
 
+  /**
+   * Sets a specific role to have no access.
+   *
+   * @param {Role} role - the role
+   */
   setNoAccessForRole(role) {
     this.access.setNoAccessForRole(role);
   }
 
+  /**
+   * Sets a specific role to have read access only.
+   *
+   * @param {Role} role - the role
+   */
   setReadOnlyForRole(role) {
     this.access.setReadOnlyForRole(role);
   }
 
+  /**
+   * Sets a specific role to have read and write access.
+   *
+   * @param {Role} role - the role
+   */
   setReadWriteAccessForRole(role) {
     this.access.setReadWriteAccessForRole(role);
   }
 
+  /**
+   * Sets a specific user to have no access.
+   *
+   * @param {Record} user - the user record
+   */
   setNoAccessForUser(user) {
     this.access.setNoAccessForUser(user);
   }
 
+  /**
+   * Sets a specific user to have read access only.
+   *
+   * @param {Record} user - the user record
+   */
   setReadOnlyForUser(user) {
     this.access.setReadOnlyForUser(user);
   }
 
-  setReadWriteAccessForUser(User) {
-    this.access.setReadWriteAccessForUser(User);
+  /**
+   * Sets a specific user to have read and write access.
+   *
+   * @param {Record} user - the user record
+   */
+  setReadWriteAccessForUser(user) {
+    this.access.setReadWriteAccessForUser(user);
   }
 
+  /**
+   * Checks if public has read access.
+   *
+   * @return {Boolean} true if public has read access
+   */
   hasPublicReadAccess() {
     this.access.hasPublicReadAccess();
   }
 
+  /**
+   * Checks if public has write access.
+   *
+   * @return {Boolean} true if public has write access
+   */
   hasPublicWriteAccess() {
     this.access.hasPublicWriteAccess();
   }
 
-  hasReadAccess(role) {
-    this.access.hasReadAccess(role);
-  }
-
-  hasWriteAccess(role) {
-    this.access.hasWriteAccess(role);
-  }
-
+  /**
+   * Checks if the specific role has read access.
+   *
+   * @param {Role} role - the role
+   * @return {Boolean} true if the role has read access
+   */
   hasReadAccessForRole(role) {
     this.access.hasReadAccessForRole(role);
   }
 
+  /**
+   * Checks if the specific role has write access.
+   *
+   * @param {Role} role - the role
+   * @return {Boolean} true if the role has write access
+   */
   hasWriteAccessForRole(role) {
     this.access.hasWriteAccessForRole(role);
   }
 
+  /**
+   * Checks if the specific user has read access.
+   *
+   * @param {Record} user - the user
+   * @return {Boolean} true if the user has read access
+   */
   hasReadAccessForUser(user) {
     this.access.hasReadAccessForUser(user);
   }
 
+  /**
+   * Checks if the specific user has write access.
+   *
+   * @param {Record} user - the user
+   * @return {Boolean} true if the user has write access
+   */
   hasWriteAccessForUser(user) {
     this.access.hasWriteAccessForUser(user);
   }
 
+  /**
+   * @private
+   */
   updateTransient(transient_, merge = false) {
     var newTransient = merge ? _.clone(this._transient) : {};
     _.each(transient_, function (value, key) {
@@ -280,6 +348,11 @@ export default class Record {
     this._transient = newTransient;
   }
 
+  /**
+   * Serializes Record to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     let payload = {
       _id: this.id,
@@ -315,6 +388,17 @@ export default class Record {
     return [tuple[0], tuple.slice(1).join('/')];
   }
 
+  /**
+   * Extends a Record class with a record type
+   *
+   * @example
+   * const Note = skygear.Record.extend('note');
+   * const note = new Note({ 'content': 'abc' });
+   *
+   * @param  {String} recordType - record type
+   * @param  {function} instFunc
+   * @return {Class}
+   */
   static extend(recordType, instFunc) {
     if (!Record.validType(recordType)) {
       throw new Error(

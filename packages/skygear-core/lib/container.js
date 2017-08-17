@@ -36,6 +36,9 @@ import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
 
+/**
+ * @type {Record}
+ */
 export const UserRecord = Record.extend('user');
 
 /**

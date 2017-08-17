@@ -16,8 +16,24 @@
 import {atob} from 'Base64';
 import Blob from 'w3c-blob';
 
+/**
+ * Asset
+ *
+ * A model representing a file reference in Skygear record.
+ */
 export default class Asset {
 
+  /**
+   * Constructs a new Asset object. Either file, url or base64 must be
+   * provided.
+   *
+   * @param {Object} attrs
+   * @param {String} attrs.name - asset name
+   * @param {File|Blob} [attrs.file] - file object
+   * @param {String} [attrs.base64] - base64 encoded file content
+   * @param {String} [attrs.contentType] - mime of the file
+   * @param {String} [attrs.url] - url of the file on Skygear server
+   */
   constructor(attrs) {
     attrs = attrs || {};
 
@@ -46,12 +62,40 @@ export default class Asset {
       throw new Error('Either file or url should present');
     }
 
+    /**
+     * Asset name
+     *
+     * @type {String}
+     */
     this.name = name;
+
+    /**
+     * File object
+     *
+     * @type {File|Blob}
+     */
     this.file = file;
+
+    /**
+     * Mime of the file
+     *
+     * @type {String}
+     */
     this.contentType = contentType;
+
+    /**
+     * Url of the file on Skygear server
+     *
+     * @type {String}
+     */
     this.url = url;
   }
 
+  /**
+   * Serializes Asset to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     return {
       $type: 'asset',
@@ -60,6 +104,15 @@ export default class Asset {
     };
   }
 
+  /**
+   * Constructs a new Asset object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   * @param {String} attrs.$name - asset name
+   * @param {String} attrs.$url - url of the file on Skygear server
+   * @param {String} attrs.$content_type - mime of the file
+   * @return {Asset} the created Asset object
+   */
   static fromJSON(attrs) {
     return new Asset({
       name: attrs.$name,

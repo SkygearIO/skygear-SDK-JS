@@ -18,7 +18,16 @@ import _ from 'lodash';
 
 const definedRoles = {};
 
+/**
+ * Role
+ */
 export default class Role {
+
+  /**
+   * Constructs a new Role object.
+   *
+   * @param  {String} name - role name
+   */
   constructor(name) {
     if (!Role.isValidName(name)) {
       throw new Error(
@@ -28,10 +37,18 @@ export default class Role {
     this._name = name;
   }
 
+  /**
+   * Role name
+   *
+   * @type {String}
+   */
   get name() {
     return this._name;
   }
 
+  /**
+   * @private
+   */
   static isValidName(name) {
     if (!name) {
       return false;
@@ -40,6 +57,9 @@ export default class Role {
     return true;
   }
 
+  /**
+   * @private
+   */
   static define(name) {
     var defined = definedRoles[name];
     if (defined !== undefined) {
@@ -52,6 +72,13 @@ export default class Role {
     return defined;
   }
 
+  /**
+   * Adds a role to a collection of roles without duplication.
+   *
+   * @param  {Role[]} roles - collection of roles
+   * @param  {Role} aRole - role to be added
+   * @return {Role[]}
+   */
   static union(roles, aRole) {
     let duplicatedRole = _.find(roles, function (perRole) {
       return perRole.name === aRole.name;
@@ -64,12 +91,26 @@ export default class Role {
     }
   }
 
+  /**
+   * Removes a role to a collection of roles.
+   *
+   * @param  {Role[]} roles - collection of roles
+   * @param  {Role} aRole - role to be removed
+   * @return {Role[]}
+   */
   static subtract(roles, aRole) {
     return _.filter(roles, function (perRole) {
       return perRole.name !== aRole.name;
     });
   }
 
+  /**
+   * Checks if a collection of roles contain a role.
+   *
+   * @param  {Role[]} roles - collection of role
+   * @param  {Role} aRole - target role
+   * @return {Boolean}
+   */
   static contain(roles, aRole) {
     return _.find(roles, function (perRole) {
       return perRole.name === aRole.name;

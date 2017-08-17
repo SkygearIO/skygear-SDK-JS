@@ -21,6 +21,11 @@ import Role from './role';
 
 export const USER_CHANGED = 'userChanged';
 
+/**
+ * Auth container
+ *
+ * Provides User authentications and user roles API.
+ */
 export class AuthContainer {
   constructor(container) {
     /**

@@ -15,8 +15,19 @@
  */
 import _ from 'lodash';
 
+/**
+ * Geolocation
+ *
+ * A model representing a latlong location in Skygear record.
+ */
 export default class Geolocation {
 
+  /**
+   * Constructs a new Geolocation object.
+   *
+   * @param  {Number} latitude - latitude of the location
+   * @param  {Number} longitude - longitude of the location
+   */
   constructor(latitude, longitude) {
     if (!_.isNumber(latitude)) {
       throw new Error('Latitude is not a number');
@@ -30,10 +41,27 @@ export default class Geolocation {
     if (longitude < -180 || longitude > 180) {
       throw new Error('Longitude is not in expected range (-180, 180)');
     }
+
+    /**
+     * Latitude
+     *
+     * @type {Number}
+     */
     this.latitude = latitude;
+
+    /**
+     * Longitude
+     *
+     * @type {Number}
+     */
     this.longitude = longitude;
   }
 
+  /**
+   * Serializes Geolocation to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
   toJSON() {
     return {
       $lat: this.latitude,
@@ -42,6 +70,13 @@ export default class Geolocation {
     };
   }
 
+  /**
+   * Constructs a new Geolocation object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   * @param {Number} attrs.$latitude - latitude of the location
+   * @param {Number} attrs.$longitude - longitude of the location
+   */
   static fromJSON(attrs) {
     return new Geolocation(attrs.$lat, attrs.$lng);
   }

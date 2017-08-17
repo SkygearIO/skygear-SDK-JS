@@ -33,7 +33,19 @@ function accessLevelNumber(level) {
   return AccessLevelMap[level] || 0;
 }
 
+/**
+ * Access Control List
+ *
+ * It describes the read and write permission of a record to public, specific
+ * roles or users.
+ */
 export default class ACL {
+
+  /**
+   * Constructs a new ACL object.
+   *
+   * @param  {Object[]} attrs
+   */
   constructor(attrs) {
     // default ACL: public read only
     this.public = AccessLevel.ReadOnlyLevel;
@@ -73,6 +85,9 @@ export default class ACL {
     }
   }
 
+  /**
+   * Serializes ACL to a JSON object.
+   */
   toJSON() {
     let json = [];
     if (this.public) {
@@ -103,18 +118,32 @@ export default class ACL {
     return json;
   }
 
+  /**
+   * Sets public to have no access.
+   */
   setPublicNoAccess() {
     this.public = AccessLevel.NoAccessLevel;
   }
 
+  /**
+   * Sets public to have read access only.
+   */
   setPublicReadOnly() {
     this.public = AccessLevel.ReadOnlyLevel;
   }
 
+  /**
+   * Sets public to have both read and write access.
+   */
   setPublicReadWriteAccess() {
     this.public = AccessLevel.ReadWriteLevel;
   }
 
+  /**
+   * Sets a specific role to have no access.
+   *
+   * @param {Role} role - the role
+   */
   setNoAccessForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
@@ -123,6 +152,11 @@ export default class ACL {
     this.roles[role.name] = AccessLevel.NoAccessLevel;
   }
 
+  /**
+   * Sets a specific role to have read access only.
+   *
+   * @param {Role} role - the role
+   */
   setReadOnlyForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
@@ -131,6 +165,11 @@ export default class ACL {
     this.roles[role.name] = AccessLevel.ReadOnlyLevel;
   }
 
+  /**
+   * Sets a specific role to have read and write access.
+   *
+   * @param {Role} role - the role
+   */
   setReadWriteAccessForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
@@ -139,6 +178,11 @@ export default class ACL {
     this.roles[role.name] = AccessLevel.ReadWriteLevel;
   }
 
+  /**
+   * Sets a specific user to have no access.
+   *
+   * @param {Record} user - the user record
+   */
   setNoAccessForUser(user) {
     if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
@@ -147,6 +191,11 @@ export default class ACL {
     this.users[user._id] = AccessLevel.NoAccessLevel;
   }
 
+  /**
+   * Sets a specific user to have read access only.
+   *
+   * @param {Record} user - the user record
+   */
   setReadOnlyForUser(user) {
     if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
@@ -155,6 +204,11 @@ export default class ACL {
     this.users[user._id] = AccessLevel.ReadOnlyLevel;
   }
 
+  /**
+   * Sets a specific user to have read and write access.
+   *
+   * @param {Record} user - the user record
+   */
   setReadWriteAccessForUser(user) {
     if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
@@ -163,16 +217,32 @@ export default class ACL {
     this.users[user._id] = AccessLevel.ReadWriteLevel;
   }
 
+  /**
+   * Checks if public has read access.
+   *
+   * @return {Boolean} true if public has read access
+   */
   hasPublicReadAccess() {
     return accessLevelNumber(this.public) >=
       accessLevelNumber(AccessLevel.ReadOnlyLevel);
   }
 
+  /**
+   * Checks if public has write access.
+   *
+   * @return {Boolean} true if public has write access
+   */
   hasPublicWriteAccess() {
     return accessLevelNumber(this.public) ===
       accessLevelNumber(AccessLevel.ReadWriteLevel);
   }
 
+  /**
+   * Checks if the specific role has read access.
+   *
+   * @param {Role} role - the role
+   * @return {Boolean} true if the role has read access
+   */
   hasReadAccessForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
@@ -183,6 +253,12 @@ export default class ACL {
         accessLevelNumber(AccessLevel.ReadOnlyLevel);
   }
 
+  /**
+   * Checks if the specific role has write access.
+   *
+   * @param {Role} role - the role
+   * @return {Boolean} true if the role has write access
+   */
   hasWriteAccessForRole(role) {
     if (!role || !(role instanceof Role)) {
       throw new Error(role + ' is not a role.');
@@ -193,6 +269,12 @@ export default class ACL {
         accessLevelNumber(AccessLevel.ReadWriteLevel);
   }
 
+  /**
+   * Checks if the specific user has read access.
+   *
+   * @param {Record} user - the user
+   * @return {Boolean} true if the user has read access
+   */
   hasReadAccessForUser(user) {
     if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
@@ -203,6 +285,12 @@ export default class ACL {
         accessLevelNumber(AccessLevel.ReadOnlyLevel);
   }
 
+  /**
+   * Checks if the specific user has write access.
+   *
+   * @param {Record} user - the user
+   * @return {Boolean} true if the user has write access
+   */
   hasWriteAccessForUser(user) {
     if (!user || !(user instanceof Record) || !(user.recordType === 'user')) {
       throw new Error(user + ' is not a user.');
@@ -213,6 +301,13 @@ export default class ACL {
         accessLevelNumber(AccessLevel.ReadWriteLevel);
   }
 
+  /**
+   * Checks if the specific user and role has read access.
+   *
+   * @param {Record} user - the user
+   * @param {Role[]} roles - roles
+   * @return {Boolean} true if the user and roles has read access
+   */
   hasReadAccess(user, roles) {
     if (this.hasReadAccessForUser(user)) {
       return true;
@@ -227,6 +322,13 @@ export default class ACL {
     return false;
   }
 
+  /**
+   * Checks if the specific user and role has write access.
+   *
+   * @param {Record} user - the user
+   * @param {Role[]} roles - roles
+   * @return {Boolean} true if the user and roles has write access
+   */
   hasWriteAccess(user, roles) {
     if (this.hasWriteAccessForUser(user)) {
       return true;
@@ -241,6 +343,12 @@ export default class ACL {
     return false;
   }
 
+  /**
+   * Constructs a new ACL object from JSON object.
+   *
+   * @param  {Object} attrs - the JSON object
+   * @return {ACL} the created acl object
+   */
   static fromJSON(attrs) {
     return new ACL(attrs);
   }

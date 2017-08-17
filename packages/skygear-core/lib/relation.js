@@ -17,14 +17,43 @@ const _ = require('lodash');
 
 import {UserRecord} from './container';
 
+/**
+ * Outward relation direction
+ *
+ * @type {String}
+ */
 export const Outward = 'outward';
+
+/**
+ * Inward relation direction
+ *
+ * @type {String}
+ */
 export const Inward = 'inward';
+
+/**
+ * Mutual relation direction
+ *
+ * @type {String}
+ */
 export const Mutual = 'mutual';
 
 const format = /^[a-zA-Z]+$/;
 
+/**
+ * Relation
+ *
+ * It describes a relationship of the current user with other users.
+ */
 export class Relation {
 
+  /**
+   * Constructs a new Relation object.
+   *
+   * @param  {String} identifier - identifier of the relation
+   * @param  {String} direction - direction of the relation
+   * @param  {Record[]} targets - target users of the relation
+   */
   constructor(identifier, direction, targets = []) {
     if (!Relation.validName(identifier)) {
       throw new Error(
@@ -41,22 +70,36 @@ export class Relation {
     this.fails = [];
   }
 
+  /**
+   * Target user ids
+   *
+   * @type {String[]}
+   */
   get targetsID() {
     return _.map(this.targets, function (user) {
       return user._id;
     });
   }
 
+  /**
+   * @private
+   */
   static validDirection(direction) {
     return direction === Mutual
       || direction === Outward
       || direction === Inward;
   }
 
+  /**
+   * @private
+   */
   static validName(identifier) {
     return format.test(identifier);
   }
 
+  /**
+   * @private
+   */
   static extend(identifier, direction) {
     if (!Relation.validName(identifier)) {
       throw new Error(
@@ -75,6 +118,9 @@ export class Relation {
   }
 }
 
+/**
+ * @private
+ */
 export class RelationQuery {
 
   constructor(relationCls) {
@@ -95,10 +141,24 @@ export class RelationQuery {
 
 }
 
+/**
+ * Result of add relation API
+ */
 export class RelationResult {
 
   constructor(results) {
+    /**
+     * Succesfully added target users
+     *
+     * @type {Record[]}
+     */
     this.success = [];
+
+    /**
+     * Errors
+     *
+     * @type {Object[]}
+     */
     this.fails = [];
     this.partialError = false;
     let len = results.length;
@@ -114,10 +174,24 @@ export class RelationResult {
 
 }
 
+/**
+ * Result of remove relation API
+ */
 export class RelationRemoveResult {
 
   constructor(results) {
+    /**
+     * Succesfully removed target users
+     *
+     * @type {String[]}
+     */
     this.success = [];
+
+    /**
+     * Errors
+     *
+     * @type {Object[]}
+     */
     this.fails = [];
     this.partialError = false;
     let len = results.length;
@@ -133,8 +207,14 @@ export class RelationRemoveResult {
 
 }
 
+/**
+ * Result of query relation API
+ */
 export class RelationQueryResult extends Array {
 
+  /**
+   * @private
+   */
   static createFromBody(body) {
     let users = _.map(body.result, function (attrs) {
       return new UserRecord(attrs.data);
@@ -146,6 +226,12 @@ export class RelationQueryResult extends Array {
     return result;
   }
 
+  /**
+   * The count would return the number of all matching records, and ignore the
+   * offset and limit of the query.
+   *
+   * @type {Number} the number of all matching records
+   */
   get overallCount() {
     return this._overallCount;
   }

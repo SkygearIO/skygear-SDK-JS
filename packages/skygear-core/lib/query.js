@@ -43,16 +43,50 @@ export default class Query {
       throw new Error(
         'RecordType is not valid. Please start with alphanumeric string.');
     }
+
+    /**
+     * @private
+     */
     this.recordCls = recordCls;
+
+    /**
+     * Record type
+     *
+     * @type {String}
+     */
     this.recordType = recordCls.recordType;
     this._predicate = [];
     this._orPredicate = [];
     this._sort = [];
     this._include = {};
     this._negation = false;
+
+    /**
+     * True if the query includes overall count
+     *
+     * @type {Boolean}
+     */
     this.overallCount = false;
+
+    /**
+     * Limit of the query result
+     *
+     * @type {Number}
+     */
     this.limit = 50;
+
+    /**
+     * Offset of the query result
+     *
+     * @type {Number}
+     */
     this.offset = 0;
+
+    /**
+     * Page of the query result
+     *
+     * @type {Number}
+     */
     this.page = 0;
   }
 

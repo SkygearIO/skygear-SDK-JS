@@ -322,14 +322,32 @@ export class Database {
 
 export class PublicDatabase extends Database {
 
+  /**
+   * The default ACL of a newly created record
+   *
+   * @type {ACL}
+   */
   get defaultACL() {
     return this._Record.defaultACL;
   }
 
+  /**
+   * Sets default ACL of a newly created record.
+   *
+   * @param {ACL} acl - the default acl
+   */
   setDefaultACL(acl) {
     this._Record.defaultACL = acl;
   }
 
+  /**
+   * Sets the roles that are allowed to create records of a record type.
+   *
+   * @param {Class} recordClass - the record class created with
+   * {@link Record.extend}
+   * @param {Role[]} roles - the roles
+   * @return {Promise} promise
+   */
   setRecordCreateAccess(recordClass, roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
@@ -341,6 +359,14 @@ export class PublicDatabase extends Database {
     }).then((body) => body.result);
   }
 
+  /**
+   * Sets the default ACL of a newly created record of a record type.
+   *
+   * @param {Class} recordClass - the record class created with
+   * {@link Record.extend}
+   * @param {ACL} acl - the default acl
+   * @return {Promise} promise
+   */
   setRecordDefaultAccess(recordClass, acl) {
     return this.container.makeRequest('schema:default_access', {
       type: recordClass.recordType,
@@ -350,9 +376,20 @@ export class PublicDatabase extends Database {
 
 }
 
+/**
+ * @private
+ */
 export class DatabaseContainer {
 
+  /**
+   * Creates a DatabaseContainer.
+   *
+   * @param  {Container} container - the Skygear container
+   */
   constructor(container) {
+    /**
+     * @private
+     */
     this.container = container;
 
     this._public = null;
@@ -360,6 +397,9 @@ export class DatabaseContainer {
     this._cacheResponse = true;
   }
 
+  /**
+   * @type {PublicDatabase}
+   */
   get public() {
     if (this._public === null) {
       this._public = new PublicDatabase('_public', this.container);
@@ -368,6 +408,11 @@ export class DatabaseContainer {
     return this._public;
   }
 
+  /**
+   * Private database of the current user
+   *
+   * @type {Database}
+   */
   get private() {
     if (this.container.accessToken === null) {
       throw new Error('You must login before access to privateDB');
@@ -379,14 +424,30 @@ export class DatabaseContainer {
     return this._private;
   }
 
+  /**
+   * Uploads asset to Skygear server.
+   *
+   * @param  {Asset} asset - the asset
+   * @return {Promise<Asset>} promise
+   */
   uploadAsset(asset) {
     return makeUploadAssetRequest(this.container, asset);
   }
 
+  /**
+   * True if the database cache result from response
+   *
+   * @type {Boolean}
+   */
   get cacheResponse() {
     return this._cacheResponse;
   }
 
+  /**
+   * True if the database cache result from response
+   *
+   * @type {Boolean}
+   */
   set cacheResponse(value) {
     const b = !!value;
     this._cacheResponse = b;
