@@ -1,3 +1,17 @@
+## 0.24.2 (2017-08-30)
+
+### Bug Fixes
+
+- Handle null and undefined on SkygearResponse.isInstance checking
+- Fix response header not wrapped in array
+- Correctly signed URL for fs aseet (skygeario/skygear-server#427)
+- Fix unable to get/set ACL for new record (#203)
+- Fix unable to run travis build successfully
+- Fixing issue with underfed this when saving asset (#225)
+- Fix unable to run lerna and gulp
+- Force asset collector to exit at the end
+- Fix minor issue with CHANGELOG
+
 ## 0.24.1 (2017-05-23)
 
 ### Incompatible Changes
