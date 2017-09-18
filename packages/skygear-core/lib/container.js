@@ -173,9 +173,12 @@ export class BaseContainer {
     let _action = action.replace(/:/g, '/');
     return this.request
       .post(this.url + _action)
-      .set('X-Skygear-API-Key', this.apiKey)
-      .set('Accept', 'application/json')
-      .set('X-Skygear-SDK-Version', `skygear-SDK-JS/${this.VERSION}`);
+      .set({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Skygear-API-Key': this.apiKey,
+        'X-Skygear-SDK-Version': `skygear-SDK-JS/${this.VERSION}`
+      });
   }
 
   _prepareRequestData(action, data) {
