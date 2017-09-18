@@ -89,9 +89,18 @@ function mock(config) {
   /**
    * Override set function
    */
-  Request.prototype.set = function (headers) {
-    this.headers = headers;
+  Request.prototype.set = function (key, value) {
+    if (_.isUndefined(this.headers)) {
+      this.headers = {};
+    }
 
+    // handle request.set({ 'Accept': 'xxx' })
+    if (_.isObject(key)) {
+      this.headers = _.merge(this.headers, key);
+      return this;
+    }
+
+    this.headers[key] = value;
     return this;
   };
 

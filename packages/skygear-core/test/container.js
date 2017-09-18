@@ -120,7 +120,7 @@ describe('Container', function () {
         }
         return fn({
           status: 'ok'
-        }, 200);
+        });
       }
     }]);
 
