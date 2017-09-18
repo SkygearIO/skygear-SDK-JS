@@ -106,6 +106,32 @@ describe('Container', function () {
     expect(container.privateDB.cacheResponse).to.be.true();
   });
 
+  it('should set the content type header', function () {
+    let container = new Container();
+    container.pubsub.autoPubsub = false;
+    container.configApiKey('correctApiKey');
+    container.request = mockSuperagent([{
+      pattern: 'http://skygear.dev/content/type',
+      fixtures: function (match, params, headers, fn) {
+        if (headers['Content-Type'] !== 'application/json') {
+          return fn({
+            status: 'fails'
+          }, 500);
+        }
+        return fn({
+          status: 'ok'
+        }, 200);
+      }
+    }]);
+
+    return container.makeRequest('content:type', {}).then(function () {
+      return;
+    }, function (err) {
+      throw 'Content Type header not correctly set';
+    });
+
+  });
+
   it('should clear access token on 104 AccessTokenNotAccepted', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
