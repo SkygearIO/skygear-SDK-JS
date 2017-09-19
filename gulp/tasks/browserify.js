@@ -23,11 +23,7 @@ function bundle() {
       standalone: packageConfig.standalone
     });
     var bundler;
-    if (gutil.env.type != "dev") {
-      bundler = browserify(packageConfig.browserifySrc, bundlerArgs).ignore('react-native');
-    } else {
-      bundler = watchify(browserify(packageConfig.browserifySrc, bundlerArgs).ignore('react-native'));
-    }
+    bundler = browserify(packageConfig.browserifySrc, bundlerArgs).ignore('react-native');
 
     browserifyConfig.settings.transform.forEach(function(t) {
       bundler.transform(t);

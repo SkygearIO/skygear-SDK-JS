@@ -46,7 +46,11 @@ gulp.task('babel', function () {
 });
 
 gulp.task('watch', ['browserify', 'babel'], function() {
-  gulp.watch(config.src, ['browserify', 'babel']);
+  var packageConfigs = config.getPackageConfigs();
+  var packagesSrc = packageConfigs.map(function(config) {
+    return config.src;
+  });
+  gulp.watch(packagesSrc, ['browserify', 'babel']);
 });
 
 gulp.task('prepublish', ['nsp', 'babel', 'browserify', 'minify']);
