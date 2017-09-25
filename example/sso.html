@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Skygear-SDK-JS</title>
+</head>
+<body>
+  <div id="main">
+    <p>
+      <label>End Point</label>
+      <span id="endpoint"></span>
+    </p>
+    <p>
+      <label>Token</label>
+      <span id="accessToken"></span>
+    </p>
+    <p>
+      <label>Username</label>
+      <span id="currentUsername"></span>
+    </p>
+    <p>
+      <label>Email</label>
+      <span id="currentEmail"></span>
+    </p>
+    <p>
+      <label>Error</label>
+      <span id="errorMessage" style="color: red;"></span>
+    </p>
+    <h4>Social Login</h4>
+    <label>Google sign-in using Popup</label>
+    <p>
+      <button onclick="loginOAuthProviderWithPopup();">Sign in with google</button>
+    </p>
+    <label>Google sign-in using Redirect</label>
+    <p>
+      <button onclick="loginOAuthProviderWithRedirect();">Sign in with google</button>
+    </p>
+    <hr>
+    <p><button onclick="logout();">Logout</button></p>
+  </div>
+  <script src="../packages/skygear/dist/bundle.js"></script>
+  <script type="text/javascript">
+    var m = document.getElementById("endpoint");
+    var token = document.getElementById("accessToken");
+    var currentUsername = document.getElementById("currentUsername");
+    var currentEmail = document.getElementById("currentEmail");
+    var errorMessage = document.getElementById("errorMessage");
+    skygear.config({
+      'endPoint': 'http://127.0.0.1:3000/',
+      'apiKey': 'api_key'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = skygear.auth.accessToken;
+      if (skygear.auth.currentUser) {
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
+      }
+    }, function(err) {
+      console.log(err);
+    });
+    m.textContent = skygear.endPoint;
+    token.innerText = skygear.auth.accessToken;
+    logout = function() {
+      skygear.auth.logout().then(function() {
+        console.log('Logout ok');
+        token.innerText = 'Cleared accessToken';
+      }, function(error) {
+        console.log('Logout failed');
+        token.innerText = error;
+      });
+    };
+    loginOAuthProviderWithPopup = function() {
+      skygear.auth.loginOAuthProviderWithPopup("google", {})
+      .then(function(authResult) {
+        console.info('Login oauth with popup success', authResult);
+        token.innerText = skygear.auth.accessToken;
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
+        errorMessage.innerText = "";
+      }, function(error) {
+        console.error('Login oauth with popup fail', error);
+        errorMessage.innerText = "[" + error.error.code + "] " + error.error.message;
+      });
+    };
+    loginOAuthProviderWithRedirect = function() {
+      skygear.auth.loginOAuthProviderWithRedirect("google", {
+        'redirect_uri': window.location.href
+      });
+    }
+  </script>
+</body>
+</html>
