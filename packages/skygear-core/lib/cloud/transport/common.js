@@ -25,6 +25,7 @@ import { pool } from '../pg';
 import Record from '../../record';
 
 import skyconfig from '../skyconfig';
+import { getContainer } from '../container';
 
 /**
  * Encode 16-bit unicode strings or a buffer to base64 string.
@@ -60,6 +61,16 @@ function b64DecodeUnicode(str) {
       }
     ).join('')
   );
+}
+
+/**
+ * Create a CloudCodeContainer from the specified request context.
+ */
+function containerFromContext(context) {
+  const {
+    user_id: userId
+  } = context;
+  return userId ? getContainer(userId) : getContainer();
 }
 
 /**
@@ -307,7 +318,10 @@ export default class CommonTransport {
       originalRecord = new Record(_type, param.original);
     }
 
-    const options = { context };
+    const options = {
+      context,
+      container: containerFromContext(context)
+    };
     return this._promisify(
       func,
       incomingRecord,
@@ -334,7 +348,10 @@ export default class CommonTransport {
       return Promise.reject(new Error('Lambda function does not exist'));
     }
 
-    const options = { context };
+    const options = {
+      context,
+      container: containerFromContext(context)
+    };
     return this._promisify(
       func,
       param,
@@ -390,7 +407,10 @@ export default class CommonTransport {
       return Promise.reject(new Error('Handler not exist'));
     }
 
-    const options = { context };
+    const options = {
+      context,
+      container: containerFromContext(context)
+    };
     const req = new SkygearRequest(param);
     return this._promisify(
       func,
