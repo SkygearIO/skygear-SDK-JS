@@ -24,6 +24,7 @@ import {RelationContainer} from '../relation';
 import {DatabaseContainer} from '../database';
 import {PubsubContainer} from '../pubsub';
 import {CloudCodePushContainer} from './push';
+import {settings} from './settings';
 
 export default class CloudCodeContainer extends BaseContainer {
 
@@ -94,4 +95,22 @@ export default class CloudCodeContainer extends BaseContainer {
     return _.assign(extraData, requestData);
   }
 
+}
+
+/**
+ * Get a configured CloudCodeContainer.
+ *
+ * @param {String} [userId] - user ID of the user. If not specified, the default
+ * is determined by the server.
+ * @return {CloudCodeContainer} the cloud code container that acts as
+ * the specified user.
+ */
+export function getContainer(userId) {
+  const container = new CloudCodeContainer();
+  container.apiKey = settings.masterKey;
+  container.endPoint = settings.skygearEndpoint + '/';
+  if (userId) {
+    container.asUserId = userId;
+  }
+  return container;
 }

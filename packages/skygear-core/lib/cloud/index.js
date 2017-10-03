@@ -141,7 +141,8 @@ export function event(name, func, options = {}) {
  * skygearCloud.handler('private', function(req, options) {
  *     // cloud code handling the request
  *     const {
- *       context
+ *       context,
+ *       container  // a cloud code container for the current request context
  *     } = options;
  *     return {
  *       status: 'ok',
@@ -433,5 +434,6 @@ export { poolConnect } from './pg';
 export { SkygearRequest, SkygearResponse } from './transport/common';
 export const settings = _settings;
 export const CloudCodeContainer = _CloudCodeContainer;
+export { getContainer } from './container';
 export const ErrorCodes = _ErrorCodes;
 export const SkygearError = _SkygearError;

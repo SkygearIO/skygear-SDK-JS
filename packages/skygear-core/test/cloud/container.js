@@ -15,8 +15,9 @@
  */
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
-import CloudCodeContainer
-  from '../../lib/cloud/container';
+import CloudCodeContainer from '../../lib/cloud/container';
+import {getContainer} from '../../lib/cloud/container';
+import {settings} from '../../lib/cloud/settings';
 import mockSuperagent from '../mock/superagent';
 
 describe('Cloud container', function () {
@@ -77,5 +78,21 @@ describe('Cloud container', function () {
       assert.instanceOf(container2.auth.currentUser, container2.UserRecord);
       assert.equal(container2.auth.currentUser.id, 'user/user:id2');
     });
+  });
+});
+
+describe('getContainer', function () {
+  it('should return container', function () {
+    let container = getContainer('user-id');
+    assert.equal(container.endPoint, settings.skygearEndpoint + '/');
+    assert.equal(container.apiKey, settings.masterKey);
+    assert.equal(container.asUserId, 'user-id');
+  });
+
+  it('should return container for user', function () {
+    let container = getContainer();
+    assert.equal(container.endPoint, settings.skygearEndpoint + '/');
+    assert.equal(container.apiKey, settings.masterKey);
+    assert.isUndefined(container.asUserId);
   });
 });

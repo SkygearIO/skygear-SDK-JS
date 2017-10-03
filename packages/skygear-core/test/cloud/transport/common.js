@@ -52,7 +52,10 @@ describe('CommonTransport', function () {
       }, {
         context: {
           user_id: '0383f77599f1412e938f29ae79c3dcc8'
-        }
+        },
+        container: sinon.match(function (container) {
+          return container.asUserId === '0383f77599f1412e938f29ae79c3dcc8';
+        })
       });
       expect(result).to.be.eql({
         result: 'op result'
@@ -178,7 +181,10 @@ describe('CommonTransport', function () {
         sinon.match({
           context: {
             user_id: '0383f77599f1412e938f29ae79c3dcc8'
-          }
+          },
+          container: sinon.match(function (container) {
+            return container.asUserId === '0383f77599f1412e938f29ae79c3dcc8';
+          })
         })
       );
       expect(result).to.be.eql({
@@ -221,7 +227,10 @@ describe('CommonTransport', function () {
         sinon.match({
           context: {
             user_id: '0383f77599f1412e938f29ae79c3dcc8'
-          }
+          },
+          container: sinon.match(function (container) {
+            return container.asUserId === '0383f77599f1412e938f29ae79c3dcc8';
+          })
         })
       );
       done();
