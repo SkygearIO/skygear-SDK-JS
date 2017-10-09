@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
+import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container from '../lib/container';
 
@@ -180,4 +181,263 @@ describe('Container device unregistration', function () {
     });
   });
 });
+
+describe('Container Push User', function () {
+  let container = new Container();
+  container.pubsub.autoPubsub = false;
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/push/user',
+    fixtures: function (match, params, headers, fn) {
+      console.log(params);
+      if (params.topic !== 'the-topic') {
+        return fn({
+          'error': {
+            'name': 'UnexpectedError',
+            'code': 10000,
+            'message': 'topic is not correct'
+          }
+        }, 500);
+      }
+      assert.equal(_.get(params, 'notification.apns.aps.sound'), 'chime');
+      assert.isArray(params.user_ids);
+
+      return fn({
+        'result': _.map(params.user_ids, function (user) {
+          assert.isString(user);
+          return {
+            '_id': user
+          };
+        })
+      });
+    }
+  }]);
+  container.configApiKey('correctApiKey');
+
+  it('should send push to user', function () {
+    return container.push.sendToUser(
+      ['user-id1', 'user-id2'],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'user-id1'
+        },
+        {
+          '_id': 'user-id2'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to user');
+    });
+  });
+
+  it('should send push to user with string ID', function () {
+    return container.push.sendToUser(
+      'user-id',
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'user-id'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to user');
+    });
+  });
+
+  it('should send push to user with object', function () {
+    return container.push.sendToUser(
+      [
+        {
+          id: 'user-id1'
+        },
+        {
+          id: 'user-id2'
+        }
+      ],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'user-id1'
+        },
+        {
+          '_id': 'user-id2'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to user');
+    });
+  });
+
+  it('should handle error', function () {
+    return container.push.sendToUser(
+      ['user-id'],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'wrong-topic'
+    ).then(function (result) {
+      assert.fail('should fail');
+    }, function (error) {
+      assert.equal(error.error.name, 'UnexpectedError');
+    });
+  });
+});
+
+describe('Container Push Device', function () {
+  let container = new Container();
+  container.pubsub.autoPubsub = false;
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/push/device',
+    fixtures: function (match, params, headers, fn) {
+      console.log(params);
+      if (params.topic !== 'the-topic') {
+        return fn({
+          'error': {
+            'name': 'UnexpectedError',
+            'code': 10000,
+            'message': 'topic is not correct'
+          }
+        }, 500);
+      }
+      assert.equal(_.get(params, 'notification.apns.aps.sound'), 'chime');
+      assert.isArray(params.device_ids);
+
+      return fn({
+        'result': _.map(params.device_ids, function (device) {
+          assert.isString(device);
+          return {
+            '_id': device
+          };
+        })
+      });
+    }
+  }]);
+  container.configApiKey('correctApiKey');
+
+  it('should send push to device', function () {
+    return container.push.sendToDevice(
+      ['device-id1', 'device-id2'],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'device-id1'
+        },
+        {
+          '_id': 'device-id2'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to device');
+    });
+  });
+
+  it('should send push to device with string ID', function () {
+    return container.push.sendToDevice(
+      'device-id',
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'device-id'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to device');
+    });
+  });
+
+  it('should send push to device with object', function () {
+    return container.push.sendToDevice(
+      [
+        {
+          id: 'device-id1'
+        },
+        {
+          id: 'device-id2'
+        }
+      ],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'the-topic'
+    ).then(function (result) {
+      assert.deepEqual(result, [
+        {
+          '_id': 'device-id1'
+        },
+        {
+          '_id': 'device-id2'
+        }
+      ]);
+    }, function (error) {
+      assert.fail(error, undefined, 'failed to send push to device');
+    });
+  });
+
+  it('should handle error', function () {
+    return container.push.sendToDevice(
+      ['device-id'],
+      {
+        apns: {
+          aps: {
+            sound: 'chime'
+          }
+        }
+      },
+      'wrong-topic'
+    ).then(function (result) {
+      assert.fail('should fail');
+    }, function (error) {
+      assert.equal(error.error.name, 'UnexpectedError');
+    });
+  });
+});
+
 /*eslint-enable dot-notation, no-unused-vars, quote-props */
