@@ -2,99 +2,104 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
   <title>Skygear-SDK-JS</title>
 </head>
 <body>
-  <div id="main">
-    <p>
-      <label>End Point</label>
-      <span id="endpoint"></span>
-    </p>
-    <p>
-      <label>Token</label>
-      <span id="accessToken"></span>
-    </p>
-    <p>
-      <label>Username</label>
-      <span id="currentUsername"></span>
-    </p>
-    <p>
-      <label>Email</label>
-      <span id="currentEmail"></span>
-    </p>
-    <p>
-      <a href="record.html">Record CRUD</a>
-    </p>
-    <p>
-      <a href="pubsub.html">Pubsub</a>
-    </p>
-    <p>
-      <a href="user.html">User discovery</a>
-    </p>
-    <p><a href="role-acl.html">Role and ACL</a></p>
-  </div>
-  <hr>
-  <div id="auth">
-    <form action="#" onsubmit="return false;">
+  <div class="container-fluid">
+    <div class="well" id="main">
+      <p>
+        <label>End Point</label>
+        <span id="endpoint"></span>
+      </p>
+      <p>
+        <label>Token</label>
+        <span id="accessToken"></span>
+      </p>
       <p>
         <label>Username</label>
-        <input id="username" type="text">
+        <span id="currentUsername"></span>
       </p>
       <p>
         <label>Email</label>
-        <input id="email" type="email">
+        <span id="currentEmail"></span>
       </p>
       <p>
-        <label>Password</label>
-        <input id="password" type="password">
+        <a href="record.html">Record CRUD</a>
       </p>
       <p>
-        <button onclick="signup();">Signup</button>
-        <button onclick="signup('username');">Signup With Username</button>
-        <button onclick="signup('email');">Signup With Email</button>
-        <button onclick="signup('anonymous');">Signup Anonymously</button>
+        <a href="pubsub.html">Pubsub</a>
       </p>
       <p>
-        <button onclick="login();">Login</button>
-        <button onclick="login('username');">Login with Username</button>
-        <button onclick="login('email');">Login With Email</button>
+        <a href="user.html">User discovery</a>
       </p>
-    </form>
-    <p id="auth-token">Click the button to test</p>
+      <p><a href="role-acl.html">Role and ACL</a></p>
+    </div>
     <hr>
-    <h4>Change password</h4>
-        <form action="#" onsubmit="return false;">
-      <p>
-        <label>Old Password</label>
-        <br>
-        <input id="old-password" type="password" placeholder="Key in existing password">
-      </p>
-      <p>
-        <label>New Password</label>
-        <br>
-        <input id="new-password" type="password" placeholder="Key in new password">
-      </p>
-      <p id="change-result"></p>
-      <button onclick="changePassword();">Change</button>
-    </form>
-    <hr>
-    <h4>Forgot password</h4>
-    <form action="#" onsubmit="return false;">
-      <label>Email</label>
-      <input id="forgotpassword-email" type="email"><br>
-      <p><button onclick="forgotPassword();">Forget Password</button></p>
-      <label>userID</label>
-      <input id="forgotpassword-userID"><br>
-      <label>code</label>
-      <input id="forgotpassword-code"><br>
-      <label>expireAt</label>
-      <input id="forgotpassword-expireAt"><br>
-      <label>newPassword</label>
-      <input id="forgotpassword-newPassword"><br>
-      <p><button onclick="resetPassword();">Reset Password</button></p>
-    </form>
-    <hr>
-    <p><button onclick="logout();">Logout</button></p>
+    <div id="auth">
+      <form action="#" onsubmit="return false;">
+        <p>
+          <label>Username</label>
+          <input id="username" type="text">
+        </p>
+        <p>
+          <label>Email</label>
+          <input id="email" type="email">
+        </p>
+        <p>
+          <label>Password</label>
+          <input id="password" type="password">
+        </p>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="signup();">Signup</button>
+          <button class="btn btn-primary" onclick="signup('username');">Signup With Username</button>
+          <button class="btn btn-primary" onclick="signup('email');">Signup With Email</button>
+          <button class="btn btn-primary" onclick="signup('anonymous');">Signup Anonymously</button>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="login();">Login</button>
+          <button class="btn btn-primary" onclick="login('username');">Login with Username</button>
+          <button class="btn btn-primary"onclick="login('email');">Login With Email</button>
+        </div>
+      </form>
+      <p id="auth-token">Click the button to test</p>
+      <hr>
+      <h4>Change password</h4>
+          <form action="#" onsubmit="return false;">
+        <p>
+          <label>Old Password</label>
+          <br>
+          <input id="old-password" type="password" placeholder="Key in existing password">
+        </p>
+        <p>
+          <label>New Password</label>
+          <br>
+          <input id="new-password" type="password" placeholder="Key in new password">
+        </p>
+        <p id="change-result"></p>
+        <button onclick="changePassword();">Change</button>
+      </form>
+      <hr>
+      <h4>Forgot password</h4>
+      <form action="#" onsubmit="return false;">
+        <label>Email</label>
+        <input id="forgotpassword-email" type="email"><br>
+        <p><button onclick="forgotPassword();">Forget Password</button></p>
+        <label>userID</label>
+        <input id="forgotpassword-userID"><br>
+        <label>code</label>
+        <input id="forgotpassword-code"><br>
+        <label>expireAt</label>
+        <input id="forgotpassword-expireAt"><br>
+        <label>newPassword</label>
+        <input id="forgotpassword-newPassword"><br>
+        <p><button onclick="resetPassword();">Reset Password</button></p>
+      </form>
+      <hr>
+      <p><button onclick="logout();">Logout</button></p>
+    </div>
   </div>
   <script src="../packages/skygear/dist/bundle.js"></script>
   <script type="text/javascript">
