@@ -61,7 +61,7 @@
         <div class="form-group">
           <button class="btn btn-primary" onclick="login();">Login</button>
           <button class="btn btn-primary" onclick="login('username');">Login with Username</button>
-          <button class="btn btn-primary"onclick="login('email');">Login With Email</button>
+          <button class="btn btn-primary" onclick="login('email');">Login With Email</button>
         </div>
       </form>
       <p id="auth-token">Click the button to test</p>
@@ -79,14 +79,14 @@
           <input id="new-password" type="password" placeholder="Key in new password">
         </p>
         <p id="change-result"></p>
-        <button onclick="changePassword();">Change</button>
+        <button class="btn btn-primary" onclick="changePassword();">Change</button>
       </form>
       <hr>
       <h4>Forgot password</h4>
       <form action="#" onsubmit="return false;">
         <label>Email</label>
         <input id="forgotpassword-email" type="email"><br>
-        <p><button onclick="forgotPassword();">Forget Password</button></p>
+        <p><button class="btn btn-primary" onclick="forgotPassword();">Forget Password</button></p>
         <label>userID</label>
         <input id="forgotpassword-userID"><br>
         <label>code</label>
@@ -95,10 +95,10 @@
         <input id="forgotpassword-expireAt"><br>
         <label>newPassword</label>
         <input id="forgotpassword-newPassword"><br>
-        <p><button onclick="resetPassword();">Reset Password</button></p>
+        <p><button class="btn btn-primary" onclick="resetPassword();">Reset Password</button></p>
       </form>
       <hr>
-      <p><button onclick="logout();">Logout</button></p>
+      <p><button class="btn btn-primary" onclick="logout();">Logout</button></p>
     </div>
   </div>
   <script src="../packages/skygear/dist/bundle.js"></script>
