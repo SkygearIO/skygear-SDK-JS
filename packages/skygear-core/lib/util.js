@@ -36,9 +36,13 @@ export function toJSON(v) {
   } else if (v.toJSON) {
     return v.toJSON();
   } else if (_.isObject(v)) {
+    // cannot use `map` directly
+    // because array-like object would give integer key instead of string key
+    // when calling map
     return _.chain(v)
-      .map((value, key) => {
-        return [key, toJSON(value)];
+      .keys()
+      .map((key) => {
+        return [key, toJSON(v[key])];
       })
       .fromPairs()
       .value();
