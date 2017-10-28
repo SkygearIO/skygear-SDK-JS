@@ -64,6 +64,33 @@ describe('CommonTransport', function () {
     });
   });
 
+  it('should call with opHandler when no context', function (done) {
+    const registry = new Registry();
+    const opFunc = sinon.stub().returns('op result');
+    registry.getFunc = sinon.stub().returns(opFunc);
+    const transport = new CommonTransport(registry);
+    return transport.opHandler({
+      kind: 'op',
+      name: 'lambda',
+      param: {
+        key: 'value'
+      }
+    }).then((result) => {
+      expect(opFunc).to.be.calledWithMatch({
+        key: 'value'
+      }, {
+        context: undefined,
+        container: sinon.match(function (container) {
+          return !!container;
+        })
+      });
+      expect(result).to.be.eql({
+        result: 'op result'
+      });
+      done();
+    });
+  });
+
   it('should call with eventHandler', function (done) {
     const registry = new Registry();
     const eventFunc = sinon.stub().returns('event result');
