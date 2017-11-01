@@ -162,7 +162,7 @@ export class Database {
    *
    * @param  {Record|Record[]|QueryResult} record - the record(s) to delete
    * @return {Promise<Record>} promise with the delete result
-   * @see Database#delete
+   * @see {@link Database#delete}
    */
   del(record) {
     return this.delete(record);
