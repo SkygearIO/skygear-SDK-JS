@@ -55,13 +55,13 @@
       <pre id="result"></pre>
     </form>
   </div>
-  <script src="../packages/skygear/dist/bundle.js"></script>
+  <script src="/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
     skygear.config({
-      'endPoint': 'https://sdkjsexample.skygeario.com/',
-      'apiKey': '363826633dc44161a11e9135b1546539'
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
     }).then(function(container) {
       m.textContent = container.endPoint;
       token.innerText = container.auth.accessToken;

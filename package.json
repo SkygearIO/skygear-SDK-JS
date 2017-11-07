@@ -31,6 +31,7 @@
     "babelify": "^7.3.0",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
+    "connect-inject": "^0.4.0",
     "dirty-chai": "^1.2.2",
     "esdoc": "^1.0.1",
     "esdoc-accessor-plugin": "^1.0.0",
@@ -60,6 +61,7 @@
     "gulp-nsp": "^2.0.0",
     "gulp-preprocess": "^1.2.0",
     "gulp-rename": "^1.2.2",
+    "gulp-serve": "^1.4.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.6",
@@ -84,7 +86,8 @@
     "test": "gulp --type dev",
     "deploy": "gulp deploy --type production",
     "deploy-latest": "gulp deploy --type production --latest",
-    "lerna": "lerna"
+    "lerna": "lerna",
+    "example": "gulp --type dev example"
   },
   "bin": {
     "skygear-node": "./bin.js",

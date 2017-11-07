@@ -133,7 +133,7 @@
     <hr />
   </div>
 </body>
-<script src="../packages/skygear/dist/bundle.js"></script>
+<script src="/bundle.js"></script>
 
 <!-- init -->
 <script>
@@ -147,8 +147,8 @@
     };
 
     skygear.config({
-      'endPoint': 'https://sdkjsexample.skygeario.com/',
-      'apiKey': '363826633dc44161a11e9135b1546539'
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
     }).then(function (container) {
       display.endPoint.textContent = container.endPoint;
       display.token.textContent = container.auth.accessToken;
