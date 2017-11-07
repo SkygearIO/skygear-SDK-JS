@@ -70,6 +70,4 @@ Include the following lines into the header of your HTML file:
 ## Development
 Pull requests are welcomed!
 
-You may visit a live [demo](https://sdkjsexample.skygeario.com/static/example/index.html)
-
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues
