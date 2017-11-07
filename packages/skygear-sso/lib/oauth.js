@@ -1,4 +1,4 @@
-/* global window:false */
+/* global window:false document:false */
 import cookies from 'js-cookie';
 import { atob } from 'Base64';
 import { NewWindowObserver, PostAuthResultObserver } from './observer';
@@ -30,7 +30,7 @@ export function loginOAuthProviderWithPopup(provider, options) {
   return this.container.lambda(`sso/${provider}/login_auth_url`, {
     ux_mode: 'web_popup', //eslint-disable-line camelcase
     callback_url: window.location.href, //eslint-disable-line camelcase
-    ...options
+    ...options || {}
   })
   .then((data) => {
     newWindow.location.href = data.auth_url; //eslint-disable-line camelcase
@@ -62,15 +62,74 @@ export function loginOAuthProviderWithRedirect(provider, options) {
   return new Promise((resolve, reject) => {
     this.container.lambda(`sso/${provider}/login_auth_url`, {
       ux_mode: 'web_redirect', //eslint-disable-line
-      ...options
+      callback_url: window.location.href, //eslint-disable-line camelcase
+      ...options || {}
     })
     .then((data) => {
+      const store = this.container.store;
       window.location.href = data.auth_url; //eslint-disable-line
-      resolve();
+      return store.setItem('skygear-oauth-is-login', true);
     }, (err) => {
       reject(err);
     });
   });
+}
+
+/**
+ * return user from redirect based login flow
+ * if login success, promise resolve with logged in user.
+ * if login fail, promise fail with error.
+ * if no redirect flow was called, promise resolve with empty result.
+ *
+ * @injectTo {AuthContainer} as getLoginRedirectResult
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.getLoginRedirectResult().then(...);
+ */
+export function getLoginRedirectResult() {
+  this._oauthResultObserver = this._oauthResultObserver ||
+    new PostAuthResultObserver();
+
+  const addOAuthIframe = () => {
+    this._oauthIfame = document.createElement('iframe');
+    this._oauthIfame.style.display = 'none';
+    this._oauthIfame.src = this.container.url + 'sso/iframe_handler';
+    document.body.appendChild(this._oauthIfame);
+  };
+
+  const removeOAuthIframe = () => {
+    if (this._oauthIfame) {
+      document.body.removeChild(this._oauthIfame);
+      this._oauthIfame = null;
+    }
+  };
+
+  const onLoginCompleted = () => {
+    removeOAuthIframe();
+    this._oauthResultObserver.unsubscribe();
+  };
+
+  return this.container.store.getItem('skygear-oauth-is-login')
+    .then((isRedirectFlowCalled) => {
+      if (!isRedirectFlowCalled) {
+        return Promise.resolve();
+      }
+      if (isRedirectFlowCalled) {
+        addOAuthIframe();
+        this.container.store.removeItem('skygear-oauth-is-login');
+        return this._oauthResultObserver.subscribe();
+      }
+    }).then((result) => {
+      onLoginCompleted();
+      if (!result) {
+        return Promise.resolve();
+      }
+      return this.container.auth._authResolve(result);
+    }, (error) => {
+      onLoginCompleted();
+      return Promise.reject(error);
+    });
 }
 
 /**
@@ -94,6 +153,32 @@ export function oauthHandler() {
       } else {
         reject(errorResponseFromMessage('Fail to find opener'));
       }
+    }, (err) => {
+      reject(err);
+    });
+  });
+}
+
+
+/**
+ * Iframe handler script. When getLoginRedirectResult is called, sdk will
+ * inject an iframe in the document with plugin iframe handler endpoint
+ * the endpoint will call this handler. Handler will get the sso result from
+ * browser session and post the result back to parnet
+ *
+ * @injectTo {AuthContainer} as iframeHandler
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.iframeHandler().then(...);
+ */
+export function iframeHandler() {
+  return new Promise((resolve, reject) => {
+    this.container.lambda('sso/config')
+    .then((data) => {
+      let authorizedUrls = data.authorized_urls; //eslint-disable-line
+      _postSSOResultToWindow(window.parent, authorizedUrls);
+      resolve();
     }, (err) => {
       reject(err);
     });
