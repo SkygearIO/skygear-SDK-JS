@@ -6,6 +6,7 @@
 </head>
 <body>
   <div id="main">
+    <h3>SSO plugin is required in this example</h3>
     <p>
       <label>End Point</label>
       <span id="endpoint"></span>
@@ -38,7 +39,7 @@
     <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
-  <script src="../packages/skygear/dist/bundle.js"></script>
+  <script src="/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
     var token = document.getElementById("accessToken");
@@ -46,8 +47,8 @@
     var currentEmail = document.getElementById("currentEmail");
     var errorMessage = document.getElementById("errorMessage");
     skygear.config({
-      'endPoint': 'http://127.0.0.1:3000/',
-      'apiKey': 'api_key'
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
     }).then(function(container) {
       m.textContent = container.endPoint;
       token.innerText = skygear.auth.accessToken;
