@@ -5,99 +5,137 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
     crossorigin="anonymous">
+  <style>
+    .inline-input {
+      display: inline-block; width: auto;
+      margin-left: 0.75em;
+    }
+  </style>
   <title>Skygear-SDK-JS</title>
 </head>
 <body>
   <div class="container-fluid">
     <div class="well" id="main">
-      <p>
-        <label>End Point</label>
-        <span id="endpoint"></span>
-      </p>
-      <p>
-        <label>Token</label>
-        <span id="accessToken"></span>
-      </p>
-      <p>
-        <label>Username</label>
-        <span id="currentUsername"></span>
-      </p>
-      <p>
-        <label>Email</label>
-        <span id="currentEmail"></span>
-      </p>
-      <p>
-        <a href="record.html">Record CRUD</a>
-      </p>
-      <p>
-        <a href="pubsub.html">Pubsub</a>
-      </p>
-      <p>
-        <a href="user.html">User discovery</a>
-      </p>
-      <p><a href="role-acl.html">Role and ACL</a></p>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>End Point</label>
+          <span id="endpoint"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Token</label>
+          <span id="accessToken"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Username</label>
+          <span id="currentUsername"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Email</label>
+          <span id="currentEmail"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <a href="record.html">Record CRUD</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <a href="pubsub.html">Pubsub</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <a href="user.html">User discovery</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <a href="role-acl.html">Role and ACL</a>
+        </div>
+      </div>
     </div>
     <hr>
     <div id="auth">
-      <form action="#" onsubmit="return false;" class="form-horizontal">
+      <form action="#" onsubmit="return false;">
         <div class="form-group">
-          <label class="col-sm-2 col-md-2 col-lg-2 col-xs-2">Username</label>
-          <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10">
-            <input class="form-control" id="username" type="text">
-          </div>
+          <label>Username</label>
+          <input class="form-control inline-input" id="username" type="text">
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input id="email" type="email">
+          <input class="form-control inline-input" id="email" type="email">
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input id="password" type="password">
+          <input class="form-control inline-input" id="password" type="password">
         </div>
         <div class="form-group">
-          <button class="btn btn-primary" onclick="signup();">Signup</button>
-          <button class="btn btn-primary" onclick="signup('username');">Signup With Username</button>
-          <button class="btn btn-primary" onclick="signup('email');">Signup With Email</button>
-          <button class="btn btn-primary" onclick="signup('anonymous');">Signup Anonymously</button>
+          <div>
+            <button class="btn btn-primary" onclick="signup();">Signup</button>
+            <button class="btn btn-primary" onclick="signup('username');">Signup With Username</button>
+            <button class="btn btn-primary" onclick="signup('email');">Signup With Email</button>
+            <button class="btn btn-primary" onclick="signup('anonymous');">Signup Anonymously</button>
+          </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary" onclick="login();">Login</button>
-          <button class="btn btn-primary" onclick="login('username');">Login with Username</button>
-          <button class="btn btn-primary" onclick="login('email');">Login With Email</button>
+          <div>
+            <button class="btn btn-primary" onclick="login();">Login</button>
+            <button class="btn btn-primary" onclick="login('username');">Login with Username</button>
+            <button class="btn btn-primary" onclick="login('email');">Login With Email</button>
+          </div>
         </div>
       </form>
       <p id="auth-token">Click the button to test</p>
       <hr>
       <h4>Change password</h4>
-          <form action="#" onsubmit="return false;">
-        <p>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
           <label>Old Password</label>
-          <br>
-          <input id="old-password" type="password" placeholder="Key in existing password">
-        </p>
-        <p>
+          <input class="form-control" id="old-password" type="password" placeholder="Key in existing password">
+        </div>
+        <div class="form-group">
           <label>New Password</label>
-          <br>
-          <input id="new-password" type="password" placeholder="Key in new password">
-        </p>
+          <input class="form-control" id="new-password" type="password" placeholder="Key in new password">
+        </div>
         <p id="change-result"></p>
         <button class="btn btn-primary" onclick="changePassword();">Change</button>
       </form>
       <hr>
       <h4>Forgot password</h4>
       <form action="#" onsubmit="return false;">
-        <label>Email</label>
-        <input id="forgotpassword-email" type="email"><br>
-        <p><button class="btn btn-primary" onclick="forgotPassword();">Forget Password</button></p>
-        <label>userID</label>
-        <input id="forgotpassword-userID"><br>
-        <label>code</label>
-        <input id="forgotpassword-code"><br>
-        <label>expireAt</label>
-        <input id="forgotpassword-expireAt"><br>
-        <label>newPassword</label>
-        <input id="forgotpassword-newPassword"><br>
-        <p><button class="btn btn-primary" onclick="resetPassword();">Reset Password</button></p>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control inline-input" id="forgotpassword-email" type="email">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="forgotPassword();">Forget Password</button>
+        </div>
+        <div class="form-group">
+          <label>userID</label>
+          <input class="form-control inline-input" id="forgotpassword-userID">
+        </div>
+        <div class="form-group">
+          <label>code</label>
+          <input class="form-control inline-input" id="forgotpassword-code"><br>
+        </div>
+        <div class="form-group">
+          <label>expireAt</label>
+          <input class="form-control inline-input" id="forgotpassword-expireAt"><br>
+        </div>
+        <div class="form-group">
+          <label>newPassword</label>
+          <input class="form-control inline-input" id="forgotpassword-newPassword"><br>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="resetPassword();">Reset Password</button>
+        </div>
       </form>
       <hr>
       <p><button class="btn btn-primary" onclick="logout();">Logout</button></p>
