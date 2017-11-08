@@ -100,6 +100,17 @@ describe('util', function () {
     ]);
   });
 
+  it('toJSON array like object', function () {
+    const object = {
+      1: 'handsome',
+      length: 5
+    };
+    expect(toJSON(object)).to.eql({
+      1: 'handsome',
+      length: 5
+    });
+  });
+
   it('toJSON undefined', function () {
     expect(() => toJSON(undefined))
       .to.throw('toJSON does not support undefined value');

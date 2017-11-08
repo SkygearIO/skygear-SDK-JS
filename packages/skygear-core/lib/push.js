@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import _ from 'lodash';
+
 import {ErrorCodes, SkygearError} from './error';
 
 /**
@@ -118,6 +120,77 @@ export class PushContainer {
       } else {
         return Promise.reject(error);
       }
+    });
+  }
+
+  /**
+   * Send a push notification to all devices associated with the specified
+   * users.
+   *
+   * @param {string|string[]} users - a list of User IDs
+   * @param {Object} notification - push notification payload
+   * @param {Object} notification.apns - push notification payload for APNS
+   * @param {Object} notification.gcm - push notification payload for GCM
+   * @param {?string} topic - the device topic, refer to application bundle
+   * identifier on iOS and application package name on Android
+   * @return {Object[]} list of users to which notification was sent
+   *
+   * @see https://developers.google.com/cloud-messaging/concept-options
+   * @see https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
+   **/
+  sendToUser(users, notification, topic) {
+    if (!_.isArray(users)) {
+      users = [users];
+    }
+    let userIDs = _.map(users, function (user) {
+      if (typeof user === 'string') {
+        return user;
+      }
+      return user.id;
+    });
+    return this.container.makeRequest('push:user', {
+      user_ids: userIDs, //eslint-disable-line camelcase
+      notification,
+      topic
+    }).then((result) => {
+      return result.result;
+    }, (error) => {
+      return Promise.reject(error);
+    });
+  }
+
+  /**
+   * Send a push notification to specified devices.
+   *
+   * @param {string|string[]} devices - a list of Device IDs
+   * @param {Object} notification - push notification payload
+   * @param {Object} notification.apns - push notification payload for APNS
+   * @param {Object} notification.gcm - push notification payload for GCM
+   * @param {?string} topic - the device topic, refer to application bundle
+   * identifier on iOS and application package name on Android
+   * @return {Object[]} list of users to which notification was sent
+   *
+   * @see https://developers.google.com/cloud-messaging/concept-options
+   * @see https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
+   **/
+  sendToDevice(devices, notification, topic) {
+    if (!_.isArray(devices)) {
+      devices = [devices];
+    }
+    let deviceIDs = _.map(devices, function (device) {
+      if (typeof device === 'string') {
+        return device;
+      }
+      return device.id;
+    });
+    return this.container.makeRequest('push:device', {
+      device_ids: deviceIDs, //eslint-disable-line camelcase
+      notification,
+      topic
+    }).then((result) => {
+      return result.result;
+    }, (error) => {
+      return Promise.reject(error);
     });
   }
 
