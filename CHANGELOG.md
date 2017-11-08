@@ -1,3 +1,15 @@
+## 1.1.2 (2017-11-08)
+
+### Bug Fixes
+
+- Fix "cannot read property 'user_id' of undefined" (#323)
+- Update toJSON handling for array like object
+
+### Other Notes
+
+- Local dev server to serve example html (#333)
+- Fix broken link in doc (SkygearIO/skygear-doc#529)
+
 ## 1.1.1 (2017-10-23)
 
 ### Features
