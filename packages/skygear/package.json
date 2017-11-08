@@ -27,7 +27,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "skygear-core": "^1.1.2",
-    "skygear-forgot-password": "^1.1.2"
+    "skygear-forgot-password": "^1.1.2",
+    "skygear-sso": "^1.1.0"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
