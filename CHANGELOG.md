@@ -1,3 +1,43 @@
+## 1.1.2 (2017-11-08)
+
+### Bug Fixes
+
+- Fix "cannot read property 'user_id' of undefined" (#323)
+- Update toJSON handling for array like object
+
+### Other Notes
+
+- Local dev server to serve example html (#333)
+- Fix broken link in doc (SkygearIO/skygear-doc#529)
+
+## 1.1.1 (2017-10-23)
+
+### Features
+
+- Add sendToUser and sendToDevice (#307)
+- Get cloud code container for current request context (#300)
+- Add Content-Type: application/json to request made by container (#308)
+- Inject version string in Makefile, and include the version in request header
+
+
+### Bug fixes
+
+- Fix `npm run dev` doesn’t rebuild
+- Allow pubsub to publish falsy message (#228)
+- Update API reference (#281)
+- Install missing esdoc plugins
+- Change op and handler option auth_required to key_required (#273)
+- Return meaningful error for undefined record key (#113)
+- Handle non json request body with 400
+
+### Other notes
+
+- Add a proper README.md
+- Add node 8 to travis-CI env matrix, remove  node 4
+- Use npm@5.3.0 and package-lock.json (#283)
+- Run lerna bootstrap in postinstall stage (#284)
+- Add minimal cloud example
+
 ## 1.1.0 (2017-08-07)
 
 ### Incompatible Changes

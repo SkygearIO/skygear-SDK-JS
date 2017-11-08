@@ -35,7 +35,7 @@ var skygear = require('skygear');
 #import skygear from 'skygear'; #For ES2015
 
 skygear.config({
-    'endPoint': 'http://<your-app-name>.skygeario.com',
+    'endPoint': 'https://<your-app-name>.skygeario.com',
     'apiKey': '<your-api-key>',
 }).then(() => {
     console.log('Container is ready to make API call');
@@ -67,9 +67,21 @@ Include the following lines into the header of your HTML file:
 </script>
 ```
 
+## Running client example
+
+Checkout the source and run the following to launch a local server:
+
+```
+npm install
+
+# run example with demo endpoint
+npm run example
+
+# run example with your app endpoint
+SKYGEAR_ENDPOINT=https://<your-app-name>.skygeario.com SKYGEAR_API_KEY=<your-api-key> npm run example
+```
+
 ## Development
 Pull requests are welcomed!
-
-You may visit a live [demo](https://sdkjsexample.skygeario.com/static/example/index.html)
 
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues

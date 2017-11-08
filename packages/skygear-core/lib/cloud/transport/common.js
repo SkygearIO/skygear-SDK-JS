@@ -69,7 +69,7 @@ function b64DecodeUnicode(str) {
 function containerFromContext(context) {
   const {
     user_id: userId
-  } = context;
+  } = context || {};
   return userId ? getContainer(userId) : getContainer();
 }
 
