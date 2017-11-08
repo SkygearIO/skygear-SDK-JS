@@ -2,196 +2,245 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
   <title>Skygear-SDK-JS</title>
 </head>
 <body>
-  <div id="main">
-    <p>
-      <label>End Point</label>
-      <span id="endpoint"></span>
-    </p>
-    <p>
-      <label>Token</label>
-      <span id="accessToken">
-        <a href="index.html">Go to Login</a>
-      </span>
-    </p>
-    <p>
-      <label>Username</label>
-      <span id="currentUsername"></span>
-    </p>
-    <p>
-      <label>Email</label>
-      <span id="currentEmail"></span>
-    </p>
-    <p>
-      <button onclick="clearCache();">Clear Cache</button>
-    </p>
-  </div>
-  <hr>
-  <div id="record">
-    <h4>Create Record</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        <label>Record Type</label>
-        <input id="create-type" type="text" value="note">
-      </p>
-      <p>
-        <label>JSON payload</label>
-        <textarea id="create-payload">{}</textarea>
-      </p>
-      <p>
-        <input id="auto-increment" type="checkbox"/>
-        <label for="auto-increment">Include auto increment ID</label>
-        <input id="auto-increment-id" type="text" value="noteID">
-      </p>
-      <p id="create-result"></p>
-      <button onclick="createRecord();">Create Record</button>
-    </form>
-  </div>
-  <hr>
-  <div id="record">
-    <h4>Query Record</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        <label>Record Type</label>
-        <input id="query-type" type="text" value="note">
-      </p>
-      <p>
-        <input id="query-key" type="text" placeholder="Key">
-        <select id="query-operator">
-          <option value="like">like</option>
-          <option value="equalTo">=</option>
-          <option value="greaterThan">&gt;</option>
-          <option value="greaterThanOrEqualTo">&gt;=</option>
-          <option value="lessThan">&lt;</option>
-          <option value="lessThanOrEqualTo">&lt;=</option>
-          <option value="notEqualTo">&lt;&gt;</option>
-        </select>
-        <input id="query-operand" type="text" placeholder="operand">
-      </p>
-      <p>
-        <input id="query-key2" type="text" placeholder="Key">
-        <select id="query-operator2">
-          <option value="like">like</option>
-          <option value="equalTo">=</option>
-          <option value="greaterThan">&gt;</option>
-          <option value="greaterThanOrEqualTo">&gt;=</option>
-          <option value="lessThan">&lt;</option>
-          <option value="lessThanOrEqualTo">&lt;=</option>
-          <option value="notEqualTo">&lt;&gt;</option>
-        </select>
-        <input id="query-operand2" type="text" placeholder="operand">
-      </p>
-      <p>
-        <input id="query-in1-value" type="text" placeholder="String value">
-        in
-        <input id="query-in1-keypath" type="text" placeholder="Key path">
-        <br/>
-        <input id="query-in2-keypath" type="text" placeholder="Key path">
-        in
-        [<input id="query-in2-value1" type="text" placeholder="string value 1">,
-        <input id="query-in2-value2" type="text" placeholder="string value 2">,
-        <input id="query-in2-value3" type="text" placeholder="string value 3">]
-      </p>
-      <p>
-        <input id="query-relation-keypath" type="text" placeholder="Key path">
-        (e.g. <code>_owner</code>)
-        having relation
-        <select id="query-relation-name">
-          <option value="friend">friend</option>
-          <option value="following">following</option>
-          <option value="followed">followed</option>
-        </select>
-      </p>
-      <p>
-        <label>Sort</label>
-        <input id="query-sort" type="text">
-        <select id="query-sort-order">
-          <option value="addAscending">acs</option>
-          <option value="addDescending">desc</option>
-        </select>
-      </p>
-      <p>
-        <label>Page</label>
-        <input id="query-page" type="number">
-      </p>
-      <p>
-        <label>Offset</label>
-        <input id="query-offset" type="number">
-      </p>
-      <p>
-        <label>Limit</label>
-        <input id="query-limit" type="number">
-      </p>
-      <p>
-        <input id="display-cache" type="checkbox"/>
-        <label for="display-cache">Display cached result</label>
-      </p>
-      <p id="query-count"></p>
-      <p id="query-result"></p>
-      <button onclick="queryRecord();">Query</button>
-    </form>
-  </div>
-  <hr>
-  <div>
-    <h4>Update Record</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        <label>Record Type</label>
-        <input id="update-type" type="text" value="note">
-      </p>
-      <p>
-        <label>Record ID</label>
-        <input id="update-id" type="text">
-      </p>
-      <p>
-        <input id="update-key" type="text" placeholder="Key">
-        <input id="update-value" type="text" placeholder="Value">
-      </p>
-      <p id="update-result"></p>
-      <button onclick="updateRecord();">Update Record</button>
-    </form>
-  </div>
-  <hr>
-  <div>
-    <h4>Delete Record</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        <label>Record Type</label>
-        <input id="delete-type" type="text" value="note">
-      </p>
-      <p>
-        <label>Record ID</label>
-        <input id="delete-id" type="text">
-      </p>
-      <p id="delete-result"></p>
-      <button onclick="deleteRecord();">Delete</button>
-    </form>
-  </div>
-  <hr>
-  <div>
-    <h4>Upload Asset</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        <label>Record Type</label>
-        <input id="upload-type" type="text" value="note">
-      </p>
-      <p>
-        <label>File Field</label>
-        <input id="upload-field" type="text">
-      </p>
-      <p>
-        <label>File Name</label>
-        <input id="upload-name" type="text">
-      </p>
-      <p>
-        <label>File</label>
-        <input type="file" id="asset">
-      </p>
-      <pre id="upload-result"></pre>
-      <button onclick="uploadAsset();">Upload</button>
-    </form>
+  <div class="container-fluid">
+    <div class="well" id="main">
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>End Point</label>
+          <span id="endpoint"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Token</label>
+          <span id="accessToken">
+            <a href="index.html">Go to Login</a>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Username</label>
+          <span id="currentUsername"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Email</label>
+          <span id="currentEmail"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <button class="btn btn-primary" onclick="clearCache();">Clear Cache</button>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div id="record">
+      <h4>Create Record</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label for="create-type">Record Type</label>
+          <input class="form-control" id="create-type" type="text" value="note">
+        </div>
+        <div class="form-group">
+          <label for="create-payload">JSON payload</label>
+          <textarea class="form-control" id="create-payload">{}</textarea>
+        </div>
+        <div class="form-group">
+          <input id="auto-increment" type="checkbox"/>
+          <label for="auto-increment">Include auto increment ID</label>
+          <input class="form-control" style="display: inline-block; width:calc(100% - 194px);" id="auto-increment-id" type="text" value="noteID">
+        </div>
+        <p id="create-result"></p>
+        <button class="btn btn-primary" onclick="createRecord();">Create Record</button>
+      </form>
+    </div>
+    <hr>
+    <div id="record">
+      <h4>Query Record</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Record Type</label>
+          <input class="form-control" id="query-type" type="text" value="note">
+        </div>
+        <div class="form-group">
+          <input class="form-control" id="query-key" type="text" placeholder="Key">
+        </div>
+        <div class="form-group">
+          <select class="form-control"
+            style="display: inline-block; width: auto;" id="query-operator">
+            <option value="like">like</option>
+            <option value="equalTo">=</option>
+            <option value="greaterThan">&gt;</option>
+            <option value="greaterThanOrEqualTo">&gt;=</option>
+            <option value="lessThan">&lt;</option>
+            <option value="lessThanOrEqualTo">&lt;=</option>
+            <option value="notEqualTo">&lt;&gt;</option>
+          </select>
+
+          <input
+            class="form-control"
+            style="display: inline-block; width: auto;"
+            id="query-operand" type="text" placeholder="operand">
+        </div>
+        <div class="form-group">
+          <input class="form-control"
+            style="display: inline-block; width: auto;"
+            id="query-key2" type="text" placeholder="Key">
+          <select class="form-control"
+            style="display: inline-block; width: auto;"
+            id="query-operator2">
+            <option value="like">like</option>
+            <option value="equalTo">=</option>
+            <option value="greaterThan">&gt;</option>
+            <option value="greaterThanOrEqualTo">&gt;=</option>
+            <option value="lessThan">&lt;</option>
+            <option value="lessThanOrEqualTo">&lt;=</option>
+            <option value="notEqualTo">&lt;&gt;</option>
+          </select>
+          <input
+            style="display: inline-block; width: auto;"
+            class="form-control" id="query-operand2" type="text" placeholder="operand">
+        </div>
+        <div class="form-group">
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in1-value" type="text" placeholder="String value">
+          in
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in1-keypath" type="text" placeholder="Key path">
+          <br/>
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in2-keypath" type="text" placeholder="Key path">
+          in
+          [<input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in2-value1" type="text" placeholder="string value 1">,
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in2-value2" type="text" placeholder="string value 2">,
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-in2-value3" type="text" placeholder="string value 3">]
+        </div>
+        <div class="form-group">
+          <input
+            style="display: inline-block; width: auto;"
+            class="form-control"
+            id="query-relation-keypath" type="text" placeholder="Key path">
+          (e.g. <code>_owner</code>)
+          having relation
+          <select style="display: inline-block; width: auto;"
+            class="form-control" id="query-relation-name">
+            <option value="friend">friend</option>
+            <option value="following">following</option>
+            <option value="followed">followed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sort</label>
+          <input style="display: inline-block; width: auto;"
+            class="form-control" id="query-sort" type="text">
+          <select style="display: inline-block; width: auto;"
+            class="form-control" id="query-sort-order">
+            <option value="addAscending">acs</option>
+            <option value="addDescending">desc</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Page</label>
+          <input style="display: inline-block; width: auto;" class="form-control"
+            id="query-page" type="number">
+        </div>
+        <div class="form-group">
+          <label>Offset</label>
+          <input style="display: inline-block; width: auto;" class="form-control"
+            id="query-offset" type="number">
+        </div>
+        <div class="form-group">
+          <label>Limit</label>
+          <input style="display: inline-block; width: auto;" class="form-control"
+            id="query-limit" type="number">
+        </div>
+        <div class="form-group">
+          <input id="display-cache" type="checkbox"/>
+          <label for="display-cache">Display cached result</label>
+        <div class="form-group">
+        <p id="query-count"></p>
+        <p id="query-result"></p>
+        <button class="btn btn-primary" onclick="queryRecord();">Query</button>
+      </form>
+    </div>
+    <hr>
+    <div>
+      <h4>Update Record</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Record Type</label>
+          <input class="form-control" id="update-type" type="text" value="note">
+        </div>
+        <div class="form-group">
+          <label>Record ID</label>
+          <input class="form-control" id="update-id" type="text">
+        </div>
+        <div class="form-group">
+          <input
+            style="display: inline-block; width: auto;"
+            class="form-control" id="update-key" type="text" placeholder="Key">
+          <input
+            style="display: inline-block; width: auto;"
+            class="form-control" id="update-value" type="text" placeholder="Value">
+        </div>
+        <p id="update-result"></p>
+        <button class="btn btn-primary" onclick="updateRecord();">Update Record</button>
+      </form>
+    </div>
+    <hr>
+    <div>
+      <h4>Delete Record</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Record Type</label>
+          <input class="form-control" id="delete-type" type="text" value="note">
+        </div>
+        <div class="form-group">
+          <label>Record ID</label>
+          <input class="form-control" id="delete-id" type="text">
+        </div>
+        <p id="delete-result"></p>
+        <button class="btn btn-primary" onclick="deleteRecord();">Delete</button>
+      </form>
+    </div>
+    <hr>
+    <div>
+      <h4>Upload Asset</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Record Type</label>
+          <input class="form-control" id="upload-type" type="text" value="note">
+        </div>
+        <div class="form-group">
+          <label>File Field</label>
+          <input class="form-control" id="upload-field" type="text">
+        </div>
+        <div class="form-group">
+          <label>File Name</label>
+          <input class="form-control" id="upload-name" type="text">
+        </div>
+        <div class="form-group">
+          <label>File</label>
+          <input class="form-control" type="file" id="asset">
+        </div>
+        <div class="form-group">
+          <pre class="form-control" id="upload-result"></pre>
+        </div>
+        <button class="btn btn-primary" onclick="uploadAsset();">Upload</button>
+      </form>
+    </div>
   </div>
   <script src="/bundle.js"></script>
   <script type="text/javascript">
