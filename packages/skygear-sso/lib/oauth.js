@@ -83,51 +83,24 @@ export function linkOAuthProviderWithRedirect(provider, options) {
  * skygear.auth.getLoginRedirectResult().then(...);
  */
 export function getLoginRedirectResult() {
-  this._oauthResultObserver = this._oauthResultObserver ||
-    new WindowMessageObserver();
+  const auth = this.container.auth;
+  return _getRedirectResult.bind(this)('login', auth._authResolve.bind(auth));
+}
 
-  let oauthIframe;
-  const promise = this.container.store.getItem('skygear-oauth-is-login')
-    .then((isRedirectFlowCalled) => {
-      if (!isRedirectFlowCalled) {
-        return Promise.resolve();
-      }
-      if (isRedirectFlowCalled) {
-        let subscribeOauthResult = this._oauthResultObserver.subscribe();
-        let resetRedirectActionStore = this.container.store
-          .removeItem('skygear-oauth-is-login');
-
-        // add the iframe and wait for the receive message
-        oauthIframe = document.createElement('iframe');
-        oauthIframe.style.display = 'none';
-        oauthIframe.src = this.container.url + 'sso/iframe_handler';
-        document.body.appendChild(oauthIframe);
-
-        return Promise.all([subscribeOauthResult, resetRedirectActionStore]);
-      }
-    }).then((result) => {
-      if (!result) {
-        // no previous redirect operation
-        return Promise.resolve();
-      }
-      let oauthResult = result[0];
-      return _ssoResultMessageResolve(oauthResult);
-    }).then((result) => {
-      if (!result) {
-        // no previous redirect operation
-        return Promise.resolve();
-      }
-      return this.container.auth._authResolve(result);
-    });
-
-  // the pattern is going to achieve finally in Promise
-  return promise.catch(() => undefined).then(() => {
-    this._oauthResultObserver.unsubscribe();
-    if (oauthIframe) {
-      document.body.removeChild(oauthIframe);
-    }
-    return promise;
-  });
+/**
+ * Get redirect link result, return user from redirect based login flow
+ * if link success, promise resolve with result { result: 'OK' }.
+ * if link fail, promise fail with error.
+ * if no redirect flow was called, promise resolve with empty result.
+ *
+ * @injectTo {AuthContainer} as getLinkRedirectResult
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.getLinkRedirectResult().then(...);
+ */
+export function getLinkRedirectResult() {
+  return _getRedirectResult.bind(this)('link', Promise.resolve.bind(Promise));
 }
 
 /**
@@ -239,15 +212,71 @@ function _oauthFlowWithRedirect(provider, options, action) {
   .then((data) => {
     const store = this.container.store;
     window.location.href = data.auth_url; //eslint-disable-line
-    return store.setItem(_getOAuthStoreActionKey(provider), true);
+    return store.setItem('skygear-oauth-redirect-action', action);
   });
 }
 
-function _getOAuthStoreActionKey(action) {
-  return {
-    login: 'skygear-oauth-is-login',
-    link: 'skygear-oauth-is-link'
-  }[action];
+
+/**
+ *
+ * @private
+ *
+ * Get redirect login result, return user from redirect based login flow
+ * if login success, promise resolve with logged in user.
+ * if login fail, promise fail with error.
+ * if no redirect flow was called, promise resolve with empty result.
+ *
+ * @injectTo {AuthContainer} as getLoginRedirectResult
+ * @param  {String}   action - login or link
+ * @param  {Function} resolvePromise - function that return promise which will
+ *                                     be called when oauth flow resolve
+ * @return {Promise} promise
+ *
+ */
+function _getRedirectResult(action, resolvePromise) {
+  this._oauthResultObserver = this._oauthResultObserver ||
+    new WindowMessageObserver();
+
+  let oauthIframe;
+  const promise = this.container.store.getItem('skygear-oauth-redirect-action')
+    .then((lastRedirectAction) => {
+      if (lastRedirectAction !== action) {
+        return Promise.resolve();
+      }
+      let subscribeOauthResult = this._oauthResultObserver.subscribe();
+      let resetRedirectActionStore = this.container.store
+        .removeItem('skygear-oauth-redirect-action');
+
+      // add the iframe and wait for the receive message
+      oauthIframe = document.createElement('iframe');
+      oauthIframe.style.display = 'none';
+      oauthIframe.src = this.container.url + 'sso/iframe_handler';
+      document.body.appendChild(oauthIframe);
+
+      return Promise.all([subscribeOauthResult, resetRedirectActionStore]);
+    }).then((result) => {
+      if (!result) {
+        // no previous redirect operation
+        return Promise.resolve();
+      }
+      let oauthResult = result[0];
+      return _ssoResultMessageResolve(oauthResult);
+    }).then((result) => {
+      if (!result) {
+        // no previous redirect operation
+        return Promise.resolve();
+      }
+      return resolvePromise(result);
+    });
+
+  // the pattern is going to achieve finally in Promise
+  return promise.catch(() => undefined).then(() => {
+    if (oauthIframe) {
+      this._oauthResultObserver.unsubscribe();
+      document.body.removeChild(oauthIframe);
+    }
+    return promise;
+  });
 }
 
 function _getAuthUrl(provider, action) {
