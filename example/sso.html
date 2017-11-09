@@ -60,6 +60,16 @@
       <span id="linkRedirectResult"></span>
     </p>
     <hr>
+    <h4>Login or link with access token</h4>
+    <label>Google sign-in with access token</label>
+    <p>
+      <input id="accessTokenInput" type="text" placeholder="Google access token">
+    </p>
+    <p>
+      <button onclick="loginOAuthProviderWithAccessToken();">Sign in with access token</button>
+      <button onclick="linkOAuthProviderWithAccessToken();">Link with access token</button>
+    </p>
+    <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
   <script src="/bundle.js"></script>
@@ -131,6 +141,28 @@
     linkOAuthProviderWithRedirect = function () {
       skygear.auth.linkOAuthProviderWithRedirect("google")
       .catch(function (err) {
+        showErrorResult(err);
+      });
+    };
+    loginOAuthProviderWithAccessToken = function () {
+      var accessToken = document.getElementById("accessTokenInput").value;
+      console.log(accessToken);
+      skygear.auth.loginOAuthProviderWithAccessToken("google", accessToken)
+      .then(function (result) {
+        showSuccessResult('Login with access token success');
+        token.innerText = skygear.auth.accessToken;
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
+      }).catch(function (err) {
+        showErrorResult(err);
+      });
+    };
+    linkOAuthProviderWithAccessToken = function () {
+      var accessToken = document.getElementById("accessTokenInput").value;
+      skygear.auth.linkOAuthProviderWithAccessToken("google", accessToken)
+      .then(function() {
+        showSuccessResult('Link with access token success');
+      }).catch(function (err) {
         showErrorResult(err);
       });
     };
