@@ -24,9 +24,14 @@
       <span id="currentEmail"></span>
     </p>
     <p>
+      <label>Result</label>
+      <span id="resultMessage" style="color: green;"></span>
+    </p>
+    <p>
       <label>Error</label>
       <span id="errorMessage" style="color: red;"></span>
     </p>
+    <hr>
     <h4>Social Login</h4>
     <label>Google sign-in using Popup</label>
     <p>
@@ -40,6 +45,10 @@
     <p id="loginRedirectResult">
     </p>
     <hr>
+    <label>Google link with Popup</label>
+    <p>
+      <button onclick="linkOAuthProviderWithPopup();">Link with google</button>
+    </p>
     <p><button onclick="logout();">Logout</button></p>
   </div>
   <script src="/bundle.js"></script>
@@ -48,6 +57,7 @@
     var token = document.getElementById("accessToken");
     var currentUsername = document.getElementById("currentUsername");
     var currentEmail = document.getElementById("currentEmail");
+    var resultMessage = document.getElementById("resultMessage");
     var errorMessage = document.getElementById("errorMessage");
     skygear.config({
       'endPoint': '{{ SKYGEAR_ENDPOINT }}',
@@ -59,13 +69,12 @@
         currentUsername.innerText = skygear.auth.currentUser.username;
         currentEmail.innerText = skygear.auth.currentUser.email;
       }
-
       // get redirect result when load
       var loginRedirectResult = document.getElementById("loginRedirectResult");
       skygear.auth.getLoginRedirectResult().then(function (user) {
         if (user) {
-          console.log('getLoginRedirectResult', user);
-          loginRedirectResult.innerText = 'get login redirect result success';
+          showSuccessResult('Login with redirect success');
+          loginRedirectResult.innerText = 'Get login redirect result success';
           token.innerText = skygear.auth.accessToken;
           currentUsername.innerText = skygear.auth.currentUser.username;
           currentEmail.innerText = skygear.auth.currentUser.email;
@@ -73,8 +82,8 @@
           loginRedirectResult.innerText = 'No redirect operation was called';
         }
       }, function(error) {
-        console.error('getLoginRedirectResult', error);
-        loginRedirectResult.innerText = "Error: [" + error.error.code + "] " + error.error.message;
+        showErrorResult(error);
+        loginRedirectResult.innerText = resultMessage.innerText;
       });
     }, function(err) {
       console.log(err);
@@ -84,28 +93,48 @@
     logout = function() {
       skygear.auth.logout().then(function() {
         console.log('Logout ok');
-        token.innerText = 'Cleared accessToken';
+        showSuccessResult('Logout ok, cleared accessToken');
+        token.innerText = '';
       }, function(error) {
         console.log('Logout failed');
-        token.innerText = "[" + error.error.code + "] " + error.error.message;
+        showErrorResult(error);
       });
     };
-    loginOAuthProviderWithPopup = function() {
+    loginOAuthProviderWithPopup = function () {
       skygear.auth.loginOAuthProviderWithPopup("google", {})
       .then(function(authResult) {
         console.info('Login oauth with popup success', authResult);
+        showSuccessResult('Login oauth with popup success');
         token.innerText = skygear.auth.accessToken;
         currentUsername.innerText = skygear.auth.currentUser.username;
         currentEmail.innerText = skygear.auth.currentUser.email;
         errorMessage.innerText = "";
       }, function(error) {
         console.error('Login oauth with popup fail', error);
-        errorMessage.innerText = "[" + error.error.code + "] " + error.error.message;
+        showErrorResult(error);
       });
     };
-    loginOAuthProviderWithRedirect = function() {
+    linkOAuthProviderWithPopup = function () {
+      skygear.auth.linkOAuthProviderWithPopup("google", {})
+      .then(function(authResult) {
+        console.info('Link oauth with popup success', authResult);
+        showSuccessResult('Link oauth with popup success');
+      }, function(error) {
+        console.error('Link oauth with popup fail', error);
+        showErrorResult(error);
+      });
+    };
+    loginOAuthProviderWithRedirect = function () {
       skygear.auth.loginOAuthProviderWithRedirect("google");
-    }
+    };
+    showSuccessResult = function (message) {
+      resultMessage.innerText = message;
+      errorMessage.innerText = '';
+    };
+    showErrorResult = function (error) {
+      resultMessage.innerText = '';
+      errorMessage.innerText = "[" + error.error.code + "] " + error.error.message;
+    };
   </script>
 </body>
 </html>

@@ -4,8 +4,9 @@ import cookies from 'js-cookie';
 import { atob } from 'Base64';
 import { NewWindowObserver, WindowMessageObserver } from './observer';
 import { errorResponseFromMessage } from './util';
+
 /**
- * Calling plugin to retrieve auth url and open in popup
+ * Login oauth provider with popup window
  *
  * @injectTo {AuthContainer} as loginOAuthProviderWithPopup
  * @param  {String} provider - name of provider, e.g. google, facebook
@@ -16,39 +17,14 @@ import { errorResponseFromMessage } from './util';
  * skygear.auth.loginOAuthProviderWithPopup('google').then(...);
  */
 export function loginOAuthProviderWithPopup(provider, options) {
-  var newWindow = window.open('', '_blank', 'height=700,width=500');
-  this._oauthWindowObserver = this._oauthWindowObserver ||
-    new NewWindowObserver();
-  this._oauthResultObserver = this._oauthResultObserver ||
-    new WindowMessageObserver();
-
-  const promise = this.container.lambda(`sso/${provider}/login_auth_url`, {
-    ux_mode: 'web_popup',
-    callback_url: window.location.href,
-    ...options || {}
-  }).then((data) => {
-    newWindow.location.href = data.auth_url;
-    return Promise.race([
-      this._oauthWindowObserver.subscribe(newWindow),
-      this._oauthResultObserver.subscribe()
-    ]);
-  }).then((result) => {
-    return _ssoResultMessageResolve(result);
-  }).then((result) => {
-    return this.container.auth._authResolve(result);
-  });
-
-  // the pattern is going to achieve finally in Promise
-  return promise.catch(() => undefined).then(() => {
-    newWindow.close();
-    this._oauthWindowObserver.unsubscribe();
-    this._oauthResultObserver.unsubscribe();
-    return promise;
-  });
+  const auth = this.container.auth;
+  return _oauthFlowWithPopup.bind(this)(
+    provider, options, 'login', auth._authResolve.bind(auth)
+  );
 }
 
 /**
- * Calling plugin to retrieve and redirect to auth url
+ * Login oauth provider with redirect
  *
  * @injectTo {AuthContainer} as loginOAuthProviderWithRedirect
  * @param  {String} provider - name of provider, e.g. google, facebook
@@ -72,7 +48,25 @@ export function loginOAuthProviderWithRedirect(provider, options) {
 }
 
 /**
- * return user from redirect based login flow
+ * Link oauth provider with popup window
+ *
+ * @injectTo {AuthContainer} as linkOAuthProviderWithPopup
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {Object} options - options for generating auth_url
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.linkOAuthProviderWithPopup('google').then(...);
+ */
+export function linkOAuthProviderWithPopup(provider, options) {
+  return _oauthFlowWithPopup.bind(this)(
+    provider, options, 'link', Promise.resolve.bind(Promise)
+  );
+}
+
+
+/**
+ * Get redirect login result, return user from redirect based login flow
  * if login success, promise resolve with logged in user.
  * if login fail, promise fail with error.
  * if no redirect flow was called, promise resolve with empty result.
@@ -176,6 +170,58 @@ export function iframeHandler() {
   });
 }
 
+/**
+ * @private
+ *
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {Object} options - options for generating auth_url
+ * @param  {String} action - login or link
+ * @param  {Function} resolvePromise - function that return promise which will
+ *                                     be called when oauth flow resolve
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.iframeHandler().then(...);
+ */
+function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
+  var newWindow = window.open('', '_blank', 'height=700,width=500');
+  this._oauthWindowObserver = this._oauthWindowObserver ||
+    new NewWindowObserver();
+  this._oauthResultObserver = this._oauthResultObserver ||
+    new WindowMessageObserver();
+
+  const promise = this.container.lambda(_getAuthUrl(provider, action), {
+    ux_mode: 'web_popup',
+    callback_url: window.location.href,
+    ...options || {}
+  }).then((data) => {
+    newWindow.location.href = data.auth_url;
+    return Promise.race([
+      this._oauthWindowObserver.subscribe(newWindow),
+      this._oauthResultObserver.subscribe()
+    ]);
+  }).then((result) => {
+    return _ssoResultMessageResolve(result);
+  }).then((result) => {
+    return resolvePromise(result);
+  });
+
+  // the pattern is going to achieve finally in Promise
+  return promise.catch(() => undefined).then(() => {
+    newWindow.close();
+    this._oauthWindowObserver.unsubscribe();
+    this._oauthResultObserver.unsubscribe();
+    return promise;
+  });
+}
+
+
+function _getAuthUrl(provider, action) {
+  return {
+    login: `sso/${provider}/login_auth_url`,
+    link: `sso/${provider}/link_auth_url`
+  }[action];
+}
 
 /**
  * Posting sso result to given window (opener or parent)
