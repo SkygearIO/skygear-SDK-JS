@@ -35,16 +35,7 @@ export function loginOAuthProviderWithPopup(provider, options) {
  * skygear.auth.loginOAuthProviderWithRedirect('google').then(...);
  */
 export function loginOAuthProviderWithRedirect(provider, options) {
-  return this.container.lambda(`sso/${provider}/login_auth_url`, {
-    ux_mode: 'web_redirect',
-    callback_url: window.location.href,
-    ...options || {}
-  })
-  .then((data) => {
-    const store = this.container.store;
-    window.location.href = data.auth_url;
-    return store.setItem('skygear-oauth-is-login', true);
-  });
+  return _oauthFlowWithRedirect.bind(this)(provider, options, 'login');
 }
 
 /**
@@ -64,6 +55,20 @@ export function linkOAuthProviderWithPopup(provider, options) {
   );
 }
 
+/**
+ * Link oauth provider with redirect
+ *
+ * @injectTo {AuthContainer} as linkOAuthProviderWithRedirect
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {Object} options - options for generating auth_url
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.linkOAuthProviderWithRedirect('google').then(...);
+ */
+export function linkOAuthProviderWithRedirect(provider, options) {
+  return _oauthFlowWithRedirect.bind(this)(provider, options, 'link');
+}
 
 /**
  * Get redirect login result, return user from redirect based login flow
@@ -173,15 +178,14 @@ export function iframeHandler() {
 /**
  * @private
  *
+ * Start oauth flow with popup window
+ *
  * @param  {String} provider - name of provider, e.g. google, facebook
  * @param  {Object} options - options for generating auth_url
  * @param  {String} action - login or link
  * @param  {Function} resolvePromise - function that return promise which will
  *                                     be called when oauth flow resolve
  * @return {Promise} promise
- *
- * @example
- * skygear.auth.iframeHandler().then(...);
  */
 function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   var newWindow = window.open('', '_blank', 'height=700,width=500');
@@ -215,6 +219,36 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   });
 }
 
+/**
+ * @private
+ *
+ * Start oauth flow with redirect
+ *
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {Object} options - options for generating auth_url
+ * @param  {String} action - login or link
+ * @return {Promise} promise
+ *
+ */
+function _oauthFlowWithRedirect(provider, options, action) {
+  return this.container.lambda(_getAuthUrl(provider, action), {
+    ux_mode: 'web_redirect', //eslint-disable-line
+    callback_url: window.location.href, //eslint-disable-line camelcase
+    ...options || {}
+  })
+  .then((data) => {
+    const store = this.container.store;
+    window.location.href = data.auth_url; //eslint-disable-line
+    return store.setItem(_getOAuthStoreActionKey(provider), true);
+  });
+}
+
+function _getOAuthStoreActionKey(action) {
+  return {
+    login: 'skygear-oauth-is-login',
+    link: 'skygear-oauth-is-link'
+  }[action];
+}
 
 function _getAuthUrl(provider, action) {
   return {

@@ -32,7 +32,7 @@
       <span id="errorMessage" style="color: red;"></span>
     </p>
     <hr>
-    <h4>Social Login</h4>
+    <h4>Social Login - Signup and login user</h4>
     <label>Google sign-in using Popup</label>
     <p>
       <button onclick="loginOAuthProviderWithPopup();">Sign in with google</button>
@@ -45,10 +45,16 @@
     <p id="loginRedirectResult">
     </p>
     <hr>
+    <h4>Social Login - Link logged in user</h4>
     <label>Google link with Popup</label>
     <p>
       <button onclick="linkOAuthProviderWithPopup();">Link with google</button>
     </p>
+    <label>Google link using Redirect</label>
+    <p>
+      <button onclick="linkOAuthProviderWithRedirect();">Link with google</button>
+    </p>
+    <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
   <script src="/bundle.js"></script>
@@ -125,8 +131,17 @@
       });
     };
     loginOAuthProviderWithRedirect = function () {
-      skygear.auth.loginOAuthProviderWithRedirect("google");
+      skygear.auth.loginOAuthProviderWithRedirect("google")
+      .catch(function (err) {
+        showErrorResult(err);
+      });
     };
+    linkOAuthProviderWithRedirect = function () {
+      skygear.auth.linkOAuthProviderWithRedirect("google")
+      .catch(function (err) {
+        showErrorResult(err);
+      });
+    }
     showSuccessResult = function (message) {
       resultMessage.innerText = message;
       errorMessage.innerText = '';
