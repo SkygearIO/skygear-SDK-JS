@@ -59,19 +59,15 @@ export function loginOAuthProviderWithPopup(provider, options) {
  * skygear.auth.loginOAuthProviderWithRedirect('google').then(...);
  */
 export function loginOAuthProviderWithRedirect(provider, options) {
-  return new Promise((resolve, reject) => {
-    this.container.lambda(`sso/${provider}/login_auth_url`, {
-      ux_mode: 'web_redirect', //eslint-disable-line
-      callback_url: window.location.href, //eslint-disable-line camelcase
-      ...options || {}
-    })
-    .then((data) => {
-      const store = this.container.store;
-      window.location.href = data.auth_url; //eslint-disable-line
-      return store.setItem('skygear-oauth-is-login', true);
-    }, (err) => {
-      reject(err);
-    });
+  return this.container.lambda(`sso/${provider}/login_auth_url`, {
+    ux_mode: 'web_redirect',
+    callback_url: window.location.href,
+    ...options || {}
+  })
+  .then((data) => {
+    const store = this.container.store;
+    window.location.href = data.auth_url;
+    return store.setItem('skygear-oauth-is-login', true);
   });
 }
 
@@ -142,20 +138,16 @@ export function getLoginRedirectResult() {
  * skygear.auth.oauthHandler().then(...);
  */
 export function oauthHandler() {
-  return new Promise((resolve, reject) => {
-    this.container.lambda('sso/config')
-    .then((data) => {
-      let authorizedUrls = data.authorized_urls; //eslint-disable-line
-      if (window.opener) {
-        // popup
-        _postSSOResultToWindow(window.opener, authorizedUrls);
-        resolve();
-      } else {
-        reject(errorResponseFromMessage('Fail to find opener'));
-      }
-    }, (err) => {
-      reject(err);
-    });
+  return this.container.lambda('sso/config')
+  .then((data) => {
+    let authorizedUrls = data.authorized_urls; //eslint-disable-line
+    if (window.opener) {
+      // popup
+      _postSSOResultToWindow(window.opener, authorizedUrls);
+      return Promise.resolve();
+    } else {
+      return Promise.reject(errorResponseFromMessage('Fail to find opener'));
+    }
   });
 }
 
@@ -173,15 +165,11 @@ export function oauthHandler() {
  * skygear.auth.iframeHandler().then(...);
  */
 export function iframeHandler() {
-  return new Promise((resolve, reject) => {
-    this.container.lambda('sso/config')
-    .then((data) => {
-      let authorizedUrls = data.authorized_urls; //eslint-disable-line
-      _postSSOResultToWindow(window.parent, authorizedUrls);
-      resolve();
-    }, (err) => {
-      reject(err);
-    });
+  return this.container.lambda('sso/config')
+  .then((data) => {
+    let authorizedUrls = data.authorized_urls; //eslint-disable-line
+    _postSSOResultToWindow(window.parent, authorizedUrls);
+    return Promise.resolve();
   });
 }
 
