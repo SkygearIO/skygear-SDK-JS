@@ -22,13 +22,7 @@ export function loginOAuthProviderWithPopup(provider, options) {
   this._oauthResultObserver = this._oauthResultObserver ||
     new PostAuthResultObserver();
 
-  const onLoginCompleted = () => {
-    newWindow.close();
-    this._oauthWindowObserver.unsubscribe();
-    this._oauthResultObserver.unsubscribe();
-  };
-
-  return this.container.lambda(`sso/${provider}/login_auth_url`, {
+  const promise = this.container.lambda(`sso/${provider}/login_auth_url`, {
     ux_mode: 'web_popup',
     callback_url: window.location.href,
     ...options || {}
@@ -40,11 +34,17 @@ export function loginOAuthProviderWithPopup(provider, options) {
       this._oauthResultObserver.subscribe()
     ]);
   }).then((result) => {
-    onLoginCompleted();
     return this.container.auth._authResolve(result);
   }, (error) => {
-    onLoginCompleted();
     return Promise.reject(error);
+  });
+
+  // the pattern is going to achieve finally in Promise
+  return promise.catch(() => undefined).then(() => {
+    newWindow.close();
+    this._oauthWindowObserver.unsubscribe();
+    this._oauthResultObserver.unsubscribe();
+    return promise;
   });
 }
 
@@ -88,26 +88,8 @@ export function getLoginRedirectResult() {
   this._oauthResultObserver = this._oauthResultObserver ||
     new PostAuthResultObserver();
 
-  const addOAuthIframe = () => {
-    this._oauthIframe = document.createElement('iframe');
-    this._oauthIframe.style.display = 'none';
-    this._oauthIframe.src = this.container.url + 'sso/iframe_handler';
-    document.body.appendChild(this._oauthIframe);
-  };
-
-  const removeOAuthIframe = () => {
-    if (this._oauthIframe) {
-      document.body.removeChild(this._oauthIframe);
-      this._oauthIframe = null;
-    }
-  };
-
-  const onLoginCompleted = () => {
-    removeOAuthIframe();
-    this._oauthResultObserver.unsubscribe();
-  };
-
-  return this.container.store.getItem('skygear-oauth-is-login')
+  let oauthIframe;
+  const promise = this.container.store.getItem('skygear-oauth-is-login')
     .then((isRedirectFlowCalled) => {
       if (!isRedirectFlowCalled) {
         return Promise.resolve();
@@ -116,11 +98,16 @@ export function getLoginRedirectResult() {
         let subscribeOauthResult = this._oauthResultObserver.subscribe();
         let resetRedirectActionStore = this.container.store
           .removeItem('skygear-oauth-is-login');
-        addOAuthIframe();
+
+        // add the iframe and wait for the receive message
+        oauthIframe = document.createElement('iframe');
+        oauthIframe.style.display = 'none';
+        oauthIframe.src = this.container.url + 'sso/iframe_handler';
+        document.body.appendChild(oauthIframe);
+
         return Promise.all([subscribeOauthResult, resetRedirectActionStore]);
       }
     }).then((result) => {
-      onLoginCompleted();
       if (!result) {
         // no previous redirect operation
         return Promise.resolve();
@@ -128,9 +115,17 @@ export function getLoginRedirectResult() {
       let oauthResult = result[0];
       return this.container.auth._authResolve(oauthResult);
     }, (error) => {
-      onLoginCompleted();
       return Promise.reject(error);
     });
+
+  // the pattern is going to achieve finally in Promise
+  return promise.catch(() => undefined).then(() => {
+    this._oauthResultObserver.unsubscribe();
+    if (oauthIframe) {
+      document.body.removeChild(oauthIframe);
+    }
+    return promise;
+  });
 }
 
 /**
