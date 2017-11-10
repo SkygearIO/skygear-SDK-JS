@@ -1,4 +1,5 @@
 /* global window:false document:false */
+/* eslint camelcase: 0 */
 import cookies from 'js-cookie';
 import { atob } from 'Base64';
 import { NewWindowObserver, PostAuthResultObserver } from './observer';
@@ -28,12 +29,12 @@ export function loginOAuthProviderWithPopup(provider, options) {
   };
 
   return this.container.lambda(`sso/${provider}/login_auth_url`, {
-    ux_mode: 'web_popup', //eslint-disable-line camelcase
-    callback_url: window.location.href, //eslint-disable-line camelcase
+    ux_mode: 'web_popup',
+    callback_url: window.location.href,
     ...options || {}
   })
   .then((data) => {
-    newWindow.location.href = data.auth_url; //eslint-disable-line camelcase
+    newWindow.location.href = data.auth_url;
     return Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
       this._oauthResultObserver.subscribe()
@@ -140,7 +141,7 @@ export function getLoginRedirectResult() {
 export function oauthHandler() {
   return this.container.lambda('sso/config')
   .then((data) => {
-    let authorizedUrls = data.authorized_urls; //eslint-disable-line
+    let authorizedUrls = data.authorized_urls;
     if (window.opener) {
       // popup
       _postSSOResultToWindow(window.opener, authorizedUrls);
@@ -167,7 +168,7 @@ export function oauthHandler() {
 export function iframeHandler() {
   return this.container.lambda('sso/config')
   .then((data) => {
-    let authorizedUrls = data.authorized_urls; //eslint-disable-line
+    let authorizedUrls = data.authorized_urls;
     _postSSOResultToWindow(window.parent, authorizedUrls);
     return Promise.resolve();
   });
@@ -177,7 +178,7 @@ function _postSSOResultToWindow(window, authorizedUrls) {
   let resultStr = cookies.get('sso_data');
   cookies.remove('sso_data');
   let data = resultStr && JSON.parse(atob(resultStr));
-  let callbackURL = data && data.callback_url; //eslint-disable-line camelcase
+  let callbackURL = data && data.callback_url;
   let result = data && data.result;
   var error = null;
   if (!result) {
