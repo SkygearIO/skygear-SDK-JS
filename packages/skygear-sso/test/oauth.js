@@ -54,6 +54,15 @@ describe('SSO OAuth', function () {
         }
       });
     }
+  }, {
+    pattern: 'http://skygear.dev/sso/provider/unlink',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        result: {
+          result: 'OK'
+        }
+      });
+    }
   }]);
   container.configApiKey('correctApiKey');
   injectToContainer(container);
@@ -69,6 +78,15 @@ describe('SSO OAuth', function () {
 
   it('can link with access token', function (done) {
     container.auth.linkOAuthProviderWithAccessToken('provider', 'accessToken')
+      .then(function (response) {
+        expect(response).not.be.null();
+        expect(response.result).to.eql('OK');
+        done();
+      });
+  });
+
+  it('can unlink oauth', function (done) {
+    container.auth.unlinkOAuthProvider('provider')
       .then(function (response) {
         expect(response).not.be.null();
         expect(response.result).to.eql('OK');
