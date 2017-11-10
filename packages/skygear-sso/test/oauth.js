@@ -9,7 +9,7 @@ describe('SSO OAuth', function () {
   // setup container
   let container = new Container();
   container.pubsub.autoPubsub = false;
-  container.request = container.request = mockSuperagent([{
+  container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({

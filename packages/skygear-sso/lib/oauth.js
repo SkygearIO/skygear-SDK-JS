@@ -89,16 +89,16 @@ export function getLoginRedirectResult() {
     new PostAuthResultObserver();
 
   const addOAuthIframe = () => {
-    this._oauthIfame = document.createElement('iframe');
-    this._oauthIfame.style.display = 'none';
-    this._oauthIfame.src = this.container.url + 'sso/iframe_handler';
-    document.body.appendChild(this._oauthIfame);
+    this._oauthIframe = document.createElement('iframe');
+    this._oauthIframe.style.display = 'none';
+    this._oauthIframe.src = this.container.url + 'sso/iframe_handler';
+    document.body.appendChild(this._oauthIframe);
   };
 
   const removeOAuthIframe = () => {
-    if (this._oauthIfame) {
-      document.body.removeChild(this._oauthIfame);
-      this._oauthIfame = null;
+    if (this._oauthIframe) {
+      document.body.removeChild(this._oauthIframe);
+      this._oauthIframe = null;
     }
   };
 
