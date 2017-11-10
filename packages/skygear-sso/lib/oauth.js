@@ -113,16 +113,20 @@ export function getLoginRedirectResult() {
         return Promise.resolve();
       }
       if (isRedirectFlowCalled) {
+        let subscribeOauthResult = this._oauthResultObserver.subscribe();
+        let resetRedirectActionStore = this.container.store
+          .removeItem('skygear-oauth-is-login');
         addOAuthIframe();
-        this.container.store.removeItem('skygear-oauth-is-login');
-        return this._oauthResultObserver.subscribe();
+        return Promise.all([subscribeOauthResult, resetRedirectActionStore]);
       }
     }).then((result) => {
       onLoginCompleted();
       if (!result) {
+        // no previous redirect operation
         return Promise.resolve();
       }
-      return this.container.auth._authResolve(result);
+      let oauthResult = result[0];
+      return this.container.auth._authResolve(oauthResult);
     }, (error) => {
       onLoginCompleted();
       return Promise.reject(error);
