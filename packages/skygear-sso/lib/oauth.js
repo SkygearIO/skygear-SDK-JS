@@ -185,6 +185,20 @@ export function linkOAuthProviderWithAccessToken(provider, accessToken) {
 }
 
 /**
+ * Unlink oauth provider
+ *
+ * @injectTo {AuthContainer} as unlinkOAuthProvider
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.unlinkOAuthProvider(provider).then(...);
+ */
+export function unlinkOAuthProvider(provider) {
+  return this.container.lambda(`sso/${provider}/unlink`);
+}
+
+/**
  * @private
  *
  * Start oauth flow with popup window
