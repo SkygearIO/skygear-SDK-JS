@@ -18,16 +18,23 @@ describe('SSO OAuth', function () {
         }
       });
     }
+  }, {
+    pattern: 'http://skygear.dev/sso/provider/link_auth_url',
+    fixtures: function (match, params, headers, fn) {
+      return fn({
+        result: {
+          auth_url: 'http://auth_url_of_provider' // eslint-disable-line camelcase
+        }
+      });
+    }
   }]);
   container.configApiKey('correctApiKey');
   injectToContainer(container);
 
-  // setup mock window
-  let MockBrowser = require('mock-browser').mocks.MockBrowser;
-  global.window = new MockBrowser().getWindow();
-
   it('can login oauth with popup', function (done) {
-    // setup window open
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
     global.window.open = function () {
       let newWindow = new MockBrowser().getWindow();
       return newWindow;
@@ -67,6 +74,9 @@ describe('SSO OAuth', function () {
   it('user close window when login oauth with popup', function (done) {
     this.timeout(4000);
 
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
     // mock window will be closed by user
     global.window.open = function () {
       let newWindow = new MockBrowser().getWindow();
@@ -84,4 +94,38 @@ describe('SSO OAuth', function () {
         done();
       });
   });
+
+  it('can link oauth with popup', function (done) {
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
+    global.window.open = function () {
+      let newWindow = new MockBrowser().getWindow();
+      return newWindow;
+    };
+
+    // mock message post from opened window
+    setTimeout(function () {
+      let result = {
+        result: 'OK'
+      };
+      window.postMessage({
+        type: 'result',
+        result
+      }, '*');
+      window.postMessage({
+        type: 'end'
+      }, '*');
+    }, 50);
+
+    container.auth.linkOAuthProviderWithPopup('provider', {})
+      .then(function (result) {
+        expect(result).not.be.null();
+        expect(result.result).to.eql('OK');
+        done();
+      }).catch(function (error) {
+        done(error);
+      });
+  });
+
 });

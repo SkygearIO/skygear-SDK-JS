@@ -2,8 +2,11 @@ import skygear from 'skygear-core';
 import {
   loginOAuthProviderWithPopup,
   loginOAuthProviderWithRedirect,
+  linkOAuthProviderWithPopup,
+  linkOAuthProviderWithRedirect,
   oauthHandler,
   getLoginRedirectResult,
+  getLinkRedirectResult,
   iframeHandler
 } from './oauth';
 
@@ -16,7 +19,12 @@ export const injectToContainer = (container = skygear) => {
     loginOAuthProviderWithPopup;
   authContainerPrototype.loginOAuthProviderWithRedirect =
     loginOAuthProviderWithRedirect;
+  authContainerPrototype.linkOAuthProviderWithPopup =
+    linkOAuthProviderWithPopup;
+  authContainerPrototype.linkOAuthProviderWithRedirect =
+    linkOAuthProviderWithRedirect;
   authContainerPrototype.oauthHandler = oauthHandler;
   authContainerPrototype.getLoginRedirectResult = getLoginRedirectResult;
+  authContainerPrototype.getLinkRedirectResult = getLinkRedirectResult;
   authContainerPrototype.iframeHandler = iframeHandler;
 };
