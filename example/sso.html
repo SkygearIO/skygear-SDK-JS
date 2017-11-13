@@ -80,6 +80,14 @@
       But the linkage will only be recreated at the moment you signup.
     </i>
     <hr>
+    <h4>Get current user's provider profile</h4>
+    <p>
+      <button onclick="getOAuthProviderProfiles();">Get provider user profiles</button>
+    </p>
+    <p>
+      <span id="profileResult"></span>
+    </p>
+    <hr>
     <p><button onclick="logout();">Logout</button></p>
   </div>
   <script src="/bundle.js"></script>
@@ -223,6 +231,15 @@
         linkRedirectResult.innerText = 'Get link redirect result fail';
       });
     };
+    getOAuthProviderProfiles = function () {
+      var profileResult = document.getElementById("profileResult");
+      skygear.auth.getOAuthProviderProfiles().then(function (result) {
+        showSuccessResult(JSON.stringify(result));
+        profileResult.innerText = JSON.stringify(result);
+      }, function (error) {
+        showErrorResult(error);
+      });
+    }
   </script>
 </body>
 </html>

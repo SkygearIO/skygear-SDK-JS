@@ -10,7 +10,8 @@ import {
   iframeHandler,
   loginOAuthProviderWithAccessToken,
   linkOAuthProviderWithAccessToken,
-  unlinkOAuthProvider
+  unlinkOAuthProvider,
+  getOAuthProviderProfiles
 } from './oauth';
 
 /**
@@ -36,4 +37,5 @@ export const injectToContainer = (container = skygear) => {
     linkOAuthProviderWithAccessToken;
   authContainerPrototype.unlinkOAuthProvider =
     unlinkOAuthProvider;
+  authContainerPrototype.getOAuthProviderProfiles = getOAuthProviderProfiles;
 };

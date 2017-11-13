@@ -199,6 +199,20 @@ export function unlinkOAuthProvider(provider) {
 }
 
 /**
+ * Get current user's provider profiles, can use for determine user logged in
+ * provider
+ *
+ * @injectTo {AuthContainer} as getOAuthProviderProfiles
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.getOAuthProviderProfiles().then(...);
+ */
+export function getOAuthProviderProfiles() {
+  return this.container.lambda('sso/provider_profiles');
+}
+
+/**
  * @private
  *
  * Start oauth flow with popup window
