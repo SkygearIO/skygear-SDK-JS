@@ -149,6 +149,56 @@ export function iframeHandler() {
 }
 
 /**
+ * Login oauth provider with access token
+ *
+ * @injectTo {AuthContainer} as loginOAuthProviderWithAccessToken
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {String} accessToken - provider app access token
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.loginOAuthProviderWithAccessToken(provider, accessToken).then(...);
+ */
+export function loginOAuthProviderWithAccessToken(provider, accessToken) {
+  return this.container.lambda(_getAuthWithAccessTokenUrl(provider, 'login'), {
+    access_token: accessToken
+  }).then((result) => {
+    return this.container.auth._authResolve(result);
+  });
+}
+
+/**
+ * Link oauth provider with access token
+ *
+ * @injectTo {AuthContainer} as linkOAuthProviderWithAccessToken
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @param  {String} accessToken - provider app access token
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.linkOAuthProviderWithAccessToken(provider, accessToken).then(...);
+ */
+export function linkOAuthProviderWithAccessToken(provider, accessToken) {
+  return this.container.lambda(_getAuthWithAccessTokenUrl(provider, 'link'), {
+    access_token: accessToken
+  });
+}
+
+/**
+ * Unlink oauth provider
+ *
+ * @injectTo {AuthContainer} as unlinkOAuthProvider
+ * @param  {String} provider - name of provider, e.g. google, facebook
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.unlinkOAuthProvider(provider).then(...);
+ */
+export function unlinkOAuthProvider(provider) {
+  return this.container.lambda(`sso/${provider}/unlink`);
+}
+
+/**
  * @private
  *
  * Start oauth flow with popup window
@@ -205,8 +255,8 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
  */
 function _oauthFlowWithRedirect(provider, options, action) {
   return this.container.lambda(_getAuthUrl(provider, action), {
-    ux_mode: 'web_redirect', //eslint-disable-line
-    callback_url: window.location.href, //eslint-disable-line camelcase
+    ux_mode: 'web_redirect',
+    callback_url: window.location.href,
     ...options || {}
   })
   .then((data) => {
@@ -283,6 +333,13 @@ function _getAuthUrl(provider, action) {
   return {
     login: `sso/${provider}/login_auth_url`,
     link: `sso/${provider}/link_auth_url`
+  }[action];
+}
+
+function _getAuthWithAccessTokenUrl(provider, action) {
+  return {
+    login: `sso/${provider}/login`,
+    link: `sso/${provider}/link`
   }[action];
 }
 
