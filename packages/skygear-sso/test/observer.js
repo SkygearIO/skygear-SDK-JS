@@ -1,6 +1,6 @@
 /* global window:false */
 import { expect } from 'chai';
-import { NewWindowObserver, PostAuthResultObserver } from '../lib/observer';
+import { NewWindowObserver, WindowMessageObserver } from '../lib/observer';
 
 
 describe('SSO observer', function () {
@@ -24,7 +24,7 @@ describe('SSO observer', function () {
   });
 
 
-  it('post auth result observer', function (done) {
+  it('post auth result observer for result message', function (done) {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
@@ -33,11 +33,11 @@ describe('SSO observer', function () {
       hello: 'would'
     };
 
-    const observer = new PostAuthResultObserver();
+    const observer = new WindowMessageObserver();
     observer.subscribe().then(function (result) {
-      expect(result).eq(resultToPost);
+      expect(result.result).eq(resultToPost);
       done();
-    });
+    }).catch(done);
 
     // post message
     window.postMessage({
@@ -49,7 +49,7 @@ describe('SSO observer', function () {
     }, '*');
   });
 
-  it('post auth result observer for error result', function (done) {
+  it('post auth result observer for error message', function (done) {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
@@ -58,17 +58,34 @@ describe('SSO observer', function () {
       error: 'error'
     };
 
-    const observer = new PostAuthResultObserver();
-    observer.subscribe().catch(function (error) {
-      expect(error).eq(errorToPost);
+    const observer = new WindowMessageObserver();
+    observer.subscribe().then(function (result) {
+      expect(result.error).eq(errorToPost);
       done();
-    });
+    }).catch(done);
 
     // post message
     window.postMessage({
-      type: 'result',
-      result: errorToPost
+      type: 'error',
+      error: errorToPost
     }, '*');
+    window.postMessage({
+      type: 'end'
+    }, '*');
+  });
+
+  it('post auth result observer for end message', function (done) {
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
+
+    const observer = new WindowMessageObserver();
+    observer.subscribe().then(function (result) {
+      expect(result.type).eq('end');
+      done();
+    }).catch(done);
+
+    // post message
     window.postMessage({
       type: 'end'
     }, '*');

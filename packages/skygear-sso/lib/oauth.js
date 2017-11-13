@@ -2,7 +2,7 @@
 /* eslint camelcase: 0 */
 import cookies from 'js-cookie';
 import { atob } from 'Base64';
-import { NewWindowObserver, PostAuthResultObserver } from './observer';
+import { NewWindowObserver, WindowMessageObserver } from './observer';
 import { errorResponseFromMessage } from './util';
 /**
  * Calling plugin to retrieve auth url and open in popup
@@ -20,23 +20,22 @@ export function loginOAuthProviderWithPopup(provider, options) {
   this._oauthWindowObserver = this._oauthWindowObserver ||
     new NewWindowObserver();
   this._oauthResultObserver = this._oauthResultObserver ||
-    new PostAuthResultObserver();
+    new WindowMessageObserver();
 
   const promise = this.container.lambda(`sso/${provider}/login_auth_url`, {
     ux_mode: 'web_popup',
     callback_url: window.location.href,
     ...options || {}
-  })
-  .then((data) => {
+  }).then((data) => {
     newWindow.location.href = data.auth_url;
     return Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
       this._oauthResultObserver.subscribe()
     ]);
   }).then((result) => {
+    return _ssoResultMessageResolve(result);
+  }).then((result) => {
     return this.container.auth._authResolve(result);
-  }, (error) => {
-    return Promise.reject(error);
   });
 
   // the pattern is going to achieve finally in Promise
@@ -86,7 +85,7 @@ export function loginOAuthProviderWithRedirect(provider, options) {
  */
 export function getLoginRedirectResult() {
   this._oauthResultObserver = this._oauthResultObserver ||
-    new PostAuthResultObserver();
+    new WindowMessageObserver();
 
   let oauthIframe;
   const promise = this.container.store.getItem('skygear-oauth-is-login')
@@ -113,9 +112,13 @@ export function getLoginRedirectResult() {
         return Promise.resolve();
       }
       let oauthResult = result[0];
-      return this.container.auth._authResolve(oauthResult);
-    }, (error) => {
-      return Promise.reject(error);
+      return _ssoResultMessageResolve(oauthResult);
+    }).then((result) => {
+      if (!result) {
+        // no previous redirect operation
+        return Promise.resolve();
+      }
+      return this.container.auth._authResolve(result);
     });
 
   // the pattern is going to achieve finally in Promise
@@ -143,7 +146,7 @@ export function oauthHandler() {
     let authorizedUrls = data.authorized_urls;
     if (window.opener) {
       // popup
-      _postSSOResultToWindow(window.opener, authorizedUrls);
+      _postSSOResultMessageToWindow(window.opener, authorizedUrls);
       return Promise.resolve();
     } else {
       return Promise.reject(errorResponseFromMessage('Fail to find opener'));
@@ -168,12 +171,29 @@ export function iframeHandler() {
   return this.container.lambda('sso/config')
   .then((data) => {
     let authorizedUrls = data.authorized_urls;
-    _postSSOResultToWindow(window.parent, authorizedUrls);
+    _postSSOResultMessageToWindow(window.parent, authorizedUrls);
     return Promise.resolve();
   });
 }
 
-function _postSSOResultToWindow(window, authorizedUrls) {
+
+/**
+ * Posting sso result to given window (opener or parent)
+ * There are 3 type messages
+ * { "type": "result", "result": { ...result object } }
+ * { "type": "error", "error": { ...error object } }
+ * { "type": "end" }
+ * `error` and `end` will send to all target origin *
+ * and `result` will send to the given callback URL only
+ *
+ * when the observer successfully get the message, it will remove the message
+ * listener, if user provide an incorrect callback url. The observer will still
+ * be able to get the `end` message here
+ *
+ * @private
+ *
+ */
+function _postSSOResultMessageToWindow(window, authorizedUrls) {
   let resultStr = cookies.get('sso_data');
   cookies.remove('sso_data');
   let data = resultStr && JSON.parse(atob(resultStr));
@@ -186,6 +206,13 @@ function _postSSOResultToWindow(window, authorizedUrls) {
     error = 'Fail to retrieve callbackURL';
   } else if (!_validateCallbackUrl(callbackURL, authorizedUrls)) {
     error = `Unauthorized domain: ${callbackURL}`;
+  }
+
+  if (error) {
+    window.postMessage({
+      type: 'error',
+      error
+    }, '*');
   } else {
     window.postMessage({
       type: 'result',
@@ -193,9 +220,28 @@ function _postSSOResultToWindow(window, authorizedUrls) {
     }, callbackURL);
   }
   window.postMessage({
-    type: 'end',
-    error
+    type: 'end'
   }, '*');
+}
+
+function _ssoResultMessageResolve(message) {
+  switch (message.type) {
+  case 'error':
+    return Promise.reject(message.error);
+  case 'result':
+    const result = message.result;
+    // server error
+    if (result.error) {
+      return Promise.reject(result);
+    }
+    return Promise.resolve(result);
+  case 'end':
+    return Promise.reject(errorResponseFromMessage(`Fail to retrieve result.
+Please check the callback_url params in function and
+authorized callback urls list in portal.`));
+  default:
+    return Promise.reject(errorResponseFromMessage('Unkown message type'));
+  }
 }
 
 function _validateCallbackUrl(url, authorizedUrls) {
