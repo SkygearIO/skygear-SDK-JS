@@ -155,7 +155,7 @@ export class Registry {
 
   static _matchHandler(handlerName, path) {
     const namePattern = new RegExp(
-      '^' + handlerName.replace(/\/:((?!\/).)+/g, '/((?!/).)+') + '$'
+      '^' + handlerName.replace(/\/{((?![\/\}]).)+\}/g, '/((?!/).)+') + '$'
     );
     return path.match(namePattern) !== null;
   }

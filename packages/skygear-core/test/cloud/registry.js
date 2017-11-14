@@ -118,13 +118,15 @@ describe('Registry', function () {
   it('add handler with parameters to funcList', function () {
     const registry = new Registry();
     function handlerWithParams() {}
-    registry.registerHandler('download/:platform/:version', handlerWithParams, {
-      method: ['GET'],
-      keyRequired: false,
-      userRequired: true
-    });
+    registry.registerHandler(
+      'download/{platform}/{version}',
+      handlerWithParams, {
+        method: ['GET'],
+        keyRequired: false,
+        userRequired: true
+      });
     expect(registry.funcList().handler).to.be.eql([{
-      name: 'download/:platform/:version',
+      name: 'download/{platform}/{version}',
       methods: ['GET'],
       key_required: false,
       user_required: true
@@ -136,13 +138,15 @@ describe('Registry', function () {
   it('add handler with alternating parameters to funcList', function () {
     const registry = new Registry();
     function handlerWithParams() {}
-    registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
-      method: ['GET'],
-      keyRequired: false,
-      userRequired: true
-    });
+    registry.registerHandler(
+      'hello/{param1}/world/{param2}',
+      handlerWithParams, {
+        method: ['GET'],
+        keyRequired: false,
+        userRequired: true
+      });
     expect(registry.funcList().handler).to.be.eql([{
-      name: 'hello/:param1/world/:param2',
+      name: 'hello/{param1}/world/{param2}',
       methods: ['GET'],
       key_required: false,
       user_required: true
@@ -156,17 +160,17 @@ describe('Registry', function () {
   });
 
   it('match handler with parameterized path', function () {
-    expect(Registry._matchHandler('download/:platform/:version',
+    expect(Registry._matchHandler('download/{platform}/{version}',
       'download/osx/1.0.0')).to.eql(true);
   });
 
   it('match handler with parameterized path - false', function () {
-    expect(Registry._matchHandler('download/:platform/:version',
+    expect(Registry._matchHandler('download/{platform}/{version}',
       'sthelse/osx/1.0.0')).to.eql(false);
   });
 
   it('match handler with calacala parameterized path', function () {
-    expect(Registry._matchHandler('hello/:foo/world/:bar', 'hello/1/world/2'))
+    expect(Registry._matchHandler('hello/{foo}/world/{bar}', 'hello/1/world/2'))
       .to.eql(true);
   });
 
