@@ -2,54 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <style>
+    .inline-input {
+      display: inline-block; width: auto;
+      margin-left: 0.75em;
+    }
+  </style>
   <title>Skygear-SDK-JS</title>
 </head>
 <body>
-  <div id="display">
-    <ul>
-      <li><span>End Point: </span><span id="endpoint-display"></span></li>
-      <li><span>Token: </span><span id="token-display"></span></li>
-      <li><span>Username: </span><span id="username-display"></span></li>
-      <li><span>Email: </span><span id="email-display"></span></li>
-    </ul>
+  <div class="container-fluid">
+    <div class="well" id="main">
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>End Point</label>
+          <span id="endpoint-display"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Token</label>
+          <span id="token-display"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Username</label>
+          <span id="username-display"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Email</label>
+          <span id="email-display"></span>
+        </div>
+      </div>
+    </div>
     <hr />
 
     <div>
       <!-- define role -->
       <div>
         <form action="#" onsubmit="onDefineRole(); return false;">
-          <label>Define Role: </label>
-          <input type="text" id="define-role-input" placeholder="Role Name" />
-          <input type="submit" value="Define" />
+          <div class="form-group">
+            <label>Define Role: </label>
+            <input class="form-control inline-input" type="text" id="define-role-input" placeholder="Role Name" />
+            <input class="btn btn-primary" type="submit" value="Define" />
+          </div>
         </form>
       </div>
 
       <!-- assign role -->
       <div>
         <form action="#" onsubmit="onAssignRole(); return false;">
-          <label>Assign Role: </label>
-          <input type="text" id="assign-role-name-input" placeholder="Role Name" />
-          <input type="text" id="assign-role-to-user-email-input" placeholder="User Email" />
-          <input type="submit" value="Assign" />
+          <div class="form-group">
+            <label>Assign Role: </label>
+            <input class="form-control inline-input" type="text" id="assign-role-name-input" placeholder="Role Name" />
+            <input class="form-control inline-input" type="text" id="assign-role-to-user-email-input" placeholder="User Email" />
+            <input class="btn btn-primary" type="submit" value="Assign" />
+          </div>
         </form>
       </div>
 
       <!-- remove role -->
       <div>
         <form action="#" onsubmit="onRemoveRole(); return false;">
-          <label>Remove Role: </label>
-          <input type="text" id="remove-role-name-input" placeholder="Role Name" />
-          <input type="text" id="remove-role-from-user-email-input" placeholder="User Email" />
-          <input type="submit" value="Remove" />
+          <div class="form-group">
+            <label>Remove Role: </label>
+            <input class="form-control inline-input" type="text" id="remove-role-name-input" placeholder="Role Name" />
+            <input class="form-control inline-input" type="text" id="remove-role-from-user-email-input" placeholder="User Email" />
+            <input class="btn btn-primary" type="submit" value="Remove" />
+          </div>
         </form>
       </div>
 
       <!-- check user role -->
       <div>
         <form action="#" onsubmit="onCheckUserRole(); return false;">
-          <label>Check User Role: </label>
-          <input type="text" id="check-user-role-input" placeholder="User Email" />
-          <input type="submit" value="Check" />
+          <div class="form-group">
+            <label>Check User Role: </label>
+            <input class="form-control inline-input" type="text" id="check-user-role-input" placeholder="User Email" />
+            <input class="btn btn-primary" type="submit" value="Check" />
+          </div>
           <span id="check-user-role-display"></span>
         </form>
       </div>
@@ -57,18 +94,22 @@
       <!-- set admin role -->
       <div>
         <form action="#" onsubmit="onSetAdminRole(); return false;">
-          <label>Set Admin Role: </label>
-          <input type="text" id="set-admin-role-input" placeholder="Role Name" />
-          <input type="submit" value="Set" />
+          <div class="form-group">
+            <label>Set Admin Role: </label>
+            <input class="form-control inline-input" type="text" id="set-admin-role-input" placeholder="Role Name" />
+            <input class="btn btn-primary" type="submit" value="Set" />
+          </div>
         </form>
       </div>
 
       <!-- set default role -->
       <div>
         <form action="#" onsubmit="onSetDefaultRole(); return false;">
-          <label>Set Default Role: </label>
-          <input type="text" id="set-default-role-input" placeholder="Role Name" />
-          <input type="submit" value="Set" />
+          <div class="form-group">
+            <label>Set Default Role: </label>
+            <input class="form-control inline-input" type="text" id="set-default-role-input" placeholder="Role Name" />
+            <input class="btn btn-primary" type="submit" value="Set" />
+          </div>
         </form>
       </div>
     </div>
@@ -87,50 +128,54 @@
       <div>
         <form action="#" onsubmit="return false;">
           <!-- public access settings -->
-          <label>Public: </label>
-          <input type="radio" value="no-access" name="public-access-toggle" id="public-no-access-toggle" />
-          <label>No Access</label>
-          <input type="radio" value="read-only" name="public-access-toggle" id="public-read-only-toggle" />
-          <label>Read Only</label>
-          <input type="radio" value="read-write" name="public-access-toggle" id="public-read-write-toggle" />
-          <label>Read Write</label>
-          <br />
+          <div class="form-group">
+            <label>Public: </label>
+            <input type="radio" value="no-access" name="public-access-toggle" id="public-no-access-toggle" />
+            <label>No Access</label>
+            <input type="radio" value="read-only" name="public-access-toggle" id="public-read-only-toggle" />
+            <label>Read Only</label>
+            <input type="radio" value="read-write" name="public-access-toggle" id="public-read-write-toggle" />
+            <label>Read Write</label>
+          </div>
 
           <!-- role access settings -->
-          <label>Role: </label>
-          <input type="text" id="manage-access-role-input" placeholder="Role Name" />
-          <input type="radio" value="no-access" name="role-access-toggle" id="role-no-access-toggle" />
-          <label>No Access</label>
-          <input type="radio" value="read-only" name="role-access-toggle" id="role-read-only-toggle" />
-          <label>Read Only</label>
-          <input type="radio" value="read-write" name="role-access-toggle" id="role-read-write-toggle" />
-          <label>Read Write</label>
-          <br />
+          <div class="form-group">
+            <label>Role: </label>
+            <input class="form-control inline-input" type="text" id="manage-access-role-input" placeholder="Role Name" />
+            <input type="radio" value="no-access" name="role-access-toggle" id="role-no-access-toggle" />
+            <label>No Access</label>
+            <input type="radio" value="read-only" name="role-access-toggle" id="role-read-only-toggle" />
+            <label>Read Only</label>
+            <input type="radio" value="read-write" name="role-access-toggle" id="role-read-write-toggle" />
+            <label>Read Write</label>
+          </div>
 
           <!-- user access settings -->
-          <label>User Email: </label>
-          <input type="text" id="manage-access-user-email-input" placeholder="User Email" />
-          <input type="radio" value="no-access" name="user-access-toggle" id="user-no-access-toggle" />
-          <label>No Access</label>
-          <input type="radio" value="read-only" name="user-access-toggle" id="user-read-only-toggle" />
-          <label>Read Only</label>
-          <input type="radio" value="read-write" name="user-access-toggle" id="user-read-write-toggle" />
-          <label>Read Write</label>
-          <br />
+          <div class="form-group">
+            <label>User Email: </label>
+            <input class="form-control inline-input" type="text" id="manage-access-user-email-input" placeholder="User Email" />
+            <input type="radio" value="no-access" name="user-access-toggle" id="user-no-access-toggle" />
+            <label>No Access</label>
+            <input type="radio" value="read-only" name="user-access-toggle" id="user-read-only-toggle" />
+            <label>Read Only</label>
+            <input type="radio" value="read-write" name="user-access-toggle" id="user-read-write-toggle" />
+            <label>Read Write</label>
+          </div>
 
           <!-- set access -->
-          <input type="button" value="Set Access" onclick="onSetAccess();" />
-          <input type="button" value="Set Default Access" onclick="onSetDefaultAccess();" />
-          <p />
+          <input class="btn btn-primary" type="button" value="Set Access" onclick="onSetAccess();" />
+          <input class="btn btn-primary" type="button" value="Set Default Access" onclick="onSetDefaultAccess();" />
 
           <!-- create access -->
-          <input type="text" id="record-create-access-input" placeholder="Record Type" />
-          <input type="button" value="Set Create Access" onclick="onSetCreateAccess();" />
-          <br />
+          <div class="form-group">
+            <input class="form-control inline-input" style="margin-left: 0; margin-top: 0.75em;" type="text" id="record-create-access-input" placeholder="Record Type" />
+            <input class="btn btn-primary" type="button" value="Set Create Access" onclick="onSetCreateAccess();" />
+          </div>
         </form>
       </div>
     </div>
     <hr />
+  </div>
   </div>
 </body>
 <script src="/bundle.js"></script>
