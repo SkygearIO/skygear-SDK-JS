@@ -120,13 +120,13 @@ describe('Registry', function () {
     function handlerWithParams() {}
     registry.registerHandler('download/:platform/:version', handlerWithParams, {
       method: ['GET'],
-      authRequired: false,
+      keyRequired: false,
       userRequired: true
     });
     expect(registry.funcList().handler).to.be.eql([{
       name: 'download/:platform/:version',
       methods: ['GET'],
-      auth_required: false,
+      key_required: false,
       user_required: true
     }]);
     expect(registry.getHandler('download/osx/1.0.0', 'GET'))
@@ -138,13 +138,13 @@ describe('Registry', function () {
     function handlerWithParams() {}
     registry.registerHandler('hello/:param1/world/:param2', handlerWithParams, {
       method: ['GET'],
-      authRequired: false,
+      keyRequired: false,
       userRequired: true
     });
     expect(registry.funcList().handler).to.be.eql([{
       name: 'hello/:param1/world/:param2',
       methods: ['GET'],
-      auth_required: false,
+      key_required: false,
       user_required: true
     }]);
     expect(registry.getHandler('hello/foo/world/bar', 'GET'))
