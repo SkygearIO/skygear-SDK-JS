@@ -384,7 +384,8 @@ export class AuthContainer {
     return this.container.store.getItem('skygear-user').then((userJSON) => {
       let attrs = JSON.parse(userJSON);
       this._user = new this._User(attrs);
-    }, (err) => {
+      return this._user;
+    }).catch((err) => {
       console.warn('Failed to get user', err);
       this._user = null;
       return null;
