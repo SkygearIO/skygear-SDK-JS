@@ -16,7 +16,9 @@
 const cookieKeyWhiteList = [
   'skygear-deviceid',
   'skygear-user',
-  'skygear-accesstoken'];
+  'skygear-accesstoken',
+  'skygear-oauth-redirect-action'
+];
 var store;
 
 const PURGEABLE_KEYS_KEY = '_skygear_purgeable_keys_';
