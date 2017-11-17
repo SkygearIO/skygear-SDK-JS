@@ -1,8 +1,7 @@
-import { SkygearError } from 'skygear-core/lib/error';
-
+import skygear from 'skygear-core';
 
 export function errorResponseFromMessage(message) {
   return {
-    error: new SkygearError(message)
+    error: new skygear.Error(message)
   };
 }
