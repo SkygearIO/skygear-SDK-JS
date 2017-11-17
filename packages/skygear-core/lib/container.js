@@ -28,7 +28,10 @@ import {Database} from './database';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
-import {ErrorCodes} from './error';
+import {
+  SkygearError,
+  ErrorCodes
+} from './error';
 
 import {AuthContainer} from './auth';
 import {RelationContainer} from './relation';
@@ -300,6 +303,13 @@ export class BaseContainer {
    */
   get Following() {
     return this.relation.Following;
+  }
+
+  /**
+   * @type {SkygearError}
+   */
+  get Error() {
+    return SkygearError;
   }
 
   /**
