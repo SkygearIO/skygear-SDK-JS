@@ -458,8 +458,10 @@ export default class Container {
     let req = this.request
       .post(this.url + _action)
       .set('X-Skygear-API-Key', this.apiKey)
-      .set('X-Skygear-Access-Token', this.accessToken)
       .set('Accept', 'application/json');
+    if (this.accessToken) {
+      req = req.set('X-Skygear-Access-Token', this.accessToken)
+    }
     if (this.timeoutOptions !== undefined && this.timeoutOptions !== null) {
       req = req.timeout(this.timeoutOptions);
     }
