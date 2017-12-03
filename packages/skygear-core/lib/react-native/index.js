@@ -1,18 +1,6 @@
-import Container from '../container';
-import {ReactNativePushContainer} from './push';
-import {setStore} from '../store';
-import reactNativeStore from './store';
+import container from '../index';
 
-class ReactNativeContainer extends Container {
+container.platform = 'react-native';
+container.configPlatform();
 
-  constructor() {
-    super();
-
-    this._push = new ReactNativePushContainer(this);
-  }
-
-}
-
-setStore(reactNativeStore);
-
-export default new ReactNativeContainer();
+export default container;
