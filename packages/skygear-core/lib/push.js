@@ -33,7 +33,6 @@ export class PushContainer {
     this.container = container;
 
     this._deviceID = null;
-    this._getDeviceID();
   }
 
   /**
