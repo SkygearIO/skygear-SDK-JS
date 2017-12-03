@@ -514,8 +514,10 @@ export default class Container extends BaseContainer {
   _prepareRequestObject(action, data) {
     let requestObject = super._prepareRequestObject(action, data);
 
-    requestObject = requestObject
-      .set('X-Skygear-Access-Token', this.auth.accessToken);
+    if (this.auth.accessToken) {
+      requestObject = requestObject
+        .set('X-Skygear-Access-Token', this.auth.accessToken);
+    }
 
     if (this.timeoutOptions !== undefined && this.timeoutOptions !== null) {
       requestObject = requestObject.timeout(this.timeoutOptions);
