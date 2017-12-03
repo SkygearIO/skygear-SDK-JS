@@ -16,6 +16,7 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import Cache from '../lib/cache';
+import getStore from '../lib/store';
 
 describe('Cache', function () {
 
@@ -23,7 +24,7 @@ describe('Cache', function () {
   let store;
 
   beforeEach(function () {
-    cache = new Cache('prefix');
+    cache = new Cache('prefix', getStore());
     store = {};
     cache.store = store;
   });
