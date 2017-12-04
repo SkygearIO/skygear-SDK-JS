@@ -115,6 +115,37 @@ describe('Registry', function () {
     expect(registry.getHandler('pubHandler', 'GET')).to.be.eql(pubHandler);
   });
 
+  it('add duplicate handler to funcList', function () {
+    const registry = new Registry();
+    function pubHandler() {}
+    registry.registerHandler('pubHandler', pubHandler, {
+      method: ['GET', 'POST'],
+      keyRequired: false,
+      userRequired: true
+    });
+    registry.registerHandler('pubHandler', pubHandler, {
+      method: ['POST'],
+      keyRequired: true,
+      userRequired: false
+    });
+    expect(registry.funcList().handler).to.be.eql([
+      {
+        name: 'pubHandler',
+        methods: ['GET'],
+        key_required: false,
+        user_required: true
+      },
+      {
+        name: 'pubHandler',
+        methods: ['POST'],
+        key_required: true,
+        user_required: false
+      }
+    ]);
+
+    expect(registry.getHandler('pubHandler', 'GET')).to.be.eql(pubHandler);
+  });
+
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}
