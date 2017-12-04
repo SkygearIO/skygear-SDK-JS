@@ -1,6 +1,5 @@
 import container from '../index';
 
-container.platform = 'react-native';
-container.configPlatform();
+container._configPlatform('react-native');
 
 export default container;
