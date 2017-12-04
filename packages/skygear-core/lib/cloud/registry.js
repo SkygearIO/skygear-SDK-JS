@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 /* eslint-disable no-var, camelcase */
+import _ from 'lodash';
+
 export class Registry {
   constructor() {
     this.funcMap = {
@@ -36,7 +38,32 @@ export class Registry {
     this.staticAsset = {};
   }
 
+  _addParamHandler(param) {
+    const kind = 'handler';
+    let list = this.paramMap[kind];
+    list = list.filter(function (item) {
+      if (
+        item.name === param.name &&
+        !_.isEmpty(_.intersection(item.methods, param.methods))
+      ) {
+        console.log(`Replacing previously registered ${kind}: ${item.name}`);
+        return false;
+      }
+      return true;
+    });
+    _.forEach(param.methods, function (method) {
+      const newParam = _.cloneDeep(param);
+      newParam.methods = [method];
+      list.push(newParam);
+    });
+    this.paramMap[kind] = list;
+  }
+
   _addParam(kind, param) {
+    if (kind === 'handler') {
+      return this._addParamHandler(param);
+    }
+
     let list = this.paramMap[kind];
     list = list.filter(function (item) {
       if (item.name === param.name) {
