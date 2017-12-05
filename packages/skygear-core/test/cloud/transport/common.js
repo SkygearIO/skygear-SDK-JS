@@ -19,7 +19,7 @@ import sinon from 'sinon';
 import {Registry} from '../../../lib/cloud/registry';
 import CommonTransport
   from '../../../lib/cloud/transport/common';
-import { SkygearResponse }
+import { SkygearResponse, SkygearRequest }
   from '../../../lib/cloud/transport/common';
 
 describe('CommonTransport', function () {
@@ -229,6 +229,7 @@ describe('CommonTransport', function () {
     const handlerFunc = sinon.spy(function (req) {
       return req.json.data;
     });
+    handlerFunc.handlerName = 'handler1';
     registry.getHandler = sinon.stub().returns(handlerFunc);
     const transport = new CommonTransport(registry);
     return transport.handlerHandler({
@@ -262,6 +263,62 @@ describe('CommonTransport', function () {
       );
       done();
     }).catch(done);
+  });
+
+  it('parse parameters in path', function () {
+    expect(SkygearRequest._parseParamsInPath('download/{platform}/{version}',
+      '/download/osx/1.0.0')).to.be.deep.eql({
+        platform: 'osx',
+        version: '1.0.0'
+      });
+  });
+
+  it('parse parameters in path, calacala parameters', function () {
+    expect(SkygearRequest._parseParamsInPath('hello/{param1}/world/{param2}',
+      '/hello/foo/world/bar')).to.be.deep.eql({
+        param1: 'foo',
+        param2: 'bar'
+      });
+  });
+
+  it('parse parameters in non parameterized path', function () {
+    expect(SkygearRequest._parseParamsInPath('a/normal/url',
+      '/a/normal/url')).to.be.deep.eql({});
+  });
+
+  it('call with handlerHandler with params in req', function () {
+    const registry = new Registry();
+    registry.registerHandler('user/{id}', function (req) {
+      return req;
+    }, {
+      method: ['GET'],
+      authRequired: false,
+      userRequired: true
+    });
+    const transport = new CommonTransport(registry);
+    return transport.handlerHandler({
+      kind: 'handler',
+      name: 'user/12345678',
+      param: {
+        method: 'GET',
+        header: {
+          'Content-Type': ['application/json'],
+          'Content-Length': ['16']
+        },
+        body: 'eyJkYXRhIjoi4pyTIn0=', // {"data":"✓"}
+        path: '/user/12345678',
+        query_string: 'q=1'
+      },
+      context: {
+        user_id: '0383f77599f1412e938f29ae79c3dcc8'
+      }
+    }).then((result) => {
+      const buf = Buffer.from(result.result.body, 'base64');
+      const body = JSON.parse(buf);
+      expect(body.params).to.deep.equal({
+        id: '12345678'
+      });
+    });
   });
 
   it('should call init event handler properly', function (done) {

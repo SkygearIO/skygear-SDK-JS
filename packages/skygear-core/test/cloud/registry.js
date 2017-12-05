@@ -115,6 +115,65 @@ describe('Registry', function () {
     expect(registry.getHandler('pubHandler', 'GET')).to.be.eql(pubHandler);
   });
 
+  it('add handler with parameters to funcList', function () {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler(
+      'download/{platform}/{version}',
+      handlerWithParams, {
+        method: ['GET'],
+        keyRequired: false,
+        userRequired: true
+      });
+    expect(registry.funcList().handler).to.be.eql([{
+      name: 'download/{platform}/{version}',
+      methods: ['GET'],
+      key_required: false,
+      user_required: true
+    }]);
+    expect(registry.getHandler('download/osx/1.0.0', 'GET'))
+      .to.be.eql(handlerWithParams);
+  });
+
+  it('add handler with alternating parameters to funcList', function () {
+    const registry = new Registry();
+    function handlerWithParams() {}
+    registry.registerHandler(
+      'hello/{param1}/world/{param2}',
+      handlerWithParams, {
+        method: ['GET'],
+        keyRequired: false,
+        userRequired: true
+      });
+    expect(registry.funcList().handler).to.be.eql([{
+      name: 'hello/{param1}/world/{param2}',
+      methods: ['GET'],
+      key_required: false,
+      user_required: true
+    }]);
+    expect(registry.getHandler('hello/foo/world/bar', 'GET'))
+      .to.be.eql(handlerWithParams);
+  });
+
+  it('match handler with normal path', function () {
+    expect(Registry._matchHandler('foo/bar', 'foo/bar')).to.eql(true);
+  });
+
+  it('match handler with parameterized path', function () {
+    expect(Registry._matchHandler('download/{platform}/{version}',
+      'download/osx/1.0.0')).to.eql(true);
+  });
+
+  it('match handler with parameterized path - false', function () {
+    expect(Registry._matchHandler('download/{platform}/{version}',
+      'sthelse/osx/1.0.0')).to.eql(false);
+  });
+
+  it('match handler with calacala parameterized path', function () {
+    expect(Registry._matchHandler('hello/{foo}/world/{bar}', 'hello/1/world/2'))
+      .to.eql(true);
+  });
+
   it('add static asset collect func', function () {
     const registry = new Registry();
     function staticAsset() {}

@@ -142,8 +142,22 @@ export class Registry {
     return this._hookTypeMap[name];
   }
 
-  getHandler(name, method) {
-    return this.handlers[name][method];
+  getHandler(path, method) {
+    for (let k in this.handlers) {
+      if (Registry._matchHandler(k, path)) {
+        let func = this.handlers[k][method];
+        func.handlerName = k;
+        return func;
+      }
+    }
+    return undefined;
+  }
+
+  static _matchHandler(handlerName, path) {
+    const namePattern = new RegExp(
+      '^' + handlerName.replace(/\/{((?![\/\}]).)+\}/g, '/((?!/).)+') + '$'
+    );
+    return path.match(namePattern) !== null;
   }
 
   getProvider(name) {
