@@ -418,7 +418,11 @@ export default class CommonTransport {
 
     const func = this.registry.getHandler(param.path, param.method);
     if (!func) {
-      return Promise.reject(new Error('Handler not exist'));
+      return Promise.resolve({
+        result: new SkygearResponse({
+          statusCode: 404,
+        }).toResultJSON()
+      });
     }
 
     const options = {
