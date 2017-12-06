@@ -28,15 +28,6 @@ module.exports = {
     'skygear': 'skygear.min.js',
     'skygear-core': 'skygear.min.js'
   },
-  cdn: {
-    region: 'us-east-1',
-    bucket: 'code.skygear.io',
-    path: {
-      'skygear': 'js/skygear',
-      'skygear-core': 'js/skygear-core'
-    },
-    distribution: 'E1PUX937CX882Y'
-  },
   getAllPackagesPath: function() {
     return glob.sync(this.packages);
   },
@@ -51,8 +42,7 @@ module.exports = {
         standalone: this.browserify.standalone[basename] || 'skygear',
         browserifySrc: path.join(packagePath, this.browserify.src),
         browserifyDest: path.join(packagePath, this.browserify.dest),
-        minifiedDest: this.minified[basename] || 'skygear.min.js',
-        cdnPath: this.cdn.path[basename] || path.join('js', basename)
+        minifiedDest: this.minified[basename] || 'skygear.min.js'
       };
     });
   }

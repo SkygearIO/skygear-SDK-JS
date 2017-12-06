@@ -1,13 +1,17 @@
 VERSION := $(shell git describe --always)
+VERSION_NUM := $(shell git describe --always | sed 's/^v//')
 DOCS_AWS_BUCKET := docs.skygear.io
 DOCS_AWS_DISTRIBUTION := E31J8XF8IPV2V
 DOCS_PREFIX = /js/reference
+CODE_AWS_BUCKET := code.skygear.io
+CODE_AWS_DISTRIBUTION := E1PUX937CX882Y
+CODE_PREFIX = /js/skygear
 OS = $(shell uname -s)
 
 ifeq ($(OS),Darwin)
- SED := sed -i ""
+SED := sed -i ""
 else
- SED := sed -i""
+SED := sed -i""
 endif
 
 ifeq ($(VERSION),)
@@ -73,6 +77,25 @@ doc-invalidate:
 
 .PHONY: doc-deploy
 doc-deploy: doc-clean doc doc-upload doc-invalidate
+
+.PHONY: minify
+minify:
+	$(DOCKER_RUN) npm run minify
+
+.PHONY: minify-clean
+minify-clean:
+	-rm -rf packages/skygear/dist/skygear.min.js*
+
+.PHONY: minify-upload
+minify-upload:
+	$(DOCKER_RUN) aws s3 sync --exclude '*' --include skygear.min.js* packages/skygear/dist s3://$(CODE_AWS_BUCKET)$(CODE_PREFIX)/$(VERSION_NUM) --delete
+
+.PHONY: minify-invalidate
+minify-invalidate:
+	$(DOCKER_RUN) aws cloudfront create-invalidation --distribution-id $(CODE_AWS_DISTRIBUTION) --paths "$(CODE_PREFIX)/$(VERSION_NUM)/*"
+
+.PHONY: minify-deploy
+minify-deploy: minify-clean minify minify-upload minify-invalidate
 
 .PHONY: docker-build
 docker-build:

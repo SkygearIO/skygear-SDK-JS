@@ -24,11 +24,7 @@ fi
 # Deploy minified JS to CDN
 
 if [ -n "$TRAVIS_TAG" ]; then
-    npm run deploy
-fi
-
-if [ "$TRAVIS_TAG" == "latest" ]; then
-    npm run deploy-latest
+    make minify-deploy
 fi
 
 # Notify doc.esdoc.org to regenerate esdoc
