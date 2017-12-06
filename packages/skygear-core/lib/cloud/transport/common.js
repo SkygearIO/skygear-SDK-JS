@@ -412,12 +412,11 @@ export default class CommonTransport {
 
   handlerHandler(payload) {
     const {
-      name,
       param,
       context
     } = payload;
 
-    const func = this.registry.getHandler(name, param.method);
+    const func = this.registry.getHandler(param.path, param.method);
     if (!func) {
       return Promise.reject(new Error('Handler not exist'));
     }

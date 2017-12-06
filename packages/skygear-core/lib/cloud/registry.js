@@ -98,8 +98,9 @@ export class Registry {
 
   registerHandler(name, func, options) {
     const m = options.method || ['GET', 'POST', 'PUT'];
+    const baseName = Registry._parseBaseRoute(name);
     const opts = {
-      name: name,
+      name: baseName,
       methods: m,
       key_required: options.keyRequired,
       user_required: options.userRequired
@@ -153,9 +154,14 @@ export class Registry {
     return undefined;
   }
 
+  static _parseBaseRoute(handlerName) {
+    const basePath = handlerName.replace(/\/{((?![\/\}]).)+\}?.+/g, '/');
+    return basePath;
+  }
+
   static _matchHandler(handlerName, path) {
     const namePattern = new RegExp(
-      '^' + handlerName.replace(/\/{((?![\/\}]).)+\}/g, '/((?!/).)+') + '$'
+      '^[/]?' + handlerName.replace(/\/{((?![\/\}]).)+\}/g, '/((?!/).)+') + '$'
     );
     return path.match(namePattern) !== null;
   }

@@ -126,12 +126,12 @@ describe('Registry', function () {
         userRequired: true
       });
     expect(registry.funcList().handler).to.be.eql([{
-      name: 'download/{platform}/{version}',
+      name: 'download/',
       methods: ['GET'],
       key_required: false,
       user_required: true
     }]);
-    expect(registry.getHandler('download/osx/1.0.0', 'GET'))
+    expect(registry.getHandler('/download/osx/1.0.0', 'GET'))
       .to.be.eql(handlerWithParams);
   });
 
@@ -146,27 +146,57 @@ describe('Registry', function () {
         userRequired: true
       });
     expect(registry.funcList().handler).to.be.eql([{
-      name: 'hello/{param1}/world/{param2}',
+      name: 'hello/',
       methods: ['GET'],
       key_required: false,
       user_required: true
     }]);
-    expect(registry.getHandler('hello/foo/world/bar', 'GET'))
+    expect(registry.getHandler('/hello/foo/world/bar', 'GET'))
       .to.be.eql(handlerWithParams);
+  });
+
+  it('parse handler base route for normal path', function () {
+    expect(Registry._parseBaseRoute('foo/bar')).to.eql('foo/bar');
+    expect(Registry._parseBaseRoute('/foo/bar')).to.eql('/foo/bar');
+  });
+
+  it('parse handler base route for parameterized path', function () {
+    expect(Registry._parseBaseRoute('download/{platform}'))
+      .to.eql('download/');
+  });
+
+  it('parse handler base route for 2 level parameterized path', function () {
+    expect(Registry._parseBaseRoute('download/{platform}/{version}'))
+      .to.eql('download/');
+  });
+
+  it('parse handler base route for middle parameterized path', function () {
+    expect(Registry._parseBaseRoute('download/{platform}/1.0'))
+      .to.eql('download/');
+  });
+
+  it('parse handler base route for 4 parameterized path', function () {
+    expect(Registry._parseBaseRoute('hello/{foo}/world/{bar}'))
+      .to.eql('hello/');
   });
 
   it('match handler with normal path', function () {
     expect(Registry._matchHandler('foo/bar', 'foo/bar')).to.eql(true);
+    expect(Registry._matchHandler('foo/bar', '/foo/bar')).to.eql(true);
   });
 
   it('match handler with parameterized path', function () {
     expect(Registry._matchHandler('download/{platform}/{version}',
       'download/osx/1.0.0')).to.eql(true);
+    expect(Registry._matchHandler('download/{platform}/{version}',
+      '/download/osx/1.0.0')).to.eql(true);
   });
 
   it('match handler with parameterized path - false', function () {
     expect(Registry._matchHandler('download/{platform}/{version}',
       'sthelse/osx/1.0.0')).to.eql(false);
+    expect(Registry._matchHandler('download/{platform}/{version}',
+      '/sthelse/osx/1.0.0')).to.eql(false);
   });
 
   it('match handler with calacala parameterized path', function () {
