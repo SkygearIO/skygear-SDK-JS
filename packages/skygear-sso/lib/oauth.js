@@ -11,6 +11,11 @@ import { errorResponseFromMessage } from './util';
  * @injectTo {AuthContainer} as loginOAuthProviderWithPopup
  * @param  {String} provider - name of provider, e.g. google, facebook
  * @param  {Object} options - options for generating auth_url
+ * @param  {String} options.callbackURL - target url for the popup window to
+ *                                        post the result message
+ * @param  {Array.<String>} options.scope - oauth scopes params
+ * @param  {Object} options.options - add extra query params to provider auth
+ *                                    url
  * @return {Promise} promise
  *
  * @example
@@ -29,6 +34,11 @@ export function loginOAuthProviderWithPopup(provider, options) {
  * @injectTo {AuthContainer} as loginOAuthProviderWithRedirect
  * @param  {String} provider - name of provider, e.g. google, facebook
  * @param  {Object} options - options for generating auth_url
+ * @param  {String} options.callbackURL - target url for the popup window to
+ *                                        post the result message
+ * @param  {Array.<String>} options.scope - oauth scopes params
+ * @param  {Object} options.options - add extra query params to provider auth
+ *                                    url
  * @return {Promise} promise
  *
  * @example
@@ -44,6 +54,11 @@ export function loginOAuthProviderWithRedirect(provider, options) {
  * @injectTo {AuthContainer} as linkOAuthProviderWithPopup
  * @param  {String} provider - name of provider, e.g. google, facebook
  * @param  {Object} options - options for generating auth_url
+ * @param  {String} options.callbackURL - target url for the popup window to
+ *                                        post the result message
+ * @param  {Array.<String>} options.scope - oauth scopes params
+ * @param  {Object} options.options - add extra query params to provider auth
+ *                                    url
  * @return {Promise} promise
  *
  * @example
@@ -61,6 +76,11 @@ export function linkOAuthProviderWithPopup(provider, options) {
  * @injectTo {AuthContainer} as linkOAuthProviderWithRedirect
  * @param  {String} provider - name of provider, e.g. google, facebook
  * @param  {Object} options - options for generating auth_url
+ * @param  {String} options.callbackURL - target url for the popup window to
+ *                                        post the result message
+ * @param  {Array.<String>} options.scope - oauth scopes params
+ * @param  {Object} options.options - add extra query params to provider auth
+ *                                    url
  * @return {Promise} promise
  *
  * @example
@@ -115,10 +135,10 @@ export function getLinkRedirectResult() {
 export function oauthHandler() {
   return this.container.lambda('sso/config')
   .then((data) => {
-    let authorizedUrls = data.authorized_urls;
+    let authorizedURLs = data.authorized_urls;
     if (window.opener) {
       // popup
-      _postSSOResultMessageToWindow(window.opener, authorizedUrls);
+      _postSSOResultMessageToWindow(window.opener, authorizedURLs);
       return Promise.resolve();
     } else {
       return Promise.reject(errorResponseFromMessage('Fail to find opener'));
@@ -142,8 +162,8 @@ export function oauthHandler() {
 export function iframeHandler() {
   return this.container.lambda('sso/config')
   .then((data) => {
-    let authorizedUrls = data.authorized_urls;
-    _postSSOResultMessageToWindow(window.parent, authorizedUrls);
+    let authorizedURLs = data.authorized_urls;
+    _postSSOResultMessageToWindow(window.parent, authorizedURLs);
     return Promise.resolve();
   });
 }
@@ -160,7 +180,7 @@ export function iframeHandler() {
  * skygear.auth.loginOAuthProviderWithAccessToken(provider, accessToken).then(...);
  */
 export function loginOAuthProviderWithAccessToken(provider, accessToken) {
-  return this.container.lambda(_getAuthWithAccessTokenUrl(provider, 'login'), {
+  return this.container.lambda(_getAuthWithAccessTokenURL(provider, 'login'), {
     access_token: accessToken
   }).then((result) => {
     return this.container.auth._authResolve(result);
@@ -179,7 +199,7 @@ export function loginOAuthProviderWithAccessToken(provider, accessToken) {
  * skygear.auth.linkOAuthProviderWithAccessToken(provider, accessToken).then(...);
  */
 export function linkOAuthProviderWithAccessToken(provider, accessToken) {
-  return this.container.lambda(_getAuthWithAccessTokenUrl(provider, 'link'), {
+  return this.container.lambda(_getAuthWithAccessTokenURL(provider, 'link'), {
     access_token: accessToken
   });
 }
@@ -231,11 +251,9 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   this._oauthResultObserver = this._oauthResultObserver ||
     new WindowMessageObserver();
 
-  const promise = this.container.lambda(_getAuthUrl(provider, action), {
-    ux_mode: 'web_popup',
-    callback_url: window.location.href,
-    ...options || {}
-  }).then((data) => {
+  const params = _genAuthURLParams('web_popup', options);
+  const promise = this.container.lambda(_getAuthURL(provider, action), params)
+  .then((data) => {
     newWindow.location.href = data.auth_url;
     return Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
@@ -268,11 +286,8 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
  *
  */
 function _oauthFlowWithRedirect(provider, options, action) {
-  return this.container.lambda(_getAuthUrl(provider, action), {
-    ux_mode: 'web_redirect',
-    callback_url: window.location.href,
-    ...options || {}
-  })
+  const params = _genAuthURLParams('web_redirect', options);
+  return this.container.lambda(_getAuthURL(provider, action), params)
   .then((data) => {
     const store = this.container.store;
     window.location.href = data.auth_url; //eslint-disable-line
@@ -343,18 +358,38 @@ function _getRedirectResult(action, resolvePromise) {
   });
 }
 
-function _getAuthUrl(provider, action) {
+function _getAuthURL(provider, action) {
   return {
     login: `sso/${provider}/login_auth_url`,
     link: `sso/${provider}/link_auth_url`
   }[action];
 }
 
-function _getAuthWithAccessTokenUrl(provider, action) {
+function _getAuthWithAccessTokenURL(provider, action) {
   return {
     login: `sso/${provider}/login`,
     link: `sso/${provider}/link`
   }[action];
+}
+
+function _genAuthURLParams(uxMode, options) {
+  const params = {
+    ux_mode: uxMode,
+    callback_url: window.location.href
+  };
+
+  if (options) {
+    if (options.callbackURL) {
+      params.callback_url = options.callbackURL;
+    }
+    if (options.scope) {
+      params.scope = options.scope;
+    }
+    if (options.options) {
+      params.options = options.options;
+    }
+  }
+  return params;
 }
 
 /**
@@ -373,7 +408,7 @@ function _getAuthWithAccessTokenUrl(provider, action) {
  * @private
  *
  */
-function _postSSOResultMessageToWindow(window, authorizedUrls) {
+function _postSSOResultMessageToWindow(window, authorizedURLs) {
   let resultStr = cookies.get('sso_data');
   cookies.remove('sso_data');
   let data = resultStr && JSON.parse(atob(resultStr));
@@ -384,7 +419,7 @@ function _postSSOResultMessageToWindow(window, authorizedUrls) {
     error = 'Fail to retrieve result';
   } else if (!callbackURL) {
     error = 'Fail to retrieve callbackURL';
-  } else if (!_validateCallbackUrl(callbackURL, authorizedUrls)) {
+  } else if (!_validateCallbackURL(callbackURL, authorizedURLs)) {
     error = `Unauthorized domain: ${callbackURL}`;
   }
 
@@ -424,17 +459,17 @@ authorized callback urls list in portal.`));
   }
 }
 
-function _validateCallbackUrl(url, authorizedUrls) {
+function _validateCallbackURL(url, authorizedURLs) {
   if (!url) {
     return false;
   }
 
   // if no authorized urls are set, all domain is allowed
-  if (authorizedUrls.length === 0) {
+  if (authorizedURLs.length === 0) {
     return true;
   }
 
-  for (let u of authorizedUrls) {
+  for (let u of authorizedURLs) {
     let regex = new RegExp(`^${u}`, 'i');
     if (url && url.match(regex)) {
       return true;
