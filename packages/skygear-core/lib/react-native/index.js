@@ -1,18 +1,14 @@
-import Container from '../container';
+import container from '../index';
 import {ReactNativePushContainer} from './push';
 import {setStore} from '../store';
 import reactNativeStore from './store';
-
-class ReactNativeContainer extends Container {
-
-  constructor() {
-    super();
-
-    this._push = new ReactNativePushContainer(this);
-  }
-
-}
+import {DatabaseContainer} from '../database';
 
 setStore(reactNativeStore);
+container._store = reactNativeStore;
+// Cache of DatabaseContainer will use the container store
+// So we have to recreate the _db after the store is changed
+container._db = new DatabaseContainer(container);
+container._push = new ReactNativePushContainer(container);
 
-export default new ReactNativeContainer();
+export default container;
