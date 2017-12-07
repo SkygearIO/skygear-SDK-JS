@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import getStore from './store';
 
 /**
  * @private
  */
 export default class Cache {
 
-  constructor(prefix, store) {
+  constructor(prefix) {
     this._maxRetryCount = 1;
     this.prefix = prefix;
     this.map = {};
-    this.store = store;
+    this.store = getStore();
   }
 
   _applyNamespaceOnKey(key) {

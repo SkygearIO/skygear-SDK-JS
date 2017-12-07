@@ -44,7 +44,7 @@ export class Database {
      * @private
      */
     this.container = container;
-    this._cacheStore = new Cache(this.dbID, this.container.store);
+    this._cacheStore = new Cache(this.dbID);
     this._cacheResponse = true;
   }
 

@@ -35,6 +35,7 @@ export class AuthContainer {
 
     this._accessToken = null;
     this._user = null;
+    this._getAccessToken();
   }
 
   /**
