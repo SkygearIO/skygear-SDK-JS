@@ -39,9 +39,6 @@ import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
 
-import {setStore} from './store';
-
-
 /**
  * @type {Record}
  */
@@ -119,6 +116,7 @@ export class BaseContainer {
     if (options.endPoint) {
       this.endPoint = options.endPoint;
     }
+
     return Promise.resolve(this);
   }
 
@@ -421,11 +419,6 @@ export default class Container extends BaseContainer {
 
   constructor() {
     super();
-    /**
-     * Platform support web and react-native
-     * @private
-     */
-    this.platform = 'web';
 
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
@@ -500,13 +493,10 @@ export default class Container extends BaseContainer {
    * @param {Object} options - configuration options of the skygear container
    * @param {String} options.apiKey - api key
    * @param {String} options.endPoint - end point
-   * @param {String} options.platform - web or react-native
    * @return {Promise<Container>} promise with the skygear container
    */
   config(options) {
     return super.config(options).then(() => {
-      return this._configPlatform(options.platform);
-    }).then(() => {
       let promises = [
         this.auth._getUser(),
         this.auth._getAccessToken(),
@@ -519,35 +509,6 @@ export default class Container extends BaseContainer {
     }, () => {
       return this;
     });
-  }
-
-  /**
-   * @private
-   *
-   * Configure container based on the platform.
-   *
-   * This will be called in config function when the platform option change.
-   * Or you can call it after change the platform.
-   * Currently only react-native is supported.
-   */
-  _configPlatform(platform) {
-    if (platform && platform !== this.platform) {
-      this.platform = platform;
-
-      if (platform === 'react-native') {
-        // Those modules require react-native
-        // so we don't put them at the top level
-        const reactNativeStore = require('./react-native/store');
-        const { ReactNativePushContainer } = require('./react-native/push');
-        setStore(reactNativeStore);
-        this._store = reactNativeStore;
-        // Cache of DatabaseContainer will use the container store
-        // So we have to recreate the _db after the store is changed
-        this._db = new DatabaseContainer(this);
-        this._push = new ReactNativePushContainer(this);
-      }
-    }
-    return Promise.resolve(this);
   }
 
   _prepareRequestObject(action, data) {

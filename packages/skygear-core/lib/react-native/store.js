@@ -1,4 +1,5 @@
 import reactNative from 'react-native';
+import { Store } from '../store';
 
 class ReactNativeAsyncStorageDriver {
 
@@ -88,4 +89,6 @@ class ReactNativeAsyncStorageDriver {
   }
 }
 
-export default new ReactNativeAsyncStorageDriver(reactNative.AsyncStorage);
+export default new Store(
+  new ReactNativeAsyncStorageDriver(reactNative.AsyncStorage)
+);

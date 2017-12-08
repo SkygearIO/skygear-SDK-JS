@@ -154,7 +154,7 @@ class SyncStorageDriver {
 /**
  * @private
  */
-class Store {
+export class Store {
   constructor(driver, keyWhiteList) {
     this._driver = driver;
     this.keyWhiteList = keyWhiteList;
