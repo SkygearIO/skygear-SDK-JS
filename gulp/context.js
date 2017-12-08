@@ -1,4 +1,4 @@
-var version = "1.1.2";
+var version = "1.2.0-alpha.2";
 
 module.exports = {
   "dev": {
