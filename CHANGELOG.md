@@ -1,3 +1,28 @@
+## 1.2.0 (2017-12-11)
+
+### Features
+- Re-export SkygearError as skygear.Error
+- Implement SSO login flow
+
+    Supported flow are
+    - loginOAuthProviderWithRedirect
+    - loginOAuthProviderWithPopup
+    - linkOAuthProviderWithAccessToken
+    - unlinkAuthProvider
+
+    refs SkygearIO/features#5
+
+### Bug Fixes
+- Fix config react native for chat (#303, SkygearIO/chat-SDK-JS#78)
+- Fix register handler with different HTTP method (#325)
+- Do not set the X-Skygear-Access-Token on null
+
+### Other Notes
+
+- Add Makefile targets for deploying minified JS #349
+- Apply Bootstrap 3 Style to example
+- Update pubsub and query example page style with bootstrap 3
+
 ## 1.1.2 (2017-11-08)
 
 ### Bug Fixes
