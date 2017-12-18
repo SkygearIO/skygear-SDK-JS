@@ -47,8 +47,6 @@ describe('SSO Custom Token', function () {
   it('can login with custom token', function (done) {
     container.auth.loginWithCustomToken('eyXXXX')
       .then(function (user) {
-        console.log('fuck');
-        console.log(user);
         expect(user).not.be.null();
         expect(user.email).to.eql('user1@skygear.dev');
         done();
