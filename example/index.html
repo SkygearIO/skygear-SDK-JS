@@ -77,6 +77,10 @@
           <input class="form-control inline-input" id="password" type="password">
         </div>
         <div class="form-group">
+          <label>Custom Token</label>
+          <input class="form-control inline-input" id="custom_token" type="text">
+        </div>
+        <div class="form-group">
           <div>
             <button class="btn btn-primary" onclick="signup();">Signup</button>
             <button class="btn btn-primary" onclick="signup('username');">Signup With Username</button>
@@ -88,7 +92,8 @@
           <div>
             <button class="btn btn-primary" onclick="login();">Login</button>
             <button class="btn btn-primary" onclick="login('username');">Login with Username</button>
-            <button class="btn btn-primary" onclick="login('email');">Login With Email</button>
+            <button class="btn btn-primary" onclick="login('email');">Login with Email</button>
+            <button class="btn btn-primary" onclick="login('custom_token');">Login with Custom Token</button>
           </div>
         </div>
       </form>
@@ -201,11 +206,14 @@
       var username = document.getElementById("username").value;
       var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
+      var customToken = document.getElementById("custom_token").value;
       var _login = null;
       if (identifier === 'email') {
         _login = skygear.auth.loginWithEmail(email, password);
       } else if (identifier === 'username') {
         _login = skygear.auth.loginWithUsername(username, password)
+      } else if (identifier === 'custom_token') {
+        _login = skygear.auth.loginWithCustomToken(customToken)
       } else {
         _login = skygear.auth.login({
           username: username,

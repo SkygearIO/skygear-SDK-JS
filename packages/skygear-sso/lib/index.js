@@ -13,6 +13,9 @@ import {
   unlinkOAuthProvider,
   getOAuthProviderProfiles
 } from './oauth';
+import {
+  loginWithCustomToken
+} from './custom_token';
 
 /**
  * @private
@@ -38,4 +41,5 @@ export const injectToContainer = (container = skygear) => {
   authContainerPrototype.unlinkOAuthProvider =
     unlinkOAuthProvider;
   authContainerPrototype.getOAuthProviderProfiles = getOAuthProviderProfiles;
+  authContainerPrototype.loginWithCustomToken = loginWithCustomToken;
 };
