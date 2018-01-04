@@ -1,3 +1,8 @@
+## 1.3.0 (2018-01-04)
+
+### Features
+- Implement loginWithCustomToken (#359)
+
 ## 1.2.0 (2017-12-11)
 
 ### Features
