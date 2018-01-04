@@ -6,13 +6,6 @@ DOCS_PREFIX = /js/reference
 CODE_AWS_BUCKET := code.skygear.io
 CODE_AWS_DISTRIBUTION := E1PUX937CX882Y
 CODE_PREFIX = /js/skygear
-OS = $(shell uname -s)
-
-ifeq ($(OS),Darwin)
-SED := sed -i ""
-else
-SED := sed -i""
-endif
 
 ifeq ($(VERSION),)
 $(error VERSION is empty)
@@ -48,9 +41,9 @@ clean:
 build:
 	$(DOCKER_RUN) sh -c "npm run lerna exec -- npm pack"
 
-.PHONY: update-version
-update-version:
-	$(SED) "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
+.PHONY: release-commit
+release-commit:
+	./scripts/release-commit.sh
 
 .PHONY: doc
 doc:
