@@ -1,3 +1,4 @@
+#!/bin/sh -e
 if [ -z "$SKYGEAR_VERSION" ]; then
     >&2 echo "SKYGEAR_VERSION is required."
     exit 1
@@ -13,7 +14,7 @@ fi
 if [ -e "new-release" ]; then
     echo "Making release commit and github release..."
 else
-    echo "file 'new-release' is required."
+    >&2 echo "file 'new-release' is required."
     exit 1
 fi
 
@@ -23,8 +24,7 @@ github-release release -u skygeario -r skygear-SDK-JS --draft --tag v$SKYGEAR_VE
 cat CHANGELOG.md >> new-release && mv new-release CHANGELOG.md
 git add CHANGELOG.md
 
-## Changing the version number and releasing all packages to npm using lerna.
-sed -i "" "s/var version = \".*\";/var version = \"$SKYGEAR_VERSION\";/" gulp/context.js
+make update-version VERSION=$SKYGEAR_VERSION
 
 npm run lerna bootstrap # make sure dependencies are linked
 npm run prepublish # Build all packages

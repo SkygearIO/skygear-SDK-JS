@@ -45,6 +45,10 @@ build:
 release-commit:
 	./scripts/release-commit.sh
 
+.PHONY: update-version
+update-version:
+	sed -i "" "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
+
 .PHONY: doc
 doc:
 	$(DOCKER_RUN) npm run doc
