@@ -48,6 +48,10 @@ clean:
 build:
 	$(DOCKER_RUN) sh -c "npm run lerna exec -- npm pack"
 
+.PHONY: release-commit
+release-commit:
+	./scripts/release-commit.sh
+
 .PHONY: update-version
 update-version:
 	$(SED) "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
