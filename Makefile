@@ -6,6 +6,13 @@ DOCS_PREFIX = /js/reference
 CODE_AWS_BUCKET := code.skygear.io
 CODE_AWS_DISTRIBUTION := E1PUX937CX882Y
 CODE_PREFIX = /js/skygear
+OS = $(shell uname -s)
+
+ifeq ($(OS),Darwin)
+SED := sed -i ""
+else
+SED := sed -i""
+endif
 
 ifeq ($(VERSION),)
 $(error VERSION is empty)
@@ -47,7 +54,7 @@ release-commit:
 
 .PHONY: update-version
 update-version:
-	sed -i "" "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
+	$(SED) "s/var version = \".*\";/var version = \"$(VERSION)\";/" gulp/context.js
 
 .PHONY: doc
 doc:
