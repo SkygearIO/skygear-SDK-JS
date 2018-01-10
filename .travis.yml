@@ -11,8 +11,13 @@ cache:
     - node_modules
 
 node_js:
+  - '9'
   - '8'
   - '6'
+
+matrix:
+  allow_failures:
+    - node_js: '9'
 
 before_install:
   - npm i -g npm@5.3.0
