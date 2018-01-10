@@ -34,6 +34,9 @@ gulp.task('pre-test', function () {
 });
 
 gulp.task('test', ['pre-test'], function () {
+  // Make node.js crash when test case have unhandled promise rejection
+  process.on('unhandledRejection', up => { throw up })
+
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(packageConfig.test)
