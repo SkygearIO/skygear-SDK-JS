@@ -234,6 +234,29 @@ describe('Container auth', function () {
   }]);
   container.configApiKey('correctApiKey');
 
+  it('should handle falsy attrs', function () {
+    return container.auth._setUser(null)
+    .then(() => {
+      assert.equal(container.auth.currentUser, null);
+      return container.auth._getUser();
+    })
+    .then(() => {
+      assert.equal(container.auth.currentUser, null);
+      return container.auth._setUser(undefined);
+    })
+    .then(() => {
+      assert.equal(container.auth.currentUser, null);
+      return container.auth._getUser();
+    })
+    .then(() => {
+      assert.equal(container.auth.currentUser, null);
+      return container.auth._setUser(false);
+    })
+    .then(() => {
+      assert.equal(container.auth.currentUser, null);
+    });
+  });
+
   it('should serialize and deserlize user correctly', function () {
     const userAttrs = {
       _id: 'user/user1',
