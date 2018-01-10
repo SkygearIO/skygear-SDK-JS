@@ -234,26 +234,31 @@ describe('Container auth', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should handle falsy attrs', function () {
-    return container.auth._setUser(null)
+  it('_getUser should set _user=null with missing store key', function () {
+    container.auth._user = new container.UserRecord();
+    container.store.removeItem('skygear-user')
     .then(() => {
-      assert.equal(container.auth.currentUser, null);
       return container.auth._getUser();
     })
     .then(() => {
-      assert.equal(container.auth.currentUser, null);
-      return container.auth._setUser(undefined);
-    })
+      assert.isNull(container.auth.currentUser);
+    });
+  });
+
+
+  it('_setUser should set _user=null with null attrs', function () {
+    container.auth._user = new container.UserRecord();
+    container.auth._setUser(null)
     .then(() => {
-      assert.equal(container.auth.currentUser, null);
-      return container.auth._getUser();
-    })
+      assert.isNull(container.auth.currentUser);
+    });
+  });
+
+  it('_setUser should set _user=null with undefined attrs', function () {
+    container.auth._user = new container.UserRecord();
+    container.auth._setUser(undefined)
     .then(() => {
-      assert.equal(container.auth.currentUser, null);
-      return container.auth._setUser(false);
-    })
-    .then(() => {
-      assert.equal(container.auth.currentUser, null);
+      assert.isNull(container.auth.currentUser);
     });
   });
 
