@@ -34,6 +34,23 @@ describe('Record', function () {
     );
   });
 
+  it('handle falsy attrs', function () {
+    let r = new Record('user', null);
+    let tuple = r.id.split("/");
+    expect(v4Spec.test(tuple[1])).to.be.true();
+    expect(tuple[0]).to.equal('user');
+
+    r = new Record('user', undefined);
+    tuple = r.id.split("/");
+    expect(v4Spec.test(tuple[1])).to.be.true();
+    expect(tuple[0]).to.equal('user');
+
+    r = new Record('user', false);
+    tuple = r.id.split("/");
+    expect(v4Spec.test(tuple[1])).to.be.true();
+    expect(tuple[0]).to.equal('user');
+  });
+
   it('generate with uuid v4 as id', function () {
     let r = new Record('note');
     let tuple = r.id.split("/");

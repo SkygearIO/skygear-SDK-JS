@@ -78,10 +78,13 @@ const _metaKey = _.map(_metaAttrs, function (obj) {
  */
 export default class Record {
 
-  constructor(recordType, attrs = defaultAttrs) {
+  constructor(recordType, attrs) {
     if (!Record.validType(recordType)) {
       throw new Error(
         'RecordType is not valid. Please start with alphanumeric string.');
+    }
+    if (!attrs) {
+      attrs = _.assign({}, defaultAttrs);
     }
     this._recordType = recordType;
     // Favouring `id`, since `id` will always contains type information if
