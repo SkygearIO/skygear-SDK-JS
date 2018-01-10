@@ -381,10 +381,17 @@ export class AuthContainer {
 
   _getUser() {
     return this.container.store.getItem('skygear-user').then((userJSON) => {
-      let attrs = JSON.parse(userJSON);
-      if (!attrs) {
+      if (!userJSON) {
+        this._user = null;
         return null;
       }
+
+      let attrs = JSON.parse(userJSON);
+      if (!attrs) {
+        this._user = null;
+        return null;
+      }
+
       this._user = new this._User(attrs);
       return this._user;
     }).catch((err) => {
