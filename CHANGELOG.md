@@ -1,3 +1,10 @@
+## 0.24.3 (2018-01-17)
+
+### Bug Fixes
+
+- Fix pubsub websocket state maybe inconsitent
+- Don't set the X-Skygear-Access-Token on null
+
 ## 0.24.2 (2017-08-30)
 
 ### Bug Fixes

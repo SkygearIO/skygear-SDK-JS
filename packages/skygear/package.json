@@ -1,6 +1,6 @@
 {
   "name": "skygear",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "description": "JS SDK of Skygear services",
   "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",
   "repository": {
@@ -26,7 +26,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "skygear-core": "^0.24.2"
+    "skygear-core": "^0.24.3"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
