@@ -333,7 +333,9 @@ export class Pubsub {
    */
   close() {
     if (this._ws) {
+      this._clearWebSocket();
       this._ws.close();
+      this.ee.emit(ON_CLOSE, false);
       this._ws = null;
     }
   }
@@ -373,6 +375,16 @@ export class Pubsub {
     };
   }
 
+  _clearWebSocket() {
+    if (!this._ws) {
+      return;
+    }
+
+    this._ws.onopen = null;
+    this._ws.onclose = null;
+    this._ws.onmessage = null;
+  }
+
   /**
    * Connects to server if the Skygear container has credentials and not
    * connected.
@@ -383,6 +395,12 @@ export class Pubsub {
     }
 
     let pubsubUrl = this._pubsubUrl(this._internal);
+
+    // The old websocket will still call our _onopen and we will try to send
+    // message with the new websocket, whose readyState may not be OPEN.
+    // Therefore, we need to clear the websocket
+    this._clearWebSocket();
+
     let ws = new this.WebSocket(pubsubUrl);
     this._setWebSocket(ws);
   }
