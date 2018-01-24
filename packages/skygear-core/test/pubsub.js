@@ -201,6 +201,12 @@ describe('Pubsub', function () {
   });
 
   it('once should subscribe channel and return promise', function () {
+    ws.send = sinon.spy(function (data) {
+      expect(JSON.parse(data)).to.deep.equal({
+        action: 'sub',
+        channel: 'CHANNEL'
+      });
+    });
     sinon.spy(pubsub, 'subscribe');
     const promise = pubsub.once('CHANNEL');
     promise.catch(function (err) {
