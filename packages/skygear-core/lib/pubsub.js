@@ -335,7 +335,7 @@ export class Pubsub {
     if (this._ws) {
       this._clearWebSocket();
       this._ws.close();
-      this.ee.emit(ON_CLOSE, false);
+      this._ee.emit(ON_CLOSE, false);
       this._ws = null;
     }
   }
