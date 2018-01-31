@@ -99,7 +99,8 @@ describe('Container auth', function () {
               '_access': null, // eslint-disable-line camelcase
               'username': 'user1',
               'email': 'user1@skygear.io',
-              ...params['profile'] || {}
+              // simulate serialisation and deserialisation by superagent
+              ...JSON.parse(JSON.stringify(params['profile'])) || {}
             }
           }
         });
@@ -303,6 +304,30 @@ describe('Container auth', function () {
           'user/user:id1'
         );
         assert.equal(container.auth.currentUser.age, 100);
+      });
+  });
+
+  it('should signup with date in profile successfully', function () {
+    return container.auth
+      .signup({
+        username: 'username',
+        email: 'user@email.com'
+      }, 'passwd', {
+        birthday: new Date(0)
+      })
+      .then(function (user) {
+        assert.equal(
+          container.auth.accessToken,
+          'uuid1');
+        assert.instanceOf(container.auth.currentUser, container.Record);
+        assert.equal(
+          container.auth.currentUser.id,
+          'user/user:id1'
+        );
+        assert.equal(
+          container.auth.currentUser.birthday.getTime(),
+          0
+        );
       });
   });
 

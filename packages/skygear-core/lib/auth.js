@@ -15,7 +15,7 @@
  */
 const _ = require('lodash');
 
-import {EventHandle} from './util';
+import {EventHandle, toJSON} from './util';
 import {ErrorCodes} from './error';
 import Role from './role';
 
@@ -77,7 +77,7 @@ export class AuthContainer {
     return this.container.makeRequest('auth:signup', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password,
-      profile: data
+      profile: toJSON(data)
     }).then(this._authResolve.bind(this));
   }
 
