@@ -1,3 +1,19 @@
+## 1.3.1 (2018-02-01)
+
+### Bug Fixes
+- Fix signup profile serialization
+- Fix pubsub test case
+- Fix pubsub websocket state maybe inconsitent
+- Fail test case when there is unhandled promise rejection (#371)
+- Handle falsy skygear-user value in store (#361)
+- Fix auth init before login (361)
+- Fix Record construct with falsy attrs
+- Inject sso and forgot password to react native container
+
+### Other Notes
+- Add node_js: 9 in travis
+-  Add release-commit target
+
 ## 1.3.0 (2018-01-04)
 
 ### Features
