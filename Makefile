@@ -103,8 +103,24 @@ minify-deploy: minify-clean minify minify-upload minify-invalidate
 
 .PHONY: docker-build
 docker-build:
-	make -C scripts/docker-images/release docker-build
+	docker build -t $(IMAGE_NAME) .
+	docker build -t $(IMAGE_NAME)-onbuild -f Dockerfile.onbuild .
 
 .PHONY: docker-push
 docker-push:
-	make -C scripts/docker-images/release docker-push
+	docker tag $(IMAGE_NAME) $(DOCKER_REGISTRY)$(IMAGE_NAME)
+	docker push $(DOCKER_REGISTRY)$(IMAGE_NAME)
+	docker tag $(IMAGE_NAME)-onbuild $(DOCKER_REGISTRY)$(IMAGE_NAME)-onbuild
+	docker push $(DOCKER_REGISTRY)$(IMAGE_NAME)-onbuild
+
+.PHONY: docker-push-version
+docker-push-version:
+	docker tag $(IMAGE_NAME) $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):$(PUSH_DOCKER_TAG)
+	docker push $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):$(PUSH_DOCKER_TAG)
+	docker tag $(IMAGE_NAME)-onbuild $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):$(PUSH_DOCKER_TAG)-onbuild
+	docker push $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):$(PUSH_DOCKER_TAG)-onbuild
+
+	@if [ "latest" = "$(PUSH_DOCKER_TAG)" ]; then\
+		docker tag $(IMAGE_NAME)-onbuild $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):onbuild;\
+		docker push $(DOCKER_REGISTRY)$(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):onbuild;\
+	fi
