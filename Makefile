@@ -1,5 +1,5 @@
-VERSION := $(shell git describe --always)
-VERSION_NUM := $(shell git describe --always | sed 's/^v//')
+VERSION ?= $(shell git describe --always)
+VERSION_NUM := $(shell echo $(VERSION) | sed 's/^v//')
 DOCS_AWS_BUCKET := docs.skygear.io
 DOCS_AWS_DISTRIBUTION := E31J8XF8IPV2V
 DOCS_PREFIX = /js/reference
@@ -7,6 +7,14 @@ CODE_AWS_BUCKET := code.skygear.io
 CODE_AWS_DISTRIBUTION := E1PUX937CX882Y
 CODE_PREFIX = /js/skygear
 OS = $(shell uname -s)
+
+DOCKER_REGISTRY :=
+DOCKER_ORG_NAME := skygeario
+DOCKER_IMAGE := skygear-node
+DOCKER_TAG = git-$(shell git rev-parse --short HEAD)
+PUSH_DOCKER_TAG := $(VERSION)
+
+IMAGE_NAME ?= $(DOCKER_ORG_NAME)/$(DOCKER_IMAGE):$(DOCKER_TAG)
 
 ifeq ($(OS),Darwin)
 SED := sed -i ""
@@ -103,8 +111,8 @@ minify-deploy: minify-clean minify minify-upload minify-invalidate
 
 .PHONY: docker-build
 docker-build:
-	docker build -t $(IMAGE_NAME) .
-	docker build -t $(IMAGE_NAME)-onbuild -f Dockerfile.onbuild .
+	docker build --build-arg version=$(VERSION) -t $(IMAGE_NAME) .
+	docker build --build-arg version=$(VERSION) -t $(IMAGE_NAME)-onbuild -f Dockerfile.onbuild .
 
 .PHONY: docker-push
 docker-push:
