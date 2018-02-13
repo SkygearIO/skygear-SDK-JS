@@ -42,6 +42,12 @@ export const ErrorCodes = {
   PluginTimeout: 119,
   RecordQueryInvalid: 120,
   PluginInitializing: 121,
+  ResponseTimeout: 122,
+  DeniedArgument: 123,
+  RecordQueryDenied: 124,
+  NotConfigured: 125,
+  PasswordPolicyViolated: 126,
+  UserDisabled: 127,
   UnexpectedError: 10000
 };
 
@@ -130,6 +136,22 @@ export class SkygearError extends Error {
       return 'The server took too long to process.';
     case ErrorCodes.RecordQueryInvalid:
       return 'A problem occurred while processing this request.';
+    case ErrorCodes.ResponseTimeout:
+      return 'The server timed out while processing the request.';
+    case ErrorCodes.DeniedArgument:
+      return 'The server is unable to process the data.';
+    case ErrorCodes.RecordQueryDenied:
+      return 'You are not allowed to perform this operation.';
+    case ErrorCodes.NotConfigured:
+      return 'The server is not configured for this operation.';
+    case ErrorCodes.PasswordPolicyViolated:
+      return 'The password does not meet policy requirement.';
+    case ErrorCodes.UserDisabled:
+      if (this.info && this.info.message) {
+        return 'The user is disabled: ${this.info.message}';
+      } else {
+        return 'The user is disabled.';
+      }
     default:
       return 'An unexpected error has occurred.';
     }
