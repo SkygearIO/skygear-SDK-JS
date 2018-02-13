@@ -540,4 +540,47 @@ describe('Container auth', function () {
       });
   });
 });
+
+describe('AuthContainer', function () {
+  let container = new Container();
+  container.pubsub.autoPubsub = false;
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/auth/disable/set',
+    fixtures: function (match, params, headers, fn) {
+      assert.equal(params.auth_id, 'some-uuid');
+      if (params.disabled) {
+        assert.equal(params.message, 'some reason');
+        assert.equal(params.expiry, '2014-09-27T17:40:00.000Z');
+      }
+      return fn({
+        'result': {
+          'status': 'OK'
+        }
+      });
+    }
+  }]);
+
+  it('enableUser should send auth:disable:set', function () {
+    return container.auth.enableUser('some-uuid')
+    .then((userID) => {
+      assert.equal(userID, 'some-uuid');
+    }, (err) => {
+      assert.fail(err);
+    });
+  });
+
+  it('disableUser should send auth:disable:set', function () {
+    return container.auth.disableUser(
+      'some-uuid',
+      'some reason',
+      new Date('2014-09-27T17:40:00.000Z')
+    )
+    .then((userID) => {
+      assert.equal(userID, 'some-uuid');
+    }, (err) => {
+      assert.fail(err);
+    });
+  });
+});
 /*eslint-enable dot-notation, no-unused-vars, quote-props */
