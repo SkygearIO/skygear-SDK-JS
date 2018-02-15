@@ -19,7 +19,6 @@ services:
       # `db` in the following string should match the name of the database
       # container above.
       DATABASE_URL: postgresql://postgres:@db/postgres?sslmode=disable
-      REDISTEST: redis://redis:6379
       API_KEY: changeme
       MASTER_KEY: secret
       APP_NAME: _
@@ -34,15 +33,12 @@ services:
       NODE_PATH: http://plugin:9000
 
   plugin:
-    image: skygeario/skygear-nodedev
-    command: node_modules/.bin/skygear-node
+    image: quay.io/skygeario/skygear-node:canary
     volumes:
     - .:/usr/src/app
-    - ../../packages/skygear:/usr/src/app/skygear
     environment:
       DATABASE_URL: postgres://postgres@db/postgres?sslmode=disable
       PUBSUB_URL: PUBSUB_URL=ws://app:3000/pubsub
-      SKYGEAR_ADDRESS: tcp://app:5555
       SKYGEAR_ENDPOINT: http://app:3000
       API_KEY: changeme
       MASTER_KEY: secret
