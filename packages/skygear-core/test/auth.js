@@ -548,10 +548,16 @@ describe('AuthContainer', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/disable/set',
     fixtures: function (match, params, headers, fn) {
-      assert.equal(params.auth_id, 'some-uuid');
-      if (params.disabled) {
+      if (params.auth_id === 'some-uuid1') {
+        assert.isFalse(params.disabled);
+      } else if (params.auth_id === 'some-uuid2') {
+        assert.isTrue(params.disabled);
         assert.equal(params.message, 'some reason');
         assert.equal(params.expiry, '2014-09-27T17:40:00.000Z');
+      } else if (params.auth_id === 'some-uuid3') {
+        assert.isTrue(params.disabled);
+      } else {
+        assert.fail(params.auth_id);
       }
       return fn({
         'result': {
@@ -562,9 +568,9 @@ describe('AuthContainer', function () {
   }]);
 
   it('enableUser should send auth:disable:set', function () {
-    return container.auth.enableUser('some-uuid')
+    return container.auth.enableUser('some-uuid1')
     .then((userID) => {
-      assert.equal(userID, 'some-uuid');
+      assert.equal(userID, 'some-uuid1');
     }, (err) => {
       assert.fail(err);
     });
@@ -572,15 +578,27 @@ describe('AuthContainer', function () {
 
   it('disableUser should send auth:disable:set', function () {
     return container.auth.disableUser(
-      'some-uuid',
+      'some-uuid2',
       'some reason',
       new Date('2014-09-27T17:40:00.000Z')
     )
     .then((userID) => {
-      assert.equal(userID, 'some-uuid');
+      assert.equal(userID, 'some-uuid2');
     }, (err) => {
       assert.fail(err);
     });
   });
+
+  it(
+    'disableUser should send auth:disable:set without optional fields',
+    function () {
+      return container.auth.disableUser('some-uuid3')
+      .then((userID) => {
+        assert.equal(userID, 'some-uuid3');
+      }, (err) => {
+        assert.fail(err);
+      });
+    }
+  );
 });
 /*eslint-enable dot-notation, no-unused-vars, quote-props */

@@ -374,7 +374,7 @@ export class AuthContainer {
 
     let payload = {
       auth_id: userId, // eslint-disable-line camelcase
-      disabled: false
+      disabled: true
     };
     if (message) {
       payload.message = message;
