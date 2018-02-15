@@ -5,7 +5,7 @@
 docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
 docker login -u "$QUAY_USER" -p "$QUAY_PASSWORD" quay.io
 
-MAKE="make -C scripts/docker-images/release"
+MAKE="make"
 
 $MAKE docker-build
 
