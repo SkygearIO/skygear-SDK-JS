@@ -8,9 +8,5 @@ RUN \
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY . /usr/src/app
-RUN (cd /usr/src/app; npm install && npm link)
-
 ENV NODE_PATH /usr/local/lib/node_modules
 ENTRYPOINT ["/usr/local/bin/tini", "--"]
-CMD ["skygear-node"]

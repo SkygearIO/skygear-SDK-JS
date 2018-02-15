@@ -31,8 +31,8 @@ services:
   plugin:
     build:
       context: .
-      dockerfile: Dockerfile-development
-    command: skygear-node
+      dockerfile: Dockerfile.dev
+    command: node ./packages/skygear/bin.js
     volumes:
     - .:/usr/src/app
     environment:
@@ -43,6 +43,14 @@ services:
       PUBSUB_URL: ws://app:3000/pubsub
       SKYGEAR_ENDPOINT: http://app:3000
       HTTP: "true"
+
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    volumes:
+    - .:/usr/src/app
 
 volumes:
   db_data:

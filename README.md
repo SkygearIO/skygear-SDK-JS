@@ -82,6 +82,9 @@ SKYGEAR_ENDPOINT=https://<your-app-name>.skygeario.com SKYGEAR_API_KEY=<your-api
 ```
 
 ## Development
+
+Check out [DEVELOPMENT.md].
+
 Pull requests are welcomed!
 
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues

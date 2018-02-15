@@ -27,16 +27,8 @@ $(error VERSION is empty)
 endif
 
 
-DOCKER_COMPOSE_CMD := docker-compose \
-	-f docker-compose.dev.yml \
-	-p skygear-node-test
-
 ifeq (1,${WITH_DOCKER})
-DOCKER_RUN := docker run --rm -i \
-	-v `pwd`:/usr/src/app \
-	-w /usr/src/app \
-	skygeario/skygear-nodedev
-DOCKER_COMPOSE_RUN := ${DOCKER_COMPOSE_CMD} run --rm node
+DOCKER_RUN := docker-compose run --rm node
 endif
 
 .PHONY: vendor
@@ -74,7 +66,7 @@ doc-clean:
 
 .PHONY: doc-upload
 doc-upload:
-	$(DOCKER_RUN) aws s3 sync esdoc s3://$(DOCS_AWS_BUCKET)$(DOCS_PREFIX)/$(VERSION) --delete
+	aws s3 sync esdoc s3://$(DOCS_AWS_BUCKET)$(DOCS_PREFIX)/$(VERSION) --delete
 
 .PHONY: doc-trigger-esdoc
 doc-trigger-esdoc:
@@ -85,7 +77,7 @@ doc-trigger-esdoc:
 
 .PHONY: doc-invalidate
 doc-invalidate:
-	$(DOCKER_RUN) aws cloudfront create-invalidation --distribution-id $(DOCS_AWS_DISTRIBUTION) --paths "$(DOCS_PREFIX)/$(VERSION)/*"
+	aws cloudfront create-invalidation --distribution-id $(DOCS_AWS_DISTRIBUTION) --paths "$(DOCS_PREFIX)/$(VERSION)/*"
 
 .PHONY: doc-deploy
 doc-deploy: doc-clean doc doc-upload doc-invalidate
@@ -100,11 +92,11 @@ minify-clean:
 
 .PHONY: minify-upload
 minify-upload:
-	$(DOCKER_RUN) aws s3 sync --exclude '*' --include skygear.min.js* packages/skygear/dist s3://$(CODE_AWS_BUCKET)$(CODE_PREFIX)/$(VERSION_NUM) --delete
+	aws s3 sync --exclude '*' --include skygear.min.js* packages/skygear/dist s3://$(CODE_AWS_BUCKET)$(CODE_PREFIX)/$(VERSION_NUM) --delete
 
 .PHONY: minify-invalidate
 minify-invalidate:
-	$(DOCKER_RUN) aws cloudfront create-invalidation --distribution-id $(CODE_AWS_DISTRIBUTION) --paths "$(CODE_PREFIX)/$(VERSION_NUM)/*"
+	aws cloudfront create-invalidation --distribution-id $(CODE_AWS_DISTRIBUTION) --paths "$(CODE_PREFIX)/$(VERSION_NUM)/*"
 
 .PHONY: minify-deploy
 minify-deploy: minify-clean minify minify-upload minify-invalidate
