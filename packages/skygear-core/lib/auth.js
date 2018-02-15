@@ -345,6 +345,48 @@ export class AuthContainer {
     }).then((body) => body.result);
   }
 
+  /**
+   * Enable user account of a user.
+   *
+   * @param  {Record|String} user - target user
+   * @return {Promise<String>} promise with target user
+   */
+  enableUser(user) {
+    const userId = user._id || user;
+
+    return this.container.makeRequest('auth:disable:set', {
+      auth_id: userId, // eslint-disable-line camelcase
+      disabled: false
+    }).then(() => userId);
+  }
+
+  /**
+   * Disable user account of a user.
+   *
+   * @param  {Record|String} user - target user
+   * @param  {String} [message] - message to be shown to user
+   * @param  {Date} [expiry] - date and time when the user is automatically
+   *   enabled
+   * @return {Promise<String>} promise with target user
+   */
+  disableUser(user, message, expiry) {
+    const userId = user._id || user;
+
+    let payload = {
+      auth_id: userId, // eslint-disable-line camelcase
+      disabled: true
+    };
+    if (message) {
+      payload.message = message;
+    }
+    if (expiry) {
+      payload.expiry = expiry.toJSON();
+    }
+
+    return this.container.makeRequest('auth:disable:set', payload)
+    .then(() => userId);
+  }
+
   _getAccessToken() {
     return this.container.store.getItem('skygear-accesstoken').then((token) => {
       this._accessToken = token;
