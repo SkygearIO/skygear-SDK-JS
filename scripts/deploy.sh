@@ -27,6 +27,10 @@ if [ -n "$TRAVIS_TAG" ]; then
     make minify-deploy
 fi
 
+if [ "$TRAVIS_TAG" == "latest" ]; then
+    make minify-deploy VERSION=latest
+fi
+
 # Notify doc.esdoc.org to regenerate esdoc
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
