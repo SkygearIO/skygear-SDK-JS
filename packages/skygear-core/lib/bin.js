@@ -43,12 +43,12 @@ if (cmd === '--settings') {
   process.exit();
 }
 
-settings.loadModules.forEach(function (moduleName) {
-  configModule(moduleName);
-});
+const loadModulesPromise = Promise.all(
+  settings.loadModules.map((moduleName) => configModule(moduleName)),
+);
 
 const codePath = path.join(process.cwd(), cmd);
-configModule(codePath, {
+const mainModulePromise = configModule(codePath, {
   ignoreWarning: true
 });
 
@@ -68,4 +68,8 @@ if (settings.http.enabled) {
   throw new Error('Currently, only http transport is supported.');
 }
 
-transport.start();
+loadModulesPromise
+  .then(mainModulePromise)
+  .then(() => {
+    transport.start();
+  });

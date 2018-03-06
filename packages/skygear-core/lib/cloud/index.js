@@ -421,7 +421,7 @@ export function configModule(moduleName, options) {
   const { includeme } = require(moduleName);
   if (includeme !== undefined) {
     const settings = {};
-    includeme(module.exports, settings);
+    return new Promise(resolve => resolve(includeme(module.exports, settings)));
   } else if (ignoreWarning !== true) {
     console.warn(`The ${moduleName} module does not export the includeme` +
     ' function. This function is required to config the module.');
