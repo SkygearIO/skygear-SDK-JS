@@ -43,14 +43,11 @@ if (cmd === '--settings') {
   process.exit();
 }
 
-settings.loadModules.forEach(function (moduleName) {
-  configModule(moduleName);
+const loadModules = settings.loadModules.map((moduleName) => {
+  return configModule(moduleName);
 });
 
 const codePath = path.join(process.cwd(), cmd);
-configModule(codePath, {
-  ignoreWarning: true
-});
 
 // Register the static asset as handler if configured so
 if (settings.serveStaticAssets) {
@@ -68,4 +65,12 @@ if (settings.http.enabled) {
   throw new Error('Currently, only http transport is supported.');
 }
 
-transport.start();
+Promise.all(loadModules)
+  .then(() => {
+    return configModule(codePath, {
+      ignoreWarning: true
+    });
+  })
+  .then(() => {
+    transport.start();
+  });
