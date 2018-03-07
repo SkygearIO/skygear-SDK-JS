@@ -1,3 +1,17 @@
+## 1.4.0 (2018-03-07)
+
+### Features
+
+- Support enable/disable user account #380
+
+### Other Notes
+
+- Fix deploy minified latest
+- Update cloud example and remove nodedev image
+- Use docker multi-stage build
+- Update error code list
+- Check in package-lock.json
+
 ## 1.3.1 (2018-02-01)
 
 ### Bug Fixes
