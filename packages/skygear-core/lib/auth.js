@@ -205,7 +205,10 @@ export class AuthContainer {
       ]).then(() => null);
     })
     .catch((err) => {
-      return this._setAccessToken(null).then(() => {
+      return Promise.all([
+        this._setAccessToken(null),
+        this._setUser(null)
+      ]).then(() => {
         return Promise.reject(err);
       });
     });
