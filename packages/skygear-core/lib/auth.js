@@ -241,6 +241,22 @@ export class AuthContainer {
   }
 
   /**
+   * Reset user password, require master key.
+   *
+   * @param  {Record|String} user - target user or user id
+   * @param  {String} newPassword - new password of target user
+   * @return {Promise<String>} promise with target user id
+   */
+  adminResetPassword(user, newPassword) {
+    const userId = user._id || user;
+    return this.container.makeRequest('auth:reset_password', {
+      auth_id: userId, // eslint-disable-line camelcase
+      password: newPassword
+    })
+    .then(() => userId);
+  }
+
+  /**
    * Defines roles to have admin right.
    *
    * @param {Role[]} roles - roles to have admin right
