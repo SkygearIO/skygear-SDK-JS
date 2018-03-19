@@ -40,6 +40,40 @@ export function _resetPassword(userID, code, expireAt, newPassword) {
 }
 
 /**
+ * Request to verify user data.
+ *
+ * @injectTo {AuthContainer} as requestVerification
+ * @param  {String} recordKey - record key containing user data to be verified
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.requestVerification("email").then(...);
+ */
+export function _requestVerification(recordKey) {
+  return this.container.lambda('user:verify_request', {
+    record_key: recordKey /* eslint camelcase: 0 */
+  });
+}
+
+/**
+ * Verify user by specifying verification code sent by server.
+ *
+ * @injectTo {AuthContainer} as verifyUserWithCode
+ * @param  {String} code - code received from server
+ * @return {Promise} promise
+ *
+ * @example
+ * skygear.auth.verifyUserWithCode("123456").then(...);
+ */
+export function _verifyUserWithCode(code) {
+  return this.container.lambda('user:verify_code', {
+    code
+  }).then(() => {
+    return this.whoami();
+  });
+}
+
+/**
  * @ignore
  */
 export const forgotPassword = _forgotPassword.bind(skygear.auth);
@@ -50,10 +84,22 @@ export const forgotPassword = _forgotPassword.bind(skygear.auth);
 export const resetPassword = _resetPassword.bind(skygear.auth);
 
 /**
+ * @ignore
+ */
+export const requestVerification = _requestVerification.bind(skygear.auth);
+
+/**
+ * @ignore
+ */
+export const verifyUserWithCode = _verifyUserWithCode.bind(skygear.auth);
+
+/**
  * @private
  */
 export const injectToContainer = (container = skygear) => {
   const authContainerPrototype = container.auth.constructor.prototype;
   authContainerPrototype.forgotPassword = _forgotPassword;
   authContainerPrototype.resetPassword = _resetPassword;
+  authContainerPrototype.requestVerification = _requestVerification;
+  authContainerPrototype.verifyUserWithCode = _verifyUserWithCode;
 };
