@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <style>
+    .inline-input {
+      display: inline-block; width: auto;
+      margin-left: 0.75em;
+    }
+  </style>
+  <title>Skygear-SDK-JS</title>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="well" id="main">
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>End Point</label>
+          <span id="endpoint"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Token</label>
+          <span id="accessToken">
+            <a href="index.html">Go to Login</a>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Username</label>
+          <span id="currentUsername"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+          <label>Email</label>
+          <span id="currentEmail"></span>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div id="verify-request">
+      <h4>Verify User data</h4>
+      <p>Select the following user data to verify. This example only support email and phone.</p>
+      <form action="#" onsubmit="return false;">
+        <button class="btn btn-primary" onclick="doVerifyRequest('email');">Email</button>
+        <button class="btn btn-primary" onclick="doVerifyRequest('phone');">Phone</button>
+      </form>
+      <pre id="verify-request-result"></pre>
+    </div>
+    <hr>
+    <div id="verify-code">
+      <h4>Submit Verify Code</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Code</label>
+          <input class="form-control inline-input" id="code" type="code">
+          <button class="btn btn-primary" onclick="doVerifyCode();">Send</button>
+        </div>
+      </form>
+      <pre id="verify-code-result"></pre>
+    </div>
+  </div>
+  <script src="/bundle.js"></script>
+  <script type="text/javascript">
+    var m = document.getElementById("endpoint");
+    var token = document.getElementById("accessToken");
+    var currentUsername = document.getElementById("currentUsername");
+    var currentEmail = document.getElementById("currentEmail");
+    skygear.config({
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      m.textContent = container.endPoint;
+      token.innerText = skygear.auth.accessToken;
+      if (skygear.auth.currentUser) {
+        currentUsername.innerText = skygear.auth.currentUser.username;
+        currentEmail.innerText = skygear.auth.currentUser.email;
+      }
+    }, function(err) {
+      console.log(err);
+    });
+
+    function doVerifyRequest (recordKey) {
+      console.log('Verify Request');
+      var resultElement = document.getElementById("verify-request-result");
+
+      skygear.auth.requestVerification(recordKey)
+      .then(function () {
+        resultElement.innerText = "success"
+      }, function(error) {
+        console.log(error);
+        resultElement.innerText = JSON.stringify(error, null, 2);
+      });
+    }
+
+    function doVerifyCode () {
+      console.log('Verify Code');
+      var code = document.getElementById("code").value
+      var resultElement = document.getElementById("verify-code-result");
+
+      skygear.auth.verifyUserWithCode(code)
+      .then(function (user) {
+        if (user.length ==  0) {
+          iam.innerText = "no user found";
+          return
+        }
+        console.log(user);
+        resultElement.innerText = JSON.stringify(user.toJSON(), null, 2);
+      }, function(error) {
+        console.log(error);
+        resultElement.innerText = JSON.stringify(error, null, 2);
+      });
+    }
+
+  </script>
+</body>
+</html>
