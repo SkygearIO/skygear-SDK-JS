@@ -567,8 +567,8 @@ describe('AuthContainer', function () {
     }
   }]);
 
-  it('enableUser should send auth:disable:set', function () {
-    return container.auth.enableUser('some-uuid1')
+  it('adminEnableUser should send auth:disable:set', function () {
+    return container.auth.adminEnableUser('some-uuid1')
     .then((userID) => {
       assert.equal(userID, 'some-uuid1');
     }, (err) => {
@@ -576,8 +576,8 @@ describe('AuthContainer', function () {
     });
   });
 
-  it('disableUser should send auth:disable:set', function () {
-    return container.auth.disableUser(
+  it('adminDisableUser should send auth:disable:set', function () {
+    return container.auth.adminDisableUser(
       'some-uuid2',
       'some reason',
       new Date('2014-09-27T17:40:00.000Z')
@@ -590,9 +590,9 @@ describe('AuthContainer', function () {
   });
 
   it(
-    'disableUser should send auth:disable:set without optional fields',
+    'adminDisableUser should send auth:disable:set without optional fields',
     function () {
-      return container.auth.disableUser('some-uuid3')
+      return container.auth.adminDisableUser('some-uuid3')
       .then((userID) => {
         assert.equal(userID, 'some-uuid3');
       }, (err) => {
