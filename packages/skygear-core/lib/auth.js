@@ -364,10 +364,12 @@ export class AuthContainer {
   /**
    * Enable user account of a user.
    *
+   * This function is intended for admin use.
+   *
    * @param  {Record|String} user - target user
    * @return {Promise<String>} promise with target user
    */
-  enableUser(user) {
+  adminEnableUser(user) {
     const userId = user._id || user;
 
     return this.container.makeRequest('auth:disable:set', {
@@ -379,13 +381,15 @@ export class AuthContainer {
   /**
    * Disable user account of a user.
    *
+   * This function is intended for admin use.
+   *
    * @param  {Record|String} user - target user
    * @param  {String} [message] - message to be shown to user
    * @param  {Date} [expiry] - date and time when the user is automatically
    *   enabled
    * @return {Promise<String>} promise with target user
    */
-  disableUser(user, message, expiry) {
+  adminDisableUser(user, message, expiry) {
     const userId = user._id || user;
 
     let payload = {
