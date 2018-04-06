@@ -64,7 +64,7 @@ export class BaseContainer {
     /**
      * @private
      */
-    this.url = '/* @echo API_URL */';
+    this.url = '/* @echo API_URL */' || null;
 
     /**
      * API key of the skygear container
@@ -169,6 +169,10 @@ export class BaseContainer {
   }
 
   _prepareRequestObject(action) {
+    if (this.endPoint === null) {
+      throw Error('Please config endpoint');
+    }
+
     if (this.apiKey === null) {
       throw Error('Please config ApiKey');
     }

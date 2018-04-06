@@ -6,7 +6,7 @@ module.exports = {
     "SKYGEAR_VERSION": version
   },
   "production": {
-    "API_URL": "http://myapp.skygeario.com/",
+    "API_URL": '',
     "SKYGEAR_VERSION": version
   }
 }
