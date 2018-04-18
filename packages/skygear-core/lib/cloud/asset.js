@@ -8,6 +8,7 @@ import {settings} from './settings';
 import S3URLSigner from 'amazon-s3-url-signer';
 import request from 'superagent';
 import URL from 'url';
+import { default as BaseAsset } from '../asset';
 
 /**
  * staticAssetHandler — default handler for serving static assets with during
@@ -227,4 +228,15 @@ export function getSigner() {
     }
   }
   return sharedSigner;
+}
+
+export class Asset extends BaseAsset {
+  constructor(attrs) {
+    super(attrs);
+
+    let base64 = attrs.base64;
+    if (base64) {
+      this.file = Buffer.from(base64, 'base64');
+    }
+  }
 }

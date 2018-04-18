@@ -466,7 +466,9 @@ function makeUploadAssetRequest(container, asset) {
     container.makeRequest('asset:put', {
       filename: asset.name,
       'content-type': asset.contentType,
-      'content-size': asset.file.size
+      // asset.file.size for File and Blob
+      // asset.file.byteLength for Buffer
+      'content-size': asset.file.size || asset.file.byteLength
     })
     .then((res) => {
       const newAsset = Asset.fromJSON(res.result.asset);
@@ -489,7 +491,14 @@ function makeUploadAssetRequest(container, asset) {
         });
       }
 
-      _request.attach('file', asset.file).end((err) => {
+      if (asset.file instanceof Buffer) {
+        // need providing file name to buffer
+        _request = _request.attach('file', asset.file, asset.name);
+      } else {
+        _request = _request.attach('file', asset.file);
+      }
+
+      _request.end((err) => {
         if (err) {
           reject(err);
           return;

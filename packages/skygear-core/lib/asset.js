@@ -29,7 +29,7 @@ export default class Asset {
    *
    * @param {Object} attrs
    * @param {String} attrs.name - asset name
-   * @param {File|Blob} [attrs.file] - file object
+   * @param {File|Blob|Buffer} [attrs.file] - file or buffer object
    * @param {String} [attrs.base64] - base64 encoded file content
    * @param {String} [attrs.contentType] - mime of the file
    * @param {String} [attrs.url] - url of the file on Skygear server
