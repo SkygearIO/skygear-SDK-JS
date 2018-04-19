@@ -16,7 +16,7 @@
 /*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
 import {expect, assert} from 'chai';
 import uuid from 'uuid';
-import Record from '../lib/record';
+import Record, {isRecord} from '../lib/record';
 import Role from '../lib/role';
 import Reference from '../lib/reference';
 import Geolocation from '../lib/geolocation';
@@ -85,6 +85,12 @@ describe('Record', function () {
     }).to.throw(
       'RecordType is not valid. Please start with alphanumeric string.'
     );
+  });
+
+  it('isRecord returns true for extended Record', function () {
+    let rCls = Record.extend('note');
+    let r = new rCls();
+    expect(isRecord(r)).to.be.true();
   });
 });
 
@@ -297,6 +303,15 @@ describe('Extended Record', function () {
         '$underlying_type': 'money'
       }
     });
+  });
+
+  it('deserialize attrs and extend record', function () {
+    let payload = {
+      _id: 'note/uid'
+    };
+    let r = Record.fromJSON(payload);
+    expect(r.recordType).to.be.equal('note');
+    expect(r.id).to.be.equal('note/uid');
   });
 
   it('deserialize from payload with geolocation', function () {

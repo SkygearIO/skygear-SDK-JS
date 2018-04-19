@@ -341,7 +341,7 @@ export default class Record {
       // If value is an object and `_id` field exists, assume
       // that it is a record.
       if (_.isObject(value) && '_id' in value) {
-        newTransient[key] = recordDictToObj(value);
+        newTransient[key] = Record.fromJSON(value);
       } else if (_.isObject(value)) {
         newTransient[key] = fromJSON(value);
       } else {
@@ -418,9 +418,23 @@ export default class Record {
     RecordCls.recordType = recordType;
     return RecordCls;
   }
+
+  /**
+   * Constructs a new Record object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   */
+  static fromJSON(attrs) {
+    const Cls = Record.extend(attrs._id.split('/')[0]);
+    return new Cls(attrs);
+  }
 }
 
-function recordDictToObj(dict) {
-  const Cls = Record.extend(dict._id.split('/')[0]);
-  return new Cls(dict);
+/**
+ * Returns whether an object is a Skygear Record.
+ *
+ * @return {Boolean} true if the specified object is a Skygear Record.
+ */
+export function isRecord(obj) {
+  return obj instanceof Record;
 }
