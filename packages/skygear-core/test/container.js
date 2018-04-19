@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
+import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container, {UserRecord} from '../lib/container';
+import Geolocation from '../lib/geolocation';
 import {AccessLevel} from '../lib/acl';
 import Role from '../lib/role';
 
@@ -413,6 +415,44 @@ describe('lambda', function () {
         assert.deepEqual(result, {
           'hello': ['hello', 'world']
         });
+      });
+  });
+
+  it('should pass location parameters', function () {
+    return container
+      .lambda('hello:args', [new Geolocation(1, 2)])
+      .then(function (result) {
+        assert.deepEqual(result, {
+          'hello': [new Geolocation(1, 2)]
+        });
+      });
+  });
+
+  it('should pass record parameters', function () {
+    const Note = container.Record.extend('note');
+    const attrs = {
+      id: 'note/id'
+    };
+    return container
+      .lambda('hello:args', [new Note(_.assign({}, attrs))])
+      .then(function (result) {
+        expect(result.hello).to.have.lengthOf(1);
+        expect(result.hello[0]).to.be.an.instanceof(container.Record);
+        expect(result.hello[0].id).to.be.equal('note/id');
+      });
+  });
+
+  it('should pass asset parameters', function () {
+    const assetName = '025b58f9-148d-4387-8a51-1898b5d8b613';
+    const asset = new container.Asset({
+      name: assetName
+    });
+    return container
+      .lambda('hello:args', [asset])
+      .then(function (result) {
+        expect(result.hello).to.have.lengthOf(1);
+        expect(result.hello[0]).to.be.an.instanceof(container.Asset);
+        expect(result.hello[0].name).to.be.equal(assetName);
       });
   });
 

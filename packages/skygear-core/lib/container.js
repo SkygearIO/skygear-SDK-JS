@@ -38,6 +38,7 @@ import {RelationContainer} from './relation';
 import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
+import {fromJSON, toJSON} from './util';
 
 /**
  * @type {Record}
@@ -164,8 +165,10 @@ export class BaseContainer {
    */
   lambda(name, data) {
     return this.makeRequest(name, {
-      args: data
-    }).then((resp) => resp.result);
+      args: data ? toJSON(data) : undefined
+    }).then((resp) => {
+      return fromJSON(resp.result);
+    });
   }
 
   _prepareRequestObject(action) {
