@@ -483,7 +483,7 @@ describe('Container auth', function () {
     /* eslint-enable-line camelcase */
   });
 
-  it('should clear access token if logout fail', function () {
+  it('should clear current user and access token if logout fail', function () {
     /* eslint-disable camelcase */
     const aUserAttr = {
       user_id: '68a2e6ce-9321-4561-8042-a8fa076e9214',
@@ -512,7 +512,7 @@ describe('Container auth', function () {
       assert.equal(true, false);
     }, () => {
       assert.isNull(container.auth.accessToken);
-      assert.isNotNull(container.auth.currentUser);
+      assert.isNull(container.auth.currentUser);
     });
     /* eslint-enable-line camelcase */
   });
