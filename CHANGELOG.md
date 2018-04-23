@@ -1,3 +1,20 @@
+## 1.5.0 (2018-04-23)
+
+### Features
+
+- Add admin reset password api
+- Implement request verification and submit code
+
+### Bug Fixes
+
+- Fix current user not set to null when logout request fail #401
+
+### Other Notes
+
+- Support configModule and main entry point return promise
+- Add admin prefix to disable/enable user functions
+- Remove default endpoint in container
+
 ## 1.4.0 (2018-03-07)
 
 ### Features
