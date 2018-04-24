@@ -57,7 +57,12 @@ export default class Asset {
     } else if (url) {
       // do nothing
     } else if (base64) {
-      file = base64StringtoBlob(base64);
+      if (typeof window === 'undefined') {
+        // env: node
+        file = Buffer.from(base64, 'base64');
+      } else {
+        file = base64StringtoBlob(base64);
+      }
     } else {
       throw new Error('Either file or url should present');
     }

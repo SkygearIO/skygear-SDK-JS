@@ -23,7 +23,6 @@ import {
   ErrorCodes as _ErrorCodes,
   SkygearError as _SkygearError
 } from '../error';
-import { Asset as _Asset } from './asset';
 
 const nameCntMap = {};
 
@@ -438,4 +437,3 @@ export const CloudCodeContainer = _CloudCodeContainer;
 export { getContainer } from './container';
 export const ErrorCodes = _ErrorCodes;
 export const SkygearError = _SkygearError;
-export const Asset = _Asset;
