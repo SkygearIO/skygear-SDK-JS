@@ -137,3 +137,12 @@ function base64StringtoBlob(base64) {
   var bb = new Blob([ab]);
   return bb;
 }
+
+/**
+ * Returns whether an object is a Skygear Asset.
+ *
+ * @return {Boolean} true if the specified object is a Skygear Asset.
+ */
+export function isAsset(obj) {
+  return obj instanceof Asset;
+}

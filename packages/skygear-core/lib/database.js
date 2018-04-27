@@ -16,7 +16,8 @@
 const _ = require('lodash');
 
 import Cache from './cache';
-import Asset from './asset';
+import Asset, {isAsset} from './asset';
+import {isRecord} from './record';
 import Query from './query';
 import QueryResult from './query_result';
 
@@ -129,32 +130,76 @@ export class Database {
     });
   }
 
-  _presaveAssetTask(key, asset) {
-    if (asset.file) {
-      return makeUploadAssetRequest(this.container, asset)
-        .then((a) => [key, a]);
+  /**
+   * Presave a single value.
+   *
+   * A single value is the smallest unit of object to presave. In other words,
+   * a single value does not contain smaller values to presave.
+   *
+   * This function returns a promise that may perform other operations, such
+   * as calling the server to upload asset.
+   */
+  _presaveSingleValue(value) {
+    if (isAsset(value) && value.file) {
+      return makeUploadAssetRequest(this.container, value);
     } else {
-      return Promise.resolve([key, asset]);
+      return Promise.resolve(value);
     }
   }
 
-  _presave(record) {
-    // for every (key, value) pair, process the pair in a Promise
-    // the Promise should be resolved by the transformed [key, value] pair
-    let tasks = _.map(record, (value, key) => {
-      if (value instanceof Asset) {
-        return this._presaveAssetTask(key, value);
-      } else {
-        return Promise.resolve([key, value]);
-      }
-    });
+  /**
+   * Presave a value as part of a key-value object.
+   *
+   * This function differs from _presave in that it returns the key of the
+   * parent object that is being presaved. This helps constructs the object
+   * after resolving all promises.
+   */
+  _presaveKeyValue(key, value) {
+    return this._presave(value)
+      .then((v) => [key, v]);
+  }
 
-    return Promise.all(tasks).then((keyvalues) => {
-      _.each(keyvalues, ([key, value]) => {
-        record[key] = value;
+  /**
+   * Presave a value.
+   *
+   * If the value contains other objects that can be presaved, it will
+   * iterates each member and create a promise for such object. Essentially this
+   * function creates a tree of promises that resembles the object tree.
+   */
+  _presave(value) {
+    if (value === undefined || value === null) {
+      return Promise.resolve(value);
+    } else if (_.isArray(value)) {
+      return Promise.all(_.map(value, this._presave.bind(this)));
+    } else if (isRecord(value)) {
+      const record = value;
+      let tasks = _.map(record, (v, k) => {
+        return this._presaveKeyValue(k, v);
       });
-      return record;
-    });
+      return Promise.all(tasks).then((keyvalues) => {
+        _.each(keyvalues, ([k, v]) => {
+          record[k] = v;
+        });
+        return record;
+      });
+    } else if (_.isObject(value)) {
+      const obj = value;
+      let tasks = _.chain(obj)
+        .keys()
+        .map((key) => this._presaveKeyValue(key, obj[key]))
+        .value();
+      return Promise.all(tasks).then((keyvalues) => {
+        _.each(keyvalues, ([k, v]) => {
+          obj[k] = v;
+        });
+        return obj;
+      });
+    } else {
+      // The value does not contain other objects that can be presaved.
+      // Call _presaveSingleValue to create the actual promise that performs
+      // other operations, such as upload asset.
+      return this._presaveSingleValue(value);
+    }
   }
 
   /**
@@ -199,8 +244,7 @@ export class Database {
       );
     }
 
-    const presaveTasks = _.map(records, this._presave.bind(this));
-    return Promise.all(presaveTasks)
+    return this._presave(records)
     .then((processedRecords) => {
       let payload = {
         database_id: this.dbID //eslint-disable-line
