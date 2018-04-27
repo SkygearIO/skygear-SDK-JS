@@ -26,10 +26,6 @@ describe('Asset', function () {
     expect(function () {
       new Asset();
     }).to.throw('Name should not be empty');
-
-    expect(function () {
-      new Asset({name: 'asset-name'});
-    }).to.throw('Either file or url should present');
   });
 
   it('serializes to JSON', function () {

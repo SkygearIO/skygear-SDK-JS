@@ -54,8 +54,6 @@ export default class Asset {
         throw new Error('ContentType cannot be inferred from file, ' +
           'please provide a content type manually');
       }
-    } else if (url) {
-      // do nothing
     } else if (base64) {
       if (typeof window === 'undefined') {
         // env: node
@@ -63,8 +61,6 @@ export default class Asset {
       } else {
         file = base64StringtoBlob(base64);
       }
-    } else {
-      throw new Error('Either file or url should present');
     }
 
     /**
