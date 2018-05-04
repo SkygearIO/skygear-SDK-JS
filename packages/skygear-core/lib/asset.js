@@ -29,7 +29,7 @@ export default class Asset {
    *
    * @param {Object} attrs
    * @param {String} attrs.name - asset name
-   * @param {File|Blob} [attrs.file] - file object
+   * @param {File|Blob|Buffer} [attrs.file] - file or buffer object
    * @param {String} [attrs.base64] - base64 encoded file content
    * @param {String} [attrs.contentType] - mime of the file
    * @param {String} [attrs.url] - url of the file on Skygear server
@@ -57,7 +57,12 @@ export default class Asset {
     } else if (url) {
       // do nothing
     } else if (base64) {
-      file = base64StringtoBlob(base64);
+      if (typeof window === 'undefined') {
+        // env: node
+        file = Buffer.from(base64, 'base64');
+      } else {
+        file = base64StringtoBlob(base64);
+      }
     } else {
       throw new Error('Either file or url should present');
     }
