@@ -155,8 +155,8 @@ export class Database {
    * parent object that is being presaved. This helps constructs the object
    * after resolving all promises.
    */
-  _presaveKeyValue(key, value) {
-    return this._presave(value)
+  _presaveKeyValue(fn, key, value) {
+    return this._presave(fn, value)
       .then((v) => [key, v]);
   }
 
@@ -167,15 +167,15 @@ export class Database {
    * iterates each member and create a promise for such object. Essentially this
    * function creates a tree of promises that resembles the object tree.
    */
-  _presave(value) {
+  _presave(fn, value) {
     if (value === undefined || value === null) {
       return Promise.resolve(value);
     } else if (_.isArray(value)) {
-      return Promise.all(_.map(value, this._presave.bind(this)));
+      return Promise.all(_.map(value, this._presave.bind(this, fn)));
     } else if (isRecord(value)) {
       const record = value;
       let tasks = _.map(record, (v, k) => {
-        return this._presaveKeyValue(k, v);
+        return this._presaveKeyValue(fn, k, v);
       });
       return Promise.all(tasks).then((keyvalues) => {
         _.each(keyvalues, ([k, v]) => {
@@ -183,16 +183,16 @@ export class Database {
         });
         return record;
       });
-    } else if (isValueType(value) || !._isObject(value)) {
+    } else if (isValueType(value) || !_.isObject(value)) {
       // The value does not contain other objects that can be presaved.
-      // Call _presaveSingleValue to create the actual promise that performs
+      // Call _presaveSingleValue to create the actual promise which performs
       // other operations, such as upload asset.
-      return this._presaveSingleValue(value);
+      return fn(value);
     } else {
       const obj = value;
       let tasks = _.chain(obj)
         .keys()
-        .map((key) => this._presaveKeyValue(key, obj[key]))
+        .map((key) => this._presaveKeyValue(fn, key, obj[key]))
         .value();
       return Promise.all(tasks).then((keyvalues) => {
         _.each(keyvalues, ([k, v]) => {
@@ -245,7 +245,7 @@ export class Database {
       );
     }
 
-    return this._presave(records)
+    return this._presave(this._presaveSingleValue.bind(this), records)
     .then((processedRecords) => {
       let payload = {
         database_id: this.dbID //eslint-disable-line

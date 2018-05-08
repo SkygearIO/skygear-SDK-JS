@@ -164,15 +164,17 @@ export class BaseContainer {
    * @return {Promise<Object>} promise with result of the lambda function
    */
   lambda(name, data) {
-    return this.publicDB._presave(data)
-      .then((presavedData) => {
-        return this.makeRequest(name, {
-          args: presavedData ? toJSON(presavedData) : undefined
-        });
-      })
-      .then((resp) => {
-        return fromJSON(resp.result);
+    return this.publicDB._presave(
+      this.publicDB._presaveSingleValue.bind(this),
+      data
+    ).then((presavedData) => {
+      return this.makeRequest(name, {
+        args: presavedData ? toJSON(presavedData) : undefined
       });
+    })
+    .then((resp) => {
+      return fromJSON(resp.result);
+    });
   }
 
   _prepareRequestObject(action) {
