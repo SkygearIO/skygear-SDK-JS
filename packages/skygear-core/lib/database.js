@@ -20,6 +20,7 @@ import Asset, {isAsset} from './asset';
 import {isRecord} from './record';
 import Query from './query';
 import QueryResult from './query_result';
+import {isValueType} from './util';
 
 export class Database {
 
@@ -182,7 +183,12 @@ export class Database {
         });
         return record;
       });
-    } else if (_.isObject(value)) {
+    } else if (isValueType(value) || !._isObject(value)) {
+      // The value does not contain other objects that can be presaved.
+      // Call _presaveSingleValue to create the actual promise that performs
+      // other operations, such as upload asset.
+      return this._presaveSingleValue(value);
+    } else {
       const obj = value;
       let tasks = _.chain(obj)
         .keys()
@@ -194,11 +200,6 @@ export class Database {
         });
         return obj;
       });
-    } else {
-      // The value does not contain other objects that can be presaved.
-      // Call _presaveSingleValue to create the actual promise that performs
-      // other operations, such as upload asset.
-      return this._presaveSingleValue(value);
     }
   }
 

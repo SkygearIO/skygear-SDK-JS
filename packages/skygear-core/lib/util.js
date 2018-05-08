@@ -18,7 +18,7 @@ import Asset from './asset';
 import Reference from './reference';
 import Geolocation from './geolocation';
 import Record, {isRecord} from './record';
-import {UnknownValue} from './type';
+import {UnknownValue, Sequence} from './type';
 
 function mapObject(obj, fn) {
   // cannot use `map` directly
@@ -129,6 +129,15 @@ export function isLocalStorageValid() {
   } catch (e) {
     return false;
   }
+}
+
+export function isValueType(value) {
+  return value instanceof Asset ||
+    value instanceof Reference ||
+    value instanceof Geolocation ||
+    value instanceof Record ||
+    value instanceof UnknownValue ||
+    value instanceof Sequence;
 }
 
 export class EventHandle {
