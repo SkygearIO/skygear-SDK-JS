@@ -165,7 +165,7 @@ export class BaseContainer {
    */
   lambda(name, data) {
     return this.publicDB._presave(
-      this.publicDB._presaveSingleValue.bind(this),
+      this.publicDB._presaveSingleValue.bind(this.publicDB),
       data
     ).then((presavedData) => {
       return this.makeRequest(name, {
