@@ -188,7 +188,6 @@ describe('Container Push User', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/push/user',
     fixtures: function (match, params, headers, fn) {
-      console.log(params);
       if (params.topic !== 'the-topic') {
         return fn({
           'error': {
@@ -317,7 +316,6 @@ describe('Container Push Device', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/push/device',
     fixtures: function (match, params, headers, fn) {
-      console.log(params);
       if (params.topic !== 'the-topic') {
         return fn({
           'error': {
