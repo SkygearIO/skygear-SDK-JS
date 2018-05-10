@@ -191,16 +191,41 @@ describe('Extended Record', function () {
     expect(r.attributeKeys).to.not.include('_key');
   });
 
+  /* eslint-disable camelcase */
   it('serialize to payload', function () {
     let r = new Note({
       _id: 'note/uid',
+      _ownerID: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
+      _created_at: '2014-09-27T17:40:00.000Z',
+      _updated_at: '2014-10-27T17:40:00.000Z',
+      _created_by: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
+      _updated_by: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
       _access: [
         { level: AccessLevel.ReadOnlyLevel, public: true },
         { level: AccessLevel.ReadWriteLevel, role: 'Writer' }
       ],
-      content: 'hello world'
+      content: 'hello world',
+      _transient: {
+        'content': 'hello world'
+      }
     });
     expect(r.toJSON()).to.be.eql({
+      _id: 'note/uid',
+      _ownerID: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
+      _created_at: '2014-09-27T17:40:00.000Z',
+      _updated_at: '2014-10-27T17:40:00.000Z',
+      _created_by: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
+      _updated_by: '9998fa1c-0f7e-430a-bdf3-1a2b429e27e5',
+      _access: [
+        { level: AccessLevel.ReadOnlyLevel, public: true },
+        { level: AccessLevel.ReadWriteLevel, role: 'Writer' }
+      ],
+      content: 'hello world',
+      _transient: {
+        'content': 'hello world'
+      }
+    });
+    expect(r.toTruncatedJSON()).to.be.eql({
       _id: 'note/uid',
       _access: [
         { level: AccessLevel.ReadOnlyLevel, public: true },
@@ -209,6 +234,7 @@ describe('Extended Record', function () {
       content: 'hello world'
     });
   });
+  /* eslint-enable camelcase */
 
   it('serialize to payload with date', function () {
     const note = new Note({

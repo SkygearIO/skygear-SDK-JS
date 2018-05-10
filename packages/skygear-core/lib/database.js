@@ -256,7 +256,7 @@ export class Database {
       }
 
       payload.records = _.map(processedRecords, (perRecord) => {
-        return perRecord.toJSON();
+        return perRecord.toTruncatedJSON();
       });
 
       return this.container.makeRequest('record:save', payload);
