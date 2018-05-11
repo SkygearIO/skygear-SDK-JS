@@ -16,7 +16,7 @@
 /*eslint-disable max-len, no-new, camelcase */
 import {expect} from 'chai';
 import sinon from 'sinon';
-import Asset from '../lib/asset';
+import Asset, {isAsset} from '../lib/asset';
 import {CloudSigner, FSSigner, S3Signer} from '../lib/cloud/asset';
 import mockSuperagent from './mock/superagent';
 
@@ -26,10 +26,6 @@ describe('Asset', function () {
     expect(function () {
       new Asset();
     }).to.throw('Name should not be empty');
-
-    expect(function () {
-      new Asset({name: 'asset-name'});
-    }).to.throw('Either file or url should present');
   });
 
   it('serializes to JSON', function () {
@@ -62,6 +58,13 @@ describe('Asset', function () {
     };
     let asset = Asset.fromJSON(resp);
     expect(asset.toJSON()).eql(resp);
+  });
+
+  it('isAsset returns true for Asset', function () {
+    let asset = new Asset({
+      name: 'asset-name'
+    });
+    expect(isAsset(asset)).to.be.true();
   });
 });
 

@@ -23,6 +23,7 @@ import { IncomingForm } from 'formidable';
 import { parse } from 'url';
 import { pool } from '../pg';
 import Record from '../../record';
+import { fromJSON, toJSON } from '../../util';
 
 import skyconfig from '../skyconfig';
 import { getContainer } from '../container';
@@ -354,10 +355,12 @@ export default class CommonTransport {
     };
     return this._promisify(
       func,
-      param,
+      fromJSON(param),
       options
     ).then((result) => {
-      return { result };
+      return {
+        result: toJSON(result)
+      };
     });
   }
 

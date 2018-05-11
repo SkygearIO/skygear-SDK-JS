@@ -16,6 +16,7 @@
 /*eslint-disable no-unused-vars, quote-props */
 import {expect, assert} from 'chai';
 import Geolocation from '../lib/geolocation';
+import Record from '../lib/record';
 import {Sequence, UnknownValue} from '../lib/type';
 import {toJSON, fromJSON} from '../lib/util';
 
@@ -82,6 +83,18 @@ describe('util', function () {
     expect(unknownValue.underlyingType).to.equal('money');
   });
 
+  it('fromJSON record object', function () {
+    const recordValue = fromJSON({
+      $type: 'record',
+      $record: {
+        _id: 'note/uid',
+        geo: {$type: 'geo', $lat: 10, $lng: 20}
+      }
+    });
+    expect(recordValue).to.be.an.instanceof(Record);
+    expect(recordValue.id).to.equal('note/uid');
+  });
+
   it('toJSON array with mixed objects', function () {
     const array = [
       null,
@@ -114,6 +127,12 @@ describe('util', function () {
   it('toJSON undefined', function () {
     expect(() => toJSON(undefined))
       .to.throw('toJSON does not support undefined value');
+  });
+
+  it('toJSON record', function () {
+    const object = toJSON(Record.fromJSON({'_id': 'note/uid'}));
+    expect(object.$type).to.equal('record');
+    expect(object.$record._id).to.equal('note/uid');
   });
 
 });

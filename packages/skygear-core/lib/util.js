@@ -17,8 +17,37 @@ import _ from 'lodash';
 import Asset from './asset';
 import Reference from './reference';
 import Geolocation from './geolocation';
-import {UnknownValue} from './type';
+import Record, {isRecord} from './record';
+import {UnknownValue, Sequence} from './type';
 
+function mapObject(obj, fn) {
+  // cannot use `map` directly
+  // because array-like object would give integer key instead of string key
+  // when calling map
+  return _.chain(obj)
+    .keys()
+    .map((key) => {
+      return [key, fn(key, obj[key])];
+    })
+    .fromPairs()
+    .value();
+}
+
+/**
+ * Returns the specified value to a JSON representation.
+ *
+ * It will descends into array and object to convert Skygear Data Type
+ * into JSON representation. If the specified value is null, null is returned.
+ *
+ * The output of this function differ from Record.toJSON when specifying
+ * a Record. This function will wrap a Record in JSON representation with
+ * a `$type=record` object.
+ *
+ * This function is the opposite of fromJSON.
+ *
+ * @param {Object} v - the object or value value to convert to JSON
+ * @return {Object} the result in JSON representation
+ */
 export function toJSON(v) {
   if (v === undefined) {
     throw new Error('toJSON does not support undefined value');
@@ -33,41 +62,59 @@ export function toJSON(v) {
       $type: 'date',
       $date: v.toJSON()
     };
+  } else if (isRecord(v)) {
+    return {
+      $type: 'record',
+      $record: v.toJSON()
+    };
   } else if (v.toJSON) {
     return v.toJSON();
   } else if (_.isObject(v)) {
-    // cannot use `map` directly
-    // because array-like object would give integer key instead of string key
-    // when calling map
-    return _.chain(v)
-      .keys()
-      .map((key) => {
-        return [key, toJSON(v[key])];
-      })
-      .fromPairs()
-      .value();
+    return mapObject(v, (key, value) => toJSON(value));
   } else {
     return v;
   }
 }
 
+/**
+ * Convert object from JSON representation
+ *
+ * It will descends into array and object to convert Skygear Data Type
+ * from JSON representation. If the specified value is null, null is returned.
+ *
+ * This function is the opposite of toJSON.
+ *
+ * @param {Object} attrs - the object or value in JSON representation
+ * @return {Object} the result in Skygear Data Type
+ */
+// eslint-disable-next-line complexity
 export function fromJSON(attrs) {
-  if (!_.isObject(attrs)) {
-    return attrs;
-  }
-
-  switch (attrs.$type) {
-  case 'geo':
-    return Geolocation.fromJSON(attrs);
-  case 'asset':
-    return Asset.fromJSON(attrs);
-  case 'date':
-    return new Date(attrs.$date);
-  case 'ref':
-    return new Reference(attrs);
-  case 'unknown':
-    return UnknownValue.fromJSON(attrs);
-  default:
+  if (attrs === null) {
+    return null;
+  } else if (attrs === undefined) {
+    return undefined;
+  } else if (_.isArray(attrs)) {
+    return _.map(attrs, fromJSON);
+  } else if (_.isObject(attrs)) {
+    switch (attrs.$type) {
+    case 'geo':
+      return Geolocation.fromJSON(attrs);
+    case 'asset':
+      return Asset.fromJSON(attrs);
+    case 'date':
+      return new Date(attrs.$date);
+    case 'ref':
+      return new Reference(attrs);
+    case 'unknown':
+      return UnknownValue.fromJSON(attrs);
+    case 'record':
+      return Record.fromJSON(attrs.$record);
+    default:
+      return mapObject(attrs, (key, value) => fromJSON(value));
+    }
+  } else if (attrs.fromJSON) {
+    return attrs.fromJSON();
+  } else {
     return attrs;
   }
 }
@@ -82,6 +129,15 @@ export function isLocalStorageValid() {
   } catch (e) {
     return false;
   }
+}
+
+export function isValueType(value) {
+  return value instanceof Asset ||
+    value instanceof Reference ||
+    value instanceof Geolocation ||
+    value instanceof Record ||
+    value instanceof UnknownValue ||
+    value instanceof Sequence;
 }
 
 export class EventHandle {

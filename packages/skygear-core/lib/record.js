@@ -28,16 +28,25 @@ const _metaAttrs = {
     parser: (v) => {
       return new Date(v);
     },
+    stringify: (v) => {
+      return v.toJSON();
+    },
     newKey: 'createdAt'
   },
   _updated_at: { //eslint-disable-line
     parser: (v) => {
       return new Date(v);
     },
+    stringify: (v) => {
+      return v.toJSON();
+    },
     newKey: 'updatedAt'
   },
   _ownerID: {
     parser: (v) => {
+      return v;
+    },
+    stringify: (v) => {
       return v;
     },
     newKey: 'ownerID'
@@ -46,10 +55,16 @@ const _metaAttrs = {
     parser: (v) => {
       return v;
     },
+    stringify: (v) => {
+      return v;
+    },
     newKey: 'createdBy'
   },
   _updated_by: { //eslint-disable-line
     parser: (v) => {
+      return v;
+    },
+    stringify: (v) => {
       return v;
     },
     newKey: 'updatedBy'
@@ -62,13 +77,17 @@ const _metaAttrs = {
       }
       return ACL.fromJSON(acl);
     },
+    stringify: (v) => {
+      return v && v.toJSON();
+    },
     newKey: '_access'
   }
 };
 
-const _metaKey = _.map(_metaAttrs, function (obj) {
-  return obj.newKey;
-});
+const _metaKeys = _.reduce(_metaAttrs, function (result, value, key) {
+  result[value.newKey] = key;
+  return result;
+}, {});
 
 /**
  * Record provides the model for Skygear {@link Database} to interact with
@@ -157,9 +176,22 @@ export default class Record {
   get attributeKeys() {
     let keys = Object.keys(this);
     return _.filter(keys, function (value) {
-      return value.indexOf('_') !== 0 && !_.includes(_metaKey, value);
+      return value.indexOf('_') !== 0 && !(value in _metaKeys);
     });
   }
+
+  /**
+   * Gets all keys of attributes of the records, includig reserved keys.
+   *
+   * @type {String[]} [description]
+   */
+  get metaKeys() {
+    let keys = Object.keys(this);
+    return _.filter(keys, function (value) {
+      return value in _metaKeys;
+    });
+  }
+
 
   /**
    * Returns a dictionary of transient fields.
@@ -341,7 +373,7 @@ export default class Record {
       // If value is an object and `_id` field exists, assume
       // that it is a record.
       if (_.isObject(value) && '_id' in value) {
-        newTransient[key] = recordDictToObj(value);
+        newTransient[key] = Record.fromJSON(value);
       } else if (_.isObject(value)) {
         newTransient[key] = fromJSON(value);
       } else {
@@ -357,19 +389,44 @@ export default class Record {
    * @return {Object} the JSON object
    */
   toJSON() {
-    let payload = {
-      _id: this.id,
-      _access: this._access && this._access.toJSON()
-    };
-    _.each(this.attributeKeys, (key) => {
+    var result = this.toTruncatedJSON();
+    result = _.reduce(this.metaKeys, (payload, key) => {
+      const value = this[key];
+      if (value === undefined) {
+        throw new Error(`Unsupported undefined value of record key: ${key}`);
+      }
+      if (key in _metaKeys) {
+        const meta = _metaAttrs[_metaKeys[key]];
+        payload[_metaKeys[key]] = meta.stringify(value);
+      } else {
+        payload[key] = toJSON(value);
+      }
+      return payload;
+    }, result);
+
+    if (!_.isEmpty(this._transient)) {
+      result._transient = toJSON(this._transient);
+    }
+    return result;
+  }
+
+  /**
+   * Serializes Record to a JSON object without metadata keys.
+   *
+   * @return {Object} the JSON object
+   */
+  toTruncatedJSON() {
+    return _.reduce(this.attributeKeys, (payload, key) => {
       const value = this[key];
       if (value === undefined) {
         throw new Error(`Unsupported undefined value of record key: ${key}`);
       }
       payload[key] = toJSON(value);
+      return payload;
+    }, {
+      _id: this.id,
+      _access: this._access && this._access.toJSON()
     });
-
-    return payload;
   }
 
   /**
@@ -418,9 +475,23 @@ export default class Record {
     RecordCls.recordType = recordType;
     return RecordCls;
   }
+
+  /**
+   * Constructs a new Record object from JSON object.
+   *
+   * @param {Object} attrs - the JSON object
+   */
+  static fromJSON(attrs) {
+    const Cls = Record.extend(attrs._id.split('/')[0]);
+    return new Cls(attrs);
+  }
 }
 
-function recordDictToObj(dict) {
-  const Cls = Record.extend(dict._id.split('/')[0]);
-  return new Cls(dict);
+/**
+ * Returns whether an object is a Skygear Record.
+ *
+ * @return {Boolean} true if the specified object is a Skygear Record.
+ */
+export function isRecord(obj) {
+  return obj instanceof Record;
 }
