@@ -88,3 +88,7 @@ Check out [DEVELOPMENT.md].
 Pull requests are welcomed!
 
 Report bug on https://github.com/SkygearIO/skygear-SDK-JS/issues
+
+## Support 
+For implementation related questions or technical support, please find us on the [official forum](https://discuss.skygear.io) or [community chat](https://slack.skygear.io).
+ 
