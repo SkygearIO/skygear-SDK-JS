@@ -19,6 +19,7 @@ import { pool as _pool } from './pg';
 import { settings as _settings } from './settings';
 import crypto from 'crypto';
 import _CloudCodeContainer from './container';
+import { createLogger as _createLogger } from './logging';
 import {
   ErrorCodes as _ErrorCodes,
   SkygearError as _SkygearError
@@ -71,7 +72,8 @@ export function op(name, func, options = {}) {
   // move authRequired to keyRequired, if keyRequired not specified
   if (options.keyRequired === undefined &&
       options.authRequired !== undefined) {
-    console.warn('authRequired is deprecated, use keyRequired instead');
+    const logger = _createLogger('plugin').child({tag: 'plugin'});
+    logger.warn('authRequired is deprecated, use keyRequired instead');
     options.keyRequired = options.authRequired;
   }
 
@@ -162,6 +164,7 @@ export function event(name, func, options = {}) {
  * @param {Boolean} [options.userRequired] - require user to call the lambda
  */
 export function handler(path, func, options = {}) {
+  const logger = _createLogger('plugin').child({tag: 'plugin'});
   if (typeof options.method === 'string') {
     options.method = [options.method];
   }
@@ -169,7 +172,7 @@ export function handler(path, func, options = {}) {
   // move authRequired to keyRequired, if keyRequired not specified
   if (options.keyRequired === undefined &&
       options.authRequired !== undefined) {
-    console.warn('authRequired is deprecated, use keyRequired instead');
+    logger.warn('authRequired is deprecated, use keyRequired instead');
     options.keyRequired = options.authRequired;
   }
 
@@ -417,13 +420,14 @@ export function staticAsset(mountPoint, func) {
  * This function will also call the `includeme` function to config the module.
  */
 export function configModule(moduleName, options) {
+  const logger = _createLogger('plugin').child({tag: 'plugin'});
   const { ignoreWarning } = options || {};
   const { includeme } = require(moduleName);
   if (includeme !== undefined) {
     const settings = {};
     return includeme(module.exports, settings);
   } else if (ignoreWarning !== true) {
-    console.warn(`The ${moduleName} module does not export the includeme` +
+    logger.warn(`The ${moduleName} module does not export the includeme` +
     ' function. This function is required to config the module.');
   }
 }
@@ -437,3 +441,4 @@ export const CloudCodeContainer = _CloudCodeContainer;
 export { getContainer } from './container';
 export const ErrorCodes = _ErrorCodes;
 export const SkygearError = _SkygearError;
+export const log = _createLogger;

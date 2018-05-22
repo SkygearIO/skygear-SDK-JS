@@ -21,6 +21,7 @@ import {
 } from '../settings';
 import { SkygearError } from '../../error';
 import CommonTransport from './common';
+import { createLogger } from '../logging';
 
 
 class HTTPTransport extends CommonTransport {
@@ -31,6 +32,7 @@ class HTTPTransport extends CommonTransport {
     this.dispatch = this.dispatch.bind(this);
     this.readReq = this.readReq.bind(this);
     this.server = null;
+    this.logger = createLogger('plugin').child({tag: 'plugin'});
   }
 
   start() {
@@ -42,7 +44,7 @@ class HTTPTransport extends CommonTransport {
       socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
     });
     this.server.on('error', (err) => {
-      console.error(err);
+      this.logger.error(err);
     });
 
     const {
@@ -50,7 +52,7 @@ class HTTPTransport extends CommonTransport {
       port
     } = settings.http;
 
-    console.info(`Listening ${address} on port ${port}...`);
+    this.logger.info(`Listening ${address} on port ${port}...`);
     this.server.listen(port, address);
   }
 
@@ -77,7 +79,7 @@ class HTTPTransport extends CommonTransport {
         this.dispatch(data, res);
       } catch (e) {
         this.writeError(res, 500, 'Internal server error', e);
-        console.warn(e.stack);
+        this.logger.warn({err: e});
         return;
       }
     });
@@ -87,9 +89,15 @@ class HTTPTransport extends CommonTransport {
     const handlerName = payload.kind + 'Handler';
     if (!this[handlerName]) {
       this.writeError(res, 400, `func kind ${payload.kind} is not supported`);
-      console.log(`func kind ${payload.kind} is not supported`);
+      this.logger.log(`func kind ${payload.kind} is not supported`);
       return;
     }
+
+    const {
+      context
+    } = payload;
+
+    const logger = createLogger('plugin', context);
 
     this[handlerName](payload).then((resolved) => {
       this.writeResponse(res, resolved);
@@ -97,10 +105,10 @@ class HTTPTransport extends CommonTransport {
       if (err instanceof SkygearError) {
         // do nothing
       } else if (err !== null && err !== undefined) {
-        console.error('Catching unexpected error:', err);
+        logger.error({err: err}, 'Catching unexpected error: %s', err);
         err = new SkygearError(err.toString());
       } else {
-        console.error('Catching err but value is null or undefined.');
+        logger.error('Catching err but value is null or undefined.');
         err = new SkygearError('An unexpected error has occurred.');
       }
       this.writeResponse(res, {

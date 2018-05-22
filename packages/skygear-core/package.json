@@ -34,6 +34,7 @@
     "Base64": "^0.3.0",
     "amazon-s3-url-signer": "^0.1.0",
     "babel-polyfill": "^6.13.0",
+    "bunyan": "^1.8.12",
     "cookie-storage": "^1.0.4",
     "dotenv": "^4.0.0",
     "event-emitter": "^0.3.4",

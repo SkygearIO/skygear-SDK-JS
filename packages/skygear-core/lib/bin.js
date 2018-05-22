@@ -25,6 +25,7 @@ if (cmd === '--help') {
   - MASTER_KEY: Master Key of the application
   - APP_NAME: Application name of the skygear daemon
   - LOG_LEVEL: Log level
+  - LOG_FORMAT: Log format, either text or json
   - HTTP: Trigger http web server
   - HTTP_ADDR: Address where http web server listen to. In the format
     of {HOST}:{PORT}

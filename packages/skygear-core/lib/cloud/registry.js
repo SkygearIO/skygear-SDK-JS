@@ -15,6 +15,7 @@
  */
 /* eslint-disable no-var, camelcase */
 import _ from 'lodash';
+import { createLogger } from './logging';
 
 export class Registry {
   constructor() {
@@ -39,6 +40,8 @@ export class Registry {
   }
 
   _addParamHandler(param) {
+    const logger = createLogger('plugin').child({tag: 'plugin'});
+
     const kind = 'handler';
     let list = this.paramMap[kind];
     list = list.filter(function (item) {
@@ -46,7 +49,7 @@ export class Registry {
         item.name === param.name &&
         !_.isEmpty(_.intersection(item.methods, param.methods))
       ) {
-        console.log(`Replacing previously registered ${kind}: ${item.name}`);
+        logger.warn(`Replacing previously registered ${kind}: ${item.name}`);
         return false;
       }
       return true;
@@ -64,10 +67,12 @@ export class Registry {
       return this._addParamHandler(param);
     }
 
+    const logger = createLogger('plugin').child({tag: 'plugin'});
+
     let list = this.paramMap[kind];
     list = list.filter(function (item) {
       if (item.name === param.name) {
-        console.log(`Replacing previously registered ${kind}: ${item.name}`);
+        logger.warn(`Replacing previously registered ${kind}: ${item.name}`);
         return false;
       }
       return true;

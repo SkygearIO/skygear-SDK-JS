@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { settings } from './settings';
+import { createLogger } from './logging';
 
 import { parse } from 'url';
 import pg from 'pg';
@@ -72,9 +73,10 @@ export const pool = new pg.Pool(config);
  * }
  */
 export function poolConnect(callback) {
+  const logger = createLogger('plugin').child({tag: 'plugin'});
   pool.connect(function (err, client, done) {
     if (err !== null && err !== undefined) {
-      console.error('Unable to connect to pg pool', err);
+      logger.error({err: err}, 'Unable to connect to pg pool %s', err);
       callback(err, client, done);
       return;
     }
@@ -83,7 +85,11 @@ export function poolConnect(callback) {
     const stmt = `SET search_path TO ${schemaName},public;`;
     client.query(stmt, function (queryErr) {
       if (queryErr !== null && queryErr !== undefined) {
-        console.error(`Unable to select "${schemaName}" schema`, queryErr);
+        logger.error(
+          {err: queryErr},
+          `Unable to select "${schemaName}" schema: %s`,
+          queryErr
+        );
         callback(queryErr, client, done);
         return;
       }
