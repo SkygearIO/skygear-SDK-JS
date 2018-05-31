@@ -1,4 +1,4 @@
-FROM node:6 as nodedev
+FROM node:8 as nodedev
 
 RUN mkdir -p /usr/src/app /dist
 WORKDIR /usr/src/app

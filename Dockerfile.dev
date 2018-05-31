@@ -1,4 +1,4 @@
-FROM node:6
+FROM node:8
 
 RUN \
     wget https://github.com/krallin/tini/releases/download/v0.13.0/tini && \
