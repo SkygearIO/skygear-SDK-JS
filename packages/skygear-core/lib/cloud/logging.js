@@ -42,6 +42,25 @@ function normalizeLogFields(rec) {
   return newRec;
 }
 
+function consoleLogFunction(level) {
+  switch (level) {
+  case 'fatal': // fallthrough
+  case 'error':
+    return console.error;
+  case 'warn':
+    return console.warn;
+  case 'info':
+    return console.info;
+  case 'debug':
+    // According to MDN, `console.debug` may be unavailable.
+    return console.debug || console.log;
+  case 'trace':
+    return console.trace;
+  default:
+    return console.log;
+  }
+}
+
 class TextStream {
   write(rec) {
     /* eslint-disable no-unused-vars */
@@ -55,20 +74,23 @@ class TextStream {
       ...fields
     } = normalizeLogFields(rec);
     /* eslint-enable no-unused-vars */
+    const fn = consoleLogFunction(level);
     if (!_.isEmpty(fields)) {
-      console.log(`[${level}] ${tag}: ${msg}, ${JSON.stringify(fields)}`);
+      fn(`[${level}] ${tag}: ${msg}, ${JSON.stringify(fields)}`);
     } else {
-      console.log(`[${level}] ${tag}: ${msg}`);
+      fn(`[${level}] ${tag}: ${msg}`);
     }
     if (error) {
-      console.error(error.stack);
+      fn(error.stack);
     }
   }
 }
 
 class JSONStream {
   write(rec) {
-    console.log(JSON.stringify(normalizeLogFields(rec)));
+    const fields = normalizeLogFields(rec);
+    const fn = consoleLogFunction(fields.level);
+    fn(JSON.stringify(fields));
   }
 }
 
