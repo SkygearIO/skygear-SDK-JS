@@ -504,6 +504,12 @@ export default class Query {
     return this;
   }
 
+  _andQuery(queries) {
+    _.forEach(queries, (query) => {
+      this._predicate.push(query.predicate);
+    });
+  }
+
   _orQuery(queries) {
     _.forEach(queries, (query) => {
       this._orPredicate.push(query.predicate);
@@ -659,25 +665,52 @@ export default class Query {
   }
 
   /**
+   * Check if the queries have the same record type
+   * @param {Query} queries - Queries
+   */
+
+  static isSameRecordType(...queries) {
+    let recordType = null;
+    for (let index = 0; index < queries.length; index++) {
+      const query = queries[index];
+      if (!recordType) {
+        recordType = query.recordType;
+      }
+
+      if (recordType !== query.recordType) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Returns a conjunctive query from queries.
+   * @param {Query} queries - Queries
+   */
+
+  static and(...queries) {
+    if (!Query.isSameRecordType(queries)) {
+      throw new Error('All queries must be for the same recordType.');
+    }
+
+    let andQuery = new Query(queries[0].recordCls);
+    andQuery._andQuery(queries);
+    return andQuery;
+  }
+
+  /**
    * Returns a disjunctive query from queries.
    * @param {Query} queries - Queries
    */
 
   static or(...queries) {
-    let recordType = null;
-    let recordCls = null;
-    _.forEach(queries, (query) => {
-      if (!recordType) {
-        recordType = query.recordType;
-        recordCls = query.recordCls;
-      }
+    if (!Query.isSameRecordType(queries)) {
+      throw new Error('All queries must be for the same recordType.');
+    }
 
-      if (recordType !== query.recordType) {
-        throw new Error('All queries must be for the same recordType.');
-      }
-    });
-
-    let orQuery = new Query(recordCls);
+    let orQuery = new Query(queries[0].recordCls);
     orQuery._orQuery(queries);
     return orQuery;
   }
