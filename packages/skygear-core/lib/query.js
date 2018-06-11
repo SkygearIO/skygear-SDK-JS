@@ -691,6 +691,10 @@ export default class Query {
    */
 
   static and(...queries) {
+    if (queries.length === 0) {
+      throw new Error('Queries cannot be empty.');
+    }
+
     if (!Query.isSameRecordType(queries)) {
       throw new Error('All queries must be for the same recordType.');
     }
@@ -706,6 +710,10 @@ export default class Query {
    */
 
   static or(...queries) {
+    if (queries.length === 0) {
+      throw new Error('Queries cannot be empty.');
+    }
+
     if (!Query.isSameRecordType(queries)) {
       throw new Error('All queries must be for the same recordType.');
     }
