@@ -470,6 +470,32 @@ describe('Query', function () {
     ]);
   });
 
+  it('serialize a simple and query', function () {
+    let con1 = new Query(Note);
+    con1.greaterThan('count', 100);
+    let con2 = new Query(Note);
+    con2.lessThan('count', 10);
+    let query = Query.and(con1, con2);
+    expect(query.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'and',
+        ['gt', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 100],
+        ['lt', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 10]
+      ],
+      count: false
+    });
+  });
+
   it('serialize a simple or query', function () {
     let con1 = new Query(Note);
     con1.greaterThan('count', 100);
@@ -491,6 +517,42 @@ describe('Query', function () {
           $type: 'keypath',
           $val: 'count'
         }, 10]
+      ],
+      count: false
+    });
+  });
+
+  it('serialize a nested and/or query', function () {
+    let con1 = new Query(Note);
+    con1.greaterThan('count', 100);
+    let con2 = new Query(Note);
+    con2.lessThan('count', 10);
+    let orQuery = Query.or(con1, con2);
+    let con3 = new Query(Note);
+    con3.equalTo('count', 0);
+    let query = Query.and(orQuery, con3);
+    expect(query.toJSON()).to.eql({
+      record_type: 'note',
+      include: {},
+      limit: 50,
+      sort: [],
+      predicate: [
+        'and',
+        [
+          'or',
+          ['gt', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 100],
+          ['lt', {
+            $type: 'keypath',
+            $val: 'count'
+          }, 10]
+        ],
+        ['eq', {
+          $type: 'keypath',
+          $val: 'count'
+        }, 0]
       ],
       count: false
     });
