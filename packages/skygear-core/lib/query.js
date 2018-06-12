@@ -664,12 +664,7 @@ export default class Query {
     return query;
   }
 
-  /**
-   * Check if the queries have the same record type
-   * @param {Query} queries - Queries
-   */
-
-  static isSameRecordType(...queries) {
+  static _isSameRecordType(...queries) {
     let recordType = null;
     for (let index = 0; index < queries.length; index++) {
       const query = queries[index];
@@ -695,7 +690,7 @@ export default class Query {
       throw new Error('Queries cannot be empty.');
     }
 
-    if (!Query.isSameRecordType(queries)) {
+    if (!Query._isSameRecordType(queries)) {
       throw new Error('All queries must be for the same recordType.');
     }
 
@@ -714,7 +709,7 @@ export default class Query {
       throw new Error('Queries cannot be empty.');
     }
 
-    if (!Query.isSameRecordType(queries)) {
+    if (!Query._isSameRecordType(queries)) {
       throw new Error('All queries must be for the same recordType.');
     }
 
