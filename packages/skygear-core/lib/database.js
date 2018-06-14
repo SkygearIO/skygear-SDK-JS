@@ -142,7 +142,7 @@ export class Database {
    */
   _presaveSingleValue(value) {
     if (isAsset(value) && value.file) {
-      return makeUploadAssetRequest(this.container, value);
+      return this.uploadAsset(value);
     } else {
       return Promise.resolve(value);
     }
@@ -363,6 +363,16 @@ export class Database {
   get _Record() {
     return this.container.Record;
   }
+
+  /**
+   * Uploads asset to Skygear server.
+   *
+   * @param  {Asset} asset - the asset
+   * @return {Promise<Asset>} promise
+   */
+  uploadAsset(asset) {
+    return makeUploadAssetRequest(this.container, asset);
+  }
 }
 
 export class PublicDatabase extends Database {
@@ -472,11 +482,13 @@ export class DatabaseContainer {
   /**
    * Uploads asset to Skygear server.
    *
+   * @deprecated use Database.uploadAsset instead.
+   *
    * @param  {Asset} asset - the asset
    * @return {Promise<Asset>} promise
    */
   uploadAsset(asset) {
-    return makeUploadAssetRequest(this.container, asset);
+    return this.public.uploadAsset(asset);
   }
 
   /**
