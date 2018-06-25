@@ -429,7 +429,7 @@ describe('lambda', function () {
       await container.lambda('hello:failure');
       assert.fail('should fail');
     } catch (err) {
-      assert.equal(err.error.message, 'lambda error');
+      assert.equal(err.message, 'lambda error');
     }
   });
 

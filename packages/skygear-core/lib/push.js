@@ -80,8 +80,8 @@ export class PushContainer {
       // The deviceID can be deleted remotely, by apns feedback.
       // If the current deviceID is already null, will regards as server fail.
       let errorCode = null;
-      if (error.error) {
-        errorCode = error.error.code;
+      if (error) {
+        errorCode = error.code;
       }
       if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
         await this._setDeviceID(null);
@@ -107,8 +107,8 @@ export class PushContainer {
       });
     } catch (error) {
       let errorCode = null;
-      if (error.error) {
-        errorCode = error.error.code;
+      if (error) {
+        errorCode = error.code;
       }
       if (errorCode === ErrorCodes.ResourceNotFound) {
         // regard it as success

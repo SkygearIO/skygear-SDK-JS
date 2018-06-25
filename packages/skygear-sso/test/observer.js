@@ -18,8 +18,7 @@ describe('SSO observer', function () {
     try {
       await observer.subscribe(newWindow);
     } catch (error) {
-      const err = error.error;
-      expect(err.message).eq('User cancel the login flow');
+      expect(error.message).eq('User cancel the login flow');
       observer.unsubscribe();
     }
   });
