@@ -1,3 +1,21 @@
+## 1.6.0 (2018-06-26)
+
+### Features
+
+- Add Lambda support for Skygear Data Type in Cloud and Client SDK #409
+- Add logger for structural logging #419, #420
+- Implement Query.and
+
+### Bug Fixes
+
+- Fix cannot upload base64 asset in cloud
+
+### Other Notes
+
+- Use node:8 docker image
+- Remove unnecessary console.log
+- Update `hoek` dependencies of `mock-browser` for security updates.
+
 ## 1.5.0 (2018-04-23)
 
 ### Features
