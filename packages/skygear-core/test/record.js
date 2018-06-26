@@ -19,6 +19,7 @@ import uuid from 'uuid';
 import Record, {isRecord} from '../lib/record';
 import Role from '../lib/role';
 import Reference from '../lib/reference';
+import Asset from '../lib/asset';
 import Geolocation from '../lib/geolocation';
 import {Sequence, UnknownValue} from '../lib/type';
 import {AccessLevel} from '../lib/acl';
@@ -92,6 +93,37 @@ describe('Record', function () {
     let r = new rCls();
     expect(isRecord(r)).to.be.true();
   });
+
+  it('constructor attrs with different type objects should be retained',
+    function () {
+      const picture = new Asset({
+        name: 'asset-name',
+        url: 'http://server-will-ignore.me/'
+      });
+      const location = new Geolocation(10, 20);
+      let r = new Record('note', {
+        _id: 'note/uid',
+        attachment: picture,
+        geo: location
+      });
+      expect(r['attachment']).to.be.an.instanceof(Asset);
+      expect(r['geo']).to.be.an.instanceof(Geolocation);
+      expect(r.toJSON()).eql({
+        _access: null,
+        _id: 'note/uid',
+        attachment: {
+          $type: 'asset',
+          $name: 'asset-name',
+          $url: 'http://server-will-ignore.me/'
+        },
+        geo: {
+          $type: 'geo',
+          $lat: 10,
+          $lng: 20
+        }
+      });
+    }
+  );
 });
 
 describe('Extended Record', function () {

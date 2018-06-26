@@ -219,7 +219,7 @@ export default class Record {
 
     _.each(attrs, (value, key) => {
       if (key.indexOf('_') !== 0) {
-        if (_.isObject(value)) {
+        if (_.isPlainObject(value)) {
           this[key] = fromJSON(value);
         } else {
           this[key] = value;
