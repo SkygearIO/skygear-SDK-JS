@@ -54,7 +54,7 @@ class Signer {
    * @name Signer#sign
    * @return {Promise<string>} A Promise of the url
    */
-  sign() {
+  async sign() {
     throw new Error('Not implemented, subclass should override this method');
   }
 }
@@ -69,7 +69,7 @@ export class FSSigner extends Signer {
     this.assetStoreSecret = _settings.assetStoreSecret;
   }
 
-  sign(name) {
+  async sign(name) {
     const prefix = this.assetStoreURLPrefix;
     const duration = this.assetStoreURLExpireDuration;
     const expire = Math.floor(Date.now() / 1000) + duration;
@@ -80,7 +80,7 @@ export class FSSigner extends Signer {
       .digest('base64');
     const fullURL =
       `${prefix}/${name}?expiredAt=${expire.toString()}&signature=${hash}`;
-    return Promise.resolve(fullURL);
+    return fullURL;
   }
 }
 
@@ -102,7 +102,7 @@ export class CloudSigner extends Signer {
     this.extra = null;
   }
 
-  refreshSignerToken() {
+  async refreshSignerToken() {
     const appName = this.appName;
     const duration = parseInt(this.assetStoreURLExpireDuration);
     const expire = Math.floor(Date.now() / 1000) + duration;
@@ -110,16 +110,15 @@ export class CloudSigner extends Signer {
     const host = this.cloudAssetHost;
     const url = `${host}/token/${appName}`;
 
-    return this.request.get(url)
+    const response = await this.request.get(url)
       .accept('application/json')
       .set('Authorization', `Bearer ${token}`)
-      .query({expired_at: expire.toString()})
-      .then(response => {
-        const body = response.body;
-        this.signerSecret = body.value;
-        this.expiredAt = new Date(body.expired_at);
-        this.extra = body.extra;
-      });
+      .query({expired_at: expire.toString()});
+
+    const body = response.body;
+    this.signerSecret = body.value;
+    this.expiredAt = new Date(body.expired_at);
+    this.extra = body.extra;
   }
 
   needRefreshSignerToken() {
@@ -132,10 +131,10 @@ export class CloudSigner extends Signer {
     return false;
   }
 
-  sign(name) {
+  async sign(name) {
     if (this.needRefreshSignerToken()) {
-      return this.refreshSignerToken()
-        .then(() => this.sign(name));
+      await this.refreshSignerToken();
+      return this.sign(name);
     }
     const appName = this.appName;
     const duration = parseInt(this.assetStoreURLExpireDuration);
@@ -150,8 +149,8 @@ export class CloudSigner extends Signer {
     const signatureAndExtra =
       encodeURIComponent(`${hash}.${this.extra}`);
 
-    return Promise.resolve(`${this.prefix}/${appName}/${name}` +
-      `?expired_at=${expired}&signature=${signatureAndExtra}`);
+    return `${this.prefix}/${appName}/${name}` +
+      `?expired_at=${expired}&signature=${signatureAndExtra}`;
   }
 }
 
@@ -177,7 +176,8 @@ export class S3Signer extends Signer {
     });
     this.bucket = bucket;
   }
-  sign(name) {
+
+  async sign(name) {
     // assume name is not percent encoded
     // because it should be _asset.id in database
     const encodedName = encodeURIComponent(name);
@@ -185,7 +185,7 @@ export class S3Signer extends Signer {
     let url = this.signer.getUrl('GET', encodedName, this.bucket, duration);
     let prefix = this.assetStoreS3URLPrefix;
     if (!prefix) {
-      return Promise.resolve(url);
+      return url;
     } else if (prefix.length > 1 && prefix.slice(-1) !== '/') {
       // URL.resolve behave differently if trailing slash is not present
       // always append trailing slash such that it works in both cases.
@@ -200,7 +200,7 @@ export class S3Signer extends Signer {
     const urlObject = URL.parse(urlWithoutQuery);
     urlObject.search = plainS3URLObject.search;
     url = URL.format(urlObject);
-    return Promise.resolve(url);
+    return url;
   }
 }
 

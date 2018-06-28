@@ -21,7 +21,7 @@ import {settings} from '../../lib/cloud/settings';
 import mockSuperagent from '../mock/superagent';
 
 describe('Cloud container', function () {
-  it('should store user for each container', function () {
+  it('should store user for each container', async function () {
     let container1 = new CloudCodeContainer();
     let container2 = new CloudCodeContainer();
     for (let container of [container1, container2]) {
@@ -66,18 +66,16 @@ describe('Cloud container', function () {
       container.configApiKey('correctApiKey');
       container.pubsub.autoPubsub = false;
     }
-    return Promise.all([
+    const [user1, user2] = await Promise.all([
       container1.auth.signupWithUsername('username', 'passwd'),
       container2.auth.signupAnonymously()
-    ])
-    .then(([user1, user2]) => {
-      assert.equal(container1.auth.accessToken, 'uuid1');
-      assert.instanceOf(container1.auth.currentUser, container1.UserRecord);
-      assert.equal(container1.auth.currentUser.id, 'user/user:id1');
-      assert.equal(container2.auth.accessToken, 'uuid2');
-      assert.instanceOf(container2.auth.currentUser, container2.UserRecord);
-      assert.equal(container2.auth.currentUser.id, 'user/user:id2');
-    });
+    ]);
+    assert.equal(container1.auth.accessToken, 'uuid1');
+    assert.instanceOf(container1.auth.currentUser, container1.UserRecord);
+    assert.equal(container1.auth.currentUser.id, 'user/user:id1');
+    assert.equal(container2.auth.accessToken, 'uuid2');
+    assert.instanceOf(container2.auth.currentUser, container2.UserRecord);
+    assert.equal(container2.auth.currentUser.id, 'user/user:id2');
   });
 });
 

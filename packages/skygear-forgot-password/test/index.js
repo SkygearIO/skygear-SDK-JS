@@ -121,23 +121,18 @@ describe('AuthContainer with Forgot Password', function () {
   ]);
   injectToContainer(container);
 
-  it('should sent verification request', function () {
+  it('should sent verification request', async function () {
     container.auth._accessToken = 'token-1';
-    return container.auth.requestVerification('email')
-    .then(function () {
-      // do nothing
-    });
+    await container.auth.requestVerification('email');
   });
 
-  it('should return user when verify code', function () {
+  it('should return user when verify code', async function () {
     container.auth._accessToken = 'token-1';
-    return container.auth.verifyUserWithCode('123456')
-    .then(function (user) {
-      assert.instanceOf(user, container.Record);
-      assert.equal(user.id, 'user/user-id-1');
-      assert.equal(user.username, 'user1');
-      assert.equal(user.email, 'user1@skygear.dev');
-    });
+    const user = await container.auth.verifyUserWithCode('123456');
+    assert.instanceOf(user, container.Record);
+    assert.equal(user.id, 'user/user-id-1');
+    assert.equal(user.username, 'user1');
+    assert.equal(user.email, 'user1@skygear.dev');
   });
 });
 /*eslint-enable dot-notation, no-unused-vars, quote-props */

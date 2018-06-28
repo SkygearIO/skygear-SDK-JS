@@ -227,54 +227,42 @@ describe('RelationContainer', function () {
   container.configApiKey('correctApiKey');
   let relationAction = new RelationContainer(container);
 
-  it('query following with helper method', function () {
-    return relationAction.queryFollowing().then(function (users) {
-      expect(users.length).to.be.equal(1);
-      expect(users[0]).to.be.instanceof(UserRecord);
-      expect(users[0].id).to.be.equal('user/following1');
-      expect(users.overallCount).to.be.equal(1);
-    }, function (error) {
-      throw Error();
-    });
+  it('query following with helper method', async function () {
+    const users = await relationAction.queryFollowing();
+    expect(users.length).to.be.equal(1);
+    expect(users[0]).to.be.instanceof(UserRecord);
+    expect(users[0].id).to.be.equal('user/following1');
+    expect(users.overallCount).to.be.equal(1);
   });
 
-  it('query follower with helper method', function () {
-    return relationAction.queryFollower().then(function (users) {
-      expect(users.length).to.be.equal(2);
-      expect(users[0]).to.be.instanceof(UserRecord);
-      expect(users[0].id).to.be.equal('user/follower1');
-      expect(users.overallCount).to.be.equal(24);
-    }, function (error) {
-      throw Error();
-    });
+  it('query follower with helper method', async function () {
+    const users = await relationAction.queryFollower();
+    expect(users.length).to.be.equal(2);
+    expect(users[0]).to.be.instanceof(UserRecord);
+    expect(users[0].id).to.be.equal('user/follower1');
+    expect(users.overallCount).to.be.equal(24);
   });
 
-  it('follow a user', function () {
+  it('follow a user', async function () {
     let relation = new relationAction.Following([new UserRecord({
       _id: 'user/ben'
     })]);
-    return relationAction.add(relation).then(function (result) {
-      expect(result.success.length).to.be.equal(1);
-      expect(result.success[0]).to.be.instanceof(UserRecord);
-      expect(result.success[0].id).to.be.equal('user/ben');
-      expect(result.fails.length).to.be.equal(0);
-    }, function (error) {
-      throw Error();
-    });
+    const result = await relationAction.add(relation);
+    expect(result.success.length).to.be.equal(1);
+    expect(result.success[0]).to.be.instanceof(UserRecord);
+    expect(result.success[0].id).to.be.equal('user/ben');
+    expect(result.fails.length).to.be.equal(0);
   });
 
-  it('unfollow a user', function () {
+  it('unfollow a user', async function () {
     let relation = new relationAction.Following([new UserRecord({
       _id: 'user/ben'
     })]);
-    return relationAction.remove(relation).then(function (result) {
-      console.log(result);
-      expect(result.success.length).to.be.equal(1);
-      expect(result.success[0]).to.be.equal('ben');
-      expect(result.fails.length).to.be.equal(0);
-    }, function (error) {
-      throw Error();
-    });
+    const result = await relationAction.remove(relation);
+    console.log(result);
+    expect(result.success.length).to.be.equal(1);
+    expect(result.success[0]).to.be.equal('ben');
+    expect(result.fails.length).to.be.equal(0);
   });
 
 });

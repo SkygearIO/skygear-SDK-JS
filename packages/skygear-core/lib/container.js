@@ -110,7 +110,7 @@ export class BaseContainer {
    * @param {String} options.endPoint - end point
    * @return {Promise<BaseContainer>} promise with the skygear container
    */
-  config(options) {
+  async config(options) {
     if (options.apiKey) {
       this.apiKey = options.apiKey;
     }
@@ -118,7 +118,7 @@ export class BaseContainer {
       this.endPoint = options.endPoint;
     }
 
-    return Promise.resolve(this);
+    return this;
   }
 
   /**
@@ -142,18 +142,18 @@ export class BaseContainer {
   /**
    * @private
    */
-  makeRequest(action, data) {
+  async makeRequest(action, data) {
     let requestObject = this._prepareRequestObject(action, data);
     let requestData = this._prepareRequestData(action, data);
-
-    return this._handleResponse(new Promise((resolve) => {
+    const response = await new Promise((resolve) => {
       requestObject.send(requestData).end((err, res) => {
         resolve({
           err: err,
           res: res
         });
       });
-    }));
+    });
+    return this._handleResponse(response.err, response.res);
   }
 
   /**
@@ -163,18 +163,16 @@ export class BaseContainer {
    * @param  {Object} data - data passed to the lambda function
    * @return {Promise<Object>} promise with result of the lambda function
    */
-  lambda(name, data) {
-    return this.publicDB._presave(
+  async lambda(name, data) {
+    const presavedData = await this.publicDB._presave(
       this.publicDB._presaveSingleValue.bind(this.publicDB),
       data
-    ).then((presavedData) => {
-      return this.makeRequest(name, {
-        args: presavedData ? toJSON(presavedData) : undefined
-      });
-    })
-    .then((resp) => {
-      return fromJSON(resp.result);
+    );
+
+    const resp = await this.makeRequest(name, {
+      args: presavedData ? toJSON(presavedData) : undefined
     });
+    return fromJSON(resp.result);
   }
 
   _prepareRequestObject(action) {
@@ -208,23 +206,21 @@ export class BaseContainer {
     }, data);
   }
 
-  _handleResponse(responsePromise) {
-    return responsePromise.then(({err, res}) => {
-      // Do an application JSON parse because in some condition, the
-      // content-type header will got strip and it will not deserial
-      // the json for us.
-      let body = getRespJSON(res);
+  async _handleResponse(err, res) {
+    // Do an application JSON parse because in some condition, the
+    // content-type header will got strip and it will not deserial
+    // the json for us.
+    let body = getRespJSON(res);
 
-      if (err) {
-        let skyErr = body.error || err;
-        return Promise.reject({
-          status: err.status,
-          error: skyErr
-        });
-      } else {
-        return Promise.resolve(body);
-      }
-    });
+    if (err) {
+      let skyErr = body.error || err;
+      throw {
+        status: err.status,
+        error: skyErr
+      };
+    } else {
+      return body;
+    }
   }
 
   /**
@@ -508,20 +504,20 @@ export default class Container extends BaseContainer {
    * @param {String} options.endPoint - end point
    * @return {Promise<Container>} promise with the skygear container
    */
-  config(options) {
-    return super.config(options).then(() => {
+  async config(options) {
+    try {
+      await super.config(options);
       let promises = [
         this.auth._getUser(),
         this.auth._getAccessToken(),
         this.push._getDeviceID()
       ];
-      return Promise.all(promises);
-    }).then(() => {
+      await Promise.all(promises);
       this.pubsub._reconfigurePubsubIfNeeded();
-      return this;
-    }, () => {
-      return this;
-    });
+    } catch (err) {
+      // do nothing
+    }
+    return this;
   }
 
   _prepareRequestObject(action, data) {
@@ -547,22 +543,20 @@ export default class Container extends BaseContainer {
     }, requestData);
   }
 
-  _handleResponse(responsePromise) {
-    return super._handleResponse(responsePromise)
-      .catch((err) => {
-        // Logout user implicitly if
-        let errorCode = err.error.code;
-        if (errorCode === this.ErrorCodes.AccessTokenNotAccepted) {
-          return Promise.all([
-            this.auth._setAccessToken(null),
-            this.auth._setUser(null)
-          ]).then(() => {
-            return Promise.reject(err);
-          });
-        }
-
-        return Promise.reject(err);
-      });
+  async _handleResponse(err, res) {
+    try {
+      return await super._handleResponse(err, res);
+    } catch (innerError) {
+      // Logout user implicitly if
+      let errorCode = innerError.error.code;
+      if (errorCode === this.ErrorCodes.AccessTokenNotAccepted) {
+        await Promise.all([
+          this.auth._setAccessToken(null),
+          this.auth._setUser(null)
+        ]);
+      }
+      throw innerError;
+    }
   }
 
 }

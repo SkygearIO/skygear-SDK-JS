@@ -250,9 +250,12 @@ export class RelationContainer {
    * @param  {RelationQuery} queryObj
    * @return {Promise<RelationQueryResult>} promise with user records
    */
-  query(queryObj) {
-    return this.container.makeRequest('relation:query', queryObj.toJSON())
-      .then(RelationQueryResult.createFromBody);
+  async query(queryObj) {
+    const body = await this.container.makeRequest(
+      'relation:query',
+      queryObj.toJSON()
+    );
+    return RelationQueryResult.createFromBody(body);
   }
 
   /**
@@ -261,7 +264,7 @@ export class RelationContainer {
    *
    * @return {Promise<RelationQueryResult>} promise with user records
    */
-  queryFriend() {
+  async queryFriend() {
     let query = new RelationQuery(this.Friend);
     return this.query(query);
   }
@@ -272,7 +275,7 @@ export class RelationContainer {
    *
    * @return {Promise<RelationQueryResult>} promise with user records
    */
-  queryFollower() {
+  async queryFollower() {
     let query = new RelationQuery(this.Follower);
     return this.query(query);
   }
@@ -283,7 +286,7 @@ export class RelationContainer {
    *
    * @return {Promise<RelationQueryResult>} promise with user records
    */
-  queryFollowing() {
+  async queryFollowing() {
     let query = new RelationQuery(this.Following);
     return this.query(query);
   }
@@ -294,14 +297,13 @@ export class RelationContainer {
    * @param {Relation} relation
    * @return {Promise<RelationResult>} promise with user records
    */
-  add(relation) {
-    return this.container.makeRequest('relation:add', {
+  async add(relation) {
+    const body = await this.container.makeRequest('relation:add', {
       name: relation.identifier,
       direction: relation.direction,
       targets: relation.targetsID
-    }).then((body) =>
-      new RelationResult(body.result)
-    );
+    });
+    return new RelationResult(body.result);
   }
 
   /**
@@ -310,14 +312,13 @@ export class RelationContainer {
    * @param {Relation} relation
    * @return {Promise<RelationRemoveResult>} promise with user id
    */
-  remove(relation) {
-    return this.container.makeRequest('relation:remove', {
+  async remove(relation) {
+    const body = await this.container.makeRequest('relation:remove', {
       name: relation.identifier,
       direction: relation.direction,
       targets: relation.targetsID
-    }).then((body) =>
-      new RelationRemoveResult(body.result)
-    );
+    });
+    return new RelationRemoveResult(body.result);
   }
 
   /**

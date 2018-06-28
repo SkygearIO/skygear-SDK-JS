@@ -132,18 +132,15 @@ export function getLinkRedirectResult() {
  * @example
  * skygear.auth.oauthHandler().then(...);
  */
-export function oauthHandler() {
-  return this.container.lambda('sso/config')
-  .then((data) => {
-    let authorizedURLs = data.authorized_urls;
-    if (window.opener) {
-      // popup
-      _postSSOResultMessageToWindow(window.opener, authorizedURLs);
-      return Promise.resolve();
-    } else {
-      return Promise.reject(errorResponseFromMessage('Fail to find opener'));
-    }
-  });
+export async function oauthHandler() {
+  const data = await this.container.lambda('sso/config');
+  let authorizedURLs = data.authorized_urls;
+  if (window.opener) {
+    // popup
+    _postSSOResultMessageToWindow(window.opener, authorizedURLs);
+  } else {
+    throw errorResponseFromMessage('Fail to find opener');
+  }
 }
 
 
@@ -159,13 +156,10 @@ export function oauthHandler() {
  * @example
  * skygear.auth.iframeHandler().then(...);
  */
-export function iframeHandler() {
-  return this.container.lambda('sso/config')
-  .then((data) => {
-    let authorizedURLs = data.authorized_urls;
-    _postSSOResultMessageToWindow(window.parent, authorizedURLs);
-    return Promise.resolve();
-  });
+export async function iframeHandler() {
+  const data = await this.container.lambda('sso/config');
+  let authorizedURLs = data.authorized_urls;
+  _postSSOResultMessageToWindow(window.parent, authorizedURLs);
 }
 
 /**
@@ -179,12 +173,12 @@ export function iframeHandler() {
  * @example
  * skygear.auth.loginOAuthProviderWithAccessToken(provider, accessToken).then(...);
  */
-export function loginOAuthProviderWithAccessToken(provider, accessToken) {
-  return this.container.lambda(_getAuthWithAccessTokenURL(provider, 'login'), {
+export async function loginOAuthProviderWithAccessToken(provider, accessToken) {
+  const lambdaName = _getAuthWithAccessTokenURL(provider, 'login');
+  const result = await this.container.lambda(lambdaName, {
     access_token: accessToken
-  }).then((result) => {
-    return this.container.auth._authResolve(result);
   });
+  return this.container.auth._authResolve(result);
 }
 
 /**
@@ -198,8 +192,9 @@ export function loginOAuthProviderWithAccessToken(provider, accessToken) {
  * @example
  * skygear.auth.linkOAuthProviderWithAccessToken(provider, accessToken).then(...);
  */
-export function linkOAuthProviderWithAccessToken(provider, accessToken) {
-  return this.container.lambda(_getAuthWithAccessTokenURL(provider, 'link'), {
+export async function linkOAuthProviderWithAccessToken(provider, accessToken) {
+  const lambdaName = _getAuthWithAccessTokenURL(provider, 'link');
+  return this.container.lambda(lambdaName, {
     access_token: accessToken
   });
 }
@@ -214,7 +209,7 @@ export function linkOAuthProviderWithAccessToken(provider, accessToken) {
  * @example
  * skygear.auth.unlinkOAuthProvider(provider).then(...);
  */
-export function unlinkOAuthProvider(provider) {
+export async function unlinkOAuthProvider(provider) {
   return this.container.lambda(`sso/${provider}/unlink`);
 }
 
@@ -228,7 +223,7 @@ export function unlinkOAuthProvider(provider) {
  * @example
  * skygear.auth.getOAuthProviderProfiles().then(...);
  */
-export function getOAuthProviderProfiles() {
+export async function getOAuthProviderProfiles() {
   return this.container.lambda('sso/provider_profiles');
 }
 
@@ -244,7 +239,7 @@ export function getOAuthProviderProfiles() {
  *                                     be called when oauth flow resolve
  * @return {Promise} promise
  */
-function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
+async function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   var newWindow = window.open('', '_blank', 'height=700,width=500');
   this._oauthWindowObserver = this._oauthWindowObserver ||
     new NewWindowObserver();
@@ -252,26 +247,22 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
     new WindowMessageObserver();
 
   const params = _genAuthURLParams('web_popup', options);
-  const promise = this.container.lambda(_getAuthURL(provider, action), params)
-  .then((data) => {
+  const lambdaName = _getAuthURL(provider, action);
+  try {
+    const data = await this.container.lambda(lambdaName, params);
     newWindow.location.href = data.auth_url;
-    return Promise.race([
+    let result = await Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
       this._oauthResultObserver.subscribe()
     ]);
-  }).then((result) => {
-    return _ssoResultMessageResolve(result);
-  }).then((result) => {
-    return resolvePromise(result);
-  });
 
-  // the pattern is going to achieve finally in Promise
-  return promise.catch(() => undefined).then(() => {
+    result = await _ssoResultMessageResolve(result);
+    return resolvePromise(result);
+  } finally {
     newWindow.close();
     this._oauthWindowObserver.unsubscribe();
     this._oauthResultObserver.unsubscribe();
-    return promise;
-  });
+  }
 }
 
 /**
@@ -285,14 +276,13 @@ function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
  * @return {Promise} promise
  *
  */
-function _oauthFlowWithRedirect(provider, options, action) {
+async function _oauthFlowWithRedirect(provider, options, action) {
   const params = _genAuthURLParams('web_redirect', options);
-  return this.container.lambda(_getAuthURL(provider, action), params)
-  .then((data) => {
-    const store = this.container.store;
-    window.location.href = data.auth_url; //eslint-disable-line
-    return store.setItem('skygear-oauth-redirect-action', action);
-  });
+  const lambdaName = _getAuthURL(provider, action);
+  const data = await this.container.lambda(lambdaName, params);
+  const store = this.container.store;
+  window.location.href = data.auth_url; //eslint-disable-line
+  return store.setItem('skygear-oauth-redirect-action', action);
 }
 
 
@@ -312,50 +302,42 @@ function _oauthFlowWithRedirect(provider, options, action) {
  * @return {Promise} promise
  *
  */
-function _getRedirectResult(action, resolvePromise) {
+async function _getRedirectResult(action, resolvePromise) {
   this._oauthResultObserver = this._oauthResultObserver ||
     new WindowMessageObserver();
 
   let oauthIframe;
-  const promise = this.container.store.getItem('skygear-oauth-redirect-action')
-    .then((lastRedirectAction) => {
-      if (lastRedirectAction !== action) {
-        return Promise.resolve();
-      }
-      let subscribeOauthResult = this._oauthResultObserver.subscribe();
-      let resetRedirectActionStore = this.container.store
-        .removeItem('skygear-oauth-redirect-action');
+  try {
+    const lastRedirectAction = await this.container.store.getItem(
+      'skygear-oauth-redirect-action'
+    );
 
-      // add the iframe and wait for the receive message
-      oauthIframe = document.createElement('iframe');
-      oauthIframe.style.display = 'none';
-      oauthIframe.src = this.container.url + 'sso/iframe_handler';
-      document.body.appendChild(oauthIframe);
+    if (lastRedirectAction !== action) {
+      return;
+    }
+    const subscribeOauthResult = this._oauthResultObserver.subscribe();
+    const resetRedirectActionStore = this.container.store
+      .removeItem('skygear-oauth-redirect-action');
 
-      return Promise.all([subscribeOauthResult, resetRedirectActionStore]);
-    }).then((result) => {
-      if (!result) {
-        // no previous redirect operation
-        return Promise.resolve();
-      }
-      let oauthResult = result[0];
-      return _ssoResultMessageResolve(oauthResult);
-    }).then((result) => {
-      if (!result) {
-        // no previous redirect operation
-        return Promise.resolve();
-      }
-      return resolvePromise(result);
-    });
+    // add the iframe and wait for the receive message
+    oauthIframe = document.createElement('iframe');
+    oauthIframe.style.display = 'none';
+    oauthIframe.src = this.container.url + 'sso/iframe_handler';
+    document.body.appendChild(oauthIframe);
 
-  // the pattern is going to achieve finally in Promise
-  return promise.catch(() => undefined).then(() => {
+    let result = await Promise.all([
+      subscribeOauthResult,
+      resetRedirectActionStore]
+    );
+    let oauthResult = result[0];
+    result = await _ssoResultMessageResolve(oauthResult);
+    return resolvePromise(result);
+  } finally {
     if (oauthIframe) {
       this._oauthResultObserver.unsubscribe();
       document.body.removeChild(oauthIframe);
     }
-    return promise;
-  });
+  }
 }
 
 function _getAuthURL(provider, action) {
@@ -439,23 +421,23 @@ function _postSSOResultMessageToWindow(window, authorizedURLs) {
   }, '*');
 }
 
-function _ssoResultMessageResolve(message) {
+async function _ssoResultMessageResolve(message) {
   switch (message.type) {
   case 'error':
-    return Promise.reject(message.error);
+    throw message.error;
   case 'result':
     const result = message.result;
     // server error
     if (result.error) {
-      return Promise.reject(result);
+      throw result;
     }
-    return Promise.resolve(result);
+    return result;
   case 'end':
-    return Promise.reject(errorResponseFromMessage(`Fail to retrieve result.
+    throw errorResponseFromMessage(`Fail to retrieve result.
 Please check the callback_url params in function and
-authorized callback urls list in portal.`));
+authorized callback urls list in portal.`);
   default:
-    return Promise.reject(errorResponseFromMessage('Unkown message type'));
+    throw errorResponseFromMessage('Unkown message type');
   }
 }
 

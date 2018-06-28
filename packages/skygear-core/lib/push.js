@@ -54,7 +54,7 @@ export class PushContainer {
    * @param {string} topic - the device topic, refer to application bundle
    * identifier on iOS and application package name on Android
    **/
-  registerDevice(token, type, topic) {
+  async registerDevice(token, type, topic) {
     if (!token) {
       throw new Error('Token cannot be empty');
     }
@@ -67,14 +67,15 @@ export class PushContainer {
       deviceID = this.deviceID;
     }
 
-    return this.container.makeRequest('device:register', {
-      type: type,
-      id: deviceID,
-      topic: topic,
-      device_token: token //eslint-disable-line camelcase
-    }).then((body) => {
+    try {
+      const body = await this.container.makeRequest('device:register', {
+        type: type,
+        id: deviceID,
+        topic: topic,
+        device_token: token //eslint-disable-line camelcase
+      });
       return this._setDeviceID(body.result.id);
-    }, (error) => {
+    } catch (error) {
       // Will set the deviceID to null and try again iff deviceID is not null.
       // The deviceID can be deleted remotely, by apns feedback.
       // If the current deviceID is already null, will regards as server fail.
@@ -83,32 +84,28 @@ export class PushContainer {
         errorCode = error.error.code;
       }
       if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
-        return this._setDeviceID(null).then(() => {
-          return this.registerDevice(token, type);
-        });
+        await this._setDeviceID(null);
+        return this.registerDevice(token, type);
       } else {
-        return Promise.reject(error);
+        throw error;
       }
-    });
+    }
   }
 
   /**
    * Unregisters the current user from the current device.
    * This should be called when the user logouts.
    **/
-  unregisterDevice() {
+  async unregisterDevice() {
     if (!this.deviceID) {
-      return Promise.reject(
-        new SkygearError('Missing device id', ErrorCodes.InvalidArgument)
-      );
+      throw new SkygearError('Missing device id', ErrorCodes.InvalidArgument);
     }
 
-    return this.container.makeRequest('device:unregister', {
-      id: this.deviceID
-    }).then(() => {
-      // do nothing
-      return;
-    }, (error) => {
+    try {
+      await this.container.makeRequest('device:unregister', {
+        id: this.deviceID
+      });
+    } catch (error) {
       let errorCode = null;
       if (error.error) {
         errorCode = error.error.code;
@@ -117,9 +114,9 @@ export class PushContainer {
         // regard it as success
         return this._setDeviceID(null);
       } else {
-        return Promise.reject(error);
+        throw error;
       }
-    });
+    }
   }
 
   /**
@@ -137,7 +134,7 @@ export class PushContainer {
    * @see https://developers.google.com/cloud-messaging/concept-options
    * @see https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
    **/
-  sendToUser(users, notification, topic) {
+  async sendToUser(users, notification, topic) {
     if (!_.isArray(users)) {
       users = [users];
     }
@@ -147,15 +144,13 @@ export class PushContainer {
       }
       return user.id;
     });
-    return this.container.makeRequest('push:user', {
+
+    const result = await this.container.makeRequest('push:user', {
       user_ids: userIDs, //eslint-disable-line camelcase
       notification,
       topic
-    }).then((result) => {
-      return result.result;
-    }, (error) => {
-      return Promise.reject(error);
     });
+    return result.result;
   }
 
   /**
@@ -172,7 +167,7 @@ export class PushContainer {
    * @see https://developers.google.com/cloud-messaging/concept-options
    * @see https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
    **/
-  sendToDevice(devices, notification, topic) {
+  async sendToDevice(devices, notification, topic) {
     if (!_.isArray(devices)) {
       devices = [devices];
     }
@@ -182,15 +177,12 @@ export class PushContainer {
       }
       return device.id;
     });
-    return this.container.makeRequest('push:device', {
+    const result = await this.container.makeRequest('push:device', {
       device_ids: deviceIDs, //eslint-disable-line camelcase
       notification,
       topic
-    }).then((result) => {
-      return result.result;
-    }, (error) => {
-      return Promise.reject(error);
     });
+    return result.result;
   }
 
   /**
@@ -202,31 +194,32 @@ export class PushContainer {
     return this._deviceID;
   }
 
-  _getDeviceID() {
-    return this.container.store.getItem('skygear-deviceid').then((deviceID) => {
+  async _getDeviceID() {
+    try {
+      const deviceID = await this.container.store.getItem('skygear-deviceid');
       this._deviceID = deviceID;
       return deviceID;
-    }, (err) => {
+    } catch (err) {
       console.warn('Failed to get deviceid', err);
       this._deviceID = null;
       return null;
-    });
+    }
   }
 
-  _setDeviceID(value) {
+  async _setDeviceID(value) {
     this._deviceID = value;
-    const store = this.container.store;
-    const setItem = value === null ? store.removeItem('skygear-deviceid')
-        : store.setItem('skygear-deviceid', value);
-    return setItem.then(() => {
-      return value;
-    }, (err) => {
+    try {
+      const store = this.container.store;
+      if (value === null) {
+        await store.removeItem('skygear-deviceid');
+      } else {
+        await store.setItem('skygear-deviceid', value);
+      }
+    } catch (err) {
       console.warn('Failed to persist deviceid', err);
-      return value;
-    }).then((deviceID) => {
+    } finally {
       this.container.pubsub._reconfigurePubsubIfNeeded();
-      return deviceID;
-    });
+    }
+    return value;
   }
-
 }

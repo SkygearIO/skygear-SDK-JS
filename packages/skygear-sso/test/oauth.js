@@ -1,5 +1,5 @@
 /* global window:false */
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import { injectToContainer } from '../lib/index';
 import Container from '../../skygear-core/lib/container';
 import mockSuperagent from '../../skygear-core/test/mock/superagent';
@@ -67,34 +67,31 @@ describe('SSO OAuth', function () {
   container.configApiKey('correctApiKey');
   injectToContainer(container);
 
-  it('can login with access token', function (done) {
-    container.auth.loginOAuthProviderWithAccessToken('provider', 'accessToken')
-      .then(function (user) {
-        expect(user).not.be.null();
-        expect(user.email).to.eql('user1@skygear.dev');
-        done();
-      });
+  it('can login with access token', async function () {
+    const user = await container.auth.loginOAuthProviderWithAccessToken(
+      'provider',
+      'accessToken'
+    );
+    expect(user).not.be.null();
+    expect(user.email).to.eql('user1@skygear.dev');
   });
 
-  it('can link with access token', function (done) {
-    container.auth.linkOAuthProviderWithAccessToken('provider', 'accessToken')
-      .then(function (response) {
-        expect(response).not.be.null();
-        expect(response.result).to.eql('OK');
-        done();
-      });
+  it('can link with access token', async function () {
+    const response = await container.auth.linkOAuthProviderWithAccessToken(
+      'provider',
+      'accessToken'
+    );
+    expect(response).not.be.null();
+    expect(response.result).to.eql('OK');
   });
 
-  it('can unlink oauth', function (done) {
-    container.auth.unlinkOAuthProvider('provider')
-      .then(function (response) {
-        expect(response).not.be.null();
-        expect(response.result).to.eql('OK');
-        done();
-      });
+  it('can unlink oauth', async function () {
+    const response = await container.auth.unlinkOAuthProvider('provider');
+    expect(response).not.be.null();
+    expect(response.result).to.eql('OK');
   });
 
-  it('can login oauth with popup', function (done) {
+  it('can login oauth with popup', async function () {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
@@ -126,15 +123,15 @@ describe('SSO OAuth', function () {
       }, '*');
     }, 50);
 
-    container.auth.loginOAuthProviderWithPopup('provider', {})
-      .then(function (user) {
-        expect(user).not.be.null();
-        expect(user.email).to.eql('user1@skygear.dev');
-        done();
-      });
+    const user = await container.auth.loginOAuthProviderWithPopup(
+      'provider',
+      {}
+    );
+    expect(user).not.be.null();
+    expect(user.email).to.eql('user1@skygear.dev');
   });
 
-  it('user close window when login oauth with popup', function (done) {
+  it('user close window when login oauth with popup', async function () {
     this.timeout(4000);
 
     // setup mock window
@@ -149,16 +146,17 @@ describe('SSO OAuth', function () {
       return newWindow;
     };
 
-    container.auth.loginOAuthProviderWithPopup('provider', {})
-      .then(done).catch(function (error) {
-        const err = error.error;
-        expect(err).not.be.null();
-        expect(err.message).eq('User cancel the login flow');
-        done();
-      });
+    try {
+      await container.auth.loginOAuthProviderWithPopup('provider', {});
+      assert.fail('should fail');
+    } catch (error) {
+      const err = error.error;
+      expect(err).not.be.null();
+      expect(err.message).eq('User cancel the login flow');
+    }
   });
 
-  it('can link oauth with popup', function (done) {
+  it('can link oauth with popup', async function () {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
@@ -181,13 +179,11 @@ describe('SSO OAuth', function () {
       }, '*');
     }, 50);
 
-    container.auth.linkOAuthProviderWithPopup('provider', {})
-      .then(function (result) {
-        expect(result).not.be.null();
-        expect(result.result).to.eql('OK');
-        done();
-      }).catch(function (error) {
-        done(error);
-      });
+    const result = await container.auth.linkOAuthProviderWithPopup(
+      'provider',
+      {}
+    );
+    expect(result).not.be.null();
+    expect(result.result).to.eql('OK');
   });
 });

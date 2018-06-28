@@ -282,7 +282,7 @@ export default class CommonTransport {
     throw new Error('Not implemented');
   }
 
-  _promisify(func, ...param) {
+  _promisify(func, ...param) { // do not mark as async
     try {
       const result = func(...param);
       if (result instanceof Promise) {
@@ -294,13 +294,11 @@ export default class CommonTransport {
     }
   }
 
-  initHandler() {
-    return Promise.reject(
-      new Error('Init trigger is deprecated, use init event instead')
-    );
+  async initHandler() {
+    throw new Error('Init trigger is deprecated, use init event instead');
   }
 
-  hookHandler(payload) {
+  async hookHandler(payload) {
     const {
       name,
       param,
@@ -310,7 +308,7 @@ export default class CommonTransport {
     const func = this.registry.getFunc('hook', name);
     const _type = this.registry.getHookType(name);
     if (!func) {
-      return Promise.reject(new Error('Database hook does not exist'));
+      throw new Error('Database hook does not exist');
     }
 
     const incomingRecord = new Record(_type, param.record);
@@ -323,21 +321,20 @@ export default class CommonTransport {
       context,
       container: containerFromContext(context)
     };
-    return this._promisify(
+    const _record = await this._promisify(
       func,
       incomingRecord,
       originalRecord,
       pool,
       options
-    ).then((_record) => {
-      const record = _record || incomingRecord;
-      return {
-        result: record.toJSON()
-      };
-    });
+    );
+    const record = _record || incomingRecord;
+    return {
+      result: record.toJSON()
+    };
   }
 
-  opHandler(payload) {
+  async opHandler(payload) {
     const {
       name,
       param,
@@ -346,59 +343,56 @@ export default class CommonTransport {
 
     const func = this.registry.getFunc('op', name);
     if (!func) {
-      return Promise.reject(new Error('Lambda function does not exist'));
+      throw new Error('Lambda function does not exist');
     }
 
     const options = {
       context,
       container: containerFromContext(context)
     };
-    return this._promisify(
+    const result = await this._promisify(
       func,
       fromJSON(param),
       options
-    ).then((result) => {
-      return {
-        result: toJSON(result)
-      };
-    });
+    );
+    return {
+      result: toJSON(result)
+    };
   }
 
-  eventHandler(payload) {
+  async eventHandler(payload) {
     const funcList = this.registry.getEventFunctions(payload.name);
 
     if (!funcList) {
       // It is okay that the sending event has no handlers
-      return Promise.resolve({
+      return {
         result: []
-      });
+      };
     }
 
     const funcPromises = funcList.map(
       (eachFunc) => this._promisify(eachFunc, payload.param)
     );
 
-    return Promise.all(funcPromises).then((results) => {
-      const result = results.length > 1 ? results : results[0];
-      return { result };
-    });
+    const results = await Promise.all(funcPromises);
+    const result = results.length > 1 ? results : results[0];
+    return { result };
   }
 
-  timerHandler(payload) {
+  async timerHandler(payload) {
     const func = this.registry.getFunc('timer', payload.name);
     if (!func) {
-      return Promise.reject(new Error('Cronjob not exist'));
+      throw new Error('Cronjob not exist');
     }
 
-    return this._promisify(
+    const result = await this._promisify(
       func,
       payload.param
-    ).then((result) => {
-      return { result };
-    });
+    );
+    return { result };
   }
 
-  handlerHandler(payload) {
+  async handlerHandler(payload) {
     const {
       name,
       param,
@@ -407,7 +401,7 @@ export default class CommonTransport {
 
     const func = this.registry.getHandler(name, param.method);
     if (!func) {
-      return Promise.reject(new Error('Handler not exist'));
+      throw new Error('Handler not exist');
     }
 
     const options = {
@@ -415,18 +409,17 @@ export default class CommonTransport {
       container: containerFromContext(context)
     };
     const req = new SkygearRequest(param);
-    return this._promisify(
+    const result = await this._promisify(
       func,
       req,
       options
-    ).then((result) => {
-      return {
-        result: SkygearResponse.wrap(result).toResultJSON()
-      };
-    });
+    );
+    return {
+      result: SkygearResponse.wrap(result).toResultJSON()
+    };
   }
 
-  providerHandler(payload) {
+  async providerHandler(payload) {
     const {
       name,
       param
@@ -434,15 +427,14 @@ export default class CommonTransport {
 
     const provider = this.registry.getProvider(name);
     if (!provider) {
-      return Promise.reject(new Error('Provider not exist'));
+      throw new Error('Provider not exist');
     }
 
-    return this._promisify(
+    const result = await this._promisify(
       provider.handleAction.bind(provider),
       param.action,
       param
-    ).then((result) => {
-      return { result };
-    });
+    );
+    return { result };
   }
 }

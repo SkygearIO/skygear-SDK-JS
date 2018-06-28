@@ -44,12 +44,9 @@ describe('SSO Custom Token', function () {
   container.configApiKey('correctApiKey');
   injectToContainer(container);
 
-  it('can login with custom token', function (done) {
-    container.auth.loginWithCustomToken('eyXXXX')
-      .then(function (user) {
-        expect(user).not.be.null();
-        expect(user.email).to.eql('user1@skygear.dev');
-        done();
-      });
+  it('can login with custom token', async function () {
+    const user = await container.auth.loginWithCustomToken('eyXXXX');
+    expect(user).not.be.null();
+    expect(user.email).to.eql('user1@skygear.dev');
   });
 });

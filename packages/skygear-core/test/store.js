@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {expect} from 'chai';
+import {assert, expect} from 'chai';
 import sinon from 'sinon';
 import getStore from '../lib/store';
 
@@ -76,7 +76,7 @@ describe('Store', function () {
     );
   });
 
-  it('emulates transaction', function () {
+  it('emulates transaction', async function () {
 
     store._driver = {};
     store._driver.multiSet = sinon.stub();
@@ -102,23 +102,22 @@ describe('Store', function () {
     store._driver.multiSet.onCall(1)
       .returns(Promise.resolve());
 
-    return store.multiSetTransactionally(newKeyValuePairs).then(function () {
-      // this should be unreachable
-      expect(1).to.be.eql(2);
-    }, function () {
+    try {
+      await store.multiSetTransactionally(newKeyValuePairs);
+      assert.fail('should fail');
+    } catch (error) {
       expect(store._driver.multiGet.withArgs(keys)).to.be.callCount(1);
       expect(
         store._driver.multiSet.getCall(0).calledWithExactly(newKeyValuePairs))
-      .to.be.true();
+        .to.be.true();
       expect(store._driver.multiRemove.withArgs(keys)).to.be.callCount(1);
       expect(
         store._driver.multiSet.getCall(1).calledWithExactly(oldKeyValuePairs))
-      .to.be.true();
-    });
-
+        .to.be.true();
+    }
   });
 
-  it('store metadata when storing purgeable key-value pair', function () {
+  it('store metadata when storing purgeable key-value pair', async function () {
     store._purgeableKeys = ['a', 'b', 'c'];
     store._driver = {};
     store._driver.multiGet = sinon.stub();
@@ -148,11 +147,10 @@ describe('Store', function () {
     ]));
     store._driver.multiSet.withArgs(keyValuePairs).returns(Promise.resolve());
 
-    return store.setPurgeableItem('d', 'd').then(function () {
-      expect(store._driver.multiGet.withArgs(keys)).to.be.callCount(1);
-      expect(store._driver.multiSet.withArgs(keyValuePairs)).to.be.callCount(1);
-      expect(store._purgeableKeys).to.be.eql(['d', 'a', 'b', 'c']);
-    });
+    await store.setPurgeableItem('d', 'd');
+    expect(store._driver.multiGet.withArgs(keys)).to.be.callCount(1);
+    expect(store._driver.multiSet.withArgs(keyValuePairs)).to.be.callCount(1);
+    expect(store._purgeableKeys).to.be.eql(['d', 'a', 'b', 'c']);
   });
 
   it('selects least recently used keys to purge', function () {
@@ -162,7 +160,7 @@ describe('Store', function () {
     expect(store._selectKeysToPurge(['a', 'b', 'c'])).to.be.eql(['b', 'c']);
   });
 
-  it('purges purgeable items when write fails', function () {
+  it('purges purgeable items when write fails', async function () {
     store._purgeableKeys = ['a', 'b', 'c'];
     store._driver = {};
     store._driver.setItem = sinon.stub();
@@ -172,9 +170,10 @@ describe('Store', function () {
     store._driver.multiRemove.returns(Promise.resolve());
     store._driver.setItem.onCall(1).returns(Promise.resolve());
 
-    return store.setItem('d', 'd').then(function () {
-      expect(1).to.be.eql(2);
-    }, function () {
+    try {
+      await store.setItem('d', 'd');
+      assert.fail('should fail');
+    } catch (error) {
       expect(store._driver.setItem).to.be.callCount(2);
       expect(store._driver.multiRemove).to.be.callCount(1);
 
@@ -192,7 +191,7 @@ describe('Store', function () {
       );
 
       expect(store._purgeableKeys).to.be.eql(['a']);
-    });
+    }
   });
 
 });

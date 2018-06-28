@@ -35,46 +35,43 @@ class SyncStorageDriver {
     this._syncImpl = syncImpl;
   }
 
-  clear(callback) {
+  async clear(callback) {
     this._syncImpl.clear();
     if (callback) {
       callback(null);
     }
-    return Promise.resolve();
   }
 
-  getItem(key, callback) {
+  async getItem(key, callback) {
     const value = this._syncImpl.getItem(key);
     if (callback) {
       callback(null, value);
     }
-    return Promise.resolve(value);
+    return value;
   }
 
-  setItem(key, value, callback) {
+  async setItem(key, value, callback) {
     try {
       this._syncImpl.setItem(key, value);
       if (callback) {
         callback(null);
       }
-      return Promise.resolve();
     } catch (e) {
       if (callback) {
         callback(e);
       }
-      return Promise.reject(e);
+      throw e;
     }
   }
 
-  removeItem(key, callback) {
+  async removeItem(key, callback) {
     this._syncImpl.removeItem(key);
     if (callback) {
       callback(null);
     }
-    return Promise.resolve();
   }
 
-  multiGet(keys, callback) {
+  async multiGet(keys, callback) {
     const output = [];
     for (let i = 0; i < keys.length; ++i) {
       const key = keys[i];
@@ -87,10 +84,10 @@ class SyncStorageDriver {
     if (callback) {
       callback(null, output);
     }
-    return Promise.resolve(output);
+    return output;
   }
 
-  multiSet(keyValuePairs, callback) {
+  async multiSet(keyValuePairs, callback) {
     try {
       for (let i = 0; i < keyValuePairs.length; ++i) {
         const pair = keyValuePairs[i];
@@ -101,16 +98,15 @@ class SyncStorageDriver {
       if (callback) {
         callback(null);
       }
-      return Promise.resolve();
     } catch (e) {
       if (callback) {
-        return Promise.callback(e);
+        return callback(e);
       }
-      return Promise.reject(e);
+      throw e;
     }
   }
 
-  multiRemove(keys, callback) {
+  async multiRemove(keys, callback) {
     for (let i = 0; i < keys.length; ++i) {
       const key = keys[i];
       this._syncImpl.removeItem(key);
@@ -118,18 +114,17 @@ class SyncStorageDriver {
     if (callback) {
       callback(null);
     }
-    return Promise.resolve();
   }
 
-  key(n, callback) {
+  async key(n, callback) {
     const result = this._syncImpl.key(n);
     if (callback) {
       callback(null, result);
     }
-    return Promise.resolve(result);
+    return result;
   }
 
-  keys(callback) {
+  async keys(callback) {
     const length = this._syncImpl.length;
     const output = [];
     for (let i = 0; i < length; ++i) {
@@ -138,17 +133,16 @@ class SyncStorageDriver {
     if (callback) {
       callback(null, output);
     }
-    return Promise.resolve(output);
+    return output;
   }
 
-  length(callback) {
+  async length(callback) {
     const length = this._syncImpl.length;
     if (callback) {
       callback(null, length);
     }
-    return Promise.resolve(length);
+    return length;
   }
-
 }
 
 /**
@@ -160,7 +154,8 @@ export class Store {
     this.keyWhiteList = keyWhiteList;
     this._purgeableKeys = [];
 
-    this._driver.getItem(PURGEABLE_KEYS_KEY).then(function (value) {
+    (async () => {
+      const value = await this._driver.getItem(PURGEABLE_KEYS_KEY);
       if (value) {
         try {
           const originalKeys = JSON.parse(value);
@@ -174,7 +169,7 @@ export class Store {
           // ignore
         }
       }
-    }.bind(this));
+    })();
   }
 
   /*
@@ -220,37 +215,42 @@ export class Store {
     return output;
   }
 
-  clear(callback) {
+  async clear(callback) {
     return this._driver.clear(callback);
   }
 
-  getItem(key, callback) {
+  async getItem(key, callback) {
     return this._driver.getItem(key, callback);
   }
 
-  setItem(key, value, callback) {
+  async setItem(key, value, callback) {
     if (this.keyWhiteList && this.keyWhiteList.indexOf(key) < 0) {
-      return Promise.reject(new Error('Saving key is not permitted'));
+      throw new Error('Saving key is not permitted');
     }
-    return this._driver.setItem(key, value).then(() => {
+
+    try {
+      await this._driver.setItem(key, value);
       if (callback) {
         callback(null);
       }
-      return Promise.resolve();
-    }, (error) =>
-      this._purge().then(() => Promise.reject(error))
-    )
-    .catch((error) => {
-      if (callback) {
-        callback(error);
+    } catch (error) {
+      let lastError = error;
+      try {
+        await this._purge();
+      } catch (innerError) {
+        lastError = innerError;
       }
-      return Promise.reject(error);
-    });
+
+      if (callback) {
+        callback(lastError);
+      }
+      throw lastError;
+    }
   }
 
-  setPurgeableItem(key, value, callback) {
+  async setPurgeableItem(key, value, callback) {
     if (this.keyWhiteList && this.keyWhiteList.indexOf(key) < 0) {
-      return Promise.reject(new Error('Saving key is not permitted'));
+      throw new Error('Saving key is not permitted');
     }
     this._purgeableKeys = this._maintainLRUOrder(
       this._purgeableKeys, [key]
@@ -266,20 +266,25 @@ export class Store {
         value: JSON.stringify(this._purgeableKeys)
       }
     ];
-    return this.multiSetTransactionally(keyValuePairs).then(() => {
+
+    try {
+      await this.multiSetTransactionally(keyValuePairs);
       if (callback) {
         callback(null);
       }
-      return Promise.resolve();
-    }, (error) =>
-      this._purge().then(() => Promise.reject(error))
-    )
-    .catch((error) => {
-      if (callback) {
-        callback(error);
+    } catch (error) {
+      let lastError = error;
+      try {
+        await this._purge();
+      } catch (innerError) {
+        lastError = innerError;
       }
-      return Promise.reject(error);
-    });
+
+      if (callback) {
+        callback(lastError);
+      }
+      throw lastError;
+    }
   }
 
   _selectKeysToPurge(keys) {
@@ -288,73 +293,69 @@ export class Store {
     return keysToPurge;
   }
 
-  _purge() {
+  async _purge() {
     const keysToPurge = this._selectKeysToPurge(this._purgeableKeys);
     if (keysToPurge.length <= 0) {
-      return Promise.reject(new Error('no more keys to purge'));
+      throw new Error('no more keys to purge');
     }
 
     this._purgeableKeys = this._removeKeysInLRUOrder(
       this._purgeableKeys,
       keysToPurge
     );
-    return this._driver.multiRemove(keysToPurge).then(function () {
-      return this._driver.setItem(
-        PURGEABLE_KEYS_KEY,
-        JSON.stringify(this._purgeableKeys)
-      );
-    }.bind(this));
+    await this._driver.multiRemove(keysToPurge);
+    return this._driver.setItem(
+      PURGEABLE_KEYS_KEY,
+      JSON.stringify(this._purgeableKeys)
+    );
   }
 
-  multiSetTransactionally(keyValuePairs, callback) {
+  async multiSetTransactionally(keyValuePairs, callback) {
     const keys = [];
     for (let i = 0; i < keyValuePairs.length; ++i) {
       const pair = keyValuePairs[i];
       const key = pair.key;
       if (this.keyWhiteList && this.keyWhiteList.indexOf(key) < 0) {
-        return Promise.reject(new Error('Saving key is not permitted'));
+        throw new Error('Saving key is not permitted');
       }
       keys.push(key);
     }
-
-    return this._driver.multiGet(keys).then((original) => {
-      return this._driver.multiSet(keyValuePairs).then(() => {
-        if (callback) {
-          callback(null);
-        }
-        return Promise.resolve();
-      }, (e) => {
-        return this._driver.multiRemove(keys).then(() => {
-          return this._driver.multiSet(original).then(() => {
-            if (callback) {
-              callback(e);
-            }
-            return Promise.reject(e);
-          });
-        });
-      });
-    });
+    const original = await this._driver.multiGet(keys);
+    try {
+      await this._driver.multiSet(keyValuePairs);
+      if (callback) {
+        callback(null);
+      }
+      return;
+    } catch (e) {
+      await this._driver.multiRemove(keys);
+      await this._driver.multiSet(original);
+      if (callback) {
+        callback(e);
+      }
+      throw e;
+    }
   }
 
-  clearPurgeableItems(callback) {
+  async clearPurgeableItems(callback) {
     const keys = this._purgeableKeys.slice();
     this._purgeableKeys = [];
     return this._driver.multiRemove(keys, callback);
   }
 
-  removeItem(key, callback) {
+  async removeItem(key, callback) {
     return this._driver.removeItem(key, callback);
   }
 
-  key(n, callback) {
+  async key(n, callback) {
     return this._driver.key(n, callback);
   }
 
-  keys(callback) {
+  async keys(callback) {
     return this._driver.keys(callback);
   }
 
-  length(callback) {
+  async length(callback) {
     return this._driver.length(callback);
   }
 

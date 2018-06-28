@@ -17,27 +17,27 @@ import {AuthContainer, USER_CHANGED} from '../auth';
 
 export class CloudCodeAuthContainer extends AuthContainer {
 
-  _getUser() {
-    return Promise.resolve(this._user);
+  async _getUser() {
+    return this._user;
   }
 
-  _setUser(attrs) {
+  async _setUser(attrs) {
     if (attrs !== null) {
       this._user = new this._User(attrs);
     } else {
       this._user = null;
     }
     this.container.ee.emit(USER_CHANGED, this._user);
-    return Promise.resolve(this._user);
+    return this._user;
   }
 
-  _getAccessToken() {
-    return Promise.resolve(this._accessToken);
+  async _getAccessToken() {
+    return this._accessToken;
   }
 
-  _setAccessToken(value) {
+  async _setAccessToken(value) {
     this._accessToken = value;
-    return Promise.resolve(value);
+    return value;
   }
 
 }

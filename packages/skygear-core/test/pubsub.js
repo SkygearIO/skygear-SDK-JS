@@ -216,19 +216,20 @@ describe('Pubsub', function () {
     assert(promise instanceof Promise);
   });
 
-  it('once should unsubscribe on message and resolve promise', function () {
-    ws.send = function () {};
-    sinon.spy(pubsub, 'unsubscribe');
-    const promise = pubsub.once('CHANNEL');
-    promise.catch(function (err) {
-      throw err;
-    });
-    ws.onmessage({data: '{"channel": "CHANNEL", "data": "DATA"}'});
-    assert(pubsub.unsubscribe.calledOnce);
-    promise.then(function (data) {
+  it(
+    'once should unsubscribe on message and resolve promise',
+    async function () {
+      ws.send = function () {};
+      sinon.spy(pubsub, 'unsubscribe');
+      setTimeout(() => {
+        ws.onmessage({data: '{"channel": "CHANNEL", "data": "DATA"}'});
+      }, 5);
+
+      const data = await pubsub.once('CHANNEL');
+      assert(pubsub.unsubscribe.calledOnce);
       assert(data === 'DATA');
-    });
-  });
+    }
+  );
 
 });
 

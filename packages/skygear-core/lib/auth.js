@@ -73,12 +73,13 @@ export class AuthContainer {
    * @param  {Object} [data={}] - data saved to the user record
    * @return {Promise<Record>} promise with created user record
    */
-  signup(authData, password, data = {}) {
-    return this.container.makeRequest('auth:signup', {
+  async signup(authData, password, data = {}) {
+    const authResponse = await this.container.makeRequest('auth:signup', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password,
       profile: toJSON(data)
-    }).then(this._authResolve.bind(this));
+    });
+    return this._authResolve(authResponse);
   }
 
   /**
@@ -90,7 +91,7 @@ export class AuthContainer {
    * @param  {Object} [data={}] - data saved to the user record
    * @return {Promise<Record>} promise with the created user record
    */
-  signupWithUsername(username, password, data = {}) {
+  async signupWithUsername(username, password, data = {}) {
     return this.signup({
       username: username
     }, password, data);
@@ -105,7 +106,7 @@ export class AuthContainer {
    * @param  {Object} [data={}] - data saved to the user record
    * @return {Promise<Record>} promise with the created user record
    */
-  signupWithEmail(email, password, data = {}) {
+  async signupWithEmail(email, password, data = {}) {
     return this.signup({
       email: email
     }, password, data);
@@ -116,7 +117,7 @@ export class AuthContainer {
    *
    * @return {Promise<Record>} promise with the created user record
    */
-  signupAnonymously() {
+  async signupAnonymously() {
     return this.signup(null, null, null);
   }
 
@@ -128,11 +129,12 @@ export class AuthContainer {
    * @param  {String} password - password of the user
    * @return {Promise<Record>} promise with the logged in user record
    */
-  login(authData, password) {
-    return this.container.makeRequest('auth:login', {
+  async login(authData, password) {
+    const authResponse = await this.container.makeRequest('auth:login', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password
-    }).then(this._authResolve.bind(this));
+    });
+    return this._authResolve(authResponse);
   }
 
   /**
@@ -143,7 +145,7 @@ export class AuthContainer {
    * @param  {String} password - password of the user
    * @return {Promise<Record>} promise with the logged in user record
    */
-  loginWithUsername(username, password) {
+  async loginWithUsername(username, password) {
     return this.login({
       username: username
     }, password);
@@ -157,12 +159,11 @@ export class AuthContainer {
    * @param  {String} password - password of the user
    * @return {Promise<Record>} promise with the logged in user record
    */
-  loginWithEmail(email, password) {
+  async loginWithEmail(email, password) {
     return this.login({
       email: email
     }, password);
   }
-
 
   /**
    * Logs in to an existing user account with custom auth provider.
@@ -171,11 +172,12 @@ export class AuthContainer {
    * @param  {Object} authData - provider auth data
    * @return {Promise<Record>} promise with the logged in user record
    */
-  loginWithProvider(provider, authData) {
-    return this.container.makeRequest('auth:login', {
+  async loginWithProvider(provider, authData) {
+    const authResponse = await this.container.makeRequest('auth:login', {
       provider: provider,
       provider_auth_data: authData // eslint-disable-line camelcase
-    }).then(this._authResolve.bind(this));
+    });
+    return this._authResolve(authResponse);
   }
 
   /**
@@ -183,35 +185,29 @@ export class AuthContainer {
    *
    * @return {Promise} promise
    */
-  logout() {
-    return this.container.push.unregisterDevice()
-    .catch((error) => {
-      if (error.code === ErrorCodes.InvalidArgument &&
-          error.message === 'Missing device id'
-      ) {
-        return Promise.resolve();
+  async logout() {
+    try {
+      try {
+        await this.container.push.unregisterDevice();
+      } catch (error) {
+        if (error.code === ErrorCodes.InvalidArgument &&
+            error.message === 'Missing device id'
+        ) {
+          // fallthrough
+        } else {
+          throw error;
+        }
       }
 
-      return Promise.reject(error);
-    })
-    .then(() => {
       this.container.clearCache();
-      return this.container.makeRequest('auth:logout', {});
-    })
-    .then(() => {
-      return Promise.all([
+      await this.container.makeRequest('auth:logout', {});
+      return null;
+    } finally {
+      await Promise.all([
         this._setAccessToken(null),
         this._setUser(null)
-      ]).then(() => null);
-    })
-    .catch((err) => {
-      return Promise.all([
-        this._setAccessToken(null),
-        this._setUser(null)
-      ]).then(() => {
-        return Promise.reject(err);
-      });
-    });
+      ]);
+    }
   }
 
   /**
@@ -219,9 +215,9 @@ export class AuthContainer {
    *
    * @return {Promise<Record>} promise with current user record
    */
-  whoami() {
-    return this.container.makeRequest('me', {})
-    .then(this._authResolve.bind(this));
+  async whoami() {
+    const authResponse = await this.container.makeRequest('me', {});
+    return this._authResolve(authResponse);
   }
 
   /**
@@ -232,15 +228,15 @@ export class AuthContainer {
    * @param  {Boolean} [invalidate=false] - not implemented
    * @return {Promise<Record>} promise with current user record
    */
-  changePassword(oldPassword, newPassword, invalidate = false) {
+  async changePassword(oldPassword, newPassword, invalidate = false) {
     if (invalidate) {
       throw Error('Invalidate is not yet implemented');
     }
-    return this.container.makeRequest('auth:password', {
+    const authResponse = await this.container.makeRequest('auth:password', {
       old_password: oldPassword, // eslint-disable-line camelcase
       password: newPassword
-    })
-    .then(this._authResolve.bind(this));
+    });
+    return this._authResolve(authResponse);
   }
 
   /**
@@ -250,13 +246,13 @@ export class AuthContainer {
    * @param  {String} newPassword - new password of target user
    * @return {Promise<String>} promise with target user id
    */
-  adminResetPassword(user, newPassword) {
+  async adminResetPassword(user, newPassword) {
     const userId = user._id || user;
-    return this.container.makeRequest('auth:reset_password', {
+    await this.container.makeRequest('auth:reset_password', {
       auth_id: userId, // eslint-disable-line camelcase
       password: newPassword
-    })
-    .then(() => userId);
+    });
+    return userId;
   }
 
   /**
@@ -265,14 +261,15 @@ export class AuthContainer {
    * @param {Role[]} roles - roles to have admin right
    * @return {Promise<String[]>} promise with role names
    */
-  setAdminRole(roles) {
+  async setAdminRole(roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
     });
 
-    return this.container.makeRequest('role:admin', {
+    const body = await this.container.makeRequest('role:admin', {
       roles: roleNames
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
   /**
@@ -281,14 +278,15 @@ export class AuthContainer {
    * @param {Role[]} roles - default roles
    * @return {Promise<String[]>} promise with role names
    */
-  setDefaultRole(roles) {
+  async setDefaultRole(roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
     });
 
-    return this.container.makeRequest('role:default', {
+    const body = await this.container.makeRequest('role:default', {
       roles: roleNames
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
   /**
@@ -297,23 +295,22 @@ export class AuthContainer {
    * @param  {Record[]|String[]} users - user records or user ids
    * @return {Promise<Object>} promise with userIDs-to-roles map
    */
-  fetchUserRole(users) {
+  async fetchUserRole(users) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
       return perUser._id || perUser;
     });
 
-    return this.container.makeRequest('role:get', {
+    const body = await this.container.makeRequest('role:get', {
       users: userIds
-    })
-    .then((body) =>
-      Object.keys(body.result)
+    });
+
+    return Object.keys(body.result)
       .map((key) => [key, body.result[key]])
       .reduce((acc, pairs) => ({
         ...acc || {},
         [pairs[0]]: pairs[1].map((name) => new Role(name))
-      }), null)
-    );
+      }), null);
   }
 
   /**
@@ -323,7 +320,7 @@ export class AuthContainer {
    * @param  {Role[]|String[]} roles - roles to be assigned
    * @return {Promise<String[]>} proimse with the target users
    */
-  assignUserRole(users, roles) {
+  async assignUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
       return perUser._id || perUser;
@@ -334,10 +331,11 @@ export class AuthContainer {
       return perRole.name || perRole;
     });
 
-    return this.container.makeRequest('role:assign', {
+    const body = await this.container.makeRequest('role:assign', {
       users: userIds,
       roles: roleNames
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
   /**
@@ -347,7 +345,7 @@ export class AuthContainer {
    * @param  {Role[]|String[]} roles - roles to be revoked
    * @return {Promise<String[]>} promise with target users
    */
-  revokeUserRole(users, roles) {
+  async revokeUserRole(users, roles) {
     let userIds = _.map(users, function (perUser) {
       // accept either user record or user id
       return perUser._id || perUser;
@@ -358,10 +356,11 @@ export class AuthContainer {
       return perRole.name || perRole;
     });
 
-    return this.container.makeRequest('role:revoke', {
+    const body = await this.container.makeRequest('role:revoke', {
       users: userIds,
       roles: roleNames
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
   /**
@@ -372,13 +371,14 @@ export class AuthContainer {
    * @param  {Record|String} user - target user
    * @return {Promise<String>} promise with target user
    */
-  adminEnableUser(user) {
+  async adminEnableUser(user) {
     const userId = user._id || user;
 
-    return this.container.makeRequest('auth:disable:set', {
+    await this.container.makeRequest('auth:disable:set', {
       auth_id: userId, // eslint-disable-line camelcase
       disabled: false
-    }).then(() => userId);
+    });
+    return userId;
   }
 
   /**
@@ -392,7 +392,7 @@ export class AuthContainer {
    *   enabled
    * @return {Promise<String>} promise with target user
    */
-  adminDisableUser(user, message, expiry) {
+  async adminDisableUser(user, message, expiry) {
     const userId = user._id || user;
 
     let payload = {
@@ -406,46 +406,49 @@ export class AuthContainer {
       payload.expiry = expiry.toJSON();
     }
 
-    return this.container.makeRequest('auth:disable:set', payload)
-    .then(() => userId);
+    await this.container.makeRequest('auth:disable:set', payload);
+    return userId;
   }
 
-  _getAccessToken() {
-    return this.container.store.getItem('skygear-accesstoken').then((token) => {
+  async _getAccessToken() {
+    try {
+      const token = await this.container.store.getItem('skygear-accesstoken');
       this._accessToken = token;
       return token;
-    }, (err) => {
+    } catch (err) {
       console.warn('Failed to get access', err);
       this._accessToken = null;
       return null;
-    });
+    }
   }
 
-  _setAccessToken(value) {
-    this._accessToken = value;
-    const setItem = value === null
-        ? this.container.store.removeItem('skygear-accesstoken')
-        : this.container.store.setItem('skygear-accesstoken', value);
-    return setItem.then(() => {
-      return value;
-    }, (err) => {
+  async _setAccessToken(value) {
+    try {
+      this._accessToken = value;
+      if (value === null) {
+        await this.container.store.removeItem('skygear-accesstoken');
+      } else {
+        await this.container.store.setItem('skygear-accesstoken', value);
+      }
+    } catch (err) {
       console.warn('Failed to persist accesstoken', err);
-      return value;
-    });
+    }
+    return value;
   }
 
-  _authResolve(body) {
-    return Promise.all([
+  async _authResolve(body) {
+    await Promise.all([
       this._setUser(body.result.profile),
       this._setAccessToken(body.result.access_token)
-    ]).then(() => {
-      this.container.pubsub._reconfigurePubsubIfNeeded();
-      return this.currentUser;
-    });
+    ]);
+
+    this.container.pubsub._reconfigurePubsubIfNeeded();
+    return this.currentUser;
   }
 
-  _getUser() {
-    return this.container.store.getItem('skygear-user').then((userJSON) => {
+  async _getUser() {
+    try {
+      const userJSON = await this.container.store.getItem('skygear-user');
       if (!userJSON) {
         this._user = null;
         return null;
@@ -459,14 +462,14 @@ export class AuthContainer {
 
       this._user = new this._User(attrs);
       return this._user;
-    }).catch((err) => {
+    } catch (err) {
       console.warn('Failed to get user', err);
       this._user = null;
       return null;
-    });
+    }
   }
 
-  _setUser(attrs) {
+  async _setUser(attrs) {
     let value;
     if (attrs) {
       this._user = new this._User(attrs);
@@ -476,16 +479,16 @@ export class AuthContainer {
       value = null;
     }
 
-    const setItem = value === null ?
-        this.container.store.removeItem('skygear-user') :
-        this.container.store.setItem('skygear-user', value);
-    return setItem.then(() => {
+    try {
+      if (value === null) {
+        await this.container.store.removeItem('skygear-user');
+      } else {
+        await this.container.store.setItem('skygear-user', value);
+      }
       this.container.ee.emit(USER_CHANGED, this._user);
-      return value;
-    }, (err) => {
+    } catch (err) {
       console.warn('Failed to persist user', err);
-      return value;
-    });
+    }
   }
 
   get _User() {
