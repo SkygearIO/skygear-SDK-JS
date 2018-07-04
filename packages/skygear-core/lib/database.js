@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 const _ = require('lodash');
+const xml2js = require('xml2js');
 
 import Cache from './cache';
 import Asset, {isAsset} from './asset';
@@ -555,9 +556,14 @@ async function makeUploadAssetRequest(container, asset) {
       _request = _request.attach('file', asset.file);
     }
 
-    _request.end((err) => {
+    _request.end(async (err) => {
       if (err) {
-        reject(err);
+        try {
+          reject(await parseS3XmlErrorMessage(err));
+        } catch {
+          reject(err);
+        }
+
         return;
       }
 
@@ -565,4 +571,27 @@ async function makeUploadAssetRequest(container, asset) {
     });
   });
   return newAsset;
+}
+
+async function parseS3XmlErrorMessage(error) {
+  if (!error.response.text) {
+    throw new Error('Unable to get response text');
+  }
+
+  return new Promise((resolve, reject) => {
+    xml2js.parseString(error.response.text, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      // this is where s3 place the error
+      if (result.Error && result.Error.Message && result.Error.Message[0]) {
+        resolve(result.Error.Message[0]);
+        return;
+      }
+
+      reject(new Error('Malformed S3 response error'));
+    });
+  });
 }
