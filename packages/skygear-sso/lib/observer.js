@@ -14,7 +14,7 @@ export class NewWindowObserver {
         if (this.newWindow.closed) {
           reject(errorResponseFromMessage('User cancel the login flow'));
         }
-      }, 3000);
+      }, 1000);
     });
   }
 
