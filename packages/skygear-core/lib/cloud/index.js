@@ -419,13 +419,13 @@ export function staticAsset(mountPoint, func) {
  * It is expected that the module will exports a function called `includeme`.
  * This function will also call the `includeme` function to config the module.
  */
-export function configModule(moduleName, options) {
+export async function configModule(moduleName, options) {
   const logger = _createLogger('plugin').child({tag: 'plugin'});
   const { ignoreWarning } = options || {};
   const { includeme } = require(moduleName);
   if (includeme !== undefined) {
     const settings = {};
-    return includeme(module.exports, settings);
+    await includeme(module.exports, settings);
   } else if (ignoreWarning !== true) {
     logger.warn(`The ${moduleName} module does not export the includeme` +
     ' function. This function is required to config the module.');
