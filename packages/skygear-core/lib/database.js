@@ -22,6 +22,7 @@ import {isRecord} from './record';
 import Query from './query';
 import QueryResult from './query_result';
 import {isValueType} from './util';
+import { ErrorCodes, SkygearError } from './error';
 
 export class Database {
 
@@ -559,7 +560,8 @@ async function makeUploadAssetRequest(container, asset) {
     _request.end(async (err) => {
       if (err) {
         try {
-          reject(await parseS3XmlErrorMessage(err));
+          const [code, message] = await parseS3XmlErrorMessage(err);
+          reject(_s3ErrorToSkyError(code, message));
         } catch {
           reject(err);
         }
@@ -573,8 +575,13 @@ async function makeUploadAssetRequest(container, asset) {
   return newAsset;
 }
 
+
+/**
+ * Best effort to parse s3 error code and message.
+ * If success, resolve with [code, message].
+ */
 async function parseS3XmlErrorMessage(error) {
-  if (!error.response.text) {
+  if (!error.response || !error.response.text) {
     throw new Error('Unable to get response text');
   }
 
@@ -586,12 +593,22 @@ async function parseS3XmlErrorMessage(error) {
       }
 
       // this is where s3 place the error
-      if (result.Error && result.Error.Message && result.Error.Message[0]) {
-        resolve(result.Error.Message[0]);
+      if (result.Error &&
+          result.Error.Code && result.Error.Code[0] &&
+          result.Error.Message && result.Error.Message[0]) {
+        resolve([result.Error.Code[0], result.Error.Message[0]]);
         return;
       }
 
       reject(new Error('Malformed S3 response error'));
     });
   });
+}
+
+function _s3ErrorToSkyError(code, message) {
+  const codeMap = {
+    EntityTooLarge: ErrorCodes.AssetSizeTooLarge
+  };
+
+  return new SkygearError(message, codeMap[code] || ErrorCodes.UnexpectedError);
 }
