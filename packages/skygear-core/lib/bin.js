@@ -66,12 +66,11 @@ if (settings.http.enabled) {
   throw new Error('Currently, only http transport is supported.');
 }
 
-Promise.all(loadModules)
-  .then(() => {
-    return configModule(codePath, {
-      ignoreWarning: true
-    });
-  })
-  .then(() => {
-    transport.start();
+(async () => {
+  await Promise.all(loadModules);
+  await configModule(codePath, {
+    ignoreWarning: true
   });
+
+  transport.start();
+})();

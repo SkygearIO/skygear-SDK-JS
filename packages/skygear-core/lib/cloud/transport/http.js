@@ -85,7 +85,7 @@ class HTTPTransport extends CommonTransport {
     });
   }
 
-  dispatch(payload, res) {
+  async dispatch(payload, res) {
     const handlerName = payload.kind + 'Handler';
     if (!this[handlerName]) {
       this.writeError(res, 400, `func kind ${payload.kind} is not supported`);
@@ -99,22 +99,24 @@ class HTTPTransport extends CommonTransport {
 
     const logger = createLogger('plugin', context);
 
-    this[handlerName](payload).then((resolved) => {
+    try {
+      const resolved = await this[handlerName](payload);
       this.writeResponse(res, resolved);
-    }).catch((err) => {
+    } catch (err) {
+      let responseError = err;
       if (err instanceof SkygearError) {
         // do nothing
       } else if (err !== null && err !== undefined) {
         logger.error({err: err}, 'Catching unexpected error: %s', err);
-        err = new SkygearError(err.toString());
+        responseError = new SkygearError(err.toString());
       } else {
         logger.error('Catching err but value is null or undefined.');
-        err = new SkygearError('An unexpected error has occurred.');
+        responseError = new SkygearError('An unexpected error has occurred.');
       }
       this.writeResponse(res, {
-        error: err.toJSON()
+        error: responseError.toJSON()
       });
-    });
+    }
   }
 
   writeResponse(res, result) {

@@ -62,17 +62,16 @@ export class Database {
    * @param  {String} id - record ID with format `type/id`
    * @return {Promise<Record>} promise with the fetched Record
    */
-  getRecordByID(id) {
+  async getRecordByID(id) {
     let Record = this._Record;
     let [recordType, recordId] = Record.parseID(id);
     let query = new Query(Record.extend(recordType)).equalTo('_id', recordId);
-    return this.query(query).then((users) => {
-      if (users.length === 1) {
-        return users[0];
-      } else {
-        throw new Error(id + ' does not exist');
-      }
-    });
+    const users = await this.query(query);
+    if (users.length === 1) {
+      return users[0];
+    } else {
+      throw new Error(id + ' does not exist');
+    }
   }
 
   /**
@@ -90,7 +89,7 @@ export class Database {
    * @param  {function(queryResult:QueryResult,isCached:boolean)} cacheCallback
    * @return {Promise<QueryResult>} promise with the QueryResult
    */
-  query(query, cacheCallback = false) {
+  async query(query, cacheCallback = false) {
     let remoteReturned = false;
     let cacheStore = this.cacheStore;
     let Cls = query.recordCls;
@@ -105,30 +104,33 @@ export class Database {
     }, queryJSON);
 
     if (cacheCallback) {
-      cacheStore.get(query.hash).then(function (body) {
-        if (remoteReturned) {
-          return;
+      (async () => {
+        try {
+          const body = await cacheStore.get(query.hash);
+          if (remoteReturned) {
+            return;
+          }
+          let records = _.map(body.result, function (attrs) {
+            return new Cls(attrs);
+          });
+          let result = QueryResult.createFromResult(records, body.info);
+          cacheCallback(result, true);
+        } catch (err) {
+          console.log('No cache found', err);
         }
-        let records = _.map(body.result, function (attrs) {
-          return new Cls(attrs);
-        });
-        let result = QueryResult.createFromResult(records, body.info);
-        cacheCallback(result, true);
-      }, function (err) {
-        console.log('No cache found', err);
-      });
+      })();
     }
-    return this.container.makeRequest('record:query', payload).then((body) => {
-      let records = _.map(body.result, function (attrs) {
-        return new Cls(attrs);
-      });
-      let result = QueryResult.createFromResult(records, body.info);
-      remoteReturned = true;
-      if (this.cacheResponse) {
-        cacheStore.set(query.hash, body);
-      }
-      return result;
+
+    const body = await this.container.makeRequest('record:query', payload);
+    let records = _.map(body.result, function (attrs) {
+      return new Cls(attrs);
     });
+    let result = QueryResult.createFromResult(records, body.info);
+    remoteReturned = true;
+    if (this.cacheResponse) {
+      await cacheStore.set(query.hash, body);
+    }
+    return result;
   }
 
   /**
@@ -140,11 +142,11 @@ export class Database {
    * This function returns a promise that may perform other operations, such
    * as calling the server to upload asset.
    */
-  _presaveSingleValue(value) {
+  async _presaveSingleValue(value) {
     if (isAsset(value) && value.file) {
       return this.uploadAsset(value);
     } else {
-      return Promise.resolve(value);
+      return value;
     }
   }
 
@@ -155,9 +157,9 @@ export class Database {
    * parent object that is being presaved. This helps constructs the object
    * after resolving all promises.
    */
-  _presaveKeyValue(fn, key, value) {
-    return this._presave(fn, value)
-      .then((v) => [key, v]);
+  async _presaveKeyValue(fn, key, value) {
+    const v = await this._presave(fn, value);
+    return [key, v];
   }
 
   /**
@@ -167,9 +169,9 @@ export class Database {
    * iterates each member and create a promise for such object. Essentially this
    * function creates a tree of promises that resembles the object tree.
    */
-  _presave(fn, value) {
+  async _presave(fn, value) {
     if (value === undefined || value === null) {
-      return Promise.resolve(value);
+      return value;
     } else if (_.isArray(value)) {
       return Promise.all(_.map(value, this._presave.bind(this, fn)));
     } else if (isRecord(value)) {
@@ -177,12 +179,11 @@ export class Database {
       let tasks = _.map(record, (v, k) => {
         return this._presaveKeyValue(fn, k, v);
       });
-      return Promise.all(tasks).then((keyvalues) => {
-        _.each(keyvalues, ([k, v]) => {
-          record[k] = v;
-        });
-        return record;
+      const keyvalues = await Promise.all(tasks);
+      _.each(keyvalues, ([k, v]) => {
+        record[k] = v;
       });
+      return record;
     } else if (isValueType(value) || !_.isObject(value)) {
       // The value does not contain other objects that can be presaved.
       // Call _presaveSingleValue to create the actual promise which performs
@@ -194,12 +195,11 @@ export class Database {
         .keys()
         .map((key) => this._presaveKeyValue(fn, key, obj[key]))
         .value();
-      return Promise.all(tasks).then((keyvalues) => {
-        _.each(keyvalues, ([k, v]) => {
-          obj[k] = v;
-        });
-        return obj;
+      const keyvalues = await Promise.all(tasks);
+      _.each(keyvalues, ([k, v]) => {
+        obj[k] = v;
       });
+      return obj;
     }
   }
 
@@ -210,7 +210,7 @@ export class Database {
    * @return {Promise<Record>} promise with the delete result
    * @see {@link Database#delete}
    */
-  del(record) {
+  async del(record) {
     return this.delete(record);
   }
 
@@ -233,59 +233,59 @@ export class Database {
    * atomic
    * @return {Promise<Record>} promise with saved records
    */
-  save(_records, options = {}) {
+  async save(_records, options = {}) {
     let records = _records;
     if (!_.isArray(records)) {
       records = [records];
     }
 
     if (_.some(records, r => r === undefined || r === null)) {
-      return Promise.reject(
-        'Invalid input, unable to save undefined and null'
-      );
+      throw new Error('Invalid input, unable to save undefined and null');
     }
 
-    return this._presave(this._presaveSingleValue.bind(this), records)
-    .then((processedRecords) => {
-      let payload = {
-        database_id: this.dbID //eslint-disable-line
-      };
+    const processedRecords = await this._presave(
+      this._presaveSingleValue.bind(this),
+      records
+    );
 
-      if (options.atomic) {
-        payload.atomic = true;
-      }
+    let payload = {
+      database_id: this.dbID //eslint-disable-line
+    };
 
-      payload.records = _.map(processedRecords, (perRecord) => {
-        return perRecord.toTruncatedJSON();
-      });
+    if (options.atomic) {
+      payload.atomic = true;
+    }
 
-      return this.container.makeRequest('record:save', payload);
-    }).then((body) => {
-      let results = body.result;
-      let savedRecords = [];
-      let errors = [];
-
-      _.forEach(results, (perResult, idx) => {
-        if (perResult._type === 'error') {
-          savedRecords[idx] = undefined;
-          errors[idx] = perResult;
-        } else {
-          records[idx].update(perResult);
-          records[idx].updateTransient(perResult._transient, true);
-
-          savedRecords[idx] = records[idx];
-          errors[idx] = undefined;
-        }
-      });
-
-      if (records.length === 1) {
-        if (errors[0]) {
-          return Promise.reject(errors[0]);
-        }
-        return savedRecords[0];
-      }
-      return {savedRecords, errors};
+    payload.records = _.map(processedRecords, (perRecord) => {
+      return perRecord.toTruncatedJSON();
     });
+
+    const body = await this.container.makeRequest('record:save', payload);
+
+    let results = body.result;
+    let savedRecords = [];
+    let errors = [];
+
+    _.forEach(results, (perResult, idx) => {
+      if (perResult._type === 'error') {
+        savedRecords[idx] = undefined;
+        errors[idx] = perResult;
+      } else {
+        records[idx].update(perResult);
+        records[idx].updateTransient(perResult._transient, true);
+
+        savedRecords[idx] = records[idx];
+        errors[idx] = undefined;
+      }
+    });
+
+    if (records.length === 1) {
+      if (errors[0]) {
+        throw errors[0];
+      }
+      return savedRecords[0];
+    }
+    return {savedRecords, errors};
   }
 
   /**
@@ -298,7 +298,7 @@ export class Database {
    * @param  {Record|Record[]|QueryResult} _records - the records to delete
    * @return {Promise} promise
    */
-  delete(_records) {
+  async delete(_records) {
     let records = _records;
     let isQueryResult = records instanceof QueryResult;
     if (!_.isArray(records) && !isQueryResult) {
@@ -311,27 +311,25 @@ export class Database {
       ids: ids
     };
 
-    return this.container.makeRequest('record:delete', payload)
-      .then((body) => {
-        let results = body.result;
-        let errors = [];
+    const body = await this.container.makeRequest('record:delete', payload);
+    let results = body.result;
+    let errors = [];
 
-        _.forEach(results, (perResult, idx) => {
-          if (perResult._type === 'error') {
-            errors[idx] = perResult;
-          } else {
-            errors[idx] = undefined;
-          }
-        });
+    _.forEach(results, (perResult, idx) => {
+      if (perResult._type === 'error') {
+        errors[idx] = perResult;
+      } else {
+        errors[idx] = undefined;
+      }
+    });
 
-        if (records.length === 1) {
-          if (errors[0]) {
-            return Promise.reject(errors[0]);
-          }
-          return;
-        }
-        return errors;
-      });
+    if (records.length === 1) {
+      if (errors[0]) {
+        throw errors[0];
+      }
+      return;
+    }
+    return errors;
   }
 
   /**
@@ -403,15 +401,16 @@ export class PublicDatabase extends Database {
    * @param {Role[]} roles - the roles
    * @return {Promise} promise
    */
-  setRecordCreateAccess(recordClass, roles) {
+  async setRecordCreateAccess(recordClass, roles) {
     let roleNames = _.map(roles, function (perRole) {
       return perRole.name;
     });
 
-    return this.container.makeRequest('schema:access', {
+    const body = await this.container.makeRequest('schema:access', {
       type: recordClass.recordType,
       create_roles: roleNames //eslint-disable-line camelcase
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
   /**
@@ -422,11 +421,12 @@ export class PublicDatabase extends Database {
    * @param {ACL} acl - the default acl
    * @return {Promise} promise
    */
-  setRecordDefaultAccess(recordClass, acl) {
-    return this.container.makeRequest('schema:default_access', {
+  async setRecordDefaultAccess(recordClass, acl) {
+    const body = await this.container.makeRequest('schema:default_access', {
       type: recordClass.recordType,
       default_access: acl.toJSON() //eslint-disable-line camelcase
-    }).then((body) => body.result);
+    });
+    return body.result;
   }
 
 }
@@ -487,7 +487,7 @@ export class DatabaseContainer {
    * @param  {Asset} asset - the asset
    * @return {Promise<Asset>} promise
    */
-  uploadAsset(asset) {
+  async uploadAsset(asset) {
     return this.public.uploadAsset(asset);
   }
 
@@ -518,53 +518,51 @@ export class DatabaseContainer {
 
 }
 
-function makeUploadAssetRequest(container, asset) {
-  return new Promise((resolve, reject) => {
-    container.makeRequest('asset:put', {
-      filename: asset.name,
-      'content-type': asset.contentType,
-      // asset.file.size for File and Blob
-      // asset.file.byteLength for Buffer
-      'content-size': asset.file.size || asset.file.byteLength
-    })
-    .then((res) => {
-      const newAsset = Asset.fromJSON(res.result.asset);
-      const postRequest = res.result['post-request'];
+async function makeUploadAssetRequest(container, asset) {
+  const res = await container.makeRequest('asset:put', {
+    filename: asset.name,
+    'content-type': asset.contentType,
+    // asset.file.size for File and Blob
+    // asset.file.byteLength for Buffer
+    'content-size': asset.file.size || asset.file.byteLength
+  });
 
-      let postUrl = postRequest.action;
-      if (postUrl.indexOf('/') === 0) {
-        postUrl = postUrl.substring(1);
-      }
-      if (postUrl.indexOf('http') !== 0) {
-        postUrl = container.url + postUrl;
-      }
+  const newAsset = Asset.fromJSON(res.result.asset);
+  const postRequest = res.result['post-request'];
 
-      let _request = container.request
-        .post(postUrl)
-        .set('X-Skygear-API-Key', container.apiKey);
-      if (postRequest['extra-fields']) {
-        _.forEach(postRequest['extra-fields'], (value, key) => {
-          _request = _request.field(key, value);
-        });
-      }
+  let postUrl = postRequest.action;
+  if (postUrl.indexOf('/') === 0) {
+    postUrl = postUrl.substring(1);
+  }
+  if (postUrl.indexOf('http') !== 0) {
+    postUrl = container.url + postUrl;
+  }
 
-      if (asset.file instanceof Buffer) {
-        // need providing file name to buffer
-        _request = _request.attach('file', asset.file, asset.name);
-      } else {
-        _request = _request.attach('file', asset.file);
-      }
-
-      _request.end((err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(newAsset);
+  await new Promise((resolve, reject) => {
+    let _request = container.request
+      .post(postUrl)
+      .set('X-Skygear-API-Key', container.apiKey);
+    if (postRequest['extra-fields']) {
+      _.forEach(postRequest['extra-fields'], (value, key) => {
+        _request = _request.field(key, value);
       });
-    }, (err) => {
-      reject(err);
+    }
+
+    if (asset.file instanceof Buffer) {
+      // need providing file name to buffer
+      _request = _request.attach('file', asset.file, asset.name);
+    } else {
+      _request = _request.attach('file', asset.file);
+    }
+
+    _request.end((err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve();
     });
   });
+  return newAsset;
 }

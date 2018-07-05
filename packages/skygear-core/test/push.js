@@ -57,53 +57,47 @@ describe('Container device registration', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should save device id successfully', function () {
-    return container.push._setDeviceID(null).then(function () {
-      return container.push.registerDevice('device-token', 'android');
-    })
-    .then(function (deviceID) {
+  it(
+    'should save device id successfully',
+    async function () {
+      await container.push._setDeviceID(null);
+      const deviceID = await container.push.registerDevice(
+        'device-token',
+        'android'
+      );
       assert.equal(deviceID, 'device-id');
       assert.equal(container.push.deviceID, 'device-id');
-    }, function () {
-      throw 'failed to save device id';
-    });
+    }
+  );
+
+  it('should send app bundle name', async function () {
+    await container.push._setDeviceID(null);
+    const deviceID = await container.push.registerDevice(
+      'device-token', 'android', 'bundle-name');
+    assert.equal(deviceID, 'topic-device-id');
+    assert.equal(container.push.deviceID, 'topic-device-id');
   });
 
-  it('should send app bundle name', function () {
-    return container.push._setDeviceID(null).then(function () {
-      return container.push.registerDevice(
-        'device-token', 'android', 'bundle-name');
-    })
-    .then(function (deviceID) {
-      assert.equal(deviceID, 'topic-device-id');
-      assert.equal(container.push.deviceID, 'topic-device-id');
-    }, function () {
-      throw 'failed to send app bundle name';
-    });
+  it('should attach existing device id', async function () {
+    await container.push._setDeviceID('existing-device-id');
+    const deviceID = await container.push.registerDevice(
+      'device-token',
+      'ios'
+    );
+    assert.equal(deviceID, 'existing-device-id');
+    assert.equal(container.push.deviceID, 'existing-device-id');
   });
 
-  it('should attach existing device id', function () {
-    return container.push._setDeviceID('existing-device-id').then(function () {
-      return container.push.registerDevice('ddevice-token', 'ios');
-    }).then(function (deviceID) {
-      assert.equal(deviceID, 'existing-device-id');
-      assert.equal(container.push.deviceID, 'existing-device-id');
-    });
+  it('should retry with null deviceID on first call fails', async function () {
+    await container.push._setDeviceID('non-exist');
+    const deviceID = await container.push.registerDevice('device-token', 'ios');
+    assert.equal(deviceID, 'device-id');
+    assert.equal(container.push.deviceID, 'device-id');
   });
 
-  it('should retry with null deviceID on first call fails', function () {
-    return container.push._setDeviceID('non-exist').then(function () {
-      return container.push.registerDevice('ddevice-token', 'ios');
-    }).then(function (deviceID) {
-      assert.equal(deviceID, 'device-id');
-      assert.equal(container.push.deviceID, 'device-id');
-    });
-  });
-
-  it('should be able to set null deviceID', function () {
-    return container.push._setDeviceID(null).then(function () {
-      assert.equal(container.push.deviceID, null);
-    });
+  it('should be able to set null deviceID', async function () {
+    await container.push._setDeviceID(null);
+    assert.equal(container.push.deviceID, null);
   });
 });
 
@@ -145,40 +139,24 @@ describe('Container device unregistration', function () {
     }
   }]);
 
-  it('should success with correct device id', function (done) {
-    return container.push._setDeviceID('device_1')
-    .then(function () {
-      return container.push.unregisterDevice();
-    })
-    .then(function () {
-      done();
-    }, function () {
-      throw new Error('Should not fail with correct device id');
-    });
+  it('should success with correct device id', async function () {
+    await container.push._setDeviceID('device_1');
+    await container.push.unregisterDevice();
   });
 
-  it('should regard as success with non-exist device id', function (done) {
-    return container.push._setDeviceID('non-exist')
-    .then(function () {
-      return container.push.unregisterDevice();
-    })
-    .then(function () {
-      done();
-    }, function () {
-      throw new Error('Should not fail with non-exist device id');
-    });
+  it('should regard as success with non-exist device id', async function () {
+    await container.push._setDeviceID('non-exist');
+    await container.push.unregisterDevice();
   });
 
-  it('should fail when no device id', function (done) {
-    return container.push._setDeviceID(null)
-    .then(function () {
-      return container.push.unregisterDevice();
-    })
-    .then(function () {
-      throw new Error('Should not success without device id');
-    }, function () {
-      done();
-    });
+  it('should fail when no device id', async function () {
+    try {
+      await container.push._setDeviceID(null);
+      await container.push.unregisterDevice();
+      assert.fail('should fail');
+    } catch (err) {
+      // do nothing
+    }
   });
 });
 
@@ -212,8 +190,8 @@ describe('Container Push User', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should send push to user', function () {
-    return container.push.sendToUser(
+  it('should send push to user', async function () {
+    const result = await container.push.sendToUser(
       ['user-id1', 'user-id2'],
       {
         apns: {
@@ -223,22 +201,19 @@ describe('Container Push User', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'user-id1'
-        },
-        {
-          '_id': 'user-id2'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to user');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'user-id1'
+      },
+      {
+        '_id': 'user-id2'
+      }
+    ]);
   });
 
-  it('should send push to user with string ID', function () {
-    return container.push.sendToUser(
+  it('should send push to user with string ID', async function () {
+    const result = await container.push.sendToUser(
       'user-id',
       {
         apns: {
@@ -248,19 +223,16 @@ describe('Container Push User', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'user-id'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to user');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'user-id'
+      }
+    ]);
   });
 
-  it('should send push to user with object', function () {
-    return container.push.sendToUser(
+  it('should send push to user with object', async function () {
+    const result = await container.push.sendToUser(
       [
         {
           id: 'user-id1'
@@ -277,36 +249,34 @@ describe('Container Push User', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'user-id1'
-        },
-        {
-          '_id': 'user-id2'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to user');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'user-id1'
+      },
+      {
+        '_id': 'user-id2'
+      }
+    ]);
   });
 
-  it('should handle error', function () {
-    return container.push.sendToUser(
-      ['user-id'],
-      {
-        apns: {
-          aps: {
-            sound: 'chime'
+  it('should handle error', async function () {
+    try {
+      await container.push.sendToUser(
+        ['user-id'],
+        {
+          apns: {
+            aps: {
+              sound: 'chime'
+            }
           }
-        }
-      },
-      'wrong-topic'
-    ).then(function (result) {
+        },
+        'wrong-topic'
+      );
       assert.fail('should fail');
-    }, function (error) {
+    } catch (error) {
       assert.equal(error.error.name, 'UnexpectedError');
-    });
+    }
   });
 });
 
@@ -340,8 +310,8 @@ describe('Container Push Device', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should send push to device', function () {
-    return container.push.sendToDevice(
+  it('should send push to device', async function () {
+    const result = await container.push.sendToDevice(
       ['device-id1', 'device-id2'],
       {
         apns: {
@@ -351,22 +321,19 @@ describe('Container Push Device', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'device-id1'
-        },
-        {
-          '_id': 'device-id2'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to device');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'device-id1'
+      },
+      {
+        '_id': 'device-id2'
+      }
+    ]);
   });
 
-  it('should send push to device with string ID', function () {
-    return container.push.sendToDevice(
+  it('should send push to device with string ID', async function () {
+    const result = await container.push.sendToDevice(
       'device-id',
       {
         apns: {
@@ -376,19 +343,16 @@ describe('Container Push Device', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'device-id'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to device');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'device-id'
+      }
+    ]);
   });
 
-  it('should send push to device with object', function () {
-    return container.push.sendToDevice(
+  it('should send push to device with object', async function () {
+    const result = await container.push.sendToDevice(
       [
         {
           id: 'device-id1'
@@ -405,36 +369,34 @@ describe('Container Push Device', function () {
         }
       },
       'the-topic'
-    ).then(function (result) {
-      assert.deepEqual(result, [
-        {
-          '_id': 'device-id1'
-        },
-        {
-          '_id': 'device-id2'
-        }
-      ]);
-    }, function (error) {
-      assert.fail(error, undefined, 'failed to send push to device');
-    });
+    );
+    assert.deepEqual(result, [
+      {
+        '_id': 'device-id1'
+      },
+      {
+        '_id': 'device-id2'
+      }
+    ]);
   });
 
-  it('should handle error', function () {
-    return container.push.sendToDevice(
-      ['device-id'],
-      {
-        apns: {
-          aps: {
-            sound: 'chime'
+  it('should handle error', async function () {
+    try {
+      const result = await container.push.sendToDevice(
+        ['device-id'],
+        {
+          apns: {
+            aps: {
+              sound: 'chime'
+            }
           }
-        }
-      },
-      'wrong-topic'
-    ).then(function (result) {
+        },
+        'wrong-topic'
+      );
       assert.fail('should fail');
-    }, function (error) {
+    } catch (error) {
       assert.equal(error.error.name, 'UnexpectedError');
-    });
+    }
   });
 });
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {expect} from 'chai';
+import {assert, expect} from 'chai';
 import sinon from 'sinon';
 import Cache from '../lib/cache';
 import getStore from '../lib/store';
@@ -29,37 +29,36 @@ describe('Cache', function () {
     cache.store = store;
   });
 
-  it('save value with prefix', function () {
+  it('save value with prefix', async function () {
     store.setPurgeableItem = sinon.stub();
     store.setPurgeableItem.returns(Promise.resolve());
 
-    return cache.set('hash', {some: 'json'}).then(function () {
-      expect(store.setPurgeableItem)
-        .to.be.calledWithMatch('prefix:hash', '{"some":"json"}');
-    });
+    await cache.set('hash', {some: 'json'});
+    expect(store.setPurgeableItem)
+      .to.be.calledWithMatch('prefix:hash', '{"some":"json"}');
   });
 
-  it('get value with prefix', function () {
+  it('get value with prefix', async function () {
     store.getItem = sinon.stub();
     store.getItem.returns(Promise.resolve('{"some":"json"}'));
 
-    return cache.get('hash').then(function (myValue) {
-      expect(store.getItem).to.be.calledWithMatch('prefix:hash');
-      expect(myValue).to.be.eql({
-        some: 'json'
-      });
+    const myValue = await cache.get('hash');
+    expect(store.getItem).to.be.calledWithMatch('prefix:hash');
+    expect(myValue).to.be.eql({
+      some: 'json'
     });
   });
 
-  it('rejects when cache is not found', function () {
+  it('rejects when cache is not found', async function () {
     store.getItem = sinon.stub();
     store.getItem.returns(Promise.resolve(null));
 
-    return cache.get('hash').then(function () {
-      expect(1).to.be.eql(2);
-    }, function () {
-      expect(1).to.be.eql(1);
-    });
+    try {
+      await cache.get('hash');
+      assert.fail('should fail');
+    } catch (error) {
+      // expected
+    }
   });
 
   function testRetryForMaxRetryCount(maxRetryCount) {
@@ -67,7 +66,7 @@ describe('Cache', function () {
       'retries ' + maxRetryCount + ' times when write failed with ' +
       '_maxRetryCount = ' + maxRetryCount;
 
-    it(description, function () {
+    it(description, async function () {
       cache._maxRetryCount = maxRetryCount;
       store.setPurgeableItem = sinon.stub();
 
@@ -76,9 +75,8 @@ describe('Cache', function () {
       }
       store.setPurgeableItem.onCall(maxRetryCount).returns(Promise.resolve());
 
-      return cache.set('hash', {some: 'json'}).then(function () {
-        expect(store.setPurgeableItem).to.be.callCount(maxRetryCount + 1);
-      });
+      await cache.set('hash', {some: 'json'});
+      expect(store.setPurgeableItem).to.be.callCount(maxRetryCount + 1);
     });
   }
   for (let i = 0; i < 4; ++i) {

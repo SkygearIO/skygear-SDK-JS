@@ -28,8 +28,10 @@
  * @example
  * skygear.auth.loginWithCustomToken('eyXXXXXXXX').then(...);
  */
-export function loginWithCustomToken(token) {
-  return this.container.makeRequest('sso:custom_token:login', {
-    token
-  }).then(this._authResolve.bind(this));
+export async function loginWithCustomToken(token) {
+  const authResponse = await this.container.makeRequest(
+    'sso:custom_token:login',
+    { token }
+  );
+  return this._authResolve(authResponse);
 }

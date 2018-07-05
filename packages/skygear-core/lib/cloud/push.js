@@ -17,13 +17,13 @@ import {PushContainer} from '../push';
 
 export class CloudCodePushContainer extends PushContainer {
 
-  _getDeviceID() {
-    return Promise.resolve(this._deviceID);
+  async _getDeviceID() {
+    return this._deviceID;
   }
 
-  _setDeviceID(value) {
+  async _setDeviceID(value) {
     this._deviceID = value;
-    return Promise.resolve(value);
+    return value;
   }
 
 }

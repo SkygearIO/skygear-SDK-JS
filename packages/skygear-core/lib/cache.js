@@ -30,43 +30,43 @@ export default class Cache {
     return this.prefix + ':' + key;
   }
 
-  set(key, value) {
+  async set(key, value) {
     const namespacedKey = this._applyNamespaceOnKey(key);
     this.map[namespacedKey] = value;
     const stringifiedValue = JSON.stringify(value);
     return this._setWithRetry(namespacedKey, stringifiedValue);
   }
 
-  _setWithRetry(namespacedKey, stringifiedValue, attempt = 0) {
-    return this.store.setPurgeableItem(namespacedKey, stringifiedValue)
-      .catch((error) => {
-        // base case
-        if (attempt >= this._maxRetryCount) {
-          return Promise.reject(error);
-        }
-        // recursive case
-        // It seems that there is no easy way to
-        // convert an asynchronous recursion into
-        // iterative style with for-loop.
-        return this._setWithRetry(
-          namespacedKey,
-          stringifiedValue,
-          attempt + 1
-        );
-      });
+  async _setWithRetry(namespacedKey, stringifiedValue, attempt = 0) {
+    try {
+      await this.store.setPurgeableItem(namespacedKey, stringifiedValue);
+    } catch (error) {
+      // base case
+      if (attempt >= this._maxRetryCount) {
+        throw error;
+      }
+      // recursive case
+      // It seems that there is no easy way to
+      // convert an asynchronous recursion into
+      // iterative style with for-loop.
+      return this._setWithRetry(
+        namespacedKey,
+        stringifiedValue,
+        attempt + 1
+      );
+    }
   }
 
-  get(key) {
+  async get(key) {
     const namespacedKey = this._applyNamespaceOnKey(key);
     if (this.map[namespacedKey]) {
-      return Promise.resolve(this.map[namespacedKey]);
+      return this.map[namespacedKey];
     }
-    return this.store.getItem(namespacedKey).then(function (jsonStr) {
-      if (jsonStr) {
-        let cachedJSON = JSON.parse(jsonStr);
-        return cachedJSON;
-      }
-      return Promise.reject();
-    });
+    const jsonStr = await this.store.getItem(namespacedKey);
+    if (jsonStr) {
+      let cachedJSON = JSON.parse(jsonStr);
+      return cachedJSON;
+    }
+    throw Error(`key ${key} not found in store`);
   }
 }

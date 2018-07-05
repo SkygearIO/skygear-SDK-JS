@@ -108,7 +108,7 @@ describe('Container', function () {
     expect(container.privateDB.cacheResponse).to.be.true();
   });
 
-  it('should set the content type header', function () {
+  it('should set the content type header', async function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
     container.configApiKey('correctApiKey');
@@ -126,39 +126,38 @@ describe('Container', function () {
       }
     }]);
 
-    return container.makeRequest('content:type', {}).then(function () {
-      return;
-    }, function (err) {
-      throw 'Content Type header not correctly set';
-    });
-
+    await container.makeRequest('content:type', {});
   });
 
-  it('should clear access token on 104 AccessTokenNotAccepted', function () {
-    let container = new Container();
-    container.pubsub.autoPubsub = false;
-    container.configApiKey('correctApiKey');
-    container.auth._accessToken = 'incorrectApiKey';
-    container.request = mockSuperagent([{
-      pattern: 'http://skygear.dev/any/action',
-      fixtures: function (match, params, headers, fn) {
-        return fn({
-          error: {
-            name: 'AccessTokenNotAccepted',
-            code: 104,
-            message: 'token expired'
-          }
-        }, 401);
+  it(
+    'should clear access token on 104 AccessTokenNotAccepted',
+    async function () {
+      let container = new Container();
+      container.pubsub.autoPubsub = false;
+      container.configApiKey('correctApiKey');
+      container.auth._accessToken = 'incorrectApiKey';
+      container.request = mockSuperagent([{
+        pattern: 'http://skygear.dev/any/action',
+        fixtures: function (match, params, headers, fn) {
+          return fn({
+            error: {
+              name: 'AccessTokenNotAccepted',
+              code: 104,
+              message: 'token expired'
+            }
+          }, 401);
+        }
+      }]);
+
+      try {
+        await container.makeRequest('any:action', {});
+        assert.fail('should fail');
+      } catch (err) {
+        assert.isNull(container.auth.accessToken, 'accessToken not reset');
+        assert.isNull(container.auth.currentUser, 'currentUser not reset');
       }
-    }]);
-
-    return container.makeRequest('any:action', {}).then(function () {
-      throw 'Expected to be reject by wrong access token';
-    }, function (err) {
-      assert.isNull(container.auth.accessToken, 'accessToken not reset');
-      assert.isNull(container.auth.currentUser, 'currentUser not reset');
-    });
-  });
+    }
+  );
 
   it('should call userChange listener', function () {
     let container = new Container();
@@ -227,51 +226,39 @@ describe('Container role', function () {
     }
   }]);
 
-  it('set admin roles', function () {
+  it('set admin roles', async function () {
     var Killer = container.Role.define('Killer');
     var Police = container.Role.define('Police');
 
-    return container.auth.setAdminRole([Killer, Police])
-    .then(function (roles) {
-      assert.include(roles, 'Killer');
-      assert.include(roles, 'Police');
-    }, function (err) {
-      throw new Error('set admin roles failed');
-    });
+    const roles = await container.auth.setAdminRole([Killer, Police]);
+    assert.include(roles, 'Killer');
+    assert.include(roles, 'Police');
   });
 
-  it('set default role', function () {
+  it('set default role', async function () {
     var Healer = container.Role.define('Healer');
     var Victim = container.Role.define('Victim');
 
-    return container.auth.setDefaultRole([Victim, Healer])
-    .then(function (roles) {
-      assert.include(roles, 'Healer');
-      assert.include(roles, 'Victim');
-    }, function (err) {
-      throw new Error('set default role failed');
-    });
+    const roles = await container.auth.setDefaultRole([Victim, Healer]);
+    assert.include(roles, 'Healer');
+    assert.include(roles, 'Victim');
   });
 
-  it('should fetch user roles', function () {
+  it('should fetch user roles', async function () {
     let users = [
       new UserRecord({_id: 'user/user1'}),
       new UserRecord({_id: 'user/user2'}),
       'user3'
     ];
-    return container.auth.fetchUserRole(users)
-    .then(function (result) {
-      expect(Object.keys(result)).to.have.length(3);
-      expect(result['user1']).to.have.length(1);
-      expect(result['user1'][0]).to.be.instanceof(Role);
-      expect(result['user1'][0].name).to.eql('Developer');
-      expect(result['user2']).to.have.length(2);
-      expect(result['user2'][0].name).to.eql('Admin');
-      expect(result['user2'][1].name).to.eql('Tester');
-      expect(result['user3']).to.have.length(0);
-    }, function (error) {
-      throw Error();
-    });
+    const result = await container.auth.fetchUserRole(users);
+    expect(Object.keys(result)).to.have.length(3);
+    expect(result['user1']).to.have.length(1);
+    expect(result['user1'][0]).to.be.instanceof(Role);
+    expect(result['user1'][0].name).to.eql('Developer');
+    expect(result['user2']).to.have.length(2);
+    expect(result['user2'][0].name).to.eql('Admin');
+    expect(result['user2'][1].name).to.eql('Tester');
+    expect(result['user3']).to.have.length(0);
   });
 });
 
@@ -291,7 +278,7 @@ describe('Container acl', function () {
         return fn({
           result: {
             type: type,
-            create_roles: createRoles   // eslint-disable-line camelcase
+            create_roles: createRoles // eslint-disable-line camelcase
           }
         });
       }
@@ -310,48 +297,43 @@ describe('Container acl', function () {
         return fn({
           result: {
             type: type,
-            default_access: defaultAccess   // eslint-disable-line camelcase
+            default_access: defaultAccess // eslint-disable-line camelcase
           }
         });
       }
     }
   }]);
 
-  it('set record create access', function () {
+  it('set record create access', async function () {
     let Writer = container.Role.define('Writer');
     let WebMaster = container.Role.define('Web Master');
     let Script = container.Record.extend('script');
 
-    return container.publicDB.setRecordCreateAccess(Script, [Writer, WebMaster])
-    .then(function (result) {
-      let {type, create_roles: roles} = result; // eslint-disable-line camelcase
+    const result = await container.publicDB.setRecordCreateAccess(
+      Script,
+      [Writer, WebMaster]
+    );
+    let {type, create_roles: roles} = result; // eslint-disable-line camelcase
 
-      assert.strictEqual(type, Script.recordType);
-      assert.include(roles, Writer.name);
-      assert.include(roles, WebMaster.name);
-    }, function (err) {
-      throw new Error('set record create access failed');
-    });
+    assert.strictEqual(type, Script.recordType);
+    assert.include(roles, Writer.name);
+    assert.include(roles, WebMaster.name);
   });
 
-  it('set default ACL', function () {
+  it('set default ACL', async function () {
     let Note = container.Record.extend('note');
     let Admin = container.Role.define('Admin');
     let acl = new container.ACL();
     acl.setPublicReadOnly();
     acl.setReadWriteAccessForRole(Admin);
 
-    return container.publicDB.setRecordDefaultAccess(Note, acl)
-      .then((result) => {
-        let {type, default_access: defaultAccess} = result;
-        let responseACL = container.ACL.fromJSON(defaultAccess);
+    const result = await container.publicDB.setRecordDefaultAccess(Note, acl);
+    let {type, default_access: defaultAccess} = result;
+    let responseACL = container.ACL.fromJSON(defaultAccess);
 
-        assert.strictEqual(type, Note.recordType);
-        assert.ok(responseACL.hasPublicReadAccess());
-        assert.ok(responseACL.hasWriteAccessForRole(Admin));
-      }, function (err) {
-        throw new Error('set record default access failed', err);
-      });
+    assert.strictEqual(type, Note.recordType);
+    assert.ok(responseACL.hasPublicReadAccess());
+    assert.ok(responseACL.hasWriteAccessForRole(Admin));
   });
 });
 
@@ -390,78 +372,65 @@ describe('lambda', function () {
   }]);
   container.configApiKey('correctApiKey');
 
-  it('should call lambda correctly', function () {
-    return container.lambda('hello:world').then(function (result) {
-      assert.deepEqual(result, {'hello': 'world'});
+  it('should call lambda correctly', async function () {
+    const result = await container.lambda('hello:world');
+    assert.deepEqual(result, {'hello': 'world'});
+  });
+
+  it('should pass dict parameters', async function () {
+    const result = await container.lambda('hello:args', {'name': 'world'});
+    assert.deepEqual(result, {
+      'hello': {
+        'name': 'world'
+      }
     });
   });
 
-  it('should pass dict parameters', function () {
-    return container
-      .lambda('hello:args', {'name': 'world'})
-      .then(function (result) {
-        assert.deepEqual(result, {
-          'hello': {
-            'name': 'world'
-          }
-        });
-      });
+  it('should pass array parameters', async function () {
+    const result = await container.lambda('hello:args', ['hello', 'world']);
+    assert.deepEqual(result, {
+      'hello': ['hello', 'world']
+    });
   });
 
-  it('should pass array parameters', function () {
-    return container
-      .lambda('hello:args', ['hello', 'world'])
-      .then(function (result) {
-        assert.deepEqual(result, {
-          'hello': ['hello', 'world']
-        });
-      });
+  it('should pass location parameters', async function () {
+    const result = await container
+      .lambda('hello:args', [new Geolocation(1, 2)]);
+    assert.deepEqual(result, {
+      'hello': [new Geolocation(1, 2)]
+    });
   });
 
-  it('should pass location parameters', function () {
-    return container
-      .lambda('hello:args', [new Geolocation(1, 2)])
-      .then(function (result) {
-        assert.deepEqual(result, {
-          'hello': [new Geolocation(1, 2)]
-        });
-      });
-  });
-
-  it('should pass record parameters', function () {
+  it('should pass record parameters', async function () {
     const Note = container.Record.extend('note');
     const attrs = {
       id: 'note/id'
     };
-    return container
-      .lambda('hello:args', [new Note(_.assign({}, attrs))])
-      .then(function (result) {
-        expect(result.hello).to.have.lengthOf(1);
-        expect(result.hello[0]).to.be.an.instanceof(container.Record);
-        expect(result.hello[0].id).to.be.equal('note/id');
-      });
+    const result = await container
+      .lambda('hello:args', [new Note(_.assign({}, attrs))]);
+    expect(result.hello).to.have.lengthOf(1);
+    expect(result.hello[0]).to.be.an.instanceof(container.Record);
+    expect(result.hello[0].id).to.be.equal('note/id');
   });
 
-  it('should pass asset parameters', function () {
+  it('should pass asset parameters', async function () {
     const assetName = '025b58f9-148d-4387-8a51-1898b5d8b613';
     const asset = new container.Asset({
       name: assetName
     });
-    return container
-      .lambda('hello:args', [asset])
-      .then(function (result) {
-        expect(result.hello).to.have.lengthOf(1);
-        expect(result.hello[0]).to.be.an.instanceof(container.Asset);
-        expect(result.hello[0].name).to.be.equal(assetName);
-      });
+    const result = await container.lambda('hello:args', [asset]);
+    expect(result.hello).to.have.lengthOf(1);
+    expect(result.hello[0]).to.be.an.instanceof(container.Asset);
+    expect(result.hello[0].name).to.be.equal(assetName);
   });
 
-  it('should parse error', function () {
-    return container.lambda('hello:failure').then(function (result) {
-      throw new Error('Failed to parse erroneous lambda result');
-    }, function (err) {
+  it('should parse error', async function () {
+    try {
+      await container.lambda('hello:failure');
+      assert.fail('should fail');
+    } catch (err) {
       assert.equal(err.error.message, 'lambda error');
-    });
+    }
   });
 
   it('should expose Query as constructor', function () {

@@ -7,24 +7,25 @@ class ReactNativeAsyncStorageDriver {
     this._rnImpl = rnImpl;
   }
 
-  clear(callback) {
+  async clear(callback) {
     return this._rnImpl.clear(callback);
   }
 
-  getItem(key, callback) {
+  async getItem(key, callback) {
     return this._rnImpl.getItem(key, callback);
   }
 
-  setItem(key, value, callback) {
+  async setItem(key, value, callback) {
     return this._rnImpl.setItem(key, value, callback);
   }
 
-  removeItem(key, callback) {
+  async removeItem(key, callback) {
     return this._rnImpl.removeItem(key, callback);
   }
 
-  multiGet(keys, callback) {
-    return this._rnImpl.multiGet(keys).then(function (rnKeyValuePairs) {
+  async multiGet(keys, callback) {
+    try {
+      const rnKeyValuePairs = await this._rnImpl.multiGet(keys);
       const output = [];
       for (let i = 0; i < rnKeyValuePairs.length; ++i) {
         const rnPair = rnKeyValuePairs[i];
@@ -39,15 +40,15 @@ class ReactNativeAsyncStorageDriver {
         callback(null, output);
       }
       return output;
-    }, function (errors) {
+    } catch (errors) {
       if (callback) {
         callback(errors);
       }
-      return Promise.reject(errors);
-    });
+      throw errors;
+    }
   }
 
-  multiSet(keyValuePairs, callback) {
+  async multiSet(keyValuePairs, callback) {
     const rnKeyValuePairs = [];
     for (let i = 0; i < keyValuePairs.length; ++i) {
       const pair = keyValuePairs[i];
@@ -58,34 +59,32 @@ class ReactNativeAsyncStorageDriver {
     return this._rnImpl.multiSet(rnKeyValuePairs, callback);
   }
 
-  multiRemove(keys, callback) {
+  async multiRemove(keys, callback) {
     return this._rnImpl.multiRemove(keys, callback);
   }
 
-  key(n, callback) {
-    return this._rnImpl.getAllKeys().then(function (allKeys) {
-      let result = null;
-      if (n >= 0 && n < allKeys.length) {
-        result = allKeys[n];
-      }
-      if (callback) {
-        callback(null, result);
-      }
-      return result;
-    });
+  async key(n, callback) {
+    const allKeys = await this._rnImpl.getAllKeys();
+    let result = null;
+    if (n >= 0 && n < allKeys.length) {
+      result = allKeys[n];
+    }
+    if (callback) {
+      callback(null, result);
+    }
+    return result;
   }
 
-  keys(callback) {
+  async keys(callback) {
     return this._rnImpl.getAllKeys(callback);
   }
 
-  length(callback) {
-    return this._rnImpl.getAllKeys().then(function (allKeys) {
-      if (callback) {
-        callback(null, allKeys.length);
-      }
-      return allKeys.length;
-    });
+  async length(callback) {
+    const allKeys = await this._rnImpl.getAllKeys();
+    if (callback) {
+      callback(null, allKeys.length);
+    }
+    return allKeys.length;
   }
 }
 

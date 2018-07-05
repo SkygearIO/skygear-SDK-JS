@@ -243,25 +243,22 @@ describe('Database', function () {
     expect(d.cacheResponse).to.be.true();
   });
 
-  it('query with Query object', function () {
+  it('query with Query object', async function () {
     let q = new Query(Note);
     q.transientInclude('category');
-    return db.query(q).then(function (records) {
-      expect(records.length).to.be.equal(2);
-      expect(records[0]).to.be.an.instanceof(Note);
-      expect(records.overallCount).to.be.equal(24);
+    const records = await db.query(q);
+    expect(records.length).to.be.equal(2);
+    expect(records[0]).to.be.an.instanceof(Note);
+    expect(records.overallCount).to.be.equal(24);
 
-      let transientCategory = records[1].$transient.category;
-      expect(transientCategory.id).to.equal('category/transientCategory');
-      expect(transientCategory.createdAt.getTime())
-        .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
-      expect(transientCategory.name).to.equal('transient test');
-    }, function (error) {
-      throw Error();
-    });
+    let transientCategory = records[1].$transient.category;
+    expect(transientCategory.id).to.equal('category/transientCategory');
+    expect(transientCategory.createdAt.getTime())
+      .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
+    expect(transientCategory.name).to.equal('transient test');
   });
 
-  it('cacheCallback will not called after remote returned', function (done) {
+  it('cacheCallback will not called after remote returned', async function () {
     /*
     This test case assume the callback will not delay more than 50ms
     1. A mocked cache will return result 50ms after it got query
@@ -285,21 +282,19 @@ describe('Database', function () {
     };
     let callback = function (records, cached) {
       if (cached) {
-        done(new Error('Unexpected call of cached query callback'));
+        throw new Error('Unexpected call of cached query callback');
       }
     };
 
-    return mockDB.query(q, callback).then(function () {
+    await mockDB.query(q, callback);
+    await new Promise((resolve) => {
       setTimeout(function () {
-        done();
+        resolve();
       }, 100);
-    }, function (error) {
-      throw Error();
     });
-
   });
 
-  it('respects container.cacheResponse', function (done) {
+  it('respects container.cacheResponse=true', async function () {
     let localContainer = new Container();
     localContainer.autoPubsub = false;
     localContainer.request = request;
@@ -309,80 +304,87 @@ describe('Database', function () {
 
     let q = new Query(Note);
 
-    Promise.resolve().then(function () {
-      localContainer.cacheResponse = false;
-      mockDB._cacheStore = {};
-      mockDB._cacheStore.set = sinon.spy();
-      mockDB.query(q).then(function (records) {
-        expect(mockDB._cacheStore.set).to.be.callCount(0);
-      });
-    }).then(function () {
-      localContainer.cacheResponse = true;
-      mockDB._cacheStore = {};
-      mockDB._cacheStore.set = sinon.spy();
-      mockDB.query(q).then(function (records) {
-        expect(mockDB._cacheStore.set).to.be.callCount(1);
-        done();
-      });
-    });
+    mockDB.cacheResponse = true;
+    mockDB._cacheStore = {};
+    mockDB._cacheStore.set = sinon.spy();
+    await mockDB.query(q);
+    expect(mockDB._cacheStore.set).to.be.callCount(1);
   });
 
-  it('query with returns of unexpected _transient dict', function () {
+  it('respects container.cacheResponse=false', async function () {
+    let localContainer = new Container();
+    localContainer.autoPubsub = false;
+    localContainer.request = request;
+    localContainer.configApiKey('correctApiKey');
+
+    let mockDB = new Database('_public', localContainer);
+
+    let q = new Query(Note);
+
+    mockDB.cacheResponse = false;
+    mockDB._cacheStore = {};
+    mockDB._cacheStore.set = sinon.spy();
+    await mockDB.query(q);
+    expect(mockDB._cacheStore.set).to.be.callCount(0);
+  });
+
+  it('query with returns of unexpected _transient dict', async function () {
     let q = new Query(Note);
     // this test case should work without calls to transientInclude
     // q.transientInclude('category')
-    return db.query(q).then(function (records) {
-      expect(records.length).to.be.equal(2);
-      expect(records[0]).to.be.an.instanceof(Note);
-      expect(records.overallCount).to.be.equal(24);
+    const records = await db.query(q);
+    expect(records.length).to.be.equal(2);
+    expect(records[0]).to.be.an.instanceof(Note);
+    expect(records.overallCount).to.be.equal(24);
 
-      let transientCategory = records[1].$transient.category;
-      expect(transientCategory.id).to.equal('category/transientCategory');
-      expect(transientCategory.createdAt.getTime())
-        .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
-      expect(transientCategory.name).to.equal('transient test');
-    }, function (error) {
-      throw Error();
-    });
+    let transientCategory = records[1].$transient.category;
+    expect(transientCategory.id).to.equal('category/transientCategory');
+    expect(transientCategory.createdAt.getTime())
+      .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
+    expect(transientCategory.name).to.equal('transient test');
   });
 
-  it('reject with error on saving undefined', function () {
-    return db.save(undefined).then(function (record) {
-      throw Error();
-    }, function (error) {
-      expect(error).to.equal(
+  it('reject with error on saving undefined', async function () {
+    try {
+      const record = await db.save(undefined);
+      assert.fail('should fail');
+    } catch (error) {
+      expect(error).to.be.an.instanceof(Error);
+      expect(error.message).to.equal(
         'Invalid input, unable to save undefined and null');
-    });
+    }
   });
 
-  it('reject with error on saving records incldue undefined', function () {
+  it(
+    'reject with error on saving records incldue undefined',
+    async function () {
+      let r = new Note();
+      r.null = null;
+      try {
+        const record = await db.save([r, undefined]);
+        assert.fail('should fail');
+      } catch (error) {
+        expect(error).to.be.an.instanceof(Error);
+        expect(error.message).to.equal(
+          'Invalid input, unable to save undefined and null');
+      }
+    }
+  );
+
+  it('save record to remote', async function () {
     let r = new Note();
     r.null = null;
-    return db.save([r, undefined]).then(function (record) {
-      throw Error();
-    }, function (error) {
-      expect(error).to.equal(
-        'Invalid input, unable to save undefined and null');
-    });
+    const record = await db.save(r);
+    expect(record).to.be.an.instanceof(Note);
   });
 
-  it('save record to remote', function () {
-    let r = new Note();
-    r.null = null;
-    return db.save(r).then(function (record) {
-      expect(record).to.be.an.instanceof(Note);
-    }, function (error) {
-      throw Error(error);
-    });
-  });
-
-  it('save fails with reject callback', function () {
+  it('save fails with reject callback', async function () {
     let r = new Note({
       _id: 'note/failed-to-save'
     });
-    return db.save(r).then(function (record) {
-      throw Error();
-    }, function (error) {
+    try {
+      const record = await db.save(r);
+    } catch (error) {
       expect(error).eql({
         '_id': 'note/failed-to-save',
         '_type': 'error',
@@ -390,107 +392,91 @@ describe('Database', function () {
         'message': 'failed to save record id = note/failed-to-save',
         'type': 'ResourceSaveFailure'
       });
-    });
+    }
   });
 
-  it('save multiple records to remote', function () {
+  it('save multiple records to remote', async function () {
     let note1 = new Note();
     let note2 = new Note();
 
-    return db.save([note1, note2])
-    .then((result) => {
-      let records = result.savedRecords;
-      let errors = result.errors;
+    const result = await db.save([note1, note2]);
+    let records = result.savedRecords;
+    let errors = result.errors;
 
-      expect(records).to.have.length(2);
-      expect(records[0]).to.be.an.instanceof(Note);
-      expect(records[1]).to.be.an.instanceof(Note);
+    expect(records).to.have.length(2);
+    expect(records[0]).to.be.an.instanceof(Note);
+    expect(records[1]).to.be.an.instanceof(Note);
 
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.be.undefined();
-      expect(errors[1]).to.be.undefined();
-    }, (error) => {
-      throw Error(error);
-    });
+    expect(errors).to.have.length(2);
+    expect(errors[0]).to.be.undefined();
+    expect(errors[1]).to.be.undefined();
   });
 
-  it('save multiple records with some failures', function () {
+  it('save multiple records with some failures', async function () {
     let note1 = new Note({
       _id: 'note/failed-to-save'
     });
     let note2 = new Note();
 
-    return db.save([note1, note2])
-    .then((result) => {
-      let records = result.savedRecords;
-      let errors = result.errors;
+    const result = await db.save([note1, note2]);
+    let records = result.savedRecords;
+    let errors = result.errors;
 
-      expect(records).to.have.length(2);
-      expect(records[0]).to.be.undefined();
-      expect(records[1]).to.be.an.instanceof(Note);
+    expect(records).to.have.length(2);
+    expect(records[0]).to.be.undefined();
+    expect(records[1]).to.be.an.instanceof(Note);
 
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.eql({
-        '_id': 'note/failed-to-save',
-        '_type': 'error',
-        'code': 101,
-        'message': 'failed to save record id = note/failed-to-save',
-        'type': 'ResourceSaveFailure'
-      });
-      expect(errors[1]).to.be.undefined();
-    }, (error) => {
-      throw Error(error);
+    expect(errors).to.have.length(2);
+    expect(errors[0]).to.eql({
+      '_id': 'note/failed-to-save',
+      '_type': 'error',
+      'code': 101,
+      'message': 'failed to save record id = note/failed-to-save',
+      'type': 'ResourceSaveFailure'
     });
+    expect(errors[1]).to.be.undefined();
   });
 
-  it('save atomically multiple records to remote', function () {
+  it('save atomically multiple records to remote', async function () {
     let note1 = new Note();
     let note2 = new Note();
 
-    return db.save([note1, note2], {'atomic': true})
-    .then((result) => {
-      let records = result.savedRecords;
-      let errors = result.errors;
+    const result = await db.save([note1, note2], {'atomic': true});
+    let records = result.savedRecords;
+    let errors = result.errors;
 
-      expect(records).to.have.length(2);
-      expect(records[0]).to.be.an.instanceof(Note);
-      expect(records[1]).to.be.an.instanceof(Note);
+    expect(records).to.have.length(2);
+    expect(records[0]).to.be.an.instanceof(Note);
+    expect(records[1]).to.be.an.instanceof(Note);
 
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.be.undefined();
-      expect(errors[1]).to.be.undefined();
-    }, (error) => {
-      throw Error(error);
-    });
+    expect(errors).to.have.length(2);
+    expect(errors[0]).to.be.undefined();
+    expect(errors[1]).to.be.undefined();
   });
 
-  it('save atomically multiple records with some failures', function () {
+  it('save atomically multiple records with some failures', async function () {
     let note1 = new Note({
       _id: 'note/failed-to-save'
     });
     let note2 = new Note();
 
-    return db.save([note1, note2], {'atomic': true})
-    .then((result) => {
-      let records = result.savedRecords;
-      let errors = result.errors;
+    const result = await db.save([note1, note2], {'atomic': true});
+    let records = result.savedRecords;
+    let errors = result.errors;
 
-      expect(records).to.have.length(1);
-      expect(records[0]).to.be.undefined();
+    expect(records).to.have.length(1);
+    expect(records[0]).to.be.undefined();
 
-      expect(errors).to.have.length(1);
-      expect(errors[0]).to.eql({
-        '_type': 'error',
-        'code': 409,
-        'message': 'Atomic Operation rolled back due to one or more errors',
-        'type': 'AtomicOperationFailure'
-      });
-    }, (error) => {
-      throw Error(error);
+    expect(errors).to.have.length(1);
+    expect(errors[0]).to.eql({
+      '_type': 'error',
+      'code': 409,
+      'message': 'Atomic Operation rolled back due to one or more errors',
+      'type': 'AtomicOperationFailure'
     });
   });
 
-  it('save record with meta populated', function () {
+  it('save record with meta populated', async function () {
     let r = new Note();
     r.update({
       '_created_at': '2014-09-27T17:40:00.000Z'
@@ -499,51 +485,43 @@ describe('Database', function () {
     r.update({
       '_created_at': '2014-09-27T17:40:00.000Z'
     });
-    return db.save(r).then(function (record) {
-      expect(record).to.be.an.instanceof(Note);
-    }, function (error) {
-      throw Error();
-    });
+    const record = await db.save(r);
+    expect(record).to.be.an.instanceof(Note);
   });
 
-  it('merge transient field after save', function () {
+  it('merge transient field after save', async function () {
     let r = new Note();
     r.$transient.custom = 'CLIENT DATA';
     r.$transient.synced = false;
-    return db.save(r).then(function (record) {
-      expect(record).to.be.an.instanceof(Note);
-      expect(record.$transient.synced).to.be.true();
-      expect(record.$transient.syncDate.toISOString())
-        .to.be.equal('2014-09-27T17:40:00.000Z');
-      expect(record.$transient.custom).to.be.equal('CLIENT DATA');
-    });
+    const record = await db.save(r);
+    expect(record).to.be.an.instanceof(Note);
+    expect(record.$transient.synced).to.be.true();
+    expect(record.$transient.syncDate.toISOString())
+      .to.be.equal('2014-09-27T17:40:00.000Z');
+    expect(record.$transient.custom).to.be.equal('CLIENT DATA');
   });
 
-  it('replace record field after saving', function () {
+  it('replace record field after saving', async function () {
     let r = new Note();
     r.content = 'I shalt not exist';
-    return db.save(r).then(function (record) {
-      expect(record).to.be.an.instanceof(Note);
-      expect(record.content).to.be.undefined();
-    });
+    const record = await db.save(r);
+    expect(record).to.be.an.instanceof(Note);
+    expect(record.content).to.be.undefined();
   });
 
-  it('delete record at remote', function () {
+  it('delete record at remote', async function () {
     let r = new Note();
-    return db.del(r).then(function () {
-      return;
-    }, function (error) {
-      throw Error();
-    });
+    await db.del(r);
   });
 
-  it('delete record fails will reject', function () {
+  it('delete record fails will reject', async function () {
     let r = new Note({
       _id: 'note/not-found'
     });
-    return db.del(r).then(function () {
-      throw Error();
-    }, function (error) {
+    try {
+      await db.del(r);
+      assert.fail('should fail');
+    } catch (error) {
       expect(error).eql({
         _id: 'note/not-found',
         _type: 'error',
@@ -551,55 +529,46 @@ describe('Database', function () {
         message: 'record not found',
         type: 'ResourceNotFound'
       });
-    });
+    }
   });
 
-  it('delete record multiple records at remote', function () {
+  it('delete record multiple records at remote', async function () {
     let note1 = new Note();
     let note2 = new Note();
-    return db.delete([note1, note2])
-    .then(function (errors) {
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.be.undefined();
-      expect(errors[1]).to.be.undefined();
-    }, function (error) {
-      throw Error();
-    });
+    const result = await db.delete([note1, note2]);
+    expect(result).to.have.length(2);
+    expect(result[0]).to.be.undefined();
+    expect(result[1]).to.be.undefined();
   });
 
-  it('delete accept QueryResult and delete records at remote', function () {
-    let note1 = new Note();
-    let note2 = new Note();
-    let queryResult = QueryResult.createFromResult([note1, note2], {});
-    return db.delete(queryResult)
-    .then(function (errors) {
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.be.undefined();
-      expect(errors[1]).to.be.undefined();
-    }, function (error) {
-      throw Error();
-    });
-  });
+  it(
+    'delete accept QueryResult and delete records at remote',
+    async function () {
+      let note1 = new Note();
+      let note2 = new Note();
+      let queryResult = QueryResult.createFromResult([note1, note2], {});
+      const result = await db.delete(queryResult);
+      expect(result).to.have.length(2);
+      expect(result[0]).to.be.undefined();
+      expect(result[1]).to.be.undefined();
+    }
+  );
 
-  it('delete record multiple records with some failures', function () {
+  it('delete record multiple records with some failures', async function () {
     let note1 = new Note({
       _id: 'note/not-found'
     });
     let note2 = new Note();
-    return db.delete([note1, note2])
-    .then(function (errors) {
-      expect(errors).to.have.length(2);
-      expect(errors[0]).to.eql({
-        _id: 'note/not-found',
-        _type: 'error',
-        code: 103,
-        message: 'record not found',
-        type: 'ResourceNotFound'
-      });
-      expect(errors[1]).to.be.undefined();
-    }, function (error) {
-      throw Error();
+    const result = await db.delete([note1, note2]);
+    expect(result).to.have.length(2);
+    expect(result[0]).to.eql({
+      _id: 'note/not-found',
+      _type: 'error',
+      code: 103,
+      message: 'record not found',
+      type: 'ResourceNotFound'
     });
+    expect(result[1]).to.be.undefined();
   });
 
 });

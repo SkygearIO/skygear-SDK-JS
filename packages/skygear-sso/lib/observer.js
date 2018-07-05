@@ -6,7 +6,7 @@ export class NewWindowObserver {
     this.timer = null;
   }
 
-  subscribe(newWindow) {
+  async subscribe(newWindow) {
     this.unsubscribe();
     this.newWindow = newWindow;
     return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ export class WindowMessageObserver {
     this.onMessageReceived = null;
   }
 
-  subscribe() {
+  async subscribe() {
     this.unsubscribe();
     return new Promise((resolve) => {
       this.onMessageReceived = (message) => {

@@ -1,4 +1,8 @@
 {
+  "plugins": ["promise"],
+  "extends": [
+    "plugin:promise/recommended"
+  ],
   "rules": {
     "strict": [
       2,
@@ -178,7 +182,8 @@
     ],
     "semi": 2,
     "keyword-spacing": 2,
-    "complexity": [2, 10]
+    "complexity": [2, 10],
+    "promise/prefer-await-to-then": "error"
   },
   "env": {
     "node": true,
