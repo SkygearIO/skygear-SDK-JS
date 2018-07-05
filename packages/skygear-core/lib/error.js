@@ -48,6 +48,7 @@ export const ErrorCodes = {
   NotConfigured: 125,
   PasswordPolicyViolated: 126,
   UserDisabled: 127,
+  VerificationRequired: 128,
   UnexpectedError: 10000
 };
 
