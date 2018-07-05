@@ -402,7 +402,7 @@ export class BaseContainer {
    *
    * @return {Promise} resolve when cache is cleared successfully
    */
-  clearCache() {
+  async clearCache() {
     return this.store.clearPurgeableItems();
   }
 

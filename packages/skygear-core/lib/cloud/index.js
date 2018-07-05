@@ -229,7 +229,7 @@ export function provides(providerType, providerID, ProviderCls, options = {}) {
  *
  */
 export class BaseAuthProvider {
-  handleAction(action, param) {
+  async handleAction(action, param) {
     if (!this[action]) {
       throw new Error(`Provider not support action: ${param.action}`);
     }
@@ -239,7 +239,7 @@ export class BaseAuthProvider {
   * this method must be overridden by subclass.
   * @abstract
   */
-  login(authData) { // eslint-disable-line
+  async login(authData) { // eslint-disable-line
     throw new Error(
       'Subclass of BaseAuthProvider should implement login method.');
   }
@@ -247,7 +247,7 @@ export class BaseAuthProvider {
   * this method must be overridden by subclass.
   * @abstract
   */
-  logout(authData) { // eslint-disable-line
+  async logout(authData) { // eslint-disable-line
     throw new Error(
       'Subclass of BaseAuthProvider should implement logout method.');
   }
@@ -255,7 +255,7 @@ export class BaseAuthProvider {
   * this method must be overridden by subclass.
   * @abstract
   */
-  info(authData) { // eslint-disable-line
+  async info(authData) { // eslint-disable-line
     throw new Error(
       'Subclass of BaseAuthProvider should implement info method.');
   }

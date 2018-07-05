@@ -21,7 +21,7 @@ import { errorResponseFromMessage } from './util';
  * @example
  * skygear.auth.loginOAuthProviderWithPopup('google').then(...);
  */
-export function loginOAuthProviderWithPopup(provider, options) {
+export async function loginOAuthProviderWithPopup(provider, options) {
   const auth = this.container.auth;
   return _oauthFlowWithPopup.bind(this)(
     provider, options, 'login', auth._authResolve.bind(auth)
@@ -64,7 +64,7 @@ export function loginOAuthProviderWithRedirect(provider, options) {
  * @example
  * skygear.auth.linkOAuthProviderWithPopup('google').then(...);
  */
-export function linkOAuthProviderWithPopup(provider, options) {
+export async function linkOAuthProviderWithPopup(provider, options) {
   return _oauthFlowWithPopup.bind(this)(
     provider, options, 'link', Promise.resolve.bind(Promise)
   );

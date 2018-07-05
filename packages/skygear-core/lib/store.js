@@ -36,14 +36,14 @@ class SyncStorageDriver {
   }
 
   async clear(callback) {
-    this._syncImpl.clear();
+    await this._syncImpl.clear();
     if (callback) {
       callback(null);
     }
   }
 
   async getItem(key, callback) {
-    const value = this._syncImpl.getItem(key);
+    const value = await this._syncImpl.getItem(key);
     if (callback) {
       callback(null, value);
     }
@@ -52,7 +52,7 @@ class SyncStorageDriver {
 
   async setItem(key, value, callback) {
     try {
-      this._syncImpl.setItem(key, value);
+      await this._syncImpl.setItem(key, value);
       if (callback) {
         callback(null);
       }
@@ -65,7 +65,7 @@ class SyncStorageDriver {
   }
 
   async removeItem(key, callback) {
-    this._syncImpl.removeItem(key);
+    await this._syncImpl.removeItem(key);
     if (callback) {
       callback(null);
     }
@@ -75,7 +75,7 @@ class SyncStorageDriver {
     const output = [];
     for (let i = 0; i < keys.length; ++i) {
       const key = keys[i];
-      const value = this._syncImpl.getItem(key);
+      const value = await this._syncImpl.getItem(key);
       output.push({
         key: key,
         value: value
@@ -93,14 +93,14 @@ class SyncStorageDriver {
         const pair = keyValuePairs[i];
         const key = pair.key;
         const value = pair.value;
-        this._syncImpl.setItem(key, value);
+        await this._syncImpl.setItem(key, value);
       }
       if (callback) {
         callback(null);
       }
     } catch (e) {
       if (callback) {
-        return callback(e);
+        callback(e);
       }
       throw e;
     }
@@ -109,7 +109,7 @@ class SyncStorageDriver {
   async multiRemove(keys, callback) {
     for (let i = 0; i < keys.length; ++i) {
       const key = keys[i];
-      this._syncImpl.removeItem(key);
+      await this._syncImpl.removeItem(key);
     }
     if (callback) {
       callback(null);
@@ -117,7 +117,7 @@ class SyncStorageDriver {
   }
 
   async key(n, callback) {
-    const result = this._syncImpl.key(n);
+    const result = await this._syncImpl.key(n);
     if (callback) {
       callback(null, result);
     }
@@ -128,7 +128,7 @@ class SyncStorageDriver {
     const length = this._syncImpl.length;
     const output = [];
     for (let i = 0; i < length; ++i) {
-      output.push(this._syncImpl.key(i));
+      output.push(await this._syncImpl.key(i));
     }
     if (callback) {
       callback(null, output);
