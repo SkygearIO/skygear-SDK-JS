@@ -49,6 +49,7 @@ export const ErrorCodes = {
   PasswordPolicyViolated: 126,
   UserDisabled: 127,
   VerificationRequired: 128,
+  AssetSizeTooLarge: 129,
   UnexpectedError: 10000
 };
 
