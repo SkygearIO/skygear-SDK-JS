@@ -327,8 +327,8 @@ async function _getRedirectResult(action, resolvePromise) {
 
     let result = await Promise.all([
       subscribeOauthResult,
-      resetRedirectActionStore]
-    );
+      resetRedirectActionStore
+    ]);
     let oauthResult = result[0];
     result = await _ssoResultMessageResolve(oauthResult);
     return resolvePromise(result);
