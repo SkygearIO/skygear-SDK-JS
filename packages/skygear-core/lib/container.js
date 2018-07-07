@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /* eslint camelcase: 0 */
-const request = require('superagent');
-const _ = require('lodash');
-const ee = require('event-emitter');
+import request from 'superagent';
+import _ from 'lodash';
+import ee from 'event-emitter';
 
 import Asset from './asset';
 import Role from './role';
@@ -24,7 +24,7 @@ import ACL from './acl';
 import Record from './record';
 import Reference from './reference';
 import Query from './query';
-import {Database} from './database';
+import {Database, PublicDatabase} from './database'; // eslint-disable-line no-unused-vars
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -34,7 +34,7 @@ import {
 } from './error';
 
 import {AuthContainer} from './auth';
-import {RelationContainer} from './relation';
+import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
 import {DatabaseContainer} from './database';
 import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';

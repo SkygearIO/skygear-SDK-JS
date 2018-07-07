@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
-const _ws = require('websocket');
+import _ from 'lodash';
+import _ws from 'websocket';
 let WebSocket = null;
 if (_ws) {
   WebSocket = _ws.w3cwebsocket;
 } else {
   WebSocket = window.WebSocket; //eslint-disable-line
 }
-const url = require('url');
-const ee = require('event-emitter');
+import url from 'url';
+import ee from 'event-emitter';
 
 import {EventHandle} from './util';
+import Container from './container'; // eslint-disable-line no-unused-vars
 
 const ON_OPEN = 'onOpen';
 const ON_CLOSE = 'onClose';
@@ -37,7 +38,7 @@ export class Pubsub {
   /**
    * Constructs a new Pubsub object.
    *
-   * @param  {container} container - the Skygear container
+   * @param  {Container} container - the Skygear container
    * @param  {Boolean} internal - true if it is an internal pubsub client
    * @return {Pubsub} pubsub client
    */
@@ -56,7 +57,7 @@ export class Pubsub {
    * Registers a connection open listener
    *
    * @param  {function()} listener - the listener
-   * @return {EventHandler} event handler
+   * @return {EventHandle} event handler
    */
   onOpen(listener) {
     this._ee.on(ON_OPEN, listener);
@@ -67,7 +68,7 @@ export class Pubsub {
    * Registers a connection close listener
    *
    * @param  {function()} listener - the listener
-   * @return {EventHandler} event handler
+   * @return {EventHandle} event handler
    */
   onClose(listener) {
     this._ee.on(ON_CLOSE, listener);
@@ -277,7 +278,7 @@ export class Pubsub {
    * Checks if the channel is subscribed with any handler.
    *
    * @param {String} channel - name of the channel
-   * @return {Boolean} true if the channel has handlers
+   * @return {boolean} true if the channel has handlers
    */
   hasHandlers(channel) {
     let handlers = this._handlers[channel];

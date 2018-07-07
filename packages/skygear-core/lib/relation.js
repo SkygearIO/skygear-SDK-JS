@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
+import _ from 'lodash';
 
 import {UserRecord} from './container';
+import Record from './record'; // eslint-disable-line no-unused-vars
 
 /**
  * Outward relation direction

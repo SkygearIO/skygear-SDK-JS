@@ -189,7 +189,7 @@ export class SkygearError extends Error {
    * @param {String} attrs.message - an error message
    * @param {Number} [attrs.code] - a code for the error condition
    * @param {Object} [attrs.info] - more information about the error
-   * @return {SkyearError} the created SkyearError object
+   * @return {SkygearError} the created SkyearError object
    */
   static fromJSON(attrs) {
     const skyErr = new SkygearError(

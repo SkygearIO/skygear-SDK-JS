@@ -20,6 +20,7 @@ import { settings as _settings } from './settings';
 import crypto from 'crypto';
 import _CloudCodeContainer from './container';
 import { createLogger as _createLogger } from './logging';
+import Record from '../record'; // eslint-disable-line no-unused-vars
 import {
   ErrorCodes as _ErrorCodes,
   SkygearError as _SkygearError

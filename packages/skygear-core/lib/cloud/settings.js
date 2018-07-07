@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 function loadHttpSettings() {
   // TODO: set the default value to false when other transport is supported
