@@ -18,6 +18,7 @@ import md5 from 'md5';
 
 import {toJSON, fromJSON} from './util';
 import Record from './record';
+import Geolocation from './geolocation'; // eslint-disable-line no-unused-vars
 
 /**
 * Query object provides database query functions.
@@ -243,7 +244,7 @@ export default class Query {
   /**
    * Sets a distance greater than query.
    * @param  {string} key
-   * @param  {geolocation} loc
+   * @param  {Geolocation} loc
    * @param  {Number}  distance
    * @return {Query}  self
    */

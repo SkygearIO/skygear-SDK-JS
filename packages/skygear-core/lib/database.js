@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
+import _ from 'lodash';
 
 import Cache from './cache';
 import Asset, {isAsset} from './asset';
@@ -21,6 +21,10 @@ import {isRecord} from './record';
 import Query from './query';
 import QueryResult from './query_result';
 import {isValueType} from './util';
+import ACL from './acl'; // eslint-disable-line no-unused-vars
+import Container from './container'; // eslint-disable-line no-unused-vars
+import Role from './role'; // eslint-disable-line no-unused-vars
+import {Store} from './store'; // eslint-disable-line no-unused-vars
 
 export class Database {
 

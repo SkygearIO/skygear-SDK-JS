@@ -16,6 +16,7 @@
 import _ from 'lodash';
 
 import {ErrorCodes, SkygearError} from './error';
+import Container from './container'; // eslint-disable-line no-unused-vars
 
 /**
  * Push container
