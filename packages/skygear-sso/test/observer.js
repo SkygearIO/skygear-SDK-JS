@@ -4,8 +4,9 @@ import { NewWindowObserver, WindowMessageObserver } from '../lib/observer';
 
 
 describe('SSO observer', function () {
+  this.timeout(5000);
+
   it('new window observer when user close window', async function () {
-    this.timeout(4000);
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     let newWindow = new MockBrowser().getWindow();
