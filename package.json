@@ -21,16 +21,22 @@
     "skygear"
   ],
   "devDependencies": {
-    "babel-core": "^6.14.0",
-    "babel-eslint": "^7.1.0",
+    "@babel/cli": "^7.0.0-beta.53",
+    "@babel/core": "^7.0.0-beta.53",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.53",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.53",
+    "@babel/plugin-transform-classes": "^7.0.0-beta.53",
+    "@babel/plugin-transform-regenerator": "^7.0.0-beta.53",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
+    "@babel/preset-react": "^7.0.0-beta.53",
+    "@babel/preset-stage-2": "^7.0.0-beta.53",
+    "@babel/register": "^7.0.0-beta.53",
+    "@babel/runtime": "^7.0.0-beta.53",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-builtin-extend": "^1.1.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-2": "^6.13.0",
-    "babelify": "^7.3.0",
-    "browserify": "^11.0.1",
+    "babelify": "^9.0.0",
+    "browserify": "^16.2.2",
     "chai": "^3.2.0",
     "connect-inject": "^0.4.0",
     "dirty-chai": "^1.2.2",
@@ -73,9 +79,9 @@
     "require-dir": "^0.3.0",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "superagent": "^3.4",
+    "superagent": "^3.8.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
+    "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.3.1"
   },
   "scripts": {
@@ -95,7 +101,6 @@
     "skygear-asset": "./asset.js"
   },
   "license": "Apache-2.0",
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
   },
