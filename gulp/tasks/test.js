@@ -32,7 +32,7 @@ gulp.task('pre-test', function () {
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function () {
+gulp.task('test', gulp.series('pre-test', function () {
   // Make node.js crash when test case have unhandled promise rejection
   process.on('unhandledRejection', up => { throw up })
 
@@ -42,7 +42,6 @@ gulp.task('test', ['pre-test'], function () {
       .pipe(babel())
       .pipe(mocha({
         reporter: 'spec',
-        clearRequireCache: true,
         quiet: false
       }))
   });
@@ -60,4 +59,4 @@ gulp.task('test', ['pre-test'], function () {
         }
       }
     }));
-});
+}));

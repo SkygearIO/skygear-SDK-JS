@@ -11,8 +11,10 @@ var merge = require('merge-stream');
 
 var config = require('../config');
 var context = require('../context');
+require('./test');
+require('./browserify');
 
-gulp.task('default', ['test'], function () {
+gulp.task('default', gulp.series('test', function () {
   var packageConfigs = config.getPackageConfigs();
   var packagesSrc = packageConfigs.map(function(config) {
     return [config.src, config.test];
@@ -26,7 +28,7 @@ gulp.task('default', ['test'], function () {
       .pipe(eslint.failAfterError());
   });
   return merge(streams);
-});
+}));
 
 gulp.task('babel', function () {
   var packageConfigs = config.getPackageConfigs();
@@ -39,18 +41,17 @@ gulp.task('babel', function () {
   return merge(streams);
 });
 
-gulp.task('watch', ['browserify', 'babel'], function() {
+gulp.task('watch', gulp.series('browserify', 'babel', function() {
   var packageConfigs = config.getPackageConfigs();
   var packagesSrc = packageConfigs.map(function(config) {
     return config.src;
   });
   gulp.watch(packagesSrc, ['browserify', 'babel']);
-});
+}));
 
-gulp.task('prepublish', ['babel', 'browserify', 'minify']);
-gulp.task('dev', ['watch']);
+gulp.task('dev', gulp.series('watch'));
 
-gulp.task('minify', ['browserify'], function() {
+gulp.task('minify', gulp.series('browserify', function() {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(
@@ -66,4 +67,8 @@ gulp.task('minify', ['browserify'], function() {
       .pipe(gulp.dest(packageConfig.dest));
   });
   return merge(streams);
-});
+}));
+
+gulp.task('prepublish', gulp.series('babel', 'browserify', 'minify'));
+
+gulp.task('default', gulp.series('test', 'eslint', 'tslint'));
