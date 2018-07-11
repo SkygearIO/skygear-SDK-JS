@@ -29,7 +29,7 @@ var requireDir = require('require-dir');
 
 // Initialize the babel transpiler so ES2015 files gets compiled
 // when they're loaded
-require('babel-core/register');
+require('@babel/register');
 
 // Require all tasks in gulp/tasks, including subfolders
 requireDir('./gulp/tasks', { recurse: true });

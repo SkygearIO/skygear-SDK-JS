@@ -70,5 +70,3 @@ gulp.task('minify', gulp.series('browserify', function() {
 }));
 
 gulp.task('prepublish', gulp.series('babel', 'browserify', 'minify'));
-
-gulp.task('default', gulp.series('test', 'eslint', 'tslint'));
