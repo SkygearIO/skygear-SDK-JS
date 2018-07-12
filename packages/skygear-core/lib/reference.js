@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Record from './record';
+import Record, { isRecord } from './record';
 
 /**
  * Reference
@@ -25,36 +25,101 @@ export default class Reference {
   /**
    * Constructs a new Reference object.
    *
-   * @param {Record|String} attrs - the referenced record or record id
+   * @example
+   * let record = new Record('note', {
+   *     _recordType: 'note',
+   *     _recordID: '123',
+   *     content: 'hello world',
+   * });
+   * let ref = new Reference(record);
+   * console.log('type', ref.recordType);  // note
+   * console.log('id', ref.recordType);    // 123
+   *
+   * @example
+   * let ref = new Reference('note', '123');
+   * console.log('type', ref.recordType);  // note
+   * console.log('id', ref.recordType);    // 123
+   *
+   * @example
+   * // WARNING: This usage is deprecated
+   * let ref = new Reference('note/123');
+   * console.log('type', ref.recordType);  // note
+   * console.log('id', ref.recordType);    // 123
+   *
+   * @param {Record|String} recordOrRecordType - the referencing record or
+   *                                             the record type
+   * @param {String}        [recordID]   - the referencing record ID
    */
-  constructor(attrs) {
-    var id;
-    if (typeof attrs === 'string') {
-      id = attrs;
-    } else {
-      id = attrs.$id;
-      if (!id) {
-        id = attrs.id;
+  constructor(recordOrRecordType, recordID) {
+    if (isRecord(recordOrRecordType)) {
+      this._recordType = recordOrRecordType.recordType;
+      this._recordID = recordOrRecordType.recordID;
+      return;
+    }
+
+    if (typeof recordOrRecordType === 'string') {
+      if (recordID && typeof recordID === 'string') {
+        this._recordType = recordOrRecordType;
+        this._recordID = recordID;
+        return;
       }
+
+      const [type, id] = Record.parseDeprecatedID(recordOrRecordType);
+      this._recordType = type;
+      this._recordID = id;
+      return;
     }
 
-    if (!id) {
-      throw new Error('Empty record id');
-    }
-
-    // parse solely to test for string id validity
-    Record.parseID(id);
-
-    this._id = id;
+    throw new Error('Fail to construct a record reference');
   }
 
   /**
-   * ID of the referenced record
+   * ID of the referencing record in the deprecated format
+   * (i.e. `type/id`).
+   *
+   * @type {String}
+   *
+   * @deprecated Use `recordType` and `recordID` instead.
+   */
+  get id() {
+    return [this.recordType, this.recordID].join('/');
+  }
+
+  /**
+   * Type of the referencing record.
    *
    * @type {String}
    */
-  get id() {
-    return this._id;
+  get recordType() {
+    return this._recordType;
+  }
+
+  /**
+   * ID of the referencing record.
+   *
+   * @type {String}
+   */
+  get recordID() {
+    return this._recordID;
+  }
+
+  /**
+   * Deserializes Reference from a JSON object.
+   *
+   * @param {Object} obj - the JSON object
+   *
+   * @return {Reference} a record reference
+   */
+  static fromJSON(obj) {
+    if (obj.$recordType && obj.$recordID) {
+      return new Reference(obj.$recordType, obj.$recordID);
+    }
+
+    if (obj.$id) {
+      return new Reference(obj.$id);
+    }
+
+    throw new Error('Fail to deserialize a record reference');
   }
 
   /**
@@ -64,7 +129,9 @@ export default class Reference {
    */
   toJSON() {
     return {
-      $id: this._id,
+      $id: this.id,
+      $recordType: this.recordType,
+      $recordID: this.recordID,
       $type: 'ref'
     };
   }

@@ -104,7 +104,7 @@ export function fromJSON(attrs) {
     case 'date':
       return new Date(attrs.$date);
     case 'ref':
-      return new Reference(attrs);
+      return Reference.fromJSON(attrs);
     case 'unknown':
       return UnknownValue.fromJSON(attrs);
     case 'record':
