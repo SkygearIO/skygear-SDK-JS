@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*eslint-disable dot-notation, no-unused-vars, quote-props */
+/*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
 import {assert, expect} from 'chai';
 import Container from '../lib/container';
 
@@ -35,7 +35,8 @@ describe('Container me', function () {
               roles: ['Normal-User'],
               profile: {
                 _type: 'record', // eslint-disable-line camelcase
-                _id: 'user/user-id-1', // eslint-disable-line camelcase
+                _recordType: 'user', // eslint-disable-line camelcase
+                _recordID: 'user-id-1', // eslint-disable-line camelcase
                 _access: null, // eslint-disable-line camelcase
                 username: 'user1',
                 email: 'user1@skygear.dev'
@@ -59,7 +60,8 @@ describe('Container me', function () {
     container.auth._accessToken = 'token-1';
     const user = await container.auth.whoami();
     assert.instanceOf(user, container.Record);
-    assert.equal(user.id, 'user/user-id-1');
+    assert.equal(user.recordType, 'user');
+    assert.equal(user.recordID, 'user-id-1');
     assert.equal(user.username, 'user1');
     assert.equal(user.email, 'user1@skygear.dev');
   });
@@ -86,15 +88,16 @@ describe('Container auth', function () {
         params['auth_data']['email'] === 'user@email.com');
       if (validUser && params['password'] === 'passwd') {
         return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'profile': {
-              '_type': 'record', // eslint-disable-line camelcase
-              '_id': 'user/user:id1', // eslint-disable-line camelcase
-              '_access': null, // eslint-disable-line camelcase
-              'username': 'user1',
-              'email': 'user1@skygear.io',
+          result: {
+            user_id: 'user:id1',
+            access_token: 'uuid1',
+            profile: {
+              _type: 'record', // eslint-disable-line camelcase
+              _recordType: 'user', // eslint-disable-line camelcase
+              _recordID: 'user:id1', // eslint-disable-line camelcase
+              _access: null, // eslint-disable-line camelcase
+              username: 'user1',
+              email: 'user1@skygear.io',
               // simulate serialisation and deserialisation by superagent
               ...JSON.parse(JSON.stringify(params['profile'])) || {}
             }
@@ -104,10 +107,10 @@ describe('Container auth', function () {
       if (params['auth_data'] &&
         params['auth_data']['username'] === 'duplicated') {
         return fn({
-          'error': {
-            'type': 'ResourceDuplicated',
-            'code': 101,
-            'message': 'user duplicated'
+          error: {
+            type: 'ResourceDuplicated',
+            code: 101,
+            message: 'user duplicated'
           }
         }, 400);
       }
@@ -115,15 +118,16 @@ describe('Container auth', function () {
         params['password'] === null) {
 
         return fn({
-          'result': {
-            'user_id': 'user:id2',
-            'access_token': 'uuid2',
-            'profile': {
-              '_type': 'record', // eslint-disable-line camelcase
-              '_id': 'user/user:id2', // eslint-disable-line camelcase
-              '_access': null, // eslint-disable-line camelcase
-              'username': 'user2',
-              'email': 'user2@skygear.io'
+          result: {
+            user_id: 'user:id2',
+            access_token: 'uuid2',
+            profile: {
+              _type: 'record', // eslint-disable-line camelcase
+              _recordType: 'user', // eslint-disable-line camelcase
+              _recordID: 'user:id2', // eslint-disable-line camelcase
+              _access: null, // eslint-disable-line camelcase
+              username: 'user2',
+              email: 'user2@skygear.io'
             }
           }
         });
@@ -134,14 +138,15 @@ describe('Container auth', function () {
     fixtures: function (match, params, headers, fn) {
       if (params['provider'] === 'provider') {
         return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'provider_auth_data': params['provider_auth_data'],
-            'profile': {
-              '_type': 'record', // eslint-disable-line camelcase
-              '_id': 'user/user:id1', // eslint-disable-line camelcase
-              '_access': null // eslint-disable-line camelcase
+          result: {
+            user_id: 'user:id1',
+            access_token: 'uuid1',
+            provider_auth_data: params['provider_auth_data'],
+            profile: {
+              _type: 'record', // eslint-disable-line camelcase
+              _recordType: 'user', // eslint-disable-line camelcase
+              _recordID: 'user:id1', // eslint-disable-line camelcase
+              _access: null // eslint-disable-line camelcase
             }
           }
         });
@@ -150,24 +155,25 @@ describe('Container auth', function () {
         params['auth_data']['email'] === 'user@email.com';
       if (validUser && params['password'] === 'passwd') {
         return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'profile': {
-              '_type': 'record', // eslint-disable-line camelcase
-              '_id': 'user/user:id1', // eslint-disable-line camelcase
-              '_access': null, // eslint-disable-line camelcase
-              'username': 'user1',
-              'email': 'user1@skygear.io'
+          result: {
+            user_id: 'user:id1',
+            access_token: 'uuid1',
+            profile: {
+              _type: 'record', // eslint-disable-line camelcase
+              _recordType: 'user', // eslint-disable-line camelcase
+              _recordID: 'user:id1', // eslint-disable-line camelcase
+              _access: null, // eslint-disable-line camelcase
+              username: 'user1',
+              email: 'user1@skygear.io'
             }
           }
         });
       }
       return fn({
-        'error': {
-          'type': 'AuthenticationError',
-          'code': 102,
-          'message': 'invalid authentication information'
+        error: {
+          type: 'AuthenticationError',
+          code: 102,
+          message: 'invalid authentication information'
         }
       }, 400);
     }
@@ -176,22 +182,23 @@ describe('Container auth', function () {
     fixtures: function (match, params, headers, fn) {
       if (params['old_password'] === params['password']) {
         return fn({
-          'result': {
-            'user_id': 'user:id1',
-            'access_token': 'uuid1',
-            'profile': {
-              '_type': 'record', // eslint-disable-line camelcase
-              '_id': 'user/user:id1', // eslint-disable-line camelcase
-              '_access': null // eslint-disable-line camelcase
+          result: {
+            user_id: 'user:id1',
+            access_token: 'uuid1',
+            profile: {
+              _type: 'record', // eslint-disable-line camelcase
+              _recordType: 'user', // eslint-disable-line camelcase
+              _recordID: 'user:id1', // eslint-disable-line camelcase
+              _access: null // eslint-disable-line camelcase
             }
           }
         });
       }
       return fn({
-        'error': {
-          'type': 'AuthenticationError',
-          'code': 102,
-          'message': 'invalid authentication information'
+        error: {
+          type: 'AuthenticationError',
+          code: 102,
+          message: 'invalid authentication information'
         }
       }, 400);
     }
@@ -199,8 +206,8 @@ describe('Container auth', function () {
     pattern: 'http://skygear.dev/auth/logout',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        'result': {
-          'status': 'OK'
+        result: {
+          status: 'OK'
         }
       });
     }
@@ -209,18 +216,18 @@ describe('Container auth', function () {
     fixtures: function (match, params, headers, fn) {
       if (params && params.id) {
         return fn({
-          'result': {
-            'id': params.id
+          result: {
+            id: params.id
           }
         });
       } else {
         return fn({
-          'error': {
-            'name': 'InvalidArgument',
-            'code': 108,
-            'message': 'Missing device id',
-            'info': {
-              'arguments': [
+          error: {
+            name: 'InvalidArgument',
+            code: 108,
+            message: 'Missing device id',
+            info: {
+              arguments: [
                 'id'
               ]
             }
@@ -256,19 +263,22 @@ describe('Container auth', function () {
 
   it('should serialize and deserlize user correctly', async function () {
     const userAttrs = {
-      _id: 'user/user1',
+      _recordType: 'user',
+      _recordID: 'user1',
       name: 'user1',
       age: 100
     };
     await container.auth._setUser(userAttrs);
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(container.auth.currentUser.id, 'user/user1');
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user1');
     assert.equal(container.auth.currentUser.name, 'user1');
     assert.equal(container.auth.currentUser.age, 100);
 
     await container.auth._getUser();
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(container.auth.currentUser.id, 'user/user1');
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user1');
     assert.equal(container.auth.currentUser.name, 'user1');
     assert.equal(container.auth.currentUser.age, 100);
   });
@@ -285,10 +295,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
     assert.equal(container.auth.currentUser.age, 100);
   });
 
@@ -304,10 +312,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
     assert.equal(
       container.auth.currentUser.birthday.getTime(),
       0
@@ -320,10 +326,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
 
   it('should signup with email successfully', async function () {
@@ -333,10 +337,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
 
   it('should signup anonymously', async function () {
@@ -345,10 +347,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid2');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id2'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id2');
   });
 
   it('should not signup duplicate account', async function () {
@@ -368,10 +368,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
 
   it('should login with email and correct password', async function () {
@@ -381,10 +379,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
 
   it('should fail to login with incorrect password', async function () {
@@ -406,10 +402,8 @@ describe('Container auth', function () {
       container.auth.accessToken,
       'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(
-      container.auth.currentUser.id,
-      'user/user:id1'
-    );
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
 
   it('should be able to set null accessToken', async function () {
@@ -483,7 +477,8 @@ describe('Container auth', function () {
       .changePassword('supersecret', 'supersecret');
     assert.equal(container.auth.accessToken, 'uuid1');
     assert.instanceOf(container.auth.currentUser, container.Record);
-    assert.equal(container.auth.currentUser.id, 'user/user:id1');
+    assert.equal(container.auth.currentUser.recordType, 'user');
+    assert.equal(container.auth.currentUser.recordID, 'user:id1');
     assert.instanceOf(user, container.Record);
   });
 
@@ -546,4 +541,4 @@ describe('AuthContainer', function () {
     }
   );
 });
-/*eslint-enable dot-notation, no-unused-vars, quote-props */
+/*eslint-enable camelcase, dot-notation, no-unused-vars, quote-props */

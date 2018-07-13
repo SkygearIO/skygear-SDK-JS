@@ -23,13 +23,16 @@ describe('ACL', function () {
   let Driver = Role.define('Driver');
   let Passenger = Role.define('Passenger');
   let Alice = new UserRecord({
-    _id: 'user/Alice'
+    _recordType: 'user',
+    _recordID: 'Alice'
   });
   let AliceRoles = [Driver];
   let Bob = new UserRecord({
-    _id: 'user/Bob'
+    _recordType: 'user',
+    _recordID: 'Bob'
   });
   let BobRoles = [Passenger];
+
   it('serialization', function () {
     const payload = [
       {

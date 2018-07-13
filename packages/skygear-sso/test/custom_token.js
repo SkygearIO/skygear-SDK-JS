@@ -32,7 +32,8 @@ describe('SSO Custom Token', function () {
           user_id: 'user-id-1', // eslint-disable-line camelcase
           profile: {
             _type: 'record', // eslint-disable-line camelcase
-            _id: 'user/user-id-1', // eslint-disable-line camelcase
+            _recordType: 'user', // eslint-disable-line camelcase
+            _recordID: 'user-id-1', // eslint-disable-line camelcase
             _access: null, // eslint-disable-line camelcase
             username: 'user1',
             email: 'user1@skygear.dev'

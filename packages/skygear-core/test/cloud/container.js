@@ -38,7 +38,8 @@ describe('Cloud container', function () {
                 'access_token': 'uuid1',
                 'profile': {
                   '_type': 'record', // eslint-disable-line camelcase
-                  '_id': 'user/user:id1', // eslint-disable-line camelcase
+                  '_recordType': 'user', // eslint-disable-line camelcase
+                  '_recordID': 'user:id1', // eslint-disable-line camelcase
                   '_access': null, // eslint-disable-line camelcase
                   'username': 'user1',
                   'email': 'user1@skygear.io'
@@ -53,7 +54,8 @@ describe('Cloud container', function () {
                 'access_token': 'uuid2',
                 'profile': {
                   '_type': 'record', // eslint-disable-line camelcase
-                  '_id': 'user/user:id2', // eslint-disable-line camelcase
+                  '_recordType': 'user', // eslint-disable-line camelcase
+                  '_recordID': 'user:id2', // eslint-disable-line camelcase
                   '_access': null, // eslint-disable-line camelcase
                   'username': 'user2',
                   'email': 'user2@skygear.io'
@@ -70,12 +72,16 @@ describe('Cloud container', function () {
       container1.auth.signupWithUsername('username', 'passwd'),
       container2.auth.signupAnonymously()
     ]);
+
     assert.equal(container1.auth.accessToken, 'uuid1');
     assert.instanceOf(container1.auth.currentUser, container1.UserRecord);
-    assert.equal(container1.auth.currentUser.id, 'user/user:id1');
+    assert.equal(container1.auth.currentUser.recordType, 'user');
+    assert.equal(container1.auth.currentUser.recordID, 'user:id1');
+
     assert.equal(container2.auth.accessToken, 'uuid2');
     assert.instanceOf(container2.auth.currentUser, container2.UserRecord);
-    assert.equal(container2.auth.currentUser.id, 'user/user:id2');
+    assert.equal(container2.auth.currentUser.recordType, 'user');
+    assert.equal(container2.auth.currentUser.recordID, 'user:id2');
   });
 });
 

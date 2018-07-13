@@ -14,51 +14,61 @@
  * limitations under the License.
  */
 /*eslint-disable no-new, no-unused-vars, quote-props */
-import {expect, assert} from 'chai';
+import {expect} from 'chai';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
-import {AccessLevel} from '../lib/acl';
 
 describe('Reference', function () {
-  let record = new Record('record', {_id: 'record/id'});
+  let record = new Record('record', {
+    _recordType: 'record',
+    _recordID: 'id'
+  });
   let ref = new Reference(record);
 
   it('constructs from Record', function () {
-    expect(ref.id).to.equal('record/id');
+    expect(ref.recordType).to.equal('record');
+    expect(ref.recordID).to.equal('id');
   });
 
   it('constructs from string', function () {
-    ref = new Reference('record/id');
-    expect(ref.id).to.equal('record/id');
+    ref = new Reference('record', 'id');
+    expect(ref.recordType).to.equal('record');
+    expect(ref.recordID).to.equal('id');
   });
 
   it('throws exception if object.id is empty', function () {
     let obj = {};
     expect(function () {
       new Reference(obj);
-    }).to.throw('Empty record id');
+    }).to.throw('Fail to construct a record reference');
 
     obj._id = '';
     expect(function () {
       new Reference(obj);
-    }).to.throw('Empty record id');
+    }).to.throw('Fail to construct a record reference');
   });
 
   it('serializes to JSON', function () {
     expect(ref.toJSON()).to.eql({
-      '$type': 'ref',
-      '$id': 'record/id'
+      $type: 'ref',
+      $id: 'record/id',
+      $recordType: 'record',
+      $recordID: 'id'
     });
   });
 
   it('serializes as a JSON field', function () {
     record.key = ref;
     expect(record.toJSON()).to.eql({
-      '_id': 'record/id',
-      '_access': null,
-      'key': {
-        '$type': 'ref',
-        '$id': 'record/id'
+      _id: 'record/id',
+      _recordType: 'record',
+      _recordID: 'id',
+      _access: null,
+      key: {
+        $type: 'ref',
+        $id: 'record/id',
+        $recordType: 'record',
+        $recordID: 'id'
       }
     });
   });

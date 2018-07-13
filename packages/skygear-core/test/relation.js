@@ -47,8 +47,14 @@ describe('Relation', function () {
 
   it('create with array of users', function () {
     let users = [
-      new UserRecord({_id: 'user/id1'}),
-      new UserRecord({_id: 'user/id2'})
+      new UserRecord({
+        _recordType: 'user',
+        _recordID: 'id1'
+      }),
+      new UserRecord({
+        _recordType: 'user',
+        _recordID: 'id2'
+      })
     ];
     let r = new Relation('follow', Outward, users);
     expect(r.targetsID).to.eql(['id1', 'id2']);
@@ -86,7 +92,8 @@ describe('RelationResult', function () {
       type: 'user',
       data: {
         _type: 'record',
-        _id: 'user/id1',
+        _recordType: 'user',
+        _recordID: 'id1',
         _access: null,
         username: 'user1'
       }
@@ -95,7 +102,8 @@ describe('RelationResult', function () {
       type: 'user',
       data: {
         _type: 'record',
-        _id: 'user/id2',
+        _recordType: 'user',
+        _recordID: 'id2',
         _access: null,
         username: 'user2'
       }
@@ -110,7 +118,8 @@ describe('RelationResult', function () {
       type: 'user',
       data: {
         _type: 'record',
-        _id: 'user/id1',
+        _recordType: 'user',
+        _recordID: 'id1',
         _access: null,
         username: 'user1'
       }
@@ -123,7 +132,8 @@ describe('RelationResult', function () {
     }]);
     let user1 = relationResult.success[0];
     expect(user1).to.be.instanceof(UserRecord);
-    expect(user1.id).eql('user/id1');
+    expect(user1.recordType).eql('user');
+    expect(user1.recordID).eql('id1');
     expect(relationResult.partialError).to.eql(true);
     expect(relationResult.fails).to.eql([{
       id: 'id2',
@@ -147,7 +157,8 @@ let request = mockSuperagent([{
           type: 'user',
           data: {
             _type: 'record',
-            _id: 'user/follower1',
+            _recordType: 'user',
+            _recordID: 'follower1',
             _access: null,
             username: 'follower1',
             email: 'follower1@skygear.io'
@@ -157,7 +168,8 @@ let request = mockSuperagent([{
           type: 'user',
           data: {
             _type: 'record',
-            _id: 'user/follower2',
+            _recordType: 'user',
+            _recordID: 'follower2',
             _access: null,
             username: 'follower2',
             email: 'follower2@skygear.io'
@@ -175,7 +187,8 @@ let request = mockSuperagent([{
           type: 'user',
           data: {
             _type: 'record',
-            _id: 'user/following1',
+            _recordType: 'user',
+            _recordID: 'following1',
             _access: null,
             username: 'following1',
             email: 'following1@skygear.io'
@@ -197,7 +210,8 @@ let request = mockSuperagent([{
           type: 'user',
           data: {
             _type: 'record',
-            _id: 'user/ben',
+            _recordType: 'user',
+            _recordID: 'ben',
             _access: null,
             username: 'ben-skygear',
             email: 'ben@skygear.io'
@@ -231,7 +245,8 @@ describe('RelationContainer', function () {
     const users = await relationAction.queryFollowing();
     expect(users.length).to.be.equal(1);
     expect(users[0]).to.be.instanceof(UserRecord);
-    expect(users[0].id).to.be.equal('user/following1');
+    expect(users[0].recordType).to.be.equal('user');
+    expect(users[0].recordID).to.be.equal('following1');
     expect(users.overallCount).to.be.equal(1);
   });
 
@@ -239,24 +254,28 @@ describe('RelationContainer', function () {
     const users = await relationAction.queryFollower();
     expect(users.length).to.be.equal(2);
     expect(users[0]).to.be.instanceof(UserRecord);
-    expect(users[0].id).to.be.equal('user/follower1');
+    expect(users[0].recordType).to.be.equal('user');
+    expect(users[0].recordID).to.be.equal('follower1');
     expect(users.overallCount).to.be.equal(24);
   });
 
   it('follow a user', async function () {
     let relation = new relationAction.Following([new UserRecord({
-      _id: 'user/ben'
+      _recordType: 'user',
+      _recordID: 'ben'
     })]);
     const result = await relationAction.add(relation);
     expect(result.success.length).to.be.equal(1);
     expect(result.success[0]).to.be.instanceof(UserRecord);
-    expect(result.success[0].id).to.be.equal('user/ben');
+    expect(result.success[0].recordType).to.be.equal('user');
+    expect(result.success[0].recordID).to.be.equal('ben');
     expect(result.fails.length).to.be.equal(0);
   });
 
   it('unfollow a user', async function () {
     let relation = new relationAction.Following([new UserRecord({
-      _id: 'user/ben'
+      _recordType: 'user',
+      _recordID: 'ben'
     })]);
     const result = await relationAction.remove(relation);
     console.log(result);

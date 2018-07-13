@@ -183,7 +183,8 @@ describe('CommonTransport', function () {
       name: 'beforeNote',
       param: {
         record: {
-          '_id': 'note/uuid'
+          '_recordType': 'note',
+          '_recordID': 'uuid'
         },
         original: null
       },
@@ -207,7 +208,9 @@ describe('CommonTransport', function () {
     expect(result).to.be.eql({
       result: {
         _access: null,
-        _id: 'note/uuid'
+        _id: 'note/uuid',
+        _recordType: 'note',
+        _recordID: 'uuid'
       }
     });
   });
