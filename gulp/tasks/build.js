@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var path = require('path');
-var gutil = require('gulp-util');
 var eslint = require('gulp-eslint');
 var excludeGitignore = require('gulp-exclude-gitignore');
 var nsp = require('gulp-nsp');
@@ -38,7 +37,7 @@ gulp.task('babel', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(packageConfig.src)
-      .pipe(preprocess({context: context[gutil.env.type]}))
+      .pipe(preprocess({context: context[config.deployEnv]}))
       .pipe(babel())
       .pipe(gulp.dest(packageConfig.dest));
   })

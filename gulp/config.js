@@ -1,18 +1,21 @@
-var gutil = require('gulp-util');
+var argv = require('minimist')(process.argv.slice(2));
 var preprocessify = require('preprocessify');
 
 var context = require('./context');
 var glob = require('glob');
 var path = require('path');
 
+var deployEnv = argv['deploy-env'] || 'production';
+
 module.exports = {
+  deployEnv: deployEnv,
   packages: './packages/*',
   srcInPackage: './lib/**/*.js',
   destInPackage: './dist',
   testInPackage: './test/**/*.js',
   browserify: {
     settings: {
-      transform: ['babelify', preprocessify(context[gutil.env.type])]
+      transform: ['babelify', preprocessify(context[deployEnv])]
     },
     standalone: {
       'skygear': 'skygear',
@@ -22,7 +25,7 @@ module.exports = {
     src: './lib/index.js',
     dest: './dist',
     outputName: 'bundle.js',
-    debug: gutil.env.type === 'dev'
+    debug: deployEnv === 'dev'
   },
   minified: {
     'skygear': 'skygear.min.js',
