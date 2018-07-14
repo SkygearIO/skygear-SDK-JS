@@ -1,11 +1,11 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var connect = require('gulp-connect');
 var merge = require('merge-stream');
+var log = require('fancy-log');
 
 var config = require('../config');
 var browserifyConfig = config.browserify;
@@ -32,7 +32,7 @@ function bundle() {
 
     return bundler.bundle()
     // log errors if they happen
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .on('error', log.error)
     .pipe(source(browserifyConfig.outputName))
     .pipe(gulp.dest(packageConfig.browserifyDest))
     .pipe(connect.reload());
