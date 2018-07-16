@@ -600,5 +600,16 @@ describe('Database', function () {
     expect(result[1]).to.be.undefined();
   });
 
+  it('rejects to delete records in multiple types', async function () {
+    const r1 = new Record('note', 'some-note-1');
+    const r2 = new Record('comment', 'some-comment-1');
+    try {
+      await db.delete([r1, r2]);
+      assert.fail('Should throw when deleting records in multiple types');
+    } catch (e) {
+      expect(e.message).to.equal('Cannot delete records in multiple types');
+    }
+  });
+
 });
 /*eslint-enable camelcase, dot-notation, no-new, quote-props */

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*eslint-disable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
+/*eslint-disable camelcase, dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
 import {expect} from 'chai';
 import Record, {isRecord} from '../lib/record';
 import Role from '../lib/role';
@@ -35,11 +35,48 @@ describe('Record', function () {
     );
   });
 
+  it('accepts providing record type and record ID', function () {
+    const r = new Record('note', {
+      _recordType: 'note',
+      _recordID: 'some-note-id'
+    });
+
+    expect(r.recordType).to.equal('note');
+    expect(r.recordID).to.equal('some-note-id');
+  });
+
+  it('accepts only providing record ID', function () {
+    const r = new Record('note', {
+      _recordID: 'some-note-id'
+    });
+
+    expect(r.recordType).to.equal('note');
+    expect(r.recordID).to.equal('some-note-id');
+  });
+
+  it('still accepts deprecated record ID', function () {
+    const r = new Record('note', {
+      _id: 'note/some-note-id'
+    });
+
+    expect(r.recordType).to.equal('note');
+    expect(r.recordID).to.equal('some-note-id');
+  });
+
+  it('ignores deprecated record ID when the one in format exists', function () {
+    const r = new Record('note', {
+      _recordID: 'some-note-id',
+      _id: 'note/some-old-note-id'
+    });
+
+    expect(r.recordType).to.equal('note');
+    expect(r.recordID).to.equal('some-note-id');
+  });
+
   it('handle falsy attrs', function () {
     let r = new Record('user', null);
     expect(r.recordType).to.equal('user');
     expect(v4Spec.test(r.recordID)).to.be.true();
-
 
     r = new Record('user', undefined);
     expect(r.recordType).to.equal('user');
@@ -218,7 +255,6 @@ describe('Extended Record', function () {
     expect(r.attributeKeys).to.not.include('_key');
   });
 
-  /* eslint-disable camelcase */
   it('serialize to payload', function () {
     let r = new Note({
       _recordType: 'note',
@@ -266,7 +302,6 @@ describe('Extended Record', function () {
       content: 'hello world'
     });
   });
-  /* eslint-enable camelcase */
 
   it('serialize to payload with date', function () {
     const note = new Note({
@@ -470,4 +505,4 @@ describe('Extended Record', function () {
     expect(note.access.toJSON()).to.be.eql([]);
   });
 });
-/*eslint-enable dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
+/*eslint-enable camelcase, dot-notation, max-len, new-cap, no-new, no-unused-vars, quote-props, quotes */
