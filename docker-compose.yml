@@ -44,6 +44,19 @@ services:
       SKYGEAR_ENDPOINT: http://app:3000
       HTTP: "true"
 
+  example:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+    - "5000:5000"
+    command: npm run example
+    volumes:
+    - .:/usr/src/app
+    environment:
+      SKYGEAR_ENDPOINT: http://localhost:3000/
+      SKYGEAR_API_KEY: changeme
+
   node:
     build:
       context: .
