@@ -212,12 +212,18 @@ export class BaseContainer {
     // the json for us.
     let body = getRespJSON(res);
 
-    if (err) {
-      let skyErr = body.error || err;
-      throw {
-        status: err.status,
-        error: skyErr
-      };
+    if (err && body.error) {
+      throw SkygearError.fromJSON(body.error);
+    } else if (err) {
+      let errorCode = ErrorCodes.UnknownError;
+      if (err.timedout) {
+        errorCode = ErrorCodes.RequestTimedOut;
+      } else if (err.crossDomain) {
+        errorCode = ErrorCodes.NetworkFailure;
+      }
+      const skyErr = new SkygearError(err.message, errorCode, null);
+      skyErr.innerError = err;
+      throw skyErr;
     } else {
       return body;
     }
@@ -548,7 +554,7 @@ export default class Container extends BaseContainer {
       return await super._handleResponse(err, res);
     } catch (innerError) {
       // Logout user implicitly if
-      let errorCode = innerError.error.code;
+      let errorCode = innerError.code;
       if (errorCode === this.ErrorCodes.AccessTokenNotAccepted) {
         await Promise.all([
           this.auth._setAccessToken(null),

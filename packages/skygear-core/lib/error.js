@@ -21,6 +21,10 @@ import _ from 'lodash';
  * @enum {number}
  */
 export const ErrorCodes = {
+  UnknownError: 1,
+  NetworkFailure: 5,
+  RequestTimedOut: 12,
+
   NotAuthenticated: 101,
   PermissionDenied: 102,
   AccessKeyNotAccepted: 103,
@@ -82,6 +86,7 @@ export class SkygearError extends Error {
     this.message = message;
     this.code = code || ErrorCodes.UnexpectedError;
     this.info = info || null;
+    this.innerError = null;
   }
 
   /**
@@ -187,10 +192,16 @@ export class SkygearError extends Error {
    * @return {SkyearError} the created SkyearError object
    */
   static fromJSON(attrs) {
-    return new SkygearError(
+    const skyErr = new SkygearError(
       attrs.message,
       attrs.code || ErrorCodes.UnexpectedError,
       attrs.info || null
     );
+    skyErr._name = attrs.name;
+    return skyErr;
+  }
+
+  get name() {
+    return this._name || codeToString(this.code);
   }
 }

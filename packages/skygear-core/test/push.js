@@ -275,7 +275,7 @@ describe('Container Push User', function () {
       );
       assert.fail('should fail');
     } catch (error) {
-      assert.equal(error.error.name, 'UnexpectedError');
+      assert.equal(error.name, 'UnexpectedError');
     }
   });
 });
@@ -395,7 +395,7 @@ describe('Container Push Device', function () {
       );
       assert.fail('should fail');
     } catch (error) {
-      assert.equal(error.error.name, 'UnexpectedError');
+      assert.equal(error.name, 'UnexpectedError');
     }
   });
 });

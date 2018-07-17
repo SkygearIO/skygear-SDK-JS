@@ -198,7 +198,7 @@
     };
     showErrorResult = function (error) {
       resultMessage.innerText = '';
-      errorMessage.innerText = error.error ? "[" + error.error.code + "] " + error.error.message : error;
+      errorMessage.innerText = error ? "[" + error.code + "] " + error.message : error;
     };
     getLoginRedirectResult = function () {
       var loginRedirectResult = document.getElementById("loginRedirectResult");

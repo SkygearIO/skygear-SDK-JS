@@ -357,7 +357,7 @@ describe('Container auth', function () {
         .signupWithUsername('duplicated', 'passwd');
       assert.fail('should fail');
     } catch (err) {
-      assert.equal(err.error.message, 'user duplicated');
+      assert.equal(err.message, 'user duplicated');
     }
   });
 
@@ -394,7 +394,7 @@ describe('Container auth', function () {
       assert.fail('should fail');
     } catch (err) {
       assert.equal(
-        err.error.message,
+        err.message,
         'invalid authentication information');
     }
   });
@@ -493,7 +493,7 @@ describe('Container auth', function () {
         .changePassword('supersecret', 'wrongsecret');
       assert.fail('should fail');
     } catch (error) {
-      assert.equal(error.error.message, 'invalid authentication information');
+      assert.equal(error.message, 'invalid authentication information');
     }
   });
 });

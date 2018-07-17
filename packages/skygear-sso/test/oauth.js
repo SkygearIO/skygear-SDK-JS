@@ -150,9 +150,8 @@ describe('SSO OAuth', function () {
       await container.auth.loginOAuthProviderWithPopup('provider', {});
       assert.fail('should fail');
     } catch (error) {
-      const err = error.error;
-      expect(err).not.be.null();
-      expect(err.message).eq('User cancel the login flow');
+      expect(error).not.be.null();
+      expect(error.message).eq('User cancel the login flow');
     }
   });
 
