@@ -566,7 +566,7 @@ async function makeUploadAssetRequest(container, asset) {
         try {
           const [code, message] = await parseS3XmlErrorMessage(err);
           reject(_s3ErrorToSkyError(code, message));
-        } catch {
+        } catch (_err) {
           reject(err);
         }
 
