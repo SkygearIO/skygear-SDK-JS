@@ -20,15 +20,6 @@
     "SDK",
     "skygear"
   ],
-  "scripts": {
-    "doc": "esdoc -c esdoc.json",
-    "dev": "gulp --type dev dev",
-    "minify": "gulp --type production minify",
-    "prepublish": "gulp --type production prepublish",
-    "test": "gulp --type dev",
-    "deploy": "gulp deploy --type production",
-    "deploy-latest": "gulp deploy --type production --latest"
-  },
   "license": "Apache-2.0",
   "dependencies": {
     "Base64": "^0.3.0",
