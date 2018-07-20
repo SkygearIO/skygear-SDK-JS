@@ -328,26 +328,19 @@ export class Database {
     const isArrayLike = _.isArray(attr) || isQueryResult;
     const records = isArrayLike ? attr : [attr];
 
-    const recordTypes = _.reduce(records, (acc, eachRecord) => {
-      acc.add(eachRecord.recordType);
-      return acc;
-    }, new Set());
-
-    if (recordTypes.size > 1) {
-      throw new Error('Cannot delete records in multiple types');
-    }
-
-    const recordType = records[0].recordType;
     const ids = _.map(
       records,
       perRecord => [perRecord.recordType, perRecord.recordID].join('/')
     );
-    const recordIDs = _.map(records, perRecord => perRecord.recordID);
+    const recordIdentifiers = _.map(records, perRecord => ({
+      _id: [perRecord.recordType, perRecord.recordID].join('/'),
+      _recordType: perRecord.recordType,
+      _recordID: perRecord.recordID
+    }));
     const payload = {
       database_id: this.dbID, //eslint-disable-line
-      ids,
-      recordType,
-      recordIDs
+      records: recordIdentifiers,
+      ids
     };
 
     const body = await this.container.makeRequest('record:delete', payload);
