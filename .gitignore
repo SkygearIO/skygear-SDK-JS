@@ -6,3 +6,4 @@ esdoc
 skygear-*.tgz
 npm-debug.log
 lerna-debug.log
+.nyc_output
