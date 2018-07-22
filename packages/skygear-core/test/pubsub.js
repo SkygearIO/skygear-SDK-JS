@@ -28,6 +28,7 @@ describe('Pubsub', function () {
   beforeEach(function () {
     container = new Container();
     container.pubsub.autoPubsub = false;
+    container.configEndPoint('http://skygear.dev/');
     container.configApiKey('API_KEY');
     pubsub = new Pubsub(container, true);
     ws = {
@@ -241,6 +242,7 @@ describe('Pubsub connection', function () {
   beforeEach(function () {
     container = new Container();
     container.pubsub.autoPubsub = false;
+    container.configEndPoint('http://skygear.dev/');
     container.configApiKey('API_KEY');
     pubsub = new Pubsub(container, false);
     internalPubsub = new Pubsub(container, true);
@@ -293,6 +295,7 @@ describe('Pubsub connection', function () {
   });
 
   it('call reconfigure without api_key', function () {
+    container.configEndPoint(null);
     container.configApiKey(null);
     var spy = sinon.spy(function () {
       return { };
@@ -307,6 +310,7 @@ describe('Pubsub connection', function () {
   });
 
   it('call connect without api_key', function () {
+    container.configEndPoint(null);
     container.configApiKey(null);
     var spy = sinon.spy();
     sinon.stub(pubsub, 'WebSocket', {

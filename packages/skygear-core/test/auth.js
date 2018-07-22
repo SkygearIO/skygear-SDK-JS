@@ -22,6 +22,7 @@ import mockSuperagent from './mock/superagent';
 describe('Container me', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/me',
@@ -229,6 +230,7 @@ describe('Container auth', function () {
       }
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
 
   it(
@@ -501,6 +503,7 @@ describe('Container auth', function () {
 describe('AuthContainer', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/disable/set',

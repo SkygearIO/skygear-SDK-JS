@@ -31,15 +31,6 @@ describe('Container', function () {
     expect(container.VERSION).to.not.be.empty();
   });
 
-  it('should have default end-point', function () {
-    let container = new Container();
-    container.pubsub.autoPubsub = false;
-    assert.equal(
-      container.endPoint,
-      'http://skygear.dev/',
-      'we expected default endpoint');
-  });
-
   it('should set end-point', function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
@@ -111,6 +102,7 @@ describe('Container', function () {
   it('should set the content type header', async function () {
     let container = new Container();
     container.pubsub.autoPubsub = false;
+    container.configEndPoint('http://skygear.dev/');
     container.configApiKey('correctApiKey');
     container.request = mockSuperagent([{
       pattern: 'http://skygear.dev/content/type',
@@ -134,6 +126,7 @@ describe('Container', function () {
     async function () {
       let container = new Container();
       container.pubsub.autoPubsub = false;
+      container.configEndPoint('http://skygear.dev/');
       container.configApiKey('correctApiKey');
       container.auth._accessToken = 'incorrectApiKey';
       container.request = mockSuperagent([{
@@ -182,6 +175,7 @@ describe('Container', function () {
 
 describe('Container role', function () {
   let container = new Container();
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/role/admin',
@@ -264,6 +258,7 @@ describe('Container role', function () {
 
 describe('Container acl', function () {
   let container = new Container();
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/schema/access',
@@ -370,6 +365,7 @@ describe('lambda', function () {
       }, 400);
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
 
   it('should call lambda correctly', async function () {

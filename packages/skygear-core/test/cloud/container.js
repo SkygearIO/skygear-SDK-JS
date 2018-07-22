@@ -63,6 +63,7 @@ describe('Cloud container', function () {
           }
         }
       }]);
+      container.configEndPoint('http://skygear.dev/');
       container.configApiKey('correctApiKey');
       container.pubsub.autoPubsub = false;
     }
