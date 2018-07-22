@@ -81,7 +81,7 @@
     "dev": "gulp --type dev dev",
     "minify": "gulp --type production minify",
     "postinstall": "lerna bootstrap",
-    "prepublish": "gulp --type production prepublish",
+    "prepare": "gulp --type production prepublish",
     "test": "gulp --type dev",
     "lerna": "lerna",
     "example": "gulp --type dev example"
