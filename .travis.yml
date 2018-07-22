@@ -1,60 +1,70 @@
-language: node_js
-install:
-  - npm install
+stages:
+  - test
+  - deploy
 
+refs:
+  - &common
+    language: node_js
+    cache:
+      directories:
+        - node_modules
+    before_install:
+      - npm i -g npm@6.2.0
+    install:
+      - make vendor
 
-services:
-  - docker
+jobs:
+  include:
+    # test
+    - <<: *common
+      stage: test
+      node_js: '6' 
+      script:
+        - make test
+    - <<: *common
+      stage: test
+      node_js: '8' 
+      script:
+        - make test
+    - <<: *common
+      stage: test
+      node_js: '10' 
+      script:
+        - make test
 
-cache:
-  directories:
-    - node_modules
-
-node_js:
-  - '10'
-  - '8'
-  - '6'
-
-before_install:
-  - npm i -g npm@6.2.0
-
-install:
-  - make vendor
-
-script:
-  - make test
-
-before_deploy:
-  - make update-version
-  - npm run lerna bootstrap
-  - npm run audit
-  - npm run lerna exec -- npm pack
-  - sudo pip install awscli
-
-deploy:
-  - provider: releases
-    api-key: "$GITHUB_RELEASE_TOKEN"
-    file:
-      - "skygear-*.tgz"
-    skip_cleanup: true
-    file_glob: true
-    on:
-      repo: SkygearIO/skygear-SDK-JS
-      tags: true
-      node_js: 8
-  - provider: script
-    script: scripts/deploy-example.sh
-    skip_cleanup: true
-    on:
-      branch: master
-      node_js: 8
-  - provider: script
-    script: scripts/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: SkygearIO/skygear-SDK-JS
-      all_branches: true
-      node_js: 8
+    # deploy
+    - <<: *common
+      if: type != pull_request
+      node_js: '8'
+      services:
+        - docker
+      before_deploy:
+        - make update-version
+        - npm run lerna bootstrap
+        - npm run audit
+        - npm run lerna exec -- npm pack
+        - sudo pip install awscli
+      deploy:
+        - provider: releases
+          api-key: "$GITHUB_RELEASE_TOKEN"
+          file:
+            - "skygear-*.tgz"
+          skip_cleanup: true
+          file_glob: true
+          on:
+            repo: SkygearIO/skygear-SDK-JS
+            tags: true
+        - provider: script
+          script: scripts/deploy-example.sh
+          skip_cleanup: true
+          on:
+            branch: master
+        - provider: script
+          script: scripts/deploy.sh
+          skip_cleanup: true
+          on:
+            repo: SkygearIO/skygear-SDK-JS
+            all_branches: true
 
 notifications:
   slack:
