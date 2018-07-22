@@ -1,0 +1,15 @@
+{
+  "reporter": [
+    "lcov",
+    "text",
+    "text-summary"
+  ],
+  "statements": 70,
+  "branches": 50,
+  "functions": 70,
+  "lines": 70,
+  "include": [
+    "packages/*/lib/*.js"
+  ]
+}
+
