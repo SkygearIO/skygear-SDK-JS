@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var path = require('path');
 var eslint = require('gulp-eslint');
 var excludeGitignore = require('gulp-exclude-gitignore');
-var nsp = require('gulp-nsp');
 var babel = require('gulp-babel');
 var preprocess = require('gulp-preprocess');
 var uglify = require('gulp-uglify')
@@ -29,10 +28,6 @@ gulp.task('default', ['test'], function () {
   return merge(streams);
 });
 
-gulp.task('nsp', function (cb) {
-  nsp({package: __dirname + '/../../package.json'}, cb);
-});
-
 gulp.task('babel', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
@@ -52,7 +47,7 @@ gulp.task('watch', ['browserify', 'babel'], function() {
   gulp.watch(packagesSrc, ['browserify', 'babel']);
 });
 
-gulp.task('prepublish', ['nsp', 'babel', 'browserify', 'minify']);
+gulp.task('prepublish', ['babel', 'browserify', 'minify']);
 gulp.task('dev', ['watch']);
 
 gulp.task('minify', ['browserify'], function() {
