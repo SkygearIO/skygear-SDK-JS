@@ -226,6 +226,7 @@ describe('Database', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
   container.request = request;
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   let db = new PublicDatabase('_public', container);
   let Note = Record.extend('note');
@@ -298,6 +299,7 @@ describe('Database', function () {
     let localContainer = new Container();
     localContainer.autoPubsub = false;
     localContainer.request = request;
+    localContainer.configEndPoint('http://skygear.dev/');
     localContainer.configApiKey('correctApiKey');
 
     let mockDB = new Database('_public', localContainer);
@@ -316,6 +318,7 @@ describe('Database', function () {
     localContainer.autoPubsub = false;
     localContainer.request = request;
     localContainer.configApiKey('correctApiKey');
+    localContainer.configEndPoint('http://skygear.dev/');
 
     let mockDB = new Database('_public', localContainer);
 

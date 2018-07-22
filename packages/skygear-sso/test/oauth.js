@@ -66,6 +66,7 @@ describe('SSO OAuth', function () {
       });
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   injectToContainer(container);
 

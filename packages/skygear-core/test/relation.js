@@ -224,6 +224,7 @@ describe('RelationContainer', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
   container.request = request;
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   let relationAction = new RelationContainer(container);
 

@@ -39,8 +39,8 @@ gulp.task('test', gulp.series('pre-test', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(packageConfig.test)
-      .pipe(babel())
       .pipe(mocha({
+        require: ['@babel/register', './test/chai-setup'],
         reporter: 'spec',
         quiet: false
       }))

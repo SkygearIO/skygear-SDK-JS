@@ -41,6 +41,7 @@ describe('SSO Custom Token', function () {
       });
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   injectToContainer(container);
 

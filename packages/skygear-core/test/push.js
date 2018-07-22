@@ -55,6 +55,7 @@ describe('Container device registration', function () {
       }
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
 
   it(
@@ -104,6 +105,7 @@ describe('Container device registration', function () {
 describe('Container device unregistration', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/unregister',
@@ -188,6 +190,7 @@ describe('Container Push User', function () {
       });
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
 
   it('should send push to user', async function () {
@@ -308,6 +311,7 @@ describe('Container Push Device', function () {
       });
     }
   }]);
+  container.configEndPoint('http://skygear.dev/');
   container.configApiKey('correctApiKey');
 
   it('should send push to device', async function () {
