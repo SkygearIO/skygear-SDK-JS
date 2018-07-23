@@ -61,7 +61,6 @@
     "gulp-babel": "^8.0.0-beta.2",
     "gulp-concat": "^2.6.1",
     "gulp-connect": "^5.5.0",
-    "gulp-eslint": "^5.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^6.0.0",
@@ -96,7 +95,8 @@
     "lerna": "lerna",
     "example": "gulp --deploy-env dev example",
     "npm-install": "lerna exec -- npm install",
-    "audit": "lerna exec -- npm audit"
+    "audit": "lerna exec -- npm audit",
+    "lint": "eslint ."
   },
   "bin": {
     "skygear-node": "./bin.js",
