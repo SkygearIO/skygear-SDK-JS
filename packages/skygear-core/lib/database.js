@@ -18,7 +18,7 @@ import xml2js from 'xml2js';
 
 import Cache from './cache';
 import Asset, {isAsset} from './asset';
-import {isRecord} from './record';
+import Record, { isRecord } from './record'; // eslint-disable-line no-unused-vars
 import Query from './query';
 import QueryResult from './query_result';
 import {isValueType} from './util';
@@ -232,17 +232,6 @@ export class Database {
   }
 
   /**
-   * Same as {@link Database#delete}.
-   *
-   * @param  {Record|Record[]|QueryResult} record - the record(s) to delete
-   * @return {Promise<Record>} promise with the delete result
-   * @see {@link Database#delete}
-   */
-  async del(record) {
-    return this.delete(record);
-  }
-
-  /**
    * Saves a record or records to Skygear.
    *
    * Use this method to save a record or records to Skygear.
@@ -317,21 +306,36 @@ export class Database {
   }
 
   /**
-   * Deletes a record or records to Skygear.
-   *
-   * Use this method to delete a record or records to Skygear.
-   * The delete will be performed asynchronously and the returned promise will
-   * be resolved when the operation completes.
-   *
-   * @param  {Record|Record[]|QueryResult} obj - the records to delete
-   * @return {Promise} promise
+   * @private
    */
-  async delete(obj) {
-    const isQueryResult = obj instanceof QueryResult;
-    const isArrayLike = _.isArray(obj) || isQueryResult;
-    const records = isArrayLike ? obj : [obj];
+  async _deleteByIDs(type, ids, atomic = true) {
+    const deprecatedIDs = _.map(
+      ids,
+      eachID => [type, eachID].join('/')
+    );
+    const recordIdentifiers = _.map(
+      ids,
+      eachID => ({
+        _id: [type, eachID].join('/'),
+        _recordType: type,
+        _recordID: eachID
+      })
+    );
+    const payload = {
+      database_id: this.dbID, //eslint-disable-line
+      records: recordIdentifiers,
+      ids: deprecatedIDs,
+      atomic
+    };
 
-    const ids = _.map(
+    return await this.container.makeRequest('record:delete', payload);
+  }
+
+  /**
+   * @private
+   */
+  async _delete(records, atomic = true) {
+    const deprecatedIDs = _.map(
       records,
       perRecord => [perRecord.recordType, perRecord.recordID].join('/')
     );
@@ -342,28 +346,254 @@ export class Database {
     const payload = {
       database_id: this.dbID, //eslint-disable-line
       records: recordIdentifiers,
-      ids
+      ids: deprecatedIDs,
+      atomic
     };
 
-    const body = await this.container.makeRequest('record:delete', payload);
-    let results = body.result;
-    let errors = [];
+    return await this.container.makeRequest('record:delete', payload);
+  }
 
-    _.forEach(results, (perResult, idx) => {
-      if (perResult._type === 'error') {
-        errors[idx] = perResult;
-      } else {
-        errors[idx] = undefined;
-      }
-    });
-
-    if (records.length === 1) {
-      if (errors[0]) {
-        throw errors[0];
-      }
-      return;
+  /**
+   * Delete a record specified by the type and the ID
+   *
+   * @param {String} type - the record type
+   * @param {String} id - the record ID
+   * @return {Promise<String>} a promise of the deleted record ID
+   */
+  async deleteRecordByID(type, id) {
+    let body;
+    try {
+      body = await this._deleteByIDs(type, [id]);
+    } catch (atomicError) {
+      const deprecatedID = [type, id].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
     }
-    return errors;
+
+    const result = body.result[0];
+    return result._recordID || this._Record.parseDeprecatedID(result._id)[1];
+  }
+
+  /**
+   * Delete records specified by the type and their IDs
+   *
+   * This method deletes records in the same type. To delete records in
+   * multiple types, try to use {@link Database#deleteRecords}
+   *
+   * @param {String} type - the type of the records
+   * @param {String[]} id - the IDs of the records
+   * @return {Promise<String[]>} a promise of the deleted record IDs
+   */
+  async deleteRecordsByID(type, ids) {
+    const body = await this._deleteByIDs(type, ids);
+    const resultIDs = _.map(
+      body.result,
+      (eachResult) =>
+        eachResult._recordID ||
+        this._Record.parseDeprecatedID(eachResult._id)[1]
+    );
+    return resultIDs;
+  }
+
+  /**
+   * Delete a record from Skygear
+   *
+   * After deleting a record, the return one would have the property
+   * `deleted` set to `true`.
+   *
+   * @param {Record} record - the record
+   * @return {Promise<Record>} a promise of the deleted record
+   */
+  async deleteRecord(record) {
+    let body;
+    try {
+      body = await this._delete([record]);
+    } catch (atomicError) {
+      const deprecatedID = [record.recordType, record.recordID].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
+    }
+
+    const result = body.result[0];
+    if (
+      !record._recordType &&
+      !record._recordID &&
+      !record._id
+    ) {
+      throw new SkygearError('Received malformed server response');
+    }
+
+    let foundRecord;
+
+    if (
+        result._recordType === record.recordType &&
+        result._recordID === record.recordID ||
+        result._id === [record.recordType, record.recordID].join('/')
+    ) {
+      foundRecord = record;
+    }
+
+    if (!foundRecord) {
+      throw new SkygearError('Received unknown record');
+    }
+
+    return this._Record.fromJSON({
+      ...foundRecord.toJSON(),
+      _deleted: true
+    });
+  }
+
+  /**
+   * Delete records from Skygear
+   *
+   * After deleting the records, the return ones would have the property
+   * `deleted` set to `true`.
+   *
+   * @param {Record[] | QueryResult} records - the records
+   * @return {Promise<Record[]>} a promise of the deleted records
+   */
+  async deleteRecords(records) {
+    const recordMap = _.reduce(
+      records,
+      (acc, eachRecord) => {
+        const deprecatedID = [
+          eachRecord.recordType,
+          eachRecord.recordID
+        ].join('/');
+
+        acc[deprecatedID] = eachRecord;
+        return acc;
+      },
+      {}
+    );
+    const body = await this._delete(records);
+    const resultRecords = _.map(
+      body.result,
+      eachResult => {
+        let foundRecord;
+        if (eachResult._recordType && eachResult._recordID) {
+          const deprecatedID = [
+            eachResult._recordType,
+            eachResult._recordID
+          ].join('/');
+
+          foundRecord = recordMap[deprecatedID];
+        } else if (eachResult._id) {
+          foundRecord = recordMap[eachResult._id];
+        } else {
+          throw new SkygearError('Received malformed server response');
+        }
+
+        if (!foundRecord) {
+          throw new SkygearError('Received unknown record');
+        }
+
+        return this._Record.fromJSON({
+          ...foundRecord.toJSON(),
+          _deleted: true
+        });
+      }
+    );
+
+    return resultRecords;
+  }
+
+  /**
+   * Delete records specified by the type and their IDs non-atomicallly
+   *
+   * @typedef {String | Error} NonAtomicDeleteByIDResult
+   *
+   * @param {String} type - the type of the records
+   * @param {String[]} id - the IDs of the records
+   * @return {Promise<NonAtomicDeleteByIDResult[]>} a promise of the deletion result
+   */
+  async deleteRecordsByIDNonAtomically(type, ids) {
+    const body = await this._deleteByIDs(type, ids, false);
+    const deletionResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          return (
+            eachResult._recordID ||
+            this._Record.parseDeprecatedID(eachResult._id)[1]
+          );
+        }
+
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
+
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
+      }
+    );
+    return deletionResult;
+  }
+
+  /**
+   * Delete records from Skygear non-atomicallly
+   *
+   * After deleting the records, the return ones would have the property
+   * `deleted` set to `true`.
+   *
+   * @typedef {Record | Error} NonAtomicDeleteResult
+   *
+   * @param {Record[] | QueryResult} records - the records
+   * @return {Promise<NonAtomicDeleteResult[]>} a promise of the deletion result
+   */
+  async deleteRecordsNonAtomically(records) {
+    const recordMap = _.reduce(
+      records,
+      (acc, eachRecord) => {
+        const deprecatedID = [
+          eachRecord.recordType,
+          eachRecord.recordID
+        ].join('/');
+
+        acc[deprecatedID] = eachRecord;
+        return acc;
+      },
+      {}
+    );
+
+    const body = await this._delete(records, false);
+    const deletionResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          let foundRecord;
+          if (eachResult._recordType && eachResult._recordID) {
+            const deprecatedID = [
+              eachResult._recordType,
+              eachResult._recordID
+            ].join('/');
+
+            foundRecord = recordMap[deprecatedID];
+          } else if (eachResult._id) {
+            foundRecord = recordMap[eachResult._id];
+          } else {
+            throw new SkygearError('Received malformed server response');
+          }
+
+          if (!foundRecord) {
+            return new SkygearError('Received unknown record');
+          }
+
+          return this._Record.fromJSON({
+            ...foundRecord.toJSON(),
+            _deleted: true
+          });
+        }
+
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
+
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
+      }
+    );
+    return deletionResult;
   }
 
   /**
