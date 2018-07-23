@@ -12,6 +12,7 @@ refs:
       - npm i -g npm@6.2.0
     install:
       - make vendor
+      - npm run audit
 
 jobs:
   include:
@@ -41,7 +42,6 @@ jobs:
       before_deploy:
         - make update-version
         - npm run lerna bootstrap
-        - npm run audit
         - npm run lerna exec -- npm pack
         - sudo pip install awscli
       deploy:
