@@ -15,7 +15,7 @@ require('./browserify');
 gulp.task('babel', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
-    return gulp.src(packageConfig.src)
+    return gulp.src([packageConfig.jsSrc, packageConfig.tsSrc])
       .pipe(preprocess({context: context[config.deployEnv]}))
       .pipe(babel())
       .pipe(gulp.dest(packageConfig.dest));
@@ -26,7 +26,7 @@ gulp.task('babel', function () {
 gulp.task('watch', gulp.series('browserify', 'babel', function() {
   var packageConfigs = config.getPackageConfigs();
   var packagesSrc = packageConfigs.map(function(config) {
-    return config.src;
+    return [config.jsSrc, config.tsSrc];
   });
   gulp.watch(packagesSrc, ['browserify', 'babel']);
 }));

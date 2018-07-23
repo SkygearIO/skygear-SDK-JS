@@ -6,7 +6,8 @@ module.exports = function (api) {
       "@babel/react",
       ["@babel/stage-2", {
         "decoratorsLegacy": true
-      }]
+      }],
+      "@babel/typescript"
     ],
     "plugins": [
       "add-module-exports",

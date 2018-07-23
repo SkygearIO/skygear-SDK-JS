@@ -10,9 +10,11 @@ var deployEnv = argv['deploy-env'] || 'production';
 module.exports = {
   deployEnv: deployEnv,
   packages: './packages/*',
-  srcInPackage: './lib/**/*.js',
+  jsSrcInPackage: './lib/**/*.js',
+  tsSrcInPackage: './lib/**/*.ts',
   destInPackage: './dist',
-  testInPackage: './test/**/*.js',
+  jsTestInPackage: './test/**/*.js',
+  tsTestInPackage: './test/**/*.ts',
   browserify: {
     settings: {
       transform: ['babelify', preprocessify(context[deployEnv])]
@@ -39,9 +41,11 @@ module.exports = {
       var basename = path.basename(packagePath);
       return {
         path: packagePath,
-        src: path.join(packagePath, this.srcInPackage),
+        jsSrc: path.join(packagePath, this.jsSrcInPackage),
+        tsSrc: path.join(packagePath, this.tsSrcInPackage),
         dest: path.join(packagePath, this.destInPackage),
-        test: path.join(packagePath, this.testInPackage),
+        jsTest: path.join(packagePath, this.jsTestInPackage),
+        tsTest: path.join(packagePath, this.tsTestInPackage),
         standalone: this.browserify.standalone[basename] || 'skygear',
         browserifySrc: path.join(packagePath, this.browserify.src),
         browserifyDest: path.join(packagePath, this.browserify.dest),

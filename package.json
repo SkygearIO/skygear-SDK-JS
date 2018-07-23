@@ -31,6 +31,7 @@
     "@babel/preset-env": "^7.0.0-beta.53",
     "@babel/preset-react": "^7.0.0-beta.53",
     "@babel/preset-stage-2": "^7.0.0-beta.53",
+    "@babel/preset-typescript": "^7.0.0-beta.53",
     "@babel/register": "^7.0.0-beta.53",
     "@babel/runtime": "^7.0.0-beta.53",
     "babel-eslint": "^8.2.6",
@@ -78,6 +79,7 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "superagent": "^3.8.3",
+    "typescript": "^2.9.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.3.1"
