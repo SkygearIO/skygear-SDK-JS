@@ -67,6 +67,12 @@ const _metaAttrs = {
     },
     newKey: 'updatedBy'
   },
+  _deleted: {
+    parser: (v) => {
+      return JSON.parse(v);
+    },
+    newKey: 'deleted'
+  },
   _access: {
     parser: (v) => {
       let acl = v;
@@ -255,8 +261,11 @@ export default class Record {
           this[key] = value;
         }
       } else if (key in _metaAttrs) {
-        let meta = _metaAttrs[key];
-        this[meta.newKey] = meta.parser(value);
+        const meta = _metaAttrs[key];
+        const parser = meta.parser;
+        if (parser) {
+          this[meta.newKey] = parser(value);
+        }
       }
     });
   }
@@ -424,7 +433,10 @@ export default class Record {
       }
       if (key in _metaKeys) {
         const meta = _metaAttrs[_metaKeys[key]];
-        payload[_metaKeys[key]] = meta.stringify(value);
+        const stringify = meta.stringify;
+        if (stringify) {
+          payload[_metaKeys[key]] = stringify(value);
+        }
       } else {
         payload[key] = toJSON(value);
       }
