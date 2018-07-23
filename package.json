@@ -79,6 +79,7 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "superagent": "^3.8.3",
+    "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
@@ -95,7 +96,7 @@
     "example": "gulp --deploy-env dev example",
     "npm-install": "lerna exec -- npm install",
     "audit": "lerna exec -- npm audit",
-    "lint": "eslint ."
+    "lint": "eslint . && tslint -p ."
   },
   "bin": {
     "skygear-node": "./bin.js",
