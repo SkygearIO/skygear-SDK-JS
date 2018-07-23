@@ -1,0 +1,5 @@
+/**/*.js
+!/packages/*/lib/**/*.js
+!/packages/*/test/**/*.js
+node_modules
+dist
