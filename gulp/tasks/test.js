@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 var babel = require('gulp-babel');
@@ -23,7 +22,7 @@ gulp.task('pre-test', function () {
   var packageConfigs = config.getPackageConfigs();
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(packageConfig.src)
-      .pipe(preprocess({context: context[gutil.env.type]}))
+      .pipe(preprocess({context: context[config.deployEnv]}))
       .pipe(istanbul({
         includeUntested: true,
         instrumenter: isparta.Instrumenter

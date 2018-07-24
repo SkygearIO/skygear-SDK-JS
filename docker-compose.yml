@@ -49,6 +49,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     command: npm run dev
+    user: node
     volumes:
     - .:/usr/src/app
 

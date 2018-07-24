@@ -23,9 +23,5 @@
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
   },
-  "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",
-  "devDependencies": {
-    "hoek": "^5.0.3",
-    "mock-browser": "^0.92.14"
-  }
+  "homepage": "https://github.com/SkygearIO/skygear-SDK-JS"
 }
