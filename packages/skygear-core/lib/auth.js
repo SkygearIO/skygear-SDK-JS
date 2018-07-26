@@ -17,8 +17,11 @@ import _ from 'lodash';
 
 import {EventHandle, toJSON} from './util';
 import {ErrorCodes} from './error';
-import {isRecord} from './record';
-import Role, {isRole} from './role';
+import Role from './role';
+import {
+  getUserIDFromParams,
+  getRoleNameFromParams
+} from './util';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -248,21 +251,7 @@ export class AuthContainer {
    * @return {Promise<String>} promise with target user ID
    */
   async adminResetPassword(userOrUserID, newPassword) {
-    const userID = ((_userOrUserID) => {
-      if (isRecord(_userOrUserID)) {
-        return _userOrUserID.recordID;
-      }
-
-      const type = typeof _userOrUserID;
-      if (type === 'string') {
-        return _userOrUserID;
-      }
-
-      throw new Error(
-        `Unknown type "${type}" to represent a user for reset password`
-      );
-    })(userOrUserID);
-
+    const userID = getUserIDFromParams(userOrUserID);
     await this.container.makeRequest('auth:reset_password', {
       auth_id: userID, // eslint-disable-line camelcase
       password: newPassword
@@ -312,19 +301,7 @@ export class AuthContainer {
    * @return {Promise<Object>} promise with userID-to-roles map
    */
   async fetchUserRole(usersOrUserIDs) {
-    const userIDs = _.map(usersOrUserIDs, function (perUserOrUserID) {
-      if (isRecord(perUserOrUserID)) {
-        return perUserOrUserID.recordID;
-      }
-
-      const type = typeof perUserOrUserID;
-      if (type === 'string') {
-        return perUserOrUserID;
-      }
-
-      throw new Error(`Unknown type "${type}" for fetching role`);
-    });
-
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const body = await this.container.makeRequest('role:get', {
       users: userIDs
     });
@@ -343,34 +320,11 @@ export class AuthContainer {
    * @param  {Record[]|String[]} usersOrUserIDs - target users or user IDs
    * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
    *                                              to be assigned
-   * @return {Promise<String[]>} proimse with the target user IDs
+   * @return {Promise<String[]>} promise with the target user IDs
    */
   async assignUserRole(usersOrUserIDs, rolesOrRoleNames) {
-    const userIDs = _.map(usersOrUserIDs, function (perUserOrUserID) {
-      if (isRecord(perUserOrUserID)) {
-        return perUserOrUserID.recordID;
-      }
-
-      const type = typeof perUserOrUserID;
-      if (type === 'string') {
-        return perUserOrUserID;
-      }
-
-      throw new Error(`Unknown type "${type}" being assgined role to`);
-    });
-
-    const roleNames = _.map(rolesOrRoleNames, function (perRoleOrRoleName) {
-      if (isRole(perRoleOrRoleName)) {
-        return perRoleOrRoleName.name;
-      }
-
-      const type = typeof perRoleOrRoleName;
-      if (type === 'string') {
-        return perRoleOrRoleName;
-      }
-
-      throw new Error(`Unknown type "${type}" to represent a role`);
-    });
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
+    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
     const body = await this.container.makeRequest('role:assign', {
       users: userIDs,
@@ -389,31 +343,8 @@ export class AuthContainer {
    * @return {Promise<String[]>} promise with target user IDs
    */
   async revokeUserRole(usersOrUserIDs, rolesOrRoleNames) {
-    const userIDs = _.map(usersOrUserIDs, function (perUserOrUserID) {
-      if (isRecord(perUserOrUserID)) {
-        return perUserOrUserID.recordID;
-      }
-
-      const type = typeof perUserOrUserID;
-      if (type === 'string') {
-        return perUserOrUserID;
-      }
-
-      throw new Error(`Unknown type "${type}" being revoke role from`);
-    });
-
-    const roleNames = _.map(rolesOrRoleNames, function (perRoleOrRoleName) {
-      if (isRole(perRoleOrRoleName)) {
-        return perRoleOrRoleName.name;
-      }
-
-      const type = typeof perRoleOrRoleName;
-      if (type === 'string') {
-        return perRoleOrRoleName;
-      }
-
-      throw new Error(`Unknown type "${type}" to represent a role`);
-    });
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
+    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
     const body = await this.container.makeRequest('role:revoke', {
       users: userIDs,
@@ -432,21 +363,7 @@ export class AuthContainer {
    * @return {Promise<String>} promise with target user ID
    */
   async adminEnableUser(userOrUserID) {
-    const userID = ((_userOrUserID) => {
-      if (isRecord(_userOrUserID)) {
-        return _userOrUserID.recordID;
-      }
-
-      const type = typeof _userOrUserID;
-      if (type === 'string') {
-        return _userOrUserID;
-      }
-
-      throw new Error(
-        `Unknown type "${type}" to represent a user being enabled`
-      );
-    })(userOrUserID);
-
+    const userID = getUserIDFromParams(userOrUserID);
     await this.container.makeRequest('auth:disable:set', {
       auth_id: userID, // eslint-disable-line camelcase
       disabled: false
@@ -467,20 +384,7 @@ export class AuthContainer {
    * @return {Promise<String>} promise with target user ID
    */
   async adminDisableUser(userOrUserID, message, expiry) {
-    const userID = ((_userOrUserID) => {
-      if (isRecord(_userOrUserID)) {
-        return _userOrUserID.recordID;
-      }
-
-      const type = typeof _userOrUserID;
-      if (type === 'string') {
-        return _userOrUserID;
-      }
-
-      throw new Error(
-        `Unknown type "${type}" to represent a user being disabled`
-      );
-    })(userOrUserID);
+    const userID = getUserIDFromParams(userOrUserID);
 
     let payload = {
       auth_id: userID, // eslint-disable-line camelcase

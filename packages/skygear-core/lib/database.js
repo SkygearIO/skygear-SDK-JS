@@ -320,20 +320,19 @@ export class Database {
    * The delete will be performed asynchronously and the returned promise will
    * be resolved when the operation completes.
    *
-   * @param  {Record|Record[]|QueryResult} attr - the records to delete
+   * @param  {Record|Record[]|QueryResult} obj - the records to delete
    * @return {Promise} promise
    */
-  async delete(attr) {
-    const isQueryResult = attr instanceof QueryResult;
-    const isArrayLike = _.isArray(attr) || isQueryResult;
-    const records = isArrayLike ? attr : [attr];
+  async delete(obj) {
+    const isQueryResult = obj instanceof QueryResult;
+    const isArrayLike = _.isArray(obj) || isQueryResult;
+    const records = isArrayLike ? obj : [obj];
 
     const ids = _.map(
       records,
       perRecord => [perRecord.recordType, perRecord.recordID].join('/')
     );
     const recordIdentifiers = _.map(records, perRecord => ({
-      _id: [perRecord.recordType, perRecord.recordID].join('/'),
       _recordType: perRecord.recordType,
       _recordID: perRecord.recordID
     }));
