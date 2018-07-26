@@ -18,6 +18,7 @@ import _ from 'lodash';
 import {toJSON, fromJSON} from './util';
 import ACL from './acl';
 import Role from './role'; // eslint-disable-line no-unused-vars
+import { SkygearError, ErrorCodes } from './error';
 
 const _metaAttrs = {
   _created_at: { //eslint-disable-line
@@ -112,8 +113,10 @@ export default class Record {
     }
 
     if (_recordType && _recordType !== recordType) {
-      throw new Error(
-        '_recordType in attributes does not match the constructor recordType'
+      throw new SkygearError(
+        `_recordType ${_recordType} in attributes does not match ` +
+        `the constructor recordType ${recordType}`,
+        ErrorCodes.InvalidArgument
       );
     }
 

@@ -192,7 +192,8 @@ describe('Extended Record', function () {
         _recordID: '2'
       });
     }).to.throw(
-      '_recordType in attributes does not match the constructor recordType'
+      '_recordType box in attributes does not match ' +
+      'the constructor recordType note'
     );
   });
 
@@ -214,7 +215,8 @@ describe('Extended Record', function () {
     expect(function () {
       let r = new Note(e);
     }).to.throw(
-      '_recordType in attributes does not match the constructor recordType'
+      '_recordType memo in attributes does not match ' +
+      'the constructor recordType note'
     );
   });
 

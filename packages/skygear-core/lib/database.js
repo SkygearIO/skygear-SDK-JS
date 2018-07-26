@@ -95,7 +95,10 @@ export class Database {
     if (records.length === 1) {
       return records[0];
     } else {
-      throw new Error(`Cannot find ${recordType} record with ID ${recordID}`);
+      throw new SkygearError(
+        `Cannot find ${recordType} record with ID ${recordID}`,
+        ErrorCodes.ResourceNotFound
+      );
     }
   }
 
