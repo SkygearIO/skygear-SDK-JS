@@ -19,6 +19,7 @@ import {toJSON, fromJSON} from './util';
 import ACL from './acl';
 import Role from './role'; // eslint-disable-line no-unused-vars
 import { SkygearError, ErrorCodes } from './error';
+import deprecate from 'util-deprecate';
 
 const _metaAttrs = {
   _created_at: { //eslint-disable-line
@@ -147,6 +148,17 @@ export default class Record {
   }
 
   /**
+   * @private
+   */
+  get getDeprecatedID() {
+    return deprecate(
+      () => [this.recordType, this.recordID].join('/'),
+      'A deprecated record ID representation, i.e. `record.id`, is accessed. ' +
+        'This will not be supported in the coming version.'
+    );
+  }
+
+  /**
    * ID of the record in the deprecated format (i.e. `type/id`).
    *
    * @type {String}
@@ -154,11 +166,7 @@ export default class Record {
    * @deprecated Use `recordType` and `recordID` instead.
    */
   get id() {
-    console.warn(
-      'A deprecated record ID representation, i.e. `record.id`, is accessed. ' +
-      'This will not be supported in the coming version.'
-    );
-    return [this.recordType, this.recordID].join('/');
+    return this.getDeprecatedID();
   }
 
   /**
@@ -460,20 +468,22 @@ export default class Record {
   /**
    * @private
    */
-  static parseDeprecatedID(deprecatedID) {
-    const tuple = deprecatedID.split('/');
-    if (tuple.length < 2) {
-      throw new Error(
-        'Fail to parse the deprected ID. ' +
-        'Make sure the ID is in the format `type/id`'
-      );
-    }
+  static get parseDeprecatedID() {
+    return deprecate(
+      (deprecatedID) => {
+        const tuple = deprecatedID.split('/');
+        if (tuple.length < 2) {
+          throw new Error(
+            'Fail to parse the deprected ID. ' +
+            'Make sure the ID is in the format `type/id`'
+          );
+        }
 
-    console.warn(
+        return [tuple[0], tuple.slice(1).join('/')];
+      },
       'A deprecated record ID representation is used. ' +
-      'This will not be supported in the coming version.'
+        'This will not be supported in the coming version.'
     );
-    return [tuple[0], tuple.slice(1).join('/')];
   }
 
   /**
