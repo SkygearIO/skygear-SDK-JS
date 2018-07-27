@@ -65,7 +65,7 @@
     "gulp-uglify": "^1.5.3",
     "hoek": "^5.0.3",
     "isparta": "^4.0.0",
-    "lerna": "^3.0.0-beta.21",
+    "lerna": "^3.0.0-rc.0",
     "merge-stream": "^1.0.1",
     "minimist": "^1.2.0",
     "mock-browser": "^0.92.14",
