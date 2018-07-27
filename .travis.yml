@@ -41,7 +41,7 @@ jobs:
         - docker
       before_deploy:
         - make update-version
-        - npm run lerna bootstrap
+        - npm run build-production
         - npm run lerna exec -- npm pack
         - sudo pip install awscli
       deploy:
