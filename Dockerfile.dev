@@ -5,6 +5,8 @@ RUN \
     mv tini /usr/local/bin/tini && \
     chmod +x /usr/local/bin/tini
 
+RUN npm install -g npm@6.2.0
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
