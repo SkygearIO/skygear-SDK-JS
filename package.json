@@ -87,7 +87,7 @@
     "lerna-bootstrap": "npm run lerna-bootstrap-core && npm run lerna-bootstrap-others",
     "lerna-bootstrap-core": "lerna --scope skygear-core bootstrap",
     "lerna-bootstrap-others": "lerna --ignore skygear-core bootstrap",
-    "build-production": "gulp --deploy-env production prepublish",
+    "build-production": "gulp --deploy-env production babel && gulp --deploy-env production minify",
     "test": "gulp --deploy-env dev",
     "lerna": "lerna",
     "example": "gulp --deploy-env dev example",
