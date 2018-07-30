@@ -17,12 +17,13 @@
 import {expect, assert} from 'chai';
 import sinon from 'sinon';
 import {Database, PublicDatabase} from '../lib/database';
-import Record from '../lib/record';
+import Record, { isRecord } from '../lib/record';
 import QueryResult from '../lib/query_result';
 import Query from '../lib/query';
 import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
+import { ErrorCodes, SkygearError } from '../lib/error';
 
 let request = mockSuperagent([{
   pattern: 'http://skygear.dev/record/query',
@@ -181,16 +182,38 @@ let request = mockSuperagent([{
 }, {
   pattern: 'http://skygear.dev/record/delete',
   fixtures: function (match, params, headers, fn) {
-    let recordIds = params['ids'];
-    if (params['database_id'] === '_public' && recordIds) {
-      if (recordIds.length === 0) {
-        if (recordIds[0] === 'note/not-found') {
+    const atomic = !!params['atomic'];
+    const records = params['records'];
+    if (params['database_id'] === '_public' && records) {
+      if (records.length === 1) {
+        if (
+          records[0]._recordType === 'note' &&
+          records[0]._recordID === 'not-found'
+        ) {
+          if (atomic) {
+            return fn({
+              error: {
+                name: 'AtomicOperationFailure',
+                code: 115,
+                message:
+                  'Atomic Operation rolled back due to one or more errors',
+                info: {
+                  'note/not-found': {
+                    code: 110,
+                    message: 'record not found',
+                    type: 'ResourceNotFound'
+                  }
+                }
+              }
+            }, true);
+          }
+
           return fn({
             result: [{
               _recordType: 'note',
               _recordID: 'not-found',
               _type: 'error',
-              code: 103,
+              code: 110,
               message: 'record not found',
               type: 'ResourceNotFound'
             }]
@@ -205,19 +228,52 @@ let request = mockSuperagent([{
           });
         }
       } else {
-        let firstRecordId = recordIds[0];
-        if (firstRecordId === 'note/not-found') {
+        const firstRecord = records[0];
+        if (
+          firstRecord._recordType === 'note' &&
+          firstRecord._recordID === 'not-found'
+        ) {
+          if (atomic) {
+            return fn({
+              error: {
+                name: 'AtomicOperationFailure',
+                code: 115,
+                message:
+                  'Atomic Operation rolled back due to one or more errors',
+                info: {
+                  'note/not-found': {
+                    code: 110,
+                    message: 'record not found',
+                    type: 'ResourceNotFound'
+                  }
+                }
+              }
+            }, true);
+          }
+
           return fn({
             result: [{
               _recordType: 'note',
               _recordID: 'not-found',
               _type: 'error',
-              code: 103,
+              code: 110,
               message: 'record not found',
               type: 'ResourceNotFound'
             }, {
               _recordType: 'note',
               _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              _type: 'record'
+            }]
+          });
+        } else if (records[0]._recordType !== records[1]._recordType) {
+          return fn({
+            result: [{
+              _recordType: 'note',
+              _recordID: 'some-note-1',
+              _type: 'record'
+            }, {
+              _recordType: 'comment',
+              _recordID: 'some-comment-1',
               _type: 'record'
             }]
           });
@@ -534,79 +590,174 @@ describe('Database', function () {
     expect(record.content).to.be.undefined();
   });
 
-  it('delete record at remote', async function () {
-    let r = new Note();
-    await db.del(r);
+  it('deletes one record', async function () {
+    const note = new Note({
+      _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+    });
+    const result = await db.deleteRecord(note);
+    expect(isRecord(result)).to.be.true();
+    expect(result.deleted).to.be.true();
   });
 
-  it('delete record fails will reject', async function () {
-    let r = new Note({
-      _recordType: 'note',
-      _recordID: 'not-found'
-    });
+  it('deletes one record by ID', async function () {
+    const result = await db.deleteRecordByID(
+      'note',
+      'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+    );
+    expect(result).to.eql('c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d');
+  });
+
+  it('deletes one record fail', async function () {
+    const note = new Note({ _recordID: 'not-found' });
     try {
-      await db.del(r);
+      await db.deleteRecord(note);
       assert.fail('should fail');
     } catch (error) {
-      expect(error).eql({
-        _recordType: 'note',
-        _recordID: 'not-found',
-        _type: 'error',
-        code: 103,
-        message: 'record not found',
-        type: 'ResourceNotFound'
-      });
+      expect(error).not.to.be.null();
+      expect(error.name).to.eql('ResourceNotFound');
+      expect(error.code).to.eql(ErrorCodes.ResourceNotFound);
+      expect(error.message).to.eql('record not found');
     }
   });
 
-  it('delete record multiple records at remote', async function () {
-    let note1 = new Note();
-    let note2 = new Note();
-    const result = await db.delete([note1, note2]);
+  it('deletes one record by ID fail', async function () {
+    try {
+      await db.deleteRecordByID('note', 'not-found');
+      assert.fail('should fail');
+    } catch (error) {
+      expect(error).not.to.be.null();
+      expect(error.name).to.eql('ResourceNotFound');
+      expect(error.code).to.eql(ErrorCodes.ResourceNotFound);
+      expect(error.message).to.eql('record not found');
+    }
+  });
+
+  it('deletes multiple records', async function () {
+    let note1 = new Note({
+      _recordID: 'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577'
+    });
+    let note2 = new Note({
+      _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+    });
+    const result = await db.deleteRecords([note1, note2]);
     expect(result).to.have.length(2);
-    expect(result[0]).to.be.undefined();
-    expect(result[1]).to.be.undefined();
+    expect(isRecord(result[0])).to.be.true();
+    expect(isRecord(result[1])).to.be.true();
+    expect(result[0].deleted).to.be.true();
+    expect(result[1].deleted).to.be.true();
+  });
+
+  it('deletes multiple records by ID', async function () {
+    const result = await db.deleteRecordsByID(
+      'note',
+      [
+        'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577',
+        'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+      ]
+    );
+    expect(result).to.have.length(2);
+    expect(result[0]).to.eql('de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577');
+    expect(result[1]).to.eql('c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d');
   });
 
   it(
-    'delete accept QueryResult and delete records at remote',
+    'deletes accept QueryResult and delete records',
     async function () {
-      let note1 = new Note();
-      let note2 = new Note();
-      let queryResult = QueryResult.createFromResult([note1, note2], {});
-      const result = await db.delete(queryResult);
+      const note1 = new Note({
+        _recordID: 'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577'
+      });
+      const note2 = new Note({
+        _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+      });
+      const queryResult = QueryResult.createFromResult([note1, note2], {});
+      const result = await db.deleteRecords(queryResult);
       expect(result).to.have.length(2);
-      expect(result[0]).to.be.undefined();
-      expect(result[1]).to.be.undefined();
+      expect(isRecord(result[0])).to.be.true();
+      expect(isRecord(result[1])).to.be.true();
     }
   );
 
-  it('delete record multiple records with some failures', async function () {
-    let note1 = new Note({
-      _recordType: 'note',
-      _recordID: 'not-found'
-    });
-    let note2 = new Note();
-    const result = await db.delete([note1, note2]);
-    expect(result).to.have.length(2);
-    expect(result[0]).to.eql({
-      _recordType: 'note',
-      _recordID: 'not-found',
-      _type: 'error',
-      code: 103,
-      message: 'record not found',
-      type: 'ResourceNotFound'
-    });
-    expect(result[1]).to.be.undefined();
-  });
+  it(
+    'deletes multiple records non-atomically',
+    async function () {
+      const note1 = new Note({
+        _recordID: 'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577'
+      });
+      const note2 = new Note({
+        _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+      });
+      const result = await db.deleteRecordsNonAtomically([note1, note2]);
+      expect(result).to.have.length(2);
+      expect(isRecord(result[0])).to.be.true();
+      expect(isRecord(result[1])).to.be.true();
+    }
+  );
+
+  it(
+    'deletes multiple records by ID non-atomically',
+    async function () {
+      const result = await db.deleteRecordsByIDNonAtomically(
+        'note',
+        [
+          'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577',
+          'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+        ]
+      );
+      expect(result).to.have.length(2);
+      expect(result[0]).to.eql('de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577');
+      expect(result[1]).to.eql('c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d');
+    }
+  );
+
+  it(
+    'deletes multiple records non-atomically with some failures',
+    async function () {
+      const note1 = new Note({
+        _recordID: 'not-found'
+      });
+      const note2 = new Note({
+        _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+      });
+      const result = await db.deleteRecordsNonAtomically([note1, note2]);
+      expect(result).to.have.length(2);
+      expect(result[0]).to.be.instanceOf(SkygearError);
+      expect(result[0].toJSON()).to.eql({
+        name: 'ResourceNotFound',
+        code: ErrorCodes.ResourceNotFound,
+        message: 'record not found'
+      });
+      expect(isRecord(result[1])).to.be.true();
+    }
+  );
+
+  it(
+    'deletes multiple records by ID non-atomically with some failures',
+    async function () {
+      const result = await db.deleteRecordsByIDNonAtomically(
+        'note',
+        [
+          'not-found',
+          'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d'
+        ]
+      );
+      expect(result).to.have.length(2);
+      expect(result[0]).to.be.instanceOf(SkygearError);
+      expect(result[0].toJSON()).to.eql({
+        name: 'ResourceNotFound',
+        code: ErrorCodes.ResourceNotFound,
+        message: 'record not found'
+      });
+      expect(result[1]).to.eql('c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d');
+    }
+  );
 
   it('allows to delete records in multiple types', async function () {
-    const r1 = new Record('note', 'some-note-1');
-    const r2 = new Record('comment', 'some-comment-1');
-    const result = await db.delete([r1, r2]);
+    const r1 = new Record('note', { _recordID: 'some-note-1' });
+    const r2 = new Record('comment', { _recordID: 'some-comment-1' });
+    const result = await db.deleteRecords([r1, r2]);
     expect(result).to.have.length(2);
-    expect(result[0]).to.be.undefined();
-    expect(result[1]).to.be.undefined();
+    expect(isRecord(result[0])).to.be.true();
+    expect(isRecord(result[1])).to.be.true();
   });
 
 });
