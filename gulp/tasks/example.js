@@ -4,6 +4,7 @@ var connectInject = require('connect-inject');
 
 gulp.task('example', serve({
   root: ['./example', './packages/skygear/dist'],
+  hostname: '0.0.0.0',
   port: 5000,
   middleware: connectInject({
     runAll: true,

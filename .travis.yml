@@ -19,17 +19,17 @@ jobs:
     # test
     - <<: *common
       stage: test
-      node_js: '6' 
+      node_js: '6'
       script:
         - make test
     - <<: *common
       stage: test
-      node_js: '8' 
+      node_js: '8'
       script:
         - make test
     - <<: *common
       stage: test
-      node_js: '10' 
+      node_js: '10'
       script:
         - make test
 
@@ -41,7 +41,7 @@ jobs:
         - docker
       before_deploy:
         - make update-version
-        - npm run lerna bootstrap
+        - npm run build-production
         - npm run lerna exec -- npm pack
         - sudo pip install awscli
       deploy:

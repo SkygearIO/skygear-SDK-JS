@@ -6,6 +6,8 @@ import mockSuperagent from '../../skygear-core/test/mock/superagent';
 
 
 describe('SSO OAuth', function () {
+  this.timeout(7000);
+
   // setup container
   let container = new Container();
   container.pubsub.autoPubsub = false;
@@ -91,7 +93,7 @@ describe('SSO OAuth', function () {
     expect(response.result).to.eql('OK');
   });
 
-  it('can login oauth with popup', async function () {
+  it('can login oauth with popup', async function (done) {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
@@ -129,11 +131,10 @@ describe('SSO OAuth', function () {
     );
     expect(user).not.be.null();
     expect(user.email).to.eql('user1@skygear.dev');
+    done();
   });
 
   it('user close window when login oauth with popup', async function () {
-    this.timeout(4000);
-
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
