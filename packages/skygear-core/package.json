@@ -38,6 +38,7 @@
     "pg": "^7.4.3",
     "superagent": "^3.7.0",
     "url": "^0.11.0",
+    "util-deprecate": "^1.0.2",
     "uuid": "^2.0.1",
     "w3c-blob": "0.0.1",
     "websocket": "^1.0.23",

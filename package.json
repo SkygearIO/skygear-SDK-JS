@@ -98,9 +98,7 @@
     "skygear-asset": "./asset.js"
   },
   "license": "Apache-2.0",
-  "dependencies": {
-    "util-deprecate": "^1.0.2"
-  },
+  "dependencies": {},
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
   },
