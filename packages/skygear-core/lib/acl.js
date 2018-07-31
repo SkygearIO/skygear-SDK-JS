@@ -188,7 +188,7 @@ export default class ACL {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user._id] = AccessLevel.NoAccessLevel;
+    this.users[user.recordID] = AccessLevel.NoAccessLevel;
   }
 
   /**
@@ -201,7 +201,7 @@ export default class ACL {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user._id] = AccessLevel.ReadOnlyLevel;
+    this.users[user.recordID] = AccessLevel.ReadOnlyLevel;
   }
 
   /**
@@ -214,7 +214,7 @@ export default class ACL {
       throw new Error(user + ' is not a user.');
     }
 
-    this.users[user._id] = AccessLevel.ReadWriteLevel;
+    this.users[user.recordID] = AccessLevel.ReadWriteLevel;
   }
 
   /**
@@ -281,7 +281,7 @@ export default class ACL {
     }
 
     return this.hasPublicReadAccess() ||
-      accessLevelNumber(this.users[user._id]) >=
+      accessLevelNumber(this.users[user.recordID]) >=
         accessLevelNumber(AccessLevel.ReadOnlyLevel);
   }
 
@@ -297,7 +297,7 @@ export default class ACL {
     }
 
     return this.hasPublicWriteAccess() ||
-      accessLevelNumber(this.users[user._id]) >=
+      accessLevelNumber(this.users[user.recordID]) >=
         accessLevelNumber(AccessLevel.ReadWriteLevel);
   }
 

@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*eslint-disable dot-notation, no-new, no-unused-vars, quote-props */
+/*eslint-disable camelcase, dot-notation, no-new, quote-props */
 import {expect, assert} from 'chai';
 import sinon from 'sinon';
 import {Database, PublicDatabase} from '../lib/database';
 import Record from '../lib/record';
 import QueryResult from '../lib/query_result';
 import Query from '../lib/query';
-import Container, {UserRecord} from '../lib/container';
-import Role from '../lib/role';
+import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
 
@@ -30,29 +29,36 @@ let request = mockSuperagent([{
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public') {
       return fn({
-        'result': [{
-          '_id': 'note/6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
-          '_created_at': '2014-09-27T17:40:00.000Z',
-          'print_at': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
-          'content': 'hi ourd',
-          'noteOrder': 1,
-          'ref': {$type: 'ref', $id: 'note/note1'},
-          'geo': {$type: 'geo', $lat: 10, $lng: 20},
-          'tags': []
+        result: [{
+          _recordType: 'note',
+          _recordID: '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+          _created_at: '2014-09-27T17:40:00.000Z',
+          print_at: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
+          content: 'hi ourd',
+          noteOrder: 1,
+          ref: {
+            $type: 'ref',
+            $recordType: 'note',
+            $recordID: 'note1'
+          },
+          geo: {$type: 'geo', $lat: 10, $lng: 20},
+          tags: []
         }, {
-          '_id': 'note/56F12880-3004-4723-B94A-0AC86DF13916',
-          'content': 'limouren',
-          'noteOrder': 2,
-          '_transient': {
-            'category': {
-              '_created_at': '2015-11-17T07:41:57.461883Z',
-              '_id': 'category/transientCategory',
-              'name': 'transient test'
+          _recordType: 'note',
+          _recordID: '56F12880-3004-4723-B94A-0AC86DF13916',
+          content: 'limouren',
+          noteOrder: 2,
+          _transient: {
+            category: {
+              _created_at: '2015-11-17T07:41:57.461883Z',
+              _recordType: 'category',
+              _recordID: 'transientCategory',
+              name: 'transient test'
             }
           }
         }],
-        'info': {
-          'count': 24
+        info: {
+          count: 24
         }
       });
     }
@@ -65,14 +71,14 @@ let request = mockSuperagent([{
     if (records.length === 1) {
       if (firstRecord._id.indexOf('user/') === 0) {
         return fn({
-          'result': [{
-            '_type': 'record',
-            '_created_at': '2014-09-27T17:40:00.000Z',
-            '_ownerID': 'rick.mak@gmail.com',
-            '_access': null,
-            '_transient': {
-              'synced': true,
-              'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+          result: [{
+            _type: 'record',
+            _created_at: '2014-09-27T17:40:00.000Z',
+            _ownerID: 'rick.mak@gmail.com',
+            _access: null,
+            _transient: {
+              synced: true,
+              syncDate: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
             },
             ...firstRecord
           }]
@@ -80,25 +86,27 @@ let request = mockSuperagent([{
       } else if (params['database_id'] === '_public' &&
       firstRecord['_id'] === 'note/failed-to-save') {
         return fn({
-          'result': [{
-            '_id': 'note/failed-to-save',
-            '_type': 'error',
-            'code': 101,
-            'message': 'failed to save record id = note/failed-to-save',
-            'type': 'ResourceSaveFailure'
+          result: [{
+            _recordType: 'note',
+            _recordID: 'failed-to-save',
+            _type: 'error',
+            code: 101,
+            message: 'failed to save record id = note/failed-to-save',
+            type: 'ResourceSaveFailure'
           }]
         });
       } else {
         return fn({
-          'result': [{
-            '_type': 'record',
-            '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
-            '_created_at': '2014-09-27T17:40:00.000Z',
-            '_ownerID': 'rick.mak@gmail.com',
-            '_access': null,
-            '_transient': {
-              'synced': true,
-              'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+          result: [{
+            _type: 'record',
+            _recordType: 'note',
+            _recordID: 'b488de75-16f9-48bd-b450-7cb078d645fe',
+            _created_at: '2014-09-27T17:40:00.000Z',
+            _ownerID: 'rick.mak@gmail.com',
+            _access: null,
+            _transient: {
+              synced: true,
+              syncDate: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
             }
           }]
         });
@@ -108,11 +116,11 @@ let request = mockSuperagent([{
        firstRecord['_id'] === 'note/failed-to-save') {
         if (params.atomic) {
           return fn({
-            'result': [{
-              '_type': 'error',
-              'code': 409,
-              'type': 'AtomicOperationFailure',
-              'message':
+            result: [{
+              _type: 'error',
+              code: 409,
+              type: 'AtomicOperationFailure',
+              message:
                 'Atomic Operation rolled back due to one or more errors'
             }]
           });
@@ -121,20 +129,22 @@ let request = mockSuperagent([{
         return fn({
           result: [
             {
-              '_id': 'note/failed-to-save',
-              '_type': 'error',
-              'code': 101,
-              'message': 'failed to save record id = note/failed-to-save',
-              'type': 'ResourceSaveFailure'
+              _recordType: 'note',
+              _recordID: 'failed-to-save',
+              _type: 'error',
+              code: 101,
+              message: 'failed to save record id = note/failed-to-save',
+              type: 'ResourceSaveFailure'
             }, {
-              '_type': 'record',
-              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
-              '_created_at': '2014-09-27T17:40:00.000Z',
-              '_ownerID': 'rick.mak@gmail.com',
-              '_access': null,
-              '_transient': {
-                'synced': true,
-                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              _type: 'record',
+              _recordType: 'note',
+              _recordID: '80390764-c4c8-4873-a7d7-9330a214af0d',
+              _created_at: '2014-09-27T17:40:00.000Z',
+              _ownerID: 'rick.mak@gmail.com',
+              _access: null,
+              _transient: {
+                synced: true,
+                syncDate: {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
               }
             }]
         });
@@ -142,24 +152,26 @@ let request = mockSuperagent([{
         return fn({
           result: [
             {
-              '_type': 'record',
-              '_id': 'note/b488de75-16f9-48bd-b450-7cb078d645fe',
-              '_created_at': '2014-09-27T17:40:00.000Z',
-              '_ownerID': 'rick.mak@gmail.com',
-              '_access': null,
-              '_transient': {
-                'synced': true,
-                'syncDate': {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
+              _type: 'record',
+              _recordType: 'note',
+              _recordID: 'b488de75-16f9-48bd-b450-7cb078d645fe',
+              _created_at: '2014-09-27T17:40:00.000Z',
+              _ownerID: 'rick.mak@gmail.com',
+              _access: null,
+              _transient: {
+                synced: true,
+                syncDate: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
               }
             }, {
-              '_type': 'record',
-              '_id': 'note/80390764-c4c8-4873-a7d7-9330a214af0d',
-              '_created_at': '2014-09-27T17:40:00.000Z',
-              '_ownerID': 'rick.mak@gmail.com',
-              '_access': null,
-              '_transient': {
-                'synced': true,
-                'syncDate': {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
+              _type: 'record',
+              _recordType: 'note',
+              _recordID: '80390764-c4c8-4873-a7d7-9330a214af0d',
+              _created_at: '2014-09-27T17:40:00.000Z',
+              _ownerID: 'rick.mak@gmail.com',
+              _access: null,
+              _transient: {
+                synced: true,
+                syncDate: {$type: 'date', $date: '2014-09-37T17:40:00.000Z'}
               }
             }]
         });
@@ -175,7 +187,8 @@ let request = mockSuperagent([{
         if (recordIds[0] === 'note/not-found') {
           return fn({
             result: [{
-              _id: 'note/not-found',
+              _recordType: 'note',
+              _recordID: 'not-found',
               _type: 'error',
               code: 103,
               message: 'record not found',
@@ -184,9 +197,10 @@ let request = mockSuperagent([{
           });
         } else {
           return fn({
-            'result': [{
-              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-              '_type': 'record'
+            result: [{
+              _recordType: 'note',
+              _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              _type: 'record'
             }]
           });
         }
@@ -195,24 +209,28 @@ let request = mockSuperagent([{
         if (firstRecordId === 'note/not-found') {
           return fn({
             result: [{
-              _id: 'note/not-found',
+              _recordType: 'note',
+              _recordID: 'not-found',
               _type: 'error',
               code: 103,
               message: 'record not found',
               type: 'ResourceNotFound'
             }, {
-              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-              '_type': 'record'
+              _recordType: 'note',
+              _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              _type: 'record'
             }]
           });
         } else {
           return fn({
             result: [{
-              '_id': 'note/de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577',
-              '_type': 'record'
+              _recordType: 'note',
+              _recordID: 'de2c7e9a-7cb1-4b77-a7b3-c1aa68b16577',
+              _type: 'record'
             }, {
-              '_id': 'note/c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
-              '_type': 'record'
+              _recordType: 'note',
+              _recordID: 'c9b3b7d3-07ea-4b62-ac6a-50e1f0fb0a3d',
+              _type: 'record'
             }]
           });
         }
@@ -252,7 +270,8 @@ describe('Database', function () {
     expect(records.overallCount).to.be.equal(24);
 
     let transientCategory = records[1].$transient.category;
-    expect(transientCategory.id).to.equal('category/transientCategory');
+    expect(transientCategory.recordType).to.equal('category');
+    expect(transientCategory.recordID).to.equal('transientCategory');
     expect(transientCategory.createdAt.getTime())
       .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
     expect(transientCategory.name).to.equal('transient test');
@@ -269,8 +288,8 @@ describe('Database', function () {
     let q = new Query(Note);
     let result;
     mockDB._cacheStore = {
-      get: function (params) {
-        return new Promise(function (resolve, reject) {
+      get: function () {
+        return new Promise(function (resolve) {
           setTimeout(function () {
             resolve(result);
           }, 50);
@@ -338,7 +357,8 @@ describe('Database', function () {
     expect(records.overallCount).to.be.equal(24);
 
     let transientCategory = records[1].$transient.category;
-    expect(transientCategory.id).to.equal('category/transientCategory');
+    expect(transientCategory.recordType).to.equal('category');
+    expect(transientCategory.recordID).to.equal('transientCategory');
     expect(transientCategory.createdAt.getTime())
       .to.equal(new Date('2015-11-17T07:41:57.461883Z').getTime());
     expect(transientCategory.name).to.equal('transient test');
@@ -346,7 +366,7 @@ describe('Database', function () {
 
   it('reject with error on saving undefined', async function () {
     try {
-      const record = await db.save(undefined);
+      await db.save(undefined);
       assert.fail('should fail');
     } catch (error) {
       expect(error).to.be.an.instanceof(Error);
@@ -361,7 +381,7 @@ describe('Database', function () {
       let r = new Note();
       r.null = null;
       try {
-        const record = await db.save([r, undefined]);
+        await db.save([r, undefined]);
         assert.fail('should fail');
       } catch (error) {
         expect(error).to.be.an.instanceof(Error);
@@ -380,17 +400,19 @@ describe('Database', function () {
 
   it('save fails with reject callback', async function () {
     let r = new Note({
-      _id: 'note/failed-to-save'
+      _recordType: 'note',
+      _recordID: 'failed-to-save'
     });
     try {
-      const record = await db.save(r);
+      await db.save(r);
     } catch (error) {
       expect(error).eql({
-        '_id': 'note/failed-to-save',
-        '_type': 'error',
-        'code': 101,
-        'message': 'failed to save record id = note/failed-to-save',
-        'type': 'ResourceSaveFailure'
+        _recordType: 'note',
+        _recordID: 'failed-to-save',
+        _type: 'error',
+        code: 101,
+        message: 'failed to save record id = note/failed-to-save',
+        type: 'ResourceSaveFailure'
       });
     }
   });
@@ -414,7 +436,8 @@ describe('Database', function () {
 
   it('save multiple records with some failures', async function () {
     let note1 = new Note({
-      _id: 'note/failed-to-save'
+      _recordType: 'note',
+      _recordID: 'failed-to-save'
     });
     let note2 = new Note();
 
@@ -428,11 +451,12 @@ describe('Database', function () {
 
     expect(errors).to.have.length(2);
     expect(errors[0]).to.eql({
-      '_id': 'note/failed-to-save',
-      '_type': 'error',
-      'code': 101,
-      'message': 'failed to save record id = note/failed-to-save',
-      'type': 'ResourceSaveFailure'
+      _recordType: 'note',
+      _recordID: 'failed-to-save',
+      _type: 'error',
+      code: 101,
+      message: 'failed to save record id = note/failed-to-save',
+      type: 'ResourceSaveFailure'
     });
     expect(errors[1]).to.be.undefined();
   });
@@ -441,7 +465,7 @@ describe('Database', function () {
     let note1 = new Note();
     let note2 = new Note();
 
-    const result = await db.save([note1, note2], {'atomic': true});
+    const result = await db.save([note1, note2], {atomic: true});
     let records = result.savedRecords;
     let errors = result.errors;
 
@@ -456,11 +480,12 @@ describe('Database', function () {
 
   it('save atomically multiple records with some failures', async function () {
     let note1 = new Note({
-      _id: 'note/failed-to-save'
+      _recordType: 'note',
+      _recordID: 'failed-to-save'
     });
     let note2 = new Note();
 
-    const result = await db.save([note1, note2], {'atomic': true});
+    const result = await db.save([note1, note2], {atomic: true});
     let records = result.savedRecords;
     let errors = result.errors;
 
@@ -469,21 +494,21 @@ describe('Database', function () {
 
     expect(errors).to.have.length(1);
     expect(errors[0]).to.eql({
-      '_type': 'error',
-      'code': 409,
-      'message': 'Atomic Operation rolled back due to one or more errors',
-      'type': 'AtomicOperationFailure'
+      _type: 'error',
+      code: 409,
+      message: 'Atomic Operation rolled back due to one or more errors',
+      type: 'AtomicOperationFailure'
     });
   });
 
   it('save record with meta populated', async function () {
     let r = new Note();
     r.update({
-      '_created_at': '2014-09-27T17:40:00.000Z'
+      _created_at: '2014-09-27T17:40:00.000Z'
     });
     expect(r.createdAt.toISOString()).to.equal('2014-09-27T17:40:00.000Z');
     r.update({
-      '_created_at': '2014-09-27T17:40:00.000Z'
+      _created_at: '2014-09-27T17:40:00.000Z'
     });
     const record = await db.save(r);
     expect(record).to.be.an.instanceof(Note);
@@ -516,14 +541,16 @@ describe('Database', function () {
 
   it('delete record fails will reject', async function () {
     let r = new Note({
-      _id: 'note/not-found'
+      _recordType: 'note',
+      _recordID: 'not-found'
     });
     try {
       await db.del(r);
       assert.fail('should fail');
     } catch (error) {
       expect(error).eql({
-        _id: 'note/not-found',
+        _recordType: 'note',
+        _recordID: 'not-found',
         _type: 'error',
         code: 103,
         message: 'record not found',
@@ -556,13 +583,15 @@ describe('Database', function () {
 
   it('delete record multiple records with some failures', async function () {
     let note1 = new Note({
-      _id: 'note/not-found'
+      _recordType: 'note',
+      _recordID: 'not-found'
     });
     let note2 = new Note();
     const result = await db.delete([note1, note2]);
     expect(result).to.have.length(2);
     expect(result[0]).to.eql({
-      _id: 'note/not-found',
+      _recordType: 'note',
+      _recordID: 'not-found',
       _type: 'error',
       code: 103,
       message: 'record not found',
@@ -571,5 +600,14 @@ describe('Database', function () {
     expect(result[1]).to.be.undefined();
   });
 
+  it('allows to delete records in multiple types', async function () {
+    const r1 = new Record('note', 'some-note-1');
+    const r2 = new Record('comment', 'some-comment-1');
+    const result = await db.delete([r1, r2]);
+    expect(result).to.have.length(2);
+    expect(result[0]).to.be.undefined();
+    expect(result[1]).to.be.undefined();
+  });
+
 });
-/*eslint-enable dot-notation, no-new, no-unused-vars, quote-props */
+/*eslint-enable camelcase, dot-notation, no-new, quote-props */

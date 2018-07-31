@@ -78,7 +78,7 @@ export class Relation {
    */
   get targetsID() {
     return _.map(this.targets, function (user) {
-      return user._id;
+      return user.recordID;
     });
   }
 

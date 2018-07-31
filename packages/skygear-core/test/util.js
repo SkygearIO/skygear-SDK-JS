@@ -87,12 +87,14 @@ describe('util', function () {
     const recordValue = fromJSON({
       $type: 'record',
       $record: {
-        _id: 'note/uid',
+        _recordType: 'note',
+        _recordID: 'uid',
         geo: {$type: 'geo', $lat: 10, $lng: 20}
       }
     });
     expect(recordValue).to.be.an.instanceof(Record);
-    expect(recordValue.id).to.equal('note/uid');
+    expect(recordValue.recordType).to.equal('note');
+    expect(recordValue.recordID).to.equal('uid');
   });
 
   it('toJSON array with mixed objects', function () {
@@ -130,9 +132,13 @@ describe('util', function () {
   });
 
   it('toJSON record', function () {
-    const object = toJSON(Record.fromJSON({'_id': 'note/uid'}));
+    const object = toJSON(Record.fromJSON({
+      '_recordType': 'note',
+      '_recordID': 'uid'
+    }));
     expect(object.$type).to.equal('record');
-    expect(object.$record._id).to.equal('note/uid');
+    expect(object.$record._recordType).to.equal('note');
+    expect(object.$record._recordID).to.equal('uid');
   });
 
 });

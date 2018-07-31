@@ -18,6 +18,10 @@ import _ from 'lodash';
 import {EventHandle, toJSON} from './util';
 import {ErrorCodes} from './error';
 import Role from './role';
+import {
+  getUserIDFromParams,
+  getRoleNameFromParams
+} from './util';
 
 export const USER_CHANGED = 'userChanged';
 
@@ -242,17 +246,18 @@ export class AuthContainer {
   /**
    * Reset user password, require master key.
    *
-   * @param  {Record|String} user - target user or user id
+   * @param  {Record|String} userOrUserID - target user or user ID
    * @param  {String} newPassword - new password of target user
-   * @return {Promise<String>} promise with target user id
+   * @return {Promise<String>} promise with target user ID
    */
-  async adminResetPassword(user, newPassword) {
-    const userId = user._id || user;
+  async adminResetPassword(userOrUserID, newPassword) {
+    const userID = getUserIDFromParams(userOrUserID);
     await this.container.makeRequest('auth:reset_password', {
-      auth_id: userId, // eslint-disable-line camelcase
+      auth_id: userID, // eslint-disable-line camelcase
       password: newPassword
     });
-    return userId;
+
+    return userID;
   }
 
   /**
@@ -292,74 +297,60 @@ export class AuthContainer {
   /**
    * Gets roles of users from server.
    *
-   * @param  {Record[]|String[]} users - user records or user ids
-   * @return {Promise<Object>} promise with userIDs-to-roles map
+   * @param  {Record[]|String[]} usersOrUserIDs - user records or user IDs
+   * @return {Promise<Object>} promise with userID-to-roles map
    */
-  async fetchUserRole(users) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
+  async fetchUserRole(usersOrUserIDs) {
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const body = await this.container.makeRequest('role:get', {
-      users: userIds
+      users: userIDs
     });
 
     return Object.keys(body.result)
       .map((key) => [key, body.result[key]])
       .reduce((acc, pairs) => ({
-        ...acc || {},
+        ...acc,
         [pairs[0]]: pairs[1].map((name) => new Role(name))
-      }), null);
+      }), {});
   }
 
   /**
    * Assigns roles to users.
    *
-   * @param  {Record[]|String[]} users - target users
-   * @param  {Role[]|String[]} roles - roles to be assigned
-   * @return {Promise<String[]>} proimse with the target users
+   * @param  {Record[]|String[]} usersOrUserIDs - target users or user IDs
+   * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
+   *                                              to be assigned
+   * @return {Promise<String[]>} promise with the target user IDs
    */
-  async assignUserRole(users, roles) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
-    let roleNames = _.map(roles, function (perRole) {
-      // accept either role object or role name
-      return perRole.name || perRole;
-    });
+  async assignUserRole(usersOrUserIDs, rolesOrRoleNames) {
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
+    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
     const body = await this.container.makeRequest('role:assign', {
-      users: userIds,
+      users: userIDs,
       roles: roleNames
     });
+
     return body.result;
   }
 
   /**
    * Revokes roles from users.
    *
-   * @param  {Record[]|String[]} users - target users
-   * @param  {Role[]|String[]} roles - roles to be revoked
-   * @return {Promise<String[]>} promise with target users
+   * @param  {Record[]|String[]} usersOrUserIDs - target users or user IDs
+   * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
+   *                                              to be revoked
+   * @return {Promise<String[]>} promise with target user IDs
    */
-  async revokeUserRole(users, roles) {
-    let userIds = _.map(users, function (perUser) {
-      // accept either user record or user id
-      return perUser._id || perUser;
-    });
-
-    let roleNames = _.map(roles, function (perRole) {
-      // accept either role object or role name
-      return perRole.name || perRole;
-    });
+  async revokeUserRole(usersOrUserIDs, rolesOrRoleNames) {
+    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
+    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
     const body = await this.container.makeRequest('role:revoke', {
-      users: userIds,
+      users: userIDs,
       roles: roleNames
     });
+
     return body.result;
   }
 
@@ -368,17 +359,17 @@ export class AuthContainer {
    *
    * This function is intended for admin use.
    *
-   * @param  {Record|String} user - target user
-   * @return {Promise<String>} promise with target user
+   * @param  {Record|String} userOrUserID - target user or user ID
+   * @return {Promise<String>} promise with target user ID
    */
-  async adminEnableUser(user) {
-    const userId = user._id || user;
-
+  async adminEnableUser(userOrUserID) {
+    const userID = getUserIDFromParams(userOrUserID);
     await this.container.makeRequest('auth:disable:set', {
-      auth_id: userId, // eslint-disable-line camelcase
+      auth_id: userID, // eslint-disable-line camelcase
       disabled: false
     });
-    return userId;
+
+    return userID;
   }
 
   /**
@@ -386,17 +377,17 @@ export class AuthContainer {
    *
    * This function is intended for admin use.
    *
-   * @param  {Record|String} user - target user
+   * @param  {Record|String} userOrUserID - target user or user ID
    * @param  {String} [message] - message to be shown to user
    * @param  {Date} [expiry] - date and time when the user is automatically
    *   enabled
-   * @return {Promise<String>} promise with target user
+   * @return {Promise<String>} promise with target user ID
    */
-  async adminDisableUser(user, message, expiry) {
-    const userId = user._id || user;
+  async adminDisableUser(userOrUserID, message, expiry) {
+    const userID = getUserIDFromParams(userOrUserID);
 
     let payload = {
-      auth_id: userId, // eslint-disable-line camelcase
+      auth_id: userID, // eslint-disable-line camelcase
       disabled: true
     };
     if (message) {
@@ -407,7 +398,7 @@ export class AuthContainer {
     }
 
     await this.container.makeRequest('auth:disable:set', payload);
-    return userId;
+    return userID;
   }
 
   async _getAccessToken() {

@@ -58,25 +58,47 @@ export class Database {
 
 
   /**
-   * Fetches a single record with the specified id from Skygear.
+   * Fetches a single record with the specified id in the deprecated format.
    *
-   * Use this method to fetch a single record from Skygear by specifying a
-   * record ID in the format of `type/id`. The fetch will be performed
+   * This method expects the record ID in the deprecated format,
+   * i.e. `type/id`. The fetch will be performed
    * asynchronously and the returned promise will be resolved when the
    * operation completes.
    *
-   * @param  {String} id - record ID with format `type/id`
+   * @deprecated Use `getRecord` instead.
+   *
+   * @param  {String} deprecatedID - record ID with format `type/id`
+   *
    * @return {Promise<Record>} promise with the fetched Record
    */
-  async getRecordByID(id) {
-    let Record = this._Record;
-    let [recordType, recordId] = Record.parseID(id);
-    let query = new Query(Record.extend(recordType)).equalTo('_id', recordId);
-    const users = await this.query(query);
-    if (users.length === 1) {
-      return users[0];
+  async getRecordByDeprecatedID(deprecatedID) {
+    const [recordType, recordID]
+      = this._Record.parseDeprecatedID(deprecatedID);
+    return this.getRecord(recordType, recordID);
+  }
+
+  /**
+   * Fetches a single record with the specified id.
+   *
+   * The fetch will be performed asynchronously and the returned
+   * promise will be resolved when the operation completes.
+   *
+   * @param  {String} recordType - record Type
+   * @param  {String} recordID - record ID
+   *
+   * @return {Promise<Record>} promise with the fetched Record
+   */
+  async getRecord(recordType, recordID) {
+    const RecordCls = this._Record.extend(recordType);
+    const query = new Query(RecordCls).equalTo('_id', recordID);
+    const records = await this.query(query);
+    if (records.length === 1) {
+      return records[0];
     } else {
-      throw new Error(id + ' does not exist');
+      throw new SkygearError(
+        `Cannot find ${recordType} record with ID ${recordID}`,
+        ErrorCodes.ResourceNotFound
+      );
     }
   }
 
@@ -301,20 +323,26 @@ export class Database {
    * The delete will be performed asynchronously and the returned promise will
    * be resolved when the operation completes.
    *
-   * @param  {Record|Record[]|QueryResult} _records - the records to delete
+   * @param  {Record|Record[]|QueryResult} obj - the records to delete
    * @return {Promise} promise
    */
-  async delete(_records) {
-    let records = _records;
-    let isQueryResult = records instanceof QueryResult;
-    if (!_.isArray(records) && !isQueryResult) {
-      records = [records];
-    }
+  async delete(obj) {
+    const isQueryResult = obj instanceof QueryResult;
+    const isArrayLike = _.isArray(obj) || isQueryResult;
+    const records = isArrayLike ? obj : [obj];
 
-    let ids = _.map(records, perRecord => perRecord.id);
-    let payload = {
+    const ids = _.map(
+      records,
+      perRecord => [perRecord.recordType, perRecord.recordID].join('/')
+    );
+    const recordIdentifiers = _.map(records, perRecord => ({
+      _recordType: perRecord.recordType,
+      _recordID: perRecord.recordID
+    }));
+    const payload = {
       database_id: this.dbID, //eslint-disable-line
-      ids: ids
+      records: recordIdentifiers,
+      ids
     };
 
     const body = await this.container.makeRequest('record:delete', payload);

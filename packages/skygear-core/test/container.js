@@ -159,24 +159,37 @@ describe('Container', function () {
     }
   );
 
-  it('should call userChange listener', function () {
+  it('should call userChange listener', function (done) {
     let container = new Container();
     container.pubsub.autoPubsub = false;
     container.auth.onUserChanged(function (user) {
       assert.instanceOf(user, container.Record);
-      assert.equal(user.id, 'user/user:id1');
+      assert.equal(user.recordType, 'user');
+      assert.equal(user.recordID, 'user:id1');
+      done();
     });
-    return container.auth._setUser({_id: 'user/user:id1'});
+    return container.auth._setUser({
+      _recordType: 'user',
+      _recordID: 'user:id1'
+    });
   });
 
-  it('should able to cancel a registered userChange listener', function () {
+  it('should able to cancel a registered userChange listener', function (done) {
     let container = new Container();
     container.pubsub.autoPubsub = false;
     let handler = container.auth.onUserChanged(function (user) {
       throw 'Cancel of onUserChanged failed';
     });
     handler.cancel();
-    return container.auth._setUser({_id: 'user/user:id1'});
+
+    setTimeout(function () {
+      done();
+    }, 1500);
+
+    return container.auth._setUser({
+      _recordType: 'user',
+      _recordID: 'user:id1'
+    });
   });
 });
 
@@ -246,8 +259,14 @@ describe('Container role', function () {
 
   it('should fetch user roles', async function () {
     let users = [
-      new UserRecord({_id: 'user/user1'}),
-      new UserRecord({_id: 'user/user2'}),
+      new UserRecord({
+        _recordType: 'user',
+        _recordID: 'user1'
+      }),
+      new UserRecord({
+        _recordType: 'user',
+        _recordID: 'user2'
+      }),
       'user3'
     ];
     const result = await container.auth.fetchUserRole(users);
@@ -403,14 +422,12 @@ describe('lambda', function () {
 
   it('should pass record parameters', async function () {
     const Note = container.Record.extend('note');
-    const attrs = {
-      id: 'note/id'
-    };
-    const result = await container
-      .lambda('hello:args', [new Note(_.assign({}, attrs))]);
+    const aNote = new Note({ _recordID: 'some-note' });
+    const result = await container.lambda('hello:args', [aNote]);
     expect(result.hello).to.have.lengthOf(1);
     expect(result.hello[0]).to.be.an.instanceof(container.Record);
-    expect(result.hello[0].id).to.be.equal('note/id');
+    expect(result.hello[0].recordType).to.be.equal('note');
+    expect(result.hello[0].recordID).to.be.equal('some-note');
   });
 
   it('should pass asset parameters', async function () {

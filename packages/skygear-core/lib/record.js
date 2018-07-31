@@ -18,11 +18,8 @@ import _ from 'lodash';
 import {toJSON, fromJSON} from './util';
 import ACL from './acl';
 import Role from './role'; // eslint-disable-line no-unused-vars
-
-const defaultAttrs = {
-  _id: null,
-  _type: null
-};
+import { SkygearError, ErrorCodes } from './error';
+import deprecate from 'util-deprecate';
 
 const _metaAttrs = {
   _created_at: { //eslint-disable-line
@@ -103,30 +100,38 @@ export default class Record {
       throw new Error(
         'RecordType is not valid. Please start with alphanumeric string.');
     }
-    if (!attrs) {
-      attrs = _.assign({}, defaultAttrs);
+
+    let {
+      _id,
+      _recordID,
+      _recordType,
+      ...otherAttrs
+    } = attrs || {};
+
+    // fallback to parse `_id` only when `_recordID` is unavailable
+    if (!_recordID && _id) {
+      [_recordType, _recordID] = Record.parseDeprecatedID(_id);
     }
+
+    if (_recordType && _recordType !== recordType) {
+      throw new SkygearError(
+        `_recordType ${_recordType} in attributes does not match ` +
+        `the constructor recordType ${recordType}`,
+        ErrorCodes.InvalidArgument
+      );
+    }
+
     this._recordType = recordType;
-    // Favouring `id`, since `id` will always contains type information if
-    // exist.
-    let id = attrs.id || attrs._id;
-    if (id === null || id === undefined) {
-      id = uuid.v4();
-    } else {
-      let [type, name] = Record.parseID(id);
-      if (type !== this._recordType) {
-        throw new Error('_id is not valid. RecordType mismatch.');
-      }
-      id = name;
-    }
-    delete attrs.id; // because `id` is a readonly property
-    this._id = id;
+    this._recordID = _recordID || uuid.v4();
+
     this._access = null;
-    this.update(attrs);
-    this.updateTransient(attrs._transient);
+    this.update(otherAttrs);
+    this.updateTransient(otherAttrs._transient);
   }
 
   /**
+   * Type of the record.
+   *
    * @type {String}
    */
   get recordType() {
@@ -134,15 +139,39 @@ export default class Record {
   }
 
   /**
-   * Record id in the format of `type/id`
+   * ID of the record.
    *
    * @type {String}
    */
-  get id() {
-    return this._recordType + '/' + this._id;
+  get recordID() {
+    return this._recordID;
   }
 
   /**
+   * @private
+   */
+  get getDeprecatedID() {
+    return deprecate(
+      () => [this.recordType, this.recordID].join('/'),
+      'A deprecated record ID representation, i.e. `record.id`, is accessed. ' +
+        'This will not be supported in the coming version.'
+    );
+  }
+
+  /**
+   * ID of the record in the deprecated format (i.e. `type/id`).
+   *
+   * @type {String}
+   *
+   * @deprecated Use `recordType` and `recordID` instead.
+   */
+  get id() {
+    return this.getDeprecatedID();
+  }
+
+  /**
+   * ACL of the record.
+   *
    * @type {ACL}
    */
   get access() {
@@ -172,7 +201,7 @@ export default class Record {
    * Gets all keys of attributes of the records. Skygear reserved keys, that is
    * underscore prefixed keys, are excluded.
    *
-   * @type {String[]} [description]
+   * @type {String[]}
    */
   get attributeKeys() {
     let keys = Object.keys(this);
@@ -184,7 +213,7 @@ export default class Record {
   /**
    * Gets all keys of attributes of the records, includig reserved keys.
    *
-   * @type {String[]} [description]
+   * @type {String[]}
    */
   get metaKeys() {
     let keys = Object.keys(this);
@@ -371,9 +400,7 @@ export default class Record {
   updateTransient(transient_, merge = false) {
     var newTransient = merge ? _.clone(this._transient) : {};
     _.each(transient_, function (value, key) {
-      // If value is an object and `_id` field exists, assume
-      // that it is a record.
-      if (_.isObject(value) && '_id' in value) {
+      if (Record.isSerializedRecord(value)) {
         newTransient[key] = Record.fromJSON(value);
       } else if (_.isObject(value)) {
         newTransient[key] = fromJSON(value);
@@ -390,8 +417,7 @@ export default class Record {
    * @return {Object} the JSON object
    */
   toJSON() {
-    var result = this.toTruncatedJSON();
-    result = _.reduce(this.metaKeys, (payload, key) => {
+    const result = _.reduce(this.metaKeys, (payload, key) => {
       const value = this[key];
       if (value === undefined) {
         throw new Error(`Unsupported undefined value of record key: ${key}`);
@@ -403,7 +429,7 @@ export default class Record {
         payload[key] = toJSON(value);
       }
       return payload;
-    }, result);
+    }, this.toTruncatedJSON());
 
     if (!_.isEmpty(this._transient)) {
       result._transient = toJSON(this._transient);
@@ -425,7 +451,9 @@ export default class Record {
       payload[key] = toJSON(value);
       return payload;
     }, {
-      _id: this.id,
+      _id: [this.recordType, this.recordID].join('/'),
+      _recordType: this.recordType,
+      _recordID: this.recordID,
       _access: this._access && this._access.toJSON()
     });
   }
@@ -440,13 +468,22 @@ export default class Record {
   /**
    * @private
    */
-  static parseID(id) {
-    let tuple = id.split('/');
-    if (tuple.length < 2) {
-      throw new Error(
-        '_id is not valid. _id has to be in the format `type/id`');
-    }
-    return [tuple[0], tuple.slice(1).join('/')];
+  static get parseDeprecatedID() {
+    return deprecate(
+      (deprecatedID) => {
+        const tuple = deprecatedID.split('/');
+        if (tuple.length < 2) {
+          throw new Error(
+            'Fail to parse the deprected ID. ' +
+            'Make sure the ID is in the format `type/id`'
+          );
+        }
+
+        return [tuple[0], tuple.slice(1).join('/')];
+      },
+      'A deprecated record ID representation is used. ' +
+        'This will not be supported in the coming version.'
+    );
   }
 
   /**
@@ -457,34 +494,60 @@ export default class Record {
    * const note = new Note({ 'content': 'abc' });
    *
    * @param  {String} recordType - record type
-   * @param  {function} instFunc
+   * @param  {Map<String, Function>} instMethods - instance methods
    * @return {Class}
    */
-  static extend(recordType, instFunc) {
+  static extend(recordType, instMethods = {}) {
     if (!Record.validType(recordType)) {
       throw new Error(
         'RecordType is not valid. Please start with alphanumeric string.');
     }
-    let RecordProto = {};
-    function RecordCls(attrs = defaultAttrs) {
+
+    const RecordCls = function (attrs) {
       Record.call(this, recordType, attrs);
-    }
-    _.assign(RecordProto, instFunc, {
+    };
+    RecordCls.prototype = _.create(Record.prototype, {
+      ...instMethods,
       constructor: RecordCls
     });
-    RecordCls.prototype = _.create(Record.prototype, RecordProto);
     RecordCls.recordType = recordType;
+
     return RecordCls;
   }
 
   /**
    * Constructs a new Record object from JSON object.
    *
-   * @param {Object} attrs - the JSON object
+   * @param {Object} obj - the JSON object
    */
-  static fromJSON(attrs) {
-    const Cls = Record.extend(attrs._id.split('/')[0]);
-    return new Cls(attrs);
+  static fromJSON(obj) {
+    if (!Record.isSerializedRecord(obj)) {
+      throw new Error('Fail to deserialize a record');
+    }
+
+    const recordType
+      = obj._recordType || Record.parseDeprecatedID(obj._id)[0];
+
+    return new Record(recordType, obj);
+  }
+
+  /**
+   * @private
+   */
+  static isSerializedRecord(obj) {
+    if (!_.isObject(obj)) {
+      return false;
+    }
+
+    if ('_recordID' in obj && '_recordType' in obj) {
+      return true;
+    }
+
+    if ('_id' in obj) {
+      return true;
+    }
+
+    return false;
   }
 }
 

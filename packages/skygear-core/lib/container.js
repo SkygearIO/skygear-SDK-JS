@@ -556,6 +556,7 @@ export default class Container extends BaseContainer {
       // Logout user implicitly if
       let errorCode = innerError.code;
       if (errorCode === this.ErrorCodes.AccessTokenNotAccepted) {
+        // eslint-disable-next-line promise/no-promise-in-callback
         await Promise.all([
           this.auth._setAccessToken(null),
           this.auth._setUser(null)

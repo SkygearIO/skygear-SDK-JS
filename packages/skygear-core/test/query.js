@@ -362,7 +362,7 @@ describe('Query', function () {
 
   it('serialize a reference inside', function () {
     let q = new Query(Note);
-    let ref = new Reference('record/id');
+    let ref = new Reference('record', 'id');
     q.equalTo('ref', ref);
     expect(q.toJSON()).to.eql({
       record_type: 'note',
@@ -370,7 +370,12 @@ describe('Query', function () {
       predicate: [
         'eq',
         {$type: 'keypath', $val: 'ref'},
-        {$type: 'ref', $id: 'record/id'}
+        {
+          $type: 'ref',
+          $id: 'record/id',
+          $recordType: 'record',
+          $recordID: 'id'
+        }
       ],
       sort: [],
       limit: 50,

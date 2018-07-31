@@ -19,6 +19,8 @@ import Reference from './reference';
 import Geolocation from './geolocation';
 import Record, {isRecord} from './record';
 import {UnknownValue, Sequence} from './type';
+import { SkygearError, ErrorCodes } from './error';
+import { isRole } from './role';
 
 function mapObject(obj, fn) {
   // cannot use `map` directly
@@ -104,7 +106,7 @@ export function fromJSON(attrs) {
     case 'date':
       return new Date(attrs.$date);
     case 'ref':
-      return new Reference(attrs);
+      return Reference.fromJSON(attrs);
     case 'unknown':
       return UnknownValue.fromJSON(attrs);
     case 'record':
@@ -150,4 +152,54 @@ export class EventHandle {
   cancel() {
     this.emitter.off(this.name, this.listener);
   }
+}
+
+/**
+ * Get user ID from function parameter.
+ *
+ * @param {Record | String} userOrUserID a user record or a user ID
+ * @return {String} the ID of the user
+ */
+export function getUserIDFromParams(userOrUserID) {
+  if (isRecord(userOrUserID)) {
+    if (userOrUserID.recordType !== 'user') {
+      throw new SkygearError(
+        `Expect a user record, but get ${userOrUserID.recordType}`,
+        ErrorCodes.InvalidArgument
+      );
+    }
+
+    return userOrUserID.recordID;
+  }
+
+  const type = typeof userOrUserID;
+  if (type === 'string') {
+    return userOrUserID;
+  }
+
+  throw new SkygearError(
+    `Unknown type "${type}" to represent a user`,
+    ErrorCodes.InvalidArgument
+  );
+}
+
+/**
+ *
+ * @param {Role | String} roleOrRoleName a role or a role name
+ * @return {String} the name of the role
+ */
+export function getRoleNameFromParams(roleOrRoleName) {
+  if (isRole(roleOrRoleName)) {
+    return roleOrRoleName.name;
+  }
+
+  const type = typeof roleOrRoleName;
+  if (type === 'string') {
+    return roleOrRoleName;
+  }
+
+  throw new SkygearError(
+    `Unknown type "${type}" to represent a role`,
+    ErrorCodes.InvalidArgument
+  );
 }

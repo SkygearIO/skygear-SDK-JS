@@ -14,51 +14,83 @@
  * limitations under the License.
  */
 /*eslint-disable no-new, no-unused-vars, quote-props */
-import {expect, assert} from 'chai';
+import {expect} from 'chai';
 import Record from '../lib/record';
 import Reference from '../lib/reference';
-import {AccessLevel} from '../lib/acl';
 
 describe('Reference', function () {
-  let record = new Record('record', {_id: 'record/id'});
-  let ref = new Reference(record);
-
   it('constructs from Record', function () {
-    expect(ref.id).to.equal('record/id');
+    const r = new Record('record', {
+      _recordType: 'record',
+      _recordID: 'id'
+    });
+    const ref = new Reference(r);
+    expect(ref.recordType).to.equal('record');
+    expect(ref.recordID).to.equal('id');
   });
 
   it('constructs from string', function () {
-    ref = new Reference('record/id');
-    expect(ref.id).to.equal('record/id');
+    const ref = new Reference('record', 'id');
+    expect(ref.recordType).to.equal('record');
+    expect(ref.recordID).to.equal('id');
   });
 
-  it('throws exception if object.id is empty', function () {
-    let obj = {};
-    expect(function () {
-      new Reference(obj);
-    }).to.throw('Empty record id');
-
-    obj._id = '';
-    expect(function () {
-      new Reference(obj);
-    }).to.throw('Empty record id');
+  it('constructs from depreacted ID', function () {
+    const ref = new Reference('record/id');
+    expect(ref.recordType).to.equal('record');
+    expect(ref.recordID).to.equal('id');
   });
+
+  it(
+    'throws exception when constructing from unsupported parameters',
+    function () {
+      expect(function () {
+        new Reference({});
+      }).to.throw('Fail to construct a record reference');
+
+      expect(function () {
+        new Reference('note');
+      }).to.throw(
+        'Fail to parse the deprected ID. ' +
+        'Make sure the ID is in the format `type/id'
+      );
+
+      expect(function () {
+        new Reference('note', { someKey: 'some-value' });
+      }).to.throw(
+        'Fail to parse the deprected ID. ' +
+        'Make sure the ID is in the format `type/id'
+      );
+    }
+  );
 
   it('serializes to JSON', function () {
+    const ref = new Reference('record', 'id');
     expect(ref.toJSON()).to.eql({
-      '$type': 'ref',
-      '$id': 'record/id'
+      $type: 'ref',
+      $id: 'record/id',
+      $recordType: 'record',
+      $recordID: 'id'
     });
   });
 
   it('serializes as a JSON field', function () {
-    record.key = ref;
-    expect(record.toJSON()).to.eql({
-      '_id': 'record/id',
-      '_access': null,
-      'key': {
-        '$type': 'ref',
-        '$id': 'record/id'
+    const r = new Record('record', {
+      _recordType: 'record',
+      _recordID: 'id'
+    });
+    r.someRef = new Reference(r);
+
+    expect(r.toJSON()).to.eql({
+      _id: 'record/id',
+      _recordType: 'record',
+      _recordID: 'id',
+      _access: null,
+      someRef: {
+        $type: 'ref',
+        $id: 'record/id',
+        $recordType: 'record',
+        $recordID: 'id'
       }
     });
   });
