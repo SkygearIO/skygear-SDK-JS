@@ -232,77 +232,106 @@ export class Database {
   }
 
   /**
-   * Saves a record or records to Skygear.
-   *
-   * Use this method to save a record or records to Skygear.
-   * The save will be performed asynchronously and the returned promise will
-   * be resolved when the operation completes.
-   *
-   * New record will be created in the database while existing
-   * record will be modified.
-   *
-   * options.atomic can be set to true, which makes the operation either
-   * success or failure, but not partially success.
-   *
-   * @param {Record|Record[]} _records - the record(s) to save
-   * @param {Object} [options={}] options - options for saving the records
-   * @param {Boolean} [options.atomic] - true if the save request should be
-   * atomic
-   * @return {Promise<Record>} promise with saved records
+   * @private
    */
-  async save(_records, options = {}) {
-    let records = _records;
-    if (!_.isArray(records)) {
-      records = [records];
-    }
-
+  _checkRecordsToSave(records) {
     if (_.some(records, r => r === undefined || r === null)) {
-      throw new Error('Invalid input, unable to save undefined and null');
+      throw new SkygearError(
+        'Invalid input, unable to save undefined and null',
+        ErrorCodes.InvalidArgument
+      );
     }
+  }
+
+  /**
+   * @private
+   */
+  async _save(records, atomic = true) {
+    this._checkRecordsToSave(records);
 
     const processedRecords = await this._presave(
       this._presaveSingleValue.bind(this),
       records
     );
 
-    let payload = {
-      database_id: this.dbID //eslint-disable-line
+    const payloadRecords = _.map(
+      processedRecords,
+      eachRecord => eachRecord.toTruncatedJSON()
+    );
+
+    const payload = {
+      database_id: this.dbID, //eslint-disable-line
+      records: payloadRecords,
+      atomic: atomic
     };
 
-    if (options.atomic) {
-      payload.atomic = true;
+    return await this.container.makeRequest('record:save', payload);
+  }
+
+  /**
+   * Saves a record to Skygear.
+   *
+   * @param {Record} record the record to save
+   * @return {Promise<Record>} promise of saved record
+   */
+  async saveRecord(record) {
+    let body;
+    try {
+      body = await this._save([record]);
+    } catch (e) {
+      if (e.code !== ErrorCodes.AtomicOperationFailure) {
+        throw e;
+      }
+      const atomicError = e;
+      const deprecatedID = [record.recordType, record.recordID].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
     }
 
-    payload.records = _.map(processedRecords, (perRecord) => {
-      return perRecord.toTruncatedJSON();
-    });
+    return this._Record.fromJSON(body.result[0]);
+  }
 
-    const body = await this.container.makeRequest('record:save', payload);
+  /**
+   * Saves records to Skygear atomically.
+   *
+   * @param {Record[]} records the records to save
+   * @return {Promise<Record[]>} promise of saved records
+   */
+  async saveRecords(records) {
+    const body = await this._save(records);
+    const savedRecords = _.map(
+      body.result,
+      eachResult => this._Record.fromJSON(eachResult)
+    );
+    return savedRecords;
+  }
 
-    let results = body.result;
-    let savedRecords = [];
-    let errors = [];
+  /**
+   * Saves records to Skygear non-atomically.
+   *
+   * @typedef {Record | Error} NonAtomicSaveResult
+   *
+   * @param {Record[]} records the records to save
+   * @return {Promise<NonAtomicSaveResult[]>} promise of non-atomic save results
+   */
+  async saveRecordsNonAtomically(records) {
+    const body = await this._save(records, false);
+    const saveResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          return this._Record.fromJSON(eachResult);
+        }
 
-    _.forEach(results, (perResult, idx) => {
-      if (perResult._type === 'error') {
-        savedRecords[idx] = undefined;
-        errors[idx] = perResult;
-      } else {
-        records[idx].update(perResult);
-        records[idx].updateTransient(perResult._transient, true);
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
 
-        savedRecords[idx] = records[idx];
-        errors[idx] = undefined;
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
       }
-    });
-
-    if (records.length === 1) {
-      if (errors[0]) {
-        throw errors[0];
-      }
-      return savedRecords[0];
-    }
-    return {savedRecords, errors};
+    );
+    return saveResult;
   }
 
   /**
