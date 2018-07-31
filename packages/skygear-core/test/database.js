@@ -1,7 +1,7 @@
 /**
  * Copyright 2015 Oursky Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -67,12 +67,14 @@ let request = mockSuperagent([{
 }, {
   pattern: 'http://skygear.dev/record/save',
   fixtures: function (match, params, headers, fn) {
-    let records = params['records'];
-    let firstRecord = records[0];
+    const atomic = params['atomic'];
+    const records = params['records'];
     if (records.length === 1) {
-      if (firstRecord._id.indexOf('user/') === 0) {
+      const theRecord = records[0];
+      if (theRecord._recordType === 'user') {
         return fn({
           result: [{
+            ...theRecord,
             _type: 'record',
             _created_at: '2014-09-27T17:40:00.000Z',
             _ownerID: 'rick.mak@gmail.com',
@@ -80,12 +82,30 @@ let request = mockSuperagent([{
             _transient: {
               synced: true,
               syncDate: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'}
-            },
-            ...firstRecord
+            }
           }]
         });
-      } else if (params['database_id'] === '_public' &&
-      firstRecord['_id'] === 'note/failed-to-save') {
+      } else if (
+        params['database_id'] === '_public' &&
+        theRecord._recordID === 'failed-to-save'
+      ) {
+        if (atomic) {
+          return fn({
+            error: {
+              name: 'AtomicOperationFailure',
+              code: 115,
+              message: 'Atomic Operation rolled back due to one or more errors',
+              info: {
+                'note/failed-to-save': {
+                  name: 'PermissionDenied',
+                  code: 102,
+                  message: 'no permission to perform operation'
+                }
+              }
+            }
+          }, true);
+        }
+
         return fn({
           result: [{
             _recordType: 'note',
@@ -113,18 +133,27 @@ let request = mockSuperagent([{
         });
       }
     } else {
-      if (params['database_id'] === '_public' &&
-       firstRecord['_id'] === 'note/failed-to-save') {
-        if (params.atomic) {
+      const firstRecord = records[0];
+      if (
+        params['database_id'] === '_public' &&
+        firstRecord._recordType === 'note' &&
+        firstRecord._recordID === 'failed-to-save'
+      ) {
+        if (atomic) {
           return fn({
-            result: [{
-              _type: 'error',
-              code: 409,
-              type: 'AtomicOperationFailure',
-              message:
-                'Atomic Operation rolled back due to one or more errors'
-            }]
-          });
+            error: {
+              name: 'AtomicOperationFailure',
+              code: 115,
+              message: 'Atomic Operation rolled back due to one or more errors',
+              info: {
+                'note/failed-to-save': {
+                  name: 'PermissionDenied',
+                  code: 102,
+                  message: 'no permission to perform operation'
+                }
+              }
+            }
+          }, true);
         }
 
         return fn({
@@ -322,7 +351,7 @@ describe('Database', function () {
     q.transientInclude('category');
     const records = await db.query(q);
     expect(records.length).to.be.equal(2);
-    expect(records[0]).to.be.an.instanceof(Note);
+    expect(isRecord(records[0])).to.be.true();
     expect(records.overallCount).to.be.equal(24);
 
     let transientCategory = records[1].$transient.category;
@@ -409,7 +438,7 @@ describe('Database', function () {
     // q.transientInclude('category')
     const records = await db.query(q);
     expect(records.length).to.be.equal(2);
-    expect(records[0]).to.be.an.instanceof(Note);
+    expect(isRecord(records[0])).to.be.true();
     expect(records.overallCount).to.be.equal(24);
 
     let transientCategory = records[1].$transient.category;
@@ -422,10 +451,11 @@ describe('Database', function () {
 
   it('reject with error on saving undefined', async function () {
     try {
-      await db.save(undefined);
+      await db.saveRecord(undefined);
       assert.fail('should fail');
     } catch (error) {
-      expect(error).to.be.an.instanceof(Error);
+      expect(error).to.be.an.instanceOf(SkygearError);
+      expect(error.code).to.equal(ErrorCodes.InvalidArgument);
       expect(error.message).to.equal(
         'Invalid input, unable to save undefined and null');
     }
@@ -437,57 +467,46 @@ describe('Database', function () {
       let r = new Note();
       r.null = null;
       try {
-        await db.save([r, undefined]);
+        await db.saveRecords([r, undefined]);
         assert.fail('should fail');
       } catch (error) {
-        expect(error).to.be.an.instanceof(Error);
+        expect(error).to.be.an.instanceOf(SkygearError);
+        expect(error.code).to.equal(ErrorCodes.InvalidArgument);
         expect(error.message).to.equal(
           'Invalid input, unable to save undefined and null');
       }
     }
   );
 
-  it('save record to remote', async function () {
+  it('save one record', async function () {
     let r = new Note();
     r.null = null;
-    const record = await db.save(r);
-    expect(record).to.be.an.instanceof(Note);
+    const record = await db.saveRecord(r);
+    expect(isRecord(record)).to.be.true();
   });
 
-  it('save fails with reject callback', async function () {
+  it('save one record fails', async function () {
     let r = new Note({
       _recordType: 'note',
       _recordID: 'failed-to-save'
     });
     try {
-      await db.save(r);
+      await db.saveRecord(r);
     } catch (error) {
-      expect(error).eql({
-        _recordType: 'note',
-        _recordID: 'failed-to-save',
-        _type: 'error',
-        code: 101,
-        message: 'failed to save record id = note/failed-to-save',
-        type: 'ResourceSaveFailure'
-      });
+      expect(error).to.be.instanceOf(SkygearError);
+      expect(error.code).to.equal(ErrorCodes.PermissionDenied);
+      expect(error.message).to.equal('no permission to perform operation');
     }
   });
 
-  it('save multiple records to remote', async function () {
-    let note1 = new Note();
-    let note2 = new Note();
-
-    const result = await db.save([note1, note2]);
-    let records = result.savedRecords;
-    let errors = result.errors;
-
-    expect(records).to.have.length(2);
-    expect(records[0]).to.be.an.instanceof(Note);
-    expect(records[1]).to.be.an.instanceof(Note);
-
-    expect(errors).to.have.length(2);
-    expect(errors[0]).to.be.undefined();
-    expect(errors[1]).to.be.undefined();
+  it('save multiple records', async function () {
+    const savedRecords = await db.saveRecords([
+      new Note(),
+      new Note()
+    ]);
+    expect(savedRecords).to.have.length(2);
+    expect(isRecord(savedRecords[0])).to.be.true();
+    expect(isRecord(savedRecords[1])).to.be.true();
   });
 
   it('save multiple records with some failures', async function () {
@@ -497,97 +516,44 @@ describe('Database', function () {
     });
     let note2 = new Note();
 
-    const result = await db.save([note1, note2]);
-    let records = result.savedRecords;
-    let errors = result.errors;
-
-    expect(records).to.have.length(2);
-    expect(records[0]).to.be.undefined();
-    expect(records[1]).to.be.an.instanceof(Note);
-
-    expect(errors).to.have.length(2);
-    expect(errors[0]).to.eql({
-      _recordType: 'note',
-      _recordID: 'failed-to-save',
-      _type: 'error',
-      code: 101,
-      message: 'failed to save record id = note/failed-to-save',
-      type: 'ResourceSaveFailure'
-    });
-    expect(errors[1]).to.be.undefined();
+    try {
+      await db.saveRecords([note1, note2]);
+      assert.fail('Should fail');
+    } catch (e) {
+      expect(e).to.be.instanceOf(SkygearError);
+      expect(e.code).to.equal(ErrorCodes.AtomicOperationFailure);
+      expect(e.message).to.equal(
+        'Atomic Operation rolled back due to one or more errors'
+      );
+    }
   });
 
-  it('save atomically multiple records to remote', async function () {
-    let note1 = new Note();
-    let note2 = new Note();
-
-    const result = await db.save([note1, note2], {atomic: true});
-    let records = result.savedRecords;
-    let errors = result.errors;
-
-    expect(records).to.have.length(2);
-    expect(records[0]).to.be.an.instanceof(Note);
-    expect(records[1]).to.be.an.instanceof(Note);
-
-    expect(errors).to.have.length(2);
-    expect(errors[0]).to.be.undefined();
-    expect(errors[1]).to.be.undefined();
-  });
-
-  it('save atomically multiple records with some failures', async function () {
-    let note1 = new Note({
-      _recordType: 'note',
-      _recordID: 'failed-to-save'
-    });
-    let note2 = new Note();
-
-    const result = await db.save([note1, note2], {atomic: true});
-    let records = result.savedRecords;
-    let errors = result.errors;
-
-    expect(records).to.have.length(1);
-    expect(records[0]).to.be.undefined();
-
-    expect(errors).to.have.length(1);
-    expect(errors[0]).to.eql({
-      _type: 'error',
-      code: 409,
-      message: 'Atomic Operation rolled back due to one or more errors',
-      type: 'AtomicOperationFailure'
-    });
-  });
-
-  it('save record with meta populated', async function () {
-    let r = new Note();
-    r.update({
-      _created_at: '2014-09-27T17:40:00.000Z'
-    });
-    expect(r.createdAt.toISOString()).to.equal('2014-09-27T17:40:00.000Z');
-    r.update({
-      _created_at: '2014-09-27T17:40:00.000Z'
-    });
-    const record = await db.save(r);
-    expect(record).to.be.an.instanceof(Note);
-  });
-
-  it('merge transient field after save', async function () {
-    let r = new Note();
-    r.$transient.custom = 'CLIENT DATA';
-    r.$transient.synced = false;
-    const record = await db.save(r);
-    expect(record).to.be.an.instanceof(Note);
-    expect(record.$transient.synced).to.be.true();
-    expect(record.$transient.syncDate.toISOString())
-      .to.be.equal('2014-09-27T17:40:00.000Z');
-    expect(record.$transient.custom).to.be.equal('CLIENT DATA');
-  });
+  it(
+    'save multiple records non-atomically with some failures',
+    async function () {
+      const note1 = new Note({
+        _recordType: 'note',
+        _recordID: 'failed-to-save'
+      });
+      const note2 = new Note();
+      const result = await db.saveRecordsNonAtomically([note1, note2]);
+      expect(result).to.have.length(2);
+      expect(result[0]).to.be.instanceOf(SkygearError);
+      expect(result[0].code).to.equal(101);
+      expect(result[0].message).to.equal(
+        'failed to save record id = note/failed-to-save'
+      );
+      expect(isRecord(result[1])).to.be.true();
+    }
+  );
 
   it('replace record field after saving', async function () {
     let r = new Note();
     r.content = 'I shalt not exist';
-    const record = await db.save(r);
-    expect(record).to.be.an.instanceof(Note);
+    const record = await db.saveRecord(r);
+    expect(isRecord(record)).to.be.true();
     expect(record.content).to.be.undefined();
+    expect(r.content).to.equal('I shalt not exist');
   });
 
   it('deletes one record', async function () {
