@@ -29,39 +29,87 @@ let request = mockSuperagent([{
   pattern: 'http://skygear.dev/record/query',
   fixtures: function (match, params, headers, fn) {
     if (params['database_id'] === '_public') {
-      return fn({
-        result: [{
-          _recordType: 'note',
-          _recordID: '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
-          _created_at: '2014-09-27T17:40:00.000Z',
-          print_at: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
-          content: 'hi ourd',
-          noteOrder: 1,
-          ref: {
-            $type: 'ref',
-            $recordType: 'note',
-            $recordID: 'note1'
-          },
-          geo: {$type: 'geo', $lat: 10, $lng: 20},
-          tags: []
-        }, {
-          _recordType: 'note',
-          _recordID: '56F12880-3004-4723-B94A-0AC86DF13916',
-          content: 'limouren',
-          noteOrder: 2,
-          _transient: {
-            category: {
-              _created_at: '2015-11-17T07:41:57.461883Z',
-              _recordType: 'category',
-              _recordID: 'transientCategory',
-              name: 'transient test'
+      const predicates = params['predicate'];
+      if (!predicates || predicates.length === 0) {
+        return fn({
+          result: [{
+            _recordType: 'note',
+            _recordID: '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+            _created_at: '2014-09-27T17:40:00.000Z',
+            print_at: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
+            content: 'hi ourd',
+            noteOrder: 1,
+            ref: {
+              $type: 'ref',
+              $recordType: 'note',
+              $recordID: 'note1'
+            },
+            geo: {$type: 'geo', $lat: 10, $lng: 20},
+            tags: []
+          }, {
+            _recordType: 'note',
+            _recordID: '56F12880-3004-4723-B94A-0AC86DF13916',
+            content: 'limouren',
+            noteOrder: 2,
+            _transient: {
+              category: {
+                _created_at: '2015-11-17T07:41:57.461883Z',
+                _recordType: 'category',
+                _recordID: 'transientCategory',
+                name: 'transient test'
+              }
             }
+          }],
+          info: {
+            count: 24
           }
-        }],
-        info: {
-          count: 24
+        });
+      }
+
+      const firstPredicateOp = predicates[0];
+      const firstPredicateValue = predicates[2];
+      if (firstPredicateOp === 'eq') {
+        if (firstPredicateValue === 'not-exist') {
+          return fn({ result: [] });
         }
-      });
+
+        return fn({
+          result: [
+            {
+              _recordType: 'note',
+              _recordID: '56F12880-3004-4723-B94A-0AC86DF13916',
+              content: 'limouren',
+              noteOrder: 2
+            }
+          ]
+        });
+      } else if (firstPredicateOp === 'in') {
+        return fn({
+          result: [{
+            _recordType: 'note',
+            _recordID: '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+            _created_at: '2014-09-27T17:40:00.000Z',
+            print_at: {$type: 'date', $date: '2014-09-27T17:40:00.000Z'},
+            content: 'hi ourd',
+            noteOrder: 1,
+            ref: {
+              $type: 'ref',
+              $recordType: 'note',
+              $recordID: 'note1'
+            },
+            geo: {$type: 'geo', $lat: 10, $lng: 20},
+            tags: []
+          }, {
+            _recordType: 'note',
+            _recordID: '56F12880-3004-4723-B94A-0AC86DF13916',
+            content: 'limouren',
+            noteOrder: 2
+          }],
+          info: {
+            count: 24
+          }
+        });
+      }
     }
   }
 }, {
@@ -339,6 +387,63 @@ describe('Database', function () {
     }).to.throw(
       'Invalid database_id'
     );
+  });
+
+  it('fetches one record', async function () {
+    const r = await db.fetchRecordByID(
+      'note',
+      '56F12880-3004-4723-B94A-0AC86DF13916'
+    );
+    expect(isRecord(r)).to.be.true();
+  });
+
+  it('fetches one record not exist', async function () {
+    try {
+      await db.fetchRecordByID('note', 'not-exist');
+      assert.fail('Should fail');
+    } catch (e) {
+      expect(e).to.be.instanceOf(SkygearError);
+      expect(e.code).to.equal(ErrorCodes.ResourceNotFound);
+      expect(e.message).to.equal(
+        'Cannot find note record with ID not-exist'
+      );
+    }
+  });
+
+  it('fetches multiple records', async function () {
+    const result = await db.fetchRecordsByID(
+      'note',
+      [
+        '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+        '56F12880-3004-4723-B94A-0AC86DF13916'
+      ]
+    );
+    expect(result).to.have.length(2);
+    expect(isRecord(result[0])).to.be.true();
+    expect(result[0].recordID).to.equal('6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B');
+    expect(isRecord(result[1])).to.be.true();
+    expect(result[1].recordID).to.equal('56F12880-3004-4723-B94A-0AC86DF13916');
+  });
+
+  it('fetches multiple records with some missing', async function () {
+    const result = await db.fetchRecordsByID(
+      'note',
+      [
+        '6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B',
+        'not-exist',
+        '56F12880-3004-4723-B94A-0AC86DF13916'
+      ]
+    );
+    expect(result).to.have.length(3);
+    expect(isRecord(result[0])).to.be.true();
+    expect(result[0].recordID).to.equal('6495FFA6-C8BB-4A65-8DA0-5B84DC54D74B');
+    expect(result[1]).to.be.instanceOf(SkygearError);
+    expect(result[1].code).to.equal(ErrorCodes.ResourceNotFound);
+    expect(result[1].message).to.equal(
+      'Cannot find note record with ID not-exist'
+    );
+    expect(isRecord(result[2])).to.be.true();
+    expect(result[2].recordID).to.equal('56F12880-3004-4723-B94A-0AC86DF13916');
   });
 
   it('caches response by default', function () {
