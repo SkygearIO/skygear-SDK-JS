@@ -56,39 +56,18 @@ export class Database {
     this._cacheResponse = true;
   }
 
-
   /**
-   * Fetches a single record with the specified id in the deprecated format.
-   *
-   * This method expects the record ID in the deprecated format,
-   * i.e. `type/id`. The fetch will be performed
-   * asynchronously and the returned promise will be resolved when the
-   * operation completes.
-   *
-   * @deprecated Use `getRecord` instead.
-   *
-   * @param  {String} deprecatedID - record ID with format `type/id`
-   *
-   * @return {Promise<Record>} promise with the fetched Record
-   */
-  async getRecordByDeprecatedID(deprecatedID) {
-    const [recordType, recordID]
-      = this._Record.parseDeprecatedID(deprecatedID);
-    return this.getRecord(recordType, recordID);
-  }
-
-  /**
-   * Fetches a single record with the specified id.
+   * Fetches a single record with the specified ID.
    *
    * The fetch will be performed asynchronously and the returned
-   * promise will be resolved when the operation completes.
+   * promise will be resolved when the record is found.
    *
    * @param  {String} recordType - record Type
    * @param  {String} recordID - record ID
    *
    * @return {Promise<Record>} promise with the fetched Record
    */
-  async getRecord(recordType, recordID) {
+  async fetchRecordByID(recordType, recordID) {
     const RecordCls = this._Record.extend(recordType);
     const query = new Query(RecordCls).equalTo('_id', recordID);
     const records = await this.query(query);
@@ -100,6 +79,48 @@ export class Database {
         ErrorCodes.ResourceNotFound
       );
     }
+  }
+
+  /**
+   * Fetches records with the specified IDs.
+   *
+   * The fetch will be performed asynchronously and the returned
+   * promise will be resolved when the operation completes.
+   *
+   * @typedef {Record | Error} FetchResult
+   *
+   * @param  {String} recordType - record Type
+   * @param  {String} recordIDs - record ID
+   *
+   * @return {Promise<FetchResult[]>} promise with the fetch results
+   */
+  async fetchRecordsByID(recordType, recordIDs) {
+    const RecordCls = this._Record.extend(recordType);
+    const query = new Query(RecordCls).contains('_id', recordIDs);
+    const records = await this.query(query);
+
+    const fetchedRecordMap = _.reduce(
+      records,
+      (acc, eachRecord) => {
+        return {
+          ...acc,
+          [eachRecord.recordID]: eachRecord
+        };
+      },
+      {}
+    );
+
+    const fetchResult = _.map(
+      recordIDs,
+      eachRecordID =>
+        fetchedRecordMap[eachRecordID] ||
+        new SkygearError(
+          `Cannot find ${recordType} record with ID ${eachRecordID}`,
+          ErrorCodes.ResourceNotFound
+        )
+    );
+
+    return fetchResult;
   }
 
   /**
