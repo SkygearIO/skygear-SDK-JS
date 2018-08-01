@@ -431,7 +431,7 @@ export class Database {
    * multiple types, try to use {@link Database#deleteRecords}
    *
    * @param {String} type - the type of the records
-   * @param {String[]} id - the IDs of the records
+   * @param {String[]} ids - the IDs of the records
    * @return {Promise<String[]>} a promise of the deleted record IDs
    */
   async deleteRecordsByID(type, ids) {
