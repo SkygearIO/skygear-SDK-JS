@@ -465,30 +465,8 @@ export class Database {
     }
 
     const result = body.result[0];
-    if (
-      !record._recordType &&
-      !record._recordID &&
-      !record._id
-    ) {
-      throw new SkygearError('Received malformed server response');
-    }
-
-    let foundRecord;
-
-    if (
-        result._recordType === record.recordType &&
-        result._recordID === record.recordID ||
-        result._id === [record.recordType, record.recordID].join('/')
-    ) {
-      foundRecord = record;
-    }
-
-    if (!foundRecord) {
-      throw new SkygearError('Received unknown record');
-    }
-
     return this._Record.fromJSON({
-      ...foundRecord.toJSON(),
+      ...result,
       _deleted: true
     });
   }
@@ -503,43 +481,12 @@ export class Database {
    * @return {Promise<Record[]>} a promise of the deleted records
    */
   async deleteRecords(records) {
-    const recordMap = _.reduce(
-      records,
-      (acc, eachRecord) => {
-        const deprecatedID = [
-          eachRecord.recordType,
-          eachRecord.recordID
-        ].join('/');
-
-        acc[deprecatedID] = eachRecord;
-        return acc;
-      },
-      {}
-    );
     const body = await this._delete(records);
     const resultRecords = _.map(
       body.result,
       eachResult => {
-        let foundRecord;
-        if (eachResult._recordType && eachResult._recordID) {
-          const deprecatedID = [
-            eachResult._recordType,
-            eachResult._recordID
-          ].join('/');
-
-          foundRecord = recordMap[deprecatedID];
-        } else if (eachResult._id) {
-          foundRecord = recordMap[eachResult._id];
-        } else {
-          throw new SkygearError('Received malformed server response');
-        }
-
-        if (!foundRecord) {
-          throw new SkygearError('Received unknown record');
-        }
-
         return this._Record.fromJSON({
-          ...foundRecord.toJSON(),
+          ...eachResult,
           _deleted: true
         });
       }
@@ -592,46 +539,14 @@ export class Database {
    * @return {Promise<NonAtomicDeleteResult[]>} a promise of the deletion result
    */
   async deleteRecordsNonAtomically(records) {
-    const recordMap = _.reduce(
-      records,
-      (acc, eachRecord) => {
-        const deprecatedID = [
-          eachRecord.recordType,
-          eachRecord.recordID
-        ].join('/');
-
-        acc[deprecatedID] = eachRecord;
-        return acc;
-      },
-      {}
-    );
-
     const body = await this._delete(records, false);
     const deletionResult = _.map(
       body.result,
       eachResult => {
         const eachResultType = eachResult._type;
         if (eachResultType === 'record') {
-          let foundRecord;
-          if (eachResult._recordType && eachResult._recordID) {
-            const deprecatedID = [
-              eachResult._recordType,
-              eachResult._recordID
-            ].join('/');
-
-            foundRecord = recordMap[deprecatedID];
-          } else if (eachResult._id) {
-            foundRecord = recordMap[eachResult._id];
-          } else {
-            throw new SkygearError('Received malformed server response');
-          }
-
-          if (!foundRecord) {
-            return new SkygearError('Received unknown record');
-          }
-
           return this._Record.fromJSON({
-            ...foundRecord.toJSON(),
+            ...eachResult,
             _deleted: true
           });
         }
