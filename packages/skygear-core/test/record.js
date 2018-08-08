@@ -427,14 +427,37 @@ describe('Extended Record', function () {
     expect(r.recordID).to.be.equal('uid');
   });
 
-  it('deserialize from payload with geolocation', function () {
-    let payload = {
+  it('deserialize attrs with different types of fields', function () {
+    const payload = {
+      _access: null,
       _recordType: 'note',
       _recordID: 'uid',
-      geo: {$type: 'geo', $lat: 10, $lng: 20}
+      attachment: {
+        $type: 'asset',
+        $name: 'asset-name',
+        $content_type: 'text/plain',
+        $url: 'http://some-url-generated-from.server/some-asset-path'
+      },
+      geo: {
+        $type: 'geo',
+        $lat: 10,
+        $lng: 20
+      }
     };
-    let r = new Record('note', payload);
-    expect(r['geo']).to.be.an.instanceof(Geolocation);
+    const r = Record.fromJSON(payload);
+    expect(r.recordType).to.be.equal('note');
+    expect(r.recordID).to.be.equal('uid');
+
+    expect(r['attachment']).to.be.instanceof(Asset);
+    expect(r['attachment'].name).to.be.equal('asset-name');
+    expect(r['attachment'].contentType).to.be.equal('text/plain');
+    expect(r['attachment'].url)
+      .to.be.equal('http://some-url-generated-from.server/some-asset-path');
+
+    expect(r['geo']).to.be.instanceof(Geolocation);
+    expect(r['geo'].latitude).to.be.equal(10);
+    expect(r['geo'].longitude).to.be.equal(20);
+
   });
 
   it('deserialize from payload with reference', function () {

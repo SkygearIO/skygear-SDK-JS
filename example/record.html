@@ -278,7 +278,7 @@
       var record = new _Record();
       record[field] = asset;
 
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.publicDB.saveRecord(record).then(function (record) {
         console.log(record);
         uploadResult.innerText = JSON.stringify(record.toJSON(), null, 2);
       }, function (error) {
@@ -291,18 +291,18 @@
       console.log('Create');
       var _type = document.getElementById("create-type").value;
       var payload = document.getElementById("create-payload").value;
-      var sequence = document.getElementById("auto-increment").value;
+      var sequenceEnabled = document.getElementById("auto-increment").checked;
       var sequenceName = document.getElementById("auto-increment-id").value;
       var createResult = document.getElementById("create-result");
       var _Record = skygear.Record.extend(_type);
       var attrs = JSON.parse(payload);
       var record = new _Record(attrs);
-      if (sequence === 'on') {
+      if (sequenceEnabled && sequenceName) {
         record[sequenceName] = new skygear.Sequence();
       }
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.publicDB.saveRecord(record).then(function (record) {
         console.log(record);
-        createResult.innerText = record.ID;
+        createResult.innerText = record.recordID;
       }, function (error) {
         console.log(error);
         createResult.innerText = error;
@@ -403,9 +403,9 @@
         _id: _type + '/' + _id
       });
       record[key] = value
-      skygear.publicDB.save(record).then(function (record) {
+      skygear.publicDB.saveRecord(record).then(function (record) {
         console.log(record);
-        updateResult.innerText = record.ID;
+        updateResult.innerText = record.recordID;
       }, function (error) {
         console.log(error);
         updateResult.innerText = error;
@@ -417,11 +417,7 @@
       var _type = document.getElementById("delete-type").value;
       var _id = document.getElementById("delete-id").value;
       var deleteResult = document.getElementById("delete-result");
-      // skygear.publicDB.del(r);
-      var record = new skygear.Record(_type, {
-        _id: _type + '/' + _id
-      });
-      skygear.publicDB.del(record).then(function (ok) {
+      skygear.publicDB.deleteRecordByID(_type, _id).then(function (ok) {
         console.log(ok);
       }, function (error) {
         console.log(error);

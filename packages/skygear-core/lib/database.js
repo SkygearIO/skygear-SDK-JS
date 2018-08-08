@@ -18,7 +18,7 @@ import xml2js from 'xml2js';
 
 import Cache from './cache';
 import Asset, {isAsset} from './asset';
-import {isRecord} from './record';
+import Record, { isRecord } from './record'; // eslint-disable-line no-unused-vars
 import Query from './query';
 import QueryResult from './query_result';
 import {isValueType} from './util';
@@ -56,39 +56,18 @@ export class Database {
     this._cacheResponse = true;
   }
 
-
   /**
-   * Fetches a single record with the specified id in the deprecated format.
-   *
-   * This method expects the record ID in the deprecated format,
-   * i.e. `type/id`. The fetch will be performed
-   * asynchronously and the returned promise will be resolved when the
-   * operation completes.
-   *
-   * @deprecated Use `getRecord` instead.
-   *
-   * @param  {String} deprecatedID - record ID with format `type/id`
-   *
-   * @return {Promise<Record>} promise with the fetched Record
-   */
-  async getRecordByDeprecatedID(deprecatedID) {
-    const [recordType, recordID]
-      = this._Record.parseDeprecatedID(deprecatedID);
-    return this.getRecord(recordType, recordID);
-  }
-
-  /**
-   * Fetches a single record with the specified id.
+   * Fetches a single record with the specified ID.
    *
    * The fetch will be performed asynchronously and the returned
-   * promise will be resolved when the operation completes.
+   * promise will be resolved when the record is found.
    *
    * @param  {String} recordType - record Type
    * @param  {String} recordID - record ID
    *
    * @return {Promise<Record>} promise with the fetched Record
    */
-  async getRecord(recordType, recordID) {
+  async fetchRecordByID(recordType, recordID) {
     const RecordCls = this._Record.extend(recordType);
     const query = new Query(RecordCls).equalTo('_id', recordID);
     const records = await this.query(query);
@@ -100,6 +79,48 @@ export class Database {
         ErrorCodes.ResourceNotFound
       );
     }
+  }
+
+  /**
+   * Fetches records with the specified IDs.
+   *
+   * The fetch will be performed asynchronously and the returned
+   * promise will be resolved when the operation completes.
+   *
+   * @typedef {Record | Error} FetchResult
+   *
+   * @param  {String} recordType - record Type
+   * @param  {String} recordIDs - record ID
+   *
+   * @return {Promise<FetchResult[]>} promise with the fetch results
+   */
+  async fetchRecordsByID(recordType, recordIDs) {
+    const RecordCls = this._Record.extend(recordType);
+    const query = new Query(RecordCls).contains('_id', recordIDs);
+    const records = await this.query(query);
+
+    const fetchedRecordMap = _.reduce(
+      records,
+      (acc, eachRecord) => {
+        return {
+          ...acc,
+          [eachRecord.recordID]: eachRecord
+        };
+      },
+      {}
+    );
+
+    const fetchResult = _.map(
+      recordIDs,
+      eachRecordID =>
+        fetchedRecordMap[eachRecordID] ||
+        new SkygearError(
+          `Cannot find ${recordType} record with ID ${eachRecordID}`,
+          ErrorCodes.ResourceNotFound
+        )
+    );
+
+    return fetchResult;
   }
 
   /**
@@ -232,106 +253,139 @@ export class Database {
   }
 
   /**
-   * Same as {@link Database#delete}.
-   *
-   * @param  {Record|Record[]|QueryResult} record - the record(s) to delete
-   * @return {Promise<Record>} promise with the delete result
-   * @see {@link Database#delete}
+   * @private
    */
-  async del(record) {
-    return this.delete(record);
+  _checkRecordsToSave(records) {
+    if (_.some(records, r => r === undefined || r === null)) {
+      throw new SkygearError(
+        'Invalid input, unable to save undefined and null',
+        ErrorCodes.InvalidArgument
+      );
+    }
   }
 
   /**
-   * Saves a record or records to Skygear.
-   *
-   * Use this method to save a record or records to Skygear.
-   * The save will be performed asynchronously and the returned promise will
-   * be resolved when the operation completes.
-   *
-   * New record will be created in the database while existing
-   * record will be modified.
-   *
-   * options.atomic can be set to true, which makes the operation either
-   * success or failure, but not partially success.
-   *
-   * @param {Record|Record[]} _records - the record(s) to save
-   * @param {Object} [options={}] options - options for saving the records
-   * @param {Boolean} [options.atomic] - true if the save request should be
-   * atomic
-   * @return {Promise<Record>} promise with saved records
+   * @private
    */
-  async save(_records, options = {}) {
-    let records = _records;
-    if (!_.isArray(records)) {
-      records = [records];
-    }
-
-    if (_.some(records, r => r === undefined || r === null)) {
-      throw new Error('Invalid input, unable to save undefined and null');
-    }
+  async _save(records, atomic = true) {
+    this._checkRecordsToSave(records);
 
     const processedRecords = await this._presave(
       this._presaveSingleValue.bind(this),
       records
     );
 
-    let payload = {
-      database_id: this.dbID //eslint-disable-line
+    const payloadRecords = _.map(
+      processedRecords,
+      eachRecord => eachRecord.toTruncatedJSON()
+    );
+
+    const payload = {
+      database_id: this.dbID, //eslint-disable-line
+      records: payloadRecords,
+      atomic: atomic
     };
 
-    if (options.atomic) {
-      payload.atomic = true;
-    }
-
-    payload.records = _.map(processedRecords, (perRecord) => {
-      return perRecord.toTruncatedJSON();
-    });
-
-    const body = await this.container.makeRequest('record:save', payload);
-
-    let results = body.result;
-    let savedRecords = [];
-    let errors = [];
-
-    _.forEach(results, (perResult, idx) => {
-      if (perResult._type === 'error') {
-        savedRecords[idx] = undefined;
-        errors[idx] = perResult;
-      } else {
-        records[idx].update(perResult);
-        records[idx].updateTransient(perResult._transient, true);
-
-        savedRecords[idx] = records[idx];
-        errors[idx] = undefined;
-      }
-    });
-
-    if (records.length === 1) {
-      if (errors[0]) {
-        throw errors[0];
-      }
-      return savedRecords[0];
-    }
-    return {savedRecords, errors};
+    return await this.container.makeRequest('record:save', payload);
   }
 
   /**
-   * Deletes a record or records to Skygear.
+   * Saves a record to Skygear.
    *
-   * Use this method to delete a record or records to Skygear.
-   * The delete will be performed asynchronously and the returned promise will
-   * be resolved when the operation completes.
-   *
-   * @param  {Record|Record[]|QueryResult} obj - the records to delete
-   * @return {Promise} promise
+   * @param {Record} record the record to save
+   * @return {Promise<Record>} promise of saved record
    */
-  async delete(obj) {
-    const isQueryResult = obj instanceof QueryResult;
-    const isArrayLike = _.isArray(obj) || isQueryResult;
-    const records = isArrayLike ? obj : [obj];
+  async saveRecord(record) {
+    let body;
+    try {
+      body = await this._save([record]);
+    } catch (e) {
+      if (e.code !== ErrorCodes.AtomicOperationFailure) {
+        throw e;
+      }
+      const atomicError = e;
+      const deprecatedID = [record.recordType, record.recordID].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
+    }
 
-    const ids = _.map(
+    return this._Record.fromJSON(body.result[0]);
+  }
+
+  /**
+   * Saves records to Skygear atomically.
+   *
+   * @param {Record[]} records the records to save
+   * @return {Promise<Record[]>} promise of saved records
+   */
+  async saveRecords(records) {
+    const body = await this._save(records);
+    const savedRecords = _.map(
+      body.result,
+      eachResult => this._Record.fromJSON(eachResult)
+    );
+    return savedRecords;
+  }
+
+  /**
+   * Saves records to Skygear non-atomically.
+   *
+   * @typedef {Record | Error} NonAtomicSaveResult
+   *
+   * @param {Record[]} records the records to save
+   * @return {Promise<NonAtomicSaveResult[]>} promise of non-atomic save results
+   */
+  async saveRecordsNonAtomically(records) {
+    const body = await this._save(records, false);
+    const saveResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          return this._Record.fromJSON(eachResult);
+        }
+
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
+
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
+      }
+    );
+    return saveResult;
+  }
+
+  /**
+   * @private
+   */
+  async _deleteByIDs(type, ids, atomic = true) {
+    const deprecatedIDs = _.map(
+      ids,
+      eachID => [type, eachID].join('/')
+    );
+    const recordIdentifiers = _.map(
+      ids,
+      eachID => ({
+        _id: [type, eachID].join('/'),
+        _recordType: type,
+        _recordID: eachID
+      })
+    );
+    const payload = {
+      database_id: this.dbID, //eslint-disable-line
+      records: recordIdentifiers,
+      ids: deprecatedIDs,
+      atomic
+    };
+
+    return await this.container.makeRequest('record:delete', payload);
+  }
+
+  /**
+   * @private
+   */
+  async _delete(records, atomic = true) {
+    const deprecatedIDs = _.map(
       records,
       perRecord => [perRecord.recordType, perRecord.recordID].join('/')
     );
@@ -342,28 +396,169 @@ export class Database {
     const payload = {
       database_id: this.dbID, //eslint-disable-line
       records: recordIdentifiers,
-      ids
+      ids: deprecatedIDs,
+      atomic
     };
 
-    const body = await this.container.makeRequest('record:delete', payload);
-    let results = body.result;
-    let errors = [];
+    return await this.container.makeRequest('record:delete', payload);
+  }
 
-    _.forEach(results, (perResult, idx) => {
-      if (perResult._type === 'error') {
-        errors[idx] = perResult;
-      } else {
-        errors[idx] = undefined;
-      }
-    });
-
-    if (records.length === 1) {
-      if (errors[0]) {
-        throw errors[0];
-      }
-      return;
+  /**
+   * Delete a record specified by the type and the ID
+   *
+   * @param {String} type - the record type
+   * @param {String} id - the record ID
+   * @return {Promise<String>} a promise of the deleted record ID
+   */
+  async deleteRecordByID(type, id) {
+    let body;
+    try {
+      body = await this._deleteByIDs(type, [id]);
+    } catch (atomicError) {
+      const deprecatedID = [type, id].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
     }
-    return errors;
+
+    const result = body.result[0];
+    return result._recordID || this._Record.parseDeprecatedID(result._id)[1];
+  }
+
+  /**
+   * Delete records specified by the type and their IDs
+   *
+   * This method deletes records in the same type. To delete records in
+   * multiple types, try to use {@link Database#deleteRecords}
+   *
+   * @param {String} type - the type of the records
+   * @param {String[]} ids - the IDs of the records
+   * @return {Promise<String[]>} a promise of the deleted record IDs
+   */
+  async deleteRecordsByID(type, ids) {
+    const body = await this._deleteByIDs(type, ids);
+    const resultIDs = _.map(
+      body.result,
+      (eachResult) =>
+        eachResult._recordID ||
+        this._Record.parseDeprecatedID(eachResult._id)[1]
+    );
+    return resultIDs;
+  }
+
+  /**
+   * Delete a record from Skygear
+   *
+   * After deleting a record, the return one would have the property
+   * `deleted` set to `true`.
+   *
+   * @param {Record} record - the record
+   * @return {Promise<Record>} a promise of the deleted record
+   */
+  async deleteRecord(record) {
+    let body;
+    try {
+      body = await this._delete([record]);
+    } catch (atomicError) {
+      const deprecatedID = [record.recordType, record.recordID].join('/');
+      const errorInfo = atomicError.info[deprecatedID];
+      throw SkygearError.fromJSON(errorInfo);
+    }
+
+    const result = body.result[0];
+    return this._Record.fromJSON({
+      ...result,
+      _deleted: true
+    });
+  }
+
+  /**
+   * Delete records from Skygear
+   *
+   * After deleting the records, the return ones would have the property
+   * `deleted` set to `true`.
+   *
+   * @param {Record[] | QueryResult} records - the records
+   * @return {Promise<Record[]>} a promise of the deleted records
+   */
+  async deleteRecords(records) {
+    const body = await this._delete(records);
+    const resultRecords = _.map(
+      body.result,
+      eachResult => {
+        return this._Record.fromJSON({
+          ...eachResult,
+          _deleted: true
+        });
+      }
+    );
+
+    return resultRecords;
+  }
+
+  /**
+   * Delete records specified by the type and their IDs non-atomicallly
+   *
+   * @typedef {String | Error} NonAtomicDeleteByIDResult
+   *
+   * @param {String} type - the type of the records
+   * @param {String[]} id - the IDs of the records
+   * @return {Promise<NonAtomicDeleteByIDResult[]>} a promise of the deletion result
+   */
+  async deleteRecordsByIDNonAtomically(type, ids) {
+    const body = await this._deleteByIDs(type, ids, false);
+    const deletionResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          return (
+            eachResult._recordID ||
+            this._Record.parseDeprecatedID(eachResult._id)[1]
+          );
+        }
+
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
+
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
+      }
+    );
+    return deletionResult;
+  }
+
+  /**
+   * Delete records from Skygear non-atomicallly
+   *
+   * After deleting the records, the return ones would have the property
+   * `deleted` set to `true`.
+   *
+   * @typedef {Record | Error} NonAtomicDeleteResult
+   *
+   * @param {Record[] | QueryResult} records - the records
+   * @return {Promise<NonAtomicDeleteResult[]>} a promise of the deletion result
+   */
+  async deleteRecordsNonAtomically(records) {
+    const body = await this._delete(records, false);
+    const deletionResult = _.map(
+      body.result,
+      eachResult => {
+        const eachResultType = eachResult._type;
+        if (eachResultType === 'record') {
+          return this._Record.fromJSON({
+            ...eachResult,
+            _deleted: true
+          });
+        }
+
+        if (eachResultType === 'error') {
+          return SkygearError.fromJSON(eachResult);
+        }
+
+        throw new SkygearError(`Unknown result type ${eachResultType}`);
+      }
+    );
+    return deletionResult;
   }
 
   /**
