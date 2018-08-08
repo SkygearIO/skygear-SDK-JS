@@ -40,7 +40,8 @@
     "url": "^0.11.0",
     "uuid": "^2.0.1",
     "w3c-blob": "0.0.1",
-    "websocket": "^1.0.23"
+    "websocket": "^1.0.23",
+    "xml2js": "^0.4.19"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"
