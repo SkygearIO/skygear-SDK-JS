@@ -106,11 +106,16 @@ export default class CloudCodeContainer extends BaseContainer {
  * the specified user.
  */
 export function getContainer(userId) {
+  // FIXME: should use `await container.config()` which would introduce
+  //        a breaking change to this function to an async function.
   const container = new CloudCodeContainer();
   container.apiKey = settings.masterKey;
   container.endPoint = settings.skygearEndpoint + '/';
+  container.pubsub._reconfigurePubsubIfNeeded();
+
   if (userId) {
     container.asUserId = userId;
   }
+
   return container;
 }
