@@ -26,6 +26,9 @@ import {PubsubContainer} from '../pubsub';
 import {CloudCodePushContainer} from './push';
 import {settings} from './settings';
 
+const PUBSUB_OPEN_TIMEOUT_DURATION = 10000;
+const PUBSUB_CLOSE_TIMEOUT_DURATION = 3000;
+
 export default class CloudCodeContainer extends BaseContainer {
 
   constructor({ sendPluginRequest, asUserId } = {}) {
@@ -113,4 +116,105 @@ export function getContainer(userId) {
     container.asUserId = userId;
   }
   return container;
+}
+
+/**
+ * Publish multiple events to multiple channels.
+ *
+ * @param {String[]} [channels] - name of the channels
+ * @param {Object[]} [eventsData] - events data to be published
+ * @return {Promise<CloudCodeContainer>} promise with the cloud code container
+ */
+export async function publishMultiChannelEvents(channels, eventsData) {
+  const container = new CloudCodeContainer();
+  const pubsub = container.pubsub;
+
+  // Try to open configure pubsub within the tiemout duration
+  const pubsubOpened = await Promise.race([
+    new Promise((resolve) => {
+      pubsub.onOpen(() => {
+        resolve(true);
+      });
+      return container.config({
+        apiKey: settings.masterKey,
+        endPoint: settings.skygearEndpoint + '/'
+      }).then(() => {
+        pubsub._reconfigurePubsubIfNeeded();
+        return;
+      });
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(false);
+      }, PUBSUB_OPEN_TIMEOUT_DURATION);
+    })
+  ]);
+
+  if (!pubsubOpened) {
+    throw new Error(
+      `Failed to open Skygear Pubsub in ${PUBSUB_OPEN_TIMEOUT_DURATION}ms`
+    );
+  }
+
+  _.map(channels, (eachChannel) => {
+    _.map(eventsData, (eachEventData) => {
+      pubsub.publish(eachChannel, eachEventData);
+    });
+  });
+
+  // Try to close pubsub within the tiemout duration
+  const pubsubClosed = await Promise.race([
+    new Promise((resolve) => {
+      pubsub.onClose(() => {
+        resolve(true);
+      });
+      pubsub._pubsub.close();
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(false);
+      }, PUBSUB_CLOSE_TIMEOUT_DURATION);
+    })
+  ]);
+
+  if (!pubsubClosed) {
+    console.warn(
+      `Failed to close Skygear Pubsub in ${PUBSUB_CLOSE_TIMEOUT_DURATION}ms`
+    );
+  }
+
+  return container;
+}
+
+/**
+ * Publish a single event to multiple channels.
+ *
+ * @param {String[]} [channels] - name of the channels
+ * @param {Object} [eventData] - event data to be published
+ * @return {Promise<CloudCodeContainer>} promise with the cloud code container
+ */
+export async function publishMultiChannelEvent(channels, eventData) {
+  return publishMultiChannelEvents(channels, [eventData]);
+}
+
+/**
+ * Publish multiple events to a channel.
+ *
+ * @param {String} [channel] - name of the channel
+ * @param {Object[]} [eventsData] - events data to be published
+ * @return {Promise<CloudCodeContainer>} promise with the cloud code container
+ */
+export async function publishChannelEvents(channel, eventsData) {
+  return publishMultiChannelEvents([channel], eventsData);
+}
+
+/**
+ * Publish an event to a channel.
+ *
+ * @param {String} [channel] - name of the channel
+ * @param {Object} [eventData] - event data to be published
+ * @return {Promise<CloudCodeContainer>} promise with the cloud code container
+ */
+export async function publishChannelEvent(channel, eventData) {
+  return publishMultiChannelEvents([channel], [eventData]);
 }
