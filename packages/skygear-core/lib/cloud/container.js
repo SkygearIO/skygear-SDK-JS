@@ -125,7 +125,7 @@ export function getContainer(userId) {
  * @param {Object[]} [eventsData] - events data to be published
  * @return {Promise<CloudCodeContainer>} promise with the cloud code container
  */
-export async function publishMultiChannelEvents(channels, eventsData) {
+export async function publishEventsToChannels(channels, eventsData) {
   const container = new CloudCodeContainer();
   const pubsub = container.pubsub;
 
@@ -184,37 +184,4 @@ export async function publishMultiChannelEvents(channels, eventsData) {
   }
 
   return container;
-}
-
-/**
- * Publish a single event to multiple channels.
- *
- * @param {String[]} [channels] - name of the channels
- * @param {Object} [eventData] - event data to be published
- * @return {Promise<CloudCodeContainer>} promise with the cloud code container
- */
-export async function publishMultiChannelEvent(channels, eventData) {
-  return publishMultiChannelEvents(channels, [eventData]);
-}
-
-/**
- * Publish multiple events to a channel.
- *
- * @param {String} [channel] - name of the channel
- * @param {Object[]} [eventsData] - events data to be published
- * @return {Promise<CloudCodeContainer>} promise with the cloud code container
- */
-export async function publishChannelEvents(channel, eventsData) {
-  return publishMultiChannelEvents([channel], eventsData);
-}
-
-/**
- * Publish an event to a channel.
- *
- * @param {String} [channel] - name of the channel
- * @param {Object} [eventData] - event data to be published
- * @return {Promise<CloudCodeContainer>} promise with the cloud code container
- */
-export async function publishChannelEvent(channel, eventData) {
-  return publishMultiChannelEvents([channel], [eventData]);
 }
