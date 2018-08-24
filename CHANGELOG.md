@@ -1,3 +1,19 @@
+## 1.6.2 (2018-08-24)
+
+### Features
+
+- Allow user to access uploadAsset function from db (#429)
+
+### Bug Fixes
+
+- Throw asset s3 error
+- Add asset too large error code
+- Add verification required error code
+
+### Other Notes
+
+- Update npm, fix audit and update build system for node 10
+
 ## 1.6.0 (2018-06-26)
 
 ### Features
