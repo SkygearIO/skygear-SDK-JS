@@ -27,7 +27,7 @@ git add CHANGELOG.md
 make update-version VERSION=$SKYGEAR_VERSION
 
 npm run lerna bootstrap # make sure dependencies are linked
-npm run prepublish # Build all packages
+npm run build-production # Build all packages
 npm run lerna publish -- --skip-git --skip-npm --repo-version $SKYGEAR_VERSION
 ## Tag and push commit
 git add CHANGELOG.md lerna.json gulp/context.js packages/*/package.json
