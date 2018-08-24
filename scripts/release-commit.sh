@@ -21,7 +21,7 @@ fi
 github-release release -u skygeario -r skygear-SDK-JS --draft --tag v$SKYGEAR_VERSION --name "v$SKYGEAR_VERSION" --description "`cat new-release`"
 
 ## Update changelog
-cat CHANGELOG.md >> new-release && mv new-release CHANGELOG.md
+echo "" >> new-release && cat CHANGELOG.md >> new-release && mv new-release CHANGELOG.md
 git add CHANGELOG.md
 
 make update-version VERSION=$SKYGEAR_VERSION
