@@ -139,7 +139,7 @@ export async function publishEventsToChannels(channels, eventsData) {
         apiKey: settings.masterKey,
         endPoint: settings.skygearEndpoint + '/'
       }).then(() => {
-        pubsub._reconfigurePubsubIfNeeded();
+        pubsub._pubsub.reconfigure();
         return;
       });
     }),
