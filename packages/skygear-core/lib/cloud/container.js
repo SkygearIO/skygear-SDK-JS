@@ -26,6 +26,9 @@ import {PubsubContainer} from '../pubsub';
 import {CloudCodePushContainer} from './push';
 import {settings} from './settings';
 
+const PUBSUB_OPEN_TIMEOUT_DURATION = 10000;
+const PUBSUB_CLOSE_TIMEOUT_DURATION = 3000;
+
 export default class CloudCodeContainer extends BaseContainer {
 
   constructor({ sendPluginRequest, asUserId } = {}) {
@@ -112,5 +115,73 @@ export function getContainer(userId) {
   if (userId) {
     container.asUserId = userId;
   }
+  return container;
+}
+
+/**
+ * Publish multiple events to multiple channels.
+ *
+ * @param {String[]} [channels] - name of the channels
+ * @param {Object[]} [eventsData] - events data to be published
+ * @return {Promise<CloudCodeContainer>} promise with the cloud code container
+ */
+export async function publishEventsToChannels(channels, eventsData) {
+  const container = new CloudCodeContainer();
+  const pubsub = container.pubsub;
+
+  // Try to open configure pubsub within the tiemout duration
+  const pubsubOpened = await Promise.race([
+    new Promise((resolve) => {
+      pubsub.onOpen(() => {
+        resolve(true);
+      });
+      return container.config({
+        apiKey: settings.masterKey,
+        endPoint: settings.skygearEndpoint + '/'
+      }).then(() => {
+        pubsub._pubsub.reconfigure();
+        return;
+      });
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(false);
+      }, PUBSUB_OPEN_TIMEOUT_DURATION);
+    })
+  ]);
+
+  if (!pubsubOpened) {
+    throw new Error(
+      `Failed to open Skygear Pubsub in ${PUBSUB_OPEN_TIMEOUT_DURATION}ms`
+    );
+  }
+
+  _.map(channels, (eachChannel) => {
+    _.map(eventsData, (eachEventData) => {
+      pubsub.publish(eachChannel, eachEventData);
+    });
+  });
+
+  // Try to close pubsub within the tiemout duration
+  const pubsubClosed = await Promise.race([
+    new Promise((resolve) => {
+      pubsub.onClose(() => {
+        resolve(true);
+      });
+      pubsub._pubsub.close();
+    }),
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(false);
+      }, PUBSUB_CLOSE_TIMEOUT_DURATION);
+    })
+  ]);
+
+  if (!pubsubClosed) {
+    console.warn(
+      `Failed to close Skygear Pubsub in ${PUBSUB_CLOSE_TIMEOUT_DURATION}ms`
+    );
+  }
+
   return container;
 }
