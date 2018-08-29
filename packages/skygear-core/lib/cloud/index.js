@@ -439,7 +439,7 @@ export { poolConnect } from './pg';
 export { SkygearRequest, SkygearResponse } from './transport/common';
 export const settings = _settings;
 export const CloudCodeContainer = _CloudCodeContainer;
-export { getContainer } from './container';
+export { getContainer, publishEventsToChannels } from './container';
 export const ErrorCodes = _ErrorCodes;
 export const SkygearError = _SkygearError;
 export const log = _createLogger;
