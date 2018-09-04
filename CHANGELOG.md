@@ -1,3 +1,9 @@
+## 1.6.3 (2018-09-04)
+
+### Features
+
+- Add util functions helping publish event in cloud code
+
 ## 1.6.2 (2018-08-24)
 
 ### Features
