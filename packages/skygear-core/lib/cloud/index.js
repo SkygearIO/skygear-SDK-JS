@@ -443,3 +443,4 @@ export { getContainer, publishEventsToChannels } from './container';
 export const ErrorCodes = _ErrorCodes;
 export const SkygearError = _SkygearError;
 export const log = _createLogger;
+export { getSigner } from './asset';
