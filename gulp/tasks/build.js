@@ -4,7 +4,7 @@ var eslint = require('gulp-eslint');
 var excludeGitignore = require('gulp-exclude-gitignore');
 var babel = require('gulp-babel');
 var preprocess = require('gulp-preprocess');
-var uglify = require('gulp-uglify')
+var uglify = require('gulp-uglify-es').default;
 var concat = require('gulp-concat')
 var sourcemaps = require('gulp-sourcemaps');
 var merge = require('merge-stream');
@@ -60,8 +60,8 @@ gulp.task('minify', ['browserify'], function() {
         )
       )
       .pipe(sourcemaps.init())
-        .pipe(concat(packageConfig.minifiedDest))
-        .pipe(uglify())
+      .pipe(concat(packageConfig.minifiedDest))
+      .pipe(uglify())
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(packageConfig.dest));
   });
