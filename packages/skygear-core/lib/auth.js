@@ -271,7 +271,7 @@ export class AuthContainer {
       return perRole.name;
     });
 
-    const body = await this.container.makeRequest('role:admin', {
+    const body = await this.container.makeRequest('auth:role:admin', {
       roles: roleNames
     });
     return body.result;
@@ -288,7 +288,7 @@ export class AuthContainer {
       return perRole.name;
     });
 
-    const body = await this.container.makeRequest('role:default', {
+    const body = await this.container.makeRequest('auth:role:default', {
       roles: roleNames
     });
     return body.result;
@@ -302,7 +302,7 @@ export class AuthContainer {
    */
   async fetchUserRole(usersOrUserIDs) {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
-    const body = await this.container.makeRequest('role:get', {
+    const body = await this.container.makeRequest('auth:role:get', {
       users: userIDs
     });
 
@@ -326,7 +326,7 @@ export class AuthContainer {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
-    const body = await this.container.makeRequest('role:assign', {
+    const body = await this.container.makeRequest('auth:role:assign', {
       users: userIDs,
       roles: roleNames
     });
@@ -346,7 +346,7 @@ export class AuthContainer {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
-    const body = await this.container.makeRequest('role:revoke', {
+    const body = await this.container.makeRequest('auth:role:revoke', {
       users: userIDs,
       roles: roleNames
     });
