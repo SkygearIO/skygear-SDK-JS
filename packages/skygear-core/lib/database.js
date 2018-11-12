@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
-const xml2js = require('xml2js');
+import _ from 'lodash';
+import xmlParser from 'fast-xml-parser';
 
 import Cache from './cache';
 import Asset, {isAsset} from './asset';
@@ -585,24 +585,14 @@ async function parseS3XmlErrorMessage(error) {
     throw new Error('Unable to get response text');
   }
 
-  return new Promise((resolve, reject) => {
-    xml2js.parseString(error.response.text, (err, result) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+  const result = xmlParser.parse(error.response.text);
+  if (result.Error &&
+      result.Error.Code && typeof result.Error.Code === 'string' &&
+      result.Error.Message && typeof result.Error.Message === 'string') {
+    return [result.Error.Code, result.Error.Message];
+  }
 
-      // this is where s3 place the error
-      if (result.Error &&
-          result.Error.Code && result.Error.Code[0] &&
-          result.Error.Message && result.Error.Message[0]) {
-        resolve([result.Error.Code[0], result.Error.Message[0]]);
-        return;
-      }
-
-      reject(new Error('Malformed S3 response error'));
-    });
-  });
+  throw new Error('Malformed S3 response error');
 }
 
 function _s3ErrorToSkyError(code, message) {
