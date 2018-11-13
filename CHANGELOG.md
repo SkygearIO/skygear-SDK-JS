@@ -1,3 +1,14 @@
+## 1.6.4 (2018-11-13)
+
+### Bug Fixes
+
+- Fix react-native build problem #462
+
+### Other notes
+
+- Export getSigner for signing asset in cloud container
+
+
 ## 1.6.3 (2018-09-04)
 
 ### Features
