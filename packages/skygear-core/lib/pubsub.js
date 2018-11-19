@@ -78,7 +78,10 @@ export class Pubsub {
   _pubsubUrl(internal = false) {
     let parsedUrl = url.parse(this._container.endPoint);
     let protocol = parsedUrl.protocol === 'https:' ? 'wss:' : 'ws:';
-    let path = internal ? '/_/pubsub' : '/pubsub';
+    let trailingSlash = parsedUrl.path.endsWith('/');
+    let pubsubPath = internal ? '/_/pubsub' : '/pubsub';
+    pubsubPath = trailingSlash ? pubsubPath.substring(1) : pubsubPath;
+    let path = parsedUrl.path + pubsubPath;
     var queryString = '?api_key=' + this._container.apiKey;
     return protocol + '//' + parsedUrl.host + path + queryString;
   }
