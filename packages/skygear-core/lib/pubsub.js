@@ -436,7 +436,7 @@ export class PubsubContainer {
      *
      * @type {Boolean}
      */
-    this.autoPubsub = true;
+    this.autoPubsub = false;
   }
 
   /**

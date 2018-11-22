@@ -197,7 +197,7 @@ describe('Container role', function () {
   let container = new Container();
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/role/admin',
+    pattern: 'http://skygear.dev/auth/role/admin',
     fixtures: function (match, params, headers, fn) {
       var roles = params['roles'];
       if (roles.indexOf('Killer') !== -1 && roles.indexOf('Police') !== -1) {
@@ -210,7 +210,7 @@ describe('Container role', function () {
       }
     }
   }, {
-    pattern: 'http://skygear.dev/role/default',
+    pattern: 'http://skygear.dev/auth/role/default',
     fixtures: function (match, params, headers, fn) {
       var roles = params['roles'];
       if (roles.indexOf('Healer') !== -1 && roles.indexOf('Victim') !== -1) {
@@ -223,7 +223,7 @@ describe('Container role', function () {
       }
     }
   }, {
-    pattern: 'http://skygear.dev/role/get',
+    pattern: 'http://skygear.dev/auth/role/get',
     fixtures: function (match, params, headers, fn) {
       let userIds = params['users'];
       if (userIds.length === 3 && userIds[0] === 'user1' &&
