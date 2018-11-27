@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+  <style>
+    * {
+      font-family: 'Lato', sans-serif;
+    }
+
+    .btn-primary {
+      background-color: #007bd4 !important;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b578e !important;
+    }
+
+    .info-row {
+      margin: 10px;
+    }
+
+    code {
+      display: block;
+      max-width: -webkit-fit-content;
+      max-width:    -moz-fit-content;
+      max-width:         fit-content;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: #efefef;
+      color: black;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script> -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.js"></script>
+  <script>
+    window.logP = function (el) {
+      return function (P) {
+        return (
+          P.then(function (res) {
+            el.value = JSON.stringify(res, null, 4)
+            el.style.color = '#222'
+          }).catch(function (err) {
+            el.value = JSON.stringify(err, null, 4)
+            el.style.color = 'red'
+          })
+        )
+      }
+    }
+  </script>
+  <script src="/bundle.js"></script>
+
+  <div class="container" style="max-width: 800px">
+    <div class="row">
+      <div class="col-sm-9">
+        <!-- Current Info -->
+        <div>
+          <h2>Current Information</h2>
+          <div style="padding: 20px" class="border border-grey">
+            <div class="row info-row">
+              <div class="col">Endpoint</div>
+              <div id="info-endpoint" class="col-8"></div>
+            </div>
+            <div class="row info-row">
+              <div class="col">API Key</div>
+              <div id="info-api-key" class="col-8"></div>
+            </div>
+            <div class="row info-row">
+              <div class="col">Username</div>
+              <div id="info-username" class="col-8"></div>
+            </div>
+            <div class="row info-row">
+              <div class="col">Email</div>
+              <div id="info-email" class="col-8"></div>
+            </div>
+            <div class="row info-row">
+              <div class="col">Access token</div>
+              <div id="info-token" class="col-8" style="word-break: break-all;"></div>
+            </div>
+          </div>
+
+          <script>
+            function refreshUserInfo() {
+            $('#info-token')[0].innerText = skygear.auth.accessToken;
+            if (skygear.auth.currentUser) {
+              $('#info-username')[0].innerText = skygear.auth.currentUser.username;
+              $('#info-email')[0].innerText = skygear.auth.currentUser.email;
+            } else {
+              $('#info-username')[0].innerText = '';
+              $('#info-email')[0].innerText = '';
+            }
+          }
+
+          skygear.config({
+            'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+            'apiKey': '{{ SKYGEAR_API_KEY }}'
+          }).then(function(container) {
+            console.log()
+
+            $('#info-endpoint')[0].innerText = container.endPoint;
+            $('#info-api-key')[0].innerText = container.apiKey;
+            refreshUserInfo()
+          }, function(err) {
+            console.log(err);
+          });
+
+          skygear.auth.onUserChanged(refreshUserInfo);
+        </script>
+        </div>
+
+        <!-- Login -->
+        <div class="section section-login">
+          <h2>Login</h2>
+
+          <div id="loginWithUsername">
+            <code>loginWithUsername(username, password)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithUserName()">
+              <div class="form-group mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function loginWithUserName() {
+              var username = $('#loginWithUsername #username')[0].value
+              var password = $('#loginWithUsername #password')[0].value
+
+              return logP($('#loginWithUsername #terminal')[0])(skygear.auth.loginWithUsername(username, password))
+            }
+          </script>
+          </div>
+
+          <div id="loginWithEmail">
+            <code>loginWithEmail(email, password)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithEmail()">
+              <div class="form-group mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function loginWithEmail() {
+              var username = $('#loginWithEmail #email')[0].value
+              var password = $('#loginWithEmail #password')[0].value
+
+              return logP($('#loginWithEmail #terminal')[0])(skygear.auth.loginWithEmail(email, password))
+            }
+          </script>
+          </div>
+
+          <div id="loginWithCustomToken">
+            <code>loginWithCustomToken(token)</code>
+
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithCustomToken()">
+              <div class="form-group mr-sm-3 mb-2">
+                <label for="token" class="sr-only">Token</label>
+                <input type="password" class="form-control" id="token" placeholder="Custom token">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function loginWithCustomToken() {
+                var token = $('#loginWithCustomToken #token')[0].value
+
+                return logP($('#loginWithCustomToken #terminal')[0])(skygear.auth.loginWithCustomToken(token))
+              }
+            </script>
+          </div>
+        </div>
+
+        <div class="section section-signup">
+          <h2>Signup</h2>
+
+          <div id="signupAnonymously">
+            <code>signupAnonymously()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupAnonymously()">
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function signupAnonymously() {
+                return logP($('#signupAnonymously #terminal')[0])(skygear.auth.signupAnonymously())
+              }
+          </script>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <nav id="toc" data-toggle="toc" class="sticky-top pt-4"></nav>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
