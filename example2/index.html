@@ -12,10 +12,15 @@
   <title>Skygear-SDK-JS examples</title>
 </head>
 
-<body data-spy="scroll" data-target="#toc">
+<!-- <body data-spy="scroll" data-target="#toc"> -->
+<body>
   <style>
     * {
       font-family: 'Lato', sans-serif;
+    }
+
+    h2 {
+      font-weight: bolder;
     }
 
     .btn-primary {
@@ -24,6 +29,11 @@
 
     .btn-primary:hover {
       background-color: #0b578e !important;
+    }
+
+    nav[data-toggle="toc"] .nav-link.active {
+      color: #007bd4 !important;
+      border-color: #007bd4 !important;
     }
 
     .info-row {
@@ -49,7 +59,7 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
     crossorigin="anonymous"></script>
   <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.js"></script>
@@ -70,7 +80,7 @@
   </script>
   <script src="/bundle.js"></script>
 
-  <div class="container" style="max-width: 800px">
+  <div class="container my-3" style="max-width: 850px">
     <div class="row">
       <div class="col-sm-9">
         <!-- Current Info -->
@@ -227,10 +237,21 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <nav id="toc" data-toggle="toc" class="sticky-top pt-4"></nav>
+        <nav id="toc" class="sticky-top pt-4"></nav>
       </div>
     </div>
   </div>
+
+  <script>
+    $(function() {
+      var navSelector = '#toc';
+      var $myNav = $(navSelector);
+      Toc.init($myNav);
+      $('body').scrollspy({
+        target: navSelector
+      });
+    });
+  </script>
 </body>
 
 </html>
