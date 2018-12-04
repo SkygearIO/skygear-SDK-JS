@@ -16,7 +16,8 @@
 <body>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+    crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
     crossorigin="anonymous"></script>
   <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.js"></script>
@@ -117,11 +118,11 @@
 
             <script>
               function loginWithUserName() {
-              var username = $('#loginWithUsername #username')[0].value
-              var password = $('#loginWithUsername #password')[0].value
+                var username = $('#loginWithUsername #username')[0].value
+                var password = $('#loginWithUsername #password')[0].value
 
-              return logP($('#loginWithUsername #terminal')[0])(skygear.auth.loginWithUsername(username, password))
-            }
+                return logP($('#loginWithUsername #terminal')[0])(skygear.auth.loginWithUsername(username, password))
+              }
           </script>
           </div>
 
@@ -143,11 +144,11 @@
 
             <script>
               function loginWithEmail() {
-              var username = $('#loginWithEmail #email')[0].value
-              var password = $('#loginWithEmail #password')[0].value
+                var username = $('#loginWithEmail #email')[0].value
+                var password = $('#loginWithEmail #password')[0].value
 
-              return logP($('#loginWithEmail #terminal')[0])(skygear.auth.loginWithEmail(email, password))
-            }
+                return logP($('#loginWithEmail #terminal')[0])(skygear.auth.loginWithEmail(email, password))
+              }
           </script>
           </div>
 
@@ -299,6 +300,104 @@
           </div>
         </div>
 
+        <!-- Forgot Password -->
+        <div class="section section-forgort-password">
+          <h2>Forgot Password</h2>
+
+          <div id="forgotPassword">
+            <code>forgotPassword(email)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); forgotPassword()">
+              <div class="form-group mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function forgotPassword() {
+              var email = $('#forgotPassword #email')[0].value
+
+              return logP($('#forgotPassword #terminal')[0])(skygear.auth.forgotPassword(email))
+            }
+          </script>
+          </div>
+        </div>
+
+        <!-- Reset Password -->
+        <div class="section section-reset-password">
+          <h2>Reset Password</h2>
+
+          <div id="resetPassword">
+            <code>resetPassword(email)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); resetPassword()">
+              <div class="form-group mb-2">
+                <label for="userID" class="sr-only">User ID</label>
+                <input type="text" class="form-control" id="userID" placeholder="User ID" required>
+              </div>
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="code" class="sr-only">Code</label>
+                <input type="text" class="form-control" id="code" placeholder="Code" required>
+              </div>
+              <div class="form-group mb-2">
+                <label for="expireAt" class="sr-only">Expire At</label>
+                <input type="text" class="form-control" id="expireAt" placeholder="Expire At" required>
+              </div>
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="password" class="sr-only">New Password</label>
+                <input type="password" class="form-control" id="password" placeholder="New Password" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function resetPassword() {
+                var userID = $('#resetPassword #userID')[0].value
+                var code = $('#resetPassword #code')[0].value
+                var expireAt = $('#resetPassword #expireAt')[0].value
+                var newPassword = $('#resetPassword #password')[0].value
+
+                return logP($('#resetPassword #terminal')[0])(skygear.auth.resetPassword(userID, code, expireAt, newPassword))
+              }
+          </script>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="section section-change-password">
+          <h2>Change Password</h2>
+
+          <div id="changePassword">
+            <code>changePassword(old_password, new_password)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); changePassword()">
+              <div class="form-group mb-2">
+                <label for="oldPassword" class="sr-only">Current Password</label>
+                <input type="password" class="form-control" id="oldPassword" placeholder="Current Password" required>
+              </div>
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="newPassword" class="sr-only">New Password</label>
+                <input type="password" class="form-control" id="newPassword" placeholder="New Password" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function changePassword() {
+                var oldPassword = $('#changePassword #oldPassword')[0].value
+                var newPassword = $('#changePassword #newPassword')[0].value
+
+                return logP($('#changePassword #terminal')[0])(skygear.auth.changePassword(oldPassword, newPassword))
+              }
+          </script>
+          </div>
+        </div>
+
         <!-- User Discovery -->
         <div class="section section-user-discovery">
           <h2>User Discovery</h2>
@@ -361,6 +460,37 @@
           </div>
         </div>
 
+        <!-- Admin -->
+        <div class="section section-admin">
+          <h2>Admin</h2>
+
+          <div id="adminResetPassword">
+            <code>adminResetPassword(userID, password)</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); adminResetPassword()">
+              <div class="form-group mb-2">
+                <label for="userID" class="sr-only">User ID</label>
+                <input type="text" class="form-control" id="userID" placeholder="User ID" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function adminResetPassword() {
+                var userID = $('#adminResetPassword #userID')[0].value
+                var password = $('#adminResetPassword #password')[0].value
+
+                return logP($('#adminResetPassword #terminal')[0])(skygear.auth.adminResetPassword(userID, password))
+              }
+            </script>
+          </div>
+        </div>
+
       </div>
       <div class="col-sm-3">
         <nav id="toc" class="sticky-top pt-4"></nav>
@@ -369,7 +499,7 @@
   </div>
 
   <script>
-    $(function() {
+    $(function () {
       var navSelector = '#toc';
       var $myNav = $(navSelector);
       Toc.init($myNav);
@@ -377,6 +507,7 @@
         target: navSelector
       });
     });
+
   </script>
 </body>
 
