@@ -9,54 +9,11 @@
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.css">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
   <title>Skygear-SDK-JS examples</title>
 </head>
 
-<!-- <body data-spy="scroll" data-target="#toc"> -->
 <body>
-  <style>
-    * {
-      font-family: 'Lato', sans-serif;
-    }
-
-    h2 {
-      font-weight: bolder;
-    }
-
-    .btn-primary {
-      background-color: #007bd4 !important;
-    }
-
-    .btn-primary:hover {
-      background-color: #0b578e !important;
-    }
-
-    nav[data-toggle="toc"] .nav-link.active {
-      color: #007bd4 !important;
-      border-color: #007bd4 !important;
-    }
-
-    .info-row {
-      margin: 10px;
-    }
-
-    code {
-      display: block;
-      max-width: -webkit-fit-content;
-      max-width:    -moz-fit-content;
-      max-width:         fit-content;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      padding: 15px;
-      background-color: #efefef;
-      color: black;
-    }
-
-    .section {
-      margin-top: 20px;
-    }
-  </style>
-
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
@@ -232,9 +189,178 @@
               function signupAnonymously() {
                 return logP($('#signupAnonymously #terminal')[0])(skygear.auth.signupAnonymously())
               }
+            </script>
+          </div>
+
+          <div id="signup">
+            <code>signup()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signup()">
+              <div class="form-group md-3 mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mb-2 mr-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function signup() {
+                var username = $('#signup #username')[0].value
+                var email = $('#signup #email')[0].value
+                var password = $('#signup #password')[0].value
+
+                return logP($('#signup #terminal')[0])(skygear.auth.signup({
+                  username: username,
+                  email: email
+                }, password))
+              }
+            </script>
+          </div>
+
+          <div id="signupWithUsername">
+            <code>signupWithUsername()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupWithUsername()">
+              <div class="form-group md-3 mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mb-2 mr-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function signupWithUsername() {
+                var username = $('#signupWithUsername #username')[0].value
+                var password = $('#signupWithUsername #password')[0].value
+
+                return logP($('#signupWithUsername #terminal')[0])(skygear.auth.signupWithUsername(username, password))
+              }
+            </script>
+          </div>
+
+          <div id="signupWithEmail">
+            <code>signupWithEmail()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupWithEmail()">
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mb-2  mx-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function signupWithEmail() {
+                var email = $('#signupWithEmail #email')[0].value
+                var password = $('#signupWithEmail #password')[0].value
+
+                return logP($('#signupWithEmail #terminal')[0])(skygear.auth.signupWithEmail(email, password))
+              }
+            </script>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <div class="section section-logout">
+          <h2>Logout</h2>
+
+          <div id="logout">
+            <code>logout()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); logout()">
+              <button type="submit" class="btn btn-primary mb-2">Logout</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function logout() {
+                return logP($('#logout #terminal')[0])(skygear.auth.logout())
+              }
           </script>
           </div>
         </div>
+
+        <!-- User Discovery -->
+        <div class="section section-user-discovery">
+          <h2>User Discovery</h2>
+
+          <div id="whoami">
+            <code>whoami()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); whoami()">
+              <button type="submit" class="btn btn-primary mb-2">Who am I?</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function whoami() {
+                return logP($('#whoami #terminal')[0])(skygear.auth.whoami())
+              }
+            </script>
+          </div>
+
+          <div id="discoverUserByEmails">
+            <code>discoverUserByEmails([email])</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); discoverUserByEmails()">
+              <div class="form-group mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Discover</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function discoverUserByEmails() {
+                var email = $('#discoverUserByEmails #email')[0].value
+
+                return logP($('#discoverUserByEmails #terminal')[0])(skygear.auth.discoverUserByEmails([email]))
+              }
+            </script>
+          </div>
+
+          <div id="discoverUserByUsernames">
+            <code>discoverUserByUsernames([username])</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); discoverUserByUsernames()">
+              <div class="form-group mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="username" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Discover</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function discoverUserByUsernames() {
+                var username = $('#discoverUserByUsernames #username')[0].value
+
+                return logP($('#discoverUserByUsernames #terminal')[0])(skygear.auth.discoverUserByUsernames([username]))
+              }
+           </script>
+          </div>
+        </div>
+
       </div>
       <div class="col-sm-3">
         <nav id="toc" class="sticky-top pt-4"></nav>

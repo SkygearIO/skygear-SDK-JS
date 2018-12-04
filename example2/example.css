@@ -1,0 +1,40 @@
+* {
+  font-family: 'Lato', sans-serif;
+}
+
+h2 {
+  font-weight: bolder;
+}
+
+.btn-primary {
+  background-color: #007bd4 !important;
+}
+
+.btn-primary:hover {
+  background-color: #0b578e !important;
+}
+
+nav[data-toggle="toc"] .nav-link.active {
+  color: #007bd4 !important;
+  border-color: #007bd4 !important;
+}
+
+.info-row {
+  margin: 10px;
+}
+
+code {
+  display: block;
+  max-width: -webkit-fit-content;
+  max-width:    -moz-fit-content;
+  max-width:         fit-content;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: #efefef;
+  color: black;
+}
+
+.section {
+  margin-top: 20px;
+}
