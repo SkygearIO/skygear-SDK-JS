@@ -491,6 +491,55 @@
           </div>
         </div>
 
+        <!-- Record -->
+        <div class="section section-record">
+          <h2>Record</h2>
+
+          <div id="saveRecord">
+            <code>saveRecord(record)</code>
+            <form class="form" onsubmit="event.preventDefault(); saveRecord()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+              <div class="form-group">
+                <label for="payload">JSON Payload</label>
+                <textarea class="form-control" id="payload" rows="3">{
+  "body": "Hello World"
+}</textarea>
+              </div>
+              <div class="form-group">
+                <input id="auto-increment" type="checkbox"/>
+                <label for="auto-increment" class="form-check-label">Include auto increment ID</label>
+                <input class="form-control" style="display: inline-block; width:calc(100% - 194px);" id="auto-increment-id" type="text" value="noteID">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+              function saveRecord() {
+                var _type = $('#saveRecord #type')[0].value
+                var payload = $('#saveRecord #payload')[0].value
+                var sequenceEnabled = $('#saveRecord #auto-increment')[0].checked
+                var sequenceName = $('#saveRecord #auto-increment-id')[0].value
+
+                var _Record = skygear.Record.extend(_type)
+                var attrs = JSON.parse(payload)
+                var record = new _Record(attrs)
+
+                if (sequenceEnabled && sequenceName) {
+                  record[sequenceName] = new skygear.Sequence()
+                }
+
+                return logP($('#saveRecord #terminal')[0])(skygear.publicDB.saveRecord(record))
+              }
+          </script>
+          </div>
+        </div>
+
+
       </div>
       <div class="col-sm-3">
         <nav id="toc" class="sticky-top pt-4"></nav>
