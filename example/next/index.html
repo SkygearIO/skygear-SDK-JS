@@ -5,96 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-    crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.css">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="example.css">
   <title>Skygear-SDK-JS examples</title>
 </head>
 
 <body>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.js"></script>
-  <script>
-    window.logP = function (el) {
-      return function (P) {
-        return (
-          P.then(function (res) {
-            el.value = JSON.stringify(res, null, 4)
-            el.style.color = '#222'
-          }).catch(function (err) {
-            el.value = JSON.stringify(err, null, 4)
-            el.style.color = 'red'
-          })
-        )
-      }
-    }
-  </script>
   <script src="/bundle.js"></script>
 
   <div class="container my-3" style="max-width: 850px">
     <div class="row">
       <div class="col-sm-9">
-        <!-- Current Info -->
-        <div>
-          <h2>Current Information</h2>
-          <div style="padding: 20px" class="border border-grey">
-            <div class="row info-row">
-              <div class="col">Endpoint</div>
-              <div id="info-endpoint" class="col-8"></div>
-            </div>
-            <div class="row info-row">
-              <div class="col">API Key</div>
-              <div id="info-api-key" class="col-8"></div>
-            </div>
-            <div class="row info-row">
-              <div class="col">Username</div>
-              <div id="info-username" class="col-8"></div>
-            </div>
-            <div class="row info-row">
-              <div class="col">Email</div>
-              <div id="info-email" class="col-8"></div>
-            </div>
-            <div class="row info-row">
-              <div class="col">Access token</div>
-              <div id="info-token" class="col-8" style="word-break: break-all;"></div>
-            </div>
-          </div>
-
-          <script>
-            function refreshUserInfo() {
-            $('#info-token')[0].innerText = skygear.auth.accessToken;
-            if (skygear.auth.currentUser) {
-              $('#info-username')[0].innerText = skygear.auth.currentUser.username;
-              $('#info-email')[0].innerText = skygear.auth.currentUser.email;
-            } else {
-              $('#info-username')[0].innerText = '';
-              $('#info-email')[0].innerText = '';
-            }
-          }
-
-          skygear.config({
-            'endPoint': '{{ SKYGEAR_ENDPOINT }}',
-            'apiKey': '{{ SKYGEAR_API_KEY }}'
-          }).then(function(container) {
-            console.log()
-
-            $('#info-endpoint')[0].innerText = container.endPoint;
-            $('#info-api-key')[0].innerText = container.apiKey;
-            refreshUserInfo()
-          }, function(err) {
-            console.log(err);
-          });
-
-          skygear.auth.onUserChanged(refreshUserInfo);
-        </script>
-        </div>
+        <div id="current-info"></div>
 
         <!-- Login -->
         <div class="section section-login">
@@ -118,12 +46,21 @@
 
             <script>
               function loginWithUserName() {
-                var username = $('#loginWithUsername #username')[0].value
-                var password = $('#loginWithUsername #password')[0].value
+                var demo = document.getElementById('loginWithUsername')
+                var terminal = demo.querySelector('#terminal')
 
-                return logP($('#loginWithUsername #terminal')[0])(skygear.auth.loginWithUsername(username, password))
+                var username = demo.getElementById('username').value
+                var password = demo.getElementById('password').value
+
+                return skygear.auth.loginWithUsername(username, password)
+                  .then(function(res) {
+                    terminal.value = JSON.stringify(res, null, 4)
+                  })
+                  .catch(function(err) {
+                    terminal.value = JSON.stringify(err, null, 4)
+                  })
               }
-          </script>
+            </script>
           </div>
 
           <div id="loginWithEmail">
@@ -144,10 +81,10 @@
 
             <script>
               function loginWithEmail() {
-                var username = $('#loginWithEmail #email')[0].value
-                var password = $('#loginWithEmail #password')[0].value
+                var username = document.querySelectorAll('#loginWithEmail #email')[0].value
+                var password = document.querySelectorAll('#loginWithEmail #password')[0].value
 
-                return logP($('#loginWithEmail #terminal')[0])(skygear.auth.loginWithEmail(email, password))
+                return logP(document.querySelectorAll('#loginWithEmail #terminal')[0])(skygear.auth.loginWithEmail(email, password))
               }
           </script>
           </div>
@@ -167,9 +104,9 @@
 
             <script>
               function loginWithCustomToken() {
-                var token = $('#loginWithCustomToken #token')[0].value
+                var token = document.querySelectorAll('#loginWithCustomToken #token')[0].value
 
-                return logP($('#loginWithCustomToken #terminal')[0])(skygear.auth.loginWithCustomToken(token))
+                return logP(document.querySelectorAll('#loginWithCustomToken #terminal')[0])(skygear.auth.loginWithCustomToken(token))
               }
             </script>
           </div>
@@ -188,7 +125,7 @@
 
             <script>
               function signupAnonymously() {
-                return logP($('#signupAnonymously #terminal')[0])(skygear.auth.signupAnonymously())
+                return logP(document.querySelectorAll('#signupAnonymously #terminal')[0])(skygear.auth.signupAnonymously())
               }
             </script>
           </div>
@@ -215,11 +152,11 @@
 
             <script>
               function signup() {
-                var username = $('#signup #username')[0].value
-                var email = $('#signup #email')[0].value
-                var password = $('#signup #password')[0].value
+                var username = document.querySelectorAll('#signup #username')[0].value
+                var email = document.querySelectorAll('#signup #email')[0].value
+                var password = document.querySelectorAll('#signup #password')[0].value
 
-                return logP($('#signup #terminal')[0])(skygear.auth.signup({
+                return logP(document.querySelectorAll('#signup #terminal')[0])(skygear.auth.signup({
                   username: username,
                   email: email
                 }, password))
@@ -245,10 +182,10 @@
 
             <script>
               function signupWithUsername() {
-                var username = $('#signupWithUsername #username')[0].value
-                var password = $('#signupWithUsername #password')[0].value
+                var username = document.querySelectorAll('#signupWithUsername #username')[0].value
+                var password = document.querySelectorAll('#signupWithUsername #password')[0].value
 
-                return logP($('#signupWithUsername #terminal')[0])(skygear.auth.signupWithUsername(username, password))
+                return logP(document.querySelectorAll('#signupWithUsername #terminal')[0])(skygear.auth.signupWithUsername(username, password))
               }
             </script>
           </div>
@@ -271,10 +208,10 @@
 
             <script>
               function signupWithEmail() {
-                var email = $('#signupWithEmail #email')[0].value
-                var password = $('#signupWithEmail #password')[0].value
+                var email = document.querySelectorAll('#signupWithEmail #email')[0].value
+                var password = document.querySelectorAll('#signupWithEmail #password')[0].value
 
-                return logP($('#signupWithEmail #terminal')[0])(skygear.auth.signupWithEmail(email, password))
+                return logP(document.querySelectorAll('#signupWithEmail #terminal')[0])(skygear.auth.signupWithEmail(email, password))
               }
             </script>
           </div>
@@ -294,7 +231,7 @@
 
             <script>
               function logout() {
-                return logP($('#logout #terminal')[0])(skygear.auth.logout())
+                return logP(document.querySelectorAll('#logout #terminal')[0])(skygear.auth.logout())
               }
           </script>
           </div>
@@ -318,9 +255,9 @@
 
             <script>
               function forgotPassword() {
-              var email = $('#forgotPassword #email')[0].value
+              var email = document.querySelectorAll('#forgotPassword #email')[0].value
 
-              return logP($('#forgotPassword #terminal')[0])(skygear.auth.forgotPassword(email))
+              return logP(document.querySelectorAll('#forgotPassword #terminal')[0])(skygear.auth.forgotPassword(email))
             }
           </script>
           </div>
@@ -356,12 +293,12 @@
 
             <script>
               function resetPassword() {
-                var userID = $('#resetPassword #userID')[0].value
-                var code = $('#resetPassword #code')[0].value
-                var expireAt = $('#resetPassword #expireAt')[0].value
-                var newPassword = $('#resetPassword #password')[0].value
+                var userID = document.querySelectorAll('#resetPassword #userID')[0].value
+                var code = document.querySelectorAll('#resetPassword #code')[0].value
+                var expireAt = document.querySelectorAll('#resetPassword #expireAt')[0].value
+                var newPassword = document.querySelectorAll('#resetPassword #password')[0].value
 
-                return logP($('#resetPassword #terminal')[0])(skygear.auth.resetPassword(userID, code, expireAt, newPassword))
+                return logP(document.querySelectorAll('#resetPassword #terminal')[0])(skygear.auth.resetPassword(userID, code, expireAt, newPassword))
               }
           </script>
           </div>
@@ -389,10 +326,10 @@
 
             <script>
               function changePassword() {
-                var oldPassword = $('#changePassword #oldPassword')[0].value
-                var newPassword = $('#changePassword #newPassword')[0].value
+                var oldPassword = document.querySelectorAll('#changePassword #oldPassword')[0].value
+                var newPassword = document.querySelectorAll('#changePassword #newPassword')[0].value
 
-                return logP($('#changePassword #terminal')[0])(skygear.auth.changePassword(oldPassword, newPassword))
+                return logP(document.querySelectorAll('#changePassword #terminal')[0])(skygear.auth.changePassword(oldPassword, newPassword))
               }
           </script>
           </div>
@@ -412,7 +349,7 @@
 
             <script>
               function whoami() {
-                return logP($('#whoami #terminal')[0])(skygear.auth.whoami())
+                return logP(document.querySelectorAll('#whoami #terminal')[0])(skygear.auth.whoami())
               }
             </script>
           </div>
@@ -431,9 +368,9 @@
 
             <script>
               function discoverUserByEmails() {
-                var email = $('#discoverUserByEmails #email')[0].value
+                var email = document.querySelectorAll('#discoverUserByEmails #email')[0].value
 
-                return logP($('#discoverUserByEmails #terminal')[0])(skygear.auth.discoverUserByEmails([email]))
+                return logP(document.querySelectorAll('#discoverUserByEmails #terminal')[0])(skygear.auth.discoverUserByEmails([email]))
               }
             </script>
           </div>
@@ -452,9 +389,9 @@
 
             <script>
               function discoverUserByUsernames() {
-                var username = $('#discoverUserByUsernames #username')[0].value
+                var username = document.querySelectorAll('#discoverUserByUsernames #username')[0].value
 
-                return logP($('#discoverUserByUsernames #terminal')[0])(skygear.auth.discoverUserByUsernames([username]))
+                return logP(document.querySelectorAll('#discoverUserByUsernames #terminal')[0])(skygear.auth.discoverUserByUsernames([username]))
               }
            </script>
           </div>
@@ -482,10 +419,10 @@
 
             <script>
               function adminResetPassword() {
-                var userID = $('#adminResetPassword #userID')[0].value
-                var password = $('#adminResetPassword #password')[0].value
+                var userID = document.querySelectorAll('#adminResetPassword #userID')[0].value
+                var password = document.querySelectorAll('#adminResetPassword #password')[0].value
 
-                return logP($('#adminResetPassword #terminal')[0])(skygear.auth.adminResetPassword(userID, password))
+                return logP(document.querySelectorAll('#adminResetPassword #terminal')[0])(skygear.auth.adminResetPassword(userID, password))
               }
             </script>
           </div>
@@ -520,10 +457,10 @@
 
             <script>
               function saveRecord() {
-                var _type = $('#saveRecord #type')[0].value
-                var payload = $('#saveRecord #payload')[0].value
-                var sequenceEnabled = $('#saveRecord #auto-increment')[0].checked
-                var sequenceName = $('#saveRecord #auto-increment-id')[0].value
+                var _type = document.querySelectorAll('#saveRecord #type')[0].value
+                var payload = document.querySelectorAll('#saveRecord #payload')[0].value
+                var sequenceEnabled = document.querySelectorAll('#saveRecord #auto-increment')[0].checked
+                var sequenceName = document.querySelectorAll('#saveRecord #auto-increment-id')[0].value
 
                 var _Record = skygear.Record.extend(_type)
                 var attrs = JSON.parse(payload)
@@ -533,7 +470,7 @@
                   record[sequenceName] = new skygear.Sequence()
                 }
 
-                return logP($('#saveRecord #terminal')[0])(skygear.publicDB.saveRecord(record))
+                return logP(document.querySelectorAll('#saveRecord #terminal')[0])(skygear.publicDB.saveRecord(record))
               }
           </script>
           </div>
@@ -542,21 +479,21 @@
 
       </div>
       <div class="col-sm-3">
-        <nav id="toc" class="sticky-top pt-4"></nav>
       </div>
     </div>
   </div>
 
+  <script src="current-info.js"></script>
   <script>
-    $(function () {
-      var navSelector = '#toc';
-      var $myNav = $(navSelector);
-      Toc.init($myNav);
-      $('body').scrollspy({
-        target: navSelector
-      });
-    });
-
+    skygear.config({
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
   </script>
 </body>
 

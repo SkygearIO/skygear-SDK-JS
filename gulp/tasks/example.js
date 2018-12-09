@@ -3,7 +3,7 @@ var serve = require('gulp-serve');
 var connectInject = require('connect-inject');
 
 gulp.task('example', serve({
-  root: ['./example2', './packages/skygear/dist'],
+  root: ['./example/next', './packages/skygear/dist'],
   hostname: '0.0.0.0',
   port: 5000,
   middleware: connectInject({
