@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+
+        <!-- Login -->
+        <div class="section section-login">
+          <h2>Login</h2>
+
+          <div id="loginWithUsername">
+            <code>loginWithUsername(username, password)</code>
+
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithUserName()">
+              <div class="form-group mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="loginWithEmail">
+            <code>loginWithEmail(email, password)</code>
+
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithEmail()">
+              <div class="form-group mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="loginWithCustomToken">
+            <code>loginWithCustomToken(token)</code>
+
+            <form class="form-inline" onsubmit="event.preventDefault(); loginWithCustomToken()">
+              <div class="form-group mr-sm-3 mb-2">
+                <label for="token" class="sr-only">Token</label>
+                <input type="password" class="form-control" id="token" placeholder="Custom token">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="/bundle.js"></script> <!-- Skygear -->
+  <script src="current-info.js"></script> <!-- Display current Info -->
+  <script>
+    skygear.config({
+      endPoint: '{{ SKYGEAR_ENDPOINT }}',
+      apiKey: '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
+  </script>
+
+  <script>
+    function loginWithUserName() {
+      var demo = document.getElementById('loginWithUsername')
+      var terminal = demo.querySelector('#terminal')
+
+      var username = demo.querySelector('#username').value
+      var password = demo.querySelector('#password').value
+
+      return skygear.auth.loginWithUsername(username, password)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function loginWithEmail() {
+      var demo = document.getElementById('loginWithEmail')
+      var terminal = demo.querySelector('#terminal')
+
+      var username = demo.querySelector('#email').value
+      var password = demo.querySelector('#password').value
+
+      return skygear.auth.loginWithEmail(email, password)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function loginWithCustomToken() {
+      var demo = document.getElementById('loginWithCustomToken')
+      var terminal = demo.querySelector('#terminal')
+
+      var token = demo.querySelector('#token').value
+
+      return skygear.auth.loginWithCustomToken(token)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+  </script>
+</body>
+
+</html>

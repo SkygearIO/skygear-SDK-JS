@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <script src="/bundle.js"></script>
+
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+        <div class="section section-signup">
+          <h2>Signup</h2>
+
+          <div id="signupAnonymously">
+            <code>signupAnonymously()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupAnonymously()">
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+
+            <script>
+
+            </script>
+          </div>
+
+          <div id="signup">
+            <code>signup()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signup()">
+              <div class="form-group md-3 mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mb-2 mr-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="signupWithUsername">
+            <code>signupWithUsername()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupWithUsername()">
+              <div class="form-group md-3 mb-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="signupWithEmail">
+            <code>signupWithEmail()</code>
+            <form class="form-inline" onsubmit="event.preventDefault(); signupWithEmail()">
+              <div class="form-group mb-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="current-info.js"></script>
+  <script>
+    skygear.config({
+      'endPoint': '{{ SKYGEAR_ENDPOINT }}',
+      'apiKey': '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
+  </script>
+
+  <script>
+    function signup() {
+      var demo = document.getElementById('signup')
+      var terminal = demo.querySelector('#terminal')
+
+      var username = demo.querySelector('#username').value
+      var email = demo.querySelector('#email').value
+      var password = demo.querySelector('#password').value
+
+      return skygear.auth.signup({ username: username, email: email }, password)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function signupWithUsername() {
+      var demo = document.getElementById('signupWithUsername')
+      var terminal = demo.querySelector('#terminal')
+
+      var username = document.querySelectorAll('#signupWithUsername #username')[0].value
+      var password = document.querySelectorAll('#signupWithUsername #password')[0].value
+
+      return skygear.auth.signupWithUsername(username, password)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function signupWithEmail() {
+      var demo = document.getElementById('signupWithEmail')
+      var terminal = demo.querySelector('#terminal')
+
+      var email = demo.querySelector('#email').value
+      var password = demo.querySelector('#password').value
+
+      return skygear.auth.signupWithEmail(email, password)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function signupAnonymously() {
+      var demo = document.getElementById('signupAnonymously')
+      var terminal = demo.querySelector('#terminal')
+
+      return skygear.auth.signupAnonymously()
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+  </script>
+</body>
+
+</html>
