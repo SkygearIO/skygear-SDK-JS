@@ -283,7 +283,7 @@
     resetPassword = function() {
       var userID = document.getElementById("forgotpassword-userID").value;
       var code = document.getElementById("forgotpassword-code").value;
-      var expireAt = document.getElementById("forgotpassword-expireAt").value;
+      var expireAt = parseFloat(document.getElementById("forgotpassword-expireAt").value);
       var newPassword = document.getElementById("forgotpassword-newPassword").value;
       var changeResult = document.getElementById("change-result");
       skygear.auth.resetPassword(userID, code, expireAt, newPassword).then(function(user) {
