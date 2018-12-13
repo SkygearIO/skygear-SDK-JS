@@ -11,7 +11,7 @@ import skygear from 'skygear-core';
  * skygear.auth.forgotPassword(email).then(...);
  */
 export async function _forgotPassword(email) {
-  return this.container.lambda('user:forgot-password', {
+  return this.container.makeRequest('auth:forgot_password', {
     email: email
   });
 }
@@ -31,7 +31,7 @@ export async function _forgotPassword(email) {
  * skygear.auth.resetPassword(userID, code, expireAt, newPassword).then(...);
  */
 export async function _resetPassword(userID, code, expireAt, newPassword) {
-  return this.container.lambda('user:reset-password', {
+  return this.container.makeRequest('auth:forgot_password:reset_password', {
     user_id: userID,     /* eslint camelcase: 0 */
     code: code,          /* eslint camelcase: 0 */
     expire_at: expireAt, /* eslint camelcase: 0 */
@@ -50,7 +50,7 @@ export async function _resetPassword(userID, code, expireAt, newPassword) {
  * skygear.auth.requestVerification("email").then(...);
  */
 export async function _requestVerification(recordKey) {
-  return this.container.lambda('user:verify_request', {
+  return this.container.makeRequest('auth:verify_request', {
     record_key: recordKey /* eslint camelcase: 0 */
   });
 }
@@ -66,7 +66,7 @@ export async function _requestVerification(recordKey) {
  * skygear.auth.verifyUserWithCode("123456").then(...);
  */
 export async function _verifyUserWithCode(code) {
-  await this.container.lambda('user:verify_code', {
+  await this.container.makeRequest('auth:verify_code', {
     code
   });
   return this.whoami();
