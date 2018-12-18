@@ -15,18 +15,14 @@ describe('SSO OAuth', function () {
     pattern: 'http://skygear.dev/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          auth_url: 'http://auth_url_of_provider' // eslint-disable-line camelcase
-        }
+        result: 'http://auth_url_of_provider'
       });
     }
   }, {
     pattern: 'http://skygear.dev/sso/provider/link_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          auth_url: 'http://auth_url_of_provider' // eslint-disable-line camelcase
-        }
+        result: 'http://auth_url_of_provider'
       });
     }
   }, {
@@ -34,16 +30,14 @@ describe('SSO OAuth', function () {
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: {
-          result: {
-            user_id: 'user-id-1', // eslint-disable-line camelcase
-            profile: {
-              _type: 'record', // eslint-disable-line camelcase
-              _recordType: 'user', // eslint-disable-line camelcase
-              _recordID: 'user-id-1', // eslint-disable-line camelcase
-              _access: null, // eslint-disable-line camelcase
-              username: 'user1',
-              email: 'user1@skygear.dev'
-            }
+          user_id: 'user-id-1', // eslint-disable-line camelcase
+          profile: {
+            _type: 'record', // eslint-disable-line camelcase
+            _recordType: 'user', // eslint-disable-line camelcase
+            _recordID: 'user-id-1', // eslint-disable-line camelcase
+            _access: null, // eslint-disable-line camelcase
+            username: 'user1',
+            email: 'user1@skygear.dev'
           }
         }
       });
@@ -52,18 +46,14 @@ describe('SSO OAuth', function () {
     pattern: 'http://skygear.dev/sso/provider/link',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          result: 'OK'
-        }
+        result: 'OK'
       });
     }
   }, {
     pattern: 'http://skygear.dev/sso/provider/unlink',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          result: 'OK'
-        }
+        result: 'OK'
       });
     }
   }]);
