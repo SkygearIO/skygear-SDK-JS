@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/skygear.svg)](https://www.npmjs.com/package/skygear)
 [![npm](https://img.shields.io/npm/dt/skygear.svg)](https://www.npmjs.com/package/skygear)
 [![Build Status](https://travis-ci.org/SkygearIO/skygear-SDK-JS.svg?branch=master)](https://travis-ci.org/SkygearIO/skygear-SDK-JS)
-[![License](https://img.shields.io/npm/l/skygear.svg)](https://www.npmjs.com/package/skygear)
+[![License](https://img.shields.io/npm/l/skygear.svg)](https://www.npmjs.com/package/skygear) [![Greenkeeper badge](https://badges.greenkeeper.io/SkygearIO/skygear-SDK-JS.svg)](https://greenkeeper.io/)
 
 Skygear Server is an opensource serverless backend for making web and mobile app
 development faster, delegate the backend to Skygear so you can focus at the
