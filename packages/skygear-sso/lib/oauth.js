@@ -133,7 +133,7 @@ export function getLinkRedirectResult() {
  * skygear.auth.oauthHandler().then(...);
  */
 export async function oauthHandler() {
-  const data = await this.container.makeRequest('sso/config');
+  const data = await this.container.makeRequest('auth/sso/config');
   let authorizedURLs = data.result.authorized_urls;
   if (window.opener) {
     // popup
@@ -157,7 +157,7 @@ export async function oauthHandler() {
  * skygear.auth.iframeHandler().then(...);
  */
 export async function iframeHandler() {
-  const data = await this.container.makeRequest('sso/config');
+  const data = await this.container.makeRequest('auth/sso/config');
   let authorizedURLs = data.result.authorized_urls;
   _postSSOResultMessageToWindow(window.parent, authorizedURLs);
 }
@@ -210,7 +210,7 @@ export async function linkOAuthProviderWithAccessToken(provider, accessToken) {
  * skygear.auth.unlinkOAuthProvider(provider).then(...);
  */
 export async function unlinkOAuthProvider(provider) {
-  return this.container.makeRequest(`sso/${provider}/unlink`);
+  return this.container.makeRequest(`auth/sso/${provider}/unlink`);
 }
 
 /**
@@ -224,7 +224,7 @@ export async function unlinkOAuthProvider(provider) {
  * skygear.auth.getOAuthProviderProfiles().then(...);
  */
 export async function getOAuthProviderProfiles() {
-  return this.container.makeRequest('sso/provider_profiles');
+  return this.container.makeRequest('auth/sso/provider_profiles');
 }
 
 /**
@@ -322,7 +322,7 @@ async function _getRedirectResult(action, resolvePromise) {
     // add the iframe and wait for the receive message
     oauthIframe = document.createElement('iframe');
     oauthIframe.style.display = 'none';
-    oauthIframe.src = this.container.url + 'sso/iframe_handler';
+    oauthIframe.src = this.container.url + 'auth/sso/iframe_handler';
     document.body.appendChild(oauthIframe);
 
     let result = await Promise.all([
@@ -342,15 +342,15 @@ async function _getRedirectResult(action, resolvePromise) {
 
 function _getAuthURL(provider, action) {
   return {
-    login: `sso/${provider}/login_auth_url`,
-    link: `sso/${provider}/link_auth_url`
+    login: `auth/sso/${provider}/login_auth_url`,
+    link: `auth/sso/${provider}/link_auth_url`
   }[action];
 }
 
 function _getAuthWithAccessTokenURL(provider, action) {
   return {
-    login: `sso/${provider}/login`,
-    link: `sso/${provider}/link`
+    login: `auth/sso/${provider}/login`,
+    link: `auth/sso/${provider}/link`
   }[action];
 }
 
