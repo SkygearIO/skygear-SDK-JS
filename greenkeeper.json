@@ -1,0 +1,14 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "example/cloud/package.json",
+        "package.json",
+        "packages/skygear-core/package.json",
+        "packages/skygear-forgot-password/package.json",
+        "packages/skygear-sso/package.json",
+        "packages/skygear/package.json"
+      ]
+    }
+  }
+}
