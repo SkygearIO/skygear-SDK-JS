@@ -50,7 +50,7 @@
       </div>
     </div>
     <hr>
-    <div id="verify-request">
+    <div id="reset-password">
       <h4>Admin reset password (Require master key)</h4>
       <form action="#" onsubmit="return false;">
         <div class="form-group">
@@ -69,6 +69,29 @@
       </pre>
     </div>
     <hr>
+    <div id="disable-user">
+      <h4>Enable/Disable user (Require master key)</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>User ID</label>
+          <input class="form-control inline-input" id="disable-user-id" type="text">
+        </div>
+        <div class="form-group">
+          <label>Disable Message</label>
+          <input class="form-control inline-input" id="disable-message" type="text">
+        </div>
+        <div class="form-group">
+          <label>Disable Expiry</label>
+          <input class="form-control inline-input" id="disable-expiry" type="date">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="doDisableUser();">Disable</button>
+          <button class="btn btn-primary" onclick="doEnableUser();">Enable</button>
+        </div>
+      </form>
+      <pre id="disable-result">
+      </pre>
+    </div>
   </div>
   <script src="/bundle.js"></script>
   <script type="text/javascript">
@@ -107,6 +130,39 @@
         resultElement.innerText = JSON.stringify(error, null, 2);
       });
     }
+
+    function doDisableUser () {
+      console.log('Disable user');
+      var userID = document.getElementById("disable-user-id").value;
+      var message = document.getElementById("disable-message").value;
+      var expiry = new Date(document.getElementById("disable-expiry").value);
+      var resultElement = document.getElementById("disable-result");
+
+      skygear.auth.adminDisableUser(userID, message, expiry)
+      .then(function (userID) {
+        console.log('User has been successfully disabled, id: ' + userID);
+        resultElement.innerText = 'User has been successfully disabled, id: ' + userID;
+      }, function (error) {
+        console.log(error);
+        resultElement.innerText = JSON.stringify(error, null, 2);
+      });
+    }
+
+    function doEnableUser () {
+      console.log('Enable user');
+      var userID = document.getElementById("disable-user-id").value;
+      var resultElement = document.getElementById("disable-result");
+
+      skygear.auth.adminEnableUser(userID)
+      .then(function (userID) {
+        console.log('User has been successfully enabled, id: ' + userID);
+        resultElement.innerText = 'User has been successfully enabled, id: ' + userID;
+      }, function (error) {
+        console.log(error);
+        resultElement.innerText = JSON.stringify(error, null, 2);
+      });
+    }
+
   </script>
 </body>
 </html>
