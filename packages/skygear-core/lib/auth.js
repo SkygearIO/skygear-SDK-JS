@@ -236,11 +236,11 @@ export class AuthContainer {
     if (invalidate) {
       throw Error('Invalidate is not yet implemented');
     }
-    const authResponse = await this.container.makeRequest('auth:password', {
+    const resp = await this.container.makeRequest('auth:change_password', {
       old_password: oldPassword, // eslint-disable-line camelcase
       password: newPassword
     });
-    return this._authResolve(authResponse);
+    return this._authResolve(resp);
   }
 
   /**

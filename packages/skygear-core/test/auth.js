@@ -178,7 +178,7 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
-    pattern: 'http://skygear.dev/auth/password',
+    pattern: 'http://skygear.dev/auth/change_password',
     fixtures: function (match, params, headers, fn) {
       if (params['old_password'] === params['password']) {
         return fn({
