@@ -224,7 +224,8 @@ export async function unlinkOAuthProvider(provider) {
  * skygear.auth.getOAuthProviderProfiles().then(...);
  */
 export async function getOAuthProviderProfiles() {
-  return this.container.makeRequest('auth/sso/provider_profiles');
+  const data = await this.container.makeRequest('auth/sso/provider_profiles');
+  return Promise.resolve(data.result);
 }
 
 /**
