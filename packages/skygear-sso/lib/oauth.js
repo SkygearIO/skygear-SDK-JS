@@ -429,7 +429,7 @@ async function _ssoResultMessageResolve(message) {
     const result = message.result;
     // server error
     if (result.error) {
-      throw result;
+      throw result.error;
     }
     return result;
   case 'end':
