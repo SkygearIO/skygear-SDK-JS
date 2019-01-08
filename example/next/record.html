@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+
+        <div class="section section-record">
+          <h2>Record</h2>
+
+          <div id="createRecord">
+            <pre><code>createRecord(record)</code></pre>
+            <form class="form" onsubmit="event.preventDefault(); createRecord()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+              <div class="form-group">
+                <label for="payload">JSON Payload</label>
+                <textarea class="form-control" id="payload" rows="3">{
+  "body": "Hello World"
+}</textarea>
+              </div>
+              <div class="form-group">
+                <input id="auto-increment" type="checkbox"/>
+                <label for="auto-increment" class="form-check-label">Include auto increment ID</label>
+                <input class="form-control" style="display: inline-block; width:calc(100% - 194px);" id="auto-increment-id" type="text" value="noteID">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="queryRecord">
+            <pre><code>queryRecord(record)</code></pre>
+            <form class="form" onsubmit="event.preventDefault(); queryRecord()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+
+              <div class="form-group mb-2">
+                <input type="text" class="form-control" id="compare-key-1" placeholder="Key" style="display: inline-block; width: auto;">
+                <select class="form-control" style="display: inline-block; width: auto;" id="compare-operator-1">
+                  <option value="like">like</option>
+                  <option value="equalTo">=</option>
+                  <option value="greaterThan">&gt;</option>
+                  <option value="greaterThanOrEqualTo">&gt;=</option>
+                  <option value="lessThan">&lt;</option>
+                  <option value="lessThanOrEqualTo">&lt;=</option>
+                  <option value="notEqualTo">&lt;&gt;</option>
+                </select>
+                <input type="text" class="form-control" id="compare-value-1" placeholder="Operand" style="display: inline-block; width: auto;">
+              </div>
+
+              <div class="form-group mb-2">
+                <input type="text" class="form-control" id="compare-key-2" placeholder="Key" style="display: inline-block; width: auto;">
+                <select class="form-control" style="display: inline-block; width: auto;" id="compare-operator-2">
+                  <option value="like">like</option>
+                  <option value="equalTo">=</option>
+                  <option value="greaterThan">&gt;</option>
+                  <option value="greaterThanOrEqualTo">&gt;=</option>
+                  <option value="lessThan">&lt;</option>
+                  <option value="lessThanOrEqualTo">&lt;=</option>
+                  <option value="notEqualTo">&lt;&gt;</option>
+                </select>
+                <input type="text" class="form-control" id="compare-value-2" placeholder="Operand" style="display: inline-block; width: auto;">
+              </div>
+
+              <div class="form-group mb-2">
+                <input type="text" class="form-control mr-2" id="include-value-1" placeholder="Value" style="display: inline-block; width: auto;">
+                in
+                <input type="text" class="form-control" id="include-path-1" placeholder="Key path" style="display: inline-block; width: auto;">
+              </div>
+
+              <div class="form-group mb-2" style="display: flex;">
+                <input type="text" class="form-control mr-2" id="include-path-2" placeholder="Key path" style="display: inline-block; width: auto;">
+                in
+                <div class="mx-2" style="display: flex;">
+                  [<input type="text" class="form-control" id="include-value-1-1" placeholder="Value 1" style="display: inline-block; width: auto;">,
+                  <input type="text" class="form-control" id="include-value-1-2" placeholder="Value 2" style="display: inline-block; width: auto;">,
+                  <input type="text" class="form-control" id="include-value-1-3" placeholder="Value 3" style="display: inline-block; width: auto;">]
+                </div>
+              </div>
+
+              <div class="form-group mb-2">
+                <input type="text" class="form-control" id="relation-path" placeholder="Key path" style="display: inline-block; width: auto;">
+                (e.g. <code>_owner</code>)
+              having relations
+                <select style="display: inline-block; width: auto;" class="form-control" id="relation-name">
+                  <option value="friend">friend</option>
+                  <option value="following">following</option>
+                  <option value="followed">followed</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Sort by</label>
+                <input style="display: inline-block; width: auto;" class="form-control" id="sort" placeholder="Key" type="text">
+                <select style="display: inline-block; width: auto;" class="form-control" id="sort-order">
+                  <option value="addAscending">Ascending</option>
+                  <option value="addDescending">Descending</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Page</label>
+                <input style="display: inline-block; width: auto;" class="form-control"
+                  id="page" type="number">
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Offset</label>
+                <input style="display: inline-block; width: auto;" class="form-control"
+                  id="offset" type="number">
+              </div>
+
+              <div class="form-group mb-2">
+                <label>Limit</label>
+                <input style="display: inline-block; width: auto;" class="form-control"
+                  id="limit" type="number">
+              </div>
+
+              <div class="form-group mb-2">
+                <input id="display-cache" type="checkbox"/>
+                <label for="display-cache">Display cached result</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="updateRecord">
+            <pre><code>updateRecord(record)</code></pre>
+            <form class="form" onsubmit="event.preventDefault(); updateRecord()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+              <div class="form-group">
+                <label for="id">Record's ID</label>
+                <input type="text" class="form-control" id="id" value="note" required>
+              </div>
+              <div class="form-group">
+                <input
+                  style="display: inline-block; width: auto;"
+                  class="form-control" id="key" type="text" placeholder="Key">
+                <input
+                  style="display: inline-block; width: auto;"
+                  class="form-control" id="value" type="text" placeholder="Value">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="deleteRecord">
+            <pre><code>deleteRecordByID(type, _id)</code></pre>
+            <form class="form" onsubmit="event.preventDefault(); deleteRecord()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+              <div class="form-group">
+                <label for="id">Record's ID</label>
+                <input type="text" class="form-control" id="id" value="note" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="uploadAsset">
+            <pre><b style="font-size: 150%;">Upload Asset</b></pre>
+            <form class="form" onsubmit="event.preventDefault(); uploadAsset()">
+              <div class="form-group mb-2">
+                <label for="type">Record Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Record Type" value="note" required>
+              </div>
+
+              <div class="form-group">
+                <label for="key">File field</label>
+                <input type="text" class="form-control" id="key" required>
+              </div>
+
+              <div class="form-group">
+                <label for="filename">File name</label>
+                <input type="text" class="form-control" id="filename" required>
+              </div>
+
+              <div class="form-group">
+                <label for="file">File upload</label>
+                <input type="file" class="form-control" id="file" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="/bundle.js"></script> <!-- Skygear -->
+  <script src="current-info.js"></script> <!-- Display current Info -->
+  <script>
+    skygear.config({
+      endPoint: '{{ SKYGEAR_ENDPOINT }}',
+      apiKey: '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
+  </script>
+
+  <script>
+    function createRecord() {
+      var demo = document.getElementById('createRecord')
+      var terminal = document.querySelector('#terminal')
+
+      var _type = document.querySelector('#type').value
+      var payload = document.querySelector('#payload').value
+      var sequenceEnabled = document.querySelector('#auto-increment').checked
+      var sequenceName = document.querySelector('#auto-increment-id').value
+
+      var _Record = skygear.Record.extend(_type)
+      var attrs = JSON.parse(payload)
+      var record = new _Record(attrs)
+
+      if (sequenceEnabled && sequenceName) {
+        record[sequenceName] = new skygear.Sequence()
+      }
+
+      return skygear.publicDB.createRecord(record)
+        .then(function(res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function queryRecord () {
+      var demo = document.getElementById('queryRecord')
+      var terminal = document.querySelector('#terminal')
+
+      var _type = demo.querySelector('#type').value;
+      var key = demo.querySelector('#compare-key-1').value;
+      var operator = demo.querySelector('#compare-operator-1').value;
+      var operand = demo.querySelector('#compare-value-1').value;
+      var key2 = demo.querySelector('#compare-key-2').value;
+      var operator2 = demo.querySelector('#compare-operator-2').value;
+      var operand2 = demo.querySelector('#compare-value-2').value;
+      var inValue1 = demo.querySelector('#include-value-1').value;
+      var inKeyPath1 = demo.querySelector('#include-path-1').value;
+      var inKeyPath2 = demo.querySelector('#include-path-2').value;
+      var relationKeyPath = demo.querySelector('#relation-path').value;
+      var relationName = demo.querySelector('#relation-name').value;
+      var querySort = demo.querySelector('#sort').value;
+      var querySortOrder = demo.querySelector('#sort-order').value;
+      var queryOffset = demo.querySelector('#offset').value;
+      var queryPage = demo.querySelector('#page').value;
+      var queryLimit = demo.querySelector('#limit').value;
+      var displayCache = demo.querySelector('#display-cache').checked;
+      // var queryResult = demo.querySelector('#result');
+      // var queryResultCount = demo.querySelector('#count');
+      var _Record = skygear.Record.extend(_type, {
+        initialize: function(attrs, options) {
+          // noop
+        }
+      });
+      var query = new skygear.Query(_Record);
+      query.overallCount = true;
+      if (operand) {
+        query[operator](key, operand);
+      }
+      if (operand2) {
+        query[operator2](key2, operand2);
+      }
+      if (inValue1 != '' && inKeyPath1 != '') {
+        query.containsValue(inKeyPath1, inValue1);
+      }
+      if (inKeyPath2 != '') {
+        var lookupArray = [
+          document.getElementById('include-value-1-1').value,
+          document.getElementById('include-value-1-2').value,
+          document.getElementById('include-value-1-3').value
+        ];
+        query.contains(inKeyPath2, lookupArray);
+      }
+      if (relationKeyPath != '') {
+        if (relationName == 'friend') {
+          query.havingRelation(relationKeyPath, skygear.Friend);
+        } else if (relationName == 'following') {
+          query.havingRelation(relationKeyPath, skygear.Following);
+        } else {
+          query.havingRelation(relationKeyPath, skygear.Follower);
+        }
+      }
+      if (querySort) {
+        query[querySortOrder](querySort);
+      }
+      if (queryOffset) {
+        query.offset = parseInt(queryOffset, 10);
+      }
+      if (queryPage) {
+        query.page = parseInt(queryPage, 10);
+      }
+      if (queryLimit) {
+        query.limit = parseInt(queryLimit, 10);
+      }
+      if (displayCache) {
+        skygear.publicDB.query(query, function (records) {
+          // queryResultCount.innerText = records.overallCount;
+          termina.value = JSON.stringify(records);
+        });
+      } else {
+        skygear.publicDB.query(query)
+          .then(function (records) {
+            // queryResultCount.innerText = records.overallCount;
+            terminal.value = JSON.stringify(records, null, 2);
+          })
+          .catch(function (error) {
+            console.error(error);
+            terminal.value = JSON.stringify(records);
+          });
+      }
+    };
+
+    function updateRecord() {
+      var demo = document.getElementById('queryRecord')
+      var terminal = document.querySelector('#terminal')
+
+      var _type = demo.querySelector('#type').value
+      var _id = demo.querySelector('#id').value
+      var key = demo.querySelector('#key').value
+      var value = demo.querySelector('#value').value
+
+      var record = new skygear.Record(_type, {
+        _id: _type + '/' + _id
+      })
+
+      skygear.publicDB.saveRecord(record)
+        .then(function (record) {
+          terminal.value = JSON.stringify(record, null, 2);
+        }, function (error) {
+          terminal.value = JSON.stringify(error, null, 2);
+        });
+    }
+
+    function deleteRecord() {
+      var demo = document.getElementById('deleteRecord')
+      var terminal = document.querySelector('#terminal')
+
+      var _type = demo.querySelector('#type').value
+      var _id = demo.querySelector('#id').value
+
+      skygear.publicDB.deleteRecordByID(_type, _id)
+        .then(function (record) {
+          terminal.value = JSON.stringify(record, null, 2);
+        }, function (error) {
+          terminal.value = JSON.stringify(error, null, 2);
+        });
+    }
+
+    function uploadAsset() {
+      var demo = document.getElementById('uploadAsset')
+      var terminal = document.querySelector('#terminal')
+
+      var _type = demo.querySelector('#type').value
+
+      var field = demo.querySelector('#field').value
+      var filename = demo.querySelector('#filename').value
+      var file = demo.querySelector('#file').value
+
+      var _Record = skygear.Record.extend(_type)
+
+      var asset = new skygear.Asset({
+        file: file,
+        name: filename
+      });
+      var record = new _Record();
+      record[field] = asset;
+
+      skygear.publicDB.saveRecord(record)
+        .then(function (record) {
+          terminal.value = JSON.stringify(record, null, 2);
+        }, function (error) {
+          terminal.value = JSON.stringify(error, null, 2);
+        });
+    }
+  </script>
+</body>
+
+</html>
