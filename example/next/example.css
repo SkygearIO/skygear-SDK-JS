@@ -23,14 +23,22 @@ nav[data-toggle="toc"] .nav-link.active {
   margin: 10px;
 }
 
-code {
+pre {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+pre > code {
   display: block;
   max-width: -webkit-fit-content;
   max-width:    -moz-fit-content;
   max-width:         fit-content;
-  margin-top: 15px;
-  margin-bottom: 15px;
   padding: 15px;
+  background-color: #efefef;
+}
+
+code {
+  padding: 5px;
   background-color: #efefef;
   color: black;
 }
