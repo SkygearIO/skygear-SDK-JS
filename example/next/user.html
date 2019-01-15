@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+
+        <div class="section section-whoami">
+          <h2>Who am I?</h2>
+
+          <div id="whoami">
+            <pre><code>whoami()</code></pre>
+            <div></div>
+            <button class="btn btn-primary mb-2" onclick="whoami();">Who am I?</button>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+
+        <div class="section section-discover user">
+          <h2>Discover user</h2>
+
+          <div id="getByEmail">
+            <pre><code>getByEmail(email)</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); getByEmail()">
+              <div class="form-group mb-2 mr-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Discover</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="getByUsername">
+            <pre><code>getByUsername(username)</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); getByUsername()">
+              <div class="form-group mb-2 mr-2">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Discover</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="/bundle.js"></script> <!-- Skygear -->
+  <script src="current-info.js"></script> <!-- Display current Info -->
+  <script>
+    skygear.config({
+      endPoint: '{{ SKYGEAR_ENDPOINT }}',
+      apiKey: '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
+  </script>
+
+  <script>
+    function whoami() {
+      var demo = document.getElementById('whoami')
+      var terminal = demo.querySelector('#terminal')
+
+      return skygear.auth.whoami()
+        .then(function(user) {
+          if (user.length == 0) {
+            terminal.value = 'no user found'
+            return
+          }
+
+          terminal.value = JSON.stringify(user.toJSON(), null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function getByEmail() {
+      var demo = document.getElementById('getByEmail')
+      var terminal = demo.querySelector('#terminal')
+
+      var email = demo.querySelector('#email').value
+
+      return skygear.auth.discoverUserByEmails([email])
+        .then(function(users) {
+          if (users.length == 0) {
+            terminal.value = 'no user found'
+            return
+          }
+
+          terminal.value = JSON.stringify(users[0].toJSON(), null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function getByUsername() {
+      var demo = document.getElementById('getByUsername')
+      var terminal = demo.querySelector('#terminal')
+
+      var username = demo.querySelector('#username').value
+
+      return skygear.auth.discoverUserByUsernames([username])
+        .then(function(users) {
+          if (users.length == 0) {
+            terminal.value = 'no user found'
+            return
+          }
+
+          terminal.value = JSON.stringify(users[0].toJSON(), null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+  </script>
+</body>
+
+</html>
