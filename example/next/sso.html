@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <div class="alert alert-info" role="alert">
+    <strong>SSO Plugin</strong> is required in this example.
+  </div>
+
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+
+        <div class="section section-sso">
+          <h2>Social Login</h2>
+
+          <div id="loginOAuthProviderWithPopup">
+            <pre><code>loginOAuthProviderWithPopup('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="loginOAuthProviderWithPopup()">Sign in with Popup</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="loginOAuthProviderWithRedirect">
+            <pre><code>loginOAuthProviderWithRedirect('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="loginOAuthProviderWithRedirect()">Sign in with Redirect</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="loginOAuthProviderWithAccessToken">
+            <pre><code>loginOAuthProviderWithAccessToken('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); loginOAuthProviderWithAccessToken()">
+              <div class="form-group mb-2 mr-2">
+                <label for="access_token" class="sr-only">Access Token</label>
+                <input type="password" class="form-control" id="access_token" placeholder="Access Token" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Sign in with Access Token</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="linkOAuthProviderWithPopup">
+            <pre><code>linkOAuthProviderWithPopup('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="linkOAuthProviderWithPopup()">Link with Popup</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="linkOAuthProviderWithRedirect">
+            <pre><code>linkOAuthProviderWithRedirect('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="linkOAuthProviderWithRedirect()">Link with Redirect</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="linkOAuthProviderWithAccessToken">
+            <pre><code>linkOAuthProviderWithAccessToken('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); linkOAuthProviderWithAccessToken()">
+              <div class="form-group mb-2 mr-2">
+                <label for="access_token" class="sr-only">Access Token</label>
+                <input type="password" class="form-control" id="access_token" placeholder="Access Token" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Link with Access Token</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="unlinkOAuthProvider">
+            <pre><code>unlinkOAuthProvider('<select id="provider" class="js-select-provider">
+                  <option value="google">google</option>
+                  <option value="facebook">facebook</option>
+                  <option value="linkedin">linkedin</option>
+                  <option value="instagram">instagram</option>
+                </select>')</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="unlinkOAuthProvider()">Unlink from OAuth Provider</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="getOAuthProviderProfiles">
+            <pre><code>getOAuthProviderProfiles()</code></pre>
+            <div>
+              <button class="btn btn-primary mb-2" onclick="getOAuthProviderProfiles()">Get my profiles</button>
+            </div>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="/bundle.js"></script> <!-- Skygear -->
+  <script src="current-info.js"></script> <!-- Display current Info -->
+  <script>
+    skygear.config({
+      endPoint: '{{ SKYGEAR_ENDPOINT }}',
+      apiKey: '{{ SKYGEAR_API_KEY }}'
+    }).then(function (container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function (err) {
+      console.error(err);
+    })
+
+  </script>
+
+  <script>
+    function loginOAuthProviderWithPopup() {
+      var demo = document.getElementById('loginOAuthProviderWithPopup')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+
+      return skygear.auth.loginOAuthProviderWithPopup(provider, {})
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function loginOAuthProviderWithRedirect() {
+      var demo = document.getElementById('loginOAuthProviderWithRedirect')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+
+      return skygear.auth.loginOAuthProviderWithRedirect(provider, {})
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function loginOAuthProviderWithAccessToken() {
+      var demo = document.getElementById('loginOAuthProviderWithAccessToken')
+      var terminal = demo.querySelector('#terminal')
+
+      var token = demo.querySelector('#access_token').value
+
+      return skygear.auth.loginOAuthProviderWithAccessToken(provider, token)
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function linkOAuthProviderWithPopup() {
+      var demo = document.getElementById('linkOAuthProviderWithPopup')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+
+      return skygear.auth.linkOAuthProviderWithPopup(provider, {})
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function linkOAuthProviderWithRedirect() {
+      var demo = document.getElementById('linkOAuthProviderWithRedirect')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+
+      return skygear.auth.linkOAuthProviderWithRedirect(provider, {})
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function linkOAuthProviderWithAccessToken() {
+      var demo = document.getElementById('linkOAuthProviderWithAccessToken')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+      var token = demo.querySelector('#access_token').value
+
+      return skygear.auth.linkOAuthProviderWithAccessToken(provider, token)
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function unlinkOAuthProvider() {
+      var demo = document.getElementById('unlinkOAuthProvider')
+      var terminal = demo.querySelector('#terminal')
+
+      var provider = demo.querySelector('#provider').value
+
+      return skygear.auth.unlinkOAuthProvider(provider)
+        .then(function (res) {
+          terminal.value = JSON.stringify(res, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function getOAuthProviderProfiles() {
+      var demo = document.getElementById('unlinkOAuthProvider')
+      var terminal = demo.querySelector('#terminal')
+
+      return skygear.auth.getOAuthProviderProfiles()
+        .then(function (profiles) {
+          terminal.value = JSON.stringify(profiles, null, 4)
+        })
+        .catch(function (err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+  </script>
+
+</body>
+
+</html>
