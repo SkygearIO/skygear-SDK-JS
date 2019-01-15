@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous"
+  >
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="example.css">
+  <title>Skygear-SDK-JS examples</title>
+</head>
+
+<body>
+  <div class="container my-3" style="max-width: 850px">
+    <div class="row">
+      <div class="col-sm-9">
+        <div id="current-info"></div>
+
+        <div class="section section-user-role">
+          <h2>User Role</h2>
+
+          <div id="defineRole">
+            <pre><code>Role.define(role)</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); defineRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="sr-only">Role</label>
+                <input type="text" class="form-control" id="role" placeholder="Role" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Define</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="assignRole">
+            <pre><b style="font-size: 150%;">Assign Role</b></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); assignRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="sr-only">Role</label>
+                <input type="text" class="form-control" id="role" placeholder="Role" required>
+              </div>
+              <div class="form-group mb-2 mr-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="User Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Assign</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="removeRole">
+            <pre><b style="font-size: 150%;">Remove Role</b></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); removeRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="sr-only">Role</label>
+                <input type="text" class="form-control" id="role" placeholder="Role" required>
+              </div>
+              <div class="form-group mb-2 mr-2">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="User Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Remove</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="checkRole">
+            <pre><b style="font-size: 150%;">Check Role</b></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); checkRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="email" class="sr-only">Role</label>
+                <input type="email" class="form-control" id="email" placeholder="User Email" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Check</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="setAdminRole">
+            <pre><code>publicDB.setAdminRole(role)</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); setAdminRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="sr-only">Role</label>
+                <input type="text" class="form-control" id="role" placeholder="Role" required>
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Set Admin Role</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+
+          <div id="setDefaultRole">
+            <pre><code>publicDB.setDefaultRole(role)</code></pre>
+            <form class="form-inline" onsubmit="event.preventDefault(); setDefaultRole()">
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="sr-only">Role</label>
+                <input type="text" class="form-control" id="role" placeholder="Role">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Set Default Role</button>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+
+        <div class="section section-acl">
+          <h2>ACL</h2>
+
+          <div id="setACL">
+            <pre><b style="font-size: 150%">Set ACL</b></pre>
+            <form class="form-inline" onsubmit="return false;">
+              <div class="form-group mb-2 mr-2">
+                <label for="public_access" class="mr-2">Public Access: </label>
+                <select id="public_access" class="custom-select">
+                  <option value="no-access">No Access</option>
+                  <option value="read-only">Read Only</option>
+                  <option value="read-write">Read Write</option>
+                </select>
+              </div>
+              <div class="form-group mb-2 mr-2">
+                <label for="role" class="mr-2">Role Access: </label>
+                <input type="text" class="form-control mr-2" id="role" placeholder="Role">
+                <select id="role_access" class="custom-select">
+                  <option value="no-access">No Access</option>
+                  <option value="read-only">Read Only</option>
+                  <option value="read-write">Read Write</option>
+                </select>
+              </div>
+              <div class="form-group mb-2 mr-2">
+                <label for="email" class="mr-2">User Access:</label>
+                <input type="text" class="form-control mr-2" id="email" placeholder="Email">
+                <select id="user_access" class="custom-select">
+                  <option value="no-access">No Access</option>
+                  <option value="read-only">Read Only</option>
+                  <option value="read-write">Read Write</option>
+                </select>
+              </div>
+              <div>
+                <button class="btn btn-primary mb-2" onclick="setACL(window.sampleRecord)">Set Access</button>
+                <button class="btn btn-primary mb-2" onclick="setACL(skygear.publicDB.defaultACL)">Set Default Access</button>
+              </div>
+            </form>
+
+            <textarea id="terminal" class="form-control" cols="20" rows="6" readonly></textarea>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <script src="/bundle.js"></script> <!-- Skygear -->
+  <script src="current-info.js"></script> <!-- Display current Info -->
+  <script>
+    skygear.config({
+      endPoint: '{{ SKYGEAR_ENDPOINT }}',
+      apiKey: '{{ SKYGEAR_API_KEY }}'
+    }).then(function(container) {
+      console.log('Skygear successfully configured')
+      initCurrentInfo()
+    }, function(err) {
+      console.error(err);
+    })
+
+    window.sampleRecord = new skygear.Record('Sample', {
+      content: 'this is a sample record',
+    })
+  </script>
+
+  <script>
+    function defineRole() {
+      var demo = document.getElementById('defineRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var role = demo.querySelector('#role').value
+
+      skygear.Role.define(role)
+
+      terminal.value = 'Done'
+    }
+
+    function assignRole() {
+      var demo = document.getElementById('defineRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var role = demo.querySelector('#role').value
+      var email = demo.querySelector('#email').value
+
+      var roleDef = skygear.Role.define(role)
+
+      return skygear.auth.getUsersByEmail([email])
+        .then(function(users) {
+          if (users.length === 0) {
+            throw new Error('No such user for email: ' + email)
+          }
+
+          var user = users[0]
+          user.addRole(roleDef)
+          return skygear.auth.saveUser(user)
+        })
+        .then(function(user) {
+          terminal.value = JSON.stringify(user, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function assignRole() {
+      var demo = document.getElementById('defineRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var role = demo.querySelector('#role').value
+      var email = demo.querySelector('#email').value
+
+      var roleDef = skygear.Role.define(role)
+
+      return skygear.auth.getUsersByEmail([email])
+        .then(function(users) {
+          if (users.length === 0) {
+            throw new Error('No such user for email: ' + email)
+          }
+
+          var user = users[0]
+          user.removeRole(roleDef)
+          return skygear.auth.saveUser(user)
+        })
+        .then(function(user) {
+          terminal.value = JSON.stringify(user, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function checkRole() {
+      var demo = document.getElementById('defineRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var email = demo.querySelector('#email').value
+
+      return skygear.auth.getUsersByEmail([email])
+        .then(function(users) {
+          if (users.length === 0) {
+            throw new Error('No such user for email: ' + email)
+          }
+
+          var user = users[0]
+          var roles = user.roles.map(function(role) {return role.name})
+
+          terminal.value = JSON.stringify(roles, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function setAdminRole() {
+      var demo = document.getElementById('setAdminRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var role = demo.querySelector('#role').value
+
+      var roleDef = skygear.Role.define(role)
+
+      return skygear.publicDB.setAdminRole([roleDef])
+        .then(function(roles) {
+          terminal.value = JSON.stringify(roles, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    function setDefaultRole() {
+      var demo = document.getElementById('setDefaultRole')
+      var terminal = demo.querySelector('#terminal')
+
+      var role = demo.querySelector('#role').value
+
+      var roleDef = skygear.Role.define(role)
+
+      return skygear.publicDB.setDefaultRole([roleDef])
+        .then(function(roles) {
+          terminal.value = JSON.stringify(roles, null, 4)
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+
+    var publicAccessHandlers = {'no-access': 'setPublicNoAccess', 'read-only': 'setPublicReadOnly', 'read-write': 'setPublicReadWriteAccess'}
+    var roleAccessHandlers = {'no-access': 'setNoAccessForRole', 'read-only': 'setReadOnlyForRole', 'read-write': 'setReadWriteAccessForRole'}
+    var userAccessHandlers = {'no-access': 'setNoAccessForUser', 'read-only': 'setReadOnlyForUser', 'read-write': 'setReadWriteAccessForUser'}
+
+    function setACL(target) {
+      var demo = document.getElementById('setACL')
+      var terminal = demo.querySelector('#terminal')
+
+      var publicAccess = demo.querySelector('#public_access').value
+      var role = demo.querySelector('#role').value
+      var roleAccess = demo.querySelector('#role_access').value
+      var email = demo.querySelector('#email').value
+      var userAccess = demo.querySelector('#user_access').value
+
+      skygear.auth.getUsersByEmail([email])
+        .then(users => {
+          target[publicAccessHandlers[publicAccess]]()
+          target[roleAccessHandlers[roleAccess]]()
+          target[userAccessHandlers[userAccess]](users[0])
+        })
+        .then(function() {
+          if (target === skygear.publicDB.defaultACL) {
+            return target
+          }
+          return skygear.publicDB.save(target)
+        })
+        .then(function(res) {
+          terminal.value = (res && typeof res.toJSON === 'function') ? JSON.stringify(res.toJSON(), null, 4) : target
+        })
+        .catch(function(err) {
+          terminal.value = JSON.stringify(err, null, 4)
+        })
+    }
+  </script>
+</body>
+
+</html>
