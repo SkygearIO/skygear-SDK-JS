@@ -24,7 +24,7 @@ describe('Container me', function () {
   container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/me',
+    pattern: 'http://skygear.dev/auth/me',
     fixtures: function (match, params, headers, fn) {
       const token = params['access_token'];
       if (token) {

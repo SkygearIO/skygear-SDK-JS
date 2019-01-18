@@ -220,7 +220,7 @@ export class AuthContainer {
    * @return {Promise<Record>} promise with current user record
    */
   async whoami() {
-    const authResponse = await this.container.makeRequest('me', {});
+    const authResponse = await this.container.makeRequest('auth:me', {});
     return this._authResolve(authResponse);
   }
 
