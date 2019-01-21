@@ -1,6 +1,6 @@
 {
   "name": "skygear-sso",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "Single sign-on for Skygear JS SDK",
   "main": "dist/index.js",
   "repository": {
@@ -18,7 +18,7 @@
   "dependencies": {
     "Base64": "^1.0.1",
     "js-cookie": "^2.1.4",
-    "skygear-core": "^1.6.4"
+    "skygear-core": "^1.7.0"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"

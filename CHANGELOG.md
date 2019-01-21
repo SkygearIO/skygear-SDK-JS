@@ -1,3 +1,10 @@
+## 1.7.0 (2019-01-21)
+
+### Bug Fixes
+
+- Fix pubsub url path. Only host of container endpoint was used in pubsub url, but the path should also be added.
+
+
 ## 1.6.4 (2018-11-13)
 
 ### Bug Fixes
