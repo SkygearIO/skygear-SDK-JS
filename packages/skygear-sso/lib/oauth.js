@@ -2,6 +2,7 @@
 /* eslint camelcase: 0 */
 import cookies from 'js-cookie';
 import { atob } from 'Base64';
+import skygear from 'skygear-core';
 import { NewWindowObserver, WindowMessageObserver } from './observer';
 import { errorResponseFromMessage } from './util';
 
@@ -430,7 +431,7 @@ async function _ssoResultMessageResolve(message) {
     const result = message.result;
     // server error
     if (result.error) {
-      throw result.error;
+      throw skygear.Error.fromJSON(result.error);
     }
     return result;
   case 'end':
