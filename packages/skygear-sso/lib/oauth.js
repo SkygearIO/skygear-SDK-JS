@@ -2,6 +2,7 @@
 /* eslint camelcase: 0 */
 import cookies from 'js-cookie';
 import { atob } from 'Base64';
+import skygear from 'skygear-core';
 import { NewWindowObserver, WindowMessageObserver } from './observer';
 import { errorResponseFromMessage } from './util';
 
@@ -133,8 +134,8 @@ export function getLinkRedirectResult() {
  * skygear.auth.oauthHandler().then(...);
  */
 export async function oauthHandler() {
-  const data = await this.container.lambda('sso/config');
-  let authorizedURLs = data.authorized_urls;
+  const data = await this.container.makeRequest('auth/sso/config');
+  let authorizedURLs = data.result.authorized_urls;
   if (window.opener) {
     // popup
     _postSSOResultMessageToWindow(window.opener, authorizedURLs);
@@ -157,8 +158,8 @@ export async function oauthHandler() {
  * skygear.auth.iframeHandler().then(...);
  */
 export async function iframeHandler() {
-  const data = await this.container.lambda('sso/config');
-  let authorizedURLs = data.authorized_urls;
+  const data = await this.container.makeRequest('auth/sso/config');
+  let authorizedURLs = data.result.authorized_urls;
   _postSSOResultMessageToWindow(window.parent, authorizedURLs);
 }
 
@@ -175,7 +176,7 @@ export async function iframeHandler() {
  */
 export async function loginOAuthProviderWithAccessToken(provider, accessToken) {
   const lambdaName = _getAuthWithAccessTokenURL(provider, 'login');
-  const result = await this.container.lambda(lambdaName, {
+  const result = await this.container.makeRequest(lambdaName, {
     access_token: accessToken
   });
   return this.container.auth._authResolve(result);
@@ -194,7 +195,7 @@ export async function loginOAuthProviderWithAccessToken(provider, accessToken) {
  */
 export async function linkOAuthProviderWithAccessToken(provider, accessToken) {
   const lambdaName = _getAuthWithAccessTokenURL(provider, 'link');
-  return this.container.lambda(lambdaName, {
+  return this.container.makeRequest(lambdaName, {
     access_token: accessToken
   });
 }
@@ -210,7 +211,7 @@ export async function linkOAuthProviderWithAccessToken(provider, accessToken) {
  * skygear.auth.unlinkOAuthProvider(provider).then(...);
  */
 export async function unlinkOAuthProvider(provider) {
-  return this.container.lambda(`sso/${provider}/unlink`);
+  return this.container.makeRequest(`auth/sso/${provider}/unlink`);
 }
 
 /**
@@ -224,7 +225,8 @@ export async function unlinkOAuthProvider(provider) {
  * skygear.auth.getOAuthProviderProfiles().then(...);
  */
 export async function getOAuthProviderProfiles() {
-  return this.container.lambda('sso/provider_profiles');
+  const data = await this.container.makeRequest('auth/sso/provider_profiles');
+  return Promise.resolve(data.result);
 }
 
 /**
@@ -249,8 +251,8 @@ async function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   const params = _genAuthURLParams('web_popup', options);
   const lambdaName = _getAuthURL(provider, action);
   try {
-    const data = await this.container.lambda(lambdaName, params);
-    newWindow.location.href = data.auth_url;
+    const data = await this.container.makeRequest(lambdaName, params);
+    newWindow.location.href = data.result;
     let result = await Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
       this._oauthResultObserver.subscribe()
@@ -279,9 +281,9 @@ async function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
 async function _oauthFlowWithRedirect(provider, options, action) {
   const params = _genAuthURLParams('web_redirect', options);
   const lambdaName = _getAuthURL(provider, action);
-  const data = await this.container.lambda(lambdaName, params);
+  const data = await this.container.makeRequest(lambdaName, params);
   const store = this.container.store;
-  window.location.href = data.auth_url; //eslint-disable-line
+  window.location.href = data.result;
   return store.setItem('skygear-oauth-redirect-action', action);
 }
 
@@ -322,7 +324,7 @@ async function _getRedirectResult(action, resolvePromise) {
     // add the iframe and wait for the receive message
     oauthIframe = document.createElement('iframe');
     oauthIframe.style.display = 'none';
-    oauthIframe.src = this.container.url + 'sso/iframe_handler';
+    oauthIframe.src = this.container.url + 'auth/sso/iframe_handler';
     document.body.appendChild(oauthIframe);
 
     let result = await Promise.all([
@@ -342,15 +344,15 @@ async function _getRedirectResult(action, resolvePromise) {
 
 function _getAuthURL(provider, action) {
   return {
-    login: `sso/${provider}/login_auth_url`,
-    link: `sso/${provider}/link_auth_url`
+    login: `auth/sso/${provider}/login_auth_url`,
+    link: `auth/sso/${provider}/link_auth_url`
   }[action];
 }
 
 function _getAuthWithAccessTokenURL(provider, action) {
   return {
-    login: `sso/${provider}/login`,
-    link: `sso/${provider}/link`
+    login: `auth/sso/${provider}/login`,
+    link: `auth/sso/${provider}/link`
   }[action];
 }
 
@@ -429,7 +431,7 @@ async function _ssoResultMessageResolve(message) {
     const result = message.result;
     // server error
     if (result.error) {
-      throw result;
+      throw skygear.Error.fromJSON(result.error);
     }
     return result;
   case 'end':

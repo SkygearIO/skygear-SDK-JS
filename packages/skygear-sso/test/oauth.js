@@ -12,58 +12,48 @@ describe('SSO OAuth', function () {
   let container = new Container();
   container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/sso/provider/login_auth_url',
+    pattern: 'http://skygear.dev/auth/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          auth_url: 'http://auth_url_of_provider' // eslint-disable-line camelcase
-        }
+        result: 'http://auth_url_of_provider'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/sso/provider/link_auth_url',
+    pattern: 'http://skygear.dev/auth/sso/provider/link_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          auth_url: 'http://auth_url_of_provider' // eslint-disable-line camelcase
-        }
+        result: 'http://auth_url_of_provider'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/sso/provider/login',
+    pattern: 'http://skygear.dev/auth/sso/provider/login',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: {
-          result: {
-            user_id: 'user-id-1', // eslint-disable-line camelcase
-            profile: {
-              _type: 'record', // eslint-disable-line camelcase
-              _recordType: 'user', // eslint-disable-line camelcase
-              _recordID: 'user-id-1', // eslint-disable-line camelcase
-              _access: null, // eslint-disable-line camelcase
-              username: 'user1',
-              email: 'user1@skygear.dev'
-            }
+          user_id: 'user-id-1', // eslint-disable-line camelcase
+          profile: {
+            _type: 'record', // eslint-disable-line camelcase
+            _recordType: 'user', // eslint-disable-line camelcase
+            _recordID: 'user-id-1', // eslint-disable-line camelcase
+            _access: null, // eslint-disable-line camelcase
+            username: 'user1',
+            email: 'user1@skygear.dev'
           }
         }
       });
     }
   }, {
-    pattern: 'http://skygear.dev/sso/provider/link',
+    pattern: 'http://skygear.dev/auth/sso/provider/link',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          result: 'OK'
-        }
+        result: 'OK'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/sso/provider/unlink',
+    pattern: 'http://skygear.dev/auth/sso/provider/unlink',
     fixtures: function (match, params, headers, fn) {
       return fn({
-        result: {
-          result: 'OK'
-        }
+        result: 'OK'
       });
     }
   }]);
