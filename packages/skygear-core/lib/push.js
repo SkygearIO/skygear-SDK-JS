@@ -86,7 +86,7 @@ export class PushContainer {
       }
       if (this.deviceID && errorCode === ErrorCodes.ResourceNotFound) {
         await this._setDeviceID(null);
-        return this.registerDevice(token, type);
+        return this.registerDevice(token, type, topic);
       } else {
         throw error;
       }
