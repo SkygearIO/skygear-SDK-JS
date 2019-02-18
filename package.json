@@ -77,7 +77,8 @@
     "superagent": "^3.8.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.0",
+    "extend": "^3.0.2"
   },
   "scripts": {
     "doc": "esdoc -c esdoc.json",
