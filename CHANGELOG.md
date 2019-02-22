@@ -1,3 +1,13 @@
+## 1.7.1 (2019-02-22)
+
+### Bug Fixes
+
+- Fix topic removed when retry registering device #483
+
+### Other notes
+
+- Updated dependencies
+
 ## 1.7.0 (2019-01-21)
 
 ### Bug Fixes
