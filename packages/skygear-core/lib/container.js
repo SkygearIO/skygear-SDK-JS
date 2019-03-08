@@ -22,7 +22,6 @@ import Role from './role';
 import Record from './record';
 import Reference from './reference';
 import Query from './query';
-import {Database, PublicDatabase} from './database'; // eslint-disable-line no-unused-vars
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -33,7 +32,6 @@ import {
 
 import {AuthContainer} from './auth';
 import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
-import {DatabaseContainer} from './database';
 import {fromJSON, toJSON} from './util';
 
 /**
@@ -159,13 +157,8 @@ export class BaseContainer {
    * @return {Promise<Object>} promise with result of the lambda function
    */
   async lambda(name, data) {
-    const presavedData = await this.publicDB._presave(
-      this.publicDB._presaveSingleValue.bind(this.publicDB),
-      data
-    );
-
     const resp = await this.makeRequest(name, {
-      args: presavedData ? toJSON(presavedData) : undefined
+      args: data ? toJSON(data) : undefined
     });
     return fromJSON(resp.result);
   }
@@ -274,13 +267,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Database}
-   */
-  get Database() {
-    return Database;
-  }
-
-  /**
    * @type {Relation}
    */
   get Friend() {
@@ -327,13 +313,6 @@ export class BaseContainer {
    */
   get RelationContainer() {
     return RelationContainer;
-  }
-
-  /**
-   * @type {DatabaseContainer}
-   */
-  get DatabaseContainer() {
-    return DatabaseContainer;
   }
 
   /**
@@ -388,11 +367,6 @@ export class BaseContainer {
  * roles API.
  * - `skygear.relation` - {@link RelationContainer}: User relation API, like
  * add and query Friends.
- * - `skygear.privateDB` - {@link Database}: Private database of the current
- * user, with record API, like query, save and delete.
- * - `skygear.publicDB` - {@link PublicDatabase}: Public database, providing
- * the same record API as {@link Database}, but with additional record role
- * API.
  */
 export default class Container extends BaseContainer {
 
@@ -401,7 +375,7 @@ export default class Container extends BaseContainer {
 
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
-    this._db = new DatabaseContainer(this);
+
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -430,20 +404,6 @@ export default class Container extends BaseContainer {
    */
   get relation() {
     return this._relation;
-  }
-
-  /**
-   * @type {PublicDatabase}
-   */
-  get publicDB() {
-    return this._db.public;
-  }
-
-  /**
-   * @type {Database}
-   */
-  get privateDB() {
-    return this._db.private;
   }
 
   /**

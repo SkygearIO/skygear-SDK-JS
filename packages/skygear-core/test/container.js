@@ -56,50 +56,6 @@ describe('Container', function () {
       'we expected endpoint to ends with slash');
   });
 
-  it('caches response by default', function () {
-    let container = new Container();
-    expect(container._db.cacheResponse).to.be.true();
-  });
-
-  it('does not eagerly initialize db when setting cacheResponse', function () {
-    let container = new Container();
-
-    container._db.cacheResponse = false;
-    expect(container._db._public).to.be.null();
-    expect(container._db._private).to.be.null();
-  });
-
-  it('initializes db with current cacheResponse setting', function () {
-    let container = new Container();
-
-    container._db.cacheResponse = false;
-    expect(container._db._public).to.be.null();
-    expect(container._db._private).to.be.null();
-
-    expect(container.publicDB.cacheResponse).to.be.false();
-
-    container.auth._accessToken = 'access-token';
-    expect(container.privateDB.cacheResponse).to.be.false();
-  });
-
-  it('forwards cacheResponse to its databases', function () {
-    let container = new Container();
-    container._db.cacheResponse = false;
-    container.auth._accessToken = 'dummy-access-token-to-enable-private-db';
-
-    container._db.cacheResponse = true;
-    expect(container.publicDB.cacheResponse).to.be.true();
-    expect(container.privateDB.cacheResponse).to.be.true();
-
-    container._db.cacheResponse = false;
-    expect(container.publicDB.cacheResponse).to.be.false();
-    expect(container.privateDB.cacheResponse).to.be.false();
-
-    container._db.cacheResponse = true;
-    expect(container.publicDB.cacheResponse).to.be.true();
-    expect(container.privateDB.cacheResponse).to.be.true();
-  });
-
   it('should set the content type header', async function () {
     let container = new Container();
     container.configApiKey('correctApiKey');
