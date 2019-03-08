@@ -21,7 +21,6 @@ import Query from './query';
 import QueryResult from './query_result';
 import {isValueType} from './util';
 import { ErrorCodes, SkygearError } from './error';
-import ACL from './acl'; // eslint-disable-line no-unused-vars
 import Container from './container'; // eslint-disable-line no-unused-vars
 import Role from './role'; // eslint-disable-line no-unused-vars
 import {Store} from './store'; // eslint-disable-line no-unused-vars
@@ -589,24 +588,6 @@ export class Database {
 export class PublicDatabase extends Database {
 
   /**
-   * The default ACL of a newly created record
-   *
-   * @type {ACL}
-   */
-  get defaultACL() {
-    return this._Record.defaultACL;
-  }
-
-  /**
-   * Sets default ACL of a newly created record.
-   *
-   * @param {ACL} acl - the default acl
-   */
-  setDefaultACL(acl) {
-    this._Record.defaultACL = acl;
-  }
-
-  /**
    * Sets the roles that are allowed to create records of a record type.
    *
    * @param {Class} recordClass - the record class created with
@@ -622,22 +603,6 @@ export class PublicDatabase extends Database {
     const body = await this.container.makeRequest('schema:access', {
       type: recordClass.recordType,
       create_roles: roleNames //eslint-disable-line camelcase
-    });
-    return body.result;
-  }
-
-  /**
-   * Sets the default ACL of a newly created record of a record type.
-   *
-   * @param {Class} recordClass - the record class created with
-   * {@link Record.extend}
-   * @param {ACL} acl - the default acl
-   * @return {Promise} promise
-   */
-  async setRecordDefaultAccess(recordClass, acl) {
-    const body = await this.container.makeRequest('schema:default_access', {
-      type: recordClass.recordType,
-      default_access: acl.toJSON() //eslint-disable-line camelcase
     });
     return body.result;
   }

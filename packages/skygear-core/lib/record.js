@@ -16,7 +16,6 @@
 import uuid from 'uuid';
 import _ from 'lodash';
 import {toJSON, fromJSON} from './util';
-import ACL from './acl';
 import Role from './role'; // eslint-disable-line no-unused-vars
 import { SkygearError, ErrorCodes } from './error';
 import deprecate from 'util-deprecate';
@@ -72,19 +71,6 @@ const _metaAttrs = {
       return JSON.parse(v);
     },
     newKey: 'deleted'
-  },
-  _access: {
-    parser: (v) => {
-      let acl = v;
-      if (v && v.toJSON) {
-        acl = v.toJSON();
-      }
-      return ACL.fromJSON(acl);
-    },
-    stringify: (v) => {
-      return v && v.toJSON();
-    },
-    newKey: '_access'
   }
 };
 
@@ -173,34 +159,6 @@ export default class Record {
    */
   get id() {
     return this.getDeprecatedID();
-  }
-
-  /**
-   * ACL of the record.
-   *
-   * @type {ACL}
-   */
-  get access() {
-    if (this._access === null || this._access === undefined) {
-      this._access = new ACL();
-    }
-    return this._access;
-  }
-
-  /**
-   * @type {ACL}
-   */
-  set access(acl) {
-    this._access = acl;
-  }
-
-  /**
-   * Set ACL of the record.
-   *
-   * @param {ACL} acl
-   */
-  setAccess(acl) {
-    this.access = acl;
   }
 
   /**

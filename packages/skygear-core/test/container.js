@@ -18,7 +18,6 @@ import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container, {UserRecord} from '../lib/container';
 import Geolocation from '../lib/geolocation';
-import {AccessLevel} from '../lib/acl';
 import Role from '../lib/role';
 
 import mockSuperagent from './mock/superagent';
@@ -267,81 +266,6 @@ describe('Container role', function () {
     expect(result['user2'][0].name).to.eql('Admin');
     expect(result['user2'][1].name).to.eql('Tester');
     expect(result['user3']).to.have.length(0);
-  });
-});
-
-describe('Container acl', function () {
-  let container = new Container();
-  container.configApiKey('correctApiKey');
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/schema/access',
-    fixtures: function (match, params, headers, fn) {
-      let type = params['type'];
-      let createRoles = params['create_roles'];
-
-      if (type === 'script' &&
-        createRoles.indexOf('Writer') !== -1 &&
-        createRoles.indexOf('Web Master') !== -1) {
-
-        return fn({
-          result: {
-            type: type,
-            create_roles: createRoles // eslint-disable-line camelcase
-          }
-        });
-      }
-    }
-  }, {
-    pattern: 'http://skygear.dev/schema/default_access',
-    fixtures: function (match, params, headers, fn) {
-      let type = params['type'];
-      let defaultAccess = params['default_access'];
-      let acl = container.ACL.fromJSON(defaultAccess);
-      let Admin = container.Role.define('Admin');
-      if (type === 'note' &&
-        acl.hasPublicReadAccess() &&
-        acl.hasWriteAccessForRole(Admin)) {
-
-        return fn({
-          result: {
-            type: type,
-            default_access: defaultAccess // eslint-disable-line camelcase
-          }
-        });
-      }
-    }
-  }]);
-
-  it('set record create access', async function () {
-    let Writer = container.Role.define('Writer');
-    let WebMaster = container.Role.define('Web Master');
-    let Script = container.Record.extend('script');
-
-    const result = await container.publicDB.setRecordCreateAccess(
-      Script,
-      [Writer, WebMaster]
-    );
-    let {type, create_roles: roles} = result; // eslint-disable-line camelcase
-
-    assert.strictEqual(type, Script.recordType);
-    assert.include(roles, Writer.name);
-    assert.include(roles, WebMaster.name);
-  });
-
-  it('set default ACL', async function () {
-    let Note = container.Record.extend('note');
-    let Admin = container.Role.define('Admin');
-    let acl = new container.ACL();
-    acl.setPublicReadOnly();
-    acl.setReadWriteAccessForRole(Admin);
-
-    const result = await container.publicDB.setRecordDefaultAccess(Note, acl);
-    let {type, default_access: defaultAccess} = result;
-    let responseACL = container.ACL.fromJSON(defaultAccess);
-
-    assert.strictEqual(type, Note.recordType);
-    assert.ok(responseACL.hasPublicReadAccess());
-    assert.ok(responseACL.hasWriteAccessForRole(Admin));
   });
 });
 

@@ -19,7 +19,6 @@ import _ from 'lodash';
 import ee from 'event-emitter';
 
 import Role from './role';
-import ACL from './acl';
 import Record from './record';
 import Reference from './reference';
 import Query from './query';
@@ -237,13 +236,6 @@ export class BaseContainer {
    */
   get Role() {
     return Role;
-  }
-
-  /**
-   * @type {ACL}
-   */
-  get ACL() {
-    return ACL;
   }
 
   /**
