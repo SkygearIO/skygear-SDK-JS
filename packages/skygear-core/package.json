@@ -9,9 +9,6 @@
   },
   "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
   "files": [
-    "cloud.js",
-    "bin.js",
-    "asset.js",
     "react-native.js",
     "dist"
   ],
@@ -29,7 +26,6 @@
     "cookie-storage": "^1.0.4",
     "dotenv": "^4.0.0",
     "event-emitter": "^0.3.4",
-    "fast-xml-parser": "^3.12.5",
     "formidable": "^1.0.17",
     "localstorage-memory": "^1.0.2",
     "lodash": "^4.17.5",

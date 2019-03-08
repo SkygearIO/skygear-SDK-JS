@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import xmlParser from 'fast-xml-parser';
 
 import Cache from './cache';
-import Asset, {isAsset} from './asset';
 import Record, { isRecord } from './record'; // eslint-disable-line no-unused-vars
 import Query from './query';
 import QueryResult from './query_result';
@@ -192,11 +190,7 @@ export class Database {
    * as calling the server to upload asset.
    */
   async _presaveSingleValue(value) {
-    if (isAsset(value) && value.file) {
-      return this.uploadAsset(value);
-    } else {
-      return value;
-    }
+    return value;
   }
 
   /**
@@ -590,16 +584,6 @@ export class Database {
   get _Record() {
     return this.container.Record;
   }
-
-  /**
-   * Uploads asset to Skygear server.
-   *
-   * @param  {Asset} asset - the asset
-   * @return {Promise<Asset>} promise
-   */
-  uploadAsset(asset) {
-    return makeUploadAssetRequest(this.container, asset);
-  }
 }
 
 export class PublicDatabase extends Database {
@@ -709,18 +693,6 @@ export class DatabaseContainer {
   }
 
   /**
-   * Uploads asset to Skygear server.
-   *
-   * @deprecated use Database.uploadAsset instead.
-   *
-   * @param  {Asset} asset - the asset
-   * @return {Promise<Asset>} promise
-   */
-  async uploadAsset(asset) {
-    return this.public.uploadAsset(asset);
-  }
-
-  /**
    * True if the database cache result from response
    *
    * @type {Boolean}
@@ -745,87 +717,4 @@ export class DatabaseContainer {
     }
   }
 
-}
-
-async function makeUploadAssetRequest(container, asset) {
-  const res = await container.makeRequest('asset:put', {
-    filename: asset.name,
-    'content-type': asset.contentType,
-    // asset.file.size for File and Blob
-    // asset.file.byteLength for Buffer
-    'content-size': asset.file.size || asset.file.byteLength
-  });
-
-  const newAsset = Asset.fromJSON(res.result.asset);
-  const postRequest = res.result['post-request'];
-
-  let postUrl = postRequest.action;
-  if (postUrl.indexOf('/') === 0) {
-    postUrl = postUrl.substring(1);
-  }
-  if (postUrl.indexOf('http') !== 0) {
-    postUrl = container.url + postUrl;
-  }
-
-  await new Promise((resolve, reject) => {
-    let _request = container.request
-      .post(postUrl)
-      .set('X-Skygear-API-Key', container.apiKey);
-    if (postRequest['extra-fields']) {
-      _.forEach(postRequest['extra-fields'], (value, key) => {
-        _request = _request.field(key, value);
-      });
-    }
-
-    if (asset.file instanceof Buffer) {
-      // need providing file name to buffer
-      _request = _request.attach('file', asset.file, asset.name);
-    } else {
-      _request = _request.attach('file', asset.file);
-    }
-
-    _request.end(async (err) => {
-      if (err) {
-        try {
-          const [code, message] = await parseS3XmlErrorMessage(err);
-          reject(_s3ErrorToSkyError(code, message));
-        } catch (_err) {
-          reject(err);
-        }
-
-        return;
-      }
-
-      resolve();
-    });
-  });
-  return newAsset;
-}
-
-
-/**
- * Best effort to parse s3 error code and message.
- * If success, resolve with [code, message].
- */
-async function parseS3XmlErrorMessage(error) {
-  if (!error.response || !error.response.text) {
-    throw new Error('Unable to get response text');
-  }
-
-  const result = xmlParser.parse(error.response.text);
-  if (result.Error &&
-      result.Error.Code && typeof result.Error.Code === 'string' &&
-      result.Error.Message && typeof result.Error.Message === 'string') {
-    return [result.Error.Code, result.Error.Message];
-  }
-
-  throw new Error('Malformed S3 response error');
-}
-
-function _s3ErrorToSkyError(code, message) {
-  const codeMap = {
-    EntityTooLarge: ErrorCodes.AssetSizeTooLarge
-  };
-
-  return new SkygearError(message, codeMap[code] || ErrorCodes.UnexpectedError);
 }

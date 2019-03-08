@@ -18,7 +18,6 @@ import request from 'superagent';
 import _ from 'lodash';
 import ee from 'event-emitter';
 
-import Asset from './asset';
 import Role from './role';
 import ACL from './acl';
 import Record from './record';
@@ -53,7 +52,6 @@ export const UserRecord = Record.extend('user');
  * classes:
  * - Web developement: {@link Container}
  * - React Native: {@link ReactNativeContainer}
- * - Cloud development: {@link CloudCodeContainer}
  *
  * It also proxies other Skygear classes, like {@link BaseContainer#Query}.
  * Thus developer who install Skygear with <script> tag in browser can have
@@ -269,13 +267,6 @@ export class BaseContainer {
    */
   get Sequence() {
     return Sequence;
-  }
-
-  /**
-   * @type {Asset}
-   */
-  get Asset() {
-    return Asset;
   }
 
   /**

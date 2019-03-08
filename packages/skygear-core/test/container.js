@@ -430,17 +430,6 @@ describe('lambda', function () {
     expect(result.hello[0].recordID).to.be.equal('some-note');
   });
 
-  it('should pass asset parameters', async function () {
-    const assetName = '025b58f9-148d-4387-8a51-1898b5d8b613';
-    const asset = new container.Asset({
-      name: assetName
-    });
-    const result = await container.lambda('hello:args', [asset]);
-    expect(result.hello).to.have.lengthOf(1);
-    expect(result.hello[0]).to.be.an.instanceof(container.Asset);
-    expect(result.hello[0].name).to.be.equal(assetName);
-  });
-
   it('should parse error', async function () {
     try {
       await container.lambda('hello:failure');

@@ -9,9 +9,6 @@
   },
   "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
   "files": [
-    "cloud.js",
-    "bin.js",
-    "asset.js",
     "react-native.js",
     "dist"
   ],
@@ -20,10 +17,6 @@
     "SDK",
     "skygear"
   ],
-  "bin": {
-    "skygear-node": "./bin.js",
-    "skygear-asset": "./asset.js"
-  },
   "license": "Apache-2.0",
   "dependencies": {
     "skygear-core": "^1.6.0",

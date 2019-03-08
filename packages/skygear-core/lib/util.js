@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import Asset from './asset';
 import Reference from './reference';
 import Geolocation from './geolocation';
 import Record, {isRecord} from './record';
@@ -101,8 +100,6 @@ export function fromJSON(attrs) {
     switch (attrs.$type) {
     case 'geo':
       return Geolocation.fromJSON(attrs);
-    case 'asset':
-      return Asset.fromJSON(attrs);
     case 'date':
       return new Date(attrs.$date);
     case 'ref':
@@ -134,8 +131,7 @@ export function isLocalStorageValid() {
 }
 
 export function isValueType(value) {
-  return value instanceof Asset ||
-    value instanceof Reference ||
+  return value instanceof Reference ||
     value instanceof Geolocation ||
     value instanceof Record ||
     value instanceof UnknownValue ||
