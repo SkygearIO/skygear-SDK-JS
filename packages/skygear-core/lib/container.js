@@ -20,7 +20,6 @@ import ee from 'event-emitter';
 
 import Role from './role';
 import Record from './record';
-import Reference from './reference';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -241,13 +240,6 @@ export class BaseContainer {
    */
   get Sequence() {
     return Sequence;
-  }
-
-  /**
-   * @type {Reference}
-   */
-  get Reference() {
-    return Reference;
   }
 
   /**

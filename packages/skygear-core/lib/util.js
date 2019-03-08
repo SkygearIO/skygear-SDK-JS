@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import Reference from './reference';
 import Geolocation from './geolocation';
 import Record, {isRecord} from './record';
 import {UnknownValue, Sequence} from './type';
@@ -102,8 +101,6 @@ export function fromJSON(attrs) {
       return Geolocation.fromJSON(attrs);
     case 'date':
       return new Date(attrs.$date);
-    case 'ref':
-      return Reference.fromJSON(attrs);
     case 'unknown':
       return UnknownValue.fromJSON(attrs);
     case 'record':
@@ -131,8 +128,7 @@ export function isLocalStorageValid() {
 }
 
 export function isValueType(value) {
-  return value instanceof Reference ||
-    value instanceof Geolocation ||
+  return value instanceof Geolocation ||
     value instanceof Record ||
     value instanceof UnknownValue ||
     value instanceof Sequence;
