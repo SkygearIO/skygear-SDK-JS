@@ -18,43 +18,6 @@
     </p>
   </div>
   <hr>
-  <div id="send-push">
-    <h4>Send push notification</h4>
-    <form action="#" onsubmit="return false;">
-      <p>
-        Send target:
-        <input id="target-user" type="radio" name="send-target" value="user" checked>
-        <label for="target-user">User</label>
-        <input id="target-device" type="radio" name="send-target" value="device">
-        <label for="target-device">Device</label>
-      </p>
-      <p>
-        <label for="receipients">Receipients (IDs, one on each line):</label><br>
-        <textarea id="receipients"></textarea>
-      </p>
-      <p>
-        <label for="notification-payload">Notification Payload:</label><br>
-        <textarea id="notification-payload">
-{
-  "apns": {
-    "aps" : { "alert" : "Message received from Bob" }
-  },
-  "gcm": {
-    "notification" : {
-      "body" : "great match!",
-      "title" : "Portugal vs. Denmark",
-      "icon" : "myicon"
-    }
-  }
-}
-        </textarea>
-      </p>
-      <button onclick="send();">Send</button>
-
-      <p>Result:</p>
-      <pre id="result"></pre>
-    </form>
-  </div>
   <script src="/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
@@ -68,30 +31,6 @@
     }, function(err) {
       console.log(err);
     });
-
-    function send() {
-      var sendTarget = document.querySelector('input[name="send-target"]:checked').value;
-      var receipients = document.getElementById('receipients').value.split('\n');
-      var notification = JSON.parse(document.getElementById('notification-payload').value);
-      var resultElement = document.getElementById('result');
-      
-      if (receipients.length == 1 && receipients[0] == '') {
-        resultElement.innerText = "Receipient list is empty.";
-        return
-      }
-      resultElement.innerText = "Sending...";
-      var p;
-      if (sendTarget == 'user') {
-        p = skygear.push.sendToUser(receipients, notification, 'com.skygeario.sdkjsexample');
-      } else {
-        p = skygear.push.sendToDevice(receipients, notification, 'com.skygeario.sdkjsexample');
-      }
-      p.then(function (result) {
-        resultElement.innerText = JSON.stringify(result, null, 2);
-      }, function(error) {
-        resultElement.innerText = JSON.stringify(error, null, 2);
-      });
-    }
   </script>
 </body>
 </html>

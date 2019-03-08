@@ -443,13 +443,6 @@ describe('Container auth', function () {
         access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
       };
 
-      container.push.unregisterDevice = async () => {
-        throw {
-          code: 10000,
-          message: 'unknown error'
-        };
-      };
-
       try {
         await Promise.all([
           container.auth._setAccessToken(aUserAttr.access_token),

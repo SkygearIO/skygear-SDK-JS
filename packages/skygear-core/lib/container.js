@@ -35,7 +35,6 @@ import {
 import {AuthContainer} from './auth';
 import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
 import {DatabaseContainer} from './database';
-import {PushContainer} from './push';
 import {fromJSON, toJSON} from './util';
 
 /**
@@ -346,13 +345,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {PushContainer}
-   */
-  get PushContainer() {
-    return PushContainer;
-  }
-
-  /**
    * Endpoint of the skygear container
    *
    * @type {String}
@@ -409,7 +401,6 @@ export class BaseContainer {
  * - `skygear.publicDB` - {@link PublicDatabase}: Public database, providing
  * the same record API as {@link Database}, but with additional record role
  * API.
- * - `skygear.push` - {@link PushContainer}: Push Notifications.
  */
 export default class Container extends BaseContainer {
 
@@ -419,7 +410,6 @@ export default class Container extends BaseContainer {
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
     this._db = new DatabaseContainer(this);
-    this._push = new PushContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -465,13 +455,6 @@ export default class Container extends BaseContainer {
   }
 
   /**
-   * @type {PushContainer}
-   */
-  get push() {
-    return this._push;
-  }
-
-  /**
    * Sets a new end point and new API key to the container.
    *
    * After configuration,
@@ -487,8 +470,7 @@ export default class Container extends BaseContainer {
       await super.config(options);
       let promises = [
         this.auth._getUser(),
-        this.auth._getAccessToken(),
-        this.push._getDeviceID()
+        this.auth._getAccessToken()
       ];
       await Promise.all(promises);
     } catch (err) {

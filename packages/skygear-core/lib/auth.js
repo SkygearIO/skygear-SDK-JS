@@ -16,7 +16,6 @@
 import _ from 'lodash';
 
 import {EventHandle, toJSON} from './util';
-import {ErrorCodes} from './error';
 import Role from './role';
 import {
   getUserIDFromParams,
@@ -191,18 +190,6 @@ export class AuthContainer {
    */
   async logout() {
     try {
-      try {
-        await this.container.push.unregisterDevice();
-      } catch (error) {
-        if (error.code === ErrorCodes.InvalidArgument &&
-            error.message === 'Missing device id'
-        ) {
-          // fallthrough
-        } else {
-          throw error;
-        }
-      }
-
       this.container.clearCache();
       await this.container.makeRequest('auth:logout', {});
       return null;
