@@ -433,7 +433,6 @@ export class AuthContainer {
       this._setAccessToken(body.result.access_token)
     ]);
 
-    this.container.pubsub._reconfigurePubsubIfNeeded();
     return this.currentUser;
   }
 

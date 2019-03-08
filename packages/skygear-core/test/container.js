@@ -33,7 +33,6 @@ describe('Container', function () {
 
   it('should have default end-point', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     assert.equal(
       container.endPoint,
       'http://skygear.dev/',
@@ -42,7 +41,6 @@ describe('Container', function () {
 
   it('should set end-point', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com/';
     assert.equal(
       container.endPoint,
@@ -52,7 +50,6 @@ describe('Container', function () {
 
   it('should auto append slash to end-point', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     container.endPoint = 'https://skygear.example.com';
     assert.equal(
       container.endPoint,
@@ -62,13 +59,11 @@ describe('Container', function () {
 
   it('caches response by default', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     expect(container._db.cacheResponse).to.be.true();
   });
 
   it('does not eagerly initialize db when setting cacheResponse', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
 
     container._db.cacheResponse = false;
     expect(container._db._public).to.be.null();
@@ -77,7 +72,6 @@ describe('Container', function () {
 
   it('initializes db with current cacheResponse setting', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
 
     container._db.cacheResponse = false;
     expect(container._db._public).to.be.null();
@@ -91,7 +85,6 @@ describe('Container', function () {
 
   it('forwards cacheResponse to its databases', function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     container._db.cacheResponse = false;
     container.auth._accessToken = 'dummy-access-token-to-enable-private-db';
 
@@ -110,7 +103,6 @@ describe('Container', function () {
 
   it('should set the content type header', async function () {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     container.configApiKey('correctApiKey');
     container.request = mockSuperagent([{
       pattern: 'http://skygear.dev/content/type',
@@ -133,7 +125,6 @@ describe('Container', function () {
     'should clear access token on 104 AccessTokenNotAccepted',
     async function () {
       let container = new Container();
-      container.pubsub.autoPubsub = false;
       container.configApiKey('correctApiKey');
       container.auth._accessToken = 'incorrectApiKey';
       container.request = mockSuperagent([{
@@ -161,7 +152,6 @@ describe('Container', function () {
 
   it('should call userChange listener', function (done) {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     container.auth.onUserChanged(function (user) {
       assert.instanceOf(user, container.Record);
       assert.equal(user.recordType, 'user');
@@ -176,7 +166,6 @@ describe('Container', function () {
 
   it('should able to cancel a registered userChange listener', function (done) {
     let container = new Container();
-    container.pubsub.autoPubsub = false;
     let handler = container.auth.onUserChanged(function (user) {
       throw 'Cancel of onUserChanged failed';
     });
@@ -358,7 +347,6 @@ describe('Container acl', function () {
 
 describe('lambda', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/hello/world',
     fixtures: function (match, params, headers, fn) {

@@ -35,7 +35,6 @@ import {
 import {AuthContainer} from './auth';
 import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
 import {DatabaseContainer} from './database';
-import {PubsubContainer} from './pubsub';
 import {PushContainer} from './push';
 import {fromJSON, toJSON} from './util';
 
@@ -347,13 +346,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {PubsubContainer}
-   */
-  get PubsubContainer() {
-    return PubsubContainer;
-  }
-
-  /**
    * @type {PushContainer}
    */
   get PushContainer() {
@@ -417,8 +409,6 @@ export class BaseContainer {
  * - `skygear.publicDB` - {@link PublicDatabase}: Public database, providing
  * the same record API as {@link Database}, but with additional record role
  * API.
- * - `skygear.pubsub` - {@link PubsubContainer}: A publish-subscribe interface,
- * providing real-time message-based communication with other users.
  * - `skygear.push` - {@link PushContainer}: Push Notifications.
  */
 export default class Container extends BaseContainer {
@@ -429,7 +419,6 @@ export default class Container extends BaseContainer {
     this._auth = new AuthContainer(this);
     this._relation = new RelationContainer(this);
     this._db = new DatabaseContainer(this);
-    this._pubsub = new PubsubContainer(this);
     this._push = new PushContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
@@ -476,13 +465,6 @@ export default class Container extends BaseContainer {
   }
 
   /**
-   * @type {PubsubContainer}
-   */
-  get pubsub() {
-    return this._pubsub;
-  }
-
-  /**
    * @type {PushContainer}
    */
   get push() {
@@ -493,8 +475,7 @@ export default class Container extends BaseContainer {
    * Sets a new end point and new API key to the container.
    *
    * After configuration,
-   * - it tries to restore the user, access token and device id, and,
-   * - the pubsub client connects to skygear server if a user is restored.
+   * - it tries to restore the user, access token and device id.
    *
    * @param {Object} options - configuration options of the skygear container
    * @param {String} options.apiKey - api key
@@ -510,7 +491,6 @@ export default class Container extends BaseContainer {
         this.push._getDeviceID()
       ];
       await Promise.all(promises);
-      this.pubsub._reconfigurePubsubIfNeeded();
     } catch (err) {
       // do nothing
     }

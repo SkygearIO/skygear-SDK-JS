@@ -22,7 +22,6 @@ import mockSuperagent from '../../skygear-core/test/mock/superagent';
 
 describe('AuthContainer with Forgot Password', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([
     {

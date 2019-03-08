@@ -375,7 +375,6 @@ let request = mockSuperagent([{
 describe('Database', function () {
 
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = request;
   container.configApiKey('correctApiKey');
   let db = new PublicDatabase('_public', container);
@@ -505,7 +504,6 @@ describe('Database', function () {
 
   it('respects container.cacheResponse=true', async function () {
     let localContainer = new Container();
-    localContainer.autoPubsub = false;
     localContainer.request = request;
     localContainer.configApiKey('correctApiKey');
 
@@ -522,7 +520,6 @@ describe('Database', function () {
 
   it('respects container.cacheResponse=false', async function () {
     let localContainer = new Container();
-    localContainer.autoPubsub = false;
     localContainer.request = request;
     localContainer.configApiKey('correctApiKey');
 

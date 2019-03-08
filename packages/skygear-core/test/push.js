@@ -22,7 +22,6 @@ import mockSuperagent from './mock/superagent';
 
 describe('Container device registration', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/register',
     fixtures: function (match, params, headers, fn) {
@@ -103,7 +102,6 @@ describe('Container device registration', function () {
 
 describe('Container device unregistration', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/device/unregister',
@@ -162,7 +160,6 @@ describe('Container device unregistration', function () {
 
 describe('Container Push User', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/push/user',
     fixtures: function (match, params, headers, fn) {
@@ -282,7 +279,6 @@ describe('Container Push User', function () {
 
 describe('Container Push Device', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/push/device',
     fixtures: function (match, params, headers, fn) {

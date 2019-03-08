@@ -21,7 +21,6 @@ import mockSuperagent from './mock/superagent';
 
 describe('Container me', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/me',
@@ -79,7 +78,6 @@ describe('Container me', function () {
 
 describe('Container auth', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/signup',
     fixtures: function (match, params, headers, fn) {
@@ -495,7 +493,6 @@ describe('Container auth', function () {
 
 describe('AuthContainer', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/auth/disable/set',

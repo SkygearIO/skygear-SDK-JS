@@ -218,8 +218,6 @@ export class PushContainer {
       }
     } catch (err) {
       console.warn('Failed to persist deviceid', err);
-    } finally {
-      this.container.pubsub._reconfigurePubsubIfNeeded();
     }
     return value;
   }
