@@ -21,7 +21,6 @@ import ee from 'event-emitter';
 import Role from './role';
 import Record from './record';
 import Reference from './reference';
-import Query from './query';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -31,7 +30,6 @@ import {
 } from './error';
 
 import {AuthContainer} from './auth';
-import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
 import {fromJSON, toJSON} from './util';
 
 /**
@@ -48,7 +46,7 @@ export const UserRecord = Record.extend('user');
  * - Web developement: {@link Container}
  * - React Native: {@link ReactNativeContainer}
  *
- * It also proxies other Skygear classes, like {@link BaseContainer#Query}.
+ * It also proxies other Skygear classes, like {@link BaseContainer#Role}.
  * Thus developer who install Skygear with <script> tag in browser can have
  * access to those classes.
  */
@@ -218,13 +216,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Query}
-   */
-  get Query() {
-    return Query;
-  }
-
-  /**
    * @type {Role}
    */
   get Role() {
@@ -267,27 +258,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Relation}
-   */
-  get Friend() {
-    return this.relation.Friend;
-  }
-
-  /**
-   * @type {Relation}
-   */
-  get Follower() {
-    return this.relation.Follower;
-  }
-
-  /**
-   * @type {Relation}
-   */
-  get Following() {
-    return this.relation.Following;
-  }
-
-  /**
    * @type {SkygearError}
    */
   get Error() {
@@ -306,13 +276,6 @@ export class BaseContainer {
    */
   get AuthContainer() {
     return AuthContainer;
-  }
-
-  /**
-   * @type {RelationContainer}
-   */
-  get RelationContainer() {
-    return RelationContainer;
   }
 
   /**
@@ -365,8 +328,6 @@ export class BaseContainer {
  * accessors to other containers, providing various functionalities:
  * - `skygear.auth` - {@link AuthContainer}: User authentications and user
  * roles API.
- * - `skygear.relation` - {@link RelationContainer}: User relation API, like
- * add and query Friends.
  */
 export default class Container extends BaseContainer {
 
@@ -374,8 +335,6 @@ export default class Container extends BaseContainer {
     super();
 
     this._auth = new AuthContainer(this);
-    this._relation = new RelationContainer(this);
-
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -397,13 +356,6 @@ export default class Container extends BaseContainer {
    */
   get auth() {
     return this._auth;
-  }
-
-  /**
-   * @type {RelationContainer}
-   */
-  get relation() {
-    return this._relation;
   }
 
   /**

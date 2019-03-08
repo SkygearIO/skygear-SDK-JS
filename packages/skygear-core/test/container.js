@@ -306,17 +306,5 @@ describe('lambda', function () {
       assert.equal(err.message, 'lambda error');
     }
   });
-
-  it('should expose Query as constructor', function () {
-    assert.isFunction(container.Query);
-    assert.instanceOf(
-      new container.Query(container.Record.extend('note')),
-      container.Query
-    );
-  });
-
-  it('should expose static methods of Query', function () {
-    assert.isFunction(container.Query.or);
-  });
 });
 /*eslint-enable dot-notation, no-unused-vars, quote-props */

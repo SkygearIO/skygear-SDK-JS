@@ -472,8 +472,4 @@ export class AuthContainer {
     return this.container.UserRecord;
   }
 
-  get _Query() {
-    return this.container.Query;
-  }
-
 }
