@@ -18,7 +18,6 @@ import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container from '../lib/container';
 import UserRecord from '../lib/user_record';
-import Geolocation from '../lib/geolocation';
 import Role from '../lib/role';
 
 import mockSuperagent from './mock/superagent';
@@ -278,14 +277,6 @@ describe('lambda', function () {
     const result = await container.lambda('hello:args', ['hello', 'world']);
     assert.deepEqual(result, {
       'hello': ['hello', 'world']
-    });
-  });
-
-  it('should pass location parameters', async function () {
-    const result = await container
-      .lambda('hello:args', [new Geolocation(1, 2)]);
-    assert.deepEqual(result, {
-      'hello': [new Geolocation(1, 2)]
     });
   });
 

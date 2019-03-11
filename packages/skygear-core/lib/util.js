@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import Geolocation from './geolocation';
-import {isUserRecord} from './user_record';
-import {UnknownValue, Sequence} from './type';
+import { isUserRecord } from './user_record';
 import { SkygearError, ErrorCodes } from './error';
 import { isRole } from './role';
 
@@ -88,12 +86,8 @@ export function fromJSON(attrs) {
     return _.map(attrs, fromJSON);
   } else if (_.isObject(attrs)) {
     switch (attrs.$type) {
-    case 'geo':
-      return Geolocation.fromJSON(attrs);
     case 'date':
       return new Date(attrs.$date);
-    case 'unknown':
-      return UnknownValue.fromJSON(attrs);
     default:
       return mapObject(attrs, (key, value) => fromJSON(value));
     }
@@ -114,12 +108,6 @@ export function isLocalStorageValid() {
   } catch (e) {
     return false;
   }
-}
-
-export function isValueType(value) {
-  return value instanceof Geolocation ||
-    value instanceof UnknownValue ||
-    value instanceof Sequence;
 }
 
 export class EventHandle {

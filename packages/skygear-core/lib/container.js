@@ -20,9 +20,7 @@ import ee from 'event-emitter';
 
 import Role from './role';
 import UserRecord from './user_record';
-import Geolocation from './geolocation';
 import getStore from './store';
-import {Sequence} from './type';
 import {
   SkygearError,
   ErrorCodes
@@ -221,20 +219,6 @@ export class BaseContainer {
    */
   get UserRecord() {
     return UserRecord;
-  }
-
-  /**
-   * @type {Sequence}
-   */
-  get Sequence() {
-    return Sequence;
-  }
-
-  /**
-   * @type {Geolocation}
-   */
-  get Geolocation() {
-    return Geolocation;
   }
 
   /**
