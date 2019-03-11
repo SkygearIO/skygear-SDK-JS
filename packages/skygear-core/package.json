@@ -28,7 +28,7 @@
     "event-emitter": "^0.3.4",
     "formidable": "^1.0.17",
     "localstorage-memory": "^1.0.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.11",
     "md5": "^2.0.0",
     "mime-types": "^2.1.12",
     "ncp": "^2.0.0",
