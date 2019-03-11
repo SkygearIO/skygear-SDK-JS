@@ -15,7 +15,7 @@
  */
 import _ from 'lodash';
 import Geolocation from './geolocation';
-import Record, {isRecord} from './record';
+import {isUserRecord} from './user_record';
 import {UnknownValue, Sequence} from './type';
 import { SkygearError, ErrorCodes } from './error';
 import { isRole } from './role';
@@ -39,10 +39,6 @@ function mapObject(obj, fn) {
  * It will descends into array and object to convert Skygear Data Type
  * into JSON representation. If the specified value is null, null is returned.
  *
- * The output of this function differ from Record.toJSON when specifying
- * a Record. This function will wrap a Record in JSON representation with
- * a `$type=record` object.
- *
  * This function is the opposite of fromJSON.
  *
  * @param {Object} v - the object or value value to convert to JSON
@@ -61,11 +57,6 @@ export function toJSON(v) {
     return {
       $type: 'date',
       $date: v.toJSON()
-    };
-  } else if (isRecord(v)) {
-    return {
-      $type: 'record',
-      $record: v.toJSON()
     };
   } else if (v.toJSON) {
     return v.toJSON();
@@ -103,8 +94,6 @@ export function fromJSON(attrs) {
       return new Date(attrs.$date);
     case 'unknown':
       return UnknownValue.fromJSON(attrs);
-    case 'record':
-      return Record.fromJSON(attrs.$record);
     default:
       return mapObject(attrs, (key, value) => fromJSON(value));
     }
@@ -129,7 +118,6 @@ export function isLocalStorageValid() {
 
 export function isValueType(value) {
   return value instanceof Geolocation ||
-    value instanceof Record ||
     value instanceof UnknownValue ||
     value instanceof Sequence;
 }
@@ -149,18 +137,11 @@ export class EventHandle {
 /**
  * Get user ID from function parameter.
  *
- * @param {Record | String} userOrUserID a user record or a user ID
+ * @param {UserRecord | String} userOrUserID a user record or a user ID
  * @return {String} the ID of the user
  */
 export function getUserIDFromParams(userOrUserID) {
-  if (isRecord(userOrUserID)) {
-    if (userOrUserID.recordType !== 'user') {
-      throw new SkygearError(
-        `Expect a user record, but get ${userOrUserID.recordType}`,
-        ErrorCodes.InvalidArgument
-      );
-    }
-
+  if (isUserRecord(userOrUserID)) {
     return userOrUserID.recordID;
   }
 

@@ -19,7 +19,7 @@ import _ from 'lodash';
 import ee from 'event-emitter';
 
 import Role from './role';
-import Record from './record';
+import UserRecord from './user_record';
 import Geolocation from './geolocation';
 import getStore from './store';
 import {Sequence} from './type';
@@ -30,11 +30,6 @@ import {
 
 import {AuthContainer} from './auth';
 import {fromJSON, toJSON} from './util';
-
-/**
- * @type {Record}
- */
-export const UserRecord = Record.extend('user');
 
 /**
  * BaseContainer provides the basic configuration for connecting to a
@@ -222,14 +217,7 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Record}
-   */
-  get Record() {
-    return Record;
-  }
-
-  /**
-   * @type {Record}
+   * @type {UserRecord}
    */
   get UserRecord() {
     return UserRecord;

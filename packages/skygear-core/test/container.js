@@ -16,7 +16,8 @@
 /*eslint-disable dot-notation, no-unused-vars, quote-props */
 import _ from 'lodash';
 import {assert, expect} from 'chai';
-import Container, {UserRecord} from '../lib/container';
+import Container from '../lib/container';
+import UserRecord from '../lib/user_record';
 import Geolocation from '../lib/geolocation';
 import Role from '../lib/role';
 
@@ -108,7 +109,7 @@ describe('Container', function () {
   it('should call userChange listener', function (done) {
     let container = new Container();
     container.auth.onUserChanged(function (user) {
-      assert.instanceOf(user, container.Record);
+      assert.instanceOf(user, container.UserRecord);
       assert.equal(user.recordType, 'user');
       assert.equal(user.recordID, 'user:id1');
       done();
@@ -286,16 +287,6 @@ describe('lambda', function () {
     assert.deepEqual(result, {
       'hello': [new Geolocation(1, 2)]
     });
-  });
-
-  it('should pass record parameters', async function () {
-    const Note = container.Record.extend('note');
-    const aNote = new Note({ _recordID: 'some-note' });
-    const result = await container.lambda('hello:args', [aNote]);
-    expect(result.hello).to.have.lengthOf(1);
-    expect(result.hello[0]).to.be.an.instanceof(container.Record);
-    expect(result.hello[0].recordType).to.be.equal('note');
-    expect(result.hello[0].recordID).to.be.equal('some-note');
   });
 
   it('should parse error', async function () {

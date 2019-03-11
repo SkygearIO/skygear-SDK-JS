@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 /*eslint-disable no-unused-vars, quote-props */
-import {expect, assert} from 'chai';
+import {expect} from 'chai';
 import Geolocation from '../lib/geolocation';
-import Record from '../lib/record';
 import {Sequence, UnknownValue} from '../lib/type';
 import {toJSON, fromJSON} from '../lib/util';
 
@@ -83,20 +82,6 @@ describe('util', function () {
     expect(unknownValue.underlyingType).to.equal('money');
   });
 
-  it('fromJSON record object', function () {
-    const recordValue = fromJSON({
-      $type: 'record',
-      $record: {
-        _recordType: 'note',
-        _recordID: 'uid',
-        geo: {$type: 'geo', $lat: 10, $lng: 20}
-      }
-    });
-    expect(recordValue).to.be.an.instanceof(Record);
-    expect(recordValue.recordType).to.equal('note');
-    expect(recordValue.recordID).to.equal('uid');
-  });
-
   it('toJSON array with mixed objects', function () {
     const array = [
       null,
@@ -129,16 +114,6 @@ describe('util', function () {
   it('toJSON undefined', function () {
     expect(() => toJSON(undefined))
       .to.throw('toJSON does not support undefined value');
-  });
-
-  it('toJSON record', function () {
-    const object = toJSON(Record.fromJSON({
-      '_recordType': 'note',
-      '_recordID': 'uid'
-    }));
-    expect(object.$type).to.equal('record');
-    expect(object.$record._recordType).to.equal('note');
-    expect(object.$record._recordID).to.equal('uid');
   });
 
 });

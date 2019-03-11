@@ -42,7 +42,7 @@ export class AuthContainer {
 
   /**
    * Currently logged-in user
-   * @type {Record}
+   * @type {UserRecord}
    */
   get currentUser() {
     return this._user;
@@ -74,7 +74,7 @@ export class AuthContainer {
    * @param  {Object} authData - unique identifier of the user
    * @param  {String} password - password of the user
    * @param  {Object} [data={}] - data saved to the user record
-   * @return {Promise<Record>} promise with created user record
+   * @return {Promise<UserRecord>} promise with created user record
    */
   async signup(authData, password, data = {}) {
     const authResponse = await this.container.makeRequest('auth:signup', {
@@ -92,7 +92,7 @@ export class AuthContainer {
    * @param  {String} username - username of the user
    * @param  {String} password - password of the user
    * @param  {Object} [data={}] - data saved to the user record
-   * @return {Promise<Record>} promise with the created user record
+   * @return {Promise<UserRecord>} promise with the created user record
    */
   async signupWithUsername(username, password, data = {}) {
     return this.signup({
@@ -107,7 +107,7 @@ export class AuthContainer {
    * @param  {String} email - email of the user
    * @param  {String} password - password of the user
    * @param  {Object} [data={}] - data saved to the user record
-   * @return {Promise<Record>} promise with the created user record
+   * @return {Promise<UserRecord>} promise with the created user record
    */
   async signupWithEmail(email, password, data = {}) {
     return this.signup({
@@ -118,7 +118,7 @@ export class AuthContainer {
   /**
    * Creates an anonymous user account and log in as the created user.
    *
-   * @return {Promise<Record>} promise with the created user record
+   * @return {Promise<UserRecord>} promise with the created user record
    */
   async signupAnonymously() {
     return this.signup(null, null, null);
@@ -130,7 +130,7 @@ export class AuthContainer {
    *
    * @param  {Object} authData - unique identifier of the user
    * @param  {String} password - password of the user
-   * @return {Promise<Record>} promise with the logged in user record
+   * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async login(authData, password) {
     const authResponse = await this.container.makeRequest('auth:login', {
@@ -146,7 +146,7 @@ export class AuthContainer {
    *
    * @param  {String} username - username of the user
    * @param  {String} password - password of the user
-   * @return {Promise<Record>} promise with the logged in user record
+   * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async loginWithUsername(username, password) {
     return this.login({
@@ -160,7 +160,7 @@ export class AuthContainer {
    *
    * @param  {String} email - email of the user
    * @param  {String} password - password of the user
-   * @return {Promise<Record>} promise with the logged in user record
+   * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async loginWithEmail(email, password) {
     return this.login({
@@ -173,7 +173,7 @@ export class AuthContainer {
    *
    * @param  {String} provider - provider name
    * @param  {Object} authData - provider auth data
-   * @return {Promise<Record>} promise with the logged in user record
+   * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async loginWithProvider(provider, authData) {
     const authResponse = await this.container.makeRequest('auth:login', {
@@ -204,7 +204,7 @@ export class AuthContainer {
   /**
    * Retrieves current user record from server.
    *
-   * @return {Promise<Record>} promise with current user record
+   * @return {Promise<UserRecord>} promise with current user record
    */
   async whoami() {
     const authResponse = await this.container.makeRequest('auth:me', {});
@@ -217,7 +217,7 @@ export class AuthContainer {
    * @param  {String}  oldPassword - old password of current user
    * @param  {String}  newPassword - new password of current user
    * @param  {Boolean} [invalidate=false] - not implemented
-   * @return {Promise<Record>} promise with current user record
+   * @return {Promise<UserRecord>} promise with current user record
    */
   async changePassword(oldPassword, newPassword, invalidate = false) {
     if (invalidate) {
@@ -233,7 +233,7 @@ export class AuthContainer {
   /**
    * Reset user password, require master key.
    *
-   * @param  {Record|String} userOrUserID - target user or user ID
+   * @param  {UserRecord|String} userOrUserID - target user or user ID
    * @param  {String} newPassword - new password of target user
    * @return {Promise<String>} promise with target user ID
    */
@@ -284,7 +284,7 @@ export class AuthContainer {
   /**
    * Gets roles of users from server.
    *
-   * @param  {Record[]|String[]} usersOrUserIDs - user records or user IDs
+   * @param  {UserRecord[]|String[]} usersOrUserIDs - user records or user IDs
    * @return {Promise<Object>} promise with userID-to-roles map
    */
   async fetchUserRole(usersOrUserIDs) {
@@ -304,7 +304,7 @@ export class AuthContainer {
   /**
    * Assigns roles to users.
    *
-   * @param  {Record[]|String[]} usersOrUserIDs - target users or user IDs
+   * @param  {UserRecord[]|String[]} usersOrUserIDs - target users or user IDs
    * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
    *                                              to be assigned
    * @return {Promise<String[]>} promise with the target user IDs
@@ -324,7 +324,7 @@ export class AuthContainer {
   /**
    * Revokes roles from users.
    *
-   * @param  {Record[]|String[]} usersOrUserIDs - target users or user IDs
+   * @param  {UserRecord[]|String[]} usersOrUserIDs - target users or user IDs
    * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
    *                                              to be revoked
    * @return {Promise<String[]>} promise with target user IDs
@@ -346,7 +346,7 @@ export class AuthContainer {
    *
    * This function is intended for admin use.
    *
-   * @param  {Record|String} userOrUserID - target user or user ID
+   * @param  {UserRecord|String} userOrUserID - target user or user ID
    * @return {Promise<String>} promise with target user ID
    */
   async adminEnableUser(userOrUserID) {
@@ -364,7 +364,7 @@ export class AuthContainer {
    *
    * This function is intended for admin use.
    *
-   * @param  {Record|String} userOrUserID - target user or user ID
+   * @param  {UserRecord|String} userOrUserID - target user or user ID
    * @param  {String} [message] - message to be shown to user
    * @param  {Date} [expiry] - date and time when the user is automatically
    *   enabled
