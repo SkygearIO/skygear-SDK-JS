@@ -18,8 +18,7 @@ import _ from 'lodash';
 import {EventHandle, toJSON} from './util';
 import Role from './role';
 import {
-  getUserIDFromParams,
-  getRoleNameFromParams
+  getUserIDFromParams
 } from './util';
 
 export const USER_CHANGED = 'userChanged';
@@ -231,57 +230,6 @@ export class AuthContainer {
   }
 
   /**
-   * Reset user password, require master key.
-   *
-   * @param  {UserRecord|String} userOrUserID - target user or user ID
-   * @param  {String} newPassword - new password of target user
-   * @return {Promise<String>} promise with target user ID
-   */
-  async adminResetPassword(userOrUserID, newPassword) {
-    const userID = getUserIDFromParams(userOrUserID);
-    await this.container.makeRequest('_auth:reset_password', {
-      auth_id: userID, // eslint-disable-line camelcase
-      password: newPassword
-    });
-
-    return userID;
-  }
-
-  /**
-   * Defines roles to have admin right.
-   *
-   * @param {Role[]} roles - roles to have admin right
-   * @return {Promise<String[]>} promise with role names
-   */
-  async setAdminRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    const body = await this.container.makeRequest('_auth:role:admin', {
-      roles: roleNames
-    });
-    return body.result;
-  }
-
-  /**
-   * Sets default roles for new registered users.
-   *
-   * @param {Role[]} roles - default roles
-   * @return {Promise<String[]>} promise with role names
-   */
-  async setDefaultRole(roles) {
-    let roleNames = _.map(roles, function (perRole) {
-      return perRole.name;
-    });
-
-    const body = await this.container.makeRequest('_auth:role:default', {
-      roles: roleNames
-    });
-    return body.result;
-  }
-
-  /**
    * Gets roles of users from server.
    *
    * @param  {UserRecord[]|String[]} usersOrUserIDs - user records or user IDs
@@ -299,93 +247,6 @@ export class AuthContainer {
         ...acc,
         [pairs[0]]: pairs[1].map((name) => new Role(name))
       }), {});
-  }
-
-  /**
-   * Assigns roles to users.
-   *
-   * @param  {UserRecord[]|String[]} usersOrUserIDs - target users or user IDs
-   * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
-   *                                              to be assigned
-   * @return {Promise<String[]>} promise with the target user IDs
-   */
-  async assignUserRole(usersOrUserIDs, rolesOrRoleNames) {
-    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
-    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
-
-    const body = await this.container.makeRequest('_auth:role:assign', {
-      users: userIDs,
-      roles: roleNames
-    });
-
-    return body.result;
-  }
-
-  /**
-   * Revokes roles from users.
-   *
-   * @param  {UserRecord[]|String[]} usersOrUserIDs - target users or user IDs
-   * @param  {Role[]|String[]} rolesOrRoleNames - roles or role names
-   *                                              to be revoked
-   * @return {Promise<String[]>} promise with target user IDs
-   */
-  async revokeUserRole(usersOrUserIDs, rolesOrRoleNames) {
-    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
-    const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
-
-    const body = await this.container.makeRequest('_auth:role:revoke', {
-      users: userIDs,
-      roles: roleNames
-    });
-
-    return body.result;
-  }
-
-  /**
-   * Enable user account of a user.
-   *
-   * This function is intended for admin use.
-   *
-   * @param  {UserRecord|String} userOrUserID - target user or user ID
-   * @return {Promise<String>} promise with target user ID
-   */
-  async adminEnableUser(userOrUserID) {
-    const userID = getUserIDFromParams(userOrUserID);
-    await this.container.makeRequest('_auth:disable:set', {
-      auth_id: userID, // eslint-disable-line camelcase
-      disabled: false
-    });
-
-    return userID;
-  }
-
-  /**
-   * Disable user account of a user.
-   *
-   * This function is intended for admin use.
-   *
-   * @param  {UserRecord|String} userOrUserID - target user or user ID
-   * @param  {String} [message] - message to be shown to user
-   * @param  {Date} [expiry] - date and time when the user is automatically
-   *   enabled
-   * @return {Promise<String>} promise with target user ID
-   */
-  async adminDisableUser(userOrUserID, message, expiry) {
-    const userID = getUserIDFromParams(userOrUserID);
-
-    let payload = {
-      auth_id: userID, // eslint-disable-line camelcase
-      disabled: true
-    };
-    if (message) {
-      payload.message = message;
-    }
-    if (expiry) {
-      payload.expiry = expiry.toJSON();
-    }
-
-    await this.container.makeRequest('_auth:disable:set', payload);
-    return userID;
   }
 
   async _getAccessToken() {

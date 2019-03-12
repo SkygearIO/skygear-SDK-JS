@@ -16,7 +16,6 @@
 import _ from 'lodash';
 import { isUserRecord } from './user_record';
 import { SkygearError, ErrorCodes } from './error';
-import { isRole } from './role';
 
 function mapObject(obj, fn) {
   // cannot use `map` directly
@@ -140,27 +139,6 @@ export function getUserIDFromParams(userOrUserID) {
 
   throw new SkygearError(
     `Unknown type "${type}" to represent a user`,
-    ErrorCodes.InvalidArgument
-  );
-}
-
-/**
- *
- * @param {Role | String} roleOrRoleName a role or a role name
- * @return {String} the name of the role
- */
-export function getRoleNameFromParams(roleOrRoleName) {
-  if (isRole(roleOrRoleName)) {
-    return roleOrRoleName.name;
-  }
-
-  const type = typeof roleOrRoleName;
-  if (type === 'string') {
-    return roleOrRoleName;
-  }
-
-  throw new SkygearError(
-    `Unknown type "${type}" to represent a role`,
     ErrorCodes.InvalidArgument
   );
 }

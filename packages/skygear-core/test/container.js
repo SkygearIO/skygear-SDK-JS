@@ -141,32 +141,6 @@ describe('Container role', function () {
   let container = new Container();
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/_auth/role/admin',
-    fixtures: function (match, params, headers, fn) {
-      var roles = params['roles'];
-      if (roles.indexOf('Killer') !== -1 && roles.indexOf('Police') !== -1) {
-        return fn({
-          'result': [
-            'Killer',
-            'Police'
-          ]
-        });
-      }
-    }
-  }, {
-    pattern: 'http://skygear.dev/_auth/role/default',
-    fixtures: function (match, params, headers, fn) {
-      var roles = params['roles'];
-      if (roles.indexOf('Healer') !== -1 && roles.indexOf('Victim') !== -1) {
-        return fn({
-          'result': [
-            'Healer',
-            'Victim'
-          ]
-        });
-      }
-    }
-  }, {
     pattern: 'http://skygear.dev/_auth/role/get',
     fixtures: function (match, params, headers, fn) {
       let userIds = params['users'];
@@ -182,24 +156,6 @@ describe('Container role', function () {
       }
     }
   }]);
-
-  it('set admin roles', async function () {
-    var Killer = container.Role.define('Killer');
-    var Police = container.Role.define('Police');
-
-    const roles = await container.auth.setAdminRole([Killer, Police]);
-    assert.include(roles, 'Killer');
-    assert.include(roles, 'Police');
-  });
-
-  it('set default role', async function () {
-    var Healer = container.Role.define('Healer');
-    var Victim = container.Role.define('Victim');
-
-    const roles = await container.auth.setDefaultRole([Victim, Healer]);
-    assert.include(roles, 'Healer');
-    assert.include(roles, 'Victim');
-  });
 
   it('should fetch user roles', async function () {
     let users = [

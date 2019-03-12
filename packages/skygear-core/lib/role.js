@@ -117,7 +117,3 @@ export default class Role {
     }) !== undefined;
   }
 }
-
-export function isRole(obj) {
-  return obj instanceof Role;
-}
