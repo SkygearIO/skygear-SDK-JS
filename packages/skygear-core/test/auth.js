@@ -23,7 +23,7 @@ describe('Container me', function () {
   let container = new Container();
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/me',
+    pattern: 'http://skygear.dev/_auth/me',
     fixtures: function (match, params, headers, fn) {
       const token = params['access_token'];
       if (token) {
@@ -79,7 +79,7 @@ describe('Container me', function () {
 describe('Container auth', function () {
   let container = new Container();
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/signup',
+    pattern: 'http://skygear.dev/_auth/signup',
     fixtures: function (match, params, headers, fn) {
       const validUser = params['auth_data'] &&
         (params['auth_data']['username'] === 'username' ||
@@ -132,7 +132,7 @@ describe('Container auth', function () {
       }
     }
   }, {
-    pattern: 'http://skygear.dev/auth/login',
+    pattern: 'http://skygear.dev/_auth/login',
     fixtures: function (match, params, headers, fn) {
       if (params['provider'] === 'provider') {
         return fn({
@@ -176,7 +176,7 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
-    pattern: 'http://skygear.dev/auth/change_password',
+    pattern: 'http://skygear.dev/_auth/change_password',
     fixtures: function (match, params, headers, fn) {
       if (params['old_password'] === params['password']) {
         return fn({
@@ -201,7 +201,7 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
-    pattern: 'http://skygear.dev/auth/logout',
+    pattern: 'http://skygear.dev/_auth/logout',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: {
@@ -488,7 +488,7 @@ describe('AuthContainer', function () {
   let container = new Container();
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/disable/set',
+    pattern: 'http://skygear.dev/_auth/disable/set',
     fixtures: function (match, params, headers, fn) {
       if (params.auth_id === 'some-uuid1') {
         assert.isFalse(params.disabled);
@@ -509,12 +509,12 @@ describe('AuthContainer', function () {
     }
   }]);
 
-  it('adminEnableUser should send auth:disable:set', async function () {
+  it('adminEnableUser should send _auth:disable:set', async function () {
     const userID = await container.auth.adminEnableUser('some-uuid1');
     assert.equal(userID, 'some-uuid1');
   });
 
-  it('adminDisableUser should send auth:disable:set', async function () {
+  it('adminDisableUser should send _auth:disable:set', async function () {
     const userID = await container.auth.adminDisableUser(
       'some-uuid2',
       'some reason',
@@ -524,7 +524,7 @@ describe('AuthContainer', function () {
   });
 
   it(
-    'adminDisableUser should send auth:disable:set without optional fields',
+    'adminDisableUser should send _auth:disable:set without optional fields',
     async function () {
       const userID = await container.auth.adminDisableUser('some-uuid3');
       assert.equal(userID, 'some-uuid3');

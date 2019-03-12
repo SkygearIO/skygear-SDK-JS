@@ -25,7 +25,7 @@ describe('AuthContainer with Forgot Password', function () {
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([
     {
-      pattern: 'http://skygear.dev/auth/me',
+      pattern: 'http://skygear.dev/_auth/me',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token) {
@@ -57,7 +57,7 @@ describe('AuthContainer with Forgot Password', function () {
       }
     },
     {
-      pattern: 'http://skygear.dev/auth/verify_request',
+      pattern: 'http://skygear.dev/_auth/verify_request',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token !== 'token-1') {
@@ -88,7 +88,7 @@ describe('AuthContainer with Forgot Password', function () {
       }
     },
     {
-      pattern: 'http://skygear.dev/auth/verify_code',
+      pattern: 'http://skygear.dev/_auth/verify_code',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token !== 'token-1') {

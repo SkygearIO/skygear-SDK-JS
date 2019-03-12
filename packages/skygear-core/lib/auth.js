@@ -77,7 +77,7 @@ export class AuthContainer {
    * @return {Promise<UserRecord>} promise with created user record
    */
   async signup(authData, password, data = {}) {
-    const authResponse = await this.container.makeRequest('auth:signup', {
+    const authResponse = await this.container.makeRequest('_auth:signup', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password,
       profile: toJSON(data)
@@ -133,7 +133,7 @@ export class AuthContainer {
    * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async login(authData, password) {
-    const authResponse = await this.container.makeRequest('auth:login', {
+    const authResponse = await this.container.makeRequest('_auth:login', {
       auth_data: authData, // eslint-disable-line camelcase
       password: password
     });
@@ -176,7 +176,7 @@ export class AuthContainer {
    * @return {Promise<UserRecord>} promise with the logged in user record
    */
   async loginWithProvider(provider, authData) {
-    const authResponse = await this.container.makeRequest('auth:login', {
+    const authResponse = await this.container.makeRequest('_auth:login', {
       provider: provider,
       provider_auth_data: authData // eslint-disable-line camelcase
     });
@@ -191,7 +191,7 @@ export class AuthContainer {
   async logout() {
     try {
       this.container.clearCache();
-      await this.container.makeRequest('auth:logout', {});
+      await this.container.makeRequest('_auth:logout', {});
       return null;
     } finally {
       await Promise.all([
@@ -207,7 +207,7 @@ export class AuthContainer {
    * @return {Promise<UserRecord>} promise with current user record
    */
   async whoami() {
-    const authResponse = await this.container.makeRequest('auth:me', {});
+    const authResponse = await this.container.makeRequest('_auth:me', {});
     return this._authResolve(authResponse);
   }
 
@@ -223,7 +223,7 @@ export class AuthContainer {
     if (invalidate) {
       throw Error('Invalidate is not yet implemented');
     }
-    const resp = await this.container.makeRequest('auth:change_password', {
+    const resp = await this.container.makeRequest('_auth:change_password', {
       old_password: oldPassword, // eslint-disable-line camelcase
       password: newPassword
     });
@@ -239,7 +239,7 @@ export class AuthContainer {
    */
   async adminResetPassword(userOrUserID, newPassword) {
     const userID = getUserIDFromParams(userOrUserID);
-    await this.container.makeRequest('auth:reset_password', {
+    await this.container.makeRequest('_auth:reset_password', {
       auth_id: userID, // eslint-disable-line camelcase
       password: newPassword
     });
@@ -258,7 +258,7 @@ export class AuthContainer {
       return perRole.name;
     });
 
-    const body = await this.container.makeRequest('auth:role:admin', {
+    const body = await this.container.makeRequest('_auth:role:admin', {
       roles: roleNames
     });
     return body.result;
@@ -275,7 +275,7 @@ export class AuthContainer {
       return perRole.name;
     });
 
-    const body = await this.container.makeRequest('auth:role:default', {
+    const body = await this.container.makeRequest('_auth:role:default', {
       roles: roleNames
     });
     return body.result;
@@ -289,7 +289,7 @@ export class AuthContainer {
    */
   async fetchUserRole(usersOrUserIDs) {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
-    const body = await this.container.makeRequest('auth:role:get', {
+    const body = await this.container.makeRequest('_auth:role:get', {
       users: userIDs
     });
 
@@ -313,7 +313,7 @@ export class AuthContainer {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
-    const body = await this.container.makeRequest('auth:role:assign', {
+    const body = await this.container.makeRequest('_auth:role:assign', {
       users: userIDs,
       roles: roleNames
     });
@@ -333,7 +333,7 @@ export class AuthContainer {
     const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
     const roleNames = _.map(rolesOrRoleNames, getRoleNameFromParams);
 
-    const body = await this.container.makeRequest('auth:role:revoke', {
+    const body = await this.container.makeRequest('_auth:role:revoke', {
       users: userIDs,
       roles: roleNames
     });
@@ -351,7 +351,7 @@ export class AuthContainer {
    */
   async adminEnableUser(userOrUserID) {
     const userID = getUserIDFromParams(userOrUserID);
-    await this.container.makeRequest('auth:disable:set', {
+    await this.container.makeRequest('_auth:disable:set', {
       auth_id: userID, // eslint-disable-line camelcase
       disabled: false
     });
@@ -384,7 +384,7 @@ export class AuthContainer {
       payload.expiry = expiry.toJSON();
     }
 
-    await this.container.makeRequest('auth:disable:set', payload);
+    await this.container.makeRequest('_auth:disable:set', payload);
     return userID;
   }
 

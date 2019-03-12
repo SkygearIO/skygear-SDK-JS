@@ -23,7 +23,7 @@ describe('SSO Custom Token', function () {
   // setup container
   let container = new Container();
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/sso/custom_token/login',
+    pattern: 'http://skygear.dev/_auth/sso/custom_token/login',
     fixtures: function (match, params, headers, fn) {
       expect(params.token).to.equal('eyXXXX');
       return fn({
