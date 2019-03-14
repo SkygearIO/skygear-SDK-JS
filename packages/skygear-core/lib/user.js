@@ -44,6 +44,24 @@ const _metaAttrs = {
     },
     newKey: 'updatedAt'
   },
+  last_login_at: { //eslint-disable-line
+    parser: (v) => {
+      return new Date(v);
+    },
+    stringify: (v) => {
+      return v.toJSON();
+    },
+    newKey: 'lastLoginAt'
+  },
+  last_seen_at: { //eslint-disable-line
+    parser: (v) => {
+      return new Date(v);
+    },
+    stringify: (v) => {
+      return v.toJSON();
+    },
+    newKey: 'lastSeenAt'
+  },
   created_by: { //eslint-disable-line
     parser: (v) => {
       return v;
