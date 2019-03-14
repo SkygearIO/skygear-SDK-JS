@@ -6,6 +6,13 @@ import { NewWindowObserver, WindowMessageObserver } from '../lib/observer';
 describe('SSO observer', function () {
   this.timeout(5000);
 
+  function newMessageEvent(data, origin) {
+    return new window.MessageEvent('message', {
+      data,
+      origin
+    });
+  }
+
   it('new window observer when user close window', async function () {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
@@ -13,7 +20,7 @@ describe('SSO observer', function () {
 
     setTimeout(function () {
       newWindow.closed = true;
-    }, 1000);
+    }, 100);
 
     const observer = new NewWindowObserver();
     try {
@@ -25,26 +32,25 @@ describe('SSO observer', function () {
     }
   });
 
-
   it('post auth result observer for result message', async function () {
     // setup mock window
     let MockBrowser = require('mock-browser').mocks.MockBrowser;
     global.window = new MockBrowser().getWindow();
 
     let resultToPost = {
-      hello: 'would'
+      hello: 'world'
     };
 
-    const observer = new WindowMessageObserver();
+    const observer = new WindowMessageObserver('http://skygeario.com');
     setTimeout(() => {
       // post message
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'result',
         result: resultToPost
-      }, '*');
-      window.postMessage({
+      }, 'http://skygeario.com'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygeario.com'));
     }, 5);
     const result = await observer.subscribe();
     expect(result.result).eq(resultToPost);
@@ -59,16 +65,16 @@ describe('SSO observer', function () {
       error: 'error'
     };
 
-    const observer = new WindowMessageObserver();
+    const observer = new WindowMessageObserver('http://skygeario.com');
     // post message
     setTimeout(() => {
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'error',
         error: errorToPost
-      }, '*');
-      window.postMessage({
+      }, 'http://skygeario.com'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygeario.com'));
     }, 5);
     const result = await observer.subscribe();
     expect(result.error).eq(errorToPost);
@@ -81,13 +87,12 @@ describe('SSO observer', function () {
 
     setTimeout(() => {
       // post message
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygeario.com'), '*');
     }, 5);
-    const observer = new WindowMessageObserver();
+    const observer = new WindowMessageObserver('http://skygeario.com');
     const result = await observer.subscribe();
     expect(result.type).eq('end');
-
   });
 });

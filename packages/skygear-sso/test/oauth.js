@@ -8,9 +8,17 @@ import mockSuperagent from '../../skygear-core/test/mock/superagent';
 describe('SSO OAuth', function () {
   this.timeout(7000);
 
+  function newMessageEvent(data, origin) {
+    return new window.MessageEvent('message', {
+      data,
+      origin
+    });
+  }
+
   // setup container
   let container = new Container();
   container.pubsub.autoPubsub = false;
+  container.configEndPoint('http://skygear.dev');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
@@ -116,13 +124,13 @@ describe('SSO OAuth', function () {
           }
         }
       };
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'result',
         result
-      }, '*');
-      window.postMessage({
+      }, 'http://skygear.dev'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygear.dev'));
     }, 50);
 
     const user = await container.auth.loginOAuthProviderWithPopup(
@@ -171,13 +179,13 @@ describe('SSO OAuth', function () {
       let result = {
         result: 'OK'
       };
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'result',
         result
-      }, '*');
-      window.postMessage({
+      }, 'http://skygear.dev'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygear.dev'));
     }, 50);
 
     const result = await container.auth.linkOAuthProviderWithPopup(
