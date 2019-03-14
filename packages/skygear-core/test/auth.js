@@ -54,7 +54,7 @@ describe('Container me', function () {
   it('should get me correctly', async function () {
     container.auth._accessToken = 'token-1';
     const user = await container.auth.whoami();
-    assert.instanceOf(user, container.UserRecord);
+    assert.instanceOf(user, container.User);
     assert.equal(user.userID, 'user-id-1');
     assert.equal(user.metadata.username, 'user1');
     assert.equal(user.metadata.email, 'user1@skygear.dev');
@@ -214,7 +214,7 @@ describe('Container auth', function () {
   it(
     '_getUser should set _user=null with missing store key',
     async function () {
-      container.auth._user = new container.UserRecord();
+      container.auth._user = new container.User();
       await container.store.removeItem('skygear-user');
       await container.auth._getUser();
       assert.isNull(container.auth.currentUser);
@@ -223,13 +223,13 @@ describe('Container auth', function () {
 
 
   it('_setUser should set _user=null with null attrs', async function () {
-    container.auth._user = new container.UserRecord();
+    container.auth._user = new container.User();
     await container.auth._setUser(null);
     assert.isNull(container.auth.currentUser);
   });
 
   it('_setUser should set _user=null with undefined attrs', async function () {
-    container.auth._user = new container.UserRecord();
+    container.auth._user = new container.User();
     await container.auth._setUser(undefined);
     assert.isNull(container.auth.currentUser);
   });
@@ -243,13 +243,13 @@ describe('Container auth', function () {
       }
     };
     await container.auth._setUser(userAttrs);
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user1');
     assert.equal(container.auth.currentUser.metadata.name, 'user1');
     assert.equal(container.auth.currentUser.metadata.age, 100);
 
     await container.auth._getUser();
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user1');
     assert.equal(container.auth.currentUser.metadata.name, 'user1');
     assert.equal(container.auth.currentUser.metadata.age, 100);
@@ -266,7 +266,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
     assert.equal(container.auth.currentUser.metadata.age, 100);
   });
@@ -282,7 +282,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
 
     assert.equal(container.auth.currentUser.userID, 'user:id1');
     assert.equal(
@@ -296,7 +296,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
   });
 
@@ -306,7 +306,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
   });
 
@@ -315,7 +315,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid2');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id2');
   });
 
@@ -335,7 +335,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
   });
 
@@ -345,7 +345,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
   });
 
@@ -367,7 +367,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
   });
 
@@ -434,9 +434,9 @@ describe('Container auth', function () {
     const user = await container.auth
       .changePassword('supersecret', 'supersecret');
     assert.equal(container.auth.accessToken, 'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.UserRecord);
+    assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user:id1');
-    assert.instanceOf(user, container.UserRecord);
+    assert.instanceOf(user, container.User);
   });
 
   it('should fail to change password if not match', async function () {

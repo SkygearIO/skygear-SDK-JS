@@ -17,7 +17,7 @@
 import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container from '../lib/container';
-import UserRecord from '../lib/user_record';
+import User from '../lib/user';
 import Role from '../lib/role';
 
 import mockSuperagent from './mock/superagent';
@@ -108,7 +108,7 @@ describe('Container', function () {
   it('should call userChange listener', function (done) {
     let container = new Container();
     container.auth.onUserChanged(function (user) {
-      assert.instanceOf(user, container.UserRecord);
+      assert.instanceOf(user, container.User);
       assert.equal(user.userID, 'user:id1');
       done();
     });
@@ -156,10 +156,10 @@ describe('Container role', function () {
 
   it('should fetch user roles', async function () {
     let users = [
-      new UserRecord({
+      new User({
         user_id: 'user1' //eslint-disable-line
       }),
-      new UserRecord({
+      new User({
         user_id: 'user2' //eslint-disable-line
       }),
       'user3'

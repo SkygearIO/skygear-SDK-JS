@@ -125,7 +125,7 @@ describe('AuthContainer with Forgot Password', function () {
   it('should return user when verify code', async function () {
     container.auth._accessToken = 'token-1';
     const user = await container.auth.verifyUserWithCode('123456');
-    assert.instanceOf(user, container.UserRecord);
+    assert.instanceOf(user, container.User);
     assert.equal(user.userID, 'user-id-1');
     assert.equal(user.metadata.username, 'user1');
     assert.equal(user.metadata.email, 'user1@skygear.dev');

@@ -65,10 +65,10 @@ const _metaAttrs = {
 };
 
 /**
- * UserRecord provides the model for Skygear User.
+ * User provides the model for Skygear User.
  *
  */
-export default class UserRecord {
+export default class User {
 
   constructor(attrs) {
     this.update(attrs);
@@ -114,10 +114,10 @@ export default class UserRecord {
 }
 
 /**
- * Returns whether an object is a Skygear UserRecord.
+ * Returns whether an object is a Skygear User.
  *
- * @return {Boolean} true if the specified object is a Skygear UserRecord.
+ * @return {Boolean} true if the specified object is a Skygear User.
  */
-export function isUserRecord(obj) {
-  return obj instanceof UserRecord;
+export function isUser(obj) {
+  return obj instanceof User;
 }

@@ -19,7 +19,7 @@ import _ from 'lodash';
 import ee from 'event-emitter';
 
 import Role from './role';
-import UserRecord from './user_record';
+import User from './user';
 import getStore from './store';
 import {
   SkygearError,
@@ -215,10 +215,10 @@ export class BaseContainer {
   }
 
   /**
-   * @type {UserRecord}
+   * @type {User}
    */
-  get UserRecord() {
-    return UserRecord;
+  get User() {
+    return User;
   }
 
   /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { isUserRecord } from './user_record';
+import { isUser } from './user';
 import { SkygearError, ErrorCodes } from './error';
 
 function mapObject(obj, fn) {
@@ -124,11 +124,11 @@ export class EventHandle {
 /**
  * Get user ID from function parameter.
  *
- * @param {UserRecord | String} userOrUserID a user record or a user ID
+ * @param {User | String} userOrUserID a user record or a user ID
  * @return {String} the ID of the user
  */
 export function getUserIDFromParams(userOrUserID) {
-  if (isUserRecord(userOrUserID)) {
+  if (isUser(userOrUserID)) {
     return userOrUserID.userID;
   }
 
