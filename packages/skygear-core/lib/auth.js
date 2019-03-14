@@ -311,7 +311,7 @@ export class AuthContainer {
     let value;
     if (attrs) {
       this._user = new this._User(attrs);
-      value = JSON.stringify(this._user);
+      value = JSON.stringify(this._user.toJSON());
     } else {
       this._user = null;
       value = null;

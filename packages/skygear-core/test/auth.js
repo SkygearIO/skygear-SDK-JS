@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /*eslint-disable camelcase, dot-notation, no-unused-vars, quote-props */
-import {assert, expect} from 'chai';
+import {assert} from 'chai';
 import Container from '../lib/container';
 
 import mockSuperagent from './mock/superagent';
@@ -277,7 +277,7 @@ describe('Container auth', function () {
         username: 'username',
         email: 'user@email.com'
       }, 'passwd', {
-        birthday: new Date(0)
+        birthday: new Date(0).toJSON()
       });
     assert.equal(
       container.auth.accessToken,
@@ -286,8 +286,8 @@ describe('Container auth', function () {
 
     assert.equal(container.auth.currentUser.userID, 'user:id1');
     assert.equal(
-      container.auth.currentUser.metadata.birthday.getTime(),
-      0
+      container.auth.currentUser.metadata.birthday,
+      '1970-01-01T00:00:00.000Z'
     );
   });
 

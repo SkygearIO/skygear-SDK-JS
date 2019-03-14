@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import {fromJSON} from './util';
+import {toJSON, fromJSON} from './util';
 
 const _metaAttrs = {
   user_id: { //eslint-disable-line
@@ -82,6 +82,11 @@ const _metaAttrs = {
   }
 };
 
+const _metaKeys = _.reduce(_metaAttrs, function (result, value, key) {
+  result[value.newKey] = key;
+  return result;
+}, {});
+
 /**
  * User provides the model for Skygear User.
  *
@@ -127,6 +132,32 @@ export default class User {
         }
       }
     });
+  }
+
+  /**
+   * Serializes Record to a JSON object.
+   *
+   * @return {Object} the JSON object
+   */
+  toJSON() {
+    const result = _.reduce(this.attributeKeys, (payload, key) => {
+      const value = this[key];
+      if (value === undefined) {
+        throw new Error(`Unsupported undefined value of record key: ${key}`);
+      }
+      if (key in _metaKeys) {
+        const meta = _metaAttrs[_metaKeys[key]];
+        const stringify = meta.stringify;
+        if (stringify) {
+          payload[_metaKeys[key]] = stringify(value);
+        }
+      } else {
+        payload[key] = toJSON(value);
+      }
+      return payload;
+    }, {});
+
+    return result;
   }
 
 }
