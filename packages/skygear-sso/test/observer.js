@@ -94,4 +94,43 @@ describe('SSO observer', function () {
     const result = await observer.subscribe();
     expect(result.type).eq('end');
   });
+
+  it('should ingore message from other origin', async function () {
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
+    let resultToPost = {
+      hello: 'world'
+    };
+    const observer = new WindowMessageObserver('http://skygeario.com');
+    setTimeout(() => {
+      // message from different origin
+      window.dispatchEvent(newMessageEvent({
+        type: 'error',
+        error: { error: 'error' }
+      }, 'http://example.com'));
+
+      // sso message
+      window.dispatchEvent(newMessageEvent({
+        type: 'result',
+        result: resultToPost
+      }, 'http://skygeario.com'));
+
+      // message from different origin
+      window.dispatchEvent(newMessageEvent({
+        type: 'end'
+      }, 'http://example.com'));
+      // message from different origin
+      window.dispatchEvent(newMessageEvent({}, 'http://example.com'));
+
+      // sso message
+      window.dispatchEvent(newMessageEvent({
+        type: 'end'
+      }, 'http://skygeario.com'));
+    }, 5);
+
+    // get the message correctly
+    const result = await observer.subscribe();
+    expect(result.result).eq(resultToPost);
+  });
 });
