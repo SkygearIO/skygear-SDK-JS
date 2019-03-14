@@ -277,7 +277,7 @@ export class AuthContainer {
 
   async _authResolve(body) {
     await Promise.all([
-      this._setUser(body.result.profile),
+      this._setUser(body.result),
       this._setAccessToken(body.result.access_token)
     ]);
 
@@ -311,7 +311,7 @@ export class AuthContainer {
     let value;
     if (attrs) {
       this._user = new this._User(attrs);
-      value = JSON.stringify(this._user.toJSON());
+      value = JSON.stringify(this._user);
     } else {
       this._user = null;
       value = null;
