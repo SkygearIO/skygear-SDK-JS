@@ -129,7 +129,7 @@ export class EventHandle {
  */
 export function getUserIDFromParams(userOrUserID) {
   if (isUserRecord(userOrUserID)) {
-    return userOrUserID.recordID;
+    return userOrUserID.userID;
   }
 
   const type = typeof userOrUserID;

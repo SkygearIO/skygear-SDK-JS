@@ -109,13 +109,11 @@ describe('Container', function () {
     let container = new Container();
     container.auth.onUserChanged(function (user) {
       assert.instanceOf(user, container.UserRecord);
-      assert.equal(user.recordType, 'user');
-      assert.equal(user.recordID, 'user:id1');
+      assert.equal(user.userID, 'user:id1');
       done();
     });
     return container.auth._setUser({
-      _recordType: 'user',
-      _recordID: 'user:id1'
+      user_id: 'user:id1' //eslint-disable-line
     });
   });
 
@@ -131,8 +129,7 @@ describe('Container', function () {
     }, 1500);
 
     return container.auth._setUser({
-      _recordType: 'user',
-      _recordID: 'user:id1'
+      user_id: 'user:id1' //eslint-disable-line
     });
   });
 });
@@ -160,12 +157,10 @@ describe('Container role', function () {
   it('should fetch user roles', async function () {
     let users = [
       new UserRecord({
-        _recordType: 'user',
-        _recordID: 'user1'
+        user_id: 'user1' //eslint-disable-line
       }),
       new UserRecord({
-        _recordType: 'user',
-        _recordID: 'user2'
+        user_id: 'user2' //eslint-disable-line
       }),
       'user3'
     ];

@@ -29,11 +29,7 @@ describe('SSO Custom Token', function () {
       return fn({
         result: {
           user_id: 'user-id-1', // eslint-disable-line camelcase
-          profile: {
-            _type: 'record', // eslint-disable-line camelcase
-            _recordType: 'user', // eslint-disable-line camelcase
-            _recordID: 'user-id-1', // eslint-disable-line camelcase
-            _access: null, // eslint-disable-line camelcase
+          metadata: {
             username: 'user1',
             email: 'user1@skygear.dev'
           }
@@ -47,6 +43,6 @@ describe('SSO Custom Token', function () {
   it('can login with custom token', async function () {
     const user = await container.auth.loginWithCustomToken('eyXXXX');
     expect(user).not.be.null();
-    expect(user.email).to.eql('user1@skygear.dev');
+    expect(user.metadata.email).to.eql('user1@skygear.dev');
   });
 });
