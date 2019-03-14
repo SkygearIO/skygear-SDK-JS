@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
-
 import {EventHandle, toJSON} from './util';
-import Role from './role';
-import {
-  getUserIDFromParams
-} from './util';
 
 export const USER_CHANGED = 'userChanged';
 
 /**
  * Auth container
  *
- * Provides User authentications and user roles API.
+ * Provides User authentications API.
  */
 export class AuthContainer {
   constructor(container) {
@@ -227,26 +221,6 @@ export class AuthContainer {
       password: newPassword
     });
     return this._authResolve(resp);
-  }
-
-  /**
-   * Gets roles of users from server.
-   *
-   * @param  {User[]|String[]} usersOrUserIDs - user records or user IDs
-   * @return {Promise<Object>} promise with userID-to-roles map
-   */
-  async fetchUserRole(usersOrUserIDs) {
-    const userIDs = _.map(usersOrUserIDs, getUserIDFromParams);
-    const body = await this.container.makeRequest('_auth:role:get', {
-      users: userIDs
-    });
-
-    return Object.keys(body.result)
-      .map((key) => [key, body.result[key]])
-      .reduce((acc, pairs) => ({
-        ...acc,
-        [pairs[0]]: pairs[1].map((name) => new Role(name))
-      }), {});
   }
 
   async _getAccessToken() {

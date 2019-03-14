@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import { isUser } from './user';
-import { SkygearError, ErrorCodes } from './error';
 
 function mapObject(obj, fn) {
   // cannot use `map` directly
@@ -119,26 +117,4 @@ export class EventHandle {
   cancel() {
     this.emitter.off(this.name, this.listener);
   }
-}
-
-/**
- * Get user ID from function parameter.
- *
- * @param {User | String} userOrUserID a user record or a user ID
- * @return {String} the ID of the user
- */
-export function getUserIDFromParams(userOrUserID) {
-  if (isUser(userOrUserID)) {
-    return userOrUserID.userID;
-  }
-
-  const type = typeof userOrUserID;
-  if (type === 'string') {
-    return userOrUserID;
-  }
-
-  throw new SkygearError(
-    `Unknown type "${type}" to represent a user`,
-    ErrorCodes.InvalidArgument
-  );
 }

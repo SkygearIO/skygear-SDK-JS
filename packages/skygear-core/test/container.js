@@ -17,8 +17,6 @@
 import _ from 'lodash';
 import {assert, expect} from 'chai';
 import Container from '../lib/container';
-import User from '../lib/user';
-import Role from '../lib/role';
 
 import mockSuperagent from './mock/superagent';
 
@@ -131,48 +129,6 @@ describe('Container', function () {
     return container.auth._setUser({
       user_id: 'user:id1' //eslint-disable-line
     });
-  });
-});
-
-describe('Container role', function () {
-  let container = new Container();
-  container.configApiKey('correctApiKey');
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/_auth/role/get',
-    fixtures: function (match, params, headers, fn) {
-      let userIds = params['users'];
-      if (userIds.length === 3 && userIds[0] === 'user1' &&
-        userIds[1] === 'user2' && userIds[2] === 'user3') {
-        return fn({
-          result: {
-            user1: ['Developer'],
-            user2: ['Admin', 'Tester'],
-            user3: []
-          }
-        });
-      }
-    }
-  }]);
-
-  it('should fetch user roles', async function () {
-    let users = [
-      new User({
-        user_id: 'user1' //eslint-disable-line
-      }),
-      new User({
-        user_id: 'user2' //eslint-disable-line
-      }),
-      'user3'
-    ];
-    const result = await container.auth.fetchUserRole(users);
-    expect(Object.keys(result)).to.have.length(3);
-    expect(result['user1']).to.have.length(1);
-    expect(result['user1'][0]).to.be.instanceof(Role);
-    expect(result['user1'][0].name).to.eql('Developer');
-    expect(result['user2']).to.have.length(2);
-    expect(result['user2'][0].name).to.eql('Admin');
-    expect(result['user2'][1].name).to.eql('Tester');
-    expect(result['user3']).to.have.length(0);
   });
 });
 

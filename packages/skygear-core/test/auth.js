@@ -31,7 +31,6 @@ describe('Container me', function () {
           return fn({
             result: {
               user_id: 'user-id-1', // eslint-disable-line camelcase
-              roles: ['Normal-User'],
               metadata: {
                 username: 'user1',
                 email: 'user1@skygear.dev'

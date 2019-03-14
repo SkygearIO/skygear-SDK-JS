@@ -18,7 +18,6 @@ import request from 'superagent';
 import _ from 'lodash';
 import ee from 'event-emitter';
 
-import Role from './role';
 import User from './user';
 import getStore from './store';
 import {
@@ -38,9 +37,6 @@ import {fromJSON, toJSON} from './util';
  * - Web developement: {@link Container}
  * - React Native: {@link ReactNativeContainer}
  *
- * It also proxies other Skygear classes, like {@link BaseContainer#Role}.
- * Thus developer who install Skygear with <script> tag in browser can have
- * access to those classes.
  */
 export class BaseContainer {
 
@@ -208,13 +204,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Role}
-   */
-  get Role() {
-    return Role;
-  }
-
-  /**
    * @type {User}
    */
   get User() {
@@ -290,8 +279,7 @@ export class BaseContainer {
 /**
  * Container provides configuration for connecting to Skygear server, and
  * accessors to other containers, providing various functionalities:
- * - `skygear.auth` - {@link AuthContainer}: User authentications and user
- * roles API.
+ * - `skygear.auth` - {@link AuthContainer}: User authentications.
  */
 export default class Container extends BaseContainer {
 
