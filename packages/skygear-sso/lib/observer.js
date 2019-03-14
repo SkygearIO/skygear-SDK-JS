@@ -27,16 +27,22 @@ export class NewWindowObserver {
 }
 
 export class WindowMessageObserver {
-  constructor() {
+  constructor(origin) {
     this.onMessageReceived = null;
+    if (!origin) {
+      throw new Error('Origin is required for message observer');
+    }
+    this.origin = origin.replace(/\/$/, '');
   }
 
   async subscribe() {
     this.unsubscribe();
     return new Promise((resolve) => {
       this.onMessageReceived = (message) => {
-        resolve(message.data);
-        this.unsubscribe();
+        if (this.origin === message.origin) {
+          resolve(message.data);
+          this.unsubscribe();
+        }
       };
       window.addEventListener('message', this.onMessageReceived);
     });
