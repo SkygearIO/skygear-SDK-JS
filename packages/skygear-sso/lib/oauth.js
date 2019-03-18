@@ -244,8 +244,7 @@ async function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   this._oauthWindowObserver = this._oauthWindowObserver ||
     new NewWindowObserver();
   this._oauthResultObserver = this._oauthResultObserver ||
-    new WindowMessageObserver();
-
+    new WindowMessageObserver(this.container.endPoint);
   const params = _genAuthURLParams('web_popup', options);
   const lambdaName = _getAuthURL(provider, action);
   try {
@@ -304,7 +303,7 @@ async function _oauthFlowWithRedirect(provider, options, action) {
  */
 async function _getRedirectResult(action, resolvePromise) {
   this._oauthResultObserver = this._oauthResultObserver ||
-    new WindowMessageObserver();
+    new WindowMessageObserver(this.container.endPoint);
 
   let oauthIframe;
   try {
@@ -437,7 +436,7 @@ async function _ssoResultMessageResolve(message) {
 Please check the callback_url params in function and
 authorized callback urls list in portal.`);
   default:
-    throw errorResponseFromMessage('Unkown message type');
+    throw errorResponseFromMessage('Unknown message type');
   }
 }
 

@@ -8,9 +8,17 @@ import mockSuperagent from '../../skygear-core/test/mock/superagent';
 describe('SSO OAuth', function () {
   this.timeout(7000);
 
+  function newMessageEvent(data, origin) {
+    return new window.MessageEvent('message', {
+      data,
+      origin
+    });
+  }
+
   // setup container
   let container = new Container();
   container.pubsub.autoPubsub = false;
+  container.configEndPoint('http://skygear.dev');
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
@@ -118,13 +126,13 @@ describe('SSO OAuth', function () {
           }
         }
       };
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'result',
         result
-      }, '*');
-      window.postMessage({
+      }, 'http://skygear.dev'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygear.dev'));
     }, 50);
 
     const user = await container.auth.loginOAuthProviderWithPopup(
@@ -172,13 +180,53 @@ describe('SSO OAuth', function () {
       let result = {
         result: 'OK'
       };
-      window.postMessage({
+      window.dispatchEvent(newMessageEvent({
         type: 'result',
         result
-      }, '*');
-      window.postMessage({
+      }, 'http://skygear.dev'));
+      window.dispatchEvent(newMessageEvent({
         type: 'end'
-      }, '*');
+      }, 'http://skygear.dev'));
+    }, 50);
+
+    const result = await container.auth.linkOAuthProviderWithPopup(
+      'provider',
+      {}
+    );
+    expect(result).not.be.null();
+    expect(result.result).to.eql('OK');
+  });
+
+  it('should not intercept link oauth by message from different origin',
+  async function () {
+    // setup mock window
+    let MockBrowser = require('mock-browser').mocks.MockBrowser;
+    global.window = new MockBrowser().getWindow();
+    global.window.open = function () {
+      let newWindow = new MockBrowser().getWindow();
+      return newWindow;
+    };
+
+    // mock message post from opened window
+    setTimeout(function () {
+      let result = {
+        result: 'OK'
+      };
+      // message from different origin
+      window.dispatchEvent(newMessageEvent({
+        type: 'error',
+        error: { error: 'error' }
+      }, 'http://example.com'));
+
+      // sso message
+      window.dispatchEvent(newMessageEvent({
+        type: 'result',
+        result
+      }, 'http://skygear.dev'));
+      // sso message
+      window.dispatchEvent(newMessageEvent({
+        type: 'end'
+      }, 'http://skygear.dev'));
     }, 50);
 
     const result = await container.auth.linkOAuthProviderWithPopup(
