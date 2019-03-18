@@ -82,10 +82,7 @@ const _metaAttrs = {
   }
 };
 
-const _metaKeys = _.reduce(_metaAttrs, function (result, value, key) {
-  result[value.newKey] = key;
-  return result;
-}, {});
+const _METADATAKEY = 'metadata';
 
 /**
  * User provides the model for Skygear User.
@@ -94,44 +91,20 @@ const _metaKeys = _.reduce(_metaAttrs, function (result, value, key) {
 export default class User {
 
   constructor(attrs) {
-    this.update(attrs);
-  }
+    if (!attrs) {
+      return;
+    }
 
-  /**
-   * Gets all keys of attributes of the records. Skygear reserved keys, that is
-   * underscore prefixed keys, are excluded.
-   *
-   * @type {String[]}
-   */
-  get attributeKeys() {
-    return Object.keys(this);
-  }
-
-  /**
-   * Updates record attributes with a dictionary.
-   *
-   * @param  {Object} attrs
-   */
-  update(attrs) {
-    _.each(this.attributeKeys, (key) => {
-      delete this[key];
-    });
-
-    _.each(attrs, (value, key) => {
-      if (key in _metaAttrs) {
-        const meta = _metaAttrs[key];
-        const parser = meta.parser;
-        if (parser) {
-          this[meta.newKey] = parser(value);
-        }
-      } else {
-        if (_.isPlainObject(value)) {
-          this[key] = fromJSON(value);
-        } else {
-          this[key] = value;
-        }
+    _.each(_metaAttrs, (meta, key) => {
+      const newKey = meta.newKey;
+      const parser = meta.parser;
+      const value = attrs[key];
+      if (value && newKey && parser) {
+        this[newKey] = parser(value);
       }
     });
+
+    this[_METADATAKEY] = fromJSON(attrs[_METADATAKEY]);
   }
 
   /**
@@ -140,22 +113,20 @@ export default class User {
    * @return {Object} the JSON object
    */
   toJSON() {
-    const result = _.reduce(this.attributeKeys, (payload, key) => {
-      const value = this[key];
-      if (value === undefined) {
-        throw new Error(`Unsupported undefined value of record key: ${key}`);
+    const result = {};
+
+    _.each(_metaAttrs, (meta, key) => {
+      const newKey = meta.newKey;
+      const stringify = meta.stringify;
+      const value = this[newKey];
+      if (value && stringify) {
+        result[key] = stringify(value);
       }
-      if (key in _metaKeys) {
-        const meta = _metaAttrs[_metaKeys[key]];
-        const stringify = meta.stringify;
-        if (stringify) {
-          payload[_metaKeys[key]] = stringify(value);
-        }
-      } else {
-        payload[key] = toJSON(value);
-      }
-      return payload;
-    }, {});
+    });
+
+    if (this[_METADATAKEY]) {
+      result[_METADATAKEY] = toJSON(this[_METADATAKEY]);
+    }
 
     return result;
   }
