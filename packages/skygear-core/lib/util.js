@@ -48,11 +48,6 @@ export function toJSON(v) {
     return null;
   } else if (_.isArray(v)) {
     return _.map(v, toJSON);
-  } else if (_.isDate(v)) {
-    return {
-      $type: 'date',
-      $date: v.toJSON()
-    };
   } else if (v.toJSON) {
     return v.toJSON();
   } else if (_.isObject(v)) {
@@ -82,12 +77,7 @@ export function fromJSON(attrs) {
   } else if (_.isArray(attrs)) {
     return _.map(attrs, fromJSON);
   } else if (_.isObject(attrs)) {
-    switch (attrs.$type) {
-    case 'date':
-      return new Date(attrs.$date);
-    default:
-      return mapObject(attrs, (key, value) => fromJSON(value));
-    }
+    return mapObject(attrs, (key, value) => fromJSON(value));
   } else if (attrs.fromJSON) {
     return attrs.fromJSON();
   } else {

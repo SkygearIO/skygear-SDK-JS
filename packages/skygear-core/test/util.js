@@ -21,19 +21,13 @@ describe('util', function () {
 
   it('toJSON Date', function () {
     const d = new Date(1411839600000);
-    expect(toJSON(d)).to.eql({
-      $type: 'date',
-      $date: '2014-09-27T17:40:00.000Z'
-    });
+    expect(toJSON(d)).to.eql('2014-09-27T17:40:00.000Z');
   });
 
   it('fromJSON Date', function () {
-    const d = fromJSON({
-      $type: 'date',
-      $date: '2014-09-27T17:40:00.000Z'
-    });
-    expect(d).to.be.an.instanceof(Date);
-    expect(d.toISOString());
+    // Won't handle Date string
+    const d = fromJSON('2014-09-27T17:40:00.000Z');
+    expect(d).to.eql('2014-09-27T17:40:00.000Z');
   });
 
   it('toJSON array with mixed objects', function () {
@@ -47,10 +41,7 @@ describe('util', function () {
       null,
       { 'name': 'handsome' },
       ['1', '2'],
-      {
-        $type: 'date',
-        $date: '2014-09-27T17:40:00.000Z'
-      }
+      '2014-09-27T17:40:00.000Z'
     ]);
   });
 
