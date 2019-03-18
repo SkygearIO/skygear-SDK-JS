@@ -1,3 +1,10 @@
+## 1.7.2 (2019-03-18)
+
+### Bug Fixes
+
+- Fix SSO login with popup window close unexpectedly #491
+
+
 ## 1.7.1 (2019-02-22)
 
 ### Bug Fixes

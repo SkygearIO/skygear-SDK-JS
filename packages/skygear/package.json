@@ -1,6 +1,6 @@
 {
   "name": "skygear",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "JS SDK of Skygear services",
   "homepage": "https://github.com/SkygearIO/skygear-SDK-JS",
   "repository": {
@@ -28,7 +28,7 @@
   "dependencies": {
     "skygear-core": "^1.7.1",
     "skygear-forgot-password": "^1.7.1",
-    "skygear-sso": "^1.7.1"
+    "skygear-sso": "^1.7.2"
   },
   "bugs": {
     "url": "https://github.com/SkygearIO/skygear-SDK-JS/issues"

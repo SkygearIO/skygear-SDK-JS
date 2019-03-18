@@ -1,6 +1,6 @@
 {
   "name": "skygear-sso",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Single sign-on for Skygear JS SDK",
   "main": "dist/index.js",
   "repository": {
