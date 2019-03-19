@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 import _ from 'lodash';
-import Asset from './asset';
-import Reference from './reference';
-import Geolocation from './geolocation';
-import Record, {isRecord} from './record';
-import {UnknownValue, Sequence} from './type';
+import { isUserRecord } from './user_record';
 import { SkygearError, ErrorCodes } from './error';
-import { isRole } from './role';
 
 function mapObject(obj, fn) {
   // cannot use `map` directly
@@ -41,10 +36,6 @@ function mapObject(obj, fn) {
  * It will descends into array and object to convert Skygear Data Type
  * into JSON representation. If the specified value is null, null is returned.
  *
- * The output of this function differ from Record.toJSON when specifying
- * a Record. This function will wrap a Record in JSON representation with
- * a `$type=record` object.
- *
  * This function is the opposite of fromJSON.
  *
  * @param {Object} v - the object or value value to convert to JSON
@@ -63,11 +54,6 @@ export function toJSON(v) {
     return {
       $type: 'date',
       $date: v.toJSON()
-    };
-  } else if (isRecord(v)) {
-    return {
-      $type: 'record',
-      $record: v.toJSON()
     };
   } else if (v.toJSON) {
     return v.toJSON();
@@ -99,18 +85,8 @@ export function fromJSON(attrs) {
     return _.map(attrs, fromJSON);
   } else if (_.isObject(attrs)) {
     switch (attrs.$type) {
-    case 'geo':
-      return Geolocation.fromJSON(attrs);
-    case 'asset':
-      return Asset.fromJSON(attrs);
     case 'date':
       return new Date(attrs.$date);
-    case 'ref':
-      return Reference.fromJSON(attrs);
-    case 'unknown':
-      return UnknownValue.fromJSON(attrs);
-    case 'record':
-      return Record.fromJSON(attrs.$record);
     default:
       return mapObject(attrs, (key, value) => fromJSON(value));
     }
@@ -133,15 +109,6 @@ export function isLocalStorageValid() {
   }
 }
 
-export function isValueType(value) {
-  return value instanceof Asset ||
-    value instanceof Reference ||
-    value instanceof Geolocation ||
-    value instanceof Record ||
-    value instanceof UnknownValue ||
-    value instanceof Sequence;
-}
-
 export class EventHandle {
   constructor(emitter, name, listener) {
     this.emitter = emitter;
@@ -157,18 +124,11 @@ export class EventHandle {
 /**
  * Get user ID from function parameter.
  *
- * @param {Record | String} userOrUserID a user record or a user ID
+ * @param {UserRecord | String} userOrUserID a user record or a user ID
  * @return {String} the ID of the user
  */
 export function getUserIDFromParams(userOrUserID) {
-  if (isRecord(userOrUserID)) {
-    if (userOrUserID.recordType !== 'user') {
-      throw new SkygearError(
-        `Expect a user record, but get ${userOrUserID.recordType}`,
-        ErrorCodes.InvalidArgument
-      );
-    }
-
+  if (isUserRecord(userOrUserID)) {
     return userOrUserID.recordID;
   }
 
@@ -179,27 +139,6 @@ export function getUserIDFromParams(userOrUserID) {
 
   throw new SkygearError(
     `Unknown type "${type}" to represent a user`,
-    ErrorCodes.InvalidArgument
-  );
-}
-
-/**
- *
- * @param {Role | String} roleOrRoleName a role or a role name
- * @return {String} the name of the role
- */
-export function getRoleNameFromParams(roleOrRoleName) {
-  if (isRole(roleOrRoleName)) {
-    return roleOrRoleName.name;
-  }
-
-  const type = typeof roleOrRoleName;
-  if (type === 'string') {
-    return roleOrRoleName;
-  }
-
-  throw new SkygearError(
-    `Unknown type "${type}" to represent a role`,
     ErrorCodes.InvalidArgument
   );
 }

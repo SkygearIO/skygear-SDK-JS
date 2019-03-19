@@ -30,7 +30,7 @@
  */
 export async function loginWithCustomToken(token) {
   const authResponse = await this.container.makeRequest(
-    'auth/sso/custom_token/login',
+    '_auth/sso/custom_token/login',
     { token }
   );
   return this._authResolve(authResponse);

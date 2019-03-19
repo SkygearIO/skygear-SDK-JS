@@ -22,11 +22,10 @@ import mockSuperagent from '../../skygear-core/test/mock/superagent';
 
 describe('AuthContainer with Forgot Password', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([
     {
-      pattern: 'http://skygear.dev/auth/me',
+      pattern: 'http://skygear.dev/_auth/me',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token) {
@@ -58,7 +57,7 @@ describe('AuthContainer with Forgot Password', function () {
       }
     },
     {
-      pattern: 'http://skygear.dev/auth/verify_request',
+      pattern: 'http://skygear.dev/_auth/verify_request',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token !== 'token-1') {
@@ -89,7 +88,7 @@ describe('AuthContainer with Forgot Password', function () {
       }
     },
     {
-      pattern: 'http://skygear.dev/auth/verify_code',
+      pattern: 'http://skygear.dev/_auth/verify_code',
       fixtures: function (match, params, headers, fn) {
         const token = params['access_token'];
         if (token !== 'token-1') {
@@ -130,7 +129,7 @@ describe('AuthContainer with Forgot Password', function () {
   it('should return user when verify code', async function () {
     container.auth._accessToken = 'token-1';
     const user = await container.auth.verifyUserWithCode('123456');
-    assert.instanceOf(user, container.Record);
+    assert.instanceOf(user, container.UserRecord);
     assert.equal(user.recordType, 'user');
     assert.equal(user.recordID, 'user-id-1');
     assert.equal(user.username, 'user1');

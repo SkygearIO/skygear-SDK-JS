@@ -21,10 +21,9 @@ import mockSuperagent from './mock/superagent';
 
 describe('Container me', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.configApiKey('correctApiKey');
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/me',
+    pattern: 'http://skygear.dev/_auth/me',
     fixtures: function (match, params, headers, fn) {
       const token = params['access_token'];
       if (token) {
@@ -59,7 +58,7 @@ describe('Container me', function () {
   it('should get me correctly', async function () {
     container.auth._accessToken = 'token-1';
     const user = await container.auth.whoami();
-    assert.instanceOf(user, container.Record);
+    assert.instanceOf(user, container.UserRecord);
     assert.equal(user.recordType, 'user');
     assert.equal(user.recordID, 'user-id-1');
     assert.equal(user.username, 'user1');
@@ -79,9 +78,8 @@ describe('Container me', function () {
 
 describe('Container auth', function () {
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/signup',
+    pattern: 'http://skygear.dev/_auth/signup',
     fixtures: function (match, params, headers, fn) {
       const validUser = params['auth_data'] &&
         (params['auth_data']['username'] === 'username' ||
@@ -134,7 +132,7 @@ describe('Container auth', function () {
       }
     }
   }, {
-    pattern: 'http://skygear.dev/auth/login',
+    pattern: 'http://skygear.dev/_auth/login',
     fixtures: function (match, params, headers, fn) {
       if (params['provider'] === 'provider') {
         return fn({
@@ -178,7 +176,7 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
-    pattern: 'http://skygear.dev/auth/change_password',
+    pattern: 'http://skygear.dev/_auth/change_password',
     fixtures: function (match, params, headers, fn) {
       if (params['old_password'] === params['password']) {
         return fn({
@@ -203,7 +201,7 @@ describe('Container auth', function () {
       }, 400);
     }
   }, {
-    pattern: 'http://skygear.dev/auth/logout',
+    pattern: 'http://skygear.dev/_auth/logout',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: {
@@ -269,14 +267,14 @@ describe('Container auth', function () {
       age: 100
     };
     await container.auth._setUser(userAttrs);
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user1');
     assert.equal(container.auth.currentUser.name, 'user1');
     assert.equal(container.auth.currentUser.age, 100);
 
     await container.auth._getUser();
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user1');
     assert.equal(container.auth.currentUser.name, 'user1');
@@ -294,7 +292,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
     assert.equal(container.auth.currentUser.age, 100);
@@ -311,7 +309,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
     assert.equal(
@@ -325,7 +323,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
@@ -336,7 +334,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
@@ -346,7 +344,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid2');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id2');
   });
@@ -367,7 +365,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
@@ -378,7 +376,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
@@ -401,7 +399,7 @@ describe('Container auth', function () {
     assert.equal(
       container.auth.accessToken,
       'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
   });
@@ -445,13 +443,6 @@ describe('Container auth', function () {
         access_token: 'a43c8583-3ac8-496a-8cb4-8f1b0fde1c5b'
       };
 
-      container.push.unregisterDevice = async () => {
-        throw {
-          code: 10000,
-          message: 'unknown error'
-        };
-      };
-
       try {
         await Promise.all([
           container.auth._setAccessToken(aUserAttr.access_token),
@@ -476,10 +467,10 @@ describe('Container auth', function () {
     const user = await container.auth
       .changePassword('supersecret', 'supersecret');
     assert.equal(container.auth.accessToken, 'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.Record);
+    assert.instanceOf(container.auth.currentUser, container.UserRecord);
     assert.equal(container.auth.currentUser.recordType, 'user');
     assert.equal(container.auth.currentUser.recordID, 'user:id1');
-    assert.instanceOf(user, container.Record);
+    assert.instanceOf(user, container.UserRecord);
   });
 
   it('should fail to change password if not match', async function () {
@@ -493,52 +484,4 @@ describe('Container auth', function () {
   });
 });
 
-describe('AuthContainer', function () {
-  let container = new Container();
-  container.pubsub.autoPubsub = false;
-  container.configApiKey('correctApiKey');
-  container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/disable/set',
-    fixtures: function (match, params, headers, fn) {
-      if (params.auth_id === 'some-uuid1') {
-        assert.isFalse(params.disabled);
-      } else if (params.auth_id === 'some-uuid2') {
-        assert.isTrue(params.disabled);
-        assert.equal(params.message, 'some reason');
-        assert.equal(params.expiry, '2014-09-27T17:40:00.000Z');
-      } else if (params.auth_id === 'some-uuid3') {
-        assert.isTrue(params.disabled);
-      } else {
-        assert.fail(params.auth_id);
-      }
-      return fn({
-        'result': {
-          'status': 'OK'
-        }
-      });
-    }
-  }]);
-
-  it('adminEnableUser should send auth:disable:set', async function () {
-    const userID = await container.auth.adminEnableUser('some-uuid1');
-    assert.equal(userID, 'some-uuid1');
-  });
-
-  it('adminDisableUser should send auth:disable:set', async function () {
-    const userID = await container.auth.adminDisableUser(
-      'some-uuid2',
-      'some reason',
-      new Date('2014-09-27T17:40:00.000Z')
-    );
-    assert.equal(userID, 'some-uuid2');
-  });
-
-  it(
-    'adminDisableUser should send auth:disable:set without optional fields',
-    async function () {
-      const userID = await container.auth.adminDisableUser('some-uuid3');
-      assert.equal(userID, 'some-uuid3');
-    }
-  );
-});
 /*eslint-enable camelcase, dot-notation, no-unused-vars, quote-props */

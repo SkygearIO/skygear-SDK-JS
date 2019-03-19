@@ -14,43 +14,16 @@
  * limitations under the License.
  */
 /*eslint-disable no-unused-vars, quote-props */
-import {expect, assert} from 'chai';
-import Geolocation from '../lib/geolocation';
-import Record from '../lib/record';
-import {Sequence, UnknownValue} from '../lib/type';
+import {expect} from 'chai';
 import {toJSON, fromJSON} from '../lib/util';
 
 describe('util', function () {
-
-  it('toJSON Sequence', function () {
-    const seq = new Sequence();
-    expect(toJSON(seq)).to.eql({
-      $type: 'seq'
-    });
-  });
 
   it('toJSON Date', function () {
     const d = new Date(1411839600000);
     expect(toJSON(d)).to.eql({
       $type: 'date',
       $date: '2014-09-27T17:40:00.000Z'
-    });
-  });
-
-  it('toJSON geo', function () {
-    const geo = new Geolocation(10, 20);
-    expect(toJSON(geo)).to.eql({
-      $type: 'geo',
-      $lat: 10,
-      $lng: 20
-    });
-  });
-
-  it('toJSON unknown value', function () {
-    const unknownValue = new UnknownValue('money');
-    expect(toJSON(unknownValue)).to.eql({
-      $type: 'unknown',
-      $underlying_type: 'money' //eslint-disable-line camelcase
     });
   });
 
@@ -61,40 +34,6 @@ describe('util', function () {
     });
     expect(d).to.be.an.instanceof(Date);
     expect(d.toISOString());
-  });
-
-  it('fromJSON geo', function () {
-    const geo = fromJSON({
-      $type: 'geo',
-      $lat: 10,
-      $lng: 20
-    });
-    expect(geo).to.be.an.instanceof(Geolocation);
-    expect(geo.latitude).to.equal(10);
-    expect(geo.longitude).to.equal(20);
-  });
-
-  it('fromJSON unknown value', function () {
-    const unknownValue = fromJSON({
-      $type: 'unknown',
-      $underlying_type: 'money' //eslint-disable-line camelcase
-    });
-    expect(unknownValue).to.be.an.instanceof(UnknownValue);
-    expect(unknownValue.underlyingType).to.equal('money');
-  });
-
-  it('fromJSON record object', function () {
-    const recordValue = fromJSON({
-      $type: 'record',
-      $record: {
-        _recordType: 'note',
-        _recordID: 'uid',
-        geo: {$type: 'geo', $lat: 10, $lng: 20}
-      }
-    });
-    expect(recordValue).to.be.an.instanceof(Record);
-    expect(recordValue.recordType).to.equal('note');
-    expect(recordValue.recordID).to.equal('uid');
   });
 
   it('toJSON array with mixed objects', function () {
@@ -129,16 +68,6 @@ describe('util', function () {
   it('toJSON undefined', function () {
     expect(() => toJSON(undefined))
       .to.throw('toJSON does not support undefined value');
-  });
-
-  it('toJSON record', function () {
-    const object = toJSON(Record.fromJSON({
-      '_recordType': 'note',
-      '_recordID': 'uid'
-    }));
-    expect(object.$type).to.equal('record');
-    expect(object.$record._recordType).to.equal('note');
-    expect(object.$record._recordID).to.equal('uid');
   });
 
 });

@@ -56,7 +56,7 @@ gulp.task('test', ['pre-test'], function () {
           statements: 70,
           branches: 50,
           functions: 70,
-          lines: 70
+          lines: 60
         }
       }
     }));

@@ -10,23 +10,22 @@ describe('SSO OAuth', function () {
 
   // setup container
   let container = new Container();
-  container.pubsub.autoPubsub = false;
   container.request = mockSuperagent([{
-    pattern: 'http://skygear.dev/auth/sso/provider/login_auth_url',
+    pattern: 'http://skygear.dev/_auth/sso/provider/login_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: 'http://auth_url_of_provider'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/auth/sso/provider/link_auth_url',
+    pattern: 'http://skygear.dev/_auth/sso/provider/link_auth_url',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: 'http://auth_url_of_provider'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/auth/sso/provider/login',
+    pattern: 'http://skygear.dev/_auth/sso/provider/login',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: {
@@ -43,14 +42,14 @@ describe('SSO OAuth', function () {
       });
     }
   }, {
-    pattern: 'http://skygear.dev/auth/sso/provider/link',
+    pattern: 'http://skygear.dev/_auth/sso/provider/link',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: 'OK'
       });
     }
   }, {
-    pattern: 'http://skygear.dev/auth/sso/provider/unlink',
+    pattern: 'http://skygear.dev/_auth/sso/provider/unlink',
     fixtures: function (match, params, headers, fn) {
       return fn({
         result: 'OK'

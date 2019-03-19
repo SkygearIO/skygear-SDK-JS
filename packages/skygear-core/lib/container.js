@@ -18,32 +18,16 @@ import request from 'superagent';
 import _ from 'lodash';
 import ee from 'event-emitter';
 
-import Asset from './asset';
 import Role from './role';
-import ACL from './acl';
-import Record from './record';
-import Reference from './reference';
-import Query from './query';
-import {Database, PublicDatabase} from './database'; // eslint-disable-line no-unused-vars
-import Geolocation from './geolocation';
+import UserRecord from './user_record';
 import getStore from './store';
-import {Sequence} from './type';
 import {
   SkygearError,
   ErrorCodes
 } from './error';
 
 import {AuthContainer} from './auth';
-import {Relation, RelationContainer} from './relation'; //eslint-disable-line no-unused-vars
-import {DatabaseContainer} from './database';
-import {PubsubContainer} from './pubsub';
-import {PushContainer} from './push';
 import {fromJSON, toJSON} from './util';
-
-/**
- * @type {Record}
- */
-export const UserRecord = Record.extend('user');
 
 /**
  * BaseContainer provides the basic configuration for connecting to a
@@ -53,9 +37,8 @@ export const UserRecord = Record.extend('user');
  * classes:
  * - Web developement: {@link Container}
  * - React Native: {@link ReactNativeContainer}
- * - Cloud development: {@link CloudCodeContainer}
  *
- * It also proxies other Skygear classes, like {@link BaseContainer#Query}.
+ * It also proxies other Skygear classes, like {@link BaseContainer#Role}.
  * Thus developer who install Skygear with <script> tag in browser can have
  * access to those classes.
  */
@@ -164,13 +147,8 @@ export class BaseContainer {
    * @return {Promise<Object>} promise with result of the lambda function
    */
   async lambda(name, data) {
-    const presavedData = await this.publicDB._presave(
-      this.publicDB._presaveSingleValue.bind(this.publicDB),
-      data
-    );
-
     const resp = await this.makeRequest(name, {
-      args: presavedData ? toJSON(presavedData) : undefined
+      args: data ? toJSON(data) : undefined
     });
     return fromJSON(resp.result);
   }
@@ -230,13 +208,6 @@ export class BaseContainer {
   }
 
   /**
-   * @type {Query}
-   */
-  get Query() {
-    return Query;
-  }
-
-  /**
    * @type {Role}
    */
   get Role() {
@@ -244,80 +215,10 @@ export class BaseContainer {
   }
 
   /**
-   * @type {ACL}
-   */
-  get ACL() {
-    return ACL;
-  }
-
-  /**
-   * @type {Record}
-   */
-  get Record() {
-    return Record;
-  }
-
-  /**
-   * @type {Record}
+   * @type {UserRecord}
    */
   get UserRecord() {
     return UserRecord;
-  }
-
-  /**
-   * @type {Sequence}
-   */
-  get Sequence() {
-    return Sequence;
-  }
-
-  /**
-   * @type {Asset}
-   */
-  get Asset() {
-    return Asset;
-  }
-
-  /**
-   * @type {Reference}
-   */
-  get Reference() {
-    return Reference;
-  }
-
-  /**
-   * @type {Geolocation}
-   */
-  get Geolocation() {
-    return Geolocation;
-  }
-
-  /**
-   * @type {Database}
-   */
-  get Database() {
-    return Database;
-  }
-
-  /**
-   * @type {Relation}
-   */
-  get Friend() {
-    return this.relation.Friend;
-  }
-
-  /**
-   * @type {Relation}
-   */
-  get Follower() {
-    return this.relation.Follower;
-  }
-
-  /**
-   * @type {Relation}
-   */
-  get Following() {
-    return this.relation.Following;
   }
 
   /**
@@ -339,34 +240,6 @@ export class BaseContainer {
    */
   get AuthContainer() {
     return AuthContainer;
-  }
-
-  /**
-   * @type {RelationContainer}
-   */
-  get RelationContainer() {
-    return RelationContainer;
-  }
-
-  /**
-   * @type {DatabaseContainer}
-   */
-  get DatabaseContainer() {
-    return DatabaseContainer;
-  }
-
-  /**
-   * @type {PubsubContainer}
-   */
-  get PubsubContainer() {
-    return PubsubContainer;
-  }
-
-  /**
-   * @type {PushContainer}
-   */
-  get PushContainer() {
-    return PushContainer;
   }
 
   /**
@@ -419,16 +292,6 @@ export class BaseContainer {
  * accessors to other containers, providing various functionalities:
  * - `skygear.auth` - {@link AuthContainer}: User authentications and user
  * roles API.
- * - `skygear.relation` - {@link RelationContainer}: User relation API, like
- * add and query Friends.
- * - `skygear.privateDB` - {@link Database}: Private database of the current
- * user, with record API, like query, save and delete.
- * - `skygear.publicDB` - {@link PublicDatabase}: Public database, providing
- * the same record API as {@link Database}, but with additional record role
- * API.
- * - `skygear.pubsub` - {@link PubsubContainer}: A publish-subscribe interface,
- * providing real-time message-based communication with other users.
- * - `skygear.push` - {@link PushContainer}: Push Notifications.
  */
 export default class Container extends BaseContainer {
 
@@ -436,10 +299,6 @@ export default class Container extends BaseContainer {
     super();
 
     this._auth = new AuthContainer(this);
-    this._relation = new RelationContainer(this);
-    this._db = new DatabaseContainer(this);
-    this._pubsub = new PubsubContainer(this);
-    this._push = new PushContainer(this);
     /**
      * Options for how much time to wait for client request to complete.
      *
@@ -464,46 +323,10 @@ export default class Container extends BaseContainer {
   }
 
   /**
-   * @type {RelationContainer}
-   */
-  get relation() {
-    return this._relation;
-  }
-
-  /**
-   * @type {PublicDatabase}
-   */
-  get publicDB() {
-    return this._db.public;
-  }
-
-  /**
-   * @type {Database}
-   */
-  get privateDB() {
-    return this._db.private;
-  }
-
-  /**
-   * @type {PubsubContainer}
-   */
-  get pubsub() {
-    return this._pubsub;
-  }
-
-  /**
-   * @type {PushContainer}
-   */
-  get push() {
-    return this._push;
-  }
-
-  /**
    * Sets a new end point and new API key to the container.
    *
    * After configuration,
-   * - it tries to restore the user, access token and device id, and,
-   * - the pubsub client connects to skygear server if a user is restored.
+   * - it tries to restore the user, access token and device id.
    *
    * @param {Object} options - configuration options of the skygear container
    * @param {String} options.apiKey - api key
@@ -515,11 +338,9 @@ export default class Container extends BaseContainer {
       await super.config(options);
       let promises = [
         this.auth._getUser(),
-        this.auth._getAccessToken(),
-        this.push._getDeviceID()
+        this.auth._getAccessToken()
       ];
       await Promise.all(promises);
-      this.pubsub._reconfigurePubsubIfNeeded();
     } catch (err) {
       // do nothing
     }

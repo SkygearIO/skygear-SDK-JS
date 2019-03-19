@@ -9,9 +9,6 @@
   },
   "author": "rickmak <rick.mak@gmail.com> (https://skygear.io)",
   "files": [
-    "cloud.js",
-    "bin.js",
-    "asset.js",
     "react-native.js",
     "dist"
   ],
@@ -93,10 +90,6 @@
     "npm-install": "lerna exec -- npm install",
     "npm-install-lock-only": "lerna exec -- npm install --package-lock-only",
     "audit": "lerna exec -- npm audit"
-  },
-  "bin": {
-    "skygear-node": "./bin.js",
-    "skygear-asset": "./asset.js"
   },
   "license": "Apache-2.0",
   "dependencies": {},
