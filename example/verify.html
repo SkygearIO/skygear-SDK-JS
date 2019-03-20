@@ -79,8 +79,8 @@
       m.textContent = container.endPoint;
       token.innerText = skygear.auth.accessToken;
       if (skygear.auth.currentUser) {
-        currentUsername.innerText = skygear.auth.currentUser.username;
-        currentEmail.innerText = skygear.auth.currentUser.email;
+        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
+        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
       }
     }, function(err) {
       console.log(err);

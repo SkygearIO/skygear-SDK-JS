@@ -154,8 +154,8 @@
       m.textContent = container.endPoint;
       token.innerText = skygear.auth.accessToken;
       if (skygear.auth.currentUser) {
-        currentUsername.innerText = skygear.auth.currentUser.username;
-        currentEmail.innerText = skygear.auth.currentUser.email;
+        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
+        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
       }
     }, function(err) {
       console.log(err);
@@ -187,8 +187,8 @@
           currentUsername.innerText = '(anonymous)';
           currentEmail.innerText = '(anonymous)';
         } else {
-          currentUsername.innerText = skygear.auth.currentUser.username;
-          currentEmail.innerText = skygear.auth.currentUser.email;
+          currentUsername.innerText = skygear.auth.currentUser.metadata.username;
+          currentEmail.innerText = skygear.auth.currentUser.metadata.email;
         }
       }, function(error) {
         console.log('Signup failed');
@@ -218,8 +218,8 @@
       _login.then(function() {
         console.log('Login ok');
         token.innerText = skygear.auth.accessToken;
-        currentUsername.innerText = skygear.auth.currentUser.username;
-        currentEmail.innerText = skygear.auth.currentUser.email;
+        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
+        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
       }, function(error) {
         console.log('Login failed');
         token.innerText = error;
