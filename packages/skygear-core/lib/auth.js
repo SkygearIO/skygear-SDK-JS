@@ -223,6 +223,21 @@ export class AuthContainer {
     return this._authResolve(resp);
   }
 
+  /**
+   * Update user's metadata.
+   *
+   * @param  {User} user - user object
+   * @return {Promise<User>} promise with created user record
+   */
+  async updateMetadata(user) {
+    const authResponse = await this.container.makeRequest(
+      '_auth:update_metadata', {
+        metadata: toJSON(user.metadata)
+      }
+    );
+    return this._authResolve(authResponse);
+  }
+
   async _getAccessToken() {
     try {
       const token = await this.container.store.getItem('skygear-accesstoken');
