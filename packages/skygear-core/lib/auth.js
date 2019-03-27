@@ -226,13 +226,14 @@ export class AuthContainer {
   /**
    * Update user's metadata.
    *
-   * @param  {User} user - user object
+   * @param  {Object} metadata - metadata
    * @return {Promise<User>} promise with created user record
    */
-  async updateMetadata(user) {
+  async updateMetadata(metadata) {
     const authResponse = await this.container.makeRequest(
       '_auth:update_metadata', {
-        metadata: toJSON(user.metadata)
+        user_id: this.currentUser.userID, // eslint-disable-line camelcase
+        metadata: toJSON(metadata)
       }
     );
     return this._authResolve(authResponse);

@@ -161,12 +161,9 @@
     function updateMetadata() {
       var metadataValue = document.getElementById("metadata").value;
       var result = document.getElementById("update-metadata-result");
+      var metadata = JSON.parse(metadataValue);
 
-      skygear.auth.whoami().then(function (user) {
-        var metadata = JSON.parse(metadataValue);
-        user.metadata = metadata;
-        return skygear.auth.updateMetadata(user);
-      }).then(function(user) {
+      skygear.auth.updateMetadata(metadata).then(function (user) {
         result.innerText = JSON.stringify(user.toJSON(), null, 2);
       }, function(error) {
         console.log(error);

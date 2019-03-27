@@ -475,12 +475,14 @@ describe('Container updateMetadata', function () {
   }]);
 
   it('should updateMetadata correctly', async function () {
+    const metadata = {
+      age: 18
+    };
     const user = new container.User({
-      user_id: 'user-id-1',
-      metadata: { age: 18 }
+      user_id: 'user-id-1' // eslint-disable-line camelcase
     });
-    const newUser = await container.auth.updateMetadata(user);
-    console.log(newUser);
+    container.auth._setUser(user);
+    const newUser = await container.auth.updateMetadata(metadata);
     assert.instanceOf(newUser, container.User);
     assert.equal(newUser.userID, 'user-id-1');
     assert.equal(newUser.metadata.age, 18);
