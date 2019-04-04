@@ -105,8 +105,8 @@
       m.textContent = container.endPoint;
       token.innerText = skygear.auth.accessToken;
       if (skygear.auth.currentUser) {
-        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
-        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
+        currentUsername.innerText = skygear.auth.currentUser.loginIDs.username;
+        currentEmail.innerText = skygear.auth.currentUser.loginIDs.email;
       }
       // get redirect result when load
       getLoginRedirectResult();
@@ -132,8 +132,8 @@
         console.info('Login oauth with popup success', authResult);
         showSuccessResult('Login oauth with popup success');
         token.innerText = skygear.auth.accessToken;
-        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
-        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
+        currentUsername.innerText = skygear.auth.currentUser.loginIDs.username;
+        currentEmail.innerText = skygear.auth.currentUser.loginIDs.email;
         errorMessage.innerText = "";
       }, function(error) {
         console.error('Login oauth with popup fail', error);
@@ -169,8 +169,8 @@
       .then(function (result) {
         showSuccessResult('Login with access token success');
         token.innerText = skygear.auth.accessToken;
-        currentUsername.innerText = skygear.auth.currentUser.metadata.username;
-        currentEmail.innerText = skygear.auth.currentUser.metadata.email;
+        currentUsername.innerText = skygear.auth.currentUser.loginIDs.username;
+        currentEmail.innerText = skygear.auth.currentUser.loginIDs.email;
       }).catch(function (err) {
         showErrorResult(err);
       });
@@ -207,8 +207,8 @@
           showSuccessResult('Login with redirect success');
           loginRedirectResult.innerText = 'Get login redirect result success';
           token.innerText = skygear.auth.accessToken;
-          currentUsername.innerText = skygear.auth.currentUser.metadata.username;
-          currentEmail.innerText = skygear.auth.currentUser.metadata.email;
+          currentUsername.innerText = skygear.auth.currentUser.loginIDs.username;
+          currentEmail.innerText = skygear.auth.currentUser.loginIDs.email;
         } else {
           loginRedirectResult.innerText = 'No redirect operation was called';
         }
