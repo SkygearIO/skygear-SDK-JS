@@ -64,16 +64,16 @@ export class AuthContainer {
    * Creates a user account with the specified auth data, password and user
    * record data.
    *
-   * @param  {Object} authData - unique identifier of the user
+   * @param  {Object} loginIDs - unique identifier of the user
    * @param  {String} password - password of the user
    * @param  {Object} [data={}] - data saved to the user record
    * @return {Promise<User>} promise with created user record
    */
-  async signup(authData, password, data = {}) {
+  async signup(loginIDs, password, data = {}) {
     const authResponse = await this.container.makeRequest('_auth:signup', {
-      auth_data: authData, // eslint-disable-line camelcase
+      login_ids: loginIDs, // eslint-disable-line camelcase
       password: password,
-      profile: toJSON(data)
+      metadata: toJSON(data)
     });
     return this._authResolve(authResponse);
   }
@@ -121,13 +121,13 @@ export class AuthContainer {
    * Logs in to an existing user account with the specified auth data and
    * password.
    *
-   * @param  {Object} authData - unique identifier of the user
+   * @param  {Object} loginId - unique identifier of the user
    * @param  {String} password - password of the user
    * @return {Promise<User>} promise with the logged in user record
    */
-  async login(authData, password) {
+  async login(loginId, password) {
     const authResponse = await this.container.makeRequest('_auth:login', {
-      auth_data: authData, // eslint-disable-line camelcase
+      login_id: loginId, // eslint-disable-line camelcase
       password: password
     });
     return this._authResolve(authResponse);
@@ -159,21 +159,6 @@ export class AuthContainer {
     return this.login({
       email: email
     }, password);
-  }
-
-  /**
-   * Logs in to an existing user account with custom auth provider.
-   *
-   * @param  {String} provider - provider name
-   * @param  {Object} authData - provider auth data
-   * @return {Promise<User>} promise with the logged in user record
-   */
-  async loginWithProvider(provider, authData) {
-    const authResponse = await this.container.makeRequest('_auth:login', {
-      provider: provider,
-      provider_auth_data: authData // eslint-disable-line camelcase
-    });
-    return this._authResolve(authResponse);
   }
 
   /**

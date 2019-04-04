@@ -79,6 +79,15 @@ const _metaAttrs = {
       return v;
     },
     newKey: 'updatedBy'
+  },
+  login_ids: { //eslint-disable-line
+    parser: (v) => {
+      return fromJSON(v);
+    },
+    stringify: (v) => {
+      return toJSON(v);
+    },
+    newKey: 'loginIDs'
   }
 };
 
