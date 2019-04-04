@@ -31,10 +31,11 @@ describe('Container me', function () {
           return fn({
             result: {
               user_id: 'user-id-1', // eslint-disable-line camelcase
-              metadata: {
+              login_ids: {
                 username: 'user1',
                 email: 'user1@skygear.dev'
-              }
+              },
+              metadata: {}
             }
           });
         }
@@ -55,8 +56,8 @@ describe('Container me', function () {
     const user = await container.auth.whoami();
     assert.instanceOf(user, container.User);
     assert.equal(user.userID, 'user-id-1');
-    assert.equal(user.metadata.username, 'user1');
-    assert.equal(user.metadata.email, 'user1@skygear.dev');
+    assert.equal(user.loginIDs.username, 'user1');
+    assert.equal(user.loginIDs.email, 'user1@skygear.dev');
   });
 
   it('should handle error properly', async function () {
@@ -75,25 +76,27 @@ describe('Container auth', function () {
   container.request = mockSuperagent([{
     pattern: 'http://skygear.dev/_auth/signup',
     fixtures: function (match, params, headers, fn) {
-      const validUser = params['auth_data'] &&
-        (params['auth_data']['username'] === 'username' ||
-        params['auth_data']['email'] === 'user@email.com');
+      const validUser = params['login_ids'] &&
+        (params['login_ids']['username'] === 'username' ||
+        params['login_ids']['email'] === 'user@email.com');
       if (validUser && params['password'] === 'passwd') {
         return fn({
           result: {
             user_id: 'user:id1',
             access_token: 'uuid1',
-            metadata: {
+            login_ids: {
               username: 'user1',
-              email: 'user1@skygear.io',
+              email: 'user1@skygear.io'
+            },
+            metadata: {
               // simulate serialisation and deserialisation by superagent
-              ...JSON.parse(JSON.stringify(params['profile'])) || {}
+              ...JSON.parse(JSON.stringify(params['metadata'])) || {}
             }
           }
         });
       }
-      if (params['auth_data'] &&
-        params['auth_data']['username'] === 'duplicated') {
+      if (params['login_ids'] &&
+        params['login_ids']['username'] === 'duplicated') {
         return fn({
           error: {
             type: 'ResourceDuplicated',
@@ -102,17 +105,18 @@ describe('Container auth', function () {
           }
         }, 400);
       }
-      if (params['auth_data'] === null &&
+      if (params['login_ids'] === null &&
         params['password'] === null) {
 
         return fn({
           result: {
             user_id: 'user:id2',
             access_token: 'uuid2',
-            metadata: {
+            login_ids: {
               username: 'user2',
               email: 'user2@skygear.io'
-            }
+            },
+            metadata: {}
           }
         });
       }
@@ -120,28 +124,18 @@ describe('Container auth', function () {
   }, {
     pattern: 'http://skygear.dev/_auth/login',
     fixtures: function (match, params, headers, fn) {
-      if (params['provider'] === 'provider') {
-        return fn({
-          result: {
-            user_id: 'user:id1',
-            access_token: 'uuid1',
-            provider_auth_data: params['provider_auth_data'],
-            metadata: {
-            }
-          }
-        });
-      }
-      const validUser = params['auth_data']['username'] === 'registered' ||
-        params['auth_data']['email'] === 'user@email.com';
+      const validUser = params['login_id']['username'] === 'registered' ||
+        params['login_id']['email'] === 'user@email.com';
       if (validUser && params['password'] === 'passwd') {
         return fn({
           result: {
             user_id: 'user:id1',
             access_token: 'uuid1',
-            metadata: {
+            login_ids: {
               username: 'user1',
               email: 'user1@skygear.io'
-            }
+            },
+            metadata: {}
           }
         });
       }
@@ -161,8 +155,7 @@ describe('Container auth', function () {
           result: {
             user_id: 'user:id1',
             access_token: 'uuid1',
-            metadata: {
-            }
+            metadata: {}
           }
         });
       }
@@ -236,21 +229,23 @@ describe('Container auth', function () {
   it('should serialize and deserlize user correctly', async function () {
     const userAttrs = {
       user_id: 'user1',
+      login_ids: {
+        username: 'user1'
+      },
       metadata: {
-        name: 'user1',
         age: 100
       }
     };
     await container.auth._setUser(userAttrs);
     assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user1');
-    assert.equal(container.auth.currentUser.metadata.name, 'user1');
+    assert.equal(container.auth.currentUser.loginIDs.username, 'user1');
     assert.equal(container.auth.currentUser.metadata.age, 100);
 
     await container.auth._getUser();
     assert.instanceOf(container.auth.currentUser, container.User);
     assert.equal(container.auth.currentUser.userID, 'user1');
-    assert.equal(container.auth.currentUser.metadata.name, 'user1');
+    assert.equal(container.auth.currentUser.loginIDs.username, 'user1');
     assert.equal(container.auth.currentUser.metadata.age, 100);
   });
 
@@ -360,16 +355,6 @@ describe('Container auth', function () {
     }
   });
 
-  it('should login with provider successfully', async function () {
-    const user = await container.auth
-      .loginWithProvider('provider', {});
-    assert.equal(
-      container.auth.accessToken,
-      'uuid1');
-    assert.instanceOf(container.auth.currentUser, container.User);
-    assert.equal(container.auth.currentUser.userID, 'user:id1');
-  });
-
   it('should be able to set null accessToken', async function () {
     await container.auth._setAccessToken(null);
     assert.equal(container.auth.accessToken, null);
@@ -456,7 +441,6 @@ describe('Container updateMetadata', function () {
     pattern: 'http://skygear.dev/_auth/update_metadata',
     fixtures: function (match, params, headers, fn) {
       try {
-        const metadata = JSON.stringify(params.metadata);
         return fn({
           result: {
             user_id: 'user-id-1', // eslint-disable-line camelcase
