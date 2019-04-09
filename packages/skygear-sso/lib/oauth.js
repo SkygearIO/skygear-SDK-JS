@@ -250,6 +250,7 @@ async function _oauthFlowWithPopup(provider, options, action, resolvePromise) {
   const lambdaName = _getAuthURL(provider, action);
   try {
     const data = await this.container.lambda(lambdaName, params);
+    newWindow.location.href = 'about:blank';
     newWindow.location.href = data.auth_url;
     let result = await Promise.race([
       this._oauthWindowObserver.subscribe(newWindow),
