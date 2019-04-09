@@ -33,7 +33,9 @@ gulp.task('babel', function () {
   var streams = packageConfigs.map(function(packageConfig) {
     return gulp.src(packageConfig.src)
       .pipe(preprocess({context: context[config.deployEnv]}))
-      .pipe(babel())
+      .pipe(babel({
+        plugins: ['es6-promise']
+      }))
       .pipe(gulp.dest(packageConfig.dest));
   })
   return merge(streams);
