@@ -33,10 +33,11 @@ describe('AuthContainer with Forgot Password', function () {
             return fn({
               result: {
                 user_id: 'user-id-1', // eslint-disable-line camelcase
-                metadata: {
+                login_ids: { // eslint-disable-line camelcase
                   username: 'user1',
                   email: 'user1@skygear.dev'
-                }
+                },
+                metadata: {}
               }
             });
           }
@@ -126,8 +127,8 @@ describe('AuthContainer with Forgot Password', function () {
     const user = await container.auth.verifyUserWithCode('123456');
     assert.instanceOf(user, container.User);
     assert.equal(user.userID, 'user-id-1');
-    assert.equal(user.metadata.username, 'user1');
-    assert.equal(user.metadata.email, 'user1@skygear.dev');
+    assert.equal(user.loginIDs.username, 'user1');
+    assert.equal(user.loginIDs.email, 'user1@skygear.dev');
   });
 });
 /*eslint-enable dot-notation, no-unused-vars, quote-props */

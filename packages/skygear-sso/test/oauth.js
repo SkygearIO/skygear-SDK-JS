@@ -30,10 +30,11 @@ describe('SSO OAuth', function () {
       return fn({
         result: {
           user_id: 'user-id-1', // eslint-disable-line camelcase
-          metadata: {
+          login_ids: { // eslint-disable-line camelcase
             username: 'user1',
             email: 'user1@skygear.dev'
-          }
+          },
+          metadata: {}
         }
       });
     }
@@ -61,7 +62,7 @@ describe('SSO OAuth', function () {
       'accessToken'
     );
     expect(user).not.be.null();
-    expect(user.metadata.email).to.eql('user1@skygear.dev');
+    expect(user.loginIDs.email).to.eql('user1@skygear.dev');
   });
 
   it('can link with access token', async function () {
@@ -93,10 +94,11 @@ describe('SSO OAuth', function () {
       let result = {
         result: {
           user_id: 'user-id-1', // eslint-disable-line camelcase
-          metadata: {
+          login_ids: { // eslint-disable-line camelcase
             username: 'user1',
             email: 'user1@skygear.dev'
-          }
+          },
+          metadata: {}
         }
       };
       window.postMessage({
@@ -113,7 +115,7 @@ describe('SSO OAuth', function () {
       {}
     );
     expect(user).not.be.null();
-    expect(user.metadata.email).to.eql('user1@skygear.dev');
+    expect(user.loginIDs.email).to.eql('user1@skygear.dev');
     done();
   });
 
