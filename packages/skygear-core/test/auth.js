@@ -449,4 +449,57 @@ describe('Container auth', function () {
   });
 });
 
+describe('Container updateMetadata', function () {
+  let container = new Container();
+  container.configApiKey('correctApiKey');
+  container.request = mockSuperagent([{
+    pattern: 'http://skygear.dev/_auth/update_metadata',
+    fixtures: function (match, params, headers, fn) {
+      try {
+        const metadata = JSON.stringify(params.metadata);
+        return fn({
+          result: {
+            user_id: 'user-id-1', // eslint-disable-line camelcase
+            metadata: params.metadata
+          }
+        });
+      } catch (err) {
+        return fn({
+          error: {
+            code: 1000,
+            message: 'json: cannot unmarshal'
+          }
+        }, 500);
+      }
+    }
+  }]);
+
+  it('should updateMetadata correctly', async function () {
+    const metadata = {
+      age: 18
+    };
+    const user = new container.User({
+      user_id: 'user-id-1' // eslint-disable-line camelcase
+    });
+    container.auth._setUser(user);
+    const newUser = await container.auth.updateMetadata(metadata);
+    assert.instanceOf(newUser, container.User);
+    assert.equal(newUser.userID, 'user-id-1');
+    assert.equal(newUser.metadata.age, 18);
+  });
+
+  it('metadata should be an object', async function () {
+    const user = new container.User({
+      user_id: 'user-id-1',
+      metadata: 18
+    });
+    try {
+      await container.auth.updateMetadata(user);
+      assert.fail('should fail');
+    } catch (err) {
+      assert.isNotNull(err);
+    }
+  });
+});
+
 /*eslint-enable camelcase, dot-notation, no-unused-vars, quote-props */

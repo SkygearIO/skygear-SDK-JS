@@ -69,6 +69,20 @@
       </form>
     </div>
     <hr>
+    <div id="updateMetadata">
+      <h4>Update metadata</h4>
+      <form action="#" onsubmit="return false;">
+        <div class="form-group">
+          <label>Metadata</label>
+          <textarea class="form-control" id="metadata" placeholder="{&quot;age&quot;: 18}"></textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="updateMetadata();">Update</button>
+        </div>
+      </form>
+      <pre id="update-metadata-result"></pre>
+    </div>
+    <hr>
   </div>
   <script src="/bundle.js"></script>
   <script type="text/javascript">
@@ -142,6 +156,19 @@
         userInfo.innerText = error;
       });
 
+    }
+
+    function updateMetadata() {
+      var metadataValue = document.getElementById("metadata").value;
+      var result = document.getElementById("update-metadata-result");
+      var metadata = JSON.parse(metadataValue);
+
+      skygear.auth.updateMetadata(metadata).then(function (user) {
+        result.innerText = JSON.stringify(user.toJSON(), null, 2);
+      }, function(error) {
+        console.log(error);
+        result.innerText = error;
+      });
     }
     
   </script>
