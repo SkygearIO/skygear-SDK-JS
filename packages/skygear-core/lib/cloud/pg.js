@@ -21,16 +21,23 @@ import pg from 'pg';
 
 function databaseConfigFromURL(databaseURL) {
   const params = parse(databaseURL, true);
-  const auth = params.auth.split(':');
 
   const config = {
-    user: auth[0],
-    password: auth[1],
     host: params.hostname,
     port: params.port,
     database: params.pathname.split('/')[1],
     ssl: params.query.sslmode !== 'disable' || false
   };
+
+  if (params.auth) {
+    const auth = params.auth.split(':');
+
+    Object.assign(config, {
+      user: auth[0],
+      password: auth[1]
+    });
+  }
+
   return config;
 }
 
