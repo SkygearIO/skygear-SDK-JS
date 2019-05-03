@@ -13,26 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { settings } from './settings';
-import { createLogger } from './logging';
-
-import { parse } from 'url';
 import pg from 'pg';
 
-function databaseConfigFromURL(databaseURL) {
-  const params = parse(databaseURL, true);
-  const auth = params.auth.split(':');
-
-  const config = {
-    user: auth[0],
-    password: auth[1],
-    host: params.hostname,
-    port: params.port,
-    database: params.pathname.split('/')[1],
-    ssl: params.query.sslmode !== 'disable' || false
-  };
-  return config;
-}
+import { settings } from './settings';
+import { createLogger } from './logging';
+import { databaseConfigFromURL } from './pgurl';
 
 const config = databaseConfigFromURL(settings.databaseURL);
 config.min = settings.pgPoolMin;
