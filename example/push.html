@@ -55,6 +55,7 @@
       <pre id="result"></pre>
     </form>
   </div>
+  <script type="text/javascript" src="https://code.skygear.io/js/polyfill/latest/polyfill.min.js"></script>
   <script src="/bundle.js"></script>
   <script type="text/javascript">
     var m = document.getElementById("endpoint");
@@ -74,7 +75,7 @@
       var receipients = document.getElementById('receipients').value.split('\n');
       var notification = JSON.parse(document.getElementById('notification-payload').value);
       var resultElement = document.getElementById('result');
-      
+
       if (receipients.length == 1 && receipients[0] == '') {
         resultElement.innerText = "Receipient list is empty.";
         return
