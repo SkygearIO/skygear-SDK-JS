@@ -1,5 +1,9 @@
 {
   "name": "@skygear/web",
   "version": "0.0.0",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@skygear/core": "0.0.0"
+  }
 }

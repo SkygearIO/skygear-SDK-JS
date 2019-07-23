@@ -1,6 +1,11 @@
 {
   "private": true,
+  "scripts": {
+    "lerna": "lerna",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
-    "lerna": "3.4.3"
+    "lerna": "3.4.3",
+    "typescript": "3.5.3"
   }
 }
