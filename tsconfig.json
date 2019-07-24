@@ -1,24 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["es5"],
+    "target": "es3",
+    "module": "es6",
+    "noLib": true,
+    "skipLibCheck": true,
     "jsx": "react",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true
   },
+  "files": [
+    "node_modules/typescript/lib/lib.es5.d.ts",
+    "node_modules/typescript/lib/lib.es2015.promise.d.ts"
+  ],
   "include": ["packages/**/*"],
   "exclude": ["node_modules"]
 }

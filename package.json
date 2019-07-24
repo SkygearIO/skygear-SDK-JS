@@ -5,21 +5,36 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "format": "prettier --write --list-different 'packages/*/src/**/*.{js,jsx,ts,tsx}'",
-    "lint": "eslint 'packages/*/src/**/*.{js.jsx,ts,tsx}'"
+    "lint": "eslint 'packages/*/src/**/*.{js.jsx,ts,tsx}'",
+    "build:web-script": "rollup --config --configBundleType web-script",
+    "build:web-cjs": "rollup --config --configBundleType web-cjs",
+    "build:web-module": "rollup --config --configBundleType web-module",
+    "build": "npm run build:web-script && npm run build:web-cjs && npm run build:web-module",
+    "clean": "rm -r packages/*/dist"
   },
   "devDependencies": {
+    "@babel/cli": "7.5.5",
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/plugin-transform-runtime": "7.5.5",
     "@babel/preset-env": "7.5.5",
     "@babel/preset-typescript": "7.3.3",
+    "@babel/runtime": "7.5.5",
     "@types/jest": "24.0.15",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
+    "core-js": "3.1.4",
     "eslint": "6.1.0",
     "eslint-config-prettier": "6.0.0",
     "jest": "24.8.0",
     "lerna": "3.4.3",
     "prettier": "1.18.2",
-    "typescript": "3.5.3"
+    "rollup": "1.17.0",
+    "rollup-plugin-babel": "4.3.3",
+    "rollup-plugin-commonjs": "10.0.1",
+    "rollup-plugin-json": "4.0.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "typescript": "3.5.3",
+    "whatwg-fetch": "3.0.0"
   }
 }
