@@ -19,7 +19,8 @@
   },
   "files": [
     "node_modules/typescript/lib/lib.es5.d.ts",
-    "node_modules/typescript/lib/lib.es2015.promise.d.ts"
+    "node_modules/typescript/lib/lib.es2015.promise.d.ts",
+    "node_modules/typescript/lib/lib.dom.d.ts"
   ],
   "include": ["packages/**/*"],
   "exclude": ["node_modules"]

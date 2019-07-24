@@ -114,6 +114,16 @@ export default function makeConfig(commandLineArgs) {
         },
         // external: makeBabelExternal,
       };
+    case "node":
+      return {
+        plugins,
+        input: "packages/skygear-node/src/index.ts",
+        output: {
+          file: "packages/skygear-node/dist/skygear-node.js",
+          format: "cjs",
+        },
+        external: id => id === "node-fetch",
+      };
     default:
       throw new Error("unknown bundle type: " + configBundleType);
   }

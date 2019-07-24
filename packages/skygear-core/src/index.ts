@@ -1,3 +1,3 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+export * from "./types";
+export * from "./error";
+export * from "./client";

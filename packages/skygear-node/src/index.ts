@@ -1,10 +1,10 @@
 import { BaseAPIClient } from "@skygear/core";
 export * from "@skygear/core";
 
-const globalFetch = fetch;
+const nodeFetch = require("node-fetch");
 
 export class APIClient extends BaseAPIClient {
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    return globalFetch(input, init);
+    return nodeFetch(input, init);
   }
 }

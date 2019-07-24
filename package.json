@@ -9,8 +9,9 @@
     "build:web-script": "rollup --config --configBundleType web-script",
     "build:web-cjs": "rollup --config --configBundleType web-cjs",
     "build:web-module": "rollup --config --configBundleType web-module",
-    "build": "npm run build:web-script && npm run build:web-cjs && npm run build:web-module",
-    "clean": "rm -r packages/*/dist"
+    "build:node": "rollup --config --configBundleType node",
+    "build": "npm run build:web-script && npm run build:web-cjs && npm run build:web-module && npm run build:node",
+    "clean": "rm -rf packages/*/dist"
   },
   "devDependencies": {
     "@babel/cli": "7.5.5",
