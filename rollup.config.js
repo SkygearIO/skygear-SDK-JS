@@ -1,9 +1,59 @@
+const promisify = require("util").promisify;
+const fs = require("fs");
+
+const ClosureCompiler = require("google-closure-compiler").compiler;
+const tmp = require("tmp");
+
 import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import json from "rollup-plugin-json";
 import resolve from "rollup-plugin-node-resolve";
 
 const extensions = [".mjs", ".js", ".jsx", ".ts", ".tsx"];
+
+const writeFileAsync = promisify(fs.writeFile);
+
+function compile(flags) {
+  return new Promise((resolve, reject) => {
+    const compiler = new ClosureCompiler(flags);
+    compiler.run((exitCode, stdout, stderr) => {
+      if (exitCode === 0) {
+        resolve(stdout);
+      } else {
+        reject(new Error(stderr));
+      }
+    });
+  });
+}
+
+function closure(flags) {
+  return {
+    name: "plugin-google-closure-compiler",
+    async renderChunk(code) {
+      const inputFile = tmp.fileSync();
+      const tempPath = inputFile.name;
+      flags = Object.assign({}, flags, { js: tempPath });
+      await writeFileAsync(tempPath, code, "utf8");
+      const compiledCode = await compile(flags);
+      inputFile.removeCallback();
+      return { code: compiledCode };
+    },
+  };
+}
+
+const closurePlugin = closure({
+  compilation_level: "SIMPLE",
+  language_in: "ECMASCRIPT5_STRICT",
+  language_out: "ECMASCRIPT5_STRICT",
+  env: "CUSTOM",
+  warning_level: "VERBOSE",
+  apply_input_source_maps: false,
+  use_types_for_optimization: false,
+  process_common_js_modules: false,
+  rewrite_polyfills: false,
+  inject_libraries: false,
+  jscomp_off: "undefinedVars",
+});
 
 const plugins = [
   resolve({
@@ -36,7 +86,7 @@ export default function makeConfig(commandLineArgs) {
   switch (configBundleType) {
     case "web-script":
       return {
-        plugins,
+        plugins: plugins.concat([closurePlugin]),
         input: "packages/skygear-web/src/index.iife.ts",
         output: {
           file: "packages/skygear-web/dist/skygear-web.iife.js",
