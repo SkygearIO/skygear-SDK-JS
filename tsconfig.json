@@ -4,6 +4,8 @@
     "module": "es6",
     "noLib": true,
     "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
     "jsx": "react",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
@@ -14,8 +16,7 @@
     "noUnusedParameters": true,
     "strict": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true
+    "allowSyntheticDefaultImports": true
   },
   "files": [
     "node_modules/typescript/lib/lib.es5.d.ts",

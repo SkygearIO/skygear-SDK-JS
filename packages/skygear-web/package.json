@@ -2,9 +2,10 @@
   "name": "@skygear/web",
   "version": "0.0.0",
   "license": "Apache-2.0",
-  "module": "dist/skygear-web.module.js",
   "main": "dist/skygear-web.cjs.js",
+  "module": "dist/skygear-web.module.js",
   "files": [
+    "index.d.ts",
     "dist/skygear-web.module.js",
     "dist/skygear-web.cjs.js"
   ],

@@ -1,0 +1,15 @@
+{
+  "mainEntryPointFilePath": "",
+  "apiReport": {
+    "enabled": false
+  },
+  "docModel": {
+    "enabled": false
+  },
+  "dtsRollup": {
+    "enabled": false
+  },
+  "tsdocMetadata": {
+    "enabled": false
+  }
+}
