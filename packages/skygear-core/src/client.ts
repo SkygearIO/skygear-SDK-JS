@@ -74,7 +74,7 @@ export abstract class BaseAPIClient {
 
   abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-  async post(path: string, payload: any): Promise<any> {
+  async post(path: string, payload?: any): Promise<any> {
     const url = this.endpoint + path;
     const headers: any = {
       "x-skygear-api-key": this.apiKey,
@@ -87,7 +87,7 @@ export abstract class BaseAPIClient {
       mode: "cors",
       credentials: "include",
       headers,
-      body: JSON.stringify(payload),
+      body: payload && JSON.stringify(payload),
     });
     const jsonBody = await response.json();
 
@@ -159,5 +159,57 @@ export abstract class BaseAPIClient {
       identity: decodeIdentity(identity),
       accessToken: access_token,
     };
+  }
+
+  async logout(): Promise<void> {
+    await this.post("/_auth/logout");
+  }
+
+  async me(): Promise<AuthResponse> {
+    const { user, identity } = await this.post("/_auth/me");
+    return {
+      user: decodeUser(user),
+      identity: decodeIdentity(identity),
+    };
+  }
+
+  async changePassword(
+    newPassword: string,
+    oldPassword: string
+  ): Promise<AuthResponse> {
+    const payload = {
+      password: newPassword,
+      old_password: oldPassword,
+    };
+    const { user, identity, access_token } = await this.post(
+      "/_auth/change_password",
+      payload
+    );
+    return {
+      user: decodeUser(user),
+      identity: decodeIdentity(identity),
+      accessToken: access_token,
+    };
+  }
+
+  async updateMetadata(metadata: JSONObject): Promise<AuthResponse> {
+    const payload = { metadata };
+    const { user } = await this.post("/_auth/update_metadata", payload);
+    return {
+      user: decodeUser(user),
+    };
+  }
+
+  async requestForgotPasswordEmail(email: string): Promise<void> {
+    const payload = { email };
+    await this.post("/_auth/forgot_password", payload);
+  }
+
+  async requestEmailVerification(email: string): Promise<void> {
+    const payload = {
+      login_id_type: "email",
+      login_id: email,
+    };
+    await this.post("/_auth/verify_request", payload);
   }
 }
