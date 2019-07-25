@@ -1,6 +1,5 @@
 export type JSONValue = JSONObject | JSONArray | string | boolean | number;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface JSONArray extends Array<JSONValue> {}
 
 export interface JSONObject {
