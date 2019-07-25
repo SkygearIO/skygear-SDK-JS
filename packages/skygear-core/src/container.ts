@@ -26,6 +26,9 @@ function keyIdentity(name: string): string {
   return `${name}_identity`;
 }
 
+/**
+ * @public
+ */
 export class AuthContainer {
   parent: Container;
   currentUser: User | null;
@@ -148,6 +151,9 @@ export class AuthContainer {
   }
 }
 
+/**
+ * @public
+ */
 export class Container {
   name: string;
   apiClient: BaseAPIClient;

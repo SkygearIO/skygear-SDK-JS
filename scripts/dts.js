@@ -37,7 +37,11 @@ for (const p of packages) {
     showVerboseMessages: true,
   });
 
-  if (!extractorResult.succeeded) {
+  if (
+    !extractorResult.succeeded ||
+    extractorResult.errorCount > 0 ||
+    extractorResult.warningCount > 0
+  ) {
     console.error(
       `API Extractor completed with ${extractorResult.errorCount} errors` +
         ` and ${extractorResult.warningCount} warnings`
@@ -85,7 +89,11 @@ for (const p of publishedPackages) {
     showVerboseMessages: true,
   });
 
-  if (!extractorResult.succeeded) {
+  if (
+    !extractorResult.succeeded ||
+    extractorResult.errorCount > 0 ||
+    extractorResult.warningCount > 0
+  ) {
     console.error(
       `API Extractor completed with ${extractorResult.errorCount} errors` +
         ` and ${extractorResult.warningCount} warnings`

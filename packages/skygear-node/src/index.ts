@@ -3,12 +3,18 @@ export * from "@skygear/core";
 
 const nodeFetch = require("node-fetch");
 
+/**
+ * @public
+ */
 export class APIClient extends BaseAPIClient {
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     return nodeFetch(input, init);
   }
 }
 
+/**
+ * @public
+ */
 export class MemoryStorage implements ContainerStorage {
   backingStore: { [key: string]: string };
 
@@ -31,6 +37,9 @@ export class MemoryStorage implements ContainerStorage {
   }
 }
 
+/**
+ * @public
+ */
 export const defaultContainer: Container = new Container(
   "default",
   new APIClient({

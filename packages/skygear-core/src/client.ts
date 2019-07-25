@@ -6,6 +6,9 @@ function removeTrailingSlash(s: string): string {
   return s.replace(/\/+$/g, "");
 }
 
+/**
+ * @public
+ */
 export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;

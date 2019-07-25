@@ -1,41 +1,146 @@
 import { JSONObject } from "./types";
 
+/**
+ * @public
+ */
 export const SkygearErrorCodeNotAuthenticated = 101 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePermissionDenied = 102 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeAccessKeyNotAccepted = 103 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeAccessTokenNotAccepted = 104 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeInvalidCredentials = 105 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeInvalidSignature = 106 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeBadRequest = 107 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeInvalidArgument = 108 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeDuplicated = 109 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeResourceNotFound = 110 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeNotSupported = 111 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeNotImplemented = 112 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeConstraintViolated = 113 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeIncompatibleSchema = 114 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeAtomicOperationFailure = 115 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePartialOperationFailure = 116 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeUndefinedOperation = 117 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePluginUnavailable = 118 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePluginTimeout = 119 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeRecordQueryInvalid = 120 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePluginInitializing = 121 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeResponseTimeout = 122 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeDeniedArgument = 123 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeRecordQueryDenied = 124 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeNotConfigured = 125 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodePasswordPolicyViolated = 126 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeUserDisabled = 127 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeVerificationRequired = 128 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeAssetSizeTooLarge = 129 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeHookTimeOut = 130 as const;
 
+/**
+ * @public
+ */
 export const SkygearErrorCodeUnexpectedError = 10000 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeUnexpectedAuthInfoNotFound = 10001 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeUnexpectedUnableToOpenDatabase = 10002 as const;
+/**
+ * @public
+ */
 export const SkygearErrorCodeUnexpectedUserNotFound = 10005 as const;
 
+/**
+ * @public
+ */
 export type SkygearErrorCode =
   | typeof SkygearErrorCodeNotAuthenticated
   | typeof SkygearErrorCodePermissionDenied
@@ -68,6 +173,9 @@ export type SkygearErrorCode =
   | typeof SkygearErrorCodeAssetSizeTooLarge
   | typeof SkygearErrorCodeHookTimeOut;
 
+/**
+ * @public
+ */
 export class SkygearError extends Error {
   code: SkygearError;
   name: string;
@@ -86,6 +194,9 @@ export class SkygearError extends Error {
   }
 }
 
+/**
+ * @public
+ */
 export function decodeError(err?: any): Error {
   if (
     err &&
