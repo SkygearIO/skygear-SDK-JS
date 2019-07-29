@@ -215,6 +215,10 @@ export class AuthContainer {
     await this.persistResponse(response);
     return response.user;
   }
+
+  async deleteOAuthProvider(providerID: string): Promise<void> {
+    return this.parent.apiClient.deleteOAuthProvider(providerID);
+  }
 }
 
 /**

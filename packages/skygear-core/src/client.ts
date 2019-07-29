@@ -204,4 +204,9 @@ export abstract class BaseAPIClient {
       accessToken: access_token,
     };
   }
+
+  async deleteOAuthProvider(providerID: string): Promise<void> {
+    const encoded = encodeURIComponent(providerID);
+    await this.post(`/_auth/sso/${encoded}/unlink`);
+  }
 }
