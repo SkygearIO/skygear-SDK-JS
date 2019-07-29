@@ -15,15 +15,15 @@ import {
 } from "./encoding";
 
 function keyAccessToken(name: string): string {
-  return `${name}_accessToken`;
+  return `skygear2_${name}_accessToken`;
 }
 
 function keyUser(name: string): string {
-  return `${name}_user`;
+  return `skygear2_${name}_user`;
 }
 
 function keyIdentity(name: string): string {
-  return `${name}_identity`;
+  return `skygear2_${name}_identity`;
 }
 
 /**
