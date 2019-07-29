@@ -179,4 +179,9 @@ export abstract class BaseAPIClient {
     };
     await this.post("/_auth/verify_request", payload);
   }
+
+  async verifyWithCode(code: string): Promise<void> {
+    const payload = { code };
+    await this.post("/_auth/verify_code", payload);
+  }
 }
