@@ -8,12 +8,6 @@
       "index": {
         "title": "Index"
       },
-      "node.apiclient.fetch": {
-        "title": "APIClient.fetch() method"
-      },
-      "node.apiclient": {
-        "title": "APIClient class"
-      },
       "node.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -29,8 +23,20 @@
       "node.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
       },
+      "node.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "node.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
       "node.authcontainer.login": {
         "title": "AuthContainer.login() method"
+      },
+      "node.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "node.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
       },
       "node.authcontainer.logout": {
         "title": "AuthContainer.logout() method"
@@ -53,6 +59,9 @@
       "node.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
       },
+      "node.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
       "node.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
@@ -64,6 +73,9 @@
       },
       "node.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
+      },
+      "node.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
       },
       "node.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
@@ -89,14 +101,26 @@
       "node.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
+      "node.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
       "node.baseapiclient.endpoint": {
         "title": "BaseAPIClient.endpoint property"
       },
       "node.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "node.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
       "node.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
+      },
+      "node.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "node.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
       },
       "node.baseapiclient.logout": {
         "title": "BaseAPIClient.logout() method"
@@ -110,17 +134,26 @@
       "node.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
+      "node.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
       "node.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
       },
       "node.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
       },
+      "node.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
       "node.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
       "node.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "node.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
       },
       "node.container._constructor_": {
         "title": "Container.(constructor)"
@@ -143,17 +176,29 @@
       "node.container.storage": {
         "title": "Container.storage property"
       },
-      "node.containerstorage.del": {
-        "title": "ContainerStorage.del() method"
+      "node.containerstorage._constructor_": {
+        "title": "ContainerStorage.(constructor)"
       },
-      "node.containerstorage.get": {
-        "title": "ContainerStorage.get() method"
+      "node.containerstorage.driver": {
+        "title": "ContainerStorage.driver property"
       },
       "node.containerstorage": {
-        "title": "ContainerStorage interface"
+        "title": "ContainerStorage class"
       },
-      "node.containerstorage.set": {
-        "title": "ContainerStorage.set() method"
+      "node.containerstorage.safedel": {
+        "title": "ContainerStorage.safeDel() method"
+      },
+      "node.containerstorage.safeget": {
+        "title": "ContainerStorage.safeGet() method"
+      },
+      "node.containerstorage.safegetjson": {
+        "title": "ContainerStorage.safeGetJSON() method"
+      },
+      "node.containerstorage.safeset": {
+        "title": "ContainerStorage.safeSet() method"
+      },
+      "node.containerstorage.safesetjson": {
+        "title": "ContainerStorage.safeSetJSON() method"
       },
       "node.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
@@ -173,11 +218,26 @@
       "node.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
       },
+      "node.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
       "node.decodeerror": {
         "title": "decodeError() function"
       },
+      "node.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "node.decodeuser": {
+        "title": "decodeUser() function"
+      },
       "node.defaultcontainer": {
         "title": "defaultContainer variable"
+      },
+      "node.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "node.encodeuser": {
+        "title": "encodeUser() function"
       },
       "node.identity": {
         "title": "Identity type"
@@ -194,23 +254,29 @@
       "node": {
         "title": "node package"
       },
-      "node.memorystorage._constructor_": {
-        "title": "MemoryStorage.(constructor)"
+      "node.memorystoragedriver._constructor_": {
+        "title": "MemoryStorageDriver.(constructor)"
       },
-      "node.memorystorage.backingstore": {
-        "title": "MemoryStorage.backingStore property"
+      "node.memorystoragedriver.backingstore": {
+        "title": "MemoryStorageDriver.backingStore property"
       },
-      "node.memorystorage.del": {
-        "title": "MemoryStorage.del() method"
+      "node.memorystoragedriver.del": {
+        "title": "MemoryStorageDriver.del() method"
       },
-      "node.memorystorage.get": {
-        "title": "MemoryStorage.get() method"
+      "node.memorystoragedriver.get": {
+        "title": "MemoryStorageDriver.get() method"
       },
-      "node.memorystorage": {
-        "title": "MemoryStorage class"
+      "node.memorystoragedriver": {
+        "title": "MemoryStorageDriver class"
       },
-      "node.memorystorage.set": {
-        "title": "MemoryStorage.set() method"
+      "node.memorystoragedriver.set": {
+        "title": "MemoryStorageDriver.set() method"
+      },
+      "node.nodeapiclient.fetch": {
+        "title": "NodeAPIClient.fetch() method"
+      },
+      "node.nodeapiclient": {
+        "title": "NodeAPIClient class"
       },
       "node.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
@@ -374,6 +440,27 @@
       "node.skygearerrorcodeverificationrequired": {
         "title": "SkygearErrorCodeVerificationRequired variable"
       },
+      "node.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "node.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "node.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "node.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "node.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "node.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "node.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
       "node.user.createdat": {
         "title": "User.createdAt property"
       },
@@ -395,12 +482,6 @@
       "node.user.metadata": {
         "title": "User.metadata property"
       },
-      "web.apiclient.fetch": {
-        "title": "APIClient.fetch() method"
-      },
-      "web.apiclient": {
-        "title": "APIClient class"
-      },
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -416,8 +497,20 @@
       "web.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
       },
+      "web.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "web.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
       "web.authcontainer.login": {
         "title": "AuthContainer.login() method"
+      },
+      "web.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "web.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
       },
       "web.authcontainer.logout": {
         "title": "AuthContainer.logout() method"
@@ -440,6 +533,9 @@
       "web.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
       },
+      "web.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
       "web.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
@@ -451,6 +547,9 @@
       },
       "web.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
+      },
+      "web.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
       },
       "web.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
@@ -476,14 +575,26 @@
       "web.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
+      "web.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
       "web.baseapiclient.endpoint": {
         "title": "BaseAPIClient.endpoint property"
       },
       "web.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "web.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
       "web.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
+      },
+      "web.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "web.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
       },
       "web.baseapiclient.logout": {
         "title": "BaseAPIClient.logout() method"
@@ -497,17 +608,26 @@
       "web.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
+      "web.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
       "web.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
       },
       "web.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
       },
+      "web.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
       "web.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
       "web.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "web.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
       },
       "web.container._constructor_": {
         "title": "Container.(constructor)"
@@ -530,17 +650,29 @@
       "web.container.storage": {
         "title": "Container.storage property"
       },
-      "web.containerstorage.del": {
-        "title": "ContainerStorage.del() method"
+      "web.containerstorage._constructor_": {
+        "title": "ContainerStorage.(constructor)"
       },
-      "web.containerstorage.get": {
-        "title": "ContainerStorage.get() method"
+      "web.containerstorage.driver": {
+        "title": "ContainerStorage.driver property"
       },
       "web.containerstorage": {
-        "title": "containerStorage variable"
+        "title": "ContainerStorage class"
       },
-      "web.containerstorage.set": {
-        "title": "ContainerStorage.set() method"
+      "web.containerstorage.safedel": {
+        "title": "ContainerStorage.safeDel() method"
+      },
+      "web.containerstorage.safeget": {
+        "title": "ContainerStorage.safeGet() method"
+      },
+      "web.containerstorage.safegetjson": {
+        "title": "ContainerStorage.safeGetJSON() method"
+      },
+      "web.containerstorage.safeset": {
+        "title": "ContainerStorage.safeSet() method"
+      },
+      "web.containerstorage.safesetjson": {
+        "title": "ContainerStorage.safeSetJSON() method"
       },
       "web.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
@@ -560,11 +692,26 @@
       "web.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
       },
+      "web.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
       "web.decodeerror": {
         "title": "decodeError() function"
       },
+      "web.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "web.decodeuser": {
+        "title": "decodeUser() function"
+      },
       "web.defaultcontainer": {
         "title": "defaultContainer variable"
+      },
+      "web.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "web.encodeuser": {
+        "title": "encodeUser() function"
       },
       "web.identity": {
         "title": "Identity type"
@@ -578,8 +725,23 @@
       "web.jsonvalue": {
         "title": "JSONValue type"
       },
+      "web.localstoragestoragedriver": {
+        "title": "localStorageStorageDriver variable"
+      },
       "web": {
         "title": "web package"
+      },
+      "web.oauthauthorizationurloptions.action": {
+        "title": "OAuthAuthorizationURLOptions.action property"
+      },
+      "web.oauthauthorizationurloptions.callbackurl": {
+        "title": "OAuthAuthorizationURLOptions.callbackURL property"
+      },
+      "web.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions interface"
+      },
+      "web.oauthauthorizationurloptions.uxmode": {
+        "title": "OAuthAuthorizationURLOptions.uxMode property"
       },
       "web.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
@@ -743,6 +905,27 @@
       "web.skygearerrorcodeverificationrequired": {
         "title": "SkygearErrorCodeVerificationRequired variable"
       },
+      "web.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "web.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "web.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "web.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "web.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "web.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "web.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
       "web.user.createdat": {
         "title": "User.createdAt property"
       },
@@ -763,6 +946,48 @@
       },
       "web.user.metadata": {
         "title": "User.metadata property"
+      },
+      "web.webapiclient.fetch": {
+        "title": "WebAPIClient.fetch() method"
+      },
+      "web.webapiclient": {
+        "title": "WebAPIClient class"
+      },
+      "web.webapiclient.oauthauthorizationurl": {
+        "title": "WebAPIClient.oauthAuthorizationURL() method"
+      },
+      "web.webauthcontainer._constructor_": {
+        "title": "WebAuthContainer.(constructor)"
+      },
+      "web.webauthcontainer.getlinkredirectresult": {
+        "title": "WebAuthContainer.getLinkRedirectResult() method"
+      },
+      "web.webauthcontainer.getloginredirectresult": {
+        "title": "WebAuthContainer.getLoginRedirectResult() method"
+      },
+      "web.webauthcontainer.linkoauthproviderwithpopup": {
+        "title": "WebAuthContainer.linkOAuthProviderWithPopup() method"
+      },
+      "web.webauthcontainer.linkoauthproviderwithredirect": {
+        "title": "WebAuthContainer.linkOAuthProviderWithRedirect() method"
+      },
+      "web.webauthcontainer.loginoauthproviderwithpopup": {
+        "title": "WebAuthContainer.loginOAuthProviderWithPopup() method"
+      },
+      "web.webauthcontainer.loginoauthproviderwithredirect": {
+        "title": "WebAuthContainer.loginOAuthProviderWithRedirect() method"
+      },
+      "web.webauthcontainer": {
+        "title": "WebAuthContainer class"
+      },
+      "web.webcontainer._constructor_": {
+        "title": "WebContainer.(constructor)"
+      },
+      "web.webcontainer.auth": {
+        "title": "WebContainer.auth property"
+      },
+      "web.webcontainer": {
+        "title": "WebContainer class"
       }
     },
     "links": {

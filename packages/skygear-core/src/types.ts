@@ -85,7 +85,7 @@ export interface AuthResponse {
 /**
  * @public
  */
-export interface ContainerStorage {
+export interface StorageDriver {
   get(key: string): Promise<string | null>;
   set(key: string, value: string): Promise<void>;
   del(key: string): Promise<void>;

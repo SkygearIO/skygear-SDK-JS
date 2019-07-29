@@ -1,4 +1,9 @@
-import { BaseAPIClient, ContainerStorage, Container } from "@skygear/core";
+import {
+  BaseAPIClient,
+  StorageDriver,
+  Container,
+  ContainerStorage,
+} from "@skygear/core";
 export * from "@skygear/core";
 
 const nodeFetch = require("node-fetch");
@@ -6,7 +11,7 @@ const nodeFetch = require("node-fetch");
 /**
  * @public
  */
-export class APIClient extends BaseAPIClient {
+export class NodeAPIClient extends BaseAPIClient {
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     return nodeFetch(input, init);
   }
@@ -15,7 +20,7 @@ export class APIClient extends BaseAPIClient {
 /**
  * @public
  */
-export class MemoryStorage implements ContainerStorage {
+export class MemoryStorageDriver implements StorageDriver {
   backingStore: { [key: string]: string };
 
   constructor() {
@@ -40,12 +45,12 @@ export class MemoryStorage implements ContainerStorage {
 /**
  * @public
  */
-export const defaultContainer: Container = new Container(
+export const defaultContainer: Container<NodeAPIClient> = new Container(
   "default",
-  new APIClient({
+  new NodeAPIClient({
     apiKey: "",
     endpoint: "",
     accessToken: null,
   }),
-  new MemoryStorage()
+  new ContainerStorage(new MemoryStorageDriver())
 );

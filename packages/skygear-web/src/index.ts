@@ -1,42 +1,22 @@
-import { BaseAPIClient, ContainerStorage, Container } from "@skygear/core";
+import { ContainerStorage } from "@skygear/core";
 export * from "@skygear/core";
-
-const globalFetch = fetch;
-const globalLocalStorage = localStorage;
-
-/**
- * @public
- */
-export class APIClient extends BaseAPIClient {
-  fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    return globalFetch(input, init);
-  }
-}
+import { WebAPIClient } from "./client";
+export * from "./client";
+import { localStorageStorageDriver } from "./storage";
+export * from "./storage";
+import { WebContainer } from "./container";
+export * from "./container";
+export * from "./types";
 
 /**
  * @public
  */
-export const containerStorage: ContainerStorage = {
-  async get(key: string): Promise<string | null> {
-    return globalLocalStorage.getItem(key);
-  },
-  async set(key: string, value: string): Promise<void> {
-    return globalLocalStorage.setItem(key, value);
-  },
-  async del(key: string): Promise<void> {
-    return globalLocalStorage.removeItem(key);
-  },
-};
-
-/**
- * @public
- */
-export const defaultContainer: Container = new Container(
+export const defaultContainer: WebContainer = new WebContainer(
   "default",
-  new APIClient({
+  new WebAPIClient({
     apiKey: "",
     endpoint: "",
     accessToken: null,
   }),
-  containerStorage
+  new ContainerStorage(localStorageStorageDriver)
 );

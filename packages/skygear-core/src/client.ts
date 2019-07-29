@@ -1,6 +1,6 @@
 import { JSONObject, AuthResponse, SSOLoginOptions } from "./types";
 import { decodeError } from "./error";
-import { decodeUser, decodeIdentity } from "./encoding";
+import { decodeAuthResponse } from "./encoding";
 
 function removeTrailingSlash(s: string): string {
   return s.replace(/\/+$/g, "");
@@ -26,7 +26,7 @@ export abstract class BaseAPIClient {
 
   abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-  private async post(path: string, payload?: any): Promise<any> {
+  protected async post(path: string, payload?: any): Promise<any> {
     const url = this.endpoint + path;
     const headers: any = {
       "x-skygear-api-key": this.apiKey,
@@ -52,21 +52,12 @@ export abstract class BaseAPIClient {
     throw decodeError();
   }
 
-  private async postAndReturnAuthResponse(
+  protected async postAndReturnAuthResponse(
     path: string,
     payload?: any
   ): Promise<AuthResponse> {
-    const { user, identity, access_token } = await this.post(path, payload);
-    const response: AuthResponse = {
-      user: decodeUser(user),
-    };
-    if (identity) {
-      response.identity = decodeIdentity(identity);
-    }
-    if (access_token) {
-      response.accessToken = access_token;
-    }
-    return response;
+    const response = await this.post(path, payload);
+    return decodeAuthResponse(response);
   }
 
   async signup(

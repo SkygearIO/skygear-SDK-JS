@@ -1,13 +1,12 @@
 import {
-  ContainerStorage,
   JSONObject,
   User,
   Identity,
   AuthResponse,
   SSOLoginOptions,
 } from "./types";
+import { ContainerStorage } from "./storage";
 import { BaseAPIClient } from "./client";
-import { safeDel, safeGet, safeGetJSON, safeSetJSON, safeSet } from "./storage";
 import {
   encodeUser,
   encodeIdentity,
@@ -16,26 +15,26 @@ import {
 } from "./encoding";
 
 function keyAccessToken(name: string): string {
-  return `skygear2_${name}_accessToken`;
+  return `${name}_accessToken`;
 }
 
 function keyUser(name: string): string {
-  return `skygear2_${name}_user`;
+  return `${name}_user`;
 }
 
 function keyIdentity(name: string): string {
-  return `skygear2_${name}_identity`;
+  return `${name}_identity`;
 }
 
 /**
  * @public
  */
-export class AuthContainer {
-  parent: Container;
+export class AuthContainer<T extends BaseAPIClient> {
+  parent: Container<T>;
   currentUser: User | null;
   currentIdentity: Identity | null;
 
-  constructor(parent: Container) {
+  constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
     this.currentIdentity = null;
@@ -50,20 +49,18 @@ export class AuthContainer {
     const { user, identity, accessToken } = response;
 
     const userJSON = encodeUser(user);
-    await safeSetJSON(this.parent.storage, keyUser(this.parent.name), userJSON);
+    await this.parent.storage.safeSetJSON(keyUser(this.parent.name), userJSON);
 
     if (identity) {
       const identityJSON = encodeIdentity(identity);
-      await safeSetJSON(
-        this.parent.storage,
+      await this.parent.storage.safeSetJSON(
         keyIdentity(this.parent.name),
         identityJSON
       );
     }
 
     if (accessToken) {
-      await safeSet(
-        this.parent.storage,
+      await this.parent.storage.safeSet(
         keyAccessToken(this.parent.name),
         accessToken
       );
@@ -151,9 +148,9 @@ export class AuthContainer {
 
   async logout(): Promise<void> {
     await this.parent.apiClient.logout();
-    await safeDel(this.parent.storage, keyAccessToken(this.parent.name));
-    await safeDel(this.parent.storage, keyIdentity(this.parent.name));
-    await safeDel(this.parent.storage, keyUser(this.parent.name));
+    await this.parent.storage.safeDel(keyAccessToken(this.parent.name));
+    await this.parent.storage.safeDel(keyIdentity(this.parent.name));
+    await this.parent.storage.safeDel(keyUser(this.parent.name));
     this.currentUser = null;
     this.currentIdentity = null;
     this.parent.apiClient.accessToken = null;
@@ -250,17 +247,13 @@ export class AuthContainer {
 /**
  * @public
  */
-export class Container {
+export class Container<T extends BaseAPIClient> {
   name: string;
-  apiClient: BaseAPIClient;
+  apiClient: T;
   storage: ContainerStorage;
-  auth: AuthContainer;
+  auth: AuthContainer<T>;
 
-  constructor(
-    name: string,
-    apiClient: BaseAPIClient,
-    storage: ContainerStorage
-  ) {
+  constructor(name: string, apiClient: T, storage: ContainerStorage) {
     this.name = name;
     this.apiClient = apiClient;
     this.storage = storage;
@@ -274,10 +267,10 @@ export class Container {
     this.apiClient.apiKey = options.apiKey;
     this.apiClient.endpoint = options.endpoint;
 
-    const accessToken = await safeGet(this.storage, keyAccessToken(this.name));
+    const accessToken = await this.storage.safeGet(keyAccessToken(this.name));
     this.apiClient.accessToken = accessToken;
 
-    const userJSON = await safeGetJSON(this.storage, keyUser(this.name));
+    const userJSON = await this.storage.safeGetJSON(keyUser(this.name));
     if (userJSON) {
       const user = decodeUser(userJSON);
       this.auth.currentUser = user;
@@ -285,10 +278,7 @@ export class Container {
       this.auth.currentUser = null;
     }
 
-    const identityJSON = await safeGetJSON(
-      this.storage,
-      keyIdentity(this.name)
-    );
+    const identityJSON = await this.storage.safeGetJSON(keyIdentity(this.name));
     if (identityJSON) {
       const identity = decodeIdentity(identityJSON);
       this.auth.currentIdentity = identity;

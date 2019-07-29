@@ -1,57 +1,60 @@
-import { ContainerStorage, JSONValue } from "./types";
+import { StorageDriver, JSONValue } from "./types";
 
-export async function safeDel(
-  storage: ContainerStorage,
-  key: string
-): Promise<void> {
-  try {
-    await storage.del(key);
-  } catch {}
+function scopedKey(key: string): string {
+  return `skygear2_${key}`;
 }
 
-export async function safeGet(
-  storage: ContainerStorage,
-  key: string
-): Promise<string | null> {
-  try {
-    return storage.get(key);
-  } catch {
-    return null;
+/**
+ * @public
+ */
+export class ContainerStorage {
+  driver: StorageDriver;
+
+  constructor(driver: StorageDriver) {
+    this.driver = driver;
   }
-}
 
-export async function safeGetJSON(
-  storage: ContainerStorage,
-  key: string
-): Promise<JSONValue | undefined> {
-  const jsonString = await safeGet(storage, key);
-  if (jsonString == null) {
-    return undefined;
+  async safeDel(key: string): Promise<void> {
+    key = scopedKey(key);
+    try {
+      await this.driver.del(key);
+    } catch {}
   }
-  try {
-    return JSON.parse(jsonString);
-  } catch {
-    return undefined;
+
+  async safeGet(key: string): Promise<string | null> {
+    key = scopedKey(key);
+    try {
+      return this.driver.get(key);
+    } catch {
+      return null;
+    }
   }
-}
 
-export async function safeSet(
-  storage: ContainerStorage,
-  key: string,
-  value: string
-): Promise<void> {
-  try {
-    await storage.set(key, value);
-  } catch {}
-}
+  async safeGetJSON(key: string): Promise<JSONValue | undefined> {
+    // No need to scope the key because safeGet does that.
+    const jsonString = await this.safeGet(key);
+    if (jsonString == null) {
+      return undefined;
+    }
+    try {
+      return JSON.parse(jsonString);
+    } catch {
+      return undefined;
+    }
+  }
 
-export async function safeSetJSON(
-  storage: ContainerStorage,
-  key: string,
-  value: JSONValue
-): Promise<void> {
-  try {
-    const jsonString = JSON.stringify(value);
-    await storage.set(key, jsonString);
-  } catch {}
+  async safeSet(key: string, value: string): Promise<void> {
+    key = scopedKey(key);
+    try {
+      await this.driver.set(key, value);
+    } catch {}
+  }
+
+  async safeSetJSON(key: string, value: JSONValue): Promise<void> {
+    // No need to scope the key because safeSet does that.
+    try {
+      const jsonString = JSON.stringify(value);
+      await this.safeSet(key, jsonString);
+    } catch {}
+  }
 }

@@ -1,5 +1,25 @@
-import { User, Identity, JSONObject } from "./types";
+import { User, Identity, JSONObject, AuthResponse } from "./types";
 
+/**
+ * @public
+ */
+export function decodeAuthResponse(r: any): AuthResponse {
+  const { user, identity, access_token } = r;
+  const response: AuthResponse = {
+    user: decodeUser(user),
+  };
+  if (identity) {
+    response.identity = decodeIdentity(identity);
+  }
+  if (access_token) {
+    response.accessToken = access_token;
+  }
+  return response;
+}
+
+/**
+ * @public
+ */
 export function decodeUser(u: any): User {
   const id = u.id;
   const createdAt = new Date(u.created_at);
@@ -17,6 +37,9 @@ export function decodeUser(u: any): User {
   };
 }
 
+/**
+ * @public
+ */
 export function decodeIdentity(i: any): Identity {
   const id = i.id;
   const type = i.type;
@@ -52,6 +75,9 @@ export function decodeIdentity(i: any): Identity {
   }
 }
 
+/**
+ * @public
+ */
 export function encodeUser(u: User): JSONObject {
   const created_at = u.createdAt.toISOString();
   const last_login_at = u.lastLoginAt.toISOString();
@@ -65,6 +91,9 @@ export function encodeUser(u: User): JSONObject {
   };
 }
 
+/**
+ * @public
+ */
 export function encodeIdentity(i: Identity): JSONObject {
   switch (i.type) {
     case "password":
