@@ -219,6 +219,32 @@ export class AuthContainer {
   async deleteOAuthProvider(providerID: string): Promise<void> {
     return this.parent.apiClient.deleteOAuthProvider(providerID);
   }
+
+  async loginOAuthProviderWithAccessToken(
+    providerID: string,
+    accessToken: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    const response = await this.parent.apiClient.loginOAuthProviderWithAccessToken(
+      providerID,
+      accessToken,
+      options
+    );
+    await this.persistResponse(response);
+    return response.user;
+  }
+
+  async linkOAuthProviderWithAccessToken(
+    providerID: string,
+    accessToken: string
+  ): Promise<User> {
+    const response = await this.parent.apiClient.linkOAuthProviderWithAccessToken(
+      providerID,
+      accessToken
+    );
+    await this.persistResponse(response);
+    return response.user;
+  }
 }
 
 /**

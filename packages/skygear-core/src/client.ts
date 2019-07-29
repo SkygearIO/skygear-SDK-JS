@@ -26,7 +26,7 @@ export abstract class BaseAPIClient {
 
   abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-  async post(path: string, payload?: any): Promise<any> {
+  private async post(path: string, payload?: any): Promise<any> {
     const url = this.endpoint + path;
     const headers: any = {
       "x-skygear-api-key": this.apiKey,
@@ -50,6 +50,23 @@ export abstract class BaseAPIClient {
     }
 
     throw decodeError();
+  }
+
+  private async postAndReturnAuthResponse(
+    path: string,
+    payload?: any
+  ): Promise<AuthResponse> {
+    const { user, identity, access_token } = await this.post(path, payload);
+    const response: AuthResponse = {
+      user: decodeUser(user),
+    };
+    if (identity) {
+      response.identity = decodeIdentity(identity);
+    }
+    if (access_token) {
+      response.accessToken = access_token;
+    }
+    return response;
   }
 
   async signup(
@@ -80,15 +97,7 @@ export abstract class BaseAPIClient {
       realm: options && options.realm,
       metadata: options && options.metadata,
     };
-    const { user, identity, access_token } = await this.post(
-      "/_auth/signup",
-      payload
-    );
-    return {
-      user: decodeUser(user),
-      identity: decodeIdentity(identity),
-      accessToken: access_token,
-    };
+    return this.postAndReturnAuthResponse("/_auth/signup", payload);
   }
 
   async login(
@@ -102,15 +111,7 @@ export abstract class BaseAPIClient {
       login_id_key: options && options.loginIDKey,
       realm: options && options.realm,
     };
-    const { user, identity, access_token } = await this.post(
-      "/_auth/login",
-      payload
-    );
-    return {
-      user: decodeUser(user),
-      identity: decodeIdentity(identity),
-      accessToken: access_token,
-    };
+    return this.postAndReturnAuthResponse("/_auth/login", payload);
   }
 
   async logout(): Promise<void> {
@@ -118,11 +119,7 @@ export abstract class BaseAPIClient {
   }
 
   async me(): Promise<AuthResponse> {
-    const { user, identity } = await this.post("/_auth/me");
-    return {
-      user: decodeUser(user),
-      identity: decodeIdentity(identity),
-    };
+    return this.postAndReturnAuthResponse("/_auth/me");
   }
 
   async changePassword(
@@ -133,23 +130,12 @@ export abstract class BaseAPIClient {
       password: newPassword,
       old_password: oldPassword,
     };
-    const { user, identity, access_token } = await this.post(
-      "/_auth/change_password",
-      payload
-    );
-    return {
-      user: decodeUser(user),
-      identity: decodeIdentity(identity),
-      accessToken: access_token,
-    };
+    return this.postAndReturnAuthResponse("/_auth/change_password", payload);
   }
 
   async updateMetadata(metadata: JSONObject): Promise<AuthResponse> {
     const payload = { metadata };
-    const { user } = await this.post("/_auth/update_metadata", payload);
-    return {
-      user: decodeUser(user),
-    };
+    return this.postAndReturnAuthResponse("/_auth/update_metadata", payload);
   }
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
@@ -194,19 +180,45 @@ export abstract class BaseAPIClient {
       merge_realm: options && options.mergeRealm,
       on_user_duplicate: options && options.onUserDuplicate,
     };
-    const { user, identity, access_token } = await this.post(
+    return this.postAndReturnAuthResponse(
       "/_auth/sso/custom_token/login",
       payload
     );
-    return {
-      user: decodeUser(user),
-      identity: decodeIdentity(identity),
-      accessToken: access_token,
-    };
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
     const encoded = encodeURIComponent(providerID);
     await this.post(`/_auth/sso/${encoded}/unlink`);
+  }
+
+  async loginOAuthProviderWithAccessToken(
+    providerID: string,
+    accessToken: string,
+    options?: SSOLoginOptions
+  ): Promise<AuthResponse> {
+    const encoded = encodeURIComponent(providerID);
+    const payload = {
+      access_token: accessToken,
+      merge_realm: options && options.mergeRealm,
+      on_user_duplicate: options && options.onUserDuplicate,
+    };
+    return this.postAndReturnAuthResponse(
+      `/_auth/sso/${encoded}/login`,
+      payload
+    );
+  }
+
+  async linkOAuthProviderWithAccessToken(
+    providerID: string,
+    accessToken: string
+  ): Promise<AuthResponse> {
+    const encoded = encodeURIComponent(providerID);
+    const payload = {
+      access_token: accessToken,
+    };
+    return this.postAndReturnAuthResponse(
+      `/_auth/sso/${encoded}/link`,
+      payload
+    );
   }
 }
