@@ -4,6 +4,7 @@ import {
   User,
   Identity,
   AuthResponse,
+  SSOLoginOptions,
 } from "./types";
 import { BaseAPIClient } from "./client";
 import { safeDel, safeGet, safeGetJSON, safeSetJSON, safeSet } from "./storage";
@@ -201,6 +202,18 @@ export class AuthContainer {
 
   async verifyWithCode(code: string): Promise<void> {
     return this.parent.apiClient.verifyWithCode(code);
+  }
+
+  async loginWithCustomToken(
+    token: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    const response = await this.parent.apiClient.loginWithCustomToken(
+      token,
+      options
+    );
+    await this.persistResponse(response);
+    return response.user;
   }
 }
 

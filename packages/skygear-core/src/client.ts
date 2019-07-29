@@ -1,4 +1,4 @@
-import { JSONObject, AuthResponse } from "./types";
+import { JSONObject, AuthResponse, SSOLoginOptions } from "./types";
 import { decodeError } from "./error";
 import { decodeUser, decodeIdentity } from "./encoding";
 
@@ -183,5 +183,25 @@ export abstract class BaseAPIClient {
   async verifyWithCode(code: string): Promise<void> {
     const payload = { code };
     await this.post("/_auth/verify_code", payload);
+  }
+
+  async loginWithCustomToken(
+    token: string,
+    options?: SSOLoginOptions
+  ): Promise<AuthResponse> {
+    const payload = {
+      token,
+      merge_realm: options && options.mergeRealm,
+      on_user_duplicate: options && options.onUserDuplicate,
+    };
+    const { user, identity, access_token } = await this.post(
+      "/_auth/sso/custom_token/login",
+      payload
+    );
+    return {
+      user: decodeUser(user),
+      identity: decodeIdentity(identity),
+      accessToken: access_token,
+    };
   }
 }

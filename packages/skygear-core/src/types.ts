@@ -90,3 +90,11 @@ export interface ContainerStorage {
   set(key: string, value: string): Promise<void>;
   del(key: string): Promise<void>;
 }
+
+/**
+ * @public
+ */
+export interface SSOLoginOptions {
+  mergeRealm?: string;
+  onUserDuplicate?: "abort" | "merge" | "create";
+}
