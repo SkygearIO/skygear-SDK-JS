@@ -56,6 +56,12 @@
       "node.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
+      "node.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "node.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
       "node.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
       },
@@ -436,6 +442,12 @@
       },
       "web.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
+      },
+      "web.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "web.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
       },
       "web.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"

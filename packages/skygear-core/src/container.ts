@@ -94,6 +94,46 @@ export class AuthContainer {
     return response.user;
   }
 
+  /**
+   * signupWithEmail is a shorthand of {@link AuthContainer.signup | the signup() method}.
+   */
+  async signupWithEmail(
+    email: string,
+    password: string,
+    options?: {
+      realm?: string;
+      metadata?: JSONObject;
+    }
+  ): Promise<User> {
+    return this.signup(
+      {
+        email,
+      },
+      password,
+      options
+    );
+  }
+
+  /**
+   * signupWithUsername is a shorthand of {@link AuthContainer.signup | the signup() method}.
+   */
+  async signupWithUsername(
+    username: string,
+    password: string,
+    options?: {
+      realm?: string;
+      metadata?: JSONObject;
+    }
+  ): Promise<User> {
+    return this.signup(
+      {
+        username,
+      },
+      password,
+      options
+    );
+  }
+
   async login(
     loginID: string,
     password: string,
