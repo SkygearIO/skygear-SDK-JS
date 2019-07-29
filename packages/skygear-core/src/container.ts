@@ -183,11 +183,20 @@ export class AuthContainer {
   }
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
-    await this.parent.apiClient.requestForgotPasswordEmail(email);
+    return this.parent.apiClient.requestForgotPasswordEmail(email);
+  }
+
+  async resetPassword(form: {
+    userID: string;
+    code: string;
+    expireAt: number;
+    newPassword: string;
+  }): Promise<void> {
+    return this.parent.apiClient.resetPassword(form);
   }
 
   async requestEmailVerification(email: string): Promise<void> {
-    await this.parent.apiClient.requestEmailVerification(email);
+    return this.parent.apiClient.requestEmailVerification(email);
   }
 }
 

@@ -157,6 +157,21 @@ export abstract class BaseAPIClient {
     await this.post("/_auth/forgot_password", payload);
   }
 
+  async resetPassword(form: {
+    userID: string;
+    code: string;
+    expireAt: number;
+    newPassword: string;
+  }): Promise<void> {
+    const payload = {
+      user_id: form.userID,
+      code: form.code,
+      expire_at: form.expireAt,
+      new_password: form.newPassword,
+    };
+    await this.post("/_auth/forgot_password/reset_password", payload);
+  }
+
   async requestEmailVerification(email: string): Promise<void> {
     const payload = {
       login_id_type: "email",
