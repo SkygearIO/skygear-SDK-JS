@@ -7,7 +7,10 @@
     "index.d.ts",
     "dist/skygear-node.js"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@skygear/core": "0.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.0.0"
   }
 }

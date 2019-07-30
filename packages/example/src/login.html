@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Login</title>
+</head>
+<body>
+  <form class="container" onsubmit="onSubmit(event)">
+    <div class="form-group">
+      <label>Login ID</label>
+      <input id="loginID" type="text" class="form-control" placeholder="Login ID" oninput="onInput()">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="password" type="password" class="form-control" placeholder="Password" oninput="onInput()">
+    </div>
+    <div class="form-group">
+      <label>Realm</label>
+      <input id="realm" type="text" class="form-control" placeholder="Realm" oninput="onInput()">
+      <small class="form-text text-muted">
+        Realm is optional
+      </small>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="synopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="result" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function onInput() {
+  var loginID = document.getElementById("loginID").value;
+  var password = document.getElementById("password").value;
+  var realm = document.getElementById("realm").value;
+  var synopsisTextArea = document.getElementById("synopsis");
+
+  var options;
+  if (realm) {
+    options = { realm: realm };
+  }
+
+  var funcExpr = "defaultContainer.auth.login";
+  var s = stringifyFunctionCall(funcExpr, loginID, password, options);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmit(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var loginID = document.getElementById("loginID").value;
+  var password = document.getElementById("password").value;
+  var realm = document.getElementById("realm").value;
+  var resultTextArea = document.getElementById("result");
+
+  var options;
+  if (realm) {
+    options = { realm: realm };
+  }
+
+  defaultContainer.auth.login(loginID, password, options).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  onInput();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>

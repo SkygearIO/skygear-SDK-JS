@@ -9,7 +9,7 @@
     "dist/skygear-web.module.js",
     "dist/skygear-web.cjs.js"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@skygear/core": "0.0.0"
   }
 }
