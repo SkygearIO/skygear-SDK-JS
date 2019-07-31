@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Single sign-on (SSO)</title>
+</head>
+<body>
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitOAuth(event)">
+    <div class="form-group">
+      <h1>OAuth Flow</h1>
+    </div>
+    <div class="form-group">
+      <label>Login or Link</label>
+      <select id="oauthAction" class="form-control" oninput="onInputOAuth()">
+        <option value="login" selected="">Login</option>
+        <option value="link">Link</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Popup or Redirect</label>
+      <select id="oauthUXMode" class="form-control" oninput="onInputOAuth()">
+        <option value="Popup" selected="">Popup</option>
+        <option value="Redirect">Redirect</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>On User Duplicate</label>
+      <select id="oauthOnUserDuplicate" class="form-control" oninput="onInputOAuth()">
+        <option value="abort" selected="">Abort</option>
+        <option value="merge">Merge</option>
+        <option value="create">Create</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Provider ID</label>
+      <input id="oauthProviderID" type="text" class="form-control" oninput="onInputOAuth()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="oauthSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="oauthResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitAccessToken(event)">
+    <div class="form-group">
+      <h1>Access Token Flow</h1>
+    </div>
+    <div class="form-group">
+      <label>Login or Link</label>
+      <select id="accessTokenAction" class="form-control" oninput="onInputAccessToken()">
+        <option value="login" selected="">Login</option>
+        <option value="link">Link</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>On User Duplicate</label>
+      <select id="accessTokenOnUserDuplicate" class="form-control" oninput="onInputAccessToken()">
+        <option value="abort" selected="">Abort</option>
+        <option value="merge">Merge</option>
+        <option value="create">Create</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Provider ID</label>
+      <input id="accessTokenProviderID" type="text" class="form-control" oninput="onInputAccessToken()">
+    </div>
+    <div class="form-group">
+      <label>Access Token</label>
+      <input id="accessTokenAccessToken" type="text" class="form-control" oninput="onInputAccessToken()">
+      <small class="form-text text-muted">
+        Access Token Flow is disabled by default. You have to enable it first.
+      </small>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="accessTokenSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="accessTokenResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitDeleteOAuth(event)">
+    <div class="form-group">
+      <h1>Delete OAuth Provider</h1>
+    </div>
+    <div class="form-group">
+      <label>Provider ID</label>
+      <input id="deleteOAuthProviderID" type="text" class="form-control" oninput="onInputDeleteOAuth()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="deleteOAuthSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="deleteOAuthResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitCustomToken(event)">
+    <div class="form-group">
+      <h1>Login with Custom Token</h1>
+    </div>
+    <div class="form-group">
+      <label>On User Duplicate</label>
+      <select id="customTokenOnUserDuplicate" class="form-control" oninput="onInputCustomToken()">
+        <option value="abort" selected="">Abort</option>
+        <option value="merge">Merge</option>
+        <option value="create">Create</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Token</label>
+      <input id="customTokenToken" type="text" class="form-control" oninput="onInputCustomToken()">
+      <small class="form-text text-muted">
+        Custom Token is disabled by default. You have to enable it first.
+      </small>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="customTokenSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="customTokenResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function makeOAuthInvocation() {
+  var action = document.getElementById("oauthAction").value;
+  var uxMode = document.getElementById("oauthUXMode").value;
+  var onUserDuplicate = document.getElementById("oauthOnUserDuplicate").value;
+  var providerID = document.getElementById("oauthProviderID").value;
+
+  var funcName = action + "OAuthProviderWith" + uxMode;
+  var args = [providerID];
+  if (uxMode === "Redirect") {
+    args.push(window.origin + "/sso.html");
+  }
+  if (action === "login" && onUserDuplicate !== "abort") {
+    args.push({ onUserDuplicate: onUserDuplicate });
+  }
+
+  return [funcName, args];
+}
+
+function onInputOAuth() {
+  var synopsisTextArea = document.getElementById("oauthSynopsis");
+
+  var invocation = makeOAuthInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+  var funcExpr = "defaultContainer.auth." + funcName;
+  args.unshift(funcExpr);
+
+  synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
+}
+
+function onSubmitOAuth(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("oauthResult");
+
+  var invocation = makeOAuthInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+
+  var result = defaultContainer.auth[funcName].apply(defaultContainer.auth, args);
+  if (result && result.then) {
+    result.then(function(maybeUser) {
+      if (!maybeUser) {
+        resultTextArea.value = "OK";
+      } else {
+        resultTextArea.value = JSON.stringify(maybeUser);
+      }
+    }, function(e) {
+      resultTextArea.value = JSON.stringify(e);
+    });
+  }
+}
+
+function makeAccessTokenInvocation() {
+  var action = document.getElementById("accessTokenAction").value;
+  var onUserDuplicate = document.getElementById("accessTokenOnUserDuplicate").value;
+  var accessToken = document.getElementById("accessTokenAccessToken").value;
+  var providerID = document.getElementById("accessTokenProviderID").value;
+
+  var funcName = action + "OAuthProviderWithAccessToken";
+  var args = [providerID, accessToken];
+  if (action === "login" && onUserDuplicate !== "abort") {
+    args.push({ onUserDuplicate: onUserDuplicate });
+  }
+
+  return [funcName, args];
+}
+
+function onInputAccessToken() {
+  var synopsisTextArea = document.getElementById("accessTokenSynopsis");
+
+  var invocation = makeAccessTokenInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+  var funcExpr = "defaultContainer.auth." + funcName;
+  args.unshift(funcExpr);
+
+  synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
+}
+
+function onSubmitAccessToken(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("accessTokenResult");
+
+  var invocation = makeAccessTokenInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+
+  var p = defaultContainer.auth[funcName].apply(defaultContainer.auth, args);
+  p.then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputDeleteOAuth() {
+  var providerID = document.getElementById("deleteOAuthProviderID").value;
+  var synopsisTextArea = document.getElementById("deleteOAuthSynopsis");
+
+  synopsisTextArea.value = stringifyFunctionCall("defaultContainer.auth.deleteOAuthProvider", providerID);
+}
+
+function onSubmitDeleteOAuth(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var providerID = document.getElementById("deleteOAuthProviderID").value;
+  var resultTextArea = document.getElementById("deleteOAuthResult");
+
+  defaultContainer.auth.deleteOAuthProvider(providerID).then(function() {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function makeCustomTokenInvocation() {
+  var token = document.getElementById("customTokenToken").value;
+  var onUserDuplicate = document.getElementById("customTokenOnUserDuplicate").value;
+
+  var funcName = "loginWithCustomToken";
+  var args = [token];
+  if (onUserDuplicate !== "abort") {
+    args.push({ onUserDuplicate: onUserDuplicate });
+  }
+
+  return [funcName, args];
+}
+
+function onInputCustomToken() {
+  var synopsisTextArea = document.getElementById("customTokenSynopsis");
+
+  var invocation = makeCustomTokenInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+  var funcExpr = "defaultContainer.auth." + funcName;
+  args.unshift(funcExpr);
+
+  synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
+}
+
+function onSubmitCustomToken(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("customTokenResult");
+
+  var invocation = makeCustomTokenInvocation();
+  var funcName = invocation[0];
+  var args = invocation[1];
+
+  defaultContainer.auth[funcName].apply(defaultContainer.auth, args).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  onInputOAuth();
+  onInputAccessToken();
+  onInputDeleteOAuth();
+  onInputCustomToken();
+
+  var resultTextArea = document.getElementById("oauthResult");
+
+  defaultContainer.auth.getLinkRedirectResult().then(function(result) {
+    if (result) {
+      resultTextArea.value = "Link success";
+    } else {
+      defaultContainer.auth.getLoginRedirectResult().then(function(maybeUser) {
+        if (maybeUser) {
+          resultTextArea.value = JSON.stringify(maybeUser);
+        }
+      }, function(e) {
+        resultTextArea.value = JSON.stringify(e);
+      })
+    }
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
