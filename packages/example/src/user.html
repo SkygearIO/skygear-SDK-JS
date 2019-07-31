@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Logout, Me, Change Password, Update Metadata</title>
+</head>
+<body>
+
+  <form class="container" onsubmit="onSubmitMe(event)">
+    <div class="form-group">
+      <h1>Me</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="meSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="meResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitLogout(event)">
+    <div class="form-group">
+      <h1>Logout</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="logoutSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="logoutResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitChangePassword(event)">
+    <div class="form-group">
+      <h1>Change Password</h1>
+    </div>
+    <div class="form-group">
+      <label>New Password</label>
+      <input id="changePasswordNewPassword" type="password" class="form-control" placeholder="New Password" oninput="onInputChangePassword()">
+    </div>
+    <div class="form-group">
+      <label>Old Password</label>
+      <input id="changePasswordOldPassword" type="password" class="form-control" placeholder="Old Password" oninput="onInputChangePassword()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="changePasswordSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="changePasswordResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitUpdateMetadata(event)">
+    <div class="form-group">
+      <h1>Update Metadata</h1>
+    </div>
+    <div class="form-group">
+      <label>Metadata</label>
+      <textarea id="updateMetadataMetadata" class="form-control" oninput="onInputMetadata()"></textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="updateMetadataSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="updateMetadataResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function setupMeSynopsis() {
+  var synopsisTextArea = document.getElementById("meSynopsis");
+  var funcExpr = "defaultContainer.auth.me";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitMe(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("meResult");
+
+  defaultContainer.auth.me().then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function setupLogoutSynopsis() {
+  var synopsisTextArea = document.getElementById("logoutSynopsis");
+  var funcExpr = "defaultContainer.auth.logout";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitLogout(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("logoutResult");
+
+  defaultContainer.auth.logout().then(function() {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputChangePassword() {
+  var newPassword = document.getElementById("changePasswordNewPassword").value;
+  var oldPassword = document.getElementById("changePasswordOldPassword").value;
+  var synopsisTextArea = document.getElementById("changePasswordSynopsis");
+  var funcExpr = "defaultContainer.auth.changePassword";
+  var s = stringifyFunctionCall(funcExpr, newPassword, oldPassword);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitChangePassword(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var newPassword = document.getElementById("changePasswordNewPassword").value;
+  var oldPassword = document.getElementById("changePasswordOldPassword").value;
+  var resultTextArea = document.getElementById("changePasswordResult");
+
+  defaultContainer.auth.changePassword(newPassword, oldPassword).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputMetadata() {
+  var metadataStr = document.getElementById("updateMetadataMetadata").value;
+  var synopsisTextArea = document.getElementById("updateMetadataSynopsis");
+
+  var funcExpr = "defaultContainer.auth.updateMetadata";
+  var s = !metadataStr ? "" : "ERROR";
+  try {
+    var metadata = JSON.parse(metadataStr);
+    if (typeof metadata !== "object" || metadata == null) {
+      throw "invalid";
+    }
+    s = stringifyFunctionCall(funcExpr, metadata);
+  } catch (e) {}
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitUpdateMetadata(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var metadataStr = document.getElementById("updateMetadataMetadata").value;
+  var resultTextArea = document.getElementById("updateMetadataResult");
+
+  try {
+    var metadata = JSON.parse(metadataStr);
+    if (typeof metadata !== "object" || metadata == null) {
+      throw "invalid";
+    }
+    defaultContainer.auth.updateMetadata(metadata).then(function(user) {
+      resultTextArea.value = JSON.stringify(user);
+    }, function(e) {
+      resultTextArea.value = JSON.stringify(e);
+    });
+  } catch (e) {
+    resultTextArea.value = "ERROR";
+  }
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  setupMeSynopsis();
+  setupLogoutSynopsis();
+  onInputChangePassword();
+  onInputMetadata();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
