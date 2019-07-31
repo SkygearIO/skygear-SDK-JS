@@ -20,10 +20,10 @@ export class WebAPIClient extends BaseAPIClient {
     let path = "";
     switch (action) {
       case "login":
-        path = `/sso/${encoded}/login_auth_url`;
+        path = `/_auth/sso/${encoded}/login_auth_url`;
         break;
       case "link":
-        path = `/sso/${encoded}/link_auth_url`;
+        path = `/_auth/sso/${encoded}/link_auth_url`;
         break;
       default:
         throw new Error("unreachable");
