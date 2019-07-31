@@ -29,7 +29,9 @@ export class WebAPIClient extends BaseAPIClient {
         throw new Error("unreachable");
     }
     const payload = {
-      callback_url: options.callbackURL,
+      // NOTE(louis): The server always requires callback_url
+      // but actually it is optional when the ux mode is "web_popup".
+      callback_url: options.callbackURL || window.location.href,
       ux_mode: options.uxMode,
       merge_realm: options.mergeRealm,
       on_user_duplicate: options.onUserDuplicate,
