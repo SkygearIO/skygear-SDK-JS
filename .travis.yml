@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- "12"
+install:
+- npm ci
+- npm run lerna bootstrap
+script:
+- npm run format
+- npm run lint
+- npm run typecheck
+- npm run test
+- npm run build
+notifications:
+  slack:
+    secure: "KXq/5P62jVCP7/EWVq1XFeHwIiMJgRdzm07ihvu9TXH0m9KDU6gnYVYrhAUfDVJ9SakN7JdgrJrheGPwDeypcfCVUAuaoMfI/FitBol8cIVlrkuAW/ybNWk2htuDLNeI3bPq1XKUzCiH8nurp6FvPFEGo1Vn2/3hVFYhfKRnoZKRZ3jsnHAEqdEaEsqaK/fjBK5Jh0ywYv2wzHQ2MQgaUIGsRUR/KKHvi8mxB8HBQCdHfVIFTwp4MiBvAoGpwfGuTyE8VOnbyOtRSUFCj2Iu0obVwhISoqku1SMnj7lIjt3mIhkXYuzdqT484iinw8UKijYEwOoV+iODVBOn4dw1zoUCWmkPnaq7xpWOpssj8EQJHl+6qzKxiY+7CCeQqxrR/fSyIS7Wem1VwmFXpzHfXg5wh5L28ETmu9WfjhDLmJTNhTzrhPHSVLXFJl2BAqT4cD+swGV/hhcS0bP5h4F0OxT7AkK9ehufDfPcoIbukvlX6y3okGomPznvgF0xCLWOWJZkzKokwEiixB8UqhHX2dMk81HwSmyIYTNyLVvsWR3C6qAqqfJjczsJVlAomj1kUljzPjM8J+gcd1euIlhcb/8kJbmbp+quX6DoEl7FSQvRMvUgSU3Omp1ak06j+OM0hy12ReI/m1uwFsoe6hyWTZXj+pCPQX027oLgNwdk628="
