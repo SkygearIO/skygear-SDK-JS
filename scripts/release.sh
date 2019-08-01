@@ -12,6 +12,11 @@ if [ -z "$GIT_BRANCH" ]; then
   exit 1
 fi
 
+if [ -z "$GITHUB_TOKEN" ]; then
+  >&2 echo "GITHUB_TOKEN is required."
+  exit 1
+fi
+
 if [ -z "$SKYGEAR_VERSION" ]; then
   >&2 echo "SKYGEAR_VERSION is required."
   exit 1
