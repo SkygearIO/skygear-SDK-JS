@@ -482,6 +482,9 @@
       "node.user.metadata": {
         "title": "User.metadata property"
       },
+      "node.version": {
+        "title": "VERSION variable"
+      },
       "react-native.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -950,6 +953,9 @@
       "react-native.user.metadata": {
         "title": "User.metadata property"
       },
+      "react-native.version": {
+        "title": "VERSION variable"
+      },
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -1414,6 +1420,9 @@
       },
       "web.user.metadata": {
         "title": "User.metadata property"
+      },
+      "web.version": {
+        "title": "VERSION variable"
       },
       "web.webapiclient.fetch": {
         "title": "WebAPIClient.fetch() method"
