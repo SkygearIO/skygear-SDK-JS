@@ -482,6 +482,474 @@
       "node.user.metadata": {
         "title": "User.metadata property"
       },
+      "react-native.authcontainer._constructor_": {
+        "title": "AuthContainer.(constructor)"
+      },
+      "react-native.authcontainer.accesstoken": {
+        "title": "AuthContainer.accessToken property"
+      },
+      "react-native.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "react-native.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "react-native.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "react-native.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "react-native.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "react-native.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "react-native.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "react-native.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "react-native.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "react-native.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "react-native.authcontainer.parent": {
+        "title": "AuthContainer.parent property"
+      },
+      "react-native.authcontainer.persistresponse": {
+        "title": "AuthContainer.persistResponse() method"
+      },
+      "react-native.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "react-native.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "react-native.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "react-native.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "react-native.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "react-native.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "react-native.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "react-native.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "react-native.authresponse.accesstoken": {
+        "title": "AuthResponse.accessToken property"
+      },
+      "react-native.authresponse.identity": {
+        "title": "AuthResponse.identity property"
+      },
+      "react-native.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "react-native.authresponse.user": {
+        "title": "AuthResponse.user property"
+      },
+      "react-native.baseapiclient._constructor_": {
+        "title": "BaseAPIClient.(constructor)"
+      },
+      "react-native.baseapiclient.accesstoken": {
+        "title": "BaseAPIClient.accessToken property"
+      },
+      "react-native.baseapiclient.apikey": {
+        "title": "BaseAPIClient.apiKey property"
+      },
+      "react-native.baseapiclient.changepassword": {
+        "title": "BaseAPIClient.changePassword() method"
+      },
+      "react-native.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
+      "react-native.baseapiclient.endpoint": {
+        "title": "BaseAPIClient.endpoint property"
+      },
+      "react-native.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "react-native.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "react-native.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "react-native.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "react-native.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
+      },
+      "react-native.baseapiclient.logout": {
+        "title": "BaseAPIClient.logout() method"
+      },
+      "react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "react-native.baseapiclient.me": {
+        "title": "BaseAPIClient.me() method"
+      },
+      "react-native.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "react-native.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "react-native.baseapiclient.requestemailverification": {
+        "title": "BaseAPIClient.requestEmailVerification() method"
+      },
+      "react-native.baseapiclient.requestforgotpasswordemail": {
+        "title": "BaseAPIClient.requestForgotPasswordEmail() method"
+      },
+      "react-native.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
+      "react-native.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "react-native.baseapiclient.updatemetadata": {
+        "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "react-native.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "react-native.container._constructor_": {
+        "title": "Container.(constructor)"
+      },
+      "react-native.container.apiclient": {
+        "title": "Container.apiClient property"
+      },
+      "react-native.container.auth": {
+        "title": "Container.auth property"
+      },
+      "react-native.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "react-native.container": {
+        "title": "Container class"
+      },
+      "react-native.container.name": {
+        "title": "Container.name property"
+      },
+      "react-native.container.storage": {
+        "title": "Container.storage property"
+      },
+      "react-native.containerstorage._constructor_": {
+        "title": "ContainerStorage.(constructor)"
+      },
+      "react-native.containerstorage.driver": {
+        "title": "ContainerStorage.driver property"
+      },
+      "react-native.containerstorage": {
+        "title": "ContainerStorage class"
+      },
+      "react-native.containerstorage.safedel": {
+        "title": "ContainerStorage.safeDel() method"
+      },
+      "react-native.containerstorage.safeget": {
+        "title": "ContainerStorage.safeGet() method"
+      },
+      "react-native.containerstorage.safegetjson": {
+        "title": "ContainerStorage.safeGetJSON() method"
+      },
+      "react-native.containerstorage.safeset": {
+        "title": "ContainerStorage.safeSet() method"
+      },
+      "react-native.containerstorage.safesetjson": {
+        "title": "ContainerStorage.safeSetJSON() method"
+      },
+      "react-native.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "react-native.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "react-native.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "react-native.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "react-native.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "react-native.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "react-native.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
+      "react-native.decodeerror": {
+        "title": "decodeError() function"
+      },
+      "react-native.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "react-native.decodeuser": {
+        "title": "decodeUser() function"
+      },
+      "react-native.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "react-native.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "react-native.encodeuser": {
+        "title": "encodeUser() function"
+      },
+      "react-native.identity": {
+        "title": "Identity type"
+      },
+      "react-native.jsonarray": {
+        "title": "JSONArray interface"
+      },
+      "react-native.jsonobject": {
+        "title": "JSONObject interface"
+      },
+      "react-native.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "react-native": {
+        "title": "react-native package"
+      },
+      "react-native.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "react-native.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "react-native.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "react-native.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "react-native.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "react-native.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "react-native.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "react-native.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "react-native.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "react-native.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "react-native.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "react-native.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "react-native.passwordidentity.realm": {
+        "title": "PasswordIdentity.realm property"
+      },
+      "react-native.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "react-native.reactnativeapiclient.fetch": {
+        "title": "ReactNativeAPIClient.fetch() method"
+      },
+      "react-native.reactnativeapiclient": {
+        "title": "ReactNativeAPIClient class"
+      },
+      "react-native.reactnativeasyncstoragestoragedriver.del": {
+        "title": "ReactNativeAsyncStorageStorageDriver.del() method"
+      },
+      "react-native.reactnativeasyncstoragestoragedriver.get": {
+        "title": "ReactNativeAsyncStorageStorageDriver.get() method"
+      },
+      "react-native.reactnativeasyncstoragestoragedriver": {
+        "title": "ReactNativeAsyncStorageStorageDriver class"
+      },
+      "react-native.reactnativeasyncstoragestoragedriver.set": {
+        "title": "ReactNativeAsyncStorageStorageDriver.set() method"
+      },
+      "react-native.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "react-native.skygearerror.code": {
+        "title": "SkygearError.code property"
+      },
+      "react-native.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "react-native.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "react-native.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
+      "react-native.skygearerrorcode": {
+        "title": "SkygearErrorCode type"
+      },
+      "react-native.skygearerrorcodeaccesskeynotaccepted": {
+        "title": "SkygearErrorCodeAccessKeyNotAccepted variable"
+      },
+      "react-native.skygearerrorcodeaccesstokennotaccepted": {
+        "title": "SkygearErrorCodeAccessTokenNotAccepted variable"
+      },
+      "react-native.skygearerrorcodeassetsizetoolarge": {
+        "title": "SkygearErrorCodeAssetSizeTooLarge variable"
+      },
+      "react-native.skygearerrorcodeatomicoperationfailure": {
+        "title": "SkygearErrorCodeAtomicOperationFailure variable"
+      },
+      "react-native.skygearerrorcodebadrequest": {
+        "title": "SkygearErrorCodeBadRequest variable"
+      },
+      "react-native.skygearerrorcodeconstraintviolated": {
+        "title": "SkygearErrorCodeConstraintViolated variable"
+      },
+      "react-native.skygearerrorcodedeniedargument": {
+        "title": "SkygearErrorCodeDeniedArgument variable"
+      },
+      "react-native.skygearerrorcodeduplicated": {
+        "title": "SkygearErrorCodeDuplicated variable"
+      },
+      "react-native.skygearerrorcodehooktimeout": {
+        "title": "SkygearErrorCodeHookTimeOut variable"
+      },
+      "react-native.skygearerrorcodeincompatibleschema": {
+        "title": "SkygearErrorCodeIncompatibleSchema variable"
+      },
+      "react-native.skygearerrorcodeinvalidargument": {
+        "title": "SkygearErrorCodeInvalidArgument variable"
+      },
+      "react-native.skygearerrorcodeinvalidcredentials": {
+        "title": "SkygearErrorCodeInvalidCredentials variable"
+      },
+      "react-native.skygearerrorcodeinvalidsignature": {
+        "title": "SkygearErrorCodeInvalidSignature variable"
+      },
+      "react-native.skygearerrorcodenotauthenticated": {
+        "title": "SkygearErrorCodeNotAuthenticated variable"
+      },
+      "react-native.skygearerrorcodenotconfigured": {
+        "title": "SkygearErrorCodeNotConfigured variable"
+      },
+      "react-native.skygearerrorcodenotimplemented": {
+        "title": "SkygearErrorCodeNotImplemented variable"
+      },
+      "react-native.skygearerrorcodenotsupported": {
+        "title": "SkygearErrorCodeNotSupported variable"
+      },
+      "react-native.skygearerrorcodepartialoperationfailure": {
+        "title": "SkygearErrorCodePartialOperationFailure variable"
+      },
+      "react-native.skygearerrorcodepasswordpolicyviolated": {
+        "title": "SkygearErrorCodePasswordPolicyViolated variable"
+      },
+      "react-native.skygearerrorcodepermissiondenied": {
+        "title": "SkygearErrorCodePermissionDenied variable"
+      },
+      "react-native.skygearerrorcodeplugininitializing": {
+        "title": "SkygearErrorCodePluginInitializing variable"
+      },
+      "react-native.skygearerrorcodeplugintimeout": {
+        "title": "SkygearErrorCodePluginTimeout variable"
+      },
+      "react-native.skygearerrorcodepluginunavailable": {
+        "title": "SkygearErrorCodePluginUnavailable variable"
+      },
+      "react-native.skygearerrorcoderecordquerydenied": {
+        "title": "SkygearErrorCodeRecordQueryDenied variable"
+      },
+      "react-native.skygearerrorcoderecordqueryinvalid": {
+        "title": "SkygearErrorCodeRecordQueryInvalid variable"
+      },
+      "react-native.skygearerrorcoderesourcenotfound": {
+        "title": "SkygearErrorCodeResourceNotFound variable"
+      },
+      "react-native.skygearerrorcoderesponsetimeout": {
+        "title": "SkygearErrorCodeResponseTimeout variable"
+      },
+      "react-native.skygearerrorcodeundefinedoperation": {
+        "title": "SkygearErrorCodeUndefinedOperation variable"
+      },
+      "react-native.skygearerrorcodeunexpectedauthinfonotfound": {
+        "title": "SkygearErrorCodeUnexpectedAuthInfoNotFound variable"
+      },
+      "react-native.skygearerrorcodeunexpectederror": {
+        "title": "SkygearErrorCodeUnexpectedError variable"
+      },
+      "react-native.skygearerrorcodeunexpectedunabletoopendatabase": {
+        "title": "SkygearErrorCodeUnexpectedUnableToOpenDatabase variable"
+      },
+      "react-native.skygearerrorcodeunexpectedusernotfound": {
+        "title": "SkygearErrorCodeUnexpectedUserNotFound variable"
+      },
+      "react-native.skygearerrorcodeuserdisabled": {
+        "title": "SkygearErrorCodeUserDisabled variable"
+      },
+      "react-native.skygearerrorcodeverificationrequired": {
+        "title": "SkygearErrorCodeVerificationRequired variable"
+      },
+      "react-native.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "react-native.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "react-native.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "react-native.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "react-native.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "react-native.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "react-native.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
+      "react-native.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "react-native.user.id": {
+        "title": "User.id property"
+      },
+      "react-native.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "react-native.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "react-native.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "react-native.user": {
+        "title": "User interface"
+      },
+      "react-native.user.metadata": {
+        "title": "User.metadata property"
+      },
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
