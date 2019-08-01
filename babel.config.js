@@ -52,7 +52,11 @@ var plugins = [
   [
     "@babel/plugin-transform-runtime",
     {
-      useESModules: true,
+      // During test, we do not use module
+      // because jest by default does not transform node_modules.
+      // useESModules will cause module source code to be loaded,
+      // which is not parsable by jest.
+      useESModules: process.env.NODE_ENV === "test" ? false : true,
     },
   ],
 ];
