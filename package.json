@@ -17,7 +17,8 @@
     "clean-decl": "rimraf 'packages/*/src/**/*.d.ts' 'packages/*/src/**/*.d.ts.map'",
     "clean": "npm run clean-decl && rimraf temp 'packages/*/dist' 'packages/*/index.d.ts'",
     "build": "npm run clean && npm run bundle && npm run docs",
-    "example": "cd packages/example && npm start"
+    "example": "cd packages/example && npm start",
+    "set-version": "npm run lerna -- version --no-changelog --no-commit-hooks --no-git-tag-version --no-push"
   },
   "devDependencies": {
     "@babel/cli": "7.5.5",

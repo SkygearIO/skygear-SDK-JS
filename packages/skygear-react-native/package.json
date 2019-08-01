@@ -1,6 +1,6 @@
 {
   "name": "@skygear/react-native",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "Apache-2.0",
   "main": "dist/skygear-react-native.js",
   "files": [
@@ -8,8 +8,8 @@
     "dist/skygear-react-native.js"
   ],
   "devDependencies": {
-    "@skygear/core": "0.0.0",
-    "@react-native-community/async-storage": "^1.0.0"
+    "@react-native-community/async-storage": "^1.0.0",
+    "@skygear/core": "^0.1.0"
   },
   "peerDependencies": {
     "@react-native-community/async-storage": "^1.0.0"

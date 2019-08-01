@@ -1,6 +1,6 @@
 {
   "name": "@skygear/node",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "Apache-2.0",
   "main": "dist/skygear-node.js",
   "files": [
@@ -8,7 +8,7 @@
     "dist/skygear-node.js"
   ],
   "devDependencies": {
-    "@skygear/core": "0.0.0"
+    "@skygear/core": "^0.1.0"
   },
   "dependencies": {
     "node-fetch": "^2.0.0"
