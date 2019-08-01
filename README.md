@@ -60,5 +60,5 @@ $ npm run prepare-new-release
 # It will be prepended to CHANGELOG.md
 # So make sure the style is consistent.
 $ vim new-release
-$ GIT_USER=<github-username> GITHUB_TOKEN=<github-token> GIT_BRANCH=nextwip SKYGEAR_VERSION=<new-version> ./scripts/release.sh
+$ GIT_USER=<github-username> GITHUB_TOKEN=<github-token> GIT_BRANCH=next SKYGEAR_VERSION=<new-version> ./scripts/release.sh
 ```
