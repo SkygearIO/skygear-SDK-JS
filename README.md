@@ -4,7 +4,7 @@ TODO: Badges
 
 ## Documentation
 
-TODO
+View the API Reference at [https://skygeario.github.io/skygear-SDK-JS/](https://skygeario.github.io/skygear-SDK-JS/).
 
 ## Usage
 
