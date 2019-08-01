@@ -4,3 +4,4 @@ temp/
 *.log
 /packages/skygear-node/index.d.ts
 /packages/skygear-web/index.d.ts
+/packages/skygear-react-native/index.d.ts

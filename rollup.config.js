@@ -124,6 +124,16 @@ export default function makeConfig(commandLineArgs) {
         },
         external: id => id === "node-fetch",
       };
+    case "react-native":
+      return {
+        plugins,
+        input: "packages/skygear-react-native/src/index.ts",
+        output: {
+          file: "packages/skygear-react-native/dist/skygear-react-native.js",
+          format: "cjs",
+        },
+        external: id => /^@react-native-community/.test(id),
+      };
     default:
       throw new Error("unknown bundle type: " + configBundleType);
   }

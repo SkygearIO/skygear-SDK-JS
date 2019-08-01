@@ -69,6 +69,7 @@ function writeIndex() {
     "",
     "- [@skygear/web](./web.md)",
     "- [@skygear/node](./node.md)",
+    "- [@skygear/react-native](./react-native.md)",
     "",
   ];
   fs.writeFileSync(path.join(dir, "./index.md"), lines.join("\n"));
