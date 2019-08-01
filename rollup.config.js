@@ -8,6 +8,7 @@ import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import json from "rollup-plugin-json";
 import resolve from "rollup-plugin-node-resolve";
+import replace from "rollup-plugin-replace";
 
 const extensions = [".mjs", ".js", ".jsx", ".ts", ".tsx"];
 
@@ -56,6 +57,13 @@ const closurePlugin = closure({
 });
 
 const plugins = [
+  replace({
+    values: {
+      "process.env.SKYGEAR_VERSION": JSON.stringify(
+        process.env.SKYGEAR_VERSION || "VERSION"
+      ),
+    },
+  }),
   resolve({
     extensions,
   }),
