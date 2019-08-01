@@ -204,8 +204,8 @@ export function decodeError(err?: any): Error {
     typeof err.name === "string" &&
     typeof err.message === "string"
   ) {
-    throw new SkygearError(err.code, err.message, err.name, err.info);
+    return new SkygearError(err.code, err.message, err.name, err.info);
   }
   // TODO: Should we throw a better error?
-  throw new Error("unknown error");
+  return new Error("unknown error");
 }
