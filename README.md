@@ -51,3 +51,14 @@ $ cd skygear-SDK-JS
 $ npm install
 $ npm run lerna bootstrap
 ```
+
+## Releasing
+
+```sh
+$ npm run prepare-new-release
+# Edit the file new-release.
+# It will be prepended to CHANGELOG.md
+# So make sure the style is consistent.
+$ vim new-release
+$ GIT_USER=<github-username> GIT_BRANCH=nextwip SKYGEAR_VERSION=<new-version> ./scripts/release.sh
+```
