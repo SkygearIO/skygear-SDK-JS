@@ -38,6 +38,9 @@ git commit -m "Update CHANGELOG for v$SKYGEAR_VERSION"
 git tag -a v"$SKYGEAR_VERSION" -m "Release v$SKYGEAR_VERSION"
 git push git@github.com:SkygearIO/skygear-SDK-JS.git "$GIT_BRANCH"
 git push git@github.com:SkygearIO/skygear-SDK-JS.git v"$SKYGEAR_VERSION"
+
+github-release release -u skygeario -r skygear-SDK-JS --draft --tag v"$SKYGEAR_VERSION" --name v"$SKYGEAR_VERSION" --description "$(cat new-release)"
+
 (cd packages/skygear-web && npm publish --access public)
 (cd packages/skygear-node && npm publish --access public)
 (cd packages/skygear-react-native && npm publish --access public)
