@@ -177,12 +177,12 @@ export type SkygearErrorCode =
  * @public
  */
 export class SkygearError extends Error {
-  code: SkygearError;
+  code: SkygearErrorCode;
   name: string;
   info?: JSONObject;
 
   constructor(
-    code: SkygearError,
+    code: SkygearErrorCode,
     message: string,
     name: string,
     info?: JSONObject
