@@ -6,7 +6,7 @@ const projectRoot = path.join(__dirname, "..");
 
 const publishedPackages = [
   "skygear-web",
-  "skygear-node",
+  "skygear-node-client",
   "skygear-react-native",
 ];
 const packages = ["skygear-core", ...publishedPackages];

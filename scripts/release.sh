@@ -47,6 +47,6 @@ git push git@github.com:SkygearIO/skygear-SDK-JS.git v"$SKYGEAR_VERSION"
 github-release release -u skygeario -r skygear-SDK-JS --draft --tag v"$SKYGEAR_VERSION" --name v"$SKYGEAR_VERSION" --description "$(cat new-release)"
 
 (cd packages/skygear-web && npm publish --access public)
-(cd packages/skygear-node && npm publish --access public)
+(cd packages/skygear-node-client && npm publish --access public)
 (cd packages/skygear-react-native && npm publish --access public)
 (cd website && yarn && yarn run build && GIT_USER="$GIT_USER" USE_SSH=true yarn run publish-gh-pages)

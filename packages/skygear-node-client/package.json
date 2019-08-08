@@ -1,11 +1,11 @@
 {
-  "name": "@skygear/node",
+  "name": "@skygear/node-client",
   "version": "2.0.0-alpha.1",
   "license": "Apache-2.0",
-  "main": "dist/skygear-node.js",
+  "main": "dist/skygear-node-client.js",
   "files": [
     "index.d.ts",
-    "dist/skygear-node.js"
+    "dist/skygear-node-client.js"
   ],
   "devDependencies": {
     "@skygear/core": "2.0.0-alpha.1"

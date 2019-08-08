@@ -5,6 +5,6 @@ docs/
 build/
 *.log
 new-release
-/packages/skygear-node/index.d.ts
+/packages/skygear-node-client/index.d.ts
 /packages/skygear-web/index.d.ts
 /packages/skygear-react-native/index.d.ts

@@ -2,8 +2,8 @@
 
 [![@skygear/web](https://img.shields.io/npm/v/@skygear/web.svg?label=@skygear/web)](https://www.npmjs.com/package/@skygear/web)
 [![@skygear/web](https://img.shields.io/npm/dt/@skygear/web.svg?label=@skygear/web)](https://www.npmjs.com/package/@skygear/web)
-[![@skygear/node](https://img.shields.io/npm/v/@skygear/node.svg?label=@skygear/node)](https://www.npmjs.com/package/@skygear/node)
-[![@skygear/node](https://img.shields.io/npm/dt/@skygear/node.svg?label=@skygear/node)](https://www.npmjs.com/package/@skygear/node)
+[![@skygear/node-client](https://img.shields.io/npm/v/@skygear/node-client.svg?label=@skygear/node-client)](https://www.npmjs.com/package/@skygear/node-client)
+[![@skygear/node-client](https://img.shields.io/npm/dt/@skygear/node-client.svg?label=@skygear/node-client)](https://www.npmjs.com/package/@skygear/node-client)
 [![@skygear/react-native](https://img.shields.io/npm/v/@skygear/react-native.svg?label=@skygear/react-native)](https://www.npmjs.com/package/@skygear/react-native)
 [![@skygear/react-native](https://img.shields.io/npm/dt/@skygear/react-native.svg?label=@skygear/react-native)](https://www.npmjs.com/package/@skygear/react-native)
 [![Build Status](https://travis-ci.org/SkygearIO/skygear-SDK-JS.svg?branch=next)](https://travis-ci.org/SkygearIO/skygear-SDK-JS)
@@ -24,7 +24,7 @@ $ npm install --save @skygear/web
 ### Node
 
 ```sh
-$ npm install --save @skygear/node
+$ npm install --save @skygear/node-client
 ```
 
 ### React Native

@@ -122,12 +122,12 @@ export default function makeConfig(commandLineArgs) {
         },
         // external: makeBabelExternal,
       };
-    case "node":
+    case "node-client":
       return {
         plugins,
-        input: "packages/skygear-node/src/index.ts",
+        input: "packages/skygear-node-client/src/index.ts",
         output: {
-          file: "packages/skygear-node/dist/skygear-node.js",
+          file: "packages/skygear-node-client/dist/skygear-node-client.js",
           format: "cjs",
         },
         external: id => id === "node-fetch",
