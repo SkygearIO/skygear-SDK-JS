@@ -1,3 +1,9 @@
+## 2.0.0-alpha.2 (2019-08-08)
+
+### Breaking Changes
+
+- Rename `@skygear/node` to `@skygear/node-client`
+
 ## 2.0.0-alpha.1 (2019-08-01)
 
 ### Features
