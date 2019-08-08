@@ -8,481 +8,481 @@
       "index": {
         "title": "Index"
       },
-      "node.authcontainer._constructor_": {
+      "node-client.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
-      "node.authcontainer.accesstoken": {
+      "node-client.authcontainer.accesstoken": {
         "title": "AuthContainer.accessToken property"
       },
-      "node.authcontainer.changepassword": {
+      "node-client.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
-      "node.authcontainer.currentidentity": {
+      "node-client.authcontainer.currentidentity": {
         "title": "AuthContainer.currentIdentity property"
       },
-      "node.authcontainer.currentuser": {
+      "node-client.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
       },
-      "node.authcontainer.deleteoauthprovider": {
+      "node-client.authcontainer.deleteoauthprovider": {
         "title": "AuthContainer.deleteOAuthProvider() method"
       },
-      "node.authcontainer.linkoauthproviderwithaccesstoken": {
+      "node-client.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
       },
-      "node.authcontainer.login": {
+      "node-client.authcontainer.login": {
         "title": "AuthContainer.login() method"
       },
-      "node.authcontainer.loginoauthproviderwithaccesstoken": {
+      "node-client.authcontainer.loginoauthproviderwithaccesstoken": {
         "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
       },
-      "node.authcontainer.loginwithcustomtoken": {
+      "node-client.authcontainer.loginwithcustomtoken": {
         "title": "AuthContainer.loginWithCustomToken() method"
       },
-      "node.authcontainer.logout": {
+      "node-client.authcontainer.logout": {
         "title": "AuthContainer.logout() method"
       },
-      "node.authcontainer": {
+      "node-client.authcontainer": {
         "title": "AuthContainer class"
       },
-      "node.authcontainer.me": {
+      "node-client.authcontainer.me": {
         "title": "AuthContainer.me() method"
       },
-      "node.authcontainer.parent": {
+      "node-client.authcontainer.parent": {
         "title": "AuthContainer.parent property"
       },
-      "node.authcontainer.persistresponse": {
+      "node-client.authcontainer.persistresponse": {
         "title": "AuthContainer.persistResponse() method"
       },
-      "node.authcontainer.requestemailverification": {
+      "node-client.authcontainer.requestemailverification": {
         "title": "AuthContainer.requestEmailVerification() method"
       },
-      "node.authcontainer.requestforgotpasswordemail": {
+      "node-client.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
       },
-      "node.authcontainer.resetpassword": {
+      "node-client.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
       },
-      "node.authcontainer.signup": {
+      "node-client.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
-      "node.authcontainer.signupwithemail": {
+      "node-client.authcontainer.signupwithemail": {
         "title": "AuthContainer.signupWithEmail() method"
       },
-      "node.authcontainer.signupwithusername": {
+      "node-client.authcontainer.signupwithusername": {
         "title": "AuthContainer.signupWithUsername() method"
       },
-      "node.authcontainer.updatemetadata": {
+      "node-client.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
       },
-      "node.authcontainer.verifywithcode": {
+      "node-client.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
       },
-      "node.authresponse.accesstoken": {
+      "node-client.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
       },
-      "node.authresponse.identity": {
+      "node-client.authresponse.identity": {
         "title": "AuthResponse.identity property"
       },
-      "node.authresponse": {
+      "node-client.authresponse": {
         "title": "AuthResponse interface"
       },
-      "node.authresponse.user": {
+      "node-client.authresponse.user": {
         "title": "AuthResponse.user property"
       },
-      "node.baseapiclient._constructor_": {
+      "node-client.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
       },
-      "node.baseapiclient.accesstoken": {
+      "node-client.baseapiclient.accesstoken": {
         "title": "BaseAPIClient.accessToken property"
       },
-      "node.baseapiclient.apikey": {
+      "node-client.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
-      "node.baseapiclient.changepassword": {
+      "node-client.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
-      "node.baseapiclient.deleteoauthprovider": {
+      "node-client.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
       },
-      "node.baseapiclient.endpoint": {
+      "node-client.baseapiclient.endpoint": {
         "title": "BaseAPIClient.endpoint property"
       },
-      "node.baseapiclient.fetch": {
+      "node-client.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
-      "node.baseapiclient.linkoauthproviderwithaccesstoken": {
+      "node-client.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
-      "node.baseapiclient.login": {
+      "node-client.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
       },
-      "node.baseapiclient.loginoauthproviderwithaccesstoken": {
+      "node-client.baseapiclient.loginoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
       },
-      "node.baseapiclient.loginwithcustomtoken": {
+      "node-client.baseapiclient.loginwithcustomtoken": {
         "title": "BaseAPIClient.loginWithCustomToken() method"
       },
-      "node.baseapiclient.logout": {
+      "node-client.baseapiclient.logout": {
         "title": "BaseAPIClient.logout() method"
       },
-      "node.baseapiclient": {
+      "node-client.baseapiclient": {
         "title": "BaseAPIClient class"
       },
-      "node.baseapiclient.me": {
+      "node-client.baseapiclient.me": {
         "title": "BaseAPIClient.me() method"
       },
-      "node.baseapiclient.post": {
+      "node-client.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
-      "node.baseapiclient.postandreturnauthresponse": {
+      "node-client.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
       },
-      "node.baseapiclient.requestemailverification": {
+      "node-client.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
       },
-      "node.baseapiclient.requestforgotpasswordemail": {
+      "node-client.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
       },
-      "node.baseapiclient.resetpassword": {
+      "node-client.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
-      "node.baseapiclient.signup": {
+      "node-client.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
-      "node.baseapiclient.updatemetadata": {
+      "node-client.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
       },
-      "node.baseapiclient.verifywithcode": {
+      "node-client.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
       },
-      "node.container._constructor_": {
+      "node-client.container._constructor_": {
         "title": "Container.(constructor)"
       },
-      "node.container.apiclient": {
+      "node-client.container.apiclient": {
         "title": "Container.apiClient property"
       },
-      "node.container.auth": {
+      "node-client.container.auth": {
         "title": "Container.auth property"
       },
-      "node.container.configure": {
+      "node-client.container.configure": {
         "title": "Container.configure() method"
       },
-      "node.container": {
+      "node-client.container": {
         "title": "Container class"
       },
-      "node.container.name": {
+      "node-client.container.name": {
         "title": "Container.name property"
       },
-      "node.container.storage": {
+      "node-client.container.storage": {
         "title": "Container.storage property"
       },
-      "node.containerstorage._constructor_": {
+      "node-client.containerstorage._constructor_": {
         "title": "ContainerStorage.(constructor)"
       },
-      "node.containerstorage.driver": {
+      "node-client.containerstorage.driver": {
         "title": "ContainerStorage.driver property"
       },
-      "node.containerstorage": {
+      "node-client.containerstorage": {
         "title": "ContainerStorage class"
       },
-      "node.containerstorage.safedel": {
+      "node-client.containerstorage.safedel": {
         "title": "ContainerStorage.safeDel() method"
       },
-      "node.containerstorage.safeget": {
+      "node-client.containerstorage.safeget": {
         "title": "ContainerStorage.safeGet() method"
       },
-      "node.containerstorage.safegetjson": {
+      "node-client.containerstorage.safegetjson": {
         "title": "ContainerStorage.safeGetJSON() method"
       },
-      "node.containerstorage.safeset": {
+      "node-client.containerstorage.safeset": {
         "title": "ContainerStorage.safeSet() method"
       },
-      "node.containerstorage.safesetjson": {
+      "node-client.containerstorage.safesetjson": {
         "title": "ContainerStorage.safeSetJSON() method"
       },
-      "node.customtokenidentity.claims": {
+      "node-client.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
       },
-      "node.customtokenidentity.id": {
+      "node-client.customtokenidentity.id": {
         "title": "CustomTokenIdentity.id property"
       },
-      "node.customtokenidentity": {
+      "node-client.customtokenidentity": {
         "title": "CustomTokenIdentity interface"
       },
-      "node.customtokenidentity.provideruserid": {
+      "node-client.customtokenidentity.provideruserid": {
         "title": "CustomTokenIdentity.providerUserID property"
       },
-      "node.customtokenidentity.rawprofile": {
+      "node-client.customtokenidentity.rawprofile": {
         "title": "CustomTokenIdentity.rawProfile property"
       },
-      "node.customtokenidentity.type": {
+      "node-client.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
       },
-      "node.decodeauthresponse": {
+      "node-client.decodeauthresponse": {
         "title": "decodeAuthResponse() function"
       },
-      "node.decodeerror": {
+      "node-client.decodeerror": {
         "title": "decodeError() function"
       },
-      "node.decodeidentity": {
+      "node-client.decodeidentity": {
         "title": "decodeIdentity() function"
       },
-      "node.decodeuser": {
+      "node-client.decodeuser": {
         "title": "decodeUser() function"
       },
-      "node.defaultcontainer": {
+      "node-client.defaultcontainer": {
         "title": "defaultContainer variable"
       },
-      "node.encodeidentity": {
+      "node-client.encodeidentity": {
         "title": "encodeIdentity() function"
       },
-      "node.encodeuser": {
+      "node-client.encodeuser": {
         "title": "encodeUser() function"
       },
-      "node.identity": {
+      "node-client.identity": {
         "title": "Identity type"
       },
-      "node.jsonarray": {
+      "node-client.jsonarray": {
         "title": "JSONArray interface"
       },
-      "node.jsonobject": {
+      "node-client.jsonobject": {
         "title": "JSONObject interface"
       },
-      "node.jsonvalue": {
+      "node-client.jsonvalue": {
         "title": "JSONValue type"
       },
-      "node": {
-        "title": "node package"
+      "node-client": {
+        "title": "node-client package"
       },
-      "node.memorystoragedriver._constructor_": {
+      "node-client.memorystoragedriver._constructor_": {
         "title": "MemoryStorageDriver.(constructor)"
       },
-      "node.memorystoragedriver.backingstore": {
+      "node-client.memorystoragedriver.backingstore": {
         "title": "MemoryStorageDriver.backingStore property"
       },
-      "node.memorystoragedriver.del": {
+      "node-client.memorystoragedriver.del": {
         "title": "MemoryStorageDriver.del() method"
       },
-      "node.memorystoragedriver.get": {
+      "node-client.memorystoragedriver.get": {
         "title": "MemoryStorageDriver.get() method"
       },
-      "node.memorystoragedriver": {
+      "node-client.memorystoragedriver": {
         "title": "MemoryStorageDriver class"
       },
-      "node.memorystoragedriver.set": {
+      "node-client.memorystoragedriver.set": {
         "title": "MemoryStorageDriver.set() method"
       },
-      "node.nodeapiclient.fetch": {
+      "node-client.nodeapiclient.fetch": {
         "title": "NodeAPIClient.fetch() method"
       },
-      "node.nodeapiclient": {
+      "node-client.nodeapiclient": {
         "title": "NodeAPIClient class"
       },
-      "node.oauthidentity.claims": {
+      "node-client.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
       },
-      "node.oauthidentity.id": {
+      "node-client.oauthidentity.id": {
         "title": "OAuthIdentity.id property"
       },
-      "node.oauthidentity": {
+      "node-client.oauthidentity": {
         "title": "OAuthIdentity interface"
       },
-      "node.oauthidentity.providertype": {
+      "node-client.oauthidentity.providertype": {
         "title": "OAuthIdentity.providerType property"
       },
-      "node.oauthidentity.provideruserid": {
+      "node-client.oauthidentity.provideruserid": {
         "title": "OAuthIdentity.providerUserID property"
       },
-      "node.oauthidentity.rawprofile": {
+      "node-client.oauthidentity.rawprofile": {
         "title": "OAuthIdentity.rawProfile property"
       },
-      "node.oauthidentity.type": {
+      "node-client.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
       },
-      "node.passwordidentity.claims": {
+      "node-client.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
       },
-      "node.passwordidentity.id": {
+      "node-client.passwordidentity.id": {
         "title": "PasswordIdentity.id property"
       },
-      "node.passwordidentity.loginid": {
+      "node-client.passwordidentity.loginid": {
         "title": "PasswordIdentity.loginID property"
       },
-      "node.passwordidentity.loginidkey": {
+      "node-client.passwordidentity.loginidkey": {
         "title": "PasswordIdentity.loginIDKey property"
       },
-      "node.passwordidentity": {
+      "node-client.passwordidentity": {
         "title": "PasswordIdentity interface"
       },
-      "node.passwordidentity.realm": {
+      "node-client.passwordidentity.realm": {
         "title": "PasswordIdentity.realm property"
       },
-      "node.passwordidentity.type": {
+      "node-client.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
-      "node.skygearerror._constructor_": {
+      "node-client.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
-      "node.skygearerror.code": {
+      "node-client.skygearerror.code": {
         "title": "SkygearError.code property"
       },
-      "node.skygearerror.info": {
+      "node-client.skygearerror.info": {
         "title": "SkygearError.info property"
       },
-      "node.skygearerror": {
+      "node-client.skygearerror": {
         "title": "SkygearError class"
       },
-      "node.skygearerror.name": {
+      "node-client.skygearerror.name": {
         "title": "SkygearError.name property"
       },
-      "node.skygearerrorcode": {
+      "node-client.skygearerrorcode": {
         "title": "SkygearErrorCode type"
       },
-      "node.skygearerrorcodeaccesskeynotaccepted": {
+      "node-client.skygearerrorcodeaccesskeynotaccepted": {
         "title": "SkygearErrorCodeAccessKeyNotAccepted variable"
       },
-      "node.skygearerrorcodeaccesstokennotaccepted": {
+      "node-client.skygearerrorcodeaccesstokennotaccepted": {
         "title": "SkygearErrorCodeAccessTokenNotAccepted variable"
       },
-      "node.skygearerrorcodeassetsizetoolarge": {
+      "node-client.skygearerrorcodeassetsizetoolarge": {
         "title": "SkygearErrorCodeAssetSizeTooLarge variable"
       },
-      "node.skygearerrorcodeatomicoperationfailure": {
+      "node-client.skygearerrorcodeatomicoperationfailure": {
         "title": "SkygearErrorCodeAtomicOperationFailure variable"
       },
-      "node.skygearerrorcodebadrequest": {
+      "node-client.skygearerrorcodebadrequest": {
         "title": "SkygearErrorCodeBadRequest variable"
       },
-      "node.skygearerrorcodeconstraintviolated": {
+      "node-client.skygearerrorcodeconstraintviolated": {
         "title": "SkygearErrorCodeConstraintViolated variable"
       },
-      "node.skygearerrorcodedeniedargument": {
+      "node-client.skygearerrorcodedeniedargument": {
         "title": "SkygearErrorCodeDeniedArgument variable"
       },
-      "node.skygearerrorcodeduplicated": {
+      "node-client.skygearerrorcodeduplicated": {
         "title": "SkygearErrorCodeDuplicated variable"
       },
-      "node.skygearerrorcodehooktimeout": {
+      "node-client.skygearerrorcodehooktimeout": {
         "title": "SkygearErrorCodeHookTimeOut variable"
       },
-      "node.skygearerrorcodeincompatibleschema": {
+      "node-client.skygearerrorcodeincompatibleschema": {
         "title": "SkygearErrorCodeIncompatibleSchema variable"
       },
-      "node.skygearerrorcodeinvalidargument": {
+      "node-client.skygearerrorcodeinvalidargument": {
         "title": "SkygearErrorCodeInvalidArgument variable"
       },
-      "node.skygearerrorcodeinvalidcredentials": {
+      "node-client.skygearerrorcodeinvalidcredentials": {
         "title": "SkygearErrorCodeInvalidCredentials variable"
       },
-      "node.skygearerrorcodeinvalidsignature": {
+      "node-client.skygearerrorcodeinvalidsignature": {
         "title": "SkygearErrorCodeInvalidSignature variable"
       },
-      "node.skygearerrorcodenotauthenticated": {
+      "node-client.skygearerrorcodenotauthenticated": {
         "title": "SkygearErrorCodeNotAuthenticated variable"
       },
-      "node.skygearerrorcodenotconfigured": {
+      "node-client.skygearerrorcodenotconfigured": {
         "title": "SkygearErrorCodeNotConfigured variable"
       },
-      "node.skygearerrorcodenotimplemented": {
+      "node-client.skygearerrorcodenotimplemented": {
         "title": "SkygearErrorCodeNotImplemented variable"
       },
-      "node.skygearerrorcodenotsupported": {
+      "node-client.skygearerrorcodenotsupported": {
         "title": "SkygearErrorCodeNotSupported variable"
       },
-      "node.skygearerrorcodepartialoperationfailure": {
+      "node-client.skygearerrorcodepartialoperationfailure": {
         "title": "SkygearErrorCodePartialOperationFailure variable"
       },
-      "node.skygearerrorcodepasswordpolicyviolated": {
+      "node-client.skygearerrorcodepasswordpolicyviolated": {
         "title": "SkygearErrorCodePasswordPolicyViolated variable"
       },
-      "node.skygearerrorcodepermissiondenied": {
+      "node-client.skygearerrorcodepermissiondenied": {
         "title": "SkygearErrorCodePermissionDenied variable"
       },
-      "node.skygearerrorcodeplugininitializing": {
+      "node-client.skygearerrorcodeplugininitializing": {
         "title": "SkygearErrorCodePluginInitializing variable"
       },
-      "node.skygearerrorcodeplugintimeout": {
+      "node-client.skygearerrorcodeplugintimeout": {
         "title": "SkygearErrorCodePluginTimeout variable"
       },
-      "node.skygearerrorcodepluginunavailable": {
+      "node-client.skygearerrorcodepluginunavailable": {
         "title": "SkygearErrorCodePluginUnavailable variable"
       },
-      "node.skygearerrorcoderecordquerydenied": {
+      "node-client.skygearerrorcoderecordquerydenied": {
         "title": "SkygearErrorCodeRecordQueryDenied variable"
       },
-      "node.skygearerrorcoderecordqueryinvalid": {
+      "node-client.skygearerrorcoderecordqueryinvalid": {
         "title": "SkygearErrorCodeRecordQueryInvalid variable"
       },
-      "node.skygearerrorcoderesourcenotfound": {
+      "node-client.skygearerrorcoderesourcenotfound": {
         "title": "SkygearErrorCodeResourceNotFound variable"
       },
-      "node.skygearerrorcoderesponsetimeout": {
+      "node-client.skygearerrorcoderesponsetimeout": {
         "title": "SkygearErrorCodeResponseTimeout variable"
       },
-      "node.skygearerrorcodeundefinedoperation": {
+      "node-client.skygearerrorcodeundefinedoperation": {
         "title": "SkygearErrorCodeUndefinedOperation variable"
       },
-      "node.skygearerrorcodeunexpectedauthinfonotfound": {
+      "node-client.skygearerrorcodeunexpectedauthinfonotfound": {
         "title": "SkygearErrorCodeUnexpectedAuthInfoNotFound variable"
       },
-      "node.skygearerrorcodeunexpectederror": {
+      "node-client.skygearerrorcodeunexpectederror": {
         "title": "SkygearErrorCodeUnexpectedError variable"
       },
-      "node.skygearerrorcodeunexpectedunabletoopendatabase": {
+      "node-client.skygearerrorcodeunexpectedunabletoopendatabase": {
         "title": "SkygearErrorCodeUnexpectedUnableToOpenDatabase variable"
       },
-      "node.skygearerrorcodeunexpectedusernotfound": {
+      "node-client.skygearerrorcodeunexpectedusernotfound": {
         "title": "SkygearErrorCodeUnexpectedUserNotFound variable"
       },
-      "node.skygearerrorcodeuserdisabled": {
+      "node-client.skygearerrorcodeuserdisabled": {
         "title": "SkygearErrorCodeUserDisabled variable"
       },
-      "node.skygearerrorcodeverificationrequired": {
+      "node-client.skygearerrorcodeverificationrequired": {
         "title": "SkygearErrorCodeVerificationRequired variable"
       },
-      "node.ssologinoptions": {
+      "node-client.ssologinoptions": {
         "title": "SSOLoginOptions interface"
       },
-      "node.ssologinoptions.mergerealm": {
+      "node-client.ssologinoptions.mergerealm": {
         "title": "SSOLoginOptions.mergeRealm property"
       },
-      "node.ssologinoptions.onuserduplicate": {
+      "node-client.ssologinoptions.onuserduplicate": {
         "title": "SSOLoginOptions.onUserDuplicate property"
       },
-      "node.storagedriver.del": {
+      "node-client.storagedriver.del": {
         "title": "StorageDriver.del() method"
       },
-      "node.storagedriver.get": {
+      "node-client.storagedriver.get": {
         "title": "StorageDriver.get() method"
       },
-      "node.storagedriver": {
+      "node-client.storagedriver": {
         "title": "StorageDriver interface"
       },
-      "node.storagedriver.set": {
+      "node-client.storagedriver.set": {
         "title": "StorageDriver.set() method"
       },
-      "node.user.createdat": {
+      "node-client.user.createdat": {
         "title": "User.createdAt property"
       },
-      "node.user.id": {
+      "node-client.user.id": {
         "title": "User.id property"
       },
-      "node.user.isdisabled": {
+      "node-client.user.isdisabled": {
         "title": "User.isDisabled property"
       },
-      "node.user.isverified": {
+      "node-client.user.isverified": {
         "title": "User.isVerified property"
       },
-      "node.user.lastloginat": {
+      "node-client.user.lastloginat": {
         "title": "User.lastLoginAt property"
       },
-      "node.user": {
+      "node-client.user": {
         "title": "User interface"
       },
-      "node.user.metadata": {
+      "node-client.user.metadata": {
         "title": "User.metadata property"
       },
-      "node.version": {
+      "node-client.version": {
         "title": "VERSION variable"
       },
       "react-native.authcontainer._constructor_": {
