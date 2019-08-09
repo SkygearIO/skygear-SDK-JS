@@ -1,3 +1,9 @@
+## 2.0.0-alpha.3 (2019-08-09)
+
+### Features
+
+- Make apiClient a type parameter so that WebContainer can be extended with extended WebAPIClient.
+
 ## 2.0.0-alpha.2 (2019-08-08)
 
 ### Breaking Changes
