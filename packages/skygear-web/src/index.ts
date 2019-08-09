@@ -11,7 +11,7 @@ export * from "./types";
 /**
  * @public
  */
-export const defaultContainer: WebContainer = new WebContainer(
+export const defaultContainer: WebContainer<WebAPIClient> = new WebContainer(
   "default",
   new WebAPIClient({
     apiKey: "",

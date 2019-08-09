@@ -39,11 +39,11 @@ function decodeMessage(message: any) {
 /**
  * @public
  */
-export class WebAuthContainer extends AuthContainer<WebAPIClient> {
+export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   private oauthWindowObserver: NewWindowObserver | null;
   private oauthResultObserver: WindowMessageObserver | null;
 
-  constructor(parent: WebContainer) {
+  constructor(parent: WebContainer<T>) {
     super(parent);
     this.oauthWindowObserver = null;
     this.oauthResultObserver = null;
@@ -203,14 +203,10 @@ export class WebAuthContainer extends AuthContainer<WebAPIClient> {
 /**
  * @public
  */
-export class WebContainer extends Container<WebAPIClient> {
-  auth: WebAuthContainer;
+export class WebContainer<T extends WebAPIClient> extends Container<T> {
+  auth: WebAuthContainer<T>;
 
-  constructor(
-    name: string,
-    apiClient: WebAPIClient,
-    storage: ContainerStorage
-  ) {
+  constructor(name: string, apiClient: T, storage: ContainerStorage) {
     super(name, apiClient, storage);
     this.auth = new WebAuthContainer(this);
   }
