@@ -1,3 +1,10 @@
+## 2.0.0-alpha.4 (2019-08-14)
+
+### Features
+
+- Add encodeQueryComponent and encodeQuery
+- Add BaseAPIClient.get
+
 ## 2.0.0-alpha.3 (2019-08-09)
 
 ### Features
