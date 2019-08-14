@@ -56,20 +56,45 @@ export abstract class BaseAPIClient {
 
   abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-  protected async post(path: string, payload?: any): Promise<any> {
-    const url = this.endpoint + path;
-    const headers: any = {
+  protected prepareHeaders(): { [name: string]: string } {
+    const headers: { [name: string]: string } = {
       "x-skygear-api-key": this.apiKey,
     };
     if (this.accessToken) {
       headers["x-skygear-access-token"] = this.accessToken;
     }
+    return headers;
+  }
+
+  protected async post(path: string, payload?: any): Promise<any> {
+    const url = this.endpoint + path;
+    const headers = this.prepareHeaders();
     const response = await this.fetch(url, {
       method: "POST",
       mode: "cors",
       credentials: "include",
       headers,
       body: payload && JSON.stringify(payload),
+    });
+    const jsonBody = await response.json();
+
+    if (jsonBody["result"]) {
+      return jsonBody["result"];
+    } else if (jsonBody["error"]) {
+      throw decodeError(jsonBody["error"]);
+    }
+
+    throw decodeError();
+  }
+
+  protected async get(path: string, query?: [string, string][]): Promise<any> {
+    const url = this.endpoint + path + encodeQuery(query);
+    const headers = this.prepareHeaders();
+    const response = await this.fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers,
     });
     const jsonBody = await response.json();
 
