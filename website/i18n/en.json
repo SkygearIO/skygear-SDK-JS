@@ -110,6 +110,9 @@
       "node-client.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "node-client.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
       "node-client.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
@@ -136,6 +139,9 @@
       },
       "node-client.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "node-client.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
       },
       "node-client.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -235,6 +241,12 @@
       },
       "node-client.encodeidentity": {
         "title": "encodeIdentity() function"
+      },
+      "node-client.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "node-client.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
       },
       "node-client.encodeuser": {
         "title": "encodeUser() function"
@@ -587,6 +599,9 @@
       "react-native.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "react-native.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
       "react-native.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
@@ -613,6 +628,9 @@
       },
       "react-native.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "react-native.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
       },
       "react-native.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -712,6 +730,12 @@
       },
       "react-native.encodeidentity": {
         "title": "encodeIdentity() function"
+      },
+      "react-native.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "react-native.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
       },
       "react-native.encodeuser": {
         "title": "encodeUser() function"
@@ -1058,6 +1082,9 @@
       "web.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "web.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
       "web.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
@@ -1084,6 +1111,9 @@
       },
       "web.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "web.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
       },
       "web.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -1183,6 +1213,12 @@
       },
       "web.encodeidentity": {
         "title": "encodeIdentity() function"
+      },
+      "web.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "web.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
       },
       "web.encodeuser": {
         "title": "encodeUser() function"
