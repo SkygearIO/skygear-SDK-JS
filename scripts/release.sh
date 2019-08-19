@@ -30,7 +30,6 @@ else
 fi
 
 npm run clean
-npm run set-version "$SKYGEAR_VERSION"
 npm run format
 npm run lint
 npm run typecheck
