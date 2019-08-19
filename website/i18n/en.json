@@ -101,6 +101,9 @@
       "node-client.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
+      "node-client.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
       "node-client.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
       },
@@ -142,6 +145,9 @@
       },
       "node-client.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "node-client.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
       },
       "node-client.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -590,6 +596,9 @@
       "react-native.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
+      "react-native.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
       "react-native.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
       },
@@ -631,6 +640,9 @@
       },
       "react-native.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "react-native.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
       },
       "react-native.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -1073,6 +1085,9 @@
       "web.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
       },
+      "web.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
       "web.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
       },
@@ -1114,6 +1129,9 @@
       },
       "web.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "web.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
       },
       "web.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
