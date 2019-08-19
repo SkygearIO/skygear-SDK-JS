@@ -1,3 +1,9 @@
+## 2.0.0-alpha.5 (2019-08-19)
+
+### Breaking Changes
+
+- Support json and query for common HTTP methods
+
 ## 2.0.0-alpha.4 (2019-08-14)
 
 ### Features
