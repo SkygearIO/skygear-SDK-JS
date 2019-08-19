@@ -12,7 +12,9 @@ export interface JSONArray extends Array<JSONValue> {}
  * @public
  */
 export interface JSONObject {
-  [key: string]: JSONValue;
+  // undefined is not valid json value but it is included
+  // so that undefined value is skipped.
+  [key: string]: JSONValue | undefined;
 }
 
 /**

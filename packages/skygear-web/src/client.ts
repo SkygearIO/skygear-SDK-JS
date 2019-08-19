@@ -36,6 +36,6 @@ export class WebAPIClient extends BaseAPIClient {
       merge_realm: options.mergeRealm,
       on_user_duplicate: options.onUserDuplicate,
     };
-    return this.post(path, payload);
+    return this.post(path, { json: payload });
   }
 }

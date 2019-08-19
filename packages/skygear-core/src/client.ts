@@ -71,15 +71,28 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
-  protected async post(path: string, payload?: any): Promise<any> {
-    const url = this.endpoint + path;
+  protected async request(
+    method: "GET" | "POST" | "DELETE",
+    path: string,
+    options: { json?: JSONObject; query?: [string, string][] } = {}
+  ): Promise<any> {
+    const { json, query } = options;
+    let url = this.endpoint + path;
+    if (query != null) {
+      url += encodeQuery(query);
+    }
+
     const headers = this.prepareHeaders();
+    if (json != null) {
+      headers["content-type"] = "application/json";
+    }
+
     const response = await this.fetch(url, {
-      method: "POST",
+      method,
+      headers,
       mode: "cors",
       credentials: "include",
-      headers,
-      body: payload && JSON.stringify(payload),
+      body: json && JSON.stringify(json),
     });
     const jsonBody = await response.json();
 
@@ -92,24 +105,25 @@ export abstract class BaseAPIClient {
     throw decodeError();
   }
 
-  protected async get(path: string, query?: [string, string][]): Promise<any> {
-    const url = this.endpoint + path + encodeQuery(query);
-    const headers = this.prepareHeaders();
-    const response = await this.fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-      headers,
-    });
-    const jsonBody = await response.json();
+  protected async post(
+    path: string,
+    options?: { json?: JSONObject; query?: [string, string][] }
+  ): Promise<any> {
+    return this.request("POST", path, options);
+  }
 
-    if (jsonBody["result"]) {
-      return jsonBody["result"];
-    } else if (jsonBody["error"]) {
-      throw decodeError(jsonBody["error"]);
-    }
+  protected async get(
+    path: string,
+    options?: { query?: [string, string][] }
+  ): Promise<any> {
+    return this.request("GET", path, options);
+  }
 
-    throw decodeError();
+  protected async del(
+    path: string,
+    options: { json?: JSONObject; query?: [string, string][] }
+  ): Promise<any> {
+    return this.request("DELETE", path, options);
   }
 
   protected async postAndReturnAuthResponse(
@@ -191,7 +205,7 @@ export abstract class BaseAPIClient {
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
     const payload = { email };
-    await this.post("/_auth/forgot_password", payload);
+    await this.post("/_auth/forgot_password", { json: payload });
   }
 
   async resetPassword(form: {
@@ -206,7 +220,7 @@ export abstract class BaseAPIClient {
       expire_at: form.expireAt,
       new_password: form.newPassword,
     };
-    await this.post("/_auth/forgot_password/reset_password", payload);
+    await this.post("/_auth/forgot_password/reset_password", { json: payload });
   }
 
   async requestEmailVerification(email: string): Promise<void> {
@@ -214,12 +228,12 @@ export abstract class BaseAPIClient {
       login_id_type: "email",
       login_id: email,
     };
-    await this.post("/_auth/verify_request", payload);
+    await this.post("/_auth/verify_request", { json: payload });
   }
 
   async verifyWithCode(code: string): Promise<void> {
     const payload = { code };
-    await this.post("/_auth/verify_code", payload);
+    await this.post("/_auth/verify_code", { json: payload });
   }
 
   async loginWithCustomToken(
