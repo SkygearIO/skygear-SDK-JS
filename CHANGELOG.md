@@ -1,3 +1,9 @@
+## 2.0.0-alpha.7 (2019-08-20)
+
+### Bug Fixes
+
+- Fix auth action request body is not serialized
+
 ## 2.0.0-alpha.6 (2019-08-20)
 
 ### Breaking Changes
