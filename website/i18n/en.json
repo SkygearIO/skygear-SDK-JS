@@ -341,122 +341,14 @@
       "node-client.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
-      "node-client.skygearerror.code": {
-        "title": "SkygearError.code property"
-      },
       "node-client.skygearerror.info": {
         "title": "SkygearError.info property"
       },
       "node-client.skygearerror": {
         "title": "SkygearError class"
       },
-      "node-client.skygearerror.name": {
-        "title": "SkygearError.name property"
-      },
-      "node-client.skygearerrorcode": {
-        "title": "SkygearErrorCode type"
-      },
-      "node-client.skygearerrorcodeaccesskeynotaccepted": {
-        "title": "SkygearErrorCodeAccessKeyNotAccepted variable"
-      },
-      "node-client.skygearerrorcodeaccesstokennotaccepted": {
-        "title": "SkygearErrorCodeAccessTokenNotAccepted variable"
-      },
-      "node-client.skygearerrorcodeassetsizetoolarge": {
-        "title": "SkygearErrorCodeAssetSizeTooLarge variable"
-      },
-      "node-client.skygearerrorcodeatomicoperationfailure": {
-        "title": "SkygearErrorCodeAtomicOperationFailure variable"
-      },
-      "node-client.skygearerrorcodebadrequest": {
-        "title": "SkygearErrorCodeBadRequest variable"
-      },
-      "node-client.skygearerrorcodeconstraintviolated": {
-        "title": "SkygearErrorCodeConstraintViolated variable"
-      },
-      "node-client.skygearerrorcodedeniedargument": {
-        "title": "SkygearErrorCodeDeniedArgument variable"
-      },
-      "node-client.skygearerrorcodeduplicated": {
-        "title": "SkygearErrorCodeDuplicated variable"
-      },
-      "node-client.skygearerrorcodehooktimeout": {
-        "title": "SkygearErrorCodeHookTimeOut variable"
-      },
-      "node-client.skygearerrorcodeincompatibleschema": {
-        "title": "SkygearErrorCodeIncompatibleSchema variable"
-      },
-      "node-client.skygearerrorcodeinvalidargument": {
-        "title": "SkygearErrorCodeInvalidArgument variable"
-      },
-      "node-client.skygearerrorcodeinvalidcredentials": {
-        "title": "SkygearErrorCodeInvalidCredentials variable"
-      },
-      "node-client.skygearerrorcodeinvalidsignature": {
-        "title": "SkygearErrorCodeInvalidSignature variable"
-      },
-      "node-client.skygearerrorcodenotauthenticated": {
-        "title": "SkygearErrorCodeNotAuthenticated variable"
-      },
-      "node-client.skygearerrorcodenotconfigured": {
-        "title": "SkygearErrorCodeNotConfigured variable"
-      },
-      "node-client.skygearerrorcodenotimplemented": {
-        "title": "SkygearErrorCodeNotImplemented variable"
-      },
-      "node-client.skygearerrorcodenotsupported": {
-        "title": "SkygearErrorCodeNotSupported variable"
-      },
-      "node-client.skygearerrorcodepartialoperationfailure": {
-        "title": "SkygearErrorCodePartialOperationFailure variable"
-      },
-      "node-client.skygearerrorcodepasswordpolicyviolated": {
-        "title": "SkygearErrorCodePasswordPolicyViolated variable"
-      },
-      "node-client.skygearerrorcodepermissiondenied": {
-        "title": "SkygearErrorCodePermissionDenied variable"
-      },
-      "node-client.skygearerrorcodeplugininitializing": {
-        "title": "SkygearErrorCodePluginInitializing variable"
-      },
-      "node-client.skygearerrorcodeplugintimeout": {
-        "title": "SkygearErrorCodePluginTimeout variable"
-      },
-      "node-client.skygearerrorcodepluginunavailable": {
-        "title": "SkygearErrorCodePluginUnavailable variable"
-      },
-      "node-client.skygearerrorcoderecordquerydenied": {
-        "title": "SkygearErrorCodeRecordQueryDenied variable"
-      },
-      "node-client.skygearerrorcoderecordqueryinvalid": {
-        "title": "SkygearErrorCodeRecordQueryInvalid variable"
-      },
-      "node-client.skygearerrorcoderesourcenotfound": {
-        "title": "SkygearErrorCodeResourceNotFound variable"
-      },
-      "node-client.skygearerrorcoderesponsetimeout": {
-        "title": "SkygearErrorCodeResponseTimeout variable"
-      },
-      "node-client.skygearerrorcodeundefinedoperation": {
-        "title": "SkygearErrorCodeUndefinedOperation variable"
-      },
-      "node-client.skygearerrorcodeunexpectedauthinfonotfound": {
-        "title": "SkygearErrorCodeUnexpectedAuthInfoNotFound variable"
-      },
-      "node-client.skygearerrorcodeunexpectederror": {
-        "title": "SkygearErrorCodeUnexpectedError variable"
-      },
-      "node-client.skygearerrorcodeunexpectedunabletoopendatabase": {
-        "title": "SkygearErrorCodeUnexpectedUnableToOpenDatabase variable"
-      },
-      "node-client.skygearerrorcodeunexpectedusernotfound": {
-        "title": "SkygearErrorCodeUnexpectedUserNotFound variable"
-      },
-      "node-client.skygearerrorcodeuserdisabled": {
-        "title": "SkygearErrorCodeUserDisabled variable"
-      },
-      "node-client.skygearerrorcodeverificationrequired": {
-        "title": "SkygearErrorCodeVerificationRequired variable"
+      "node-client.skygearerrorname": {
+        "title": "SkygearErrorName type"
       },
       "node-client.ssologinoptions": {
         "title": "SSOLoginOptions interface"
@@ -830,122 +722,14 @@
       "react-native.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
-      "react-native.skygearerror.code": {
-        "title": "SkygearError.code property"
-      },
       "react-native.skygearerror.info": {
         "title": "SkygearError.info property"
       },
       "react-native.skygearerror": {
         "title": "SkygearError class"
       },
-      "react-native.skygearerror.name": {
-        "title": "SkygearError.name property"
-      },
-      "react-native.skygearerrorcode": {
-        "title": "SkygearErrorCode type"
-      },
-      "react-native.skygearerrorcodeaccesskeynotaccepted": {
-        "title": "SkygearErrorCodeAccessKeyNotAccepted variable"
-      },
-      "react-native.skygearerrorcodeaccesstokennotaccepted": {
-        "title": "SkygearErrorCodeAccessTokenNotAccepted variable"
-      },
-      "react-native.skygearerrorcodeassetsizetoolarge": {
-        "title": "SkygearErrorCodeAssetSizeTooLarge variable"
-      },
-      "react-native.skygearerrorcodeatomicoperationfailure": {
-        "title": "SkygearErrorCodeAtomicOperationFailure variable"
-      },
-      "react-native.skygearerrorcodebadrequest": {
-        "title": "SkygearErrorCodeBadRequest variable"
-      },
-      "react-native.skygearerrorcodeconstraintviolated": {
-        "title": "SkygearErrorCodeConstraintViolated variable"
-      },
-      "react-native.skygearerrorcodedeniedargument": {
-        "title": "SkygearErrorCodeDeniedArgument variable"
-      },
-      "react-native.skygearerrorcodeduplicated": {
-        "title": "SkygearErrorCodeDuplicated variable"
-      },
-      "react-native.skygearerrorcodehooktimeout": {
-        "title": "SkygearErrorCodeHookTimeOut variable"
-      },
-      "react-native.skygearerrorcodeincompatibleschema": {
-        "title": "SkygearErrorCodeIncompatibleSchema variable"
-      },
-      "react-native.skygearerrorcodeinvalidargument": {
-        "title": "SkygearErrorCodeInvalidArgument variable"
-      },
-      "react-native.skygearerrorcodeinvalidcredentials": {
-        "title": "SkygearErrorCodeInvalidCredentials variable"
-      },
-      "react-native.skygearerrorcodeinvalidsignature": {
-        "title": "SkygearErrorCodeInvalidSignature variable"
-      },
-      "react-native.skygearerrorcodenotauthenticated": {
-        "title": "SkygearErrorCodeNotAuthenticated variable"
-      },
-      "react-native.skygearerrorcodenotconfigured": {
-        "title": "SkygearErrorCodeNotConfigured variable"
-      },
-      "react-native.skygearerrorcodenotimplemented": {
-        "title": "SkygearErrorCodeNotImplemented variable"
-      },
-      "react-native.skygearerrorcodenotsupported": {
-        "title": "SkygearErrorCodeNotSupported variable"
-      },
-      "react-native.skygearerrorcodepartialoperationfailure": {
-        "title": "SkygearErrorCodePartialOperationFailure variable"
-      },
-      "react-native.skygearerrorcodepasswordpolicyviolated": {
-        "title": "SkygearErrorCodePasswordPolicyViolated variable"
-      },
-      "react-native.skygearerrorcodepermissiondenied": {
-        "title": "SkygearErrorCodePermissionDenied variable"
-      },
-      "react-native.skygearerrorcodeplugininitializing": {
-        "title": "SkygearErrorCodePluginInitializing variable"
-      },
-      "react-native.skygearerrorcodeplugintimeout": {
-        "title": "SkygearErrorCodePluginTimeout variable"
-      },
-      "react-native.skygearerrorcodepluginunavailable": {
-        "title": "SkygearErrorCodePluginUnavailable variable"
-      },
-      "react-native.skygearerrorcoderecordquerydenied": {
-        "title": "SkygearErrorCodeRecordQueryDenied variable"
-      },
-      "react-native.skygearerrorcoderecordqueryinvalid": {
-        "title": "SkygearErrorCodeRecordQueryInvalid variable"
-      },
-      "react-native.skygearerrorcoderesourcenotfound": {
-        "title": "SkygearErrorCodeResourceNotFound variable"
-      },
-      "react-native.skygearerrorcoderesponsetimeout": {
-        "title": "SkygearErrorCodeResponseTimeout variable"
-      },
-      "react-native.skygearerrorcodeundefinedoperation": {
-        "title": "SkygearErrorCodeUndefinedOperation variable"
-      },
-      "react-native.skygearerrorcodeunexpectedauthinfonotfound": {
-        "title": "SkygearErrorCodeUnexpectedAuthInfoNotFound variable"
-      },
-      "react-native.skygearerrorcodeunexpectederror": {
-        "title": "SkygearErrorCodeUnexpectedError variable"
-      },
-      "react-native.skygearerrorcodeunexpectedunabletoopendatabase": {
-        "title": "SkygearErrorCodeUnexpectedUnableToOpenDatabase variable"
-      },
-      "react-native.skygearerrorcodeunexpectedusernotfound": {
-        "title": "SkygearErrorCodeUnexpectedUserNotFound variable"
-      },
-      "react-native.skygearerrorcodeuserdisabled": {
-        "title": "SkygearErrorCodeUserDisabled variable"
-      },
-      "react-native.skygearerrorcodeverificationrequired": {
-        "title": "SkygearErrorCodeVerificationRequired variable"
+      "react-native.skygearerrorname": {
+        "title": "SkygearErrorName type"
       },
       "react-native.ssologinoptions": {
         "title": "SSOLoginOptions interface"
@@ -1316,122 +1100,14 @@
       "web.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
-      "web.skygearerror.code": {
-        "title": "SkygearError.code property"
-      },
       "web.skygearerror.info": {
         "title": "SkygearError.info property"
       },
       "web.skygearerror": {
         "title": "SkygearError class"
       },
-      "web.skygearerror.name": {
-        "title": "SkygearError.name property"
-      },
-      "web.skygearerrorcode": {
-        "title": "SkygearErrorCode type"
-      },
-      "web.skygearerrorcodeaccesskeynotaccepted": {
-        "title": "SkygearErrorCodeAccessKeyNotAccepted variable"
-      },
-      "web.skygearerrorcodeaccesstokennotaccepted": {
-        "title": "SkygearErrorCodeAccessTokenNotAccepted variable"
-      },
-      "web.skygearerrorcodeassetsizetoolarge": {
-        "title": "SkygearErrorCodeAssetSizeTooLarge variable"
-      },
-      "web.skygearerrorcodeatomicoperationfailure": {
-        "title": "SkygearErrorCodeAtomicOperationFailure variable"
-      },
-      "web.skygearerrorcodebadrequest": {
-        "title": "SkygearErrorCodeBadRequest variable"
-      },
-      "web.skygearerrorcodeconstraintviolated": {
-        "title": "SkygearErrorCodeConstraintViolated variable"
-      },
-      "web.skygearerrorcodedeniedargument": {
-        "title": "SkygearErrorCodeDeniedArgument variable"
-      },
-      "web.skygearerrorcodeduplicated": {
-        "title": "SkygearErrorCodeDuplicated variable"
-      },
-      "web.skygearerrorcodehooktimeout": {
-        "title": "SkygearErrorCodeHookTimeOut variable"
-      },
-      "web.skygearerrorcodeincompatibleschema": {
-        "title": "SkygearErrorCodeIncompatibleSchema variable"
-      },
-      "web.skygearerrorcodeinvalidargument": {
-        "title": "SkygearErrorCodeInvalidArgument variable"
-      },
-      "web.skygearerrorcodeinvalidcredentials": {
-        "title": "SkygearErrorCodeInvalidCredentials variable"
-      },
-      "web.skygearerrorcodeinvalidsignature": {
-        "title": "SkygearErrorCodeInvalidSignature variable"
-      },
-      "web.skygearerrorcodenotauthenticated": {
-        "title": "SkygearErrorCodeNotAuthenticated variable"
-      },
-      "web.skygearerrorcodenotconfigured": {
-        "title": "SkygearErrorCodeNotConfigured variable"
-      },
-      "web.skygearerrorcodenotimplemented": {
-        "title": "SkygearErrorCodeNotImplemented variable"
-      },
-      "web.skygearerrorcodenotsupported": {
-        "title": "SkygearErrorCodeNotSupported variable"
-      },
-      "web.skygearerrorcodepartialoperationfailure": {
-        "title": "SkygearErrorCodePartialOperationFailure variable"
-      },
-      "web.skygearerrorcodepasswordpolicyviolated": {
-        "title": "SkygearErrorCodePasswordPolicyViolated variable"
-      },
-      "web.skygearerrorcodepermissiondenied": {
-        "title": "SkygearErrorCodePermissionDenied variable"
-      },
-      "web.skygearerrorcodeplugininitializing": {
-        "title": "SkygearErrorCodePluginInitializing variable"
-      },
-      "web.skygearerrorcodeplugintimeout": {
-        "title": "SkygearErrorCodePluginTimeout variable"
-      },
-      "web.skygearerrorcodepluginunavailable": {
-        "title": "SkygearErrorCodePluginUnavailable variable"
-      },
-      "web.skygearerrorcoderecordquerydenied": {
-        "title": "SkygearErrorCodeRecordQueryDenied variable"
-      },
-      "web.skygearerrorcoderecordqueryinvalid": {
-        "title": "SkygearErrorCodeRecordQueryInvalid variable"
-      },
-      "web.skygearerrorcoderesourcenotfound": {
-        "title": "SkygearErrorCodeResourceNotFound variable"
-      },
-      "web.skygearerrorcoderesponsetimeout": {
-        "title": "SkygearErrorCodeResponseTimeout variable"
-      },
-      "web.skygearerrorcodeundefinedoperation": {
-        "title": "SkygearErrorCodeUndefinedOperation variable"
-      },
-      "web.skygearerrorcodeunexpectedauthinfonotfound": {
-        "title": "SkygearErrorCodeUnexpectedAuthInfoNotFound variable"
-      },
-      "web.skygearerrorcodeunexpectederror": {
-        "title": "SkygearErrorCodeUnexpectedError variable"
-      },
-      "web.skygearerrorcodeunexpectedunabletoopendatabase": {
-        "title": "SkygearErrorCodeUnexpectedUnableToOpenDatabase variable"
-      },
-      "web.skygearerrorcodeunexpectedusernotfound": {
-        "title": "SkygearErrorCodeUnexpectedUserNotFound variable"
-      },
-      "web.skygearerrorcodeuserdisabled": {
-        "title": "SkygearErrorCodeUserDisabled variable"
-      },
-      "web.skygearerrorcodeverificationrequired": {
-        "title": "SkygearErrorCodeVerificationRequired variable"
+      "web.skygearerrorname": {
+        "title": "SkygearErrorName type"
       },
       "web.ssologinoptions": {
         "title": "SSOLoginOptions interface"
