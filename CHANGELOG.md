@@ -1,3 +1,13 @@
+## 2.0.0-alpha.6 (2019-08-20)
+
+### Breaking Changes
+
+- Replace SkygearErrorCode with SkygearErrorName
+
+### Features
+
+- Improve error decoding
+
 ## 2.0.0-alpha.5 (2019-08-19)
 
 ### Breaking Changes
