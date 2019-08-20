@@ -128,9 +128,9 @@ export abstract class BaseAPIClient {
 
   protected async postAndReturnAuthResponse(
     path: string,
-    payload?: any
+    options?: { json?: JSONObject; query?: [string, string][] }
   ): Promise<AuthResponse> {
-    const response = await this.post(path, payload);
+    const response = await this.post(path, options);
     return decodeAuthResponse(response);
   }
 
@@ -162,7 +162,7 @@ export abstract class BaseAPIClient {
       realm: options && options.realm,
       metadata: options && options.metadata,
     };
-    return this.postAndReturnAuthResponse("/_auth/signup", payload);
+    return this.postAndReturnAuthResponse("/_auth/signup", { json: payload });
   }
 
   async login(
@@ -176,7 +176,7 @@ export abstract class BaseAPIClient {
       login_id_key: options && options.loginIDKey,
       realm: options && options.realm,
     };
-    return this.postAndReturnAuthResponse("/_auth/login", payload);
+    return this.postAndReturnAuthResponse("/_auth/login", { json: payload });
   }
 
   async logout(): Promise<void> {
@@ -195,12 +195,16 @@ export abstract class BaseAPIClient {
       password: newPassword,
       old_password: oldPassword,
     };
-    return this.postAndReturnAuthResponse("/_auth/change_password", payload);
+    return this.postAndReturnAuthResponse("/_auth/change_password", {
+      json: payload,
+    });
   }
 
   async updateMetadata(metadata: JSONObject): Promise<AuthResponse> {
     const payload = { metadata };
-    return this.postAndReturnAuthResponse("/_auth/update_metadata", payload);
+    return this.postAndReturnAuthResponse("/_auth/update_metadata", {
+      json: payload,
+    });
   }
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
@@ -245,10 +249,9 @@ export abstract class BaseAPIClient {
       merge_realm: options && options.mergeRealm,
       on_user_duplicate: options && options.onUserDuplicate,
     };
-    return this.postAndReturnAuthResponse(
-      "/_auth/sso/custom_token/login",
-      payload
-    );
+    return this.postAndReturnAuthResponse("/_auth/sso/custom_token/login", {
+      json: payload,
+    });
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
@@ -267,10 +270,9 @@ export abstract class BaseAPIClient {
       merge_realm: options && options.mergeRealm,
       on_user_duplicate: options && options.onUserDuplicate,
     };
-    return this.postAndReturnAuthResponse(
-      `/_auth/sso/${encoded}/login`,
-      payload
-    );
+    return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/login`, {
+      json: payload,
+    });
   }
 
   async linkOAuthProviderWithAccessToken(
@@ -281,9 +283,8 @@ export abstract class BaseAPIClient {
     const payload = {
       access_token: accessToken,
     };
-    return this.postAndReturnAuthResponse(
-      `/_auth/sso/${encoded}/link`,
-      payload
-    );
+    return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/link`, {
+      json: payload,
+    });
   }
 }
