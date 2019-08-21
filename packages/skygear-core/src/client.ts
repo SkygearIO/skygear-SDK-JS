@@ -1,4 +1,9 @@
-import { JSONObject, AuthResponse, SSOLoginOptions } from "./types";
+import {
+  JSONObject,
+  AuthResponse,
+  SSOLoginOptions,
+  OAuthAuthorizationURLOptions,
+} from "./types";
 import { decodeError } from "./error";
 import { decodeAuthResponse } from "./encoding";
 
@@ -252,6 +257,36 @@ export abstract class BaseAPIClient {
     return this.postAndReturnAuthResponse("/_auth/sso/custom_token/login", {
       json: payload,
     });
+  }
+
+  async oauthAuthorizationURL(
+    providerID: string,
+    options: OAuthAuthorizationURLOptions
+  ): Promise<string> {
+    const encoded = encodeURIComponent(providerID);
+    const { action } = options;
+    let path = "";
+    switch (action) {
+      case "login":
+        path = `/_auth/sso/${encoded}/login_auth_url`;
+        break;
+      case "link":
+        path = `/_auth/sso/${encoded}/link_auth_url`;
+        break;
+      default:
+        throw new Error("unreachable");
+    }
+    let callbackURL = "";
+    if ("callbackURL" in options) {
+      callbackURL = options.callbackURL;
+    }
+    const payload = {
+      callback_url: callbackURL,
+      ux_mode: options.uxMode,
+      merge_realm: options.mergeRealm,
+      on_user_duplicate: options.onUserDuplicate,
+    };
+    return this.post(path, { json: payload });
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
