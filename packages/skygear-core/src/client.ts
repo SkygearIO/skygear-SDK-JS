@@ -53,6 +53,7 @@ export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;
   accessToken: string | null;
+  fetchFunction?: typeof fetch;
 
   constructor(options: {
     apiKey: string;
@@ -63,8 +64,6 @@ export abstract class BaseAPIClient {
     this.endpoint = removeTrailingSlash(options.endpoint);
     this.accessToken = options.accessToken;
   }
-
-  abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
   protected prepareHeaders(): { [name: string]: string } {
     const headers: { [name: string]: string } = {
@@ -92,7 +91,11 @@ export abstract class BaseAPIClient {
       headers["content-type"] = "application/json";
     }
 
-    const response = await this.fetch(url, {
+    if (this.fetchFunction == null) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
+    const response = await this.fetchFunction(url, {
       method,
       headers,
       mode: "cors",

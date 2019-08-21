@@ -12,9 +12,7 @@ const nodeFetch = require("node-fetch");
  * @public
  */
 export class NodeAPIClient extends BaseAPIClient {
-  fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    return nodeFetch(input, init);
-  }
+  fetchFunction = nodeFetch;
 }
 
 /**
