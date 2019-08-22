@@ -113,6 +113,9 @@
       "node-client.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "node-client.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
       "node-client.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
@@ -137,6 +140,9 @@
       "node-client.baseapiclient.me": {
         "title": "BaseAPIClient.me() method"
       },
+      "node-client.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
       "node-client.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -148,6 +154,9 @@
       },
       "node-client.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
+      },
+      "node-client.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
       },
       "node-client.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -178,6 +187,9 @@
       },
       "node-client.container.configure": {
         "title": "Container.configure() method"
+      },
+      "node-client.container.fetch": {
+        "title": "Container.fetch() method"
       },
       "node-client.container": {
         "title": "Container class"
@@ -290,11 +302,17 @@
       "node-client.memorystoragedriver.set": {
         "title": "MemoryStorageDriver.set() method"
       },
-      "node-client.nodeapiclient.fetch": {
-        "title": "NodeAPIClient.fetch() method"
+      "node-client.nodeapiclient.fetchfunction": {
+        "title": "NodeAPIClient.fetchFunction property"
       },
       "node-client.nodeapiclient": {
         "title": "NodeAPIClient class"
+      },
+      "node-client.nodeapiclient.requestclass": {
+        "title": "NodeAPIClient.requestClass property"
+      },
+      "node-client.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
       },
       "node-client.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
@@ -316,6 +334,27 @@
       },
       "node-client.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
+      },
+      "node-client.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "node-client.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "node-client.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "node-client.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "node-client.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "node-client.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "node-client.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
       },
       "node-client.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
@@ -500,6 +539,9 @@
       "react-native.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "react-native.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
       "react-native.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
@@ -524,6 +566,9 @@
       "react-native.baseapiclient.me": {
         "title": "BaseAPIClient.me() method"
       },
+      "react-native.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
       "react-native.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -535,6 +580,9 @@
       },
       "react-native.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
+      },
+      "react-native.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
       },
       "react-native.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -565,6 +613,9 @@
       },
       "react-native.container.configure": {
         "title": "Container.configure() method"
+      },
+      "react-native.container.fetch": {
+        "title": "Container.fetch() method"
       },
       "react-native.container": {
         "title": "Container class"
@@ -659,6 +710,9 @@
       "react-native": {
         "title": "react-native package"
       },
+      "react-native.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
       "react-native.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
       },
@@ -679,6 +733,27 @@
       },
       "react-native.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
+      },
+      "react-native.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "react-native.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "react-native.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "react-native.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "react-native.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "react-native.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "react-native.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
       },
       "react-native.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
@@ -701,11 +776,14 @@
       "react-native.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
-      "react-native.reactnativeapiclient.fetch": {
-        "title": "ReactNativeAPIClient.fetch() method"
+      "react-native.reactnativeapiclient.fetchfunction": {
+        "title": "ReactNativeAPIClient.fetchFunction property"
       },
       "react-native.reactnativeapiclient": {
         "title": "ReactNativeAPIClient class"
+      },
+      "react-native.reactnativeapiclient.requestclass": {
+        "title": "ReactNativeAPIClient.requestClass property"
       },
       "react-native.reactnativeasyncstoragestoragedriver.del": {
         "title": "ReactNativeAsyncStorageStorageDriver.del() method"
@@ -881,6 +959,9 @@
       "web.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
       },
+      "web.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
       "web.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
@@ -905,6 +986,9 @@
       "web.baseapiclient.me": {
         "title": "BaseAPIClient.me() method"
       },
+      "web.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
       "web.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -916,6 +1000,9 @@
       },
       "web.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
+      },
+      "web.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
       },
       "web.baseapiclient.requestemailverification": {
         "title": "BaseAPIClient.requestEmailVerification() method"
@@ -946,6 +1033,9 @@
       },
       "web.container.configure": {
         "title": "Container.configure() method"
+      },
+      "web.container.fetch": {
+        "title": "Container.fetch() method"
       },
       "web.container": {
         "title": "Container class"
@@ -1043,17 +1133,8 @@
       "web": {
         "title": "web package"
       },
-      "web.oauthauthorizationurloptions.action": {
-        "title": "OAuthAuthorizationURLOptions.action property"
-      },
-      "web.oauthauthorizationurloptions.callbackurl": {
-        "title": "OAuthAuthorizationURLOptions.callbackURL property"
-      },
       "web.oauthauthorizationurloptions": {
-        "title": "OAuthAuthorizationURLOptions interface"
-      },
-      "web.oauthauthorizationurloptions.uxmode": {
-        "title": "OAuthAuthorizationURLOptions.uxMode property"
+        "title": "OAuthAuthorizationURLOptions type"
       },
       "web.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
@@ -1075,6 +1156,27 @@
       },
       "web.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
+      },
+      "web.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "web.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "web.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "web.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "web.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "web.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "web.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
       },
       "web.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
@@ -1154,14 +1256,14 @@
       "web.version": {
         "title": "VERSION variable"
       },
-      "web.webapiclient.fetch": {
-        "title": "WebAPIClient.fetch() method"
+      "web.webapiclient.fetchfunction": {
+        "title": "WebAPIClient.fetchFunction property"
       },
       "web.webapiclient": {
         "title": "WebAPIClient class"
       },
-      "web.webapiclient.oauthauthorizationurl": {
-        "title": "WebAPIClient.oauthAuthorizationURL() method"
+      "web.webapiclient.requestclass": {
+        "title": "WebAPIClient.requestClass property"
       },
       "web.webauthcontainer._constructor_": {
         "title": "WebAuthContainer.(constructor)"
