@@ -286,4 +286,8 @@ export class Container<T extends BaseAPIClient> {
       this.auth.currentIdentity = null;
     }
   }
+
+  async fetch(input: string, init?: RequestInit): Promise<Response> {
+    return this.apiClient.fetch(input, init);
+  }
 }

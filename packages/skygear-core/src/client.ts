@@ -76,7 +76,7 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
-  protected async fetch(input: string, init?: RequestInit): Promise<Response> {
+  async fetch(input: string, init?: RequestInit): Promise<Response> {
     if (this.requestClass == null) {
       throw new Error("missing requestClass in api client");
     }
