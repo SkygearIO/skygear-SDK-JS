@@ -1,4 +1,9 @@
-import { JSONObject, AuthResponse, SSOLoginOptions } from "./types";
+import {
+  JSONObject,
+  AuthResponse,
+  SSOLoginOptions,
+  OAuthAuthorizationURLOptions,
+} from "./types";
 import { decodeError } from "./error";
 import { decodeAuthResponse } from "./encoding";
 
@@ -48,6 +53,8 @@ export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;
   accessToken: string | null;
+  fetchFunction?: typeof fetch;
+  requestClass?: typeof Request;
 
   constructor(options: {
     apiKey: string;
@@ -59,8 +66,6 @@ export abstract class BaseAPIClient {
     this.accessToken = options.accessToken;
   }
 
-  abstract fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-
   protected prepareHeaders(): { [name: string]: string } {
     const headers: { [name: string]: string } = {
       "x-skygear-api-key": this.apiKey,
@@ -71,23 +76,47 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
+  async fetch(input: string, init?: RequestInit): Promise<Response> {
+    if (this.requestClass == null) {
+      throw new Error("missing requestClass in api client");
+    }
+
+    if (typeof input !== "string") {
+      throw new Error("only string path is allowed for fetch input");
+    }
+
+    const url = this.endpoint + "/" + input.replace(/^\//, "");
+    const request = new this.requestClass(url, init);
+
+    const headers = this.prepareHeaders();
+    for (const key of Object.keys(headers)) {
+      request.headers.set(key, headers[key]);
+    }
+
+    if (this.fetchFunction == null) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
+    return this.fetchFunction(request);
+  }
+
   protected async request(
     method: "GET" | "POST" | "DELETE",
     path: string,
     options: { json?: JSONObject; query?: [string, string][] } = {}
   ): Promise<any> {
     const { json, query } = options;
-    let url = this.endpoint + path;
+    let p = path;
     if (query != null) {
-      url += encodeQuery(query);
+      p += encodeQuery(query);
     }
 
-    const headers = this.prepareHeaders();
+    const headers: { [name: string]: string } = {};
     if (json != null) {
       headers["content-type"] = "application/json";
     }
 
-    const response = await this.fetch(url, {
+    const response = await this.fetch(p, {
       method,
       headers,
       mode: "cors",
@@ -252,6 +281,41 @@ export abstract class BaseAPIClient {
     return this.postAndReturnAuthResponse("/_auth/sso/custom_token/login", {
       json: payload,
     });
+  }
+
+  async oauthAuthorizationURL(
+    providerID: string,
+    options: OAuthAuthorizationURLOptions
+  ): Promise<string> {
+    const encoded = encodeURIComponent(providerID);
+    const { action } = options;
+    let path = "";
+    switch (action) {
+      case "login":
+        path = `/_auth/sso/${encoded}/login_auth_url`;
+        break;
+      case "link":
+        path = `/_auth/sso/${encoded}/link_auth_url`;
+        break;
+      default:
+        throw new Error("unreachable");
+    }
+
+    const callbackURL =
+      ("callbackURL" in options && options.callbackURL) ||
+      (typeof window !== "undefined" && window.location.href);
+
+    if (!callbackURL) {
+      throw new Error("callbackURL is required");
+    }
+
+    const payload = {
+      callback_url: callbackURL,
+      ux_mode: options.uxMode,
+      merge_realm: options.mergeRealm,
+      on_user_duplicate: options.onUserDuplicate,
+    };
+    return this.post(path, { json: payload });
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {

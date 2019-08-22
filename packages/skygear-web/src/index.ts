@@ -6,7 +6,6 @@ import { localStorageStorageDriver } from "./storage";
 export * from "./storage";
 import { WebContainer } from "./container";
 export * from "./container";
-export * from "./types";
 
 /**
  * @public

@@ -100,3 +100,28 @@ export interface SSOLoginOptions {
   mergeRealm?: string;
   onUserDuplicate?: "abort" | "merge" | "create";
 }
+
+/**
+ * @public
+ */
+export type OAuthAuthorizationURLOptions =
+  | OAuthWebRedirectAuthorizationURLOptions
+  | OAuthWebPopupAuthorizationURLOptions;
+
+/**
+ * @public
+ */
+export interface OAuthWebRedirectAuthorizationURLOptions
+  extends SSOLoginOptions {
+  action: "login" | "link";
+  callbackURL: string;
+  uxMode: "web_redirect";
+}
+
+/**
+ * @public
+ */
+export interface OAuthWebPopupAuthorizationURLOptions extends SSOLoginOptions {
+  action: "login" | "link";
+  uxMode: "web_popup";
+}
