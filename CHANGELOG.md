@@ -1,3 +1,9 @@
+## 2.0.0-alpha.8 (2019-08-22)
+
+### Features
+
+- Support `defaultContainer.fetch` for calling microservices
+
 ## 2.0.0-alpha.7 (2019-08-20)
 
 ### Bug Fixes
