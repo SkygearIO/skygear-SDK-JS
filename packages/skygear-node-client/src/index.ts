@@ -13,6 +13,7 @@ const nodeFetch = require("node-fetch");
  */
 export class NodeAPIClient extends BaseAPIClient {
   fetchFunction = nodeFetch;
+  requestClass = nodeFetch.Request;
 }
 
 /**

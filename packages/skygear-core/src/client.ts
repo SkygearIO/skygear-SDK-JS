@@ -54,6 +54,7 @@ export abstract class BaseAPIClient {
   endpoint: string;
   accessToken: string | null;
   fetchFunction?: typeof fetch;
+  requestClass?: typeof Request;
 
   constructor(options: {
     apiKey: string;
@@ -75,27 +76,47 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
-  protected async request(
-    method: "GET" | "POST" | "DELETE",
-    path: string,
-    options: { json?: JSONObject; query?: [string, string][] } = {}
-  ): Promise<any> {
-    const { json, query } = options;
-    let url = this.endpoint + path;
-    if (query != null) {
-      url += encodeQuery(query);
+  protected async fetch(input: string, init?: RequestInit): Promise<Response> {
+    if (this.requestClass == null) {
+      throw new Error("missing requestClass in api client");
     }
 
+    if (typeof input !== "string") {
+      throw new Error("only string path is allowed for fetch input");
+    }
+
+    const url = this.endpoint + "/" + input.replace(/^\//, "");
+    const request = new this.requestClass(url, init);
+
     const headers = this.prepareHeaders();
-    if (json != null) {
-      headers["content-type"] = "application/json";
+    for (const key of Object.keys(headers)) {
+      request.headers.set(key, headers[key]);
     }
 
     if (this.fetchFunction == null) {
       throw new Error("missing fetchFunction in api client");
     }
 
-    const response = await this.fetchFunction(url, {
+    return this.fetchFunction(request);
+  }
+
+  protected async request(
+    method: "GET" | "POST" | "DELETE",
+    path: string,
+    options: { json?: JSONObject; query?: [string, string][] } = {}
+  ): Promise<any> {
+    const { json, query } = options;
+    let p = path;
+    if (query != null) {
+      p += encodeQuery(query);
+    }
+
+    const headers: { [name: string]: string } = {};
+    if (json != null) {
+      headers["content-type"] = "application/json";
+    }
+
+    const response = await this.fetch(p, {
       method,
       headers,
       mode: "cors",

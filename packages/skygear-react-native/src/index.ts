@@ -14,6 +14,7 @@ const globalFetch = fetch;
  */
 export class ReactNativeAPIClient extends BaseAPIClient {
   fetchFunction = globalFetch;
+  requestClass = Request;
 }
 
 /**
