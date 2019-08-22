@@ -300,10 +300,15 @@ export abstract class BaseAPIClient {
       default:
         throw new Error("unreachable");
     }
-    let callbackURL = "";
-    if ("callbackURL" in options) {
-      callbackURL = options.callbackURL;
+
+    const callbackURL =
+      ("callbackURL" in options && options.callbackURL) ||
+      (typeof window !== "undefined" && window.location.href);
+
+    if (!callbackURL) {
+      throw new Error("callbackURL is required");
     }
+
     const payload = {
       callback_url: callbackURL,
       ux_mode: options.uxMode,
