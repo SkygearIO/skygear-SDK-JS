@@ -11,10 +11,6 @@ import {
 import { WebAPIClient } from "./client";
 import { NewWindowObserver, WindowMessageObserver } from "./observer";
 
-function keyOAuthRedirectAction(name: string): string {
-  return `${name}_oauthRedirectAction`;
-}
-
 function decodeMessage(message: any) {
   if (!message) {
     throw new Error("unknown message");
@@ -125,10 +121,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       mergeRealm: options && options.mergeRealm,
       onUserDuplicate: options && options.onUserDuplicate,
     });
-    await this.parent.storage.safeSet(
-      keyOAuthRedirectAction(this.parent.name),
-      "login"
-    );
+    await this.parent.storage.setOAuthRedirectAction(this.parent.name, "login");
     window.location.href = url;
   }
 
@@ -141,10 +134,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       action: "link",
       uxMode: "web_redirect",
     });
-    await this.parent.storage.safeSet(
-      keyOAuthRedirectAction(this.parent.name),
-      "link"
-    );
+    await this.parent.storage.setOAuthRedirectAction(this.parent.name, "link");
     window.location.href = url;
   }
 
@@ -157,13 +147,14 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
 
     let iframe: HTMLIFrameElement | undefined;
     try {
-      const key = keyOAuthRedirectAction(this.parent.name);
-      const lastAction = await this.parent.storage.safeGet(key);
+      const lastAction = await this.parent.storage.getOAuthRedirectAction(
+        this.parent.name
+      );
       if (lastAction !== action) {
         return undefined;
       }
 
-      await this.parent.storage.safeDel(key);
+      await this.parent.storage.delOAuthRedirectAction(this.parent.name);
       const messagePromise = this.oauthResultObserver.subscribe();
 
       iframe = document.createElement("iframe");
