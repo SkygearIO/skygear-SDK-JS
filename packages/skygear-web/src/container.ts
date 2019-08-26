@@ -2,13 +2,15 @@ import {
   AuthContainer,
   AuthResponse,
   Container,
-  ContainerStorage,
   SSOLoginOptions,
   User,
   decodeError,
   decodeAuthResponse,
+  ContainerOptions,
+  GlobalJSONContainerStorage,
 } from "@skygear/core";
 import { WebAPIClient } from "./client";
+import { localStorageStorageDriver } from "./storage";
 import { NewWindowObserver, WindowMessageObserver } from "./observer";
 
 function decodeMessage(message: any) {
@@ -197,8 +199,22 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
   auth: WebAuthContainer<T>;
 
-  constructor(name: string, apiClient: T, storage: ContainerStorage) {
-    super(name, apiClient, storage);
+  constructor(options?: ContainerOptions<T>) {
+    const o = ({
+      ...options,
+      apiClient:
+        (options && options.apiClient) ||
+        new WebAPIClient({
+          apiKey: "",
+          endpoint: "",
+          accessToken: null,
+        }),
+      storage:
+        (options && options.storage) ||
+        new GlobalJSONContainerStorage(localStorageStorageDriver),
+    } as any) as ContainerOptions<T>;
+
+    super(o);
     this.auth = new WebAuthContainer(this);
   }
 }

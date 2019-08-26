@@ -5,6 +5,7 @@ import {
   Identity,
   AuthResponse,
   SSOLoginOptions,
+  ContainerOptions,
 } from "./types";
 import { BaseAPIClient } from "./client";
 
@@ -227,10 +228,18 @@ export class Container<T extends BaseAPIClient> {
   storage: ContainerStorage;
   auth: AuthContainer<T>;
 
-  constructor(name: string, apiClient: T, storage: ContainerStorage) {
-    this.name = name;
-    this.apiClient = apiClient;
-    this.storage = storage;
+  constructor(options: ContainerOptions<T>) {
+    if (!options.apiClient) {
+      throw Error("missing apiClient");
+    }
+
+    if (!options.storage) {
+      throw Error("missing storage");
+    }
+
+    this.name = options.name || "default";
+    this.apiClient = options.apiClient;
+    this.storage = options.storage;
     this.auth = new AuthContainer(this);
   }
 

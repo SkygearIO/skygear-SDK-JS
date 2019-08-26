@@ -146,3 +146,12 @@ export interface OAuthWebPopupAuthorizationURLOptions extends SSOLoginOptions {
   action: "login" | "link";
   uxMode: "web_popup";
 }
+
+/**
+ * @public
+ */
+export interface ContainerOptions<T> {
+  name?: string;
+  apiClient?: T;
+  storage?: ContainerStorage;
+}
