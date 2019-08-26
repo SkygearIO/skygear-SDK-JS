@@ -1,5 +1,5 @@
-import { ContainerStorage } from "./storage";
-import { StorageDriver } from "./types";
+import { GlobalJSONContainerStorage, _GlobalJSONStorage } from "./storage";
+import { StorageDriver, User, Identity } from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
   backingStore: { [key: string]: string };
@@ -24,9 +24,87 @@ class MemoryStorageDriver implements StorageDriver {
 }
 
 describe("ContainerStorage", () => {
+  it("should set, get and delete user", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const user: User = {
+      id: "userid",
+      createdAt: new Date(0),
+      lastLoginAt: new Date(0),
+      isVerified: false,
+      isDisabled: false,
+      metadata: {},
+    };
+    const ns = "test";
+
+    await storage.setUser(ns, user);
+    let restored = await storage.getUser(ns);
+    expect(restored).toEqual(user);
+
+    await storage.delUser(ns);
+    restored = await storage.getUser(ns);
+    expect(restored).toEqual(null);
+  });
+
+  it("should set, get and delete identity", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const pwIdentity: Identity = {
+      id: "id",
+      type: "password",
+      loginIDKey: "email",
+      loginID: "test@skygeario.com",
+      realm: "default",
+      claims: {
+        email: "test@skygeario.com",
+      },
+    };
+    const ns = "test";
+
+    await storage.setIdentity(ns, pwIdentity);
+    let restored = await storage.getIdentity(ns);
+    expect(restored).toEqual(pwIdentity);
+
+    await storage.delIdentity(ns);
+    restored = await storage.getIdentity(ns);
+    expect(restored).toEqual(null);
+  });
+
+  it("should set, get and delete access token", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const token = "test_token";
+    const ns = "test";
+
+    await storage.setAccessToken(ns, token);
+    let restored = await storage.getAccessToken(ns);
+    expect(restored).toEqual(token);
+
+    await storage.delAccessToken(ns);
+    restored = await storage.getAccessToken(ns);
+    expect(restored).toEqual(null);
+  });
+
+  it("should set, get and delete oauth redirect action", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const action = "login";
+    const ns = "test";
+
+    await storage.setOAuthRedirectAction(ns, action);
+    let restored = await storage.getOAuthRedirectAction(ns);
+    expect(restored).toEqual(action);
+
+    await storage.delOAuthRedirectAction(ns);
+    restored = await storage.getOAuthRedirectAction(ns);
+    expect(restored).toEqual(null);
+  });
+});
+
+describe("GlobalJSONStorage", () => {
   it("should scope the key", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(
@@ -46,7 +124,7 @@ describe("ContainerStorage", () => {
   });
   it("should safeSet and safeGet", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(await storage.safeGet("a")).toEqual("b");
@@ -54,7 +132,7 @@ describe("ContainerStorage", () => {
 
   it("should safeDel", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(await storage.safeGet("a")).toEqual("b");
@@ -64,7 +142,7 @@ describe("ContainerStorage", () => {
 
   it("should safeSetJSON and safeGetJSON", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     const json = {
       str: "str",

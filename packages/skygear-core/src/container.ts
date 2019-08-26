@@ -1,30 +1,12 @@
 import {
+  ContainerStorage,
   JSONObject,
   User,
   Identity,
   AuthResponse,
   SSOLoginOptions,
 } from "./types";
-import { ContainerStorage } from "./storage";
 import { BaseAPIClient } from "./client";
-import {
-  encodeUser,
-  encodeIdentity,
-  decodeUser,
-  decodeIdentity,
-} from "./encoding";
-
-function keyAccessToken(name: string): string {
-  return `${name}_accessToken`;
-}
-
-function keyUser(name: string): string {
-  return `${name}_user`;
-}
-
-function keyIdentity(name: string): string {
-  return `${name}_identity`;
-}
 
 /**
  * @public
@@ -48,22 +30,14 @@ export class AuthContainer<T extends BaseAPIClient> {
   async persistResponse(response: AuthResponse): Promise<void> {
     const { user, identity, accessToken } = response;
 
-    const userJSON = encodeUser(user);
-    await this.parent.storage.safeSetJSON(keyUser(this.parent.name), userJSON);
+    await this.parent.storage.setUser(this.parent.name, user);
 
     if (identity) {
-      const identityJSON = encodeIdentity(identity);
-      await this.parent.storage.safeSetJSON(
-        keyIdentity(this.parent.name),
-        identityJSON
-      );
+      await this.parent.storage.setIdentity(this.parent.name, identity);
     }
 
     if (accessToken) {
-      await this.parent.storage.safeSet(
-        keyAccessToken(this.parent.name),
-        accessToken
-      );
+      await this.parent.storage.setAccessToken(this.parent.name, accessToken);
     }
 
     this.currentUser = user;
@@ -148,9 +122,9 @@ export class AuthContainer<T extends BaseAPIClient> {
 
   async logout(): Promise<void> {
     await this.parent.apiClient.logout();
-    await this.parent.storage.safeDel(keyAccessToken(this.parent.name));
-    await this.parent.storage.safeDel(keyIdentity(this.parent.name));
-    await this.parent.storage.safeDel(keyUser(this.parent.name));
+    await this.parent.storage.delUser(this.parent.name);
+    await this.parent.storage.delIdentity(this.parent.name);
+    await this.parent.storage.delAccessToken(this.parent.name);
     this.currentUser = null;
     this.currentIdentity = null;
     this.parent.apiClient.accessToken = null;
@@ -267,24 +241,14 @@ export class Container<T extends BaseAPIClient> {
     this.apiClient.apiKey = options.apiKey;
     this.apiClient.endpoint = options.endpoint;
 
-    const accessToken = await this.storage.safeGet(keyAccessToken(this.name));
+    const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient.accessToken = accessToken;
 
-    const userJSON = await this.storage.safeGetJSON(keyUser(this.name));
-    if (userJSON) {
-      const user = decodeUser(userJSON);
-      this.auth.currentUser = user;
-    } else {
-      this.auth.currentUser = null;
-    }
+    const user = await this.storage.getUser(this.name);
+    this.auth.currentUser = user;
 
-    const identityJSON = await this.storage.safeGetJSON(keyIdentity(this.name));
-    if (identityJSON) {
-      const identity = decodeIdentity(identityJSON);
-      this.auth.currentIdentity = identity;
-    } else {
-      this.auth.currentIdentity = null;
-    }
+    const identity = await this.storage.getIdentity(this.name);
+    this.auth.currentIdentity = identity;
   }
 
   async fetch(input: string, init?: RequestInit): Promise<Response> {

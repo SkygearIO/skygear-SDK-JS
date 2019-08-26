@@ -2,7 +2,7 @@ import {
   BaseAPIClient,
   StorageDriver,
   Container,
-  ContainerStorage,
+  GlobalJSONContainerStorage,
 } from "@skygear/core";
 export * from "@skygear/core";
 
@@ -51,5 +51,5 @@ export const defaultContainer: Container<NodeAPIClient> = new Container(
     endpoint: "",
     accessToken: null,
   }),
-  new ContainerStorage(new MemoryStorageDriver())
+  new GlobalJSONContainerStorage(new MemoryStorageDriver())
 );

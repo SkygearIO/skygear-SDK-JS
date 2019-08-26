@@ -3,7 +3,7 @@ import {
   BaseAPIClient,
   StorageDriver,
   Container,
-  ContainerStorage,
+  GlobalJSONContainerStorage,
 } from "@skygear/core";
 export * from "@skygear/core";
 
@@ -42,5 +42,5 @@ export const defaultContainer: Container<ReactNativeAPIClient> = new Container(
     endpoint: "",
     accessToken: null,
   }),
-  new ContainerStorage(new ReactNativeAsyncStorageStorageDriver())
+  new GlobalJSONContainerStorage(new ReactNativeAsyncStorageStorageDriver())
 );
