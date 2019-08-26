@@ -1,4 +1,4 @@
-import { ContainerStorage } from "@skygear/core";
+import { GlobalJSONContainerStorage } from "@skygear/core";
 export * from "@skygear/core";
 import { WebAPIClient } from "./client";
 export * from "./client";
@@ -17,5 +17,5 @@ export const defaultContainer: WebContainer<WebAPIClient> = new WebContainer(
     endpoint: "",
     accessToken: null,
   }),
-  new ContainerStorage(localStorageStorageDriver)
+  new GlobalJSONContainerStorage(localStorageStorageDriver)
 );

@@ -1,11 +1,11 @@
 import {
+  ContainerStorage,
   JSONObject,
   User,
   Identity,
   AuthResponse,
   SSOLoginOptions,
 } from "./types";
-import { ContainerStorage } from "./storage";
 import { BaseAPIClient } from "./client";
 
 /**

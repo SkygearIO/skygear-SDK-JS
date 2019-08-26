@@ -1,4 +1,4 @@
-import { ContainerStorage, GlobalJSONStorage } from "./storage";
+import { GlobalJSONContainerStorage, GlobalJSONStorage } from "./storage";
 import { StorageDriver, User, Identity } from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
@@ -26,7 +26,7 @@ class MemoryStorageDriver implements StorageDriver {
 describe("ContainerStorage", () => {
   it("should set, get and delete user", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new GlobalJSONContainerStorage(driver);
     const user: User = {
       id: "userid",
       createdAt: new Date(0),
@@ -48,7 +48,7 @@ describe("ContainerStorage", () => {
 
   it("should set, get and delete identity", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new GlobalJSONContainerStorage(driver);
     const pwIdentity: Identity = {
       id: "id",
       type: "password",
@@ -72,7 +72,7 @@ describe("ContainerStorage", () => {
 
   it("should set, get and delete access token", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new GlobalJSONContainerStorage(driver);
     const token = "test_token";
     const ns = "test";
 
@@ -87,7 +87,7 @@ describe("ContainerStorage", () => {
 
   it("should set, get and delete oauth redirect action", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new ContainerStorage(driver);
+    const storage = new GlobalJSONContainerStorage(driver);
     const action = "login";
     const ns = "test";
 

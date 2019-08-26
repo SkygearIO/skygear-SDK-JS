@@ -1,4 +1,10 @@
-import { StorageDriver, JSONValue, User, Identity } from "./types";
+import {
+  ContainerStorage,
+  StorageDriver,
+  JSONValue,
+  User,
+  Identity,
+} from "./types";
 
 import {
   encodeUser,
@@ -82,7 +88,7 @@ export class GlobalJSONStorage {
 /**
  * @public
  */
-export class ContainerStorage {
+export class GlobalJSONContainerStorage implements ContainerStorage {
   storage: GlobalJSONStorage;
 
   constructor(driver: StorageDriver) {
@@ -132,12 +138,6 @@ export class ContainerStorage {
 
   async getOAuthRedirectAction(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOAuthRedirectAction(namespace));
-  }
-
-  async del(namespace: string) {
-    await this.storage.safeDel(keyUser(namespace));
-    await this.storage.safeDel(keyIdentity(namespace));
-    await this.storage.safeDel(keyAccessToken(namespace));
   }
 
   async delUser(namespace: string) {

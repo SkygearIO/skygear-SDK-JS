@@ -84,6 +84,24 @@ export interface AuthResponse {
   accessToken?: string;
 }
 
+export interface ContainerStorage {
+  setUser(namespace: string, user: User): Promise<void>;
+  setIdentity(namespace: string, identity: Identity): Promise<void>;
+  setAccessToken(namespace: string, accessToken: string): Promise<void>;
+  setOAuthRedirectAction(
+    namespace: string,
+    oauthRedirectAction: string
+  ): Promise<void>;
+  getUser(namespace: string): Promise<User | null>;
+  getIdentity(namespace: string): Promise<Identity | null>;
+  getAccessToken(namespace: string): Promise<string | null>;
+  getOAuthRedirectAction(namespace: string): Promise<string | null>;
+  delUser(namespace: string): Promise<void>;
+  delIdentity(namespace: string): Promise<void>;
+  delAccessToken(namespace: string): Promise<void>;
+  delOAuthRedirectAction(namespace: string): Promise<void>;
+}
+
 /**
  * @public
  */
