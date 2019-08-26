@@ -1,4 +1,4 @@
-import { GlobalJSONContainerStorage, GlobalJSONStorage } from "./storage";
+import { GlobalJSONContainerStorage, _GlobalJSONStorage } from "./storage";
 import { StorageDriver, User, Identity } from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
@@ -104,7 +104,7 @@ describe("ContainerStorage", () => {
 describe("GlobalJSONStorage", () => {
   it("should scope the key", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(
@@ -124,7 +124,7 @@ describe("GlobalJSONStorage", () => {
   });
   it("should safeSet and safeGet", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(await storage.safeGet("a")).toEqual("b");
@@ -132,7 +132,7 @@ describe("GlobalJSONStorage", () => {
 
   it("should safeDel", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     await storage.safeSet("a", "b");
     expect(await storage.safeGet("a")).toEqual("b");
@@ -142,7 +142,7 @@ describe("GlobalJSONStorage", () => {
 
   it("should safeSetJSON and safeGetJSON", async () => {
     const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONStorage(driver);
+    const storage = new _GlobalJSONStorage(driver);
 
     const json = {
       str: "str",

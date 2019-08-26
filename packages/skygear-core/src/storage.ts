@@ -33,7 +33,10 @@ function keyOAuthRedirectAction(name: string): string {
   return `${name}_oauthRedirectAction`;
 }
 
-export class GlobalJSONStorage {
+/**
+ * @internal
+ */
+export class _GlobalJSONStorage {
   driver: StorageDriver;
 
   constructor(driver: StorageDriver) {
@@ -89,10 +92,10 @@ export class GlobalJSONStorage {
  * @public
  */
 export class GlobalJSONContainerStorage implements ContainerStorage {
-  storage: GlobalJSONStorage;
+  private storage: _GlobalJSONStorage;
 
   constructor(driver: StorageDriver) {
-    this.storage = new GlobalJSONStorage(driver);
+    this.storage = new _GlobalJSONStorage(driver);
   }
 
   async setUser(namespace: string, user: User) {

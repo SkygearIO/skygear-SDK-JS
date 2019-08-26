@@ -84,6 +84,9 @@ export interface AuthResponse {
   accessToken?: string;
 }
 
+/**
+ * @public
+ */
 export interface ContainerStorage {
   setUser(namespace: string, user: User): Promise<void>;
   setIdentity(namespace: string, identity: Identity): Promise<void>;
