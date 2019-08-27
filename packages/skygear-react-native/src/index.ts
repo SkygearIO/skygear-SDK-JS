@@ -4,6 +4,7 @@ import {
   StorageDriver,
   Container,
   GlobalJSONContainerStorage,
+  ContainerOptions,
 } from "@skygear/core";
 export * from "@skygear/core";
 
@@ -35,12 +36,33 @@ export class ReactNativeAsyncStorageStorageDriver implements StorageDriver {
 /**
  * @public
  */
-export const defaultContainer: Container<ReactNativeAPIClient> = new Container(
-  "default",
-  new ReactNativeAPIClient({
-    apiKey: "",
-    endpoint: "",
-    accessToken: null,
-  }),
-  new GlobalJSONContainerStorage(new ReactNativeAsyncStorageStorageDriver())
-);
+export class ReactNativeContainer<
+  T extends ReactNativeAPIClient
+> extends Container<T> {
+  constructor(options?: ContainerOptions<T>) {
+    const o = ({
+      ...options,
+      apiClient:
+        (options && options.apiClient) ||
+        new ReactNativeAPIClient({
+          apiKey: "",
+          endpoint: "",
+          accessToken: null,
+        }),
+      storage:
+        (options && options.storage) ||
+        new GlobalJSONContainerStorage(
+          new ReactNativeAsyncStorageStorageDriver()
+        ),
+    } as any) as ContainerOptions<T>;
+
+    super(o);
+  }
+}
+
+/**
+ * @public
+ */
+export const defaultContainer: ReactNativeContainer<
+  ReactNativeAPIClient
+> = new ReactNativeContainer();

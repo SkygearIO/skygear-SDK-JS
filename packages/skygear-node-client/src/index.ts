@@ -3,6 +3,7 @@ import {
   StorageDriver,
   Container,
   GlobalJSONContainerStorage,
+  ContainerOptions,
 } from "@skygear/core";
 export * from "@skygear/core";
 
@@ -44,12 +45,29 @@ export class MemoryStorageDriver implements StorageDriver {
 /**
  * @public
  */
-export const defaultContainer: Container<NodeAPIClient> = new Container(
-  "default",
-  new NodeAPIClient({
-    apiKey: "",
-    endpoint: "",
-    accessToken: null,
-  }),
-  new GlobalJSONContainerStorage(new MemoryStorageDriver())
-);
+export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
+  constructor(options?: ContainerOptions<T>) {
+    const o = ({
+      ...options,
+      apiClient:
+        (options && options.apiClient) ||
+        new NodeAPIClient({
+          apiKey: "",
+          endpoint: "",
+          accessToken: null,
+        }),
+      storage:
+        (options && options.storage) ||
+        new GlobalJSONContainerStorage(new MemoryStorageDriver()),
+    } as any) as ContainerOptions<T>;
+
+    super(o);
+  }
+}
+
+/**
+ * @public
+ */
+export const defaultContainer: NodeContainer<
+  NodeAPIClient
+> = new NodeContainer();
