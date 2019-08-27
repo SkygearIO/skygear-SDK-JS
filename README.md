@@ -62,7 +62,6 @@ $ npm run lerna bootstrap
 ## Releasing
 
 ```sh
-# npm run set-version <new-version>
 $ npm run prepare-new-release
 # Edit the file new-release.
 # It will be prepended to CHANGELOG.md
