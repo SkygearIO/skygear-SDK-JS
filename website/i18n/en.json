@@ -200,29 +200,56 @@
       "node-client.container.storage": {
         "title": "Container.storage property"
       },
-      "node-client.containerstorage._constructor_": {
-        "title": "ContainerStorage.(constructor)"
+      "node-client.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
       },
-      "node-client.containerstorage.driver": {
-        "title": "ContainerStorage.driver property"
+      "node-client.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "node-client.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "node-client.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "node-client.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "node-client.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "node-client.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "node-client.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "node-client.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "node-client.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
       },
       "node-client.containerstorage": {
-        "title": "ContainerStorage class"
+        "title": "ContainerStorage interface"
       },
-      "node-client.containerstorage.safedel": {
-        "title": "ContainerStorage.safeDel() method"
+      "node-client.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
       },
-      "node-client.containerstorage.safeget": {
-        "title": "ContainerStorage.safeGet() method"
+      "node-client.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
       },
-      "node-client.containerstorage.safegetjson": {
-        "title": "ContainerStorage.safeGetJSON() method"
+      "node-client.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
       },
-      "node-client.containerstorage.safeset": {
-        "title": "ContainerStorage.safeSet() method"
-      },
-      "node-client.containerstorage.safesetjson": {
-        "title": "ContainerStorage.safeSetJSON() method"
+      "node-client.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
       },
       "node-client.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
@@ -269,6 +296,48 @@
       "node-client.encodeuser": {
         "title": "encodeUser() function"
       },
+      "node-client.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "node-client.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "node-client.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "node-client.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "node-client.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "node-client.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "node-client.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
+      },
       "node-client.identity": {
         "title": "Identity type"
       },
@@ -310,6 +379,12 @@
       },
       "node-client.nodeapiclient.requestclass": {
         "title": "NodeAPIClient.requestClass property"
+      },
+      "node-client.nodecontainer._constructor_": {
+        "title": "NodeContainer.(constructor)"
+      },
+      "node-client.nodecontainer": {
+        "title": "NodeContainer class"
       },
       "node-client.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
@@ -626,29 +701,56 @@
       "react-native.container.storage": {
         "title": "Container.storage property"
       },
-      "react-native.containerstorage._constructor_": {
-        "title": "ContainerStorage.(constructor)"
+      "react-native.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
       },
-      "react-native.containerstorage.driver": {
-        "title": "ContainerStorage.driver property"
+      "react-native.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "react-native.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "react-native.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "react-native.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "react-native.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "react-native.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "react-native.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "react-native.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "react-native.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
       },
       "react-native.containerstorage": {
-        "title": "ContainerStorage class"
+        "title": "ContainerStorage interface"
       },
-      "react-native.containerstorage.safedel": {
-        "title": "ContainerStorage.safeDel() method"
+      "react-native.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
       },
-      "react-native.containerstorage.safeget": {
-        "title": "ContainerStorage.safeGet() method"
+      "react-native.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
       },
-      "react-native.containerstorage.safegetjson": {
-        "title": "ContainerStorage.safeGetJSON() method"
+      "react-native.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
       },
-      "react-native.containerstorage.safeset": {
-        "title": "ContainerStorage.safeSet() method"
-      },
-      "react-native.containerstorage.safesetjson": {
-        "title": "ContainerStorage.safeSetJSON() method"
+      "react-native.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
       },
       "react-native.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
@@ -694,6 +796,48 @@
       },
       "react-native.encodeuser": {
         "title": "encodeUser() function"
+      },
+      "react-native.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "react-native.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "react-native.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "react-native.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "react-native.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "react-native.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "react-native.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
       },
       "react-native.identity": {
         "title": "Identity type"
@@ -796,6 +940,12 @@
       },
       "react-native.reactnativeasyncstoragestoragedriver.set": {
         "title": "ReactNativeAsyncStorageStorageDriver.set() method"
+      },
+      "react-native.reactnativecontainer._constructor_": {
+        "title": "ReactNativeContainer.(constructor)"
+      },
+      "react-native.reactnativecontainer": {
+        "title": "ReactNativeContainer class"
       },
       "react-native.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
@@ -1046,29 +1196,56 @@
       "web.container.storage": {
         "title": "Container.storage property"
       },
-      "web.containerstorage._constructor_": {
-        "title": "ContainerStorage.(constructor)"
+      "web.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
       },
-      "web.containerstorage.driver": {
-        "title": "ContainerStorage.driver property"
+      "web.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "web.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "web.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "web.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "web.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "web.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "web.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "web.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "web.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "web.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
       },
       "web.containerstorage": {
-        "title": "ContainerStorage class"
+        "title": "ContainerStorage interface"
       },
-      "web.containerstorage.safedel": {
-        "title": "ContainerStorage.safeDel() method"
+      "web.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
       },
-      "web.containerstorage.safeget": {
-        "title": "ContainerStorage.safeGet() method"
+      "web.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
       },
-      "web.containerstorage.safegetjson": {
-        "title": "ContainerStorage.safeGetJSON() method"
+      "web.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
       },
-      "web.containerstorage.safeset": {
-        "title": "ContainerStorage.safeSet() method"
-      },
-      "web.containerstorage.safesetjson": {
-        "title": "ContainerStorage.safeSetJSON() method"
+      "web.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
       },
       "web.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
@@ -1114,6 +1291,48 @@
       },
       "web.encodeuser": {
         "title": "encodeUser() function"
+      },
+      "web.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "web.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "web.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "web.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "web.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "web.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "web.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "web.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "web.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "web.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
       },
       "web.identity": {
         "title": "Identity type"

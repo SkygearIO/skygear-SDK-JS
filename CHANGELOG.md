@@ -1,3 +1,10 @@
+## 2.0.0-alpha.9 (2019-08-27)
+
+### Features
+
+- Introduce options and default values for containers constructor
+- Refactor ContainerStorage
+
 ## 2.0.0-alpha.8 (2019-08-22)
 
 ### Features
