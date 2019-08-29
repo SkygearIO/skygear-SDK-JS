@@ -7,7 +7,7 @@ import {
   SSOLoginOptions,
   ContainerOptions,
 } from "./types";
-import { BaseAPIClient } from "./client";
+import { BaseAPIClient, _removeTrailingSlash } from "./client";
 
 /**
  * @public
@@ -248,7 +248,7 @@ export class Container<T extends BaseAPIClient> {
     endpoint: string;
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
-    this.apiClient.endpoint = options.endpoint;
+    this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient.accessToken = accessToken;

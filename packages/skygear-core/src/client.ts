@@ -7,7 +7,10 @@ import {
 import { decodeError } from "./error";
 import { decodeAuthResponse } from "./encoding";
 
-function removeTrailingSlash(s: string): string {
+/**
+ * @internal
+ */
+export function _removeTrailingSlash(s: string): string {
   return s.replace(/\/+$/g, "");
 }
 
@@ -62,7 +65,7 @@ export abstract class BaseAPIClient {
     accessToken: string | null;
   }) {
     this.apiKey = options.apiKey;
-    this.endpoint = removeTrailingSlash(options.endpoint);
+    this.endpoint = _removeTrailingSlash(options.endpoint);
     this.accessToken = options.accessToken;
   }
 
