@@ -1,3 +1,9 @@
+## 2.0.0-alpha.10 (2019-08-29)
+
+### Bug Fixes
+
+- Remove trailing slash in configure()
+
 ## 2.0.0-alpha.9 (2019-08-27)
 
 ### Features
