@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Session</title>
+</head>
+<body>
+
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitList(event)">
+    <div class="form-group">
+      <h1>List Sessions</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="listSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="listResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitGet(event)">
+    <div class="form-group">
+      <h1>Get Session</h1>
+    </div>
+    <div class="form-group">
+      <label>ID</label>
+      <input id="getID" type="text" class="form-control" placeholder="Session ID" oninput="onInputGet()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="getSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="getResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitUpdate(event)">
+    <div class="form-group">
+      <h1>Update Session</h1>
+    </div>
+    <div class="form-group">
+      <label>ID</label>
+      <input id="updateID" type="text" class="form-control" placeholder="Session ID" oninput="onInputUpdate()">
+    </div>
+    <div class="form-group">
+      <label>Name</label>
+      <input id="updateName" type="text" class="form-control" placeholder="Session Name" oninput="onInputUpdate()">
+    </div>
+    <div class="form-group">
+      <label>Custom Data</label>
+      <textarea id="updateCustomData" class="form-control" oninput="onInputUpdate()"></textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="updateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="updateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitRevoke(event)">
+    <div class="form-group">
+      <h1>Revoke Session</h1>
+    </div>
+    <div class="form-group">
+      <label>ID</label>
+      <input id="revokeID" type="text" class="form-control" placeholder="Session ID" oninput="onInputRevoke()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="revokeSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="revokeResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitRevokeOther(event)">
+    <div class="form-group">
+      <h1>Revoke Other Sessions</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="revokeOtherSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="revokeOtherResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function setupListSynopsis() {
+  var synopsisTextArea = document.getElementById("listSynopsis");
+  var funcExpr = "defaultContainer.auth.listSessions";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitList(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("listResult");
+
+  defaultContainer.auth.listSessions().then(function(sessions) {
+    resultTextArea.value = JSON.stringify(sessions);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputGet() {
+  var sessionID = document.getElementById("getID").value;
+  var synopsisTextArea = document.getElementById("getSynopsis");
+  var funcExpr = "defaultContainer.auth.getSession";
+  var s = stringifyFunctionCall(funcExpr, sessionID);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitGet(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var sessionID = document.getElementById("getID").value;
+  var resultTextArea = document.getElementById("getResult");
+
+  defaultContainer.auth.getSession(sessionID).then(function(session) {
+    resultTextArea.value = JSON.stringify(session);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputUpdate() {
+  var sessionID = document.getElementById("updateID").value;
+  var name = document.getElementById("updateName").value;
+  var customDataStr = document.getElementById("updateCustomData").value;
+  var synopsisTextArea = document.getElementById("updateSynopsis");
+
+  var funcExpr = "defaultContainer.auth.updateSession";
+  try {
+    var data;
+    if (customDataStr != "") {
+      data = JSON.parse(customDataStr);
+      if (typeof data !== "object" || data == null) {
+        throw "invalid";
+      }
+    }
+    s = stringifyFunctionCall(funcExpr, sessionID, { name: name, data: data });
+  } catch (e) {}
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitUpdate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var sessionID = document.getElementById("updateID").value;
+  var name = document.getElementById("updateName").value;
+  var customDataStr = document.getElementById("updateCustomData").value;
+  var resultTextArea = document.getElementById("updateResult");
+
+  try {
+    var data;
+    if (customDataStr != "") {
+      data = JSON.parse(customDataStr);
+      if (typeof data !== "object" || data == null) {
+        throw "invalid";
+      }
+    }
+    defaultContainer.auth.updateSession(sessionID, { name: name, data: data }).then(function() {
+      resultTextArea.value = "OK";
+    }, function(e) {
+      resultTextArea.value = JSON.stringify(e);
+    });
+  } catch (e) {
+    resultTextArea.value = "ERROR";
+  }
+}
+
+function onInputRevoke() {
+  var sessionID = document.getElementById("revokeID").value;
+  var synopsisTextArea = document.getElementById("revokeSynopsis");
+  var funcExpr = "defaultContainer.auth.revokeSession";
+  var s = stringifyFunctionCall(funcExpr, sessionID);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitRevoke(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var sessionID = document.getElementById("revokeID").value;
+  var resultTextArea = document.getElementById("revokeResult");
+
+  defaultContainer.auth.revokeSession(sessionID).then(function() {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function setupRevokeOtherSynopsis() {
+  var synopsisTextArea = document.getElementById("revokeOtherSynopsis");
+  var funcExpr = "defaultContainer.auth.revokeOtherSessions";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitRevokeOther(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("revokeOtherResult");
+
+  defaultContainer.auth.revokeOtherSessions().then(function(sessions) {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  setupListSynopsis();
+  onInputGet();
+  onInputUpdate();
+  onInputRevoke();
+  setupRevokeOtherSynopsis();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
