@@ -212,11 +212,11 @@ export abstract class BaseAPIClient {
   }
 
   async logout(): Promise<void> {
-    await this.post("/_auth/logout");
+    await this.post("/_auth/logout", { json: {} });
   }
 
   async me(): Promise<AuthResponse> {
-    return this.postAndReturnAuthResponse("/_auth/me");
+    return this.postAndReturnAuthResponse("/_auth/me", { json: {} });
   }
 
   async changePassword(
@@ -323,7 +323,7 @@ export abstract class BaseAPIClient {
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
     const encoded = encodeURIComponent(providerID);
-    await this.post(`/_auth/sso/${encoded}/unlink`);
+    await this.post(`/_auth/sso/${encoded}/unlink`, { json: {} });
   }
 
   async loginOAuthProviderWithAccessToken(
