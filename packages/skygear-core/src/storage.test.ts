@@ -100,6 +100,21 @@ describe("ContainerStorage", () => {
     expect(restored).toEqual(null);
   });
 
+  it("should set, get and delete session ID", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const id = "session_id";
+    const ns = "test";
+
+    await storage.setSessionID(ns, id);
+    let restored = await storage.getSessionID(ns);
+    expect(restored).toEqual(id);
+
+    await storage.delSessionID(ns);
+    restored = await storage.getSessionID(ns);
+    expect(restored).toEqual(null);
+  });
+
   it("should set, get and delete oauth redirect action", async () => {
     const driver = new MemoryStorageDriver();
     const storage = new GlobalJSONContainerStorage(driver);

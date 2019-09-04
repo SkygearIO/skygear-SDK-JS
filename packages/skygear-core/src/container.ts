@@ -17,15 +17,17 @@ export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
   currentUser: User | null;
   currentIdentity: Identity | null;
+  currentSessionID: string | null;
 
   constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
     this.currentIdentity = null;
+    this.currentSessionID = null;
   }
 
   async persistResponse(response: AuthResponse): Promise<void> {
-    const { user, identity, accessToken, refreshToken } = response;
+    const { user, identity, accessToken, refreshToken, sessionID } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
 
@@ -41,12 +43,19 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.parent.storage.setRefreshToken(this.parent.name, refreshToken);
     }
 
+    if (sessionID) {
+      await this.parent.storage.setSessionID(this.parent.name, sessionID);
+    }
+
     this.currentUser = user;
     if (identity) {
       this.currentIdentity = identity;
     }
     if (accessToken) {
       this.parent.apiClient.accessToken = accessToken;
+    }
+    if (sessionID) {
+      this.currentSessionID = sessionID;
     }
   }
 
@@ -127,9 +136,11 @@ export class AuthContainer<T extends BaseAPIClient> {
     await this.parent.storage.delIdentity(this.parent.name);
     await this.parent.storage.delAccessToken(this.parent.name);
     await this.parent.storage.delRefreshToken(this.parent.name);
+    await this.parent.storage.delSessionID(this.parent.name);
     this.currentUser = null;
     this.currentIdentity = null;
     this.parent.apiClient.accessToken = null;
+    this.currentSessionID = null;
   }
 
   /**
@@ -294,6 +305,9 @@ export class Container<T extends BaseAPIClient> {
 
     const identity = await this.storage.getIdentity(this.name);
     this.auth.currentIdentity = identity;
+
+    const sessionID = await this.storage.getSessionID(this.name);
+    this.auth.currentSessionID = sessionID;
   }
 
   async fetch(input: string, init?: RequestInit): Promise<Response> {
