@@ -1,4 +1,11 @@
-import { User, Identity, JSONObject, AuthResponse } from "./types";
+import {
+  User,
+  Identity,
+  Session,
+  SessionUserAgent,
+  JSONObject,
+  AuthResponse,
+} from "./types";
 
 /**
  * @public
@@ -79,6 +86,44 @@ export function decodeIdentity(i: any): Identity {
     default:
       throw new Error("unknown identity type: " + type);
   }
+}
+
+/**
+ * @public
+ */
+export function decodeSession(s: any): Session {
+  const id = s.id;
+  const identityID = s.identity_id;
+  const createdAt = new Date(s.created_at);
+  const lastAccessedAt = new Date(s.last_accessed_at);
+  const createdByIP = s.created_by_ip;
+  const lastAccessedByIP = s.last_accessed_by_ip;
+  const userAgent = decodeSessionUserAgent(s.user_agent);
+  const name = s.name;
+  const data = s.data;
+  return {
+    id,
+    identityID,
+    createdAt,
+    lastAccessedAt,
+    createdByIP,
+    lastAccessedByIP,
+    userAgent,
+    name,
+    data,
+  };
+}
+
+function decodeSessionUserAgent(ua: any): SessionUserAgent {
+  return {
+    raw: ua.raw,
+    name: ua.name,
+    version: ua.version,
+    os: ua.os,
+    osVersion: ua.os_version,
+    deviceName: ua.device_name,
+    deviceModel: ua.device_model,
+  };
 }
 
 /**

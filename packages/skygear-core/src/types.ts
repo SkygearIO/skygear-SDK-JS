@@ -78,6 +78,34 @@ export interface CustomTokenIdentity {
 /**
  * @public
  */
+export interface Session {
+  id: string;
+  identityID: string;
+  createdAt: Date;
+  lastAccessedAt: Date;
+  createdByIP: string;
+  lastAccessedByIP: string;
+  userAgent: SessionUserAgent;
+  name: string;
+  data: JSONObject;
+}
+
+/**
+ * @public
+ */
+export interface SessionUserAgent {
+  raw: string;
+  name: string;
+  version: string;
+  os: string;
+  osVersion: string;
+  deviceName: string;
+  deviceModel: string;
+}
+
+/**
+ * @public
+ */
 export interface AuthResponse {
   user: User;
   identity?: Identity;

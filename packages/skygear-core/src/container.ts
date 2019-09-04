@@ -6,6 +6,7 @@ import {
   AuthResponse,
   SSOLoginOptions,
   ContainerOptions,
+  Session,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
 import { SkygearError } from "./error";
@@ -267,6 +268,29 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
     await this.persistResponse(response);
     return response.user;
+  }
+
+  async listSessions(): Promise<Session[]> {
+    return this.parent.apiClient.listSessions();
+  }
+
+  async getSession(id: string): Promise<Session> {
+    return this.parent.apiClient.getSession(id);
+  }
+
+  async updateSession(
+    id: string,
+    patch: { name?: string; data?: JSONObject }
+  ): Promise<void> {
+    return this.parent.apiClient.updateSession(id, patch);
+  }
+
+  async revokeSession(id: string): Promise<void> {
+    return this.parent.apiClient.revokeSession(id);
+  }
+
+  async revokeOtherSessions(): Promise<void> {
+    return this.parent.apiClient.revokeOtherSessions();
   }
 }
 

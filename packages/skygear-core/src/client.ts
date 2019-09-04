@@ -2,10 +2,11 @@ import {
   JSONObject,
   AuthResponse,
   SSOLoginOptions,
+  Session,
   OAuthAuthorizationURLOptions,
 } from "./types";
 import { decodeError } from "./error";
-import { decodeAuthResponse } from "./encoding";
+import { decodeAuthResponse, decodeSession } from "./encoding";
 
 /**
  * @internal
@@ -410,5 +411,33 @@ export abstract class BaseAPIClient {
     return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/link`, {
       json: payload,
     });
+  }
+
+  async listSessions(): Promise<Session[]> {
+    const response = await this.post("/_auth/session/list", { json: {} });
+    return (response.sessions as any[]).map(decodeSession);
+  }
+
+  async getSession(id: string): Promise<Session> {
+    const payload = { session_id: id };
+    const response = await this.post("/_auth/session/get", { json: payload });
+    return decodeSession(response.session);
+  }
+
+  async updateSession(
+    id: string,
+    patch: { name?: string; data?: JSONObject }
+  ): Promise<void> {
+    const payload = { session_id: id, name: patch.name, data: patch.data };
+    return this.post("/_auth/session/update", { json: payload });
+  }
+
+  async revokeSession(id: string): Promise<void> {
+    const payload = { session_id: id };
+    return this.post("/_auth/session/revoke", { json: payload });
+  }
+
+  async revokeOtherSessions(): Promise<void> {
+    return this.post("/_auth/session/revoke_all", { json: {} });
   }
 }
