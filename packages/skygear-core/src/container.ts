@@ -24,7 +24,7 @@ export class AuthContainer<T extends BaseAPIClient> {
   }
 
   async persistResponse(response: AuthResponse): Promise<void> {
-    const { user, identity, accessToken } = response;
+    const { user, identity, accessToken, refreshToken } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
 
@@ -34,6 +34,10 @@ export class AuthContainer<T extends BaseAPIClient> {
 
     if (accessToken) {
       await this.parent.storage.setAccessToken(this.parent.name, accessToken);
+    }
+
+    if (refreshToken) {
+      await this.parent.storage.setRefreshToken(this.parent.name, refreshToken);
     }
 
     this.currentUser = user;
@@ -121,6 +125,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     await this.parent.storage.delUser(this.parent.name);
     await this.parent.storage.delIdentity(this.parent.name);
     await this.parent.storage.delAccessToken(this.parent.name);
+    await this.parent.storage.delRefreshToken(this.parent.name);
     this.currentUser = null;
     this.currentIdentity = null;
     this.parent.apiClient.accessToken = null;

@@ -21,6 +21,10 @@ function keyAccessToken(name: string): string {
   return `${name}_accessToken`;
 }
 
+function keyRefreshToken(name: string): string {
+  return `${name}_refreshToken`;
+}
+
 function keyUser(name: string): string {
   return `${name}_user`;
 }
@@ -112,6 +116,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSet(keyAccessToken(namespace), accessToken);
   }
 
+  async setRefreshToken(namespace: string, refreshToken: string) {
+    await this.storage.safeSet(keyRefreshToken(namespace), refreshToken);
+  }
+
   async setOAuthRedirectAction(namespace: string, oauthRedirectAction: string) {
     await this.storage.safeSet(
       keyOAuthRedirectAction(namespace),
@@ -139,6 +147,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keyAccessToken(namespace));
   }
 
+  async getRefreshToken(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyRefreshToken(namespace));
+  }
+
   async getOAuthRedirectAction(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOAuthRedirectAction(namespace));
   }
@@ -153,6 +165,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delAccessToken(namespace: string) {
     await this.storage.safeDel(keyAccessToken(namespace));
+  }
+
+  async delRefreshToken(namespace: string) {
+    await this.storage.safeDel(keyRefreshToken(namespace));
   }
 
   async delOAuthRedirectAction(namespace: string) {

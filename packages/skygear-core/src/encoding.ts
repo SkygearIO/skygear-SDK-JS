@@ -4,7 +4,7 @@ import { User, Identity, JSONObject, AuthResponse } from "./types";
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const { user, identity, access_token } = r;
+  const { user, identity, access_token, refresh_token } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
@@ -13,6 +13,9 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (access_token) {
     response.accessToken = access_token;
+  }
+  if (refresh_token) {
+    response.refreshToken = refresh_token;
   }
   return response;
 }
