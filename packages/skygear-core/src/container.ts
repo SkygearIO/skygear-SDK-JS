@@ -23,11 +23,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.currentIdentity = null;
   }
 
-  // @ts-ignore
-  get accessToken(): string | null {
-    return this.parent.apiClient.accessToken;
-  }
-
   async persistResponse(response: AuthResponse): Promise<void> {
     const { user, identity, accessToken } = response;
 
