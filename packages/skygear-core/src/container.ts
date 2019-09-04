@@ -8,6 +8,7 @@ import {
   ContainerOptions,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { SkygearError } from "./error";
 
 /**
  * @public
@@ -131,6 +132,37 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.parent.apiClient.accessToken = null;
   }
 
+  /**
+   * @internal
+   */
+  async _refreshAccessToken(): Promise<boolean> {
+    await this.parent.storage.delAccessToken(this.parent.name);
+
+    const refreshToken = await this.parent.storage.getRefreshToken(
+      this.parent.name
+    );
+    if (!refreshToken) {
+      // no-op if no refresh token
+      return false;
+    }
+
+    let accessToken;
+    try {
+      accessToken = await this.parent.apiClient.refresh(refreshToken);
+    } catch (error) {
+      if (error instanceof SkygearError && error.name === "NotAuthenticated") {
+        // cannot refresh -> session is gone
+        await this.parent.storage.delRefreshToken(this.parent.name);
+      }
+      throw error;
+    }
+
+    await this.parent.storage.setAccessToken(this.parent.name, accessToken);
+    this.parent.apiClient.accessToken = accessToken;
+
+    return true;
+  }
+
   async me(): Promise<User> {
     const response = await this.parent.apiClient.me();
     await this.persistResponse(response);
@@ -241,6 +273,10 @@ export class Container<T extends BaseAPIClient> {
     this.apiClient = options.apiClient;
     this.storage = options.storage;
     this.auth = new AuthContainer(this);
+
+    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
+      this.auth
+    );
   }
 
   async configure(options: {

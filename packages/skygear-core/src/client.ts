@@ -58,6 +58,7 @@ export abstract class BaseAPIClient {
   accessToken: string | null;
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
+  refreshTokenFunction?: () => Promise<boolean>;
 
   constructor(options: {
     apiKey: string;
@@ -79,10 +80,20 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
-  async fetch(input: string, init?: RequestInit): Promise<Response> {
+  async fetch(
+    input: string,
+    init?: RequestInit,
+    options: { autoRefreshToken?: boolean } = {}
+  ): Promise<Response> {
+    if (this.fetchFunction == null) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
     if (this.requestClass == null) {
       throw new Error("missing requestClass in api client");
     }
+
+    const { autoRefreshToken = !!this.refreshTokenFunction } = options || {};
 
     if (typeof input !== "string") {
       throw new Error("only string path is allowed for fetch input");
@@ -96,19 +107,38 @@ export abstract class BaseAPIClient {
       request.headers.set(key, headers[key]);
     }
 
-    if (this.fetchFunction == null) {
-      throw new Error("missing fetchFunction in api client");
+    let response = await this.fetchFunction(request.clone());
+    if (response.status === 401 && autoRefreshToken) {
+      if (!this.refreshTokenFunction) {
+        throw new Error("missing refreshTokenFunction in api client");
+      }
+
+      const tokenRefreshed = await this.refreshTokenFunction();
+      if (tokenRefreshed) {
+        const retryRequest = request.clone();
+        // use latest access token
+        const headers = this.prepareHeaders();
+        for (const key of Object.keys(headers)) {
+          retryRequest.headers.set(key, headers[key]);
+        }
+
+        response = await this.fetchFunction(retryRequest);
+      }
     }
 
-    return this.fetchFunction(request);
+    return response;
   }
 
   protected async request(
     method: "GET" | "POST" | "DELETE",
     path: string,
-    options: { json?: JSONObject; query?: [string, string][] } = {}
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    } = {}
   ): Promise<any> {
-    const { json, query } = options;
+    const { json, query, autoRefreshToken } = options;
     let p = path;
     if (query != null) {
       p += encodeQuery(query);
@@ -119,13 +149,17 @@ export abstract class BaseAPIClient {
       headers["content-type"] = "application/json";
     }
 
-    const response = await this.fetch(p, {
-      method,
-      headers,
-      mode: "cors",
-      credentials: "include",
-      body: json && JSON.stringify(json),
-    });
+    const response = await this.fetch(
+      p,
+      {
+        method,
+        headers,
+        mode: "cors",
+        credentials: "include",
+        body: json && JSON.stringify(json),
+      },
+      { autoRefreshToken }
+    );
     const jsonBody = await response.json();
 
     if (jsonBody["result"]) {
@@ -139,28 +173,40 @@ export abstract class BaseAPIClient {
 
   protected async post(
     path: string,
-    options?: { json?: JSONObject; query?: [string, string][] }
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<any> {
     return this.request("POST", path, options);
   }
 
   protected async get(
     path: string,
-    options?: { query?: [string, string][] }
+    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
   ): Promise<any> {
     return this.request("GET", path, options);
   }
 
   protected async del(
     path: string,
-    options: { json?: JSONObject; query?: [string, string][] }
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<any> {
     return this.request("DELETE", path, options);
   }
 
   protected async postAndReturnAuthResponse(
     path: string,
-    options?: { json?: JSONObject; query?: [string, string][] }
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<AuthResponse> {
     const response = await this.post(path, options);
     return decodeAuthResponse(response);
@@ -213,6 +259,17 @@ export abstract class BaseAPIClient {
 
   async logout(): Promise<void> {
     await this.post("/_auth/logout", { json: {} });
+  }
+
+  async refresh(refreshToken: string): Promise<string> {
+    const payload = {
+      refresh_token: refreshToken,
+    };
+    const response = await this.post("/_auth/refresh", {
+      json: payload,
+      autoRefreshToken: false,
+    });
+    return response.access_token;
   }
 
   async me(): Promise<AuthResponse> {
