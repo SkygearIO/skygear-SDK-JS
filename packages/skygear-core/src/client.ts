@@ -75,7 +75,7 @@ export abstract class BaseAPIClient {
       "x-skygear-api-key": this.apiKey,
     };
     if (this.accessToken) {
-      headers["x-skygear-access-token"] = this.accessToken;
+      headers["authorization"] = `bearer ${this.accessToken}`;
     }
     return headers;
   }
