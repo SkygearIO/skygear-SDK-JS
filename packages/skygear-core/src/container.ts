@@ -132,6 +132,13 @@ export class AuthContainer<T extends BaseAPIClient> {
 
   async logout(): Promise<void> {
     await this.parent.apiClient.logout();
+    await this._clearSession();
+  }
+
+  /**
+   * @internal
+   */
+  async _clearSession() {
     await this.parent.storage.delUser(this.parent.name);
     await this.parent.storage.delIdentity(this.parent.name);
     await this.parent.storage.delAccessToken(this.parent.name);
@@ -153,7 +160,8 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.parent.name
     );
     if (!refreshToken) {
-      // no-op if no refresh token
+      // no refresh token -> session is gone
+      await this._clearSession();
       return false;
     }
 
@@ -163,7 +171,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     } catch (error) {
       if (error instanceof SkygearError && error.name === "NotAuthenticated") {
         // cannot refresh -> session is gone
-        await this.parent.storage.delRefreshToken(this.parent.name);
+        await this._clearSession();
       }
       throw error;
     }
