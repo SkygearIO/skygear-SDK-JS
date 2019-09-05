@@ -61,6 +61,7 @@ export abstract class BaseAPIClient {
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
   userAgent?: string;
+  getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
   constructor(options: {
     apiKey: string;
@@ -72,7 +73,7 @@ export abstract class BaseAPIClient {
     this.accessToken = options.accessToken;
   }
 
-  protected prepareHeaders(): { [name: string]: string } {
+  protected async prepareHeaders(): Promise<{ [name: string]: string }> {
     const headers: { [name: string]: string } = {
       "x-skygear-api-key": this.apiKey,
     };
@@ -81,6 +82,12 @@ export abstract class BaseAPIClient {
     }
     if (this.userAgent !== undefined) {
       headers["user-agent"] = this.userAgent;
+    }
+    if (this.getExtraSessionInfo) {
+      const extraSessionInfo = await this.getExtraSessionInfo();
+      if (extraSessionInfo) {
+        headers["x-skygear-extra-info"] = JSON.stringify(extraSessionInfo);
+      }
     }
     return headers;
   }
@@ -107,7 +114,7 @@ export abstract class BaseAPIClient {
     const url = this.endpoint + "/" + input.replace(/^\//, "");
     const request = new this.requestClass(url, init);
 
-    const headers = this.prepareHeaders();
+    const headers = await this.prepareHeaders();
     for (const key of Object.keys(headers)) {
       request.headers.set(key, headers[key]);
     }
@@ -122,7 +129,7 @@ export abstract class BaseAPIClient {
       if (tokenRefreshed) {
         const retryRequest = request.clone();
         // use latest access token
-        const headers = this.prepareHeaders();
+        const headers = await this.prepareHeaders();
         for (const key of Object.keys(headers)) {
           retryRequest.headers.set(key, headers[key]);
         }

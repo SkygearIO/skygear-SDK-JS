@@ -127,12 +127,19 @@ export interface ContainerStorage {
     namespace: string,
     oauthRedirectAction: string
   ): Promise<void>;
+  setExtraSessionInfoOptions(
+    namespace: string,
+    options: ExtraSessionInfoOptions
+  ): Promise<void>;
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
   getAccessToken(namespace: string): Promise<string | null>;
   getRefreshToken(namespace: string): Promise<string | null>;
   getSessionID(namespace: string): Promise<string | null>;
   getOAuthRedirectAction(namespace: string): Promise<string | null>;
+  getExtraSessionInfoOptions(
+    namespace: string
+  ): Promise<Partial<ExtraSessionInfoOptions> | null>;
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
   delAccessToken(namespace: string): Promise<void>;
@@ -190,4 +197,20 @@ export interface ContainerOptions<T> {
   name?: string;
   apiClient?: T;
   storage?: ContainerStorage;
+  extraSessionInfoProvider?: ExtraSessionInfoProvider;
+}
+
+/**
+ * @public
+ */
+export interface ExtraSessionInfoOptions {
+  collectDeviceName: boolean;
+  deviceName?: string;
+}
+
+/**
+ * @public
+ */
+export interface ExtraSessionInfoProvider {
+  getDeviceName(): Promise<string | undefined>;
 }

@@ -7,9 +7,15 @@ import {
   SSOLoginOptions,
   ContainerOptions,
   Session,
+  ExtraSessionInfoOptions,
+  ExtraSessionInfoProvider,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
 import { SkygearError } from "./error";
+
+const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
+  collectDeviceName: false,
+};
 
 /**
  * @public
@@ -19,12 +25,44 @@ export class AuthContainer<T extends BaseAPIClient> {
   currentUser: User | null;
   currentIdentity: Identity | null;
   currentSessionID: string | null;
+  extraSessionInfoOptions: ExtraSessionInfoOptions = {
+    ...defaultExtraSessionInfoOptions,
+  };
 
   constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
     this.currentIdentity = null;
     this.currentSessionID = null;
+  }
+
+  async saveExtraSessionInfoOptions() {
+    return this.parent.storage.setExtraSessionInfoOptions(
+      this.parent.name,
+      this.extraSessionInfoOptions
+    );
+  }
+
+  /**
+   * @internal
+   */
+  async _getExtraSessionInfo(): Promise<JSONObject | null> {
+    const provider = this.parent.extraSessionInfoProvider;
+    const options = this.extraSessionInfoOptions;
+
+    let hasInfo = false;
+    const info: JSONObject = {};
+
+    if (options.collectDeviceName) {
+      let deviceName = options.deviceName;
+      if (!deviceName && provider) {
+        deviceName = await provider.getDeviceName();
+      }
+      info["device_name"] = deviceName;
+      hasInfo = true;
+    }
+
+    return hasInfo ? info : null;
   }
 
   async persistResponse(response: AuthResponse): Promise<void> {
@@ -301,6 +339,7 @@ export class Container<T extends BaseAPIClient> {
   name: string;
   apiClient: T;
   storage: ContainerStorage;
+  extraSessionInfoProvider?: ExtraSessionInfoProvider;
   auth: AuthContainer<T>;
 
   constructor(options: ContainerOptions<T>) {
@@ -315,11 +354,8 @@ export class Container<T extends BaseAPIClient> {
     this.name = options.name || "default";
     this.apiClient = options.apiClient;
     this.storage = options.storage;
+    this.extraSessionInfoProvider = options.extraSessionInfoProvider;
     this.auth = new AuthContainer(this);
-
-    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
-      this.auth
-    );
   }
 
   async configure(options: {
@@ -340,6 +376,21 @@ export class Container<T extends BaseAPIClient> {
 
     const sessionID = await this.storage.getSessionID(this.name);
     this.auth.currentSessionID = sessionID;
+
+    const extraSessionInfoOptions = await this.storage.getExtraSessionInfoOptions(
+      this.name
+    );
+    this.auth.extraSessionInfoOptions = {
+      ...defaultExtraSessionInfoOptions,
+      ...extraSessionInfoOptions,
+    };
+
+    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
+      this.auth
+    );
+    this.apiClient.getExtraSessionInfo = this.auth._getExtraSessionInfo.bind(
+      this.auth
+    );
   }
 
   async fetch(input: string, init?: RequestInit): Promise<Response> {

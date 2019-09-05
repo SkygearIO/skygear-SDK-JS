@@ -5,6 +5,7 @@ import {
   SessionUserAgent,
   JSONObject,
   AuthResponse,
+  ExtraSessionInfoOptions,
 } from "./types";
 
 /**
@@ -127,6 +128,22 @@ function decodeSessionUserAgent(ua: any): SessionUserAgent {
 }
 
 /**
+ * @internal
+ */
+export function _decodeExtraSessionInfoOptions(
+  o: any
+): Partial<ExtraSessionInfoOptions> {
+  const opts: Partial<ExtraSessionInfoOptions> = {};
+  if (o.collect_device_name !== undefined) {
+    opts.collectDeviceName = o.collect_device_name;
+  }
+  if (o.device_name !== undefined) {
+    opts.deviceName = o.device_name;
+  }
+  return opts;
+}
+
+/**
  * @public
  */
 export function encodeUser(u: User): JSONObject {
@@ -176,4 +193,16 @@ export function encodeIdentity(i: Identity): JSONObject {
     default:
       throw new Error("unknown identity type: ");
   }
+}
+
+/**
+ * @internal
+ */
+export function _encodeExtraSessionInfoOptions(
+  o: ExtraSessionInfoOptions
+): JSONObject {
+  return {
+    collect_device_name: o.collectDeviceName,
+    device_name: o.deviceName,
+  };
 }

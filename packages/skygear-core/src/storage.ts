@@ -4,6 +4,7 @@ import {
   JSONValue,
   User,
   Identity,
+  ExtraSessionInfoOptions,
 } from "./types";
 
 import {
@@ -11,6 +12,8 @@ import {
   encodeIdentity,
   decodeUser,
   decodeIdentity,
+  _encodeExtraSessionInfoOptions,
+  _decodeExtraSessionInfoOptions,
 } from "./encoding";
 
 function scopedKey(key: string): string {
@@ -39,6 +42,10 @@ function keyIdentity(name: string): string {
 
 function keyOAuthRedirectAction(name: string): string {
   return `${name}_oauthRedirectAction`;
+}
+
+function keyExtraSessionInfoOptions(name: string): string {
+  return `${name}_extra_session_info_options`;
 }
 
 /**
@@ -135,6 +142,16 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     );
   }
 
+  async setExtraSessionInfoOptions(
+    namespace: string,
+    options: ExtraSessionInfoOptions
+  ) {
+    await this.storage.safeSetJSON(
+      keyExtraSessionInfoOptions(namespace),
+      _encodeExtraSessionInfoOptions(options)
+    );
+  }
+
   async getUser(namespace: string): Promise<User | null> {
     const userJSON = await this.storage.safeGetJSON(keyUser(namespace));
     if (userJSON) {
@@ -165,6 +182,18 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async getOAuthRedirectAction(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOAuthRedirectAction(namespace));
+  }
+
+  async getExtraSessionInfoOptions(
+    namespace: string
+  ): Promise<Partial<ExtraSessionInfoOptions> | null> {
+    const optionJSON = await this.storage.safeGetJSON(
+      keyExtraSessionInfoOptions(namespace)
+    );
+    if (optionJSON) {
+      return _decodeExtraSessionInfoOptions(optionJSON);
+    }
+    return null;
   }
 
   async delUser(namespace: string) {

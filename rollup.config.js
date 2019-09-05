@@ -130,7 +130,7 @@ export default function makeConfig(commandLineArgs) {
           file: "packages/skygear-node-client/dist/skygear-node-client.js",
           format: "cjs",
         },
-        external: id => id === "node-fetch",
+        external: id => ["node-fetch", "os"].includes(id),
       };
     case "react-native":
       return {
