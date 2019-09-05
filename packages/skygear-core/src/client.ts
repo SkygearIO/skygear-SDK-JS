@@ -60,6 +60,7 @@ export abstract class BaseAPIClient {
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
+  userAgent?: string;
 
   constructor(options: {
     apiKey: string;
@@ -77,6 +78,9 @@ export abstract class BaseAPIClient {
     };
     if (this.accessToken) {
       headers["authorization"] = `bearer ${this.accessToken}`;
+    }
+    if (this.userAgent !== undefined) {
+      headers["user-agent"] = this.userAgent;
     }
     return headers;
   }

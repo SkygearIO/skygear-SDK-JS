@@ -4,8 +4,10 @@ import {
   Container,
   GlobalJSONContainerStorage,
   ContainerOptions,
+  VERSION,
 } from "@skygear/core";
 export * from "@skygear/core";
+import { type, release } from "os";
 
 const nodeFetch = require("node-fetch");
 
@@ -15,6 +17,9 @@ const nodeFetch = require("node-fetch");
 export class NodeAPIClient extends BaseAPIClient {
   fetchFunction = nodeFetch;
   requestClass = nodeFetch.Request;
+
+  // TODO(session): enough information?
+  userAgent = `skygear-node-client/${VERSION} (Skygear; ${type()} ${release()})`;
 }
 
 /**
