@@ -91,7 +91,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.currentIdentity = identity;
     }
     if (accessToken) {
-      this.parent.apiClient.accessToken = accessToken;
+      this.parent.apiClient._accessToken = accessToken;
     }
     if (sessionID) {
       this.currentSessionID = sessionID;
@@ -185,7 +185,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     await this.parent.storage.delSessionID(this.parent.name);
     this.currentUser = null;
     this.currentIdentity = null;
-    this.parent.apiClient.accessToken = null;
+    this.parent.apiClient._accessToken = null;
     this.currentSessionID = null;
   }
 
@@ -194,6 +194,7 @@ export class AuthContainer<T extends BaseAPIClient> {
    */
   async _refreshAccessToken(): Promise<boolean> {
     await this.parent.storage.delAccessToken(this.parent.name);
+    this.parent.apiClient._accessToken = null;
 
     const refreshToken = await this.parent.storage.getRefreshToken(
       this.parent.name
@@ -216,7 +217,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     }
 
     await this.parent.storage.setAccessToken(this.parent.name, accessToken);
-    this.parent.apiClient.accessToken = accessToken;
+    this.parent.apiClient._accessToken = accessToken;
 
     return true;
   }
@@ -366,7 +367,7 @@ export class Container<T extends BaseAPIClient> {
     this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
 
     const accessToken = await this.storage.getAccessToken(this.name);
-    this.apiClient.accessToken = accessToken;
+    this.apiClient._accessToken = accessToken;
 
     const user = await this.storage.getUser(this.name);
     this.auth.currentUser = user;

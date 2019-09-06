@@ -56,7 +56,10 @@ export function encodeQuery(query?: [string, string][]): string {
 export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;
-  accessToken: string | null;
+  /**
+   * @internal
+   */
+  _accessToken: string | null;
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
@@ -70,15 +73,15 @@ export abstract class BaseAPIClient {
   }) {
     this.apiKey = options.apiKey;
     this.endpoint = _removeTrailingSlash(options.endpoint);
-    this.accessToken = options.accessToken;
+    this._accessToken = options.accessToken;
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
     const headers: { [name: string]: string } = {
       "x-skygear-api-key": this.apiKey,
     };
-    if (this.accessToken) {
-      headers["authorization"] = `bearer ${this.accessToken}`;
+    if (this._accessToken) {
+      headers["authorization"] = `bearer ${this._accessToken}`;
     }
     if (this.userAgent !== undefined) {
       headers["user-agent"] = this.userAgent;
