@@ -89,7 +89,7 @@ export abstract class BaseAPIClient {
     if (this.getExtraSessionInfo) {
       const extraSessionInfo = await this.getExtraSessionInfo();
       if (extraSessionInfo) {
-        headers["x-skygear-extra-info"] = JSON.stringify(extraSessionInfo);
+        headers["x-skygear-extra-info"] = btoa(JSON.stringify(extraSessionInfo));
       }
     }
     return headers;
