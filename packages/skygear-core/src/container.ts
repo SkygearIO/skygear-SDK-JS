@@ -6,8 +6,16 @@ import {
   AuthResponse,
   SSOLoginOptions,
   ContainerOptions,
+  Session,
+  ExtraSessionInfoOptions,
+  ExtraSessionInfoProvider,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { SkygearError } from "./error";
+
+const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
+  collectDeviceName: false,
+};
 
 /**
  * @public
@@ -16,20 +24,49 @@ export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
   currentUser: User | null;
   currentIdentity: Identity | null;
+  currentSessionID: string | null;
+  extraSessionInfoOptions: ExtraSessionInfoOptions = {
+    ...defaultExtraSessionInfoOptions,
+  };
 
   constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
     this.currentIdentity = null;
+    this.currentSessionID = null;
   }
 
-  // @ts-ignore
-  get accessToken(): string | null {
-    return this.parent.apiClient.accessToken;
+  async saveExtraSessionInfoOptions() {
+    return this.parent.storage.setExtraSessionInfoOptions(
+      this.parent.name,
+      this.extraSessionInfoOptions
+    );
+  }
+
+  /**
+   * @internal
+   */
+  async _getExtraSessionInfo(): Promise<JSONObject | null> {
+    const provider = this.parent.extraSessionInfoProvider;
+    const options = this.extraSessionInfoOptions;
+
+    let hasInfo = false;
+    const info: JSONObject = {};
+
+    if (options.collectDeviceName) {
+      let deviceName = options.deviceName;
+      if (!deviceName && provider) {
+        deviceName = await provider.getDeviceName();
+      }
+      info["device_name"] = deviceName;
+      hasInfo = true;
+    }
+
+    return hasInfo ? info : null;
   }
 
   async persistResponse(response: AuthResponse): Promise<void> {
-    const { user, identity, accessToken } = response;
+    const { user, identity, accessToken, refreshToken, sessionID } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
 
@@ -41,12 +78,23 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.parent.storage.setAccessToken(this.parent.name, accessToken);
     }
 
+    if (refreshToken) {
+      await this.parent.storage.setRefreshToken(this.parent.name, refreshToken);
+    }
+
+    if (sessionID) {
+      await this.parent.storage.setSessionID(this.parent.name, sessionID);
+    }
+
     this.currentUser = user;
     if (identity) {
       this.currentIdentity = identity;
     }
     if (accessToken) {
-      this.parent.apiClient.accessToken = accessToken;
+      this.parent.apiClient._accessToken = accessToken;
+    }
+    if (sessionID) {
+      this.currentSessionID = sessionID;
     }
   }
 
@@ -123,12 +171,55 @@ export class AuthContainer<T extends BaseAPIClient> {
 
   async logout(): Promise<void> {
     await this.parent.apiClient.logout();
+    await this._clearSession();
+  }
+
+  /**
+   * @internal
+   */
+  async _clearSession() {
     await this.parent.storage.delUser(this.parent.name);
     await this.parent.storage.delIdentity(this.parent.name);
     await this.parent.storage.delAccessToken(this.parent.name);
+    await this.parent.storage.delRefreshToken(this.parent.name);
+    await this.parent.storage.delSessionID(this.parent.name);
     this.currentUser = null;
     this.currentIdentity = null;
-    this.parent.apiClient.accessToken = null;
+    this.parent.apiClient._accessToken = null;
+    this.currentSessionID = null;
+  }
+
+  /**
+   * @internal
+   */
+  async _refreshAccessToken(): Promise<boolean> {
+    await this.parent.storage.delAccessToken(this.parent.name);
+    this.parent.apiClient._accessToken = null;
+
+    const refreshToken = await this.parent.storage.getRefreshToken(
+      this.parent.name
+    );
+    if (!refreshToken) {
+      // no refresh token -> session is gone
+      await this._clearSession();
+      return false;
+    }
+
+    let accessToken;
+    try {
+      accessToken = await this.parent.apiClient.refresh(refreshToken);
+    } catch (error) {
+      if (error instanceof SkygearError && error.name === "NotAuthenticated") {
+        // cannot refresh -> session is gone
+        await this._clearSession();
+      }
+      throw error;
+    }
+
+    await this.parent.storage.setAccessToken(this.parent.name, accessToken);
+    this.parent.apiClient._accessToken = accessToken;
+
+    return true;
   }
 
   async me(): Promise<User> {
@@ -217,6 +308,29 @@ export class AuthContainer<T extends BaseAPIClient> {
     await this.persistResponse(response);
     return response.user;
   }
+
+  async listSessions(): Promise<Session[]> {
+    return this.parent.apiClient.listSessions();
+  }
+
+  async getSession(id: string): Promise<Session> {
+    return this.parent.apiClient.getSession(id);
+  }
+
+  async updateSession(
+    id: string,
+    patch: { name?: string; data?: JSONObject }
+  ): Promise<void> {
+    return this.parent.apiClient.updateSession(id, patch);
+  }
+
+  async revokeSession(id: string): Promise<void> {
+    return this.parent.apiClient.revokeSession(id);
+  }
+
+  async revokeOtherSessions(): Promise<void> {
+    return this.parent.apiClient.revokeOtherSessions();
+  }
 }
 
 /**
@@ -226,6 +340,7 @@ export class Container<T extends BaseAPIClient> {
   name: string;
   apiClient: T;
   storage: ContainerStorage;
+  extraSessionInfoProvider?: ExtraSessionInfoProvider;
   auth: AuthContainer<T>;
 
   constructor(options: ContainerOptions<T>) {
@@ -240,6 +355,7 @@ export class Container<T extends BaseAPIClient> {
     this.name = options.name || "default";
     this.apiClient = options.apiClient;
     this.storage = options.storage;
+    this.extraSessionInfoProvider = options.extraSessionInfoProvider;
     this.auth = new AuthContainer(this);
   }
 
@@ -251,13 +367,31 @@ export class Container<T extends BaseAPIClient> {
     this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
 
     const accessToken = await this.storage.getAccessToken(this.name);
-    this.apiClient.accessToken = accessToken;
+    this.apiClient._accessToken = accessToken;
 
     const user = await this.storage.getUser(this.name);
     this.auth.currentUser = user;
 
     const identity = await this.storage.getIdentity(this.name);
     this.auth.currentIdentity = identity;
+
+    const sessionID = await this.storage.getSessionID(this.name);
+    this.auth.currentSessionID = sessionID;
+
+    const extraSessionInfoOptions = await this.storage.getExtraSessionInfoOptions(
+      this.name
+    );
+    this.auth.extraSessionInfoOptions = {
+      ...defaultExtraSessionInfoOptions,
+      ...extraSessionInfoOptions,
+    };
+
+    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
+      this.auth
+    );
+    this.apiClient.getExtraSessionInfo = this.auth._getExtraSessionInfo.bind(
+      this.auth
+    );
   }
 
   async fetch(input: string, init?: RequestInit): Promise<Response> {

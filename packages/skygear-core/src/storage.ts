@@ -4,6 +4,7 @@ import {
   JSONValue,
   User,
   Identity,
+  ExtraSessionInfoOptions,
 } from "./types";
 
 import {
@@ -11,6 +12,8 @@ import {
   encodeIdentity,
   decodeUser,
   decodeIdentity,
+  _encodeExtraSessionInfoOptions,
+  _decodeExtraSessionInfoOptions,
 } from "./encoding";
 
 function scopedKey(key: string): string {
@@ -19,6 +22,14 @@ function scopedKey(key: string): string {
 
 function keyAccessToken(name: string): string {
   return `${name}_accessToken`;
+}
+
+function keyRefreshToken(name: string): string {
+  return `${name}_refreshToken`;
+}
+
+function keySessionID(name: string): string {
+  return `${name}_sessionID`;
 }
 
 function keyUser(name: string): string {
@@ -31,6 +42,10 @@ function keyIdentity(name: string): string {
 
 function keyOAuthRedirectAction(name: string): string {
   return `${name}_oauthRedirectAction`;
+}
+
+function keyExtraSessionInfoOptions(name: string): string {
+  return `${name}_extra_session_info_options`;
 }
 
 /**
@@ -112,10 +127,28 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSet(keyAccessToken(namespace), accessToken);
   }
 
+  async setRefreshToken(namespace: string, refreshToken: string) {
+    await this.storage.safeSet(keyRefreshToken(namespace), refreshToken);
+  }
+
+  async setSessionID(namespace: string, sessionID: string) {
+    await this.storage.safeSet(keySessionID(namespace), sessionID);
+  }
+
   async setOAuthRedirectAction(namespace: string, oauthRedirectAction: string) {
     await this.storage.safeSet(
       keyOAuthRedirectAction(namespace),
       oauthRedirectAction
+    );
+  }
+
+  async setExtraSessionInfoOptions(
+    namespace: string,
+    options: ExtraSessionInfoOptions
+  ) {
+    await this.storage.safeSetJSON(
+      keyExtraSessionInfoOptions(namespace),
+      _encodeExtraSessionInfoOptions(options)
     );
   }
 
@@ -139,8 +172,28 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keyAccessToken(namespace));
   }
 
+  async getRefreshToken(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyRefreshToken(namespace));
+  }
+
+  async getSessionID(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keySessionID(namespace));
+  }
+
   async getOAuthRedirectAction(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOAuthRedirectAction(namespace));
+  }
+
+  async getExtraSessionInfoOptions(
+    namespace: string
+  ): Promise<Partial<ExtraSessionInfoOptions> | null> {
+    const optionJSON = await this.storage.safeGetJSON(
+      keyExtraSessionInfoOptions(namespace)
+    );
+    if (optionJSON) {
+      return _decodeExtraSessionInfoOptions(optionJSON);
+    }
+    return null;
   }
 
   async delUser(namespace: string) {
@@ -153,6 +206,14 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delAccessToken(namespace: string) {
     await this.storage.safeDel(keyAccessToken(namespace));
+  }
+
+  async delRefreshToken(namespace: string) {
+    await this.storage.safeDel(keyRefreshToken(namespace));
+  }
+
+  async delSessionID(namespace: string) {
+    await this.storage.safeDel(keySessionID(namespace));
   }
 
   async delOAuthRedirectAction(namespace: string) {

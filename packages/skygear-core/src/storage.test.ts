@@ -1,5 +1,10 @@
 import { GlobalJSONContainerStorage, _GlobalJSONStorage } from "./storage";
-import { StorageDriver, User, Identity } from "./types";
+import {
+  StorageDriver,
+  User,
+  Identity,
+  ExtraSessionInfoOptions,
+} from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
   backingStore: { [key: string]: string };
@@ -85,6 +90,36 @@ describe("ContainerStorage", () => {
     expect(restored).toEqual(null);
   });
 
+  it("should set, get and delete refresh token", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const token = "test_token";
+    const ns = "test";
+
+    await storage.setRefreshToken(ns, token);
+    let restored = await storage.getRefreshToken(ns);
+    expect(restored).toEqual(token);
+
+    await storage.delRefreshToken(ns);
+    restored = await storage.getRefreshToken(ns);
+    expect(restored).toEqual(null);
+  });
+
+  it("should set, get and delete session ID", async () => {
+    const driver = new MemoryStorageDriver();
+    const storage = new GlobalJSONContainerStorage(driver);
+    const id = "session_id";
+    const ns = "test";
+
+    await storage.setSessionID(ns, id);
+    let restored = await storage.getSessionID(ns);
+    expect(restored).toEqual(id);
+
+    await storage.delSessionID(ns);
+    restored = await storage.getSessionID(ns);
+    expect(restored).toEqual(null);
+  });
+
   it("should set, get and delete oauth redirect action", async () => {
     const driver = new MemoryStorageDriver();
     const storage = new GlobalJSONContainerStorage(driver);
@@ -99,6 +134,21 @@ describe("ContainerStorage", () => {
     restored = await storage.getOAuthRedirectAction(ns);
     expect(restored).toEqual(null);
   });
+});
+
+it("should set and get extra session info options", async () => {
+  const driver = new MemoryStorageDriver();
+  const storage = new GlobalJSONContainerStorage(driver);
+  const options: ExtraSessionInfoOptions = {
+    collectDeviceName: true,
+    deviceName: undefined,
+  };
+  const ns = "test";
+
+  await storage.setExtraSessionInfoOptions(ns, options);
+  const restored = await storage.getExtraSessionInfoOptions(ns);
+  expect(restored).toEqual(options);
+  expect(restored).not.toHaveProperty("deviceName");
 });
 
 describe("GlobalJSONStorage", () => {

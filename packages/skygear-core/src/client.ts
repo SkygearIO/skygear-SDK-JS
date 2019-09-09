@@ -2,10 +2,12 @@ import {
   JSONObject,
   AuthResponse,
   SSOLoginOptions,
+  Session,
   OAuthAuthorizationURLOptions,
 } from "./types";
 import { decodeError } from "./error";
-import { decodeAuthResponse } from "./encoding";
+import { decodeAuthResponse, decodeSession } from "./encoding";
+import { encodeBase64 } from "./base64";
 
 /**
  * @internal
@@ -55,9 +57,15 @@ export function encodeQuery(query?: [string, string][]): string {
 export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;
-  accessToken: string | null;
+  /**
+   * @internal
+   */
+  _accessToken: string | null;
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
+  refreshTokenFunction?: () => Promise<boolean>;
+  userAgent?: string;
+  getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
   constructor(options: {
     apiKey: string;
@@ -66,23 +74,44 @@ export abstract class BaseAPIClient {
   }) {
     this.apiKey = options.apiKey;
     this.endpoint = _removeTrailingSlash(options.endpoint);
-    this.accessToken = options.accessToken;
+    this._accessToken = options.accessToken;
   }
 
-  protected prepareHeaders(): { [name: string]: string } {
+  protected async prepareHeaders(): Promise<{ [name: string]: string }> {
     const headers: { [name: string]: string } = {
       "x-skygear-api-key": this.apiKey,
     };
-    if (this.accessToken) {
-      headers["x-skygear-access-token"] = this.accessToken;
+    if (this._accessToken) {
+      headers["authorization"] = `bearer ${this._accessToken}`;
+    }
+    if (this.userAgent !== undefined) {
+      headers["user-agent"] = this.userAgent;
+    }
+    if (this.getExtraSessionInfo) {
+      const extraSessionInfo = await this.getExtraSessionInfo();
+      if (extraSessionInfo) {
+        headers["x-skygear-extra-info"] = encodeBase64(
+          JSON.stringify(extraSessionInfo)
+        );
+      }
     }
     return headers;
   }
 
-  async fetch(input: string, init?: RequestInit): Promise<Response> {
+  async fetch(
+    input: string,
+    init?: RequestInit,
+    options: { autoRefreshToken?: boolean } = {}
+  ): Promise<Response> {
+    if (this.fetchFunction == null) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
     if (this.requestClass == null) {
       throw new Error("missing requestClass in api client");
     }
+
+    const { autoRefreshToken = !!this.refreshTokenFunction } = options || {};
 
     if (typeof input !== "string") {
       throw new Error("only string path is allowed for fetch input");
@@ -91,24 +120,43 @@ export abstract class BaseAPIClient {
     const url = this.endpoint + "/" + input.replace(/^\//, "");
     const request = new this.requestClass(url, init);
 
-    const headers = this.prepareHeaders();
+    const headers = await this.prepareHeaders();
     for (const key of Object.keys(headers)) {
       request.headers.set(key, headers[key]);
     }
 
-    if (this.fetchFunction == null) {
-      throw new Error("missing fetchFunction in api client");
+    let response = await this.fetchFunction(request.clone());
+    if (response.status === 401 && autoRefreshToken) {
+      if (!this.refreshTokenFunction) {
+        throw new Error("missing refreshTokenFunction in api client");
+      }
+
+      const tokenRefreshed = await this.refreshTokenFunction();
+      if (tokenRefreshed) {
+        const retryRequest = request.clone();
+        // use latest access token
+        const headers = await this.prepareHeaders();
+        for (const key of Object.keys(headers)) {
+          retryRequest.headers.set(key, headers[key]);
+        }
+
+        response = await this.fetchFunction(retryRequest);
+      }
     }
 
-    return this.fetchFunction(request);
+    return response;
   }
 
   protected async request(
     method: "GET" | "POST" | "DELETE",
     path: string,
-    options: { json?: JSONObject; query?: [string, string][] } = {}
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    } = {}
   ): Promise<any> {
-    const { json, query } = options;
+    const { json, query, autoRefreshToken } = options;
     let p = path;
     if (query != null) {
       p += encodeQuery(query);
@@ -119,13 +167,17 @@ export abstract class BaseAPIClient {
       headers["content-type"] = "application/json";
     }
 
-    const response = await this.fetch(p, {
-      method,
-      headers,
-      mode: "cors",
-      credentials: "include",
-      body: json && JSON.stringify(json),
-    });
+    const response = await this.fetch(
+      p,
+      {
+        method,
+        headers,
+        mode: "cors",
+        credentials: "include",
+        body: json && JSON.stringify(json),
+      },
+      { autoRefreshToken }
+    );
     const jsonBody = await response.json();
 
     if (jsonBody["result"]) {
@@ -139,28 +191,40 @@ export abstract class BaseAPIClient {
 
   protected async post(
     path: string,
-    options?: { json?: JSONObject; query?: [string, string][] }
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<any> {
     return this.request("POST", path, options);
   }
 
   protected async get(
     path: string,
-    options?: { query?: [string, string][] }
+    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
   ): Promise<any> {
     return this.request("GET", path, options);
   }
 
   protected async del(
     path: string,
-    options: { json?: JSONObject; query?: [string, string][] }
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<any> {
     return this.request("DELETE", path, options);
   }
 
   protected async postAndReturnAuthResponse(
     path: string,
-    options?: { json?: JSONObject; query?: [string, string][] }
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
   ): Promise<AuthResponse> {
     const response = await this.post(path, options);
     return decodeAuthResponse(response);
@@ -212,11 +276,22 @@ export abstract class BaseAPIClient {
   }
 
   async logout(): Promise<void> {
-    await this.post("/_auth/logout");
+    await this.post("/_auth/logout", { json: {} });
+  }
+
+  async refresh(refreshToken: string): Promise<string> {
+    const payload = {
+      refresh_token: refreshToken,
+    };
+    const response = await this.post("/_auth/refresh", {
+      json: payload,
+      autoRefreshToken: false,
+    });
+    return response.access_token;
   }
 
   async me(): Promise<AuthResponse> {
-    return this.postAndReturnAuthResponse("/_auth/me");
+    return this.postAndReturnAuthResponse("/_auth/me", { json: {} });
   }
 
   async changePassword(
@@ -323,7 +398,7 @@ export abstract class BaseAPIClient {
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
     const encoded = encodeURIComponent(providerID);
-    await this.post(`/_auth/sso/${encoded}/unlink`);
+    await this.post(`/_auth/sso/${encoded}/unlink`, { json: {} });
   }
 
   async loginOAuthProviderWithAccessToken(
@@ -353,5 +428,33 @@ export abstract class BaseAPIClient {
     return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/link`, {
       json: payload,
     });
+  }
+
+  async listSessions(): Promise<Session[]> {
+    const response = await this.post("/_auth/session/list", { json: {} });
+    return (response.sessions as any[]).map(decodeSession);
+  }
+
+  async getSession(id: string): Promise<Session> {
+    const payload = { session_id: id };
+    const response = await this.post("/_auth/session/get", { json: payload });
+    return decodeSession(response.session);
+  }
+
+  async updateSession(
+    id: string,
+    patch: { name?: string; data?: JSONObject }
+  ): Promise<void> {
+    const payload = { session_id: id, name: patch.name, data: patch.data };
+    return this.post("/_auth/session/update", { json: payload });
+  }
+
+  async revokeSession(id: string): Promise<void> {
+    const payload = { session_id: id };
+    return this.post("/_auth/session/revoke", { json: payload });
+  }
+
+  async revokeOtherSessions(): Promise<void> {
+    return this.post("/_auth/session/revoke_all", { json: {} });
   }
 }

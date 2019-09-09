@@ -1,10 +1,18 @@
-import { User, Identity, JSONObject, AuthResponse } from "./types";
+import {
+  User,
+  Identity,
+  Session,
+  SessionUserAgent,
+  JSONObject,
+  AuthResponse,
+  ExtraSessionInfoOptions,
+} from "./types";
 
 /**
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const { user, identity, access_token } = r;
+  const { user, identity, access_token, refresh_token, session_id } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
@@ -13,6 +21,12 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (access_token) {
     response.accessToken = access_token;
+  }
+  if (refresh_token) {
+    response.refreshToken = refresh_token;
+  }
+  if (session_id) {
+    response.sessionID = session_id;
   }
   return response;
 }
@@ -78,6 +92,60 @@ export function decodeIdentity(i: any): Identity {
 /**
  * @public
  */
+export function decodeSession(s: any): Session {
+  const id = s.id;
+  const identityID = s.identity_id;
+  const createdAt = new Date(s.created_at);
+  const lastAccessedAt = new Date(s.last_accessed_at);
+  const createdByIP = s.created_by_ip;
+  const lastAccessedByIP = s.last_accessed_by_ip;
+  const userAgent = decodeSessionUserAgent(s.user_agent);
+  const name = s.name;
+  const data = s.data;
+  return {
+    id,
+    identityID,
+    createdAt,
+    lastAccessedAt,
+    createdByIP,
+    lastAccessedByIP,
+    userAgent,
+    name,
+    data,
+  };
+}
+
+function decodeSessionUserAgent(ua: any): SessionUserAgent {
+  return {
+    raw: ua.raw,
+    name: ua.name,
+    version: ua.version,
+    os: ua.os,
+    osVersion: ua.os_version,
+    deviceName: ua.device_name,
+    deviceModel: ua.device_model,
+  };
+}
+
+/**
+ * @internal
+ */
+export function _decodeExtraSessionInfoOptions(
+  o: any
+): Partial<ExtraSessionInfoOptions> {
+  const opts: Partial<ExtraSessionInfoOptions> = {};
+  if (o.collect_device_name !== undefined) {
+    opts.collectDeviceName = o.collect_device_name;
+  }
+  if (o.device_name !== undefined) {
+    opts.deviceName = o.device_name;
+  }
+  return opts;
+}
+
+/**
+ * @public
+ */
 export function encodeUser(u: User): JSONObject {
   const created_at = u.createdAt.toISOString();
   const last_login_at = u.lastLoginAt.toISOString();
@@ -125,4 +193,16 @@ export function encodeIdentity(i: Identity): JSONObject {
     default:
       throw new Error("unknown identity type: ");
   }
+}
+
+/**
+ * @internal
+ */
+export function _encodeExtraSessionInfoOptions(
+  o: ExtraSessionInfoOptions
+): JSONObject {
+  return {
+    collect_device_name: o.collectDeviceName,
+    device_name: o.deviceName,
+  };
 }

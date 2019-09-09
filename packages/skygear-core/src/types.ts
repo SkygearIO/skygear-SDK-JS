@@ -78,10 +78,40 @@ export interface CustomTokenIdentity {
 /**
  * @public
  */
+export interface Session {
+  id: string;
+  identityID: string;
+  createdAt: Date;
+  lastAccessedAt: Date;
+  createdByIP: string;
+  lastAccessedByIP: string;
+  userAgent: SessionUserAgent;
+  name: string;
+  data: JSONObject;
+}
+
+/**
+ * @public
+ */
+export interface SessionUserAgent {
+  raw: string;
+  name: string;
+  version: string;
+  os: string;
+  osVersion: string;
+  deviceName: string;
+  deviceModel: string;
+}
+
+/**
+ * @public
+ */
 export interface AuthResponse {
   user: User;
   identity?: Identity;
   accessToken?: string;
+  refreshToken?: string;
+  sessionID?: string;
 }
 
 /**
@@ -91,17 +121,30 @@ export interface ContainerStorage {
   setUser(namespace: string, user: User): Promise<void>;
   setIdentity(namespace: string, identity: Identity): Promise<void>;
   setAccessToken(namespace: string, accessToken: string): Promise<void>;
+  setRefreshToken(namespace: string, refreshToken: string): Promise<void>;
+  setSessionID(namespace: string, sessionID: string): Promise<void>;
   setOAuthRedirectAction(
     namespace: string,
     oauthRedirectAction: string
   ): Promise<void>;
+  setExtraSessionInfoOptions(
+    namespace: string,
+    options: ExtraSessionInfoOptions
+  ): Promise<void>;
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
   getAccessToken(namespace: string): Promise<string | null>;
+  getRefreshToken(namespace: string): Promise<string | null>;
+  getSessionID(namespace: string): Promise<string | null>;
   getOAuthRedirectAction(namespace: string): Promise<string | null>;
+  getExtraSessionInfoOptions(
+    namespace: string
+  ): Promise<Partial<ExtraSessionInfoOptions> | null>;
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
   delAccessToken(namespace: string): Promise<void>;
+  delRefreshToken(namespace: string): Promise<void>;
+  delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
 }
 
@@ -154,4 +197,20 @@ export interface ContainerOptions<T> {
   name?: string;
   apiClient?: T;
   storage?: ContainerStorage;
+  extraSessionInfoProvider?: ExtraSessionInfoProvider;
+}
+
+/**
+ * @public
+ */
+export interface ExtraSessionInfoOptions {
+  collectDeviceName: boolean;
+  deviceName?: string;
+}
+
+/**
+ * @public
+ */
+export interface ExtraSessionInfoProvider {
+  getDeviceName(): Promise<string | undefined>;
 }
