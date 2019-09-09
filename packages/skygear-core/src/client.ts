@@ -7,6 +7,7 @@ import {
 } from "./types";
 import { decodeError } from "./error";
 import { decodeAuthResponse, decodeSession } from "./encoding";
+import { encodeBase64 } from "./base64";
 
 /**
  * @internal
@@ -89,7 +90,9 @@ export abstract class BaseAPIClient {
     if (this.getExtraSessionInfo) {
       const extraSessionInfo = await this.getExtraSessionInfo();
       if (extraSessionInfo) {
-        headers["x-skygear-extra-info"] = btoa(JSON.stringify(extraSessionInfo));
+        headers["x-skygear-extra-info"] = encodeBase64(
+          JSON.stringify(extraSessionInfo)
+        );
       }
     }
     return headers;
