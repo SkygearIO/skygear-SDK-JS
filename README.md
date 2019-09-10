@@ -61,6 +61,10 @@ $ npm run lerna bootstrap
 
 ## Releasing
 
+First, ensure `github-release` and `yarn` tool is installed.
+Also, Git should be configured to be able to sign using GPG keys,
+and npm should be logged in as appropriate user.
+
 ```sh
 $ npm run prepare-new-release
 # Edit the file new-release.
