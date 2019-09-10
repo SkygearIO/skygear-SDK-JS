@@ -18,9 +18,10 @@
 <tr><th>Property</th><th>Modifiers</th><th>Type</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.accesstoken">accessToken</a></td><td></td><td><code>string | null</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.currentidentity">currentIdentity</a></td><td></td><td><code>Identity | null</code></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.currentsessionid">currentSessionID</a></td><td></td><td><code>string | null</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.currentuser">currentUser</a></td><td></td><td><code>User | null</code></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.extrasessioninfooptions">extraSessionInfoOptions</a></td><td></td><td><code>ExtraSessionInfoOptions</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.parent">parent</a></td><td></td><td><code>Container&lt;T&gt;</code></td><td></td></tr>
 </tbody>
 </table>
@@ -32,7 +33,9 @@
 <tbody>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.changepassword">changePassword(newPassword, oldPassword)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.deleteoauthprovider">deleteOAuthProvider(providerID)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.getsession">getSession(id)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.linkoauthproviderwithaccesstoken">linkOAuthProviderWithAccessToken(providerID, accessToken)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.listsessions">listSessions()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.login">login(loginID, password, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.loginoauthproviderwithaccesstoken">loginOAuthProviderWithAccessToken(providerID, accessToken, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.loginwithcustomtoken">loginWithCustomToken(token, options)</a></td><td></td><td></td></tr>
@@ -42,10 +45,14 @@
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.requestemailverification">requestEmailVerification(email)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.requestforgotpasswordemail">requestForgotPasswordEmail(email)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.resetpassword">resetPassword(form)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.revokeothersessions">revokeOtherSessions()</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.revokesession">revokeSession(id)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.saveextrasessioninfooptions">saveExtraSessionInfoOptions()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.signup">signup(loginIDs, password, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.signupwithemail">signupWithEmail(email, password, options)</a></td><td></td><td>signupWithEmail is a shorthand of <a href="/skygear-SDK-JS/docs/web.authcontainer.signup">the signup() method</a><!-- -->.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.signupwithusername">signupWithUsername(username, password, options)</a></td><td></td><td>signupWithUsername is a shorthand of <a href="/skygear-SDK-JS/docs/web.authcontainer.signup">the signup() method</a><!-- -->.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.updatemetadata">updateMetadata(metadata)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.updatesession">updateSession(id, patch)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/web.authcontainer.verifywithcode">verifyWithCode(code)</a></td><td></td><td></td></tr>
 </tbody>
 </table>
