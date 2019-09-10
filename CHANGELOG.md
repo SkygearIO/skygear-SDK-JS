@@ -4,6 +4,12 @@
 
 - Update for new session mechanism
 
+## 2.0.0-alpha.11 (2019-09-10)
+
+### Features
+
+- Update for new session mechanism
+
 ## 2.0.0-alpha.10 (2019-08-29)
 
 ### Bug Fixes
