@@ -11,14 +11,14 @@
       "node-client.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
-      "node-client.authcontainer.accesstoken": {
-        "title": "AuthContainer.accessToken property"
-      },
       "node-client.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
       "node-client.authcontainer.currentidentity": {
         "title": "AuthContainer.currentIdentity property"
+      },
+      "node-client.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
       },
       "node-client.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
@@ -26,8 +26,17 @@
       "node-client.authcontainer.deleteoauthprovider": {
         "title": "AuthContainer.deleteOAuthProvider() method"
       },
+      "node-client.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "node-client.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
       "node-client.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "node-client.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
       },
       "node-client.authcontainer.login": {
         "title": "AuthContainer.login() method"
@@ -62,6 +71,15 @@
       "node-client.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
       },
+      "node-client.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "node-client.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "node-client.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
       "node-client.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
@@ -73,6 +91,9 @@
       },
       "node-client.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
+      },
+      "node-client.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
       },
       "node-client.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
@@ -86,14 +107,17 @@
       "node-client.authresponse": {
         "title": "AuthResponse interface"
       },
+      "node-client.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "node-client.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
       "node-client.authresponse.user": {
         "title": "AuthResponse.user property"
       },
       "node-client.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "node-client.baseapiclient.accesstoken": {
-        "title": "BaseAPIClient.accessToken property"
       },
       "node-client.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
@@ -119,8 +143,17 @@
       "node-client.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
+      "node-client.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "node-client.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
       "node-client.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "node-client.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
       },
       "node-client.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
@@ -152,6 +185,12 @@
       "node-client.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
       },
+      "node-client.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "node-client.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
       "node-client.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
       },
@@ -167,11 +206,23 @@
       "node-client.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
+      "node-client.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "node-client.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
       "node-client.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
       "node-client.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "node-client.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "node-client.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
       },
       "node-client.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
@@ -188,6 +239,9 @@
       "node-client.container.configure": {
         "title": "Container.configure() method"
       },
+      "node-client.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
       "node-client.container.fetch": {
         "title": "Container.fetch() method"
       },
@@ -202,6 +256,9 @@
       },
       "node-client.containeroptions.apiclient": {
         "title": "ContainerOptions.apiClient property"
+      },
+      "node-client.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
       },
       "node-client.containeroptions": {
         "title": "ContainerOptions interface"
@@ -221,17 +278,32 @@
       "node-client.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "node-client.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "node-client.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
       "node-client.containerstorage.deluser": {
         "title": "ContainerStorage.delUser() method"
       },
       "node-client.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
+      "node-client.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "node-client.containerstorage.getidentity": {
         "title": "ContainerStorage.getIdentity() method"
       },
       "node-client.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "node-client.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
       },
       "node-client.containerstorage.getuser": {
         "title": "ContainerStorage.getUser() method"
@@ -242,11 +314,20 @@
       "node-client.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
+      "node-client.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "node-client.containerstorage.setidentity": {
         "title": "ContainerStorage.setIdentity() method"
       },
       "node-client.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "node-client.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
       },
       "node-client.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
@@ -278,6 +359,9 @@
       "node-client.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "node-client.decodesession": {
+        "title": "decodeSession() function"
+      },
       "node-client.decodeuser": {
         "title": "decodeUser() function"
       },
@@ -296,6 +380,21 @@
       "node-client.encodeuser": {
         "title": "encodeUser() function"
       },
+      "node-client.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "node-client.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "node-client.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "node-client.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "node-client.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
       "node-client.globaljsoncontainerstorage._constructor_": {
         "title": "GlobalJSONContainerStorage.(constructor)"
       },
@@ -308,17 +407,32 @@
       "node-client.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "node-client.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
       "node-client.globaljsoncontainerstorage.deluser": {
         "title": "GlobalJSONContainerStorage.delUser() method"
       },
       "node-client.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
+      "node-client.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "node-client.globaljsoncontainerstorage.getidentity": {
         "title": "GlobalJSONContainerStorage.getIdentity() method"
       },
       "node-client.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
       },
       "node-client.globaljsoncontainerstorage.getuser": {
         "title": "GlobalJSONContainerStorage.getUser() method"
@@ -329,11 +443,20 @@
       "node-client.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
+      "node-client.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "node-client.globaljsoncontainerstorage.setidentity": {
         "title": "GlobalJSONContainerStorage.setIdentity() method"
       },
       "node-client.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
       },
       "node-client.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
@@ -380,11 +503,20 @@
       "node-client.nodeapiclient.requestclass": {
         "title": "NodeAPIClient.requestClass property"
       },
+      "node-client.nodeapiclient.useragent": {
+        "title": "NodeAPIClient.userAgent property"
+      },
       "node-client.nodecontainer._constructor_": {
         "title": "NodeContainer.(constructor)"
       },
       "node-client.nodecontainer": {
         "title": "NodeContainer class"
+      },
+      "node-client.nodeextrasessioninfoprovider.getdevicename": {
+        "title": "NodeExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "node-client.nodeextrasessioninfoprovider": {
+        "title": "NodeExtraSessionInfoProvider class"
       },
       "node-client.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
@@ -452,6 +584,60 @@
       "node-client.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
+      "node-client.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "node-client.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "node-client.session.data": {
+        "title": "Session.data property"
+      },
+      "node-client.session.id": {
+        "title": "Session.id property"
+      },
+      "node-client.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "node-client.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "node-client.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "node-client.session": {
+        "title": "Session interface"
+      },
+      "node-client.session.name": {
+        "title": "Session.name property"
+      },
+      "node-client.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "node-client.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "node-client.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "node-client.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "node-client.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "node-client.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "node-client.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "node-client.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "node-client.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
       "node-client.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
@@ -512,14 +698,14 @@
       "react-native.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
-      "react-native.authcontainer.accesstoken": {
-        "title": "AuthContainer.accessToken property"
-      },
       "react-native.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
       "react-native.authcontainer.currentidentity": {
         "title": "AuthContainer.currentIdentity property"
+      },
+      "react-native.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
       },
       "react-native.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
@@ -527,8 +713,17 @@
       "react-native.authcontainer.deleteoauthprovider": {
         "title": "AuthContainer.deleteOAuthProvider() method"
       },
+      "react-native.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "react-native.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
       "react-native.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "react-native.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
       },
       "react-native.authcontainer.login": {
         "title": "AuthContainer.login() method"
@@ -563,6 +758,15 @@
       "react-native.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
       },
+      "react-native.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "react-native.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "react-native.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
       "react-native.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
@@ -574,6 +778,9 @@
       },
       "react-native.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
+      },
+      "react-native.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
       },
       "react-native.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
@@ -587,14 +794,17 @@
       "react-native.authresponse": {
         "title": "AuthResponse interface"
       },
+      "react-native.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "react-native.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
       "react-native.authresponse.user": {
         "title": "AuthResponse.user property"
       },
       "react-native.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "react-native.baseapiclient.accesstoken": {
-        "title": "BaseAPIClient.accessToken property"
       },
       "react-native.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
@@ -620,8 +830,17 @@
       "react-native.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
+      "react-native.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "react-native.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
       "react-native.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "react-native.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
       },
       "react-native.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
@@ -653,6 +872,12 @@
       "react-native.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
       },
+      "react-native.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "react-native.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
       "react-native.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
       },
@@ -668,11 +893,23 @@
       "react-native.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
+      "react-native.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "react-native.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
       "react-native.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
       "react-native.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "react-native.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "react-native.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
       },
       "react-native.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
@@ -689,6 +926,9 @@
       "react-native.container.configure": {
         "title": "Container.configure() method"
       },
+      "react-native.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
       "react-native.container.fetch": {
         "title": "Container.fetch() method"
       },
@@ -703,6 +943,9 @@
       },
       "react-native.containeroptions.apiclient": {
         "title": "ContainerOptions.apiClient property"
+      },
+      "react-native.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
       },
       "react-native.containeroptions": {
         "title": "ContainerOptions interface"
@@ -722,17 +965,32 @@
       "react-native.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "react-native.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "react-native.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
       "react-native.containerstorage.deluser": {
         "title": "ContainerStorage.delUser() method"
       },
       "react-native.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
+      "react-native.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "react-native.containerstorage.getidentity": {
         "title": "ContainerStorage.getIdentity() method"
       },
       "react-native.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "react-native.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
       },
       "react-native.containerstorage.getuser": {
         "title": "ContainerStorage.getUser() method"
@@ -743,11 +1001,20 @@
       "react-native.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
+      "react-native.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "react-native.containerstorage.setidentity": {
         "title": "ContainerStorage.setIdentity() method"
       },
       "react-native.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "react-native.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
       },
       "react-native.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
@@ -779,6 +1046,9 @@
       "react-native.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "react-native.decodesession": {
+        "title": "decodeSession() function"
+      },
       "react-native.decodeuser": {
         "title": "decodeUser() function"
       },
@@ -797,6 +1067,21 @@
       "react-native.encodeuser": {
         "title": "encodeUser() function"
       },
+      "react-native.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "react-native.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "react-native.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "react-native.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "react-native.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
       "react-native.globaljsoncontainerstorage._constructor_": {
         "title": "GlobalJSONContainerStorage.(constructor)"
       },
@@ -809,17 +1094,32 @@
       "react-native.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "react-native.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
       "react-native.globaljsoncontainerstorage.deluser": {
         "title": "GlobalJSONContainerStorage.delUser() method"
       },
       "react-native.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
+      "react-native.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "react-native.globaljsoncontainerstorage.getidentity": {
         "title": "GlobalJSONContainerStorage.getIdentity() method"
       },
       "react-native.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
       },
       "react-native.globaljsoncontainerstorage.getuser": {
         "title": "GlobalJSONContainerStorage.getUser() method"
@@ -830,11 +1130,20 @@
       "react-native.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
+      "react-native.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "react-native.globaljsoncontainerstorage.setidentity": {
         "title": "GlobalJSONContainerStorage.setIdentity() method"
       },
       "react-native.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
       },
       "react-native.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
@@ -947,6 +1256,60 @@
       "react-native.reactnativecontainer": {
         "title": "ReactNativeContainer class"
       },
+      "react-native.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "react-native.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "react-native.session.data": {
+        "title": "Session.data property"
+      },
+      "react-native.session.id": {
+        "title": "Session.id property"
+      },
+      "react-native.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "react-native.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "react-native.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "react-native.session": {
+        "title": "Session interface"
+      },
+      "react-native.session.name": {
+        "title": "Session.name property"
+      },
+      "react-native.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "react-native.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "react-native.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "react-native.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "react-native.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "react-native.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "react-native.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "react-native.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "react-native.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
       "react-native.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
       },
@@ -1007,14 +1370,14 @@
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
-      "web.authcontainer.accesstoken": {
-        "title": "AuthContainer.accessToken property"
-      },
       "web.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
       "web.authcontainer.currentidentity": {
         "title": "AuthContainer.currentIdentity property"
+      },
+      "web.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
       },
       "web.authcontainer.currentuser": {
         "title": "AuthContainer.currentUser property"
@@ -1022,8 +1385,17 @@
       "web.authcontainer.deleteoauthprovider": {
         "title": "AuthContainer.deleteOAuthProvider() method"
       },
+      "web.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "web.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
       "web.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "web.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
       },
       "web.authcontainer.login": {
         "title": "AuthContainer.login() method"
@@ -1058,6 +1430,15 @@
       "web.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
       },
+      "web.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "web.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "web.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
       "web.authcontainer.signup": {
         "title": "AuthContainer.signup() method"
       },
@@ -1069,6 +1450,9 @@
       },
       "web.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
+      },
+      "web.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
       },
       "web.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
@@ -1082,14 +1466,17 @@
       "web.authresponse": {
         "title": "AuthResponse interface"
       },
+      "web.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "web.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
       "web.authresponse.user": {
         "title": "AuthResponse.user property"
       },
       "web.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "web.baseapiclient.accesstoken": {
-        "title": "BaseAPIClient.accessToken property"
       },
       "web.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
@@ -1115,8 +1502,17 @@
       "web.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
       },
+      "web.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "web.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
       "web.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "web.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
       },
       "web.baseapiclient.login": {
         "title": "BaseAPIClient.login() method"
@@ -1148,6 +1544,12 @@
       "web.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
       },
+      "web.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "web.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
       "web.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
       },
@@ -1163,11 +1565,23 @@
       "web.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
+      "web.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "web.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
       "web.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
       "web.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "web.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "web.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
       },
       "web.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
@@ -1184,6 +1598,9 @@
       "web.container.configure": {
         "title": "Container.configure() method"
       },
+      "web.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
       "web.container.fetch": {
         "title": "Container.fetch() method"
       },
@@ -1198,6 +1615,9 @@
       },
       "web.containeroptions.apiclient": {
         "title": "ContainerOptions.apiClient property"
+      },
+      "web.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
       },
       "web.containeroptions": {
         "title": "ContainerOptions interface"
@@ -1217,17 +1637,32 @@
       "web.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "web.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "web.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
       "web.containerstorage.deluser": {
         "title": "ContainerStorage.delUser() method"
       },
       "web.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
+      "web.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "web.containerstorage.getidentity": {
         "title": "ContainerStorage.getIdentity() method"
       },
       "web.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "web.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
       },
       "web.containerstorage.getuser": {
         "title": "ContainerStorage.getUser() method"
@@ -1238,11 +1673,20 @@
       "web.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
+      "web.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "web.containerstorage.setidentity": {
         "title": "ContainerStorage.setIdentity() method"
       },
       "web.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "web.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "web.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
       },
       "web.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
@@ -1274,6 +1718,9 @@
       "web.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "web.decodesession": {
+        "title": "decodeSession() function"
+      },
       "web.decodeuser": {
         "title": "decodeUser() function"
       },
@@ -1292,6 +1739,21 @@
       "web.encodeuser": {
         "title": "encodeUser() function"
       },
+      "web.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "web.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "web.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "web.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "web.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
       "web.globaljsoncontainerstorage._constructor_": {
         "title": "GlobalJSONContainerStorage.(constructor)"
       },
@@ -1304,17 +1766,32 @@
       "web.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "web.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "web.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
       "web.globaljsoncontainerstorage.deluser": {
         "title": "GlobalJSONContainerStorage.delUser() method"
       },
       "web.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
+      "web.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
       "web.globaljsoncontainerstorage.getidentity": {
         "title": "GlobalJSONContainerStorage.getIdentity() method"
       },
       "web.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "web.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
       },
       "web.globaljsoncontainerstorage.getuser": {
         "title": "GlobalJSONContainerStorage.getUser() method"
@@ -1325,11 +1802,20 @@
       "web.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
+      "web.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
       "web.globaljsoncontainerstorage.setidentity": {
         "title": "GlobalJSONContainerStorage.setIdentity() method"
       },
       "web.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "web.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
       },
       "web.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
@@ -1417,6 +1903,60 @@
       },
       "web.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
+      },
+      "web.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "web.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "web.session.data": {
+        "title": "Session.data property"
+      },
+      "web.session.id": {
+        "title": "Session.id property"
+      },
+      "web.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "web.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "web.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "web.session": {
+        "title": "Session interface"
+      },
+      "web.session.name": {
+        "title": "Session.name property"
+      },
+      "web.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "web.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "web.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "web.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "web.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "web.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "web.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "web.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "web.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
       },
       "web.skygearerror._constructor_": {
         "title": "SkygearError.(constructor)"
