@@ -4,6 +4,7 @@ import { JSONObject } from "./types";
  * @public
  */
 export type SkygearErrorName =
+  | "UnexpectedError"
   | "NotAuthenticated"
   | "PermissionDenied"
   | "AccessKeyNotAccepted"
