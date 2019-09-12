@@ -5,7 +5,7 @@ import {
   Session,
   OAuthAuthorizationURLOptions,
 } from "./types";
-import { decodeError } from "./error";
+import { decodeError, SkygearError } from "./error";
 import { decodeAuthResponse, decodeSession } from "./encoding";
 import { encodeBase64 } from "./base64";
 
@@ -178,7 +178,22 @@ export abstract class BaseAPIClient {
       },
       { autoRefreshToken }
     );
-    const jsonBody = await response.json();
+
+    let jsonBody;
+    try {
+      jsonBody = await response.json();
+    } catch (err) {
+      if (response.status < 200 || response.status >= 300) {
+        throw new SkygearError("unexpected status code", "UnexpectedError", {
+          status_code: response.status,
+        });
+      } else {
+        throw new SkygearError(
+          "failed to decode response JSON",
+          "UnexpectedError"
+        );
+      }
+    }
 
     if (jsonBody["result"]) {
       return jsonBody["result"];
