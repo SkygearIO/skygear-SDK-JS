@@ -197,20 +197,11 @@ export interface ContainerOptions<T> {
   name?: string;
   apiClient?: T;
   storage?: ContainerStorage;
-  extraSessionInfoProvider?: ExtraSessionInfoProvider;
 }
 
 /**
  * @public
  */
 export interface ExtraSessionInfoOptions {
-  collectDeviceName: boolean;
   deviceName?: string;
-}
-
-/**
- * @public
- */
-export interface ExtraSessionInfoProvider {
-  getDeviceName(): Promise<string | undefined>;
 }
