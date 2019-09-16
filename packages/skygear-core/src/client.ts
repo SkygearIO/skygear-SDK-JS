@@ -456,14 +456,6 @@ export abstract class BaseAPIClient {
     return decodeSession(response.session);
   }
 
-  async updateSession(
-    id: string,
-    patch: { name?: string; data?: JSONObject }
-  ): Promise<void> {
-    const payload = { session_id: id, name: patch.name, data: patch.data };
-    return this.post("/_auth/session/update", { json: payload });
-  }
-
   async revokeSession(id: string): Promise<void> {
     const payload = { session_id: id };
     return this.post("/_auth/session/revoke", { json: payload });

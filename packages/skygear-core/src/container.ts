@@ -311,13 +311,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     return this.parent.apiClient.getSession(id);
   }
 
-  async updateSession(
-    id: string,
-    patch: { name?: string; data?: JSONObject }
-  ): Promise<void> {
-    return this.parent.apiClient.updateSession(id, patch);
-  }
-
   async revokeSession(id: string): Promise<void> {
     return this.parent.apiClient.revokeSession(id);
   }
