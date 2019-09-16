@@ -140,7 +140,6 @@ it("should set and get extra session info options", async () => {
   const driver = new MemoryStorageDriver();
   const storage = new GlobalJSONContainerStorage(driver);
   const options: ExtraSessionInfoOptions = {
-    collectDeviceName: true,
     deviceName: undefined,
   };
   const ns = "test";

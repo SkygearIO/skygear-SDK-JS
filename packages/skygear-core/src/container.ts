@@ -8,13 +8,12 @@ import {
   ContainerOptions,
   Session,
   ExtraSessionInfoOptions,
-  ExtraSessionInfoProvider,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
 import { SkygearError } from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
-  collectDeviceName: false,
+  deviceName: undefined,
 };
 
 /**
@@ -47,18 +46,13 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async _getExtraSessionInfo(): Promise<JSONObject | null> {
-    const provider = this.parent.extraSessionInfoProvider;
     const options = this.extraSessionInfoOptions;
 
     let hasInfo = false;
     const info: JSONObject = {};
 
-    if (options.collectDeviceName) {
-      let deviceName = options.deviceName;
-      if (!deviceName && provider) {
-        deviceName = await provider.getDeviceName();
-      }
-      info["device_name"] = deviceName;
+    if (options.deviceName) {
+      info["device_name"] = options.deviceName;
       hasInfo = true;
     }
 
@@ -317,13 +311,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     return this.parent.apiClient.getSession(id);
   }
 
-  async updateSession(
-    id: string,
-    patch: { name?: string; data?: JSONObject }
-  ): Promise<void> {
-    return this.parent.apiClient.updateSession(id, patch);
-  }
-
   async revokeSession(id: string): Promise<void> {
     return this.parent.apiClient.revokeSession(id);
   }
@@ -340,7 +327,6 @@ export class Container<T extends BaseAPIClient> {
   name: string;
   apiClient: T;
   storage: ContainerStorage;
-  extraSessionInfoProvider?: ExtraSessionInfoProvider;
   auth: AuthContainer<T>;
 
   constructor(options: ContainerOptions<T>) {
@@ -355,7 +341,6 @@ export class Container<T extends BaseAPIClient> {
     this.name = options.name || "default";
     this.apiClient = options.apiClient;
     this.storage = options.storage;
-    this.extraSessionInfoProvider = options.extraSessionInfoProvider;
     this.auth = new AuthContainer(this);
   }
 

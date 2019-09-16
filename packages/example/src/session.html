@@ -166,54 +166,6 @@ function onSubmitGet(e) {
   });
 }
 
-function onInputUpdate() {
-  var sessionID = document.getElementById("updateID").value;
-  var name = document.getElementById("updateName").value;
-  var customDataStr = document.getElementById("updateCustomData").value;
-  var synopsisTextArea = document.getElementById("updateSynopsis");
-
-  var funcExpr = "defaultContainer.auth.updateSession";
-  try {
-    var data;
-    if (customDataStr != "") {
-      data = JSON.parse(customDataStr);
-      if (typeof data !== "object" || data == null) {
-        throw "invalid";
-      }
-    }
-    s = stringifyFunctionCall(funcExpr, sessionID, { name: name, data: data });
-  } catch (e) {}
-
-  synopsisTextArea.value = s;
-}
-
-function onSubmitUpdate(e) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  var sessionID = document.getElementById("updateID").value;
-  var name = document.getElementById("updateName").value;
-  var customDataStr = document.getElementById("updateCustomData").value;
-  var resultTextArea = document.getElementById("updateResult");
-
-  try {
-    var data;
-    if (customDataStr != "") {
-      data = JSON.parse(customDataStr);
-      if (typeof data !== "object" || data == null) {
-        throw "invalid";
-      }
-    }
-    defaultContainer.auth.updateSession(sessionID, { name: name, data: data }).then(function() {
-      resultTextArea.value = "OK";
-    }, function(e) {
-      resultTextArea.value = JSON.stringify(e);
-    });
-  } catch (e) {
-    resultTextArea.value = "ERROR";
-  }
-}
-
 function onInputRevoke() {
   var sessionID = document.getElementById("revokeID").value;
   var synopsisTextArea = document.getElementById("revokeSynopsis");

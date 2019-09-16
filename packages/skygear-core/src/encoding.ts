@@ -134,9 +134,6 @@ export function _decodeExtraSessionInfoOptions(
   o: any
 ): Partial<ExtraSessionInfoOptions> {
   const opts: Partial<ExtraSessionInfoOptions> = {};
-  if (o.collect_device_name !== undefined) {
-    opts.collectDeviceName = o.collect_device_name;
-  }
   if (o.device_name !== undefined) {
     opts.deviceName = o.device_name;
   }
@@ -202,7 +199,6 @@ export function _encodeExtraSessionInfoOptions(
   o: ExtraSessionInfoOptions
 ): JSONObject {
   return {
-    collect_device_name: o.collectDeviceName,
     device_name: o.deviceName,
   };
 }

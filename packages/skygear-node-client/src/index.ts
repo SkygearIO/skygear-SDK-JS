@@ -5,7 +5,6 @@ import {
   GlobalJSONContainerStorage,
   ContainerOptions,
   VERSION,
-  ExtraSessionInfoProvider,
 } from "@skygear/core";
 export * from "@skygear/core";
 import { type, release, hostname } from "os";
@@ -51,10 +50,8 @@ export class MemoryStorageDriver implements StorageDriver {
 /**
  * @public
  */
-export class NodeExtraSessionInfoProvider implements ExtraSessionInfoProvider {
-  async getDeviceName(): Promise<string> {
-    return hostname();
-  }
+export async function getDeviceName(): Promise<string> {
+  return hostname();
 }
 
 /**
@@ -74,9 +71,6 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(new MemoryStorageDriver()),
-      extraSessionInfoProvider:
-        (options && options.extraSessionInfoProvider) ||
-        new NodeExtraSessionInfoProvider(),
     } as any) as ContainerOptions<T>;
 
     super(o);
