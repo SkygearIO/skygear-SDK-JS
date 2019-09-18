@@ -469,4 +469,11 @@ export abstract class BaseAPIClient {
   async revokeOtherSessions(): Promise<void> {
     return this.post("/_auth/session/revoke_all", { json: {} });
   }
+
+  async listRecoveryCode(): Promise<string[]> {
+    const response = await this.post("/_auth/mfa/recovery_code/list", {
+      json: {},
+    });
+    return response.recovery_codes;
+  }
 }

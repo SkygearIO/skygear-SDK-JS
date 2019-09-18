@@ -21,6 +21,7 @@ const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
  */
 export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
+  mfa: MFAContainer<T>;
   currentUser: User | null;
   currentIdentity: Identity | null;
   currentSessionID: string | null;
@@ -33,6 +34,8 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.currentUser = null;
     this.currentIdentity = null;
     this.currentSessionID = null;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    this.mfa = new MFAContainer(this);
   }
 
   async saveExtraSessionInfoOptions() {
@@ -328,6 +331,28 @@ export class AuthContainer<T extends BaseAPIClient> {
   async revokeOtherSessions(): Promise<void> {
     return this.parent.apiClient.revokeOtherSessions();
   }
+}
+
+/**
+ * @public
+ */
+export class MFAContainer<T extends BaseAPIClient> {
+  parent: AuthContainer<T>;
+
+  constructor(parent: AuthContainer<T>) {
+    this.parent = parent;
+  }
+
+  async listRecoveryCode(): Promise<string[]> {
+    return this.parent.parent.apiClient.listRecoveryCode();
+  }
+
+  // TODO(mfa): Regenerate, Authenticate Recovery code.
+  // TODO(mfa): List, Delete authenticator.
+  // TODO(mfa): Create, Activate, QRCode, Authenticate TOTP.
+  // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
+  // TODO(mfa): Revoke all bearer token.
+  // TODO(mfa): Support bearer token transparently.
 }
 
 /**
