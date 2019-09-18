@@ -4,9 +4,14 @@ import {
   SSOLoginOptions,
   Session,
   OAuthAuthorizationURLOptions,
+  Authenticator,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
-import { decodeAuthResponse, decodeSession } from "./encoding";
+import {
+  decodeAuthResponse,
+  decodeSession,
+  decodeAuthenticator,
+} from "./encoding";
 import { encodeBase64 } from "./base64";
 
 /**
@@ -493,5 +498,13 @@ export abstract class BaseAPIClient {
       "/_auth/mfa/recovery_code/authenticate",
       { json: payload }
     );
+  }
+
+  async getAuthenticators(): Promise<Authenticator[]> {
+    // TODO(mfa): authnsession
+    const response = await this.post("/_auth/mfa/authenticator/list", {
+      json: {},
+    });
+    return (response.authenticators as any[]).map(decodeAuthenticator);
   }
 }

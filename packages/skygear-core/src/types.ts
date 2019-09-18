@@ -205,3 +205,46 @@ export interface ContainerOptions<T> {
 export interface ExtraSessionInfoOptions {
   deviceName?: string;
 }
+
+/**
+ * @public
+ */
+export type Authenticator =
+  | TOTPAuthenticator
+  | OOBSMSAuthenticator
+  | OOBEmailAuthenticator;
+
+/**
+ * @public
+ */
+export interface TOTPAuthenticator {
+  id: string;
+  type: "totp";
+  createdAt: Date;
+  activatedAt: Date;
+  displayName: string;
+}
+
+/**
+ * @public
+ */
+export interface OOBSMSAuthenticator {
+  id: string;
+  type: "oob";
+  createdAt: Date;
+  activatedAt: Date;
+  channel: "sms";
+  maskedPhone: string;
+}
+
+/**
+ * @public
+ */
+interface OOBEmailAuthenticator {
+  id: string;
+  type: "oob";
+  createdAt: Date;
+  activatedAt: Date;
+  channel: "email";
+  maskedEmail: string;
+}

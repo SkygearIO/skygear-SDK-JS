@@ -6,6 +6,7 @@ import {
   JSONObject,
   AuthResponse,
   ExtraSessionInfoOptions,
+  Authenticator,
 } from "./types";
 
 /**
@@ -113,6 +114,53 @@ export function decodeSession(s: any): Session {
     name,
     data,
   };
+}
+
+/**
+ * @public
+ */
+export function decodeAuthenticator(a: any): Authenticator {
+  const id = a.id;
+  const type = a.type;
+  const createdAt = new Date(a.created_at);
+  const activatedAt = new Date(a.activated_at);
+  switch (type) {
+    case "totp":
+      return {
+        id,
+        type,
+        createdAt,
+        activatedAt,
+        displayName: a.display_name,
+      };
+    case "oob": {
+      const channel = a.channel;
+      switch (channel) {
+        case "sms":
+          return {
+            id,
+            type,
+            createdAt,
+            activatedAt,
+            channel,
+            maskedPhone: a.masked_phone,
+          };
+        case "email":
+          return {
+            id,
+            type,
+            createdAt,
+            activatedAt,
+            channel,
+            maskedEmail: a.masked_email,
+          };
+        default:
+          throw new Error("unknown authenticator channel: " + channel);
+      }
+    }
+    default:
+      throw new Error("unknown authenticator type: " + type);
+  }
 }
 
 function decodeSessionUserAgent(ua: any): SessionUserAgent {

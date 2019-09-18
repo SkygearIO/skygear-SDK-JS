@@ -8,6 +8,7 @@ import {
   ContainerOptions,
   Session,
   ExtraSessionInfoOptions,
+  Authenticator,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash } from "./client";
 import { SkygearError } from "./error";
@@ -359,7 +360,11 @@ export class MFAContainer<T extends BaseAPIClient> {
     return response.user;
   }
 
-  // TODO(mfa): List, Delete authenticator.
+  async getAuthenticators(): Promise<Authenticator[]> {
+    return this.parent.parent.apiClient.getAuthenticators();
+  }
+
+  // TODO(mfa): Delete authenticator.
   // TODO(mfa): Create, Activate, QRCode, Authenticate TOTP.
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
