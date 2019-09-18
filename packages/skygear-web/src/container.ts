@@ -103,7 +103,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       options
     );
     const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
+    await this.persistResponse(response);
     return response.user;
   }
 
@@ -183,7 +183,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       return null;
     }
     const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
+    await this.persistResponse(response);
     return response.user;
   }
 
