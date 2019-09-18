@@ -476,4 +476,11 @@ export abstract class BaseAPIClient {
     });
     return response.recovery_codes;
   }
+
+  async regenerateRecoveryCode(): Promise<string[]> {
+    const response = await this.post("/_auth/mfa/recovery_code/regenerate", {
+      json: {},
+    });
+    return response.recovery_codes;
+  }
 }

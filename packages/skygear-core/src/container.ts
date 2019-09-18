@@ -347,7 +347,11 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.listRecoveryCode();
   }
 
-  // TODO(mfa): Regenerate, Authenticate Recovery code.
+  async regenerateRecoveryCode(): Promise<string[]> {
+    return this.parent.parent.apiClient.regenerateRecoveryCode();
+  }
+
+  // TODO(mfa): Authenticate Recovery code.
   // TODO(mfa): List, Delete authenticator.
   // TODO(mfa): Create, Activate, QRCode, Authenticate TOTP.
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
