@@ -187,8 +187,18 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async _refreshAccessToken(): Promise<boolean> {
-    await this.parent.storage.delAccessToken(this.parent.name);
-    this.parent.apiClient._accessToken = null;
+    // The server only includes x-skygear-try-refresh-token if
+    // the access token in the request is invalid.
+    //
+    // If the request does not have access token at all,
+    // the server simply returns NotAuthenticated error without the header.
+    //
+    // Therefore, we have to keep the invalid token so that
+    // if refresh fails due to other reasons, the whole process
+    // can be retried.
+    //
+    // await this.parent.storage.delAccessToken(this.parent.name);
+    // this.parent.apiClient._accessToken = null;
 
     const refreshToken = await this.parent.storage.getRefreshToken(
       this.parent.name
