@@ -51,6 +51,11 @@ export function encodeQuery(query?: [string, string][]): string {
   return output;
 }
 
+function shouldRefreshToken(r: Response): boolean {
+  const h = r.headers.get("x-skygear-try-refresh-token");
+  return h === "true";
+}
+
 /**
  * @public
  */
@@ -126,7 +131,7 @@ export abstract class BaseAPIClient {
     }
 
     let response = await this.fetchFunction(request.clone());
-    if (response.status === 401 && autoRefreshToken) {
+    if (shouldRefreshToken(response) && autoRefreshToken) {
       if (!this.refreshTokenFunction) {
         throw new Error("missing refreshTokenFunction in api client");
       }
