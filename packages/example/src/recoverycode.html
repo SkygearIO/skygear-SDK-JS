@@ -16,7 +16,7 @@
     </a>
   </div>
 
-  <form class="container" onsubmit="onSubmitMe(event)">
+  <form class="container" onsubmit="onSubmitList(event)">
     <div class="form-group">
       <h1>List Recovery Code</h1>
     </div>
@@ -33,6 +33,23 @@
     </div>
   </form>
 
+  <form class="container" onsubmit="onSubmitRegenerate(event)">
+    <div class="form-group">
+      <h1>Regenerate Recovery Code</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="regenerateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="regenerateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
   <script>
 var defaultContainer = skygear.defaultContainer;
 
@@ -43,7 +60,7 @@ function setupListSynopsis() {
   synopsisTextArea.value = s;
 }
 
-function onSubmitMe(e) {
+function onSubmitList(e) {
   e.preventDefault();
   e.stopPropagation();
 
@@ -56,11 +73,32 @@ function onSubmitMe(e) {
   });
 }
 
+function setupRegenerateSynopsis() {
+  var synopsisTextArea = document.getElementById("regenerateSynopsis");
+  var funcExpr = "defaultContainer.auth.mfa.regenerateRecoveryCode";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitRegenerate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("regenerateResult");
+
+  defaultContainer.auth.mfa.regenerateRecoveryCode().then(function(codes) {
+    resultTextArea.value = JSON.stringify(codes);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
 defaultContainer.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
   setupListSynopsis();
+  setupRegenerateSynopsis();
 }, function(e) {
   console.error(e);
 });
