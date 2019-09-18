@@ -257,3 +257,23 @@ export interface GenerateOTPAuthURIOptions {
   issuer: string;
   accountName: string;
 }
+
+/**
+ * @public
+ */
+export interface CreateNewTOTPOptions {
+  displayName: string;
+  issuer: string;
+  accountName: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewTOTPResult {
+  authenticatorID: string;
+  authenticatorType: "totp";
+  secret: string;
+  otpauthURI: string;
+  qrCodeImageURL: string;
+}

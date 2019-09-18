@@ -10,6 +10,8 @@ import {
   ExtraSessionInfoOptions,
   Authenticator,
   GenerateOTPAuthURIOptions,
+  CreateNewTOTPOptions,
+  CreateNewTOTPResult,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import { SkygearError } from "./error";
@@ -397,7 +399,31 @@ export class MFAContainer<T extends BaseAPIClient> {
     );
   }
 
-  // TODO(mfa): Create, Activate, Authenticate TOTP.
+  async createNewTOTP(
+    options: CreateNewTOTPOptions
+  ): Promise<CreateNewTOTPResult> {
+    const { displayName, issuer, accountName } = options;
+    const {
+      authenticatorID,
+      authenticatorType,
+      secret,
+    } = await this.parent.parent.apiClient.createNewTOTP(displayName);
+    const otpauthURI = generateOTPAuthURI({
+      secret,
+      issuer,
+      accountName,
+    });
+    const qrCodeImageURL = this.generateOTPAuthURIQRCodeImageURL(otpauthURI);
+    return {
+      authenticatorID,
+      authenticatorType,
+      secret,
+      otpauthURI,
+      qrCodeImageURL,
+    };
+  }
+
+  // TODO(mfa): Activate, Authenticate TOTP.
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
   // TODO(mfa): Support bearer token transparently.

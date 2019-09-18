@@ -515,4 +515,24 @@ export abstract class BaseAPIClient {
       },
     });
   }
+
+  async createNewTOTP(
+    displayName: string
+  ): Promise<{
+    authenticatorID: string;
+    authenticatorType: "totp";
+    secret: string;
+  }> {
+    // TODO(mfa): authnsession
+    const response = await this.post("/_auth/mfa/totp/new", {
+      json: {
+        display_name: displayName,
+      },
+    });
+    return {
+      authenticatorID: response.authenticator_id,
+      authenticatorType: response.authenticator_type,
+      secret: response.secret,
+    };
+  }
 }
