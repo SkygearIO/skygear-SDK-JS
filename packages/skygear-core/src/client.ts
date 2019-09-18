@@ -5,6 +5,7 @@ import {
   Session,
   OAuthAuthorizationURLOptions,
   Authenticator,
+  ActivateTOTPResult,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import {
@@ -533,6 +534,18 @@ export abstract class BaseAPIClient {
       authenticatorID: response.authenticator_id,
       authenticatorType: response.authenticator_type,
       secret: response.secret,
+    };
+  }
+
+  async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
+    // TODO(mfa): authnsession
+    const response = await this.post("/_auth/mfa/totp/activate", {
+      json: {
+        otp,
+      },
+    });
+    return {
+      recoveryCodes: response.recovery_codes,
     };
   }
 }

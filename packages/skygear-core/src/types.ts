@@ -277,3 +277,10 @@ export interface CreateNewTOTPResult {
   otpauthURI: string;
   qrCodeImageURL: string;
 }
+
+/**
+ * @public
+ */
+export interface ActivateTOTPResult {
+  recoveryCodes?: string[];
+}
