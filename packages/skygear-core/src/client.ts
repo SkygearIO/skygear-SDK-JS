@@ -483,4 +483,15 @@ export abstract class BaseAPIClient {
     });
     return response.recovery_codes;
   }
+
+  async authenticateWithRecoveryCode(code: string): Promise<AuthResponse> {
+    // TODO(mfa): authnsession
+    const payload = {
+      code,
+    };
+    return this.postAndReturnAuthResponse(
+      "/_auth/mfa/recovery_code/authenticate",
+      { json: payload }
+    );
+  }
 }
