@@ -17,6 +17,9 @@
 
   <form class="container" onsubmit="onSubmitCreate(event)">
     <div class="form-group">
+      <h1>Create TOTP Authenticator</h1>
+    </div>
+    <div class="form-group">
       <label>Display Name</label>
       <input id="displayName" type="text" class="form-control" placeholder="Display Name" oninput="onInputCreate()">
     </div>
@@ -62,6 +65,31 @@
     <div class="form-group">
       <label>Result</label>
       <textarea id="activateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitAuthenticate(event)">
+    <div class="form-group">
+      <h1>Authenticate with TOTP Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>OTP</label>
+      <input id="authenticateOTP" type="text" class="form-control" placeholder="OTP" oninput="onInputAuthenticate()">
+    </div>
+    <div class="form-group">
+      <label>Skip MFA for Current Device</label>
+      <input id="skipMFAForCurrentDevice" type="checkbox" class="form-control"  oninput="onInputAuthenticate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="authenticateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="authenticateResult" class="form-control" readonly=""></textarea>
     </div>
   </form>
 
@@ -132,12 +160,46 @@ function onSubmitActivate(e) {
   });
 }
 
+function onInputAuthenticate() {
+  var otp = document.getElementById("authenticateOTP").value;
+  var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
+
+  var synopsisTextArea = document.getElementById("authenticateSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.authenticateWithTOTP";
+  var s = stringifyFunctionCall(funcExpr, {
+    otp,
+    skipMFAForCurrentDevice,
+  });
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitAuthenticate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var otp = document.getElementById("authenticateOTP").value;
+  var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
+  var resultTextArea = document.getElementById("authenticateResult");
+
+  defaultContainer.auth.mfa.authenticateWithTOTP({
+    otp,
+    skipMFAForCurrentDevice,
+  }).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
 defaultContainer.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
   onInputCreate();
   onInputActivate();
+  onInputAuthenticate();
 }, function(e) {
   console.error(e);
 });
