@@ -389,7 +389,15 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.deleteAuthenticator(id);
   }
 
-  // TODO(mfa): Create, Activate, QRCode, Authenticate TOTP.
+  generateOTPAuthURIQRCodeImageURL(otpauthURI: string): string {
+    return (
+      this.parent.parent.apiClient.endpoint +
+      "/_auth/mfa/totp/qrcode" +
+      encodeQuery([["otpauth_uri", otpauthURI]])
+    );
+  }
+
+  // TODO(mfa): Create, Activate, Authenticate TOTP.
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
   // TODO(mfa): Support bearer token transparently.
