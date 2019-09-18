@@ -6,6 +6,7 @@ import {
   OAuthAuthorizationURLOptions,
   Authenticator,
   ActivateTOTPResult,
+  AuthenticateWithTOTPOptions,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import {
@@ -547,5 +548,18 @@ export abstract class BaseAPIClient {
     return {
       recoveryCodes: response.recovery_codes,
     };
+  }
+
+  async authenticateWithTOTP(
+    options: AuthenticateWithTOTPOptions
+  ): Promise<AuthResponse> {
+    // TODO(mfa): authnsession
+    const payload = {
+      request_bearer_token: options.skipMFAForCurrentDevice,
+      otp: options.otp,
+    };
+    return this.postAndReturnAuthResponse("/_auth/mfa/totp/authenticate", {
+      json: payload,
+    });
   }
 }

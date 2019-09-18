@@ -284,3 +284,11 @@ export interface CreateNewTOTPResult {
 export interface ActivateTOTPResult {
   recoveryCodes?: string[];
 }
+
+/**
+ * @public
+ */
+export interface AuthenticateWithTOTPOptions {
+  otp: string;
+  skipMFAForCurrentDevice?: boolean;
+}

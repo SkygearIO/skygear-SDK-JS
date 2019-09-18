@@ -13,6 +13,7 @@ import {
   CreateNewTOTPOptions,
   CreateNewTOTPResult,
   ActivateTOTPResult,
+  AuthenticateWithTOTPOptions,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import { SkygearError } from "./error";
@@ -428,7 +429,16 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.activateTOTP(otp);
   }
 
-  // TODO(mfa): Authenticate TOTP.
+  async authenticateWithTOTP(
+    options: AuthenticateWithTOTPOptions
+  ): Promise<User> {
+    const response = await this.parent.parent.apiClient.authenticateWithTOTP(
+      options
+    );
+    await this.parent.persistResponse(response);
+    return response.user;
+  }
+
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
   // TODO(mfa): Support bearer token transparently.
