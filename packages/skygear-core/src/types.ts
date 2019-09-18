@@ -240,11 +240,20 @@ export interface OOBSMSAuthenticator {
 /**
  * @public
  */
-interface OOBEmailAuthenticator {
+export interface OOBEmailAuthenticator {
   id: string;
   type: "oob";
   createdAt: Date;
   activatedAt: Date;
   channel: "email";
   maskedEmail: string;
+}
+
+/**
+ * @public
+ */
+export interface GenerateOTPAuthURIOptions {
+  secret: string;
+  issuer: string;
+  accountName: string;
 }

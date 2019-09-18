@@ -9,13 +9,34 @@ import {
   Session,
   ExtraSessionInfoOptions,
   Authenticator,
+  GenerateOTPAuthURIOptions,
 } from "./types";
-import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import { SkygearError } from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
 };
+
+/**
+ * @public
+ */
+export function generateOTPAuthURI(options: GenerateOTPAuthURIOptions): string {
+  let issuer = "";
+  if (options.issuer) {
+    issuer = encodeURI(options.issuer);
+  }
+
+  const accountName = encodeURI(options.accountName);
+  const path = issuer === "" ? accountName : issuer + ":" + accountName;
+  const host = "totp";
+  const queryInput: [string, string][] = [["secret", options.secret]];
+  if (options.issuer !== "") {
+    queryInput.push(["issuer", options.issuer]);
+  }
+  const query = encodeQuery(queryInput);
+  return `otpauth://${host}/${path}${query}`;
+}
 
 /**
  * @public
