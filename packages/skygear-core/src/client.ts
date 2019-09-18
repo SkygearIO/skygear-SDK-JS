@@ -507,4 +507,12 @@ export abstract class BaseAPIClient {
     });
     return (response.authenticators as any[]).map(decodeAuthenticator);
   }
+
+  async deleteAuthenticator(id: string): Promise<void> {
+    await this.post("/_auth/mfa/authenticator/delete", {
+      json: {
+        authenticator_id: id,
+      },
+    });
+  }
 }

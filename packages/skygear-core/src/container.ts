@@ -364,7 +364,10 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.getAuthenticators();
   }
 
-  // TODO(mfa): Delete authenticator.
+  async deleteAuthenticator(id: string): Promise<void> {
+    return this.parent.parent.apiClient.deleteAuthenticator(id);
+  }
+
   // TODO(mfa): Create, Activate, QRCode, Authenticate TOTP.
   // TODO(mfa): Create, Activate, Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
