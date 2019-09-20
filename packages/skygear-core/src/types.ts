@@ -292,3 +292,35 @@ export interface AuthenticateWithTOTPOptions {
   otp: string;
   skipMFAForCurrentDevice?: boolean;
 }
+
+/**
+ * @public
+ */
+export type CreateNewOOBOptions =
+  | CreateNewOOBSMSOptions
+  | CreateNewOOBEmailOptions;
+
+/**
+ * @public
+ */
+export interface CreateNewOOBSMSOptions {
+  channel: "sms";
+  phone: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewOOBEmailOptions {
+  channel: "email";
+  email: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewOOBResult {
+  authenticatorID: string;
+  authenticatorType: "oob";
+  channel: "sms" | "email";
+}

@@ -7,6 +7,8 @@ import {
   Authenticator,
   ActivateTOTPResult,
   AuthenticateWithTOTPOptions,
+  CreateNewOOBOptions,
+  CreateNewOOBResult,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import {
@@ -561,5 +563,23 @@ export abstract class BaseAPIClient {
     return this.postAndReturnAuthResponse("/_auth/mfa/totp/authenticate", {
       json: payload,
     });
+  }
+
+  async createNewOOB(
+    options: CreateNewOOBOptions
+  ): Promise<CreateNewOOBResult> {
+    // TODO(mfa): authnsession
+    const response = await this.post("/_auth/mfa/oob/new", {
+      json: {
+        channel: options.channel,
+        phone: (options as any).phone,
+        email: (options as any).email,
+      },
+    });
+    return {
+      authenticatorID: response.authenticator_id,
+      authenticatorType: response.authenticator_type,
+      channel: response.channel,
+    };
   }
 }
