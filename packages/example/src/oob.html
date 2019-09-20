@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Out-of-band (OOB)</title>
+</head>
+<body>
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitCreate(event)">
+    <div class="form-group">
+      <h1>Create OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Channel</label>
+      <select id="channel" class="form-control" oninput="onInputCreate()">
+        <option value="sms" selected="">SMS</option>
+        <option value="email">Email</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input id="phone" type="text" class="form-control" placeholder="Phone in E.164 format" oninput="onInputCreate()">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input id="email" type="text" class="form-control" placeholder="Email" oninput="onInputCreate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="createSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="createResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function onInputCreate() {
+  var channel = document.getElementById("channel").value;
+  var phone = document.getElementById("phone").value;
+  var email = document.getElementById("email").value;
+
+  var synopsisTextArea = document.getElementById("createSynopsis");
+
+  var options;
+
+  if (channel === "sms") {
+    options = {
+      channel: "sms",
+      phone,
+    };
+  } else if (channel === "email") {
+    options = {
+      channel: "email",
+      email,
+    };
+  }
+
+  var funcExpr = "defaultContainer.auth.mfa.createNewOOB";
+  var s = stringifyFunctionCall(funcExpr, options);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitCreate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var channel = document.getElementById("channel").value;
+  var phone = document.getElementById("phone").value;
+  var email = document.getElementById("email").value;
+  var resultTextArea = document.getElementById("createResult");
+
+  defaultContainer.auth.mfa.createNewOOB({
+    channel,
+    phone,
+    email,
+  }).then(function(result) {
+    resultTextArea.value = JSON.stringify(result);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  onInputCreate();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
