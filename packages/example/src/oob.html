@@ -47,6 +47,27 @@
     </div>
   </form>
 
+  <form class="container" onsubmit="onSubmitActivate(event)">
+    <div class="form-group">
+      <h1>Activate OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Code</label>
+      <input id="activateCode" type="text" class="form-control" placeholder="Code" oninput="onInputActivate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="activateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="activateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
   <script>
 var defaultContainer = skygear.defaultContainer;
 
@@ -97,11 +118,37 @@ function onSubmitCreate(e) {
   });
 }
 
+function onInputActivate() {
+  var code = document.getElementById("activateCode").value;
+
+  var synopsisTextArea = document.getElementById("activateSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.activateOOB";
+  var s = stringifyFunctionCall(funcExpr, code);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitActivate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var code = document.getElementById("activateCode").value;
+  var resultTextArea = document.getElementById("activateResult");
+
+  defaultContainer.auth.mfa.activateOOB(code).then(function(result) {
+    resultTextArea.value = JSON.stringify(result);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
 defaultContainer.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
   onInputCreate();
+  onInputActivate();
 }, function(e) {
   console.error(e);
 });
