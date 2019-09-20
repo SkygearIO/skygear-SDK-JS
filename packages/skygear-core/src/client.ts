@@ -9,6 +9,7 @@ import {
   AuthenticateWithTOTPOptions,
   CreateNewOOBOptions,
   CreateNewOOBResult,
+  ActivateOOBResult,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import {
@@ -580,6 +581,18 @@ export abstract class BaseAPIClient {
       authenticatorID: response.authenticator_id,
       authenticatorType: response.authenticator_type,
       channel: response.channel,
+    };
+  }
+
+  async activateOOB(code: string): Promise<ActivateOOBResult> {
+    // TODO(mfa): authnsession
+    const response = await this.post("/_auth/mfa/oob/activate", {
+      json: {
+        code,
+      },
+    });
+    return {
+      recoveryCodes: response.recovery_codes,
     };
   }
 }

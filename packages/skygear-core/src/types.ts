@@ -324,3 +324,10 @@ export interface CreateNewOOBResult {
   authenticatorType: "oob";
   channel: "sms" | "email";
 }
+
+/**
+ * @public
+ */
+export interface ActivateOOBResult {
+  recoveryCodes?: string[];
+}

@@ -16,6 +16,7 @@ import {
   AuthenticateWithTOTPOptions,
   CreateNewOOBOptions,
   CreateNewOOBResult,
+  ActivateOOBResult,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import { SkygearError } from "./error";
@@ -447,7 +448,11 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.createNewOOB(options);
   }
 
-  // TODO(mfa): Activate, Trigger, Authenticate OOB.
+  async activateOOB(code: string): Promise<ActivateOOBResult> {
+    return this.parent.parent.apiClient.activateOOB(code);
+  }
+
+  // TODO(mfa): Trigger, Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
   // TODO(mfa): Support bearer token transparently.
 }
