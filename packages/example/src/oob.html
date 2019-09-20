@@ -68,6 +68,30 @@
     </div>
   </form>
 
+  <form class="container" onsubmit="onSubmitTrigger(event)">
+    <div class="form-group">
+      <h1>Trigger OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Authenticator ID</label>
+      <input id="triggerID" type="text" class="form-control" placeholder="Code" oninput="onInputTrigger()">
+      <small class="form-text text-muted">
+        Authenticator ID is optional when you only have on activated OOB authenticator.
+      </small>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="triggerSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="triggerResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
   <script>
 var defaultContainer = skygear.defaultContainer;
 
@@ -143,12 +167,41 @@ function onSubmitActivate(e) {
   });
 }
 
+function onInputTrigger() {
+  var authenticatorID = document.getElementById("triggerID").value;
+  if (authenticatorID === "") {
+    authenticatorID = undefined;
+  }
+
+  var synopsisTextArea = document.getElementById("triggerSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.triggerOOB";
+  var s = stringifyFunctionCall(funcExpr, authenticatorID);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitTrigger(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var authenticatorID = document.getElementById("triggerID").value;
+  var resultTextArea = document.getElementById("triggerResult");
+
+  defaultContainer.auth.mfa.triggerOOB(authenticatorID).then(function() {
+    resultTextArea.value = "SUCCESS";
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
 defaultContainer.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
   onInputCreate();
   onInputActivate();
+  onInputTrigger();
 }, function(e) {
   console.error(e);
 });
