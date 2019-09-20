@@ -595,4 +595,13 @@ export abstract class BaseAPIClient {
       recoveryCodes: response.recovery_codes,
     };
   }
+
+  async triggerOOB(authenticatorID?: string): Promise<void> {
+    // TODO(mfa): authnsession
+    await this.post("/_auth/mfa/oob/trigger", {
+      json: {
+        authenticator_id: authenticatorID,
+      },
+    });
+  }
 }

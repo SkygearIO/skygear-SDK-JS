@@ -452,7 +452,11 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.activateOOB(code);
   }
 
-  // TODO(mfa): Trigger, Authenticate OOB.
+  async triggerOOB(authenticatorID?: string): Promise<void> {
+    return this.parent.parent.apiClient.triggerOOB(authenticatorID);
+  }
+
+  // TODO(mfa): Authenticate OOB.
   // TODO(mfa): Revoke all bearer token.
   // TODO(mfa): Support bearer token transparently.
 }
