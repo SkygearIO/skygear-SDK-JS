@@ -331,3 +331,11 @@ export interface CreateNewOOBResult {
 export interface ActivateOOBResult {
   recoveryCodes?: string[];
 }
+
+/**
+ * @public
+ */
+export interface AuthenticateWithOOBOptions {
+  code: string;
+  skipMFAForCurrentDevice?: boolean;
+}

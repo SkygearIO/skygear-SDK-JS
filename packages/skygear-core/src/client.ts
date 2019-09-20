@@ -10,6 +10,7 @@ import {
   CreateNewOOBOptions,
   CreateNewOOBResult,
   ActivateOOBResult,
+  AuthenticateWithOOBOptions,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import {
@@ -602,6 +603,19 @@ export abstract class BaseAPIClient {
       json: {
         authenticator_id: authenticatorID,
       },
+    });
+  }
+
+  async authenticateWithOOB(
+    options: AuthenticateWithOOBOptions
+  ): Promise<AuthResponse> {
+    // TODO(mfa): authnsession
+    const payload = {
+      request_bearer_token: options.skipMFAForCurrentDevice,
+      code: options.code,
+    };
+    return this.postAndReturnAuthResponse("/_auth/mfa/oob/authenticate", {
+      json: payload,
     });
   }
 }
