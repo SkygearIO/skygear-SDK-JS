@@ -207,13 +207,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
   constructor(options?: ContainerOptions<T>) {
     const o = ({
       ...options,
-      apiClient:
-        (options && options.apiClient) ||
-        new WebAPIClient({
-          apiKey: "",
-          endpoint: "",
-          accessToken: null,
-        }),
+      apiClient: (options && options.apiClient) || new WebAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(localStorageStorageDriver),

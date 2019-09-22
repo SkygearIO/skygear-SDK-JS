@@ -83,14 +83,10 @@ export abstract class BaseAPIClient {
   userAgent?: string;
   getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
-  constructor(options: {
-    apiKey: string;
-    endpoint: string;
-    accessToken: string | null;
-  }) {
-    this.apiKey = options.apiKey;
-    this.endpoint = _removeTrailingSlash(options.endpoint);
-    this._accessToken = options.accessToken;
+  constructor() {
+    this.apiKey = "";
+    this.endpoint = "";
+    this._accessToken = null;
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
