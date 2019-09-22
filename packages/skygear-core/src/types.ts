@@ -112,6 +112,7 @@ export interface AuthResponse {
   accessToken?: string;
   refreshToken?: string;
   sessionID?: string;
+  mfaBearerToken?: string;
 }
 
 /**

@@ -631,4 +631,18 @@ export abstract class BaseAPIClient {
       json: payload,
     });
   }
+
+  async authenticateWithBearerToken(
+    bearerToken?: string
+  ): Promise<AuthResponse> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      bearer_token: bearerToken,
+    });
+    return this.postAndReturnAuthResponse(
+      "/_auth/mfa/bearer_token/authenticate",
+      {
+        json: payload,
+      }
+    );
+  }
 }

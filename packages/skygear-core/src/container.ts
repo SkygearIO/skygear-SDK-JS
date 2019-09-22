@@ -25,6 +25,7 @@ import {
   SkygearError,
   SkygearErrorNameAuthenticationSession,
   SkygearErrorNameInvalidAuthenticationSession,
+  SkygearErrorNameInvalidMFABearerToken,
 } from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
@@ -104,7 +105,14 @@ export class AuthContainer<T extends BaseAPIClient> {
     // Ensure authentication session and access token are mutually exclusive
     await this._clearAuthenticationSession();
 
-    const { user, identity, accessToken, refreshToken, sessionID } = response;
+    const {
+      user,
+      identity,
+      accessToken,
+      refreshToken,
+      sessionID,
+      mfaBearerToken,
+    } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
 
@@ -124,6 +132,13 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.parent.storage.setSessionID(this.parent.name, sessionID);
     }
 
+    if (mfaBearerToken) {
+      await this.parent.storage.setMFABearerToken(
+        this.parent.name,
+        mfaBearerToken
+      );
+    }
+
     this.currentUser = user;
     if (identity) {
       this.currentIdentity = identity;
@@ -139,16 +154,17 @@ export class AuthContainer<T extends BaseAPIClient> {
   /**
    * @internal
    */
-  async handleAuthenticationSession(e: unknown): Promise<void> {
+  async handleAuthenticationSession(e: unknown): Promise<AuthResponse> {
     // Detect invalid authentication session
     if (
       e instanceof SkygearError &&
       e.name === SkygearErrorNameInvalidAuthenticationSession
     ) {
       await this._clearAuthenticationSession();
+      throw e;
     }
 
-    // Persist authentication session
+    // The error is AuthenticationSession
     if (
       e instanceof SkygearError &&
       e.name === SkygearErrorNameAuthenticationSession &&
@@ -156,6 +172,8 @@ export class AuthContainer<T extends BaseAPIClient> {
     ) {
       // Ensure authentication session and access token are mutually exclusive
       await this._clearSession();
+
+      // Persist authentication session
       const { token, step } = e.info;
       const authenticationSession: AuthenticationSession = {
         token,
@@ -166,7 +184,38 @@ export class AuthContainer<T extends BaseAPIClient> {
         authenticationSession
       );
       this.parent.apiClient._authenticationSession = authenticationSession;
+
+      // If the step is MFA, try bearer token
+      if (step !== "mfa") {
+        throw e;
+      }
+
+      const mfaBearerToken = await this.parent.storage.getMFABearerToken(
+        this.parent.name
+      );
+      const bearerToken = mfaBearerToken === null ? undefined : mfaBearerToken;
+      try {
+        // NOTE(louis): It is very important that we use await here.
+        // If we simply return the promise, the catch block cannot catch anything.
+        const response = await this.parent.apiClient.authenticateWithBearerToken(
+          bearerToken
+        );
+        return response;
+      } catch (bearerTokenError) {
+        // If the server told us the bearer token is invalid, delete it.
+        if (
+          bearerTokenError instanceof SkygearError &&
+          bearerTokenError.name === SkygearErrorNameInvalidMFABearerToken
+        ) {
+          await this.parent.storage.delMFABearerToken(this.parent.name);
+        }
+        // re-throw the original error
+        throw e;
+      }
     }
+
+    // For any other error, re-throw it.
+    throw e;
   }
 
   /**
@@ -178,8 +227,9 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.persistAuthResponse(response);
       return response.user;
     } catch (e) {
-      await this.handleAuthenticationSession(e);
-      throw e;
+      const response = await this.handleAuthenticationSession(e);
+      await this.persistAuthResponse(response);
+      return response.user;
     }
   }
 
@@ -197,8 +247,9 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.persistAuthResponse(response);
       return response.user;
     } catch (e) {
-      await this.handleAuthenticationSession(e);
-      throw e;
+      const response = await this.handleAuthenticationSession(e);
+      await this.persistAuthResponse(response);
+      return response.user;
     }
   }
 
@@ -531,7 +582,6 @@ export class MFAContainer<T extends BaseAPIClient> {
   }
 
   // TODO(mfa): Revoke all bearer token
-  // TODO(mfa): Support bearer token transparently.
 }
 
 /**

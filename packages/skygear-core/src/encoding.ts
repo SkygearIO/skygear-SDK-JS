@@ -13,7 +13,14 @@ import {
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const { user, identity, access_token, refresh_token, session_id } = r;
+  const {
+    user,
+    identity,
+    access_token,
+    refresh_token,
+    session_id,
+    mfa_bearer_token,
+  } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
@@ -28,6 +35,9 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (session_id) {
     response.sessionID = session_id;
+  }
+  if (mfa_bearer_token) {
+    response.mfaBearerToken = mfa_bearer_token;
   }
   return response;
 }
