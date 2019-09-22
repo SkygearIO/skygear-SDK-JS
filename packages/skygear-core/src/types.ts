@@ -135,6 +135,7 @@ export interface ContainerStorage {
     namespace: string,
     authenticationSession: AuthenticationSession
   ): Promise<void>;
+  setMFABearerToken(namespace: string, mfaBearerToken: string): Promise<void>;
 
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
@@ -148,6 +149,7 @@ export interface ContainerStorage {
   getAuthenticationSession(
     namespace: string
   ): Promise<AuthenticationSession | null>;
+  getMFABearerToken(namespace: string): Promise<string | null>;
 
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
@@ -156,6 +158,7 @@ export interface ContainerStorage {
   delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
   delAuthenticationSession(namespace: string): Promise<void>;
+  delMFABearerToken(namespace: string): Promise<void>;
 }
 
 /**

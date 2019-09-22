@@ -53,6 +53,10 @@ function keyAuthenticationSession(name: string): string {
   return `${name}_authenticationSession`;
 }
 
+function keyMFABearerToken(name: string): string {
+  return `${name}_mfaBearerToken`;
+}
+
 /**
  * @internal
  */
@@ -167,6 +171,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     );
   }
 
+  async setMFABearerToken(namespace: string, mfaBearerToken: string) {
+    await this.storage.safeSet(keyMFABearerToken(namespace), mfaBearerToken);
+  }
+
   async getUser(namespace: string): Promise<User | null> {
     const userJSON = await this.storage.safeGetJSON(keyUser(namespace));
     if (userJSON) {
@@ -223,6 +231,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return null;
   }
 
+  async getMFABearerToken(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyMFABearerToken(namespace));
+  }
+
   async delUser(namespace: string) {
     await this.storage.safeDel(keyUser(namespace));
   }
@@ -249,5 +261,9 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delAuthenticationSession(namespace: string) {
     await this.storage.safeDel(keyAuthenticationSession(namespace));
+  }
+
+  async delMFABearerToken(namespace: string) {
+    await this.storage.safeDel(keyMFABearerToken(namespace));
   }
 }
