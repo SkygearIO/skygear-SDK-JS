@@ -68,6 +68,18 @@ export const SkygearErrorNameWebHookFailed = "WebHookFailed" as const;
  * @public
  */
 export const SkygearErrorNameCurrentIdentityBeingDeleted = "CurrentIdentityBeingDeleted" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameAuthenticationSession = "AuthenticationSession" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameInvalidAuthenticationSession = "InvalidAuthenticationSession" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameInvalidMFABearerToken = "InvalidMFABearerToken" as const;
 
 /**
  * @public
@@ -89,7 +101,10 @@ export type SkygearErrorName =
   | typeof SkygearErrorNameVerificationRequired
   | typeof SkygearErrorNameWebHookTimeOut
   | typeof SkygearErrorNameWebHookFailed
-  | typeof SkygearErrorNameCurrentIdentityBeingDeleted;
+  | typeof SkygearErrorNameCurrentIdentityBeingDeleted
+  | typeof SkygearErrorNameAuthenticationSession
+  | typeof SkygearErrorNameInvalidAuthenticationSession
+  | typeof SkygearErrorNameInvalidMFABearerToken;
 
 /**
  * @public
