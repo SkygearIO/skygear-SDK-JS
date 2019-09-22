@@ -131,6 +131,11 @@ export interface ContainerStorage {
     namespace: string,
     options: ExtraSessionInfoOptions
   ): Promise<void>;
+  setAuthenticationSession(
+    namespace: string,
+    authenticationSession: AuthenticationSession
+  ): Promise<void>;
+
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
   getAccessToken(namespace: string): Promise<string | null>;
@@ -140,12 +145,17 @@ export interface ContainerStorage {
   getExtraSessionInfoOptions(
     namespace: string
   ): Promise<Partial<ExtraSessionInfoOptions> | null>;
+  getAuthenticationSession(
+    namespace: string
+  ): Promise<AuthenticationSession | null>;
+
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
   delAccessToken(namespace: string): Promise<void>;
   delRefreshToken(namespace: string): Promise<void>;
   delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
+  delAuthenticationSession(namespace: string): Promise<void>;
 }
 
 /**
@@ -338,4 +348,12 @@ export interface ActivateOOBResult {
 export interface AuthenticateWithOOBOptions {
   code: string;
   skipMFAForCurrentDevice?: boolean;
+}
+
+/**
+ * @public
+ */
+export interface AuthenticationSession {
+  token: string;
+  step: "identity" | "mfa";
 }

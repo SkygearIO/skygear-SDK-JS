@@ -5,6 +5,7 @@ import {
   User,
   Identity,
   ExtraSessionInfoOptions,
+  AuthenticationSession,
 } from "./types";
 
 import {
@@ -46,6 +47,10 @@ function keyOAuthRedirectAction(name: string): string {
 
 function keyExtraSessionInfoOptions(name: string): string {
   return `${name}_extra_session_info_options`;
+}
+
+function keyAuthenticationSession(name: string): string {
+  return `${name}_authenticationSession`;
 }
 
 /**
@@ -152,6 +157,16 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     );
   }
 
+  async setAuthenticationSession(
+    namespace: string,
+    authenticationSession: AuthenticationSession
+  ) {
+    await this.storage.safeSetJSON(
+      keyAuthenticationSession(namespace),
+      authenticationSession as any
+    );
+  }
+
   async getUser(namespace: string): Promise<User | null> {
     const userJSON = await this.storage.safeGetJSON(keyUser(namespace));
     if (userJSON) {
@@ -196,6 +211,18 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return null;
   }
 
+  async getAuthenticationSession(
+    namespace: string
+  ): Promise<AuthenticationSession | null> {
+    const j = await this.storage.safeGetJSON(
+      keyAuthenticationSession(namespace)
+    );
+    if (j !== undefined) {
+      return j as any;
+    }
+    return null;
+  }
+
   async delUser(namespace: string) {
     await this.storage.safeDel(keyUser(namespace));
   }
@@ -218,5 +245,9 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delOAuthRedirectAction(namespace: string) {
     await this.storage.safeDel(keyOAuthRedirectAction(namespace));
+  }
+
+  async delAuthenticationSession(namespace: string) {
+    await this.storage.safeDel(keyAuthenticationSession(namespace));
   }
 }
