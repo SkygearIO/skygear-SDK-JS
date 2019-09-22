@@ -3,24 +3,93 @@ import { JSONObject } from "./types";
 /**
  * @public
  */
+export const SkygearErrorNameUnexpectedError = "UnexpectedError" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameNotAuthenticated = "NotAuthenticated" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNamePermissionDenied = "PermissionDenied" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameAccessKeyNotAccepted = "AccessKeyNotAccepted" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameAccessTokenNotAccepted = "AccessTokenNotAccepted" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameInvalidCredentials = "InvalidCredentials" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameBadRequest = "BadRequest" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameInvalidArgument = "InvalidArgument" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameDuplicated = "Duplicated" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameResourceNotFound = "ResourceNotFound" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameUndefinedOperation = "UndefinedOperation" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNamePasswordPolicyViolated = "PasswordPolicyViolated" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameUserDisabled = "UserDisabled" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameVerificationRequired = "VerificationRequired" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameWebHookTimeOut = "WebHookTimeOut" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameWebHookFailed = "WebHookFailed" as const;
+/**
+ * @public
+ */
+export const SkygearErrorNameCurrentIdentityBeingDeleted = "CurrentIdentityBeingDeleted" as const;
+
+/**
+ * @public
+ */
 export type SkygearErrorName =
-  | "UnexpectedError"
-  | "NotAuthenticated"
-  | "PermissionDenied"
-  | "AccessKeyNotAccepted"
-  | "AccessTokenNotAccepted"
-  | "InvalidCredentials"
-  | "BadRequest"
-  | "InvalidArgument"
-  | "Duplicated"
-  | "ResourceNotFound"
-  | "UndefinedOperation"
-  | "PasswordPolicyViolated"
-  | "UserDisabled"
-  | "VerificationRequired"
-  | "WebHookTimeOut"
-  | "WebHookFailed"
-  | "CurrentIdentityBeingDeleted";
+  | typeof SkygearErrorNameUnexpectedError
+  | typeof SkygearErrorNameNotAuthenticated
+  | typeof SkygearErrorNamePermissionDenied
+  | typeof SkygearErrorNameAccessKeyNotAccepted
+  | typeof SkygearErrorNameAccessTokenNotAccepted
+  | typeof SkygearErrorNameInvalidCredentials
+  | typeof SkygearErrorNameBadRequest
+  | typeof SkygearErrorNameInvalidArgument
+  | typeof SkygearErrorNameDuplicated
+  | typeof SkygearErrorNameResourceNotFound
+  | typeof SkygearErrorNameUndefinedOperation
+  | typeof SkygearErrorNamePasswordPolicyViolated
+  | typeof SkygearErrorNameUserDisabled
+  | typeof SkygearErrorNameVerificationRequired
+  | typeof SkygearErrorNameWebHookTimeOut
+  | typeof SkygearErrorNameWebHookFailed
+  | typeof SkygearErrorNameCurrentIdentityBeingDeleted;
 
 /**
  * @public
