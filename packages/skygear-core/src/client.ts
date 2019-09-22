@@ -645,4 +645,10 @@ export abstract class BaseAPIClient {
       }
     );
   }
+
+  async revokeAllBearerToken(): Promise<void> {
+    await this.post("/_auth/mfa/bearer_token/revoke_all", {
+      json: {},
+    });
+  }
 }

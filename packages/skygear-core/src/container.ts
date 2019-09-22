@@ -581,7 +581,9 @@ export class MFAContainer<T extends BaseAPIClient> {
     );
   }
 
-  // TODO(mfa): Revoke all bearer token
+  async revokeAllTrustedDevices(): Promise<void> {
+    await this.parent.parent.apiClient.revokeAllBearerToken();
+  }
 }
 
 /**
