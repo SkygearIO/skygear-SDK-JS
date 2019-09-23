@@ -83,7 +83,6 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function onInputEmail() {
   var email = document.getElementById("email").value;
@@ -96,7 +95,7 @@ function onInputEmail() {
     options = { realm: realm };
   }
 
-  var funcExpr = "defaultContainer.auth.signupWithEmail";
+  var funcExpr = "skygear.auth.signupWithEmail";
   var s = stringifyFunctionCall(funcExpr, email, password, options);
 
   synopsisTextArea.value = s;
@@ -116,7 +115,7 @@ function onSubmitEmail(e) {
     options = { realm: realm };
   }
 
-  defaultContainer.auth.signupWithEmail(email, password, options).then(function(user) {
+  skygear.auth.signupWithEmail(email, password, options).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -135,7 +134,7 @@ function onInputLoginID() {
     options = { realm: realm };
   }
 
-  var funcExpr = "defaultContainer.auth.signup";
+  var funcExpr = "skygear.auth.signup";
   var s = stringifyFunctionCall(funcExpr, {
     [loginIDKey]: loginID,
   }, password, options);
@@ -158,7 +157,7 @@ function onSubmitLoginID(e) {
     options = { realm: realm };
   }
 
-  defaultContainer.auth.signup({
+  skygear.auth.signup({
     [loginIDKey]: loginID,
   }, password, options).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
@@ -167,7 +166,7 @@ function onSubmitLoginID(e) {
   });
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {

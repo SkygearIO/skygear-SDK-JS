@@ -72,11 +72,10 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function setupListSynopsis() {
   var synopsisTextArea = document.getElementById("listSynopsis");
-  var funcExpr = "defaultContainer.auth.mfa.listRecoveryCode";
+  var funcExpr = "skygear.auth.mfa.listRecoveryCode";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -87,7 +86,7 @@ function onSubmitList(e) {
 
   var resultTextArea = document.getElementById("listResult");
 
-  defaultContainer.auth.mfa.listRecoveryCode().then(function(codes) {
+  skygear.auth.mfa.listRecoveryCode().then(function(codes) {
     resultTextArea.value = JSON.stringify(codes);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -96,7 +95,7 @@ function onSubmitList(e) {
 
 function setupRegenerateSynopsis() {
   var synopsisTextArea = document.getElementById("regenerateSynopsis");
-  var funcExpr = "defaultContainer.auth.mfa.regenerateRecoveryCode";
+  var funcExpr = "skygear.auth.mfa.regenerateRecoveryCode";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -107,7 +106,7 @@ function onSubmitRegenerate(e) {
 
   var resultTextArea = document.getElementById("regenerateResult");
 
-  defaultContainer.auth.mfa.regenerateRecoveryCode().then(function(codes) {
+  skygear.auth.mfa.regenerateRecoveryCode().then(function(codes) {
     resultTextArea.value = JSON.stringify(codes);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -117,7 +116,7 @@ function onSubmitRegenerate(e) {
 function onInputCode() {
   var code = document.getElementById("code").value;
   var synopsisTextArea = document.getElementById("authenticateSynopsis");
-  var funcExpr = "defaultContainer.auth.mfa.authenticateWithRecoveryCode";
+  var funcExpr = "skygear.auth.mfa.authenticateWithRecoveryCode";
   var s = stringifyFunctionCall(funcExpr, code);
   synopsisTextArea.value = s;
 }
@@ -129,14 +128,14 @@ function onSubmitAuthenticate(e) {
   var code = document.getElementById("code").value;
   var resultTextArea = document.getElementById("authenticateResult");
 
-  defaultContainer.auth.mfa.authenticateWithRecoveryCode(code).then(function(user) {
+  skygear.auth.mfa.authenticateWithRecoveryCode(code).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
   });
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {

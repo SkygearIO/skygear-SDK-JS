@@ -97,11 +97,10 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function setupMeSynopsis() {
   var synopsisTextArea = document.getElementById("meSynopsis");
-  var funcExpr = "defaultContainer.auth.me";
+  var funcExpr = "skygear.auth.me";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -112,7 +111,7 @@ function onSubmitMe(e) {
 
   var resultTextArea = document.getElementById("meResult");
 
-  defaultContainer.auth.me().then(function(user) {
+  skygear.auth.me().then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -121,7 +120,7 @@ function onSubmitMe(e) {
 
 function setupLogoutSynopsis() {
   var synopsisTextArea = document.getElementById("logoutSynopsis");
-  var funcExpr = "defaultContainer.auth.logout";
+  var funcExpr = "skygear.auth.logout";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -132,7 +131,7 @@ function onSubmitLogout(e) {
 
   var resultTextArea = document.getElementById("logoutResult");
 
-  defaultContainer.auth.logout().then(function() {
+  skygear.auth.logout().then(function() {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -143,7 +142,7 @@ function onInputChangePassword() {
   var newPassword = document.getElementById("changePasswordNewPassword").value;
   var oldPassword = document.getElementById("changePasswordOldPassword").value;
   var synopsisTextArea = document.getElementById("changePasswordSynopsis");
-  var funcExpr = "defaultContainer.auth.changePassword";
+  var funcExpr = "skygear.auth.changePassword";
   var s = stringifyFunctionCall(funcExpr, newPassword, oldPassword);
   synopsisTextArea.value = s;
 }
@@ -156,7 +155,7 @@ function onSubmitChangePassword(e) {
   var oldPassword = document.getElementById("changePasswordOldPassword").value;
   var resultTextArea = document.getElementById("changePasswordResult");
 
-  defaultContainer.auth.changePassword(newPassword, oldPassword).then(function(user) {
+  skygear.auth.changePassword(newPassword, oldPassword).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -167,7 +166,7 @@ function onInputMetadata() {
   var metadataStr = document.getElementById("updateMetadataMetadata").value;
   var synopsisTextArea = document.getElementById("updateMetadataSynopsis");
 
-  var funcExpr = "defaultContainer.auth.updateMetadata";
+  var funcExpr = "skygear.auth.updateMetadata";
   var s = !metadataStr ? "" : "ERROR";
   try {
     var metadata = JSON.parse(metadataStr);
@@ -192,7 +191,7 @@ function onSubmitUpdateMetadata(e) {
     if (typeof metadata !== "object" || metadata == null) {
       throw "invalid";
     }
-    defaultContainer.auth.updateMetadata(metadata).then(function(user) {
+    skygear.auth.updateMetadata(metadata).then(function(user) {
       resultTextArea.value = JSON.stringify(user);
     }, function(e) {
       resultTextArea.value = JSON.stringify(e);
@@ -202,7 +201,7 @@ function onSubmitUpdateMetadata(e) {
   }
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
