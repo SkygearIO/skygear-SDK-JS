@@ -1,4 +1,4 @@
-import { JSONObject } from "./types";
+import { JSONObject, AuthenticationSession } from "./types";
 
 /**
  * @public
@@ -147,4 +147,32 @@ export function decodeError(err?: any): Error {
   }
   // Otherwise cast it to string and use it as message.
   return new Error(String(err));
+}
+
+/**
+ * @internal
+ */
+export function _extractAuthenticationSession(
+  e: unknown
+): AuthenticationSession | null {
+  if (
+    e instanceof SkygearError &&
+    e.name === SkygearErrorNameAuthenticationSession &&
+    e.info != null
+  ) {
+    const { token, step } = e.info;
+    return {
+      token,
+      step,
+    } as AuthenticationSession;
+  }
+  return null;
+}
+
+/**
+ * @public
+ */
+export function isMFARequiredError(e: unknown): boolean {
+  const authenticationSession = _extractAuthenticationSession(e);
+  return authenticationSession != null && authenticationSession.step === "mfa";
 }

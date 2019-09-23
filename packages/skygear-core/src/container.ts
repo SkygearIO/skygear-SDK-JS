@@ -18,14 +18,13 @@ import {
   CreateNewOOBResult,
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
-  AuthenticationSession,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import {
   SkygearError,
-  SkygearErrorNameAuthenticationSession,
   SkygearErrorNameInvalidAuthenticationSession,
   SkygearErrorNameInvalidMFABearerToken,
+  _extractAuthenticationSession,
 } from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
@@ -165,20 +164,12 @@ export class AuthContainer<T extends BaseAPIClient> {
     }
 
     // The error is AuthenticationSession
-    if (
-      e instanceof SkygearError &&
-      e.name === SkygearErrorNameAuthenticationSession &&
-      e.info != null
-    ) {
+    const authenticationSession = _extractAuthenticationSession(e);
+    if (authenticationSession != null) {
       // Ensure authentication session and access token are mutually exclusive
       await this._clearSession();
 
       // Persist authentication session
-      const { token, step } = e.info;
-      const authenticationSession: AuthenticationSession = {
-        token,
-        step,
-      } as any;
       await this.parent.storage.setAuthenticationSession(
         this.parent.name,
         authenticationSession
@@ -186,7 +177,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.parent.apiClient._authenticationSession = authenticationSession;
 
       // If the step is MFA, try bearer token
-      if (step !== "mfa") {
+      if (authenticationSession.step !== "mfa") {
         throw e;
       }
 
