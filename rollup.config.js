@@ -109,6 +109,7 @@ export default function makeConfig(commandLineArgs) {
         output: {
           file: "packages/skygear-web/dist/skygear-web.cjs.js",
           format: "cjs",
+          exports: "named",
         },
         // external: makeBabelExternal,
       };
@@ -129,6 +130,7 @@ export default function makeConfig(commandLineArgs) {
         output: {
           file: "packages/skygear-node-client/dist/skygear-node-client.js",
           format: "cjs",
+          exports: "named",
         },
         external: id => ["node-fetch", "os"].includes(id),
       };
@@ -139,6 +141,7 @@ export default function makeConfig(commandLineArgs) {
         output: {
           file: "packages/skygear-react-native/dist/skygear-react-native.js",
           format: "cjs",
+          exports: "named",
         },
         external: id => /^@react-native-community/.test(id),
       };

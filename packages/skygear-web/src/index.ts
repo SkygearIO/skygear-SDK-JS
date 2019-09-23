@@ -8,4 +8,6 @@ export * from "./container";
 /**
  * @public
  */
-export const defaultContainer: WebContainer<WebAPIClient> = new WebContainer();
+const defaultContainer: WebContainer<WebAPIClient> = new WebContainer();
+
+export default defaultContainer;

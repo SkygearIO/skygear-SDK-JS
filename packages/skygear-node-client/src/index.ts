@@ -74,6 +74,6 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
 /**
  * @public
  */
-export const defaultContainer: NodeContainer<
-  NodeAPIClient
-> = new NodeContainer();
+const defaultContainer: NodeContainer<NodeAPIClient> = new NodeContainer();
+
+export default defaultContainer;
