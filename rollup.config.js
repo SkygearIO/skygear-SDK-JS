@@ -100,6 +100,7 @@ export default function makeConfig(commandLineArgs) {
           file: "packages/skygear-web/dist/skygear-web.iife.js",
           format: "iife",
           name: "skygear",
+          exports: "default",
         },
       };
     case "web-cjs":
