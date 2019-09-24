@@ -107,8 +107,11 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return response.user;
   }
 
-  async linkOAuthProviderWithPopup(providerID: string): Promise<void> {
-    await this._oauthProviderPopupFlow(providerID, "link");
+  async linkOAuthProviderWithPopup(providerID: string): Promise<User> {
+    const rawResponse = await this._oauthProviderPopupFlow(providerID, "link");
+    const response: AuthResponse = decodeAuthResponse(rawResponse);
+    this.persistResponse(response);
+    return response.user;
   }
 
   async loginOAuthProviderWithRedirect(
@@ -184,12 +187,14 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return response.user;
   }
 
-  async getLinkRedirectResult(): Promise<true | null> {
+  async getLinkRedirectResult(): Promise<User | null> {
     const rawResponse = await this._getRedirectResult("link");
     if (!rawResponse) {
       return null;
     }
-    return true;
+    const response: AuthResponse = decodeAuthResponse(rawResponse);
+    this.persistResponse(response);
+    return response.user;
   }
 }
 
