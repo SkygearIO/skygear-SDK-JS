@@ -22,8 +22,7 @@ import {
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import {
   SkygearError,
-  SkygearErrorNameInvalidAuthenticationSession,
-  SkygearErrorNameInvalidMFABearerToken,
+  SkygearErrorNames,
   _extractAuthenticationSession,
 } from "./error";
 
@@ -157,7 +156,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     // Detect invalid authentication session
     if (
       e instanceof SkygearError &&
-      e.name === SkygearErrorNameInvalidAuthenticationSession
+      e.name === SkygearErrorNames.InvalidAuthenticationSession
     ) {
       await this._clearAuthenticationSession();
       throw e;
@@ -196,7 +195,7 @@ export class AuthContainer<T extends BaseAPIClient> {
         // If the server told us the bearer token is invalid, delete it.
         if (
           bearerTokenError instanceof SkygearError &&
-          bearerTokenError.name === SkygearErrorNameInvalidMFABearerToken
+          bearerTokenError.name === SkygearErrorNames.InvalidMFABearerToken
         ) {
           await this.parent.storage.delMFABearerToken(this.parent.name);
         }

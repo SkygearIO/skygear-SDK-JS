@@ -3,108 +3,33 @@ import { JSONObject, AuthenticationSession } from "./types";
 /**
  * @public
  */
-export const SkygearErrorNameUnexpectedError = "UnexpectedError" as const;
-/**
- * @public
- */
-export const SkygearErrorNameNotAuthenticated = "NotAuthenticated" as const;
-/**
- * @public
- */
-export const SkygearErrorNamePermissionDenied = "PermissionDenied" as const;
-/**
- * @public
- */
-export const SkygearErrorNameAccessKeyNotAccepted = "AccessKeyNotAccepted" as const;
-/**
- * @public
- */
-export const SkygearErrorNameAccessTokenNotAccepted = "AccessTokenNotAccepted" as const;
-/**
- * @public
- */
-export const SkygearErrorNameInvalidCredentials = "InvalidCredentials" as const;
-/**
- * @public
- */
-export const SkygearErrorNameBadRequest = "BadRequest" as const;
-/**
- * @public
- */
-export const SkygearErrorNameInvalidArgument = "InvalidArgument" as const;
-/**
- * @public
- */
-export const SkygearErrorNameDuplicated = "Duplicated" as const;
-/**
- * @public
- */
-export const SkygearErrorNameResourceNotFound = "ResourceNotFound" as const;
-/**
- * @public
- */
-export const SkygearErrorNameUndefinedOperation = "UndefinedOperation" as const;
-/**
- * @public
- */
-export const SkygearErrorNamePasswordPolicyViolated = "PasswordPolicyViolated" as const;
-/**
- * @public
- */
-export const SkygearErrorNameUserDisabled = "UserDisabled" as const;
-/**
- * @public
- */
-export const SkygearErrorNameVerificationRequired = "VerificationRequired" as const;
-/**
- * @public
- */
-export const SkygearErrorNameWebHookTimeOut = "WebHookTimeOut" as const;
-/**
- * @public
- */
-export const SkygearErrorNameWebHookFailed = "WebHookFailed" as const;
-/**
- * @public
- */
-export const SkygearErrorNameCurrentIdentityBeingDeleted = "CurrentIdentityBeingDeleted" as const;
-/**
- * @public
- */
-export const SkygearErrorNameAuthenticationSession = "AuthenticationSession" as const;
-/**
- * @public
- */
-export const SkygearErrorNameInvalidAuthenticationSession = "InvalidAuthenticationSession" as const;
-/**
- * @public
- */
-export const SkygearErrorNameInvalidMFABearerToken = "InvalidMFABearerToken" as const;
+export const SkygearErrorNames = {
+  UnexpectedError: "UnexpectedError",
+  NotAuthenticated: "NotAuthenticated",
+  PermissionDenied: "PermissionDenied",
+  AccessKeyNotAccepted: "AccessKeyNotAccepted",
+  AccessTokenNotAccepted: "AccessTokenNotAccepted",
+  InvalidCredentials: "InvalidCredentials",
+  BadRequest: "BadRequest",
+  InvalidArgument: "InvalidArgument",
+  Duplicated: "Duplicated",
+  ResourceNotFound: "ResourceNotFound",
+  UndefinedOperation: "UndefinedOperation",
+  PasswordPolicyViolated: "PasswordPolicyViolated",
+  UserDisabled: "UserDisabled",
+  VerificationRequired: "VerificationRequired",
+  WebHookTimeOut: "WebHookTimeOut",
+  WebHookFailed: "WebHookFailed",
+  CurrentIdentityBeingDeleted: "CurrentIdentityBeingDeleted",
+  AuthenticationSession: "AuthenticationSession",
+  InvalidAuthenticationSession: "InvalidAuthenticationSession",
+  InvalidMFABearerToken: "InvalidMFABearerToken",
+} as const;
 
 /**
  * @public
  */
-export type SkygearErrorName =
-  | typeof SkygearErrorNameUnexpectedError
-  | typeof SkygearErrorNameNotAuthenticated
-  | typeof SkygearErrorNamePermissionDenied
-  | typeof SkygearErrorNameAccessKeyNotAccepted
-  | typeof SkygearErrorNameAccessTokenNotAccepted
-  | typeof SkygearErrorNameInvalidCredentials
-  | typeof SkygearErrorNameBadRequest
-  | typeof SkygearErrorNameInvalidArgument
-  | typeof SkygearErrorNameDuplicated
-  | typeof SkygearErrorNameResourceNotFound
-  | typeof SkygearErrorNameUndefinedOperation
-  | typeof SkygearErrorNamePasswordPolicyViolated
-  | typeof SkygearErrorNameUserDisabled
-  | typeof SkygearErrorNameVerificationRequired
-  | typeof SkygearErrorNameWebHookTimeOut
-  | typeof SkygearErrorNameWebHookFailed
-  | typeof SkygearErrorNameCurrentIdentityBeingDeleted
-  | typeof SkygearErrorNameAuthenticationSession
-  | typeof SkygearErrorNameInvalidAuthenticationSession
-  | typeof SkygearErrorNameInvalidMFABearerToken;
+export type SkygearErrorName = (typeof SkygearErrorNames)[keyof (typeof SkygearErrorNames)];
 
 /**
  * @public
@@ -157,7 +82,7 @@ export function _extractAuthenticationSession(
 ): AuthenticationSession | null {
   if (
     e instanceof SkygearError &&
-    e.name === SkygearErrorNameAuthenticationSession &&
+    e.name === SkygearErrorNames.AuthenticationSession &&
     e.info != null
   ) {
     const { token, step } = e.info;
