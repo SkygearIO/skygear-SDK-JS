@@ -97,21 +97,28 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     providerID: string,
     options?: SSOLoginOptions
   ): Promise<User> {
-    const rawResponse = await this._oauthProviderPopupFlow(
-      providerID,
-      "login",
-      options
-    );
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._oauthProviderPopupFlow(
+        providerID,
+        "login",
+        options
+      );
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleAuthResponse(f());
   }
 
   async linkOAuthProviderWithPopup(providerID: string): Promise<User> {
-    const rawResponse = await this._oauthProviderPopupFlow(providerID, "link");
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._oauthProviderPopupFlow(
+        providerID,
+        "link"
+      );
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleAuthResponse(f());
   }
 
   async loginOAuthProviderWithRedirect(
@@ -178,23 +185,27 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   }
 
   async getLoginRedirectResult(): Promise<User | null> {
-    const rawResponse = await this._getRedirectResult("login");
-    if (!rawResponse) {
-      return null;
-    }
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._getRedirectResult("login");
+      if (!rawResponse) {
+        return null;
+      }
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleMaybeAuthResponse(f());
   }
 
   async getLinkRedirectResult(): Promise<User | null> {
-    const rawResponse = await this._getRedirectResult("link");
-    if (!rawResponse) {
-      return null;
-    }
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._getRedirectResult("link");
+      if (!rawResponse) {
+        return null;
+      }
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleMaybeAuthResponse(f());
   }
 }
 
@@ -207,13 +218,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
   constructor(options?: ContainerOptions<T>) {
     const o = ({
       ...options,
-      apiClient:
-        (options && options.apiClient) ||
-        new WebAPIClient({
-          apiKey: "",
-          endpoint: "",
-          accessToken: null,
-        }),
+      apiClient: (options && options.apiClient) || new WebAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(localStorageStorageDriver),

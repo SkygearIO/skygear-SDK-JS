@@ -1,26 +1,35 @@
-import { JSONObject } from "./types";
+import { JSONObject, AuthenticationSession } from "./types";
 
 /**
  * @public
  */
-export type SkygearErrorName =
-  | "UnexpectedError"
-  | "NotAuthenticated"
-  | "PermissionDenied"
-  | "AccessKeyNotAccepted"
-  | "AccessTokenNotAccepted"
-  | "InvalidCredentials"
-  | "BadRequest"
-  | "InvalidArgument"
-  | "Duplicated"
-  | "ResourceNotFound"
-  | "UndefinedOperation"
-  | "PasswordPolicyViolated"
-  | "UserDisabled"
-  | "VerificationRequired"
-  | "WebHookTimeOut"
-  | "WebHookFailed"
-  | "CurrentIdentityBeingDeleted";
+export const SkygearErrorNames = {
+  UnexpectedError: "UnexpectedError",
+  NotAuthenticated: "NotAuthenticated",
+  PermissionDenied: "PermissionDenied",
+  AccessKeyNotAccepted: "AccessKeyNotAccepted",
+  AccessTokenNotAccepted: "AccessTokenNotAccepted",
+  InvalidCredentials: "InvalidCredentials",
+  BadRequest: "BadRequest",
+  InvalidArgument: "InvalidArgument",
+  Duplicated: "Duplicated",
+  ResourceNotFound: "ResourceNotFound",
+  UndefinedOperation: "UndefinedOperation",
+  PasswordPolicyViolated: "PasswordPolicyViolated",
+  UserDisabled: "UserDisabled",
+  VerificationRequired: "VerificationRequired",
+  WebHookTimeOut: "WebHookTimeOut",
+  WebHookFailed: "WebHookFailed",
+  CurrentIdentityBeingDeleted: "CurrentIdentityBeingDeleted",
+  AuthenticationSession: "AuthenticationSession",
+  InvalidAuthenticationSession: "InvalidAuthenticationSession",
+  InvalidMFABearerToken: "InvalidMFABearerToken",
+} as const;
+
+/**
+ * @public
+ */
+export type SkygearErrorName = (typeof SkygearErrorNames)[keyof (typeof SkygearErrorNames)];
 
 /**
  * @public
@@ -63,4 +72,32 @@ export function decodeError(err?: any): Error {
   }
   // Otherwise cast it to string and use it as message.
   return new Error(String(err));
+}
+
+/**
+ * @internal
+ */
+export function _extractAuthenticationSession(
+  e: unknown
+): AuthenticationSession | null {
+  if (
+    e instanceof SkygearError &&
+    e.name === SkygearErrorNames.AuthenticationSession &&
+    e.info != null
+  ) {
+    const { token, step } = e.info;
+    return {
+      token,
+      step,
+    } as AuthenticationSession;
+  }
+  return null;
+}
+
+/**
+ * @public
+ */
+export function isMFARequiredError(e: unknown): boolean {
+  const authenticationSession = _extractAuthenticationSession(e);
+  return authenticationSession != null && authenticationSession.step === "mfa";
 }

@@ -4,9 +4,21 @@ import {
   SSOLoginOptions,
   Session,
   OAuthAuthorizationURLOptions,
+  Authenticator,
+  ActivateTOTPResult,
+  AuthenticateWithTOTPOptions,
+  CreateNewOOBOptions,
+  CreateNewOOBResult,
+  ActivateOOBResult,
+  AuthenticateWithOOBOptions,
+  AuthenticationSession,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
-import { decodeAuthResponse, decodeSession } from "./encoding";
+import {
+  decodeAuthResponse,
+  decodeSession,
+  decodeAuthenticator,
+} from "./encoding";
 import { encodeBase64 } from "./base64";
 
 /**
@@ -51,6 +63,11 @@ export function encodeQuery(query?: [string, string][]): string {
   return output;
 }
 
+function shouldRefreshToken(r: Response): boolean {
+  const h = r.headers.get("x-skygear-try-refresh-token");
+  return h === "true";
+}
+
 /**
  * @public
  */
@@ -61,20 +78,21 @@ export abstract class BaseAPIClient {
    * @internal
    */
   _accessToken: string | null;
+  /**
+   * @internal
+   */
+  _authenticationSession: AuthenticationSession | null;
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
   userAgent?: string;
   getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
-  constructor(options: {
-    apiKey: string;
-    endpoint: string;
-    accessToken: string | null;
-  }) {
-    this.apiKey = options.apiKey;
-    this.endpoint = _removeTrailingSlash(options.endpoint);
-    this._accessToken = options.accessToken;
+  constructor() {
+    this.apiKey = "";
+    this.endpoint = "";
+    this._accessToken = null;
+    this._authenticationSession = null;
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
@@ -126,7 +144,7 @@ export abstract class BaseAPIClient {
     }
 
     let response = await this.fetchFunction(request.clone());
-    if (response.status === 401 && autoRefreshToken) {
+    if (shouldRefreshToken(response) && autoRefreshToken) {
       if (!this.refreshTokenFunction) {
         throw new Error("missing refreshTokenFunction in api client");
       }
@@ -243,6 +261,20 @@ export abstract class BaseAPIClient {
   ): Promise<AuthResponse> {
     const response = await this.post(path, options);
     return decodeAuthResponse(response);
+  }
+
+  /**
+   * @internal
+   */
+  makePayloadWithAuthenticationSessionToken(payload: JSONObject): JSONObject {
+    if (this._authenticationSession != null) {
+      const newPayload = {
+        ...payload,
+        authn_session_token: this._authenticationSession.token,
+      };
+      return newPayload;
+    }
+    return payload;
   }
 
   async signup(
@@ -463,5 +495,160 @@ export abstract class BaseAPIClient {
 
   async revokeOtherSessions(): Promise<void> {
     return this.post("/_auth/session/revoke_all", { json: {} });
+  }
+
+  async listRecoveryCode(): Promise<string[]> {
+    const response = await this.post("/_auth/mfa/recovery_code/list", {
+      json: {},
+    });
+    return response.recovery_codes;
+  }
+
+  async regenerateRecoveryCode(): Promise<string[]> {
+    const response = await this.post("/_auth/mfa/recovery_code/regenerate", {
+      json: {},
+    });
+    return response.recovery_codes;
+  }
+
+  async authenticateWithRecoveryCode(code: string): Promise<AuthResponse> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      code,
+    });
+    return this.postAndReturnAuthResponse(
+      "/_auth/mfa/recovery_code/authenticate",
+      { json: payload }
+    );
+  }
+
+  async getAuthenticators(): Promise<Authenticator[]> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({});
+    const response = await this.post("/_auth/mfa/authenticator/list", {
+      json: payload,
+    });
+    return (response.authenticators as any[]).map(decodeAuthenticator);
+  }
+
+  async deleteAuthenticator(id: string): Promise<void> {
+    await this.post("/_auth/mfa/authenticator/delete", {
+      json: {
+        authenticator_id: id,
+      },
+    });
+  }
+
+  async createNewTOTP(
+    displayName: string
+  ): Promise<{
+    authenticatorID: string;
+    authenticatorType: "totp";
+    secret: string;
+  }> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      display_name: displayName,
+    });
+    const response = await this.post("/_auth/mfa/totp/new", {
+      json: payload,
+    });
+    return {
+      authenticatorID: response.authenticator_id,
+      authenticatorType: response.authenticator_type,
+      secret: response.secret,
+    };
+  }
+
+  async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      otp,
+    });
+    const response = await this.post("/_auth/mfa/totp/activate", {
+      json: payload,
+    });
+    return {
+      recoveryCodes: response.recovery_codes,
+    };
+  }
+
+  async authenticateWithTOTP(
+    options: AuthenticateWithTOTPOptions
+  ): Promise<AuthResponse> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      request_bearer_token: options.skipMFAForCurrentDevice,
+      otp: options.otp,
+    });
+    return this.postAndReturnAuthResponse("/_auth/mfa/totp/authenticate", {
+      json: payload,
+    });
+  }
+
+  async createNewOOB(
+    options: CreateNewOOBOptions
+  ): Promise<CreateNewOOBResult> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      channel: options.channel,
+      phone: (options as any).phone,
+      email: (options as any).email,
+    });
+    const response = await this.post("/_auth/mfa/oob/new", {
+      json: payload,
+    });
+    return {
+      authenticatorID: response.authenticator_id,
+      authenticatorType: response.authenticator_type,
+      channel: response.channel,
+    };
+  }
+
+  async activateOOB(code: string): Promise<ActivateOOBResult> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      code,
+    });
+    const response = await this.post("/_auth/mfa/oob/activate", {
+      json: payload,
+    });
+    return {
+      recoveryCodes: response.recovery_codes,
+    };
+  }
+
+  async triggerOOB(authenticatorID?: string): Promise<void> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      authenticator_id: authenticatorID,
+    });
+    await this.post("/_auth/mfa/oob/trigger", {
+      json: payload,
+    });
+  }
+
+  async authenticateWithOOB(
+    options: AuthenticateWithOOBOptions
+  ): Promise<AuthResponse> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      request_bearer_token: options.skipMFAForCurrentDevice,
+      code: options.code,
+    });
+    return this.postAndReturnAuthResponse("/_auth/mfa/oob/authenticate", {
+      json: payload,
+    });
+  }
+
+  async authenticateWithBearerToken(
+    bearerToken?: string
+  ): Promise<AuthResponse> {
+    const payload = this.makePayloadWithAuthenticationSessionToken({
+      bearer_token: bearerToken,
+    });
+    return this.postAndReturnAuthResponse(
+      "/_auth/mfa/bearer_token/authenticate",
+      {
+        json: payload,
+      }
+    );
+  }
+
+  async revokeAllBearerToken(): Promise<void> {
+    await this.post("/_auth/mfa/bearer_token/revoke_all", {
+      json: {},
+    });
   }
 }

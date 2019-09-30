@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Out-of-band (OOB)</title>
+</head>
+<body>
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitCreate(event)">
+    <div class="form-group">
+      <h1>Create OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Channel</label>
+      <select id="channel" class="form-control" oninput="onInputCreate()">
+        <option value="sms" selected="">SMS</option>
+        <option value="email">Email</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input id="phone" type="text" class="form-control" placeholder="Phone in E.164 format" oninput="onInputCreate()">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input id="email" type="text" class="form-control" placeholder="Email" oninput="onInputCreate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="createSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="createResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitActivate(event)">
+    <div class="form-group">
+      <h1>Activate OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Code</label>
+      <input id="activateCode" type="text" class="form-control" placeholder="Code" oninput="onInputActivate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="activateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="activateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitTrigger(event)">
+    <div class="form-group">
+      <h1>Trigger OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Authenticator ID</label>
+      <input id="triggerID" type="text" class="form-control" placeholder="Code" oninput="onInputTrigger()">
+      <small class="form-text text-muted">
+        Authenticator ID is optional when you only have on activated OOB authenticator.
+      </small>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="triggerSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="triggerResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitAuthenticate(event)">
+    <div class="form-group">
+      <h1>Authenticate with OOB Authenticator</h1>
+    </div>
+    <div class="form-group">
+      <label>Code</label>
+      <input id="authenticateCode" type="text" class="form-control" placeholder="Code" oninput="onInputAuthenticate()">
+    </div>
+    <div class="form-group">
+      <label>Skip MFA for Current Device</label>
+      <input id="skipMFAForCurrentDevice" type="checkbox" class="form-control"  oninput="onInputAuthenticate()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="authenticateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="authenticateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function onInputCreate() {
+  var channel = document.getElementById("channel").value;
+  var phone = document.getElementById("phone").value;
+  var email = document.getElementById("email").value;
+
+  var synopsisTextArea = document.getElementById("createSynopsis");
+
+  var options;
+
+  if (channel === "sms") {
+    options = {
+      channel: "sms",
+      phone,
+    };
+  } else if (channel === "email") {
+    options = {
+      channel: "email",
+      email,
+    };
+  }
+
+  var funcExpr = "defaultContainer.auth.mfa.createNewOOB";
+  var s = stringifyFunctionCall(funcExpr, options);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitCreate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var channel = document.getElementById("channel").value;
+  var phone = document.getElementById("phone").value;
+  var email = document.getElementById("email").value;
+  var resultTextArea = document.getElementById("createResult");
+
+  defaultContainer.auth.mfa.createNewOOB({
+    channel,
+    phone,
+    email,
+  }).then(function(result) {
+    resultTextArea.value = JSON.stringify(result);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+function onInputActivate() {
+  var code = document.getElementById("activateCode").value;
+
+  var synopsisTextArea = document.getElementById("activateSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.activateOOB";
+  var s = stringifyFunctionCall(funcExpr, code);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitActivate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var code = document.getElementById("activateCode").value;
+  var resultTextArea = document.getElementById("activateResult");
+
+  defaultContainer.auth.mfa.activateOOB(code).then(function(result) {
+    resultTextArea.value = JSON.stringify(result);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+function onInputTrigger() {
+  var authenticatorID = document.getElementById("triggerID").value;
+  if (authenticatorID === "") {
+    authenticatorID = undefined;
+  }
+
+  var synopsisTextArea = document.getElementById("triggerSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.triggerOOB";
+  var s = stringifyFunctionCall(funcExpr, authenticatorID);
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitTrigger(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var authenticatorID = document.getElementById("triggerID").value;
+  var resultTextArea = document.getElementById("triggerResult");
+
+  defaultContainer.auth.mfa.triggerOOB(authenticatorID).then(function() {
+    resultTextArea.value = "SUCCESS";
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+function onInputAuthenticate() {
+  var code = document.getElementById("authenticateCode").value;
+  var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
+
+  var synopsisTextArea = document.getElementById("authenticateSynopsis");
+
+  var funcExpr = "defaultContainer.auth.mfa.authenticateWithOOB";
+  var s = stringifyFunctionCall(funcExpr, {
+    code,
+    skipMFAForCurrentDevice,
+  });
+
+  synopsisTextArea.value = s;
+}
+
+function onSubmitAuthenticate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var code = document.getElementById("authenticateCode").value;
+  var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
+  var resultTextArea = document.getElementById("authenticateResult");
+
+  defaultContainer.auth.mfa.authenticateWithOOB({
+    code,
+    skipMFAForCurrentDevice,
+  }).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(error) {
+    resultTextArea.value = JSON.stringify(error);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  onInputCreate();
+  onInputActivate();
+  onInputTrigger();
+  onInputAuthenticate();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>

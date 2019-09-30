@@ -112,6 +112,7 @@ export interface AuthResponse {
   accessToken?: string;
   refreshToken?: string;
   sessionID?: string;
+  mfaBearerToken?: string;
 }
 
 /**
@@ -131,6 +132,12 @@ export interface ContainerStorage {
     namespace: string,
     options: ExtraSessionInfoOptions
   ): Promise<void>;
+  setAuthenticationSession(
+    namespace: string,
+    authenticationSession: AuthenticationSession
+  ): Promise<void>;
+  setMFABearerToken(namespace: string, mfaBearerToken: string): Promise<void>;
+
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
   getAccessToken(namespace: string): Promise<string | null>;
@@ -140,12 +147,19 @@ export interface ContainerStorage {
   getExtraSessionInfoOptions(
     namespace: string
   ): Promise<Partial<ExtraSessionInfoOptions> | null>;
+  getAuthenticationSession(
+    namespace: string
+  ): Promise<AuthenticationSession | null>;
+  getMFABearerToken(namespace: string): Promise<string | null>;
+
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
   delAccessToken(namespace: string): Promise<void>;
   delRefreshToken(namespace: string): Promise<void>;
   delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
+  delAuthenticationSession(namespace: string): Promise<void>;
+  delMFABearerToken(namespace: string): Promise<void>;
 }
 
 /**
@@ -204,4 +218,146 @@ export interface ContainerOptions<T> {
  */
 export interface ExtraSessionInfoOptions {
   deviceName?: string;
+}
+
+/**
+ * @public
+ */
+export type Authenticator =
+  | TOTPAuthenticator
+  | OOBSMSAuthenticator
+  | OOBEmailAuthenticator;
+
+/**
+ * @public
+ */
+export interface TOTPAuthenticator {
+  id: string;
+  type: "totp";
+  createdAt: Date;
+  activatedAt: Date;
+  displayName: string;
+}
+
+/**
+ * @public
+ */
+export interface OOBSMSAuthenticator {
+  id: string;
+  type: "oob";
+  createdAt: Date;
+  activatedAt: Date;
+  channel: "sms";
+  maskedPhone: string;
+}
+
+/**
+ * @public
+ */
+export interface OOBEmailAuthenticator {
+  id: string;
+  type: "oob";
+  createdAt: Date;
+  activatedAt: Date;
+  channel: "email";
+  maskedEmail: string;
+}
+
+/**
+ * @public
+ */
+export interface GenerateOTPAuthURIOptions {
+  secret: string;
+  issuer: string;
+  accountName: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewTOTPOptions {
+  displayName: string;
+  issuer: string;
+  accountName: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewTOTPResult {
+  authenticatorID: string;
+  authenticatorType: "totp";
+  secret: string;
+  otpauthURI: string;
+  qrCodeImageURL: string;
+}
+
+/**
+ * @public
+ */
+export interface ActivateTOTPResult {
+  recoveryCodes?: string[];
+}
+
+/**
+ * @public
+ */
+export interface AuthenticateWithTOTPOptions {
+  otp: string;
+  skipMFAForCurrentDevice?: boolean;
+}
+
+/**
+ * @public
+ */
+export type CreateNewOOBOptions =
+  | CreateNewOOBSMSOptions
+  | CreateNewOOBEmailOptions;
+
+/**
+ * @public
+ */
+export interface CreateNewOOBSMSOptions {
+  channel: "sms";
+  phone: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewOOBEmailOptions {
+  channel: "email";
+  email: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateNewOOBResult {
+  authenticatorID: string;
+  authenticatorType: "oob";
+  channel: "sms" | "email";
+}
+
+/**
+ * @public
+ */
+export interface ActivateOOBResult {
+  recoveryCodes?: string[];
+}
+
+/**
+ * @public
+ */
+export interface AuthenticateWithOOBOptions {
+  code: string;
+  skipMFAForCurrentDevice?: boolean;
+}
+
+/**
+ * @public
+ */
+export interface AuthenticationSession {
+  token: string;
+  step: "identity" | "mfa";
 }

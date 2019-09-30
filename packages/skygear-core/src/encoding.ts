@@ -6,13 +6,21 @@ import {
   JSONObject,
   AuthResponse,
   ExtraSessionInfoOptions,
+  Authenticator,
 } from "./types";
 
 /**
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const { user, identity, access_token, refresh_token, session_id } = r;
+  const {
+    user,
+    identity,
+    access_token,
+    refresh_token,
+    session_id,
+    mfa_bearer_token,
+  } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
@@ -27,6 +35,9 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (session_id) {
     response.sessionID = session_id;
+  }
+  if (mfa_bearer_token) {
+    response.mfaBearerToken = mfa_bearer_token;
   }
   return response;
 }
@@ -113,6 +124,53 @@ export function decodeSession(s: any): Session {
     name,
     data,
   };
+}
+
+/**
+ * @public
+ */
+export function decodeAuthenticator(a: any): Authenticator {
+  const id = a.id;
+  const type = a.type;
+  const createdAt = new Date(a.created_at);
+  const activatedAt = new Date(a.activated_at);
+  switch (type) {
+    case "totp":
+      return {
+        id,
+        type,
+        createdAt,
+        activatedAt,
+        displayName: a.display_name,
+      };
+    case "oob": {
+      const channel = a.channel;
+      switch (channel) {
+        case "sms":
+          return {
+            id,
+            type,
+            createdAt,
+            activatedAt,
+            channel,
+            maskedPhone: a.masked_phone,
+          };
+        case "email":
+          return {
+            id,
+            type,
+            createdAt,
+            activatedAt,
+            channel,
+            maskedEmail: a.masked_email,
+          };
+        default:
+          throw new Error("unknown authenticator channel: " + channel);
+      }
+    }
+    default:
+      throw new Error("unknown authenticator type: " + type);
+  }
 }
 
 function decodeSessionUserAgent(ua: any): SessionUserAgent {

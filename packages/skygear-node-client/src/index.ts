@@ -61,13 +61,7 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
   constructor(options?: ContainerOptions<T>) {
     const o = ({
       ...options,
-      apiClient:
-        (options && options.apiClient) ||
-        new NodeAPIClient({
-          apiKey: "",
-          endpoint: "",
-          accessToken: null,
-        }),
+      apiClient: (options && options.apiClient) || new NodeAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(new MemoryStorageDriver()),

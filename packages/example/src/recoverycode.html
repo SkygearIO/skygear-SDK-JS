@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Recovery Code</title>
+</head>
+<body>
+
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitList(event)">
+    <div class="form-group">
+      <h1>List Recovery Code</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="listSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="listResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitRegenerate(event)">
+    <div class="form-group">
+      <h1>Regenerate Recovery Code</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="regenerateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="regenerateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitAuthenticate(event)">
+    <div class="form-group">
+      <h1>Authenticate with Recovery Code</h1>
+    </div>
+    <div class="form-group">
+      <label>Code</label>
+      <input id="code" type="text" class="form-control" placeholder="Code" oninput="onInputCode()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="authenticateSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="authenticateResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+var defaultContainer = skygear.defaultContainer;
+
+function setupListSynopsis() {
+  var synopsisTextArea = document.getElementById("listSynopsis");
+  var funcExpr = "defaultContainer.auth.mfa.listRecoveryCode";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitList(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("listResult");
+
+  defaultContainer.auth.mfa.listRecoveryCode().then(function(codes) {
+    resultTextArea.value = JSON.stringify(codes);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function setupRegenerateSynopsis() {
+  var synopsisTextArea = document.getElementById("regenerateSynopsis");
+  var funcExpr = "defaultContainer.auth.mfa.regenerateRecoveryCode";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitRegenerate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("regenerateResult");
+
+  defaultContainer.auth.mfa.regenerateRecoveryCode().then(function(codes) {
+    resultTextArea.value = JSON.stringify(codes);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputCode() {
+  var code = document.getElementById("code").value;
+  var synopsisTextArea = document.getElementById("authenticateSynopsis");
+  var funcExpr = "defaultContainer.auth.mfa.authenticateWithRecoveryCode";
+  var s = stringifyFunctionCall(funcExpr, code);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitAuthenticate(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var code = document.getElementById("code").value;
+  var resultTextArea = document.getElementById("authenticateResult");
+
+  defaultContainer.auth.mfa.authenticateWithRecoveryCode(code).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+defaultContainer.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  setupListSynopsis();
+  setupRegenerateSynopsis();
+  onInputCode();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>

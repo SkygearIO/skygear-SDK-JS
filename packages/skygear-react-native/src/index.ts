@@ -42,13 +42,7 @@ export class ReactNativeContainer<
   constructor(options?: ContainerOptions<T>) {
     const o = ({
       ...options,
-      apiClient:
-        (options && options.apiClient) ||
-        new ReactNativeAPIClient({
-          apiKey: "",
-          endpoint: "",
-          accessToken: null,
-        }),
+      apiClient: (options && options.apiClient) || new ReactNativeAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(

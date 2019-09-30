@@ -8,9 +8,23 @@ import {
   ContainerOptions,
   Session,
   ExtraSessionInfoOptions,
+  Authenticator,
+  GenerateOTPAuthURIOptions,
+  CreateNewTOTPOptions,
+  CreateNewTOTPResult,
+  ActivateTOTPResult,
+  AuthenticateWithTOTPOptions,
+  CreateNewOOBOptions,
+  CreateNewOOBResult,
+  ActivateOOBResult,
+  AuthenticateWithOOBOptions,
 } from "./types";
-import { BaseAPIClient, _removeTrailingSlash } from "./client";
-import { SkygearError } from "./error";
+import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
+import {
+  SkygearError,
+  SkygearErrorNames,
+  _extractAuthenticationSession,
+} from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -19,8 +33,29 @@ const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
 /**
  * @public
  */
+export function generateOTPAuthURI(options: GenerateOTPAuthURIOptions): string {
+  let issuer = "";
+  if (options.issuer) {
+    issuer = encodeURI(options.issuer);
+  }
+
+  const accountName = encodeURI(options.accountName);
+  const path = issuer === "" ? accountName : issuer + ":" + accountName;
+  const host = "totp";
+  const queryInput: [string, string][] = [["secret", options.secret]];
+  if (options.issuer !== "") {
+    queryInput.push(["issuer", options.issuer]);
+  }
+  const query = encodeQuery(queryInput);
+  return `otpauth://${host}/${path}${query}`;
+}
+
+/**
+ * @public
+ */
 export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
+  mfa: MFAContainer<T>;
   currentUser: User | null;
   currentIdentity: Identity | null;
   currentSessionID: string | null;
@@ -33,6 +68,8 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.currentUser = null;
     this.currentIdentity = null;
     this.currentSessionID = null;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    this.mfa = new MFAContainer(this);
   }
 
   async saveExtraSessionInfoOptions() {
@@ -59,8 +96,21 @@ export class AuthContainer<T extends BaseAPIClient> {
     return hasInfo ? info : null;
   }
 
-  async persistResponse(response: AuthResponse): Promise<void> {
-    const { user, identity, accessToken, refreshToken, sessionID } = response;
+  /**
+   * @internal
+   */
+  async persistAuthResponse(response: AuthResponse): Promise<void> {
+    // Ensure authentication session and access token are mutually exclusive
+    await this._clearAuthenticationSession();
+
+    const {
+      user,
+      identity,
+      accessToken,
+      refreshToken,
+      sessionID,
+      mfaBearerToken,
+    } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
 
@@ -80,6 +130,13 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.parent.storage.setSessionID(this.parent.name, sessionID);
     }
 
+    if (mfaBearerToken) {
+      await this.parent.storage.setMFABearerToken(
+        this.parent.name,
+        mfaBearerToken
+      );
+    }
+
     this.currentUser = user;
     if (identity) {
       this.currentIdentity = identity;
@@ -92,6 +149,100 @@ export class AuthContainer<T extends BaseAPIClient> {
     }
   }
 
+  /**
+   * @internal
+   */
+  async handleAuthenticationSession(e: unknown): Promise<AuthResponse> {
+    // Detect invalid authentication session
+    if (
+      e instanceof SkygearError &&
+      e.name === SkygearErrorNames.InvalidAuthenticationSession
+    ) {
+      await this._clearAuthenticationSession();
+      throw e;
+    }
+
+    // The error is AuthenticationSession
+    const authenticationSession = _extractAuthenticationSession(e);
+    if (authenticationSession != null) {
+      // Ensure authentication session and access token are mutually exclusive
+      await this._clearSession();
+
+      // Persist authentication session
+      await this.parent.storage.setAuthenticationSession(
+        this.parent.name,
+        authenticationSession
+      );
+      this.parent.apiClient._authenticationSession = authenticationSession;
+
+      // If the step is MFA, try bearer token
+      if (authenticationSession.step !== "mfa") {
+        throw e;
+      }
+
+      const mfaBearerToken = await this.parent.storage.getMFABearerToken(
+        this.parent.name
+      );
+      const bearerToken = mfaBearerToken === null ? undefined : mfaBearerToken;
+      try {
+        // NOTE(louis): It is very important that we use await here.
+        // If we simply return the promise, the catch block cannot catch anything.
+        const response = await this.parent.apiClient.authenticateWithBearerToken(
+          bearerToken
+        );
+        return response;
+      } catch (bearerTokenError) {
+        // If the server told us the bearer token is invalid, delete it.
+        if (
+          bearerTokenError instanceof SkygearError &&
+          bearerTokenError.name === SkygearErrorNames.InvalidMFABearerToken
+        ) {
+          await this.parent.storage.delMFABearerToken(this.parent.name);
+        }
+        // re-throw the original error
+        throw e;
+      }
+    }
+
+    // For any other error, re-throw it.
+    throw e;
+  }
+
+  /**
+   * @internal
+   */
+  async handleAuthResponse(p: Promise<AuthResponse>): Promise<User> {
+    try {
+      const response = await p;
+      await this.persistAuthResponse(response);
+      return response.user;
+    } catch (e) {
+      const response = await this.handleAuthenticationSession(e);
+      await this.persistAuthResponse(response);
+      return response.user;
+    }
+  }
+
+  /**
+   * @internal
+   */
+  async handleMaybeAuthResponse(
+    p: Promise<AuthResponse | null>
+  ): Promise<User | null> {
+    try {
+      const response = await p;
+      if (!response) {
+        return null;
+      }
+      await this.persistAuthResponse(response);
+      return response.user;
+    } catch (e) {
+      const response = await this.handleAuthenticationSession(e);
+      await this.persistAuthResponse(response);
+      return response.user;
+    }
+  }
+
   async signup(
     loginIDs: { [key: string]: string }[] | { [key: string]: string },
     password: string,
@@ -100,13 +251,9 @@ export class AuthContainer<T extends BaseAPIClient> {
       metadata?: JSONObject;
     }
   ): Promise<User> {
-    const response = await this.parent.apiClient.signup(
-      loginIDs,
-      password,
-      options
+    return this.handleAuthResponse(
+      this.parent.apiClient.signup(loginIDs, password, options)
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   /**
@@ -154,13 +301,9 @@ export class AuthContainer<T extends BaseAPIClient> {
     password: string,
     options?: { loginIDKey?: string; realm?: string }
   ): Promise<User> {
-    const response = await this.parent.apiClient.login(
-      loginID,
-      password,
-      options
+    return this.handleAuthResponse(
+      this.parent.apiClient.login(loginID, password, options)
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   async logout(): Promise<void> {
@@ -186,9 +329,27 @@ export class AuthContainer<T extends BaseAPIClient> {
   /**
    * @internal
    */
+  async _clearAuthenticationSession() {
+    await this.parent.storage.delAuthenticationSession(this.parent.name);
+    this.parent.apiClient._authenticationSession = null;
+  }
+
+  /**
+   * @internal
+   */
   async _refreshAccessToken(): Promise<boolean> {
-    await this.parent.storage.delAccessToken(this.parent.name);
-    this.parent.apiClient._accessToken = null;
+    // The server only includes x-skygear-try-refresh-token if
+    // the access token in the request is invalid.
+    //
+    // If the request does not have access token at all,
+    // the server simply returns NotAuthenticated error without the header.
+    //
+    // Therefore, we have to keep the invalid token so that
+    // if refresh fails due to other reasons, the whole process
+    // can be retried.
+    //
+    // await this.parent.storage.delAccessToken(this.parent.name);
+    // this.parent.apiClient._accessToken = null;
 
     const refreshToken = await this.parent.storage.getRefreshToken(
       this.parent.name
@@ -217,27 +378,22 @@ export class AuthContainer<T extends BaseAPIClient> {
   }
 
   async me(): Promise<User> {
-    const response = await this.parent.apiClient.me();
-    await this.persistResponse(response);
-    return response.user;
+    return this.handleAuthResponse(this.parent.apiClient.me());
   }
 
   async changePassword(
     newPassword: string,
     oldPassword: string
   ): Promise<User> {
-    const response = await this.parent.apiClient.changePassword(
-      newPassword,
-      oldPassword
+    return this.handleAuthResponse(
+      this.parent.apiClient.changePassword(newPassword, oldPassword)
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   async updateMetadata(metadata: JSONObject): Promise<User> {
-    const response = await this.parent.apiClient.updateMetadata(metadata);
-    await this.persistResponse(response);
-    return response.user;
+    return this.handleAuthResponse(
+      this.parent.apiClient.updateMetadata(metadata)
+    );
   }
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
@@ -265,12 +421,9 @@ export class AuthContainer<T extends BaseAPIClient> {
     token: string,
     options?: SSOLoginOptions
   ): Promise<User> {
-    const response = await this.parent.apiClient.loginWithCustomToken(
-      token,
-      options
+    return this.handleAuthResponse(
+      this.parent.apiClient.loginWithCustomToken(token, options)
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
@@ -282,25 +435,25 @@ export class AuthContainer<T extends BaseAPIClient> {
     accessToken: string,
     options?: SSOLoginOptions
   ): Promise<User> {
-    const response = await this.parent.apiClient.loginOAuthProviderWithAccessToken(
-      providerID,
-      accessToken,
-      options
+    return this.handleAuthResponse(
+      this.parent.apiClient.loginOAuthProviderWithAccessToken(
+        providerID,
+        accessToken,
+        options
+      )
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   async linkOAuthProviderWithAccessToken(
     providerID: string,
     accessToken: string
   ): Promise<User> {
-    const response = await this.parent.apiClient.linkOAuthProviderWithAccessToken(
-      providerID,
-      accessToken
+    return this.handleAuthResponse(
+      this.parent.apiClient.linkOAuthProviderWithAccessToken(
+        providerID,
+        accessToken
+      )
     );
-    await this.persistResponse(response);
-    return response.user;
   }
 
   async listSessions(): Promise<Session[]> {
@@ -317,6 +470,109 @@ export class AuthContainer<T extends BaseAPIClient> {
 
   async revokeOtherSessions(): Promise<void> {
     return this.parent.apiClient.revokeOtherSessions();
+  }
+}
+
+/**
+ * @public
+ */
+export class MFAContainer<T extends BaseAPIClient> {
+  parent: AuthContainer<T>;
+
+  constructor(parent: AuthContainer<T>) {
+    this.parent = parent;
+  }
+
+  async listRecoveryCode(): Promise<string[]> {
+    return this.parent.parent.apiClient.listRecoveryCode();
+  }
+
+  async regenerateRecoveryCode(): Promise<string[]> {
+    return this.parent.parent.apiClient.regenerateRecoveryCode();
+  }
+
+  async authenticateWithRecoveryCode(code: string): Promise<User> {
+    return this.parent.handleAuthResponse(
+      this.parent.parent.apiClient.authenticateWithRecoveryCode(code)
+    );
+  }
+
+  async getAuthenticators(): Promise<Authenticator[]> {
+    return this.parent.parent.apiClient.getAuthenticators();
+  }
+
+  async deleteAuthenticator(id: string): Promise<void> {
+    return this.parent.parent.apiClient.deleteAuthenticator(id);
+  }
+
+  generateOTPAuthURIQRCodeImageURL(otpauthURI: string): string {
+    return (
+      this.parent.parent.apiClient.endpoint +
+      "/_auth/mfa/totp/qrcode" +
+      encodeQuery([["otpauth_uri", otpauthURI]])
+    );
+  }
+
+  async createNewTOTP(
+    options: CreateNewTOTPOptions
+  ): Promise<CreateNewTOTPResult> {
+    const { displayName, issuer, accountName } = options;
+    const {
+      authenticatorID,
+      authenticatorType,
+      secret,
+    } = await this.parent.parent.apiClient.createNewTOTP(displayName);
+    const otpauthURI = generateOTPAuthURI({
+      secret,
+      issuer,
+      accountName,
+    });
+    const qrCodeImageURL = this.generateOTPAuthURIQRCodeImageURL(otpauthURI);
+    return {
+      authenticatorID,
+      authenticatorType,
+      secret,
+      otpauthURI,
+      qrCodeImageURL,
+    };
+  }
+
+  async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
+    return this.parent.parent.apiClient.activateTOTP(otp);
+  }
+
+  async authenticateWithTOTP(
+    options: AuthenticateWithTOTPOptions
+  ): Promise<User> {
+    return this.parent.handleAuthResponse(
+      this.parent.parent.apiClient.authenticateWithTOTP(options)
+    );
+  }
+
+  async createNewOOB(
+    options: CreateNewOOBOptions
+  ): Promise<CreateNewOOBResult> {
+    return this.parent.parent.apiClient.createNewOOB(options);
+  }
+
+  async activateOOB(code: string): Promise<ActivateOOBResult> {
+    return this.parent.parent.apiClient.activateOOB(code);
+  }
+
+  async triggerOOB(authenticatorID?: string): Promise<void> {
+    return this.parent.parent.apiClient.triggerOOB(authenticatorID);
+  }
+
+  async authenticateWithOOB(
+    options: AuthenticateWithOOBOptions
+  ): Promise<User> {
+    return this.parent.handleAuthResponse(
+      this.parent.parent.apiClient.authenticateWithOOB(options)
+    );
+  }
+
+  async revokeAllTrustedDevices(): Promise<void> {
+    await this.parent.parent.apiClient.revokeAllBearerToken();
   }
 }
 
@@ -350,6 +606,11 @@ export class Container<T extends BaseAPIClient> {
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
     this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
+
+    const authenticationSession = await this.storage.getAuthenticationSession(
+      this.name
+    );
+    this.apiClient._authenticationSession = authenticationSession;
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient._accessToken = accessToken;
