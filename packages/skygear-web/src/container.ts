@@ -110,10 +110,15 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   }
 
   async linkOAuthProviderWithPopup(providerID: string): Promise<User> {
-    const rawResponse = await this._oauthProviderPopupFlow(providerID, "link");
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._oauthProviderPopupFlow(
+        providerID,
+        "link"
+      );
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleAuthResponse(f());
   }
 
   async loginOAuthProviderWithRedirect(
@@ -192,13 +197,15 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   }
 
   async getLinkRedirectResult(): Promise<User | null> {
-    const rawResponse = await this._getRedirectResult("link");
-    if (!rawResponse) {
-      return null;
-    }
-    const response: AuthResponse = decodeAuthResponse(rawResponse);
-    this.persistResponse(response);
-    return response.user;
+    const f = async () => {
+      const rawResponse = await this._getRedirectResult("link");
+      if (!rawResponse) {
+        return null;
+      }
+      const response: AuthResponse = decodeAuthResponse(rawResponse);
+      return response;
+    };
+    return this.handleMaybeAuthResponse(f());
   }
 }
 
