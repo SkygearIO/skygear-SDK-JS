@@ -1,3 +1,21 @@
+## 2.0.0-alpha.12 (2019-10-02)
+
+### Breaking Changes
+
+- Rename `defaultContainer` to `default`.
+- Merge container and namespace in script tag bundle.
+
+### Features
+
+- Add MFA API
+- Update Sesson API
+- Return User in SSO link operation
+- Versioned documentation
+
+### Bug Fixes
+
+- Handle unexpected errors correctly
+
 ## 2.0.0-alpha.11 (2019-09-10)
 
 ### Features
