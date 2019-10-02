@@ -64,7 +64,6 @@
     </div>
   </form>
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function onInput() {
   var path = document.getElementById("path").value;
@@ -72,7 +71,7 @@ function onInput() {
 
   var synopsisTextArea = document.getElementById("synopsis");
 
-  var funcExpr = "defaultContainer.fetch";
+  var funcExpr = "skygear.fetch";
   var s = stringifyFunctionCall(funcExpr, path, init);
   synopsisTextArea.value = s;
 }
@@ -86,7 +85,7 @@ function onSubmit(e) {
 
   var resultTextArea = document.getElementById("result");
 
-  defaultContainer.fetch(path, init).then(function(resp) {
+  skygear.fetch(path, init).then(function(resp) {
     console.log(resp);
     return resp.text();
   })
@@ -119,7 +118,7 @@ function getRequestInit() {
   return reqInit;
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {

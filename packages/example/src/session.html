@@ -122,11 +122,10 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function setupListSynopsis() {
   var synopsisTextArea = document.getElementById("listSynopsis");
-  var funcExpr = "defaultContainer.auth.listSessions";
+  var funcExpr = "skygear.auth.listSessions";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -137,7 +136,7 @@ function onSubmitList(e) {
 
   var resultTextArea = document.getElementById("listResult");
 
-  defaultContainer.auth.listSessions().then(function(sessions) {
+  skygear.auth.listSessions().then(function(sessions) {
     resultTextArea.value = JSON.stringify(sessions);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -147,7 +146,7 @@ function onSubmitList(e) {
 function onInputGet() {
   var sessionID = document.getElementById("getID").value;
   var synopsisTextArea = document.getElementById("getSynopsis");
-  var funcExpr = "defaultContainer.auth.getSession";
+  var funcExpr = "skygear.auth.getSession";
   var s = stringifyFunctionCall(funcExpr, sessionID);
   synopsisTextArea.value = s;
 }
@@ -159,7 +158,7 @@ function onSubmitGet(e) {
   var sessionID = document.getElementById("getID").value;
   var resultTextArea = document.getElementById("getResult");
 
-  defaultContainer.auth.getSession(sessionID).then(function(session) {
+  skygear.auth.getSession(sessionID).then(function(session) {
     resultTextArea.value = JSON.stringify(session);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -169,7 +168,7 @@ function onSubmitGet(e) {
 function onInputRevoke() {
   var sessionID = document.getElementById("revokeID").value;
   var synopsisTextArea = document.getElementById("revokeSynopsis");
-  var funcExpr = "defaultContainer.auth.revokeSession";
+  var funcExpr = "skygear.auth.revokeSession";
   var s = stringifyFunctionCall(funcExpr, sessionID);
   synopsisTextArea.value = s;
 }
@@ -181,7 +180,7 @@ function onSubmitRevoke(e) {
   var sessionID = document.getElementById("revokeID").value;
   var resultTextArea = document.getElementById("revokeResult");
 
-  defaultContainer.auth.revokeSession(sessionID).then(function() {
+  skygear.auth.revokeSession(sessionID).then(function() {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -190,7 +189,7 @@ function onSubmitRevoke(e) {
 
 function setupRevokeOtherSynopsis() {
   var synopsisTextArea = document.getElementById("revokeOtherSynopsis");
-  var funcExpr = "defaultContainer.auth.revokeOtherSessions";
+  var funcExpr = "skygear.auth.revokeOtherSessions";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -201,14 +200,14 @@ function onSubmitRevokeOther(e) {
 
   var resultTextArea = document.getElementById("revokeOtherResult");
 
-  defaultContainer.auth.revokeOtherSessions().then(function(sessions) {
+  skygear.auth.revokeOtherSessions().then(function(sessions) {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
   });
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {

@@ -55,11 +55,10 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function setupListSynopsis() {
   var synopsisTextArea = document.getElementById("listSynopsis");
-  var funcExpr = "defaultContainer.auth.mfa.getAuthenticators";
+  var funcExpr = "skygear.auth.mfa.getAuthenticators";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -70,7 +69,7 @@ function onSubmitList(e) {
 
   var resultTextArea = document.getElementById("listResult");
 
-  defaultContainer.auth.mfa.getAuthenticators().then(function(authenticators) {
+  skygear.auth.mfa.getAuthenticators().then(function(authenticators) {
     resultTextArea.value = JSON.stringify(authenticators);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -80,7 +79,7 @@ function onSubmitList(e) {
 function onInput() {
   var authenticatorID = document.getElementById("authenticatorID").value;
   var synopsisTextArea = document.getElementById("deleteSynopsis");
-  var funcExpr = "defaultContainer.auth.mfa.deleteAuthenticator";
+  var funcExpr = "skygear.auth.mfa.deleteAuthenticator";
   var s = stringifyFunctionCall(funcExpr, authenticatorID);
   synopsisTextArea.value = s;
 }
@@ -92,14 +91,14 @@ function onSubmitDelete(e) {
   var authenticatorID = document.getElementById("authenticatorID").value;
   var resultTextArea = document.getElementById("deleteResult");
 
-  defaultContainer.auth.mfa.deleteAuthenticator(authenticatorID).then(function() {
+  skygear.auth.mfa.deleteAuthenticator(authenticatorID).then(function() {
     resultTextArea.value = "Delete Success";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
   });
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {

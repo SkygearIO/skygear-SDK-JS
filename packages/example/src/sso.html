@@ -155,7 +155,6 @@
   </form>
 
   <script>
-var defaultContainer = skygear.defaultContainer;
 
 function makeOAuthInvocation() {
   var action = document.getElementById("oauthAction").value;
@@ -181,7 +180,7 @@ function onInputOAuth() {
   var invocation = makeOAuthInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "defaultContainer.auth." + funcName;
+  var funcExpr = "skygear.auth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -197,7 +196,7 @@ function onSubmitOAuth(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var result = defaultContainer.auth[funcName].apply(defaultContainer.auth, args);
+  var result = skygear.auth[funcName].apply(skygear.auth, args);
   if (result && result.then) {
     result.then(function(maybeUser) {
       if (!maybeUser) {
@@ -232,7 +231,7 @@ function onInputAccessToken() {
   var invocation = makeAccessTokenInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "defaultContainer.auth." + funcName;
+  var funcExpr = "skygear.auth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -248,7 +247,7 @@ function onSubmitAccessToken(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var p = defaultContainer.auth[funcName].apply(defaultContainer.auth, args);
+  var p = skygear.auth[funcName].apply(skygear.auth, args);
   p.then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
@@ -260,7 +259,7 @@ function onInputDeleteOAuth() {
   var providerID = document.getElementById("deleteOAuthProviderID").value;
   var synopsisTextArea = document.getElementById("deleteOAuthSynopsis");
 
-  synopsisTextArea.value = stringifyFunctionCall("defaultContainer.auth.deleteOAuthProvider", providerID);
+  synopsisTextArea.value = stringifyFunctionCall("skygear.auth.deleteOAuthProvider", providerID);
 }
 
 function onSubmitDeleteOAuth(e) {
@@ -270,7 +269,7 @@ function onSubmitDeleteOAuth(e) {
   var providerID = document.getElementById("deleteOAuthProviderID").value;
   var resultTextArea = document.getElementById("deleteOAuthResult");
 
-  defaultContainer.auth.deleteOAuthProvider(providerID).then(function() {
+  skygear.auth.deleteOAuthProvider(providerID).then(function() {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -296,7 +295,7 @@ function onInputCustomToken() {
   var invocation = makeCustomTokenInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "defaultContainer.auth." + funcName;
+  var funcExpr = "skygear.auth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -312,14 +311,14 @@ function onSubmitCustomToken(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  defaultContainer.auth[funcName].apply(defaultContainer.auth, args).then(function(user) {
+  skygear.auth[funcName].apply(skygear.auth, args).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
   });
 }
 
-defaultContainer.configure({
+skygear.configure({
   endpoint: "__SKYGEAR_ENDPOINT__",
   apiKey: "__SKYGEAR_API_KEY__"
 }).then(function() {
@@ -330,11 +329,11 @@ defaultContainer.configure({
 
   var resultTextArea = document.getElementById("oauthResult");
 
-  defaultContainer.auth.getLinkRedirectResult().then(function(result) {
+  skygear.auth.getLinkRedirectResult().then(function(result) {
     if (result) {
       resultTextArea.value = "Link success";
     } else {
-      defaultContainer.auth.getLoginRedirectResult().then(function(maybeUser) {
+      skygear.auth.getLoginRedirectResult().then(function(maybeUser) {
         if (maybeUser) {
           resultTextArea.value = JSON.stringify(maybeUser);
         }
