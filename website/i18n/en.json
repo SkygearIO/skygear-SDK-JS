@@ -2056,6 +2056,2214 @@
       },
       "web.webcontainer": {
         "title": "WebContainer class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.authcontainer.accesstoken": {
+        "title": "AuthContainer.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.accesstoken": {
+        "title": "BaseAPIClient.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.nodeapiclient": {
+        "title": "NodeAPIClient class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.authcontainer.accesstoken": {
+        "title": "AuthContainer.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.accesstoken": {
+        "title": "BaseAPIClient.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.authcontainer.accesstoken": {
+        "title": "AuthContainer.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.accesstoken": {
+        "title": "BaseAPIClient.accessToken property"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.10/version-2.0.0-alpha.10-web": {
+        "title": "web package"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-index": {
+        "title": "Index"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer._constructor_": {
+        "title": "AuthContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.parent": {
+        "title": "AuthContainer.parent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.persistresponse": {
+        "title": "AuthContainer.persistResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse.accesstoken": {
+        "title": "AuthResponse.accessToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse.identity": {
+        "title": "AuthResponse.identity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.authresponse.user": {
+        "title": "AuthResponse.user property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient._constructor_": {
+        "title": "BaseAPIClient.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.apikey": {
+        "title": "BaseAPIClient.apiKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.changepassword": {
+        "title": "BaseAPIClient.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.endpoint": {
+        "title": "BaseAPIClient.endpoint property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.logout": {
+        "title": "BaseAPIClient.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.me": {
+        "title": "BaseAPIClient.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.requestemailverification": {
+        "title": "BaseAPIClient.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.requestforgotpasswordemail": {
+        "title": "BaseAPIClient.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.updatemetadata": {
+        "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container._constructor_": {
+        "title": "Container.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.apiclient": {
+        "title": "Container.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.auth": {
+        "title": "Container.auth property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.container.storage": {
+        "title": "Container.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.decodeerror": {
+        "title": "decodeError() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.decodesession": {
+        "title": "decodeSession() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.decodeuser": {
+        "title": "decodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.encodeuser": {
+        "title": "encodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.identity": {
+        "title": "Identity type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.jsonarray": {
+        "title": "JSONArray interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.jsonobject": {
+        "title": "JSONObject interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver._constructor_": {
+        "title": "MemoryStorageDriver.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver.backingstore": {
+        "title": "MemoryStorageDriver.backingStore property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver.del": {
+        "title": "MemoryStorageDriver.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver.get": {
+        "title": "MemoryStorageDriver.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver": {
+        "title": "MemoryStorageDriver class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.memorystoragedriver.set": {
+        "title": "MemoryStorageDriver.set() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeapiclient.fetchfunction": {
+        "title": "NodeAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeapiclient": {
+        "title": "NodeAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeapiclient.requestclass": {
+        "title": "NodeAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeapiclient.useragent": {
+        "title": "NodeAPIClient.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodecontainer._constructor_": {
+        "title": "NodeContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodecontainer": {
+        "title": "NodeContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeextrasessioninfoprovider.getdevicename": {
+        "title": "NodeExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.nodeextrasessioninfoprovider": {
+        "title": "NodeExtraSessionInfoProvider class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.realm": {
+        "title": "PasswordIdentity.realm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.skygearerrorname": {
+        "title": "SkygearErrorName type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-node-client.version": {
+        "title": "VERSION variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer._constructor_": {
+        "title": "AuthContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.parent": {
+        "title": "AuthContainer.parent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.persistresponse": {
+        "title": "AuthContainer.persistResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse.accesstoken": {
+        "title": "AuthResponse.accessToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse.identity": {
+        "title": "AuthResponse.identity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.authresponse.user": {
+        "title": "AuthResponse.user property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient._constructor_": {
+        "title": "BaseAPIClient.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.apikey": {
+        "title": "BaseAPIClient.apiKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.changepassword": {
+        "title": "BaseAPIClient.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.endpoint": {
+        "title": "BaseAPIClient.endpoint property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.logout": {
+        "title": "BaseAPIClient.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.me": {
+        "title": "BaseAPIClient.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.requestemailverification": {
+        "title": "BaseAPIClient.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.requestforgotpasswordemail": {
+        "title": "BaseAPIClient.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.updatemetadata": {
+        "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container._constructor_": {
+        "title": "Container.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.apiclient": {
+        "title": "Container.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.auth": {
+        "title": "Container.auth property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.container.storage": {
+        "title": "Container.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.decodeerror": {
+        "title": "decodeError() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.decodesession": {
+        "title": "decodeSession() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.decodeuser": {
+        "title": "decodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.encodeuser": {
+        "title": "encodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.identity": {
+        "title": "Identity type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.jsonarray": {
+        "title": "JSONArray interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.jsonobject": {
+        "title": "JSONObject interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.realm": {
+        "title": "PasswordIdentity.realm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeapiclient.fetchfunction": {
+        "title": "ReactNativeAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeapiclient": {
+        "title": "ReactNativeAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeapiclient.requestclass": {
+        "title": "ReactNativeAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeasyncstoragestoragedriver.del": {
+        "title": "ReactNativeAsyncStorageStorageDriver.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeasyncstoragestoragedriver.get": {
+        "title": "ReactNativeAsyncStorageStorageDriver.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeasyncstoragestoragedriver": {
+        "title": "ReactNativeAsyncStorageStorageDriver class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativeasyncstoragestoragedriver.set": {
+        "title": "ReactNativeAsyncStorageStorageDriver.set() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativecontainer._constructor_": {
+        "title": "ReactNativeContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.reactnativecontainer": {
+        "title": "ReactNativeContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.skygearerrorname": {
+        "title": "SkygearErrorName type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-react-native.version": {
+        "title": "VERSION variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer._constructor_": {
+        "title": "AuthContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.parent": {
+        "title": "AuthContainer.parent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.persistresponse": {
+        "title": "AuthContainer.persistResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.updatesession": {
+        "title": "AuthContainer.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse.accesstoken": {
+        "title": "AuthResponse.accessToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse.identity": {
+        "title": "AuthResponse.identity property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse.refreshtoken": {
+        "title": "AuthResponse.refreshToken property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse.sessionid": {
+        "title": "AuthResponse.sessionID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.authresponse.user": {
+        "title": "AuthResponse.user property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient._constructor_": {
+        "title": "BaseAPIClient.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.apikey": {
+        "title": "BaseAPIClient.apiKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.changepassword": {
+        "title": "BaseAPIClient.changePassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.deleteoauthprovider": {
+        "title": "BaseAPIClient.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.endpoint": {
+        "title": "BaseAPIClient.endpoint property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.fetchfunction": {
+        "title": "BaseAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.getextrasessioninfo": {
+        "title": "BaseAPIClient.getExtraSessionInfo property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.getsession": {
+        "title": "BaseAPIClient.getSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.linkoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.listsessions": {
+        "title": "BaseAPIClient.listSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.loginoauthproviderwithaccesstoken": {
+        "title": "BaseAPIClient.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.loginwithcustomtoken": {
+        "title": "BaseAPIClient.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.logout": {
+        "title": "BaseAPIClient.logout() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.me": {
+        "title": "BaseAPIClient.me() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.postandreturnauthresponse": {
+        "title": "BaseAPIClient.postAndReturnAuthResponse() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.prepareheaders": {
+        "title": "BaseAPIClient.prepareHeaders() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.refresh": {
+        "title": "BaseAPIClient.refresh() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.refreshtokenfunction": {
+        "title": "BaseAPIClient.refreshTokenFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.requestclass": {
+        "title": "BaseAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.requestemailverification": {
+        "title": "BaseAPIClient.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.requestforgotpasswordemail": {
+        "title": "BaseAPIClient.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.resetpassword": {
+        "title": "BaseAPIClient.resetPassword() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.revokeothersessions": {
+        "title": "BaseAPIClient.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.revokesession": {
+        "title": "BaseAPIClient.revokeSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.updatemetadata": {
+        "title": "BaseAPIClient.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.updatesession": {
+        "title": "BaseAPIClient.updateSession() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.useragent": {
+        "title": "BaseAPIClient.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.baseapiclient.verifywithcode": {
+        "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container._constructor_": {
+        "title": "Container.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.apiclient": {
+        "title": "Container.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.auth": {
+        "title": "Container.auth property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.extrasessioninfoprovider": {
+        "title": "Container.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.container.storage": {
+        "title": "Container.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containeroptions.apiclient": {
+        "title": "ContainerOptions.apiClient property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containeroptions.extrasessioninfoprovider": {
+        "title": "ContainerOptions.extraSessionInfoProvider property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containeroptions": {
+        "title": "ContainerOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containeroptions.name": {
+        "title": "ContainerOptions.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containeroptions.storage": {
+        "title": "ContainerOptions.storage property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.delaccesstoken": {
+        "title": "ContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.delidentity": {
+        "title": "ContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.deloauthredirectaction": {
+        "title": "ContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.delrefreshtoken": {
+        "title": "ContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.delsessionid": {
+        "title": "ContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.deluser": {
+        "title": "ContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getaccesstoken": {
+        "title": "ContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getextrasessioninfooptions": {
+        "title": "ContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getidentity": {
+        "title": "ContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getoauthredirectaction": {
+        "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getrefreshtoken": {
+        "title": "ContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getsessionid": {
+        "title": "ContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.getuser": {
+        "title": "ContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setaccesstoken": {
+        "title": "ContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setextrasessioninfooptions": {
+        "title": "ContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setidentity": {
+        "title": "ContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setoauthredirectaction": {
+        "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setrefreshtoken": {
+        "title": "ContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setsessionid": {
+        "title": "ContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.containerstorage.setuser": {
+        "title": "ContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.decodeauthresponse": {
+        "title": "decodeAuthResponse() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.decodeerror": {
+        "title": "decodeError() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.decodeidentity": {
+        "title": "decodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.decodesession": {
+        "title": "decodeSession() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.decodeuser": {
+        "title": "decodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.encodeidentity": {
+        "title": "encodeIdentity() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.encodeuser": {
+        "title": "encodeUser() function"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.extrasessioninfooptions.collectdevicename": {
+        "title": "ExtraSessionInfoOptions.collectDeviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.extrasessioninfoprovider.getdevicename": {
+        "title": "ExtraSessionInfoProvider.getDeviceName() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.extrasessioninfoprovider": {
+        "title": "ExtraSessionInfoProvider interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage._constructor_": {
+        "title": "GlobalJSONContainerStorage.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.delaccesstoken": {
+        "title": "GlobalJSONContainerStorage.delAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.delidentity": {
+        "title": "GlobalJSONContainerStorage.delIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.deloauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.delrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.delRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.delsessionid": {
+        "title": "GlobalJSONContainerStorage.delSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.deluser": {
+        "title": "GlobalJSONContainerStorage.delUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getaccesstoken": {
+        "title": "GlobalJSONContainerStorage.getAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getidentity": {
+        "title": "GlobalJSONContainerStorage.getIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.getRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getsessionid": {
+        "title": "GlobalJSONContainerStorage.getSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.getuser": {
+        "title": "GlobalJSONContainerStorage.getUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setaccesstoken": {
+        "title": "GlobalJSONContainerStorage.setAccessToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setextrasessioninfooptions": {
+        "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setidentity": {
+        "title": "GlobalJSONContainerStorage.setIdentity() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setoauthredirectaction": {
+        "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setrefreshtoken": {
+        "title": "GlobalJSONContainerStorage.setRefreshToken() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setsessionid": {
+        "title": "GlobalJSONContainerStorage.setSessionID() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.globaljsoncontainerstorage.setuser": {
+        "title": "GlobalJSONContainerStorage.setUser() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.identity": {
+        "title": "Identity type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.jsonarray": {
+        "title": "JSONArray interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.jsonobject": {
+        "title": "JSONObject interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.localstoragestoragedriver": {
+        "title": "localStorageStorageDriver variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web": {
+        "title": "web package"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebpopupauthorizationurloptions.action": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebpopupauthorizationurloptions": {
+        "title": "OAuthWebPopupAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebpopupauthorizationurloptions.uxmode": {
+        "title": "OAuthWebPopupAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebredirectauthorizationurloptions.action": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebredirectauthorizationurloptions.callbackurl": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebredirectauthorizationurloptions": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.oauthwebredirectauthorizationurloptions.uxmode": {
+        "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.realm": {
+        "title": "PasswordIdentity.realm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.skygearerrorname": {
+        "title": "SkygearErrorName type"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.ssologinoptions.mergerealm": {
+        "title": "SSOLoginOptions.mergeRealm property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.storagedriver.del": {
+        "title": "StorageDriver.del() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.storagedriver.get": {
+        "title": "StorageDriver.get() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.storagedriver": {
+        "title": "StorageDriver interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.storagedriver.set": {
+        "title": "StorageDriver.set() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.version": {
+        "title": "VERSION variable"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webapiclient.fetchfunction": {
+        "title": "WebAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webapiclient": {
+        "title": "WebAPIClient class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webapiclient.requestclass": {
+        "title": "WebAPIClient.requestClass property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer._constructor_": {
+        "title": "WebAuthContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.getlinkredirectresult": {
+        "title": "WebAuthContainer.getLinkRedirectResult() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.getloginredirectresult": {
+        "title": "WebAuthContainer.getLoginRedirectResult() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.linkoauthproviderwithpopup": {
+        "title": "WebAuthContainer.linkOAuthProviderWithPopup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.linkoauthproviderwithredirect": {
+        "title": "WebAuthContainer.linkOAuthProviderWithRedirect() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.loginoauthproviderwithpopup": {
+        "title": "WebAuthContainer.loginOAuthProviderWithPopup() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer.loginoauthproviderwithredirect": {
+        "title": "WebAuthContainer.loginOAuthProviderWithRedirect() method"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webauthcontainer": {
+        "title": "WebAuthContainer class"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webcontainer._constructor_": {
+        "title": "WebContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webcontainer.auth": {
+        "title": "WebContainer.auth property"
+      },
+      "version-2.0.0-alpha.11/version-2.0.0-alpha.11-web.webcontainer": {
+        "title": "WebContainer class"
       }
     },
     "links": {
