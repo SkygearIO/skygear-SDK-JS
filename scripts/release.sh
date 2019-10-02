@@ -36,10 +36,12 @@ npm run lint
 npm run typecheck
 npm run test
 SKYGEAR_VERSION="$SKYGEAR_VERSION" npm run build
-(cd website && yarn && yarn run build)
+(cd website && yarn)
+(cd website && yarn run version "$SKYGEAR_VERSION")
+(cd website && yarn run build)
 
 touch NEWCHANGELOG && cat new-release > NEWCHANGELOG && echo "" >> NEWCHANGELOG && cat CHANGELOG.md >> NEWCHANGELOG && mv NEWCHANGELOG CHANGELOG.md
-git add lerna.json CHANGELOG.md 'packages/*/package.json' 'packages/*/package-lock.json' 'website/i18n/*.json'
+git add lerna.json CHANGELOG.md 'packages/*/package.json' 'packages/*/package-lock.json' 'website/'
 git commit -m "Update CHANGELOG for v$SKYGEAR_VERSION"
 git tag -a v"$SKYGEAR_VERSION" -s -m "Release v$SKYGEAR_VERSION"
 git push git@github.com:SkygearIO/skygear-SDK-JS.git "$GIT_BRANCH"
