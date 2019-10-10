@@ -1,3 +1,7 @@
+### Features
+
+- Add script bundle to published package
+
 ## 2.0.0-alpha.12 (2019-10-02)
 
 ### Breaking Changes
