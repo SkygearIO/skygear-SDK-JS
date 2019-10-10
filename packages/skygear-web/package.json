@@ -4,10 +4,12 @@
   "license": "Apache-2.0",
   "main": "dist/skygear-web.cjs.js",
   "module": "dist/skygear-web.module.js",
+  "unpkg": "dist/skygear-web.iife.js",
   "files": [
     "index.d.ts",
     "dist/skygear-web.module.js",
-    "dist/skygear-web.cjs.js"
+    "dist/skygear-web.cjs.js",
+    "dist/skygear-web.iife.js"
   ],
   "devDependencies": {
     "@skygear/core": "2.0.0-alpha.12"
