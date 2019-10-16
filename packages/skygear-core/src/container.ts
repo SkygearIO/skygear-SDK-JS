@@ -306,8 +306,15 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
-  async logout(): Promise<void> {
-    await this.parent.apiClient.logout();
+  async logout(options: { force?: boolean } = {}): Promise<void> {
+    const { force = false } = options;
+    try {
+      await this.parent.apiClient.logout();
+    } catch (err) {
+      if (!force) {
+        throw err;
+      }
+    }
     await this._clearSession();
   }
 
