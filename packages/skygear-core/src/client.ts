@@ -14,6 +14,8 @@ import {
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
   AuthenticationSession,
+  _PresignUploadRequest,
+  _PresignUploadResponse,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -623,6 +625,17 @@ export abstract class BaseAPIClient {
   async revokeAllBearerToken(): Promise<void> {
     await this.post("/_auth/mfa/bearer_token/revoke_all", {
       json: {},
+    });
+  }
+
+  /**
+   * @internal
+   */
+  async _presignUpload(
+    req: _PresignUploadRequest
+  ): Promise<_PresignUploadResponse> {
+    return this.post("/_asset/presign_upload", {
+      json: req as any,
     });
   }
 }
