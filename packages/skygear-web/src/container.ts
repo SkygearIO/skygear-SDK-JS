@@ -8,6 +8,7 @@ import {
   decodeAuthResponse,
   ContainerOptions,
   GlobalJSONContainerStorage,
+  _PresignUploadRequest,
 } from "@skygear/core";
 import { WebAPIClient } from "./client";
 import { localStorageStorageDriver } from "./storage";
@@ -212,8 +213,85 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
 /**
  * @public
  */
+export interface UploadAssetOptions {
+  exactName?: string;
+  prefix?: string;
+  access?: "public" | "private";
+  headers?: {
+    [name: string]: string;
+  };
+  onUploadProgress?: (e: ProgressEvent) => void;
+}
+
+/**
+ * @public
+ */
+export class WebAssetContainer<T extends WebAPIClient> {
+  parent: WebContainer<T>;
+
+  constructor(parent: WebContainer<T>) {
+    this.parent = parent;
+  }
+
+  async upload(blob: Blob, options?: UploadAssetOptions): Promise<string> {
+    // Prepare presignRequest
+    const presignRequest: _PresignUploadRequest = {};
+    if (options != null) {
+      if (options.exactName != null) {
+        presignRequest.exact_name = options.exactName;
+      }
+      presignRequest.prefix = options.prefix;
+      presignRequest.access = options.access;
+      if (options.headers != null) {
+        presignRequest.headers = { ...options.headers };
+      }
+    }
+
+    // Prepare presignRequest.headers
+    const presignRequestHeaders = presignRequest.headers || {};
+    let hasContentLength = false;
+    let hasContentType = false;
+    for (const key of Object.keys(presignRequestHeaders)) {
+      const headerName = key.toLowerCase();
+      switch (headerName) {
+        case "content-length":
+          hasContentLength = true;
+          break;
+        case "content-type":
+          hasContentType = true;
+          break;
+        default:
+          break;
+      }
+    }
+    if (!hasContentLength) {
+      presignRequestHeaders["content-length"] = String(blob.size);
+    }
+    if (!hasContentType && blob.type !== "") {
+      presignRequestHeaders["content-type"] = String(blob.type);
+    }
+    presignRequest.headers = presignRequestHeaders;
+
+    const {
+      asset_name,
+      // url,
+      // method,
+      // headers,
+    } = await this.parent.apiClient._presignUpload(presignRequest);
+
+    // TODO(asset): Upload the blob using XMLHttpRequest
+    // TODO(asset): Report the upload progess
+
+    return asset_name;
+  }
+}
+
+/**
+ * @public
+ */
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
   auth: WebAuthContainer<T>;
+  asset: WebAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = ({
@@ -226,5 +304,6 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
 
     super(o);
     this.auth = new WebAuthContainer(this);
+    this.asset = new WebAssetContainer(this);
   }
 }
