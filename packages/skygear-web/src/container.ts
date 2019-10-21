@@ -35,6 +35,45 @@ function decodeMessage(message: any) {
   }
 }
 
+function uploadBlob(
+  method: string,
+  url: string,
+  headers: { name: string; value: string }[],
+  blob: Blob,
+  onUploadProgress?: (e: ProgressEvent) => void
+): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      const status = xhr.status;
+      resolve(status);
+    };
+    xhr.onerror = function() {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.ontimeout = function() {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.open(method, url, true);
+    for (const header of headers) {
+      // content-length is considered unsafe by the browser.
+      // We cannot set it.
+      if (header.name.toLowerCase() === "content-length") {
+        continue;
+      }
+      xhr.setRequestHeader(header.name, header.value);
+    }
+    if (xhr.upload != null) {
+      xhr.upload.onprogress = function(e: ProgressEvent) {
+        if (onUploadProgress != null) {
+          onUploadProgress(e);
+        }
+      };
+    }
+    xhr.send(blob);
+  });
+}
+
 /**
  * @public
  */
@@ -274,13 +313,22 @@ export class WebAssetContainer<T extends WebAPIClient> {
 
     const {
       asset_name,
-      // url,
-      // method,
-      // headers,
+      url,
+      method,
+      headers,
     } = await this.parent.apiClient._presignUpload(presignRequest);
 
-    // TODO(asset): Upload the blob using XMLHttpRequest
-    // TODO(asset): Report the upload progess
+    const status = await uploadBlob(
+      method,
+      url,
+      headers,
+      blob,
+      options && options.onUploadProgress
+    );
+
+    if (status < 200 || status > 299) {
+      throw new Error("Unexpected upload status: " + status);
+    }
 
     return asset_name;
   }
