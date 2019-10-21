@@ -10,11 +10,14 @@ function stringifyFunctionCall() {
     if (v === undefined) {
       continue;
     }
-    var s = JSON.stringify(v);
     if (i > 0) {
       parts.push(", ");
     }
-    parts.push(s);
+    if (v instanceof Blob) {
+      parts.push("<Blob>");
+    } else {
+      parts.push(JSON.stringify(v));
+    }
   }
   parts.push(")");
   return parts.join("");
