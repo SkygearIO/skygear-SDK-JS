@@ -386,3 +386,10 @@ export interface _PresignUploadResponse {
     value: string;
   }[];
 }
+
+/**
+ * @internal
+ */
+export interface _PresignUploadFormResponse {
+  url: string;
+}

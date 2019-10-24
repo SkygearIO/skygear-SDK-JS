@@ -16,6 +16,7 @@ import {
   AuthenticationSession,
   _PresignUploadRequest,
   _PresignUploadResponse,
+  _PresignUploadFormResponse,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -636,6 +637,15 @@ export abstract class BaseAPIClient {
   ): Promise<_PresignUploadResponse> {
     return this.post("/_asset/presign_upload", {
       json: req as any,
+    });
+  }
+
+  /**
+   * @internal
+   */
+  async _presignUploadForm(): Promise<_PresignUploadFormResponse> {
+    return this.post("/_asset/presign_upload_form", {
+      json: {},
     });
   }
 }
