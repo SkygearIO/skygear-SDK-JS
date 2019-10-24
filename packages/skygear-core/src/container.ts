@@ -19,8 +19,9 @@ import {
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
 } from "./types";
-import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
 import { SkygearError, _extractAuthenticationSession } from "./error";
+import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { encodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
