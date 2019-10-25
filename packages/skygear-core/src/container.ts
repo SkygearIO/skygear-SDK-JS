@@ -512,36 +512,10 @@ export class MFAContainer<T extends BaseAPIClient> {
     return this.parent.parent.apiClient.deleteAuthenticator(id);
   }
 
-  generateOTPAuthURIQRCodeImageURL(otpauthURI: string): string {
-    return (
-      this.parent.parent.apiClient.endpoint +
-      "/_auth/mfa/totp/qrcode" +
-      encodeQuery([["otpauth_uri", otpauthURI]])
-    );
-  }
-
   async createNewTOTP(
     options: CreateNewTOTPOptions
   ): Promise<CreateNewTOTPResult> {
-    const { displayName, issuer, accountName } = options;
-    const {
-      authenticatorID,
-      authenticatorType,
-      secret,
-    } = await this.parent.parent.apiClient.createNewTOTP(displayName);
-    const otpauthURI = generateOTPAuthURI({
-      secret,
-      issuer,
-      accountName,
-    });
-    const qrCodeImageURL = this.generateOTPAuthURIQRCodeImageURL(otpauthURI);
-    return {
-      authenticatorID,
-      authenticatorType,
-      secret,
-      otpauthURI,
-      qrCodeImageURL,
-    };
+    return this.parent.parent.apiClient.createNewTOTP(options);
   }
 
   async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
