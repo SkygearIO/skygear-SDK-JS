@@ -128,7 +128,7 @@ function onSubmitCreate(e) {
     accountName,
   }).then(function(result) {
     resultTextArea.value = JSON.stringify(result);
-    qrCode.src = result.qrCodeImageURL;
+    qrCode.src = result.qrCodeImageURI;
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
   });

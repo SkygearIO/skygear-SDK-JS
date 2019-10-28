@@ -7,6 +7,8 @@ import {
   Authenticator,
   ActivateTOTPResult,
   AuthenticateWithTOTPOptions,
+  CreateNewTOTPOptions,
+  CreateNewTOTPResult,
   CreateNewOOBOptions,
   CreateNewOOBResult,
   ActivateOOBResult,
@@ -538,14 +540,12 @@ export abstract class BaseAPIClient {
   }
 
   async createNewTOTP(
-    displayName: string
-  ): Promise<{
-    authenticatorID: string;
-    authenticatorType: "totp";
-    secret: string;
-  }> {
+    options: CreateNewTOTPOptions
+  ): Promise<CreateNewTOTPResult> {
     const payload = this.makePayloadWithAuthenticationSessionToken({
-      display_name: displayName,
+      display_name: options.displayName,
+      issuer: options.issuer,
+      account_name: options.accountName,
     });
     const response = await this.post("/_auth/mfa/totp/new", {
       json: payload,
@@ -554,6 +554,8 @@ export abstract class BaseAPIClient {
       authenticatorID: response.authenticator_id,
       authenticatorType: response.authenticator_type,
       secret: response.secret,
+      otpauthURI: response.otpauth_uri,
+      qrCodeImageURI: response.qr_code_image_uri,
     };
   }
 

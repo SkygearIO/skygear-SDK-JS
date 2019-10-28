@@ -289,7 +289,7 @@ export interface CreateNewTOTPResult {
   authenticatorType: "totp";
   secret: string;
   otpauthURI: string;
-  qrCodeImageURL: string;
+  qrCodeImageURI: string;
 }
 
 /**
