@@ -3,18 +3,21 @@ import { SkygearError, decodeError } from "./error";
 describe("decodeError", () => {
   it("decodes skygear error", () => {
     const actual = decodeError({
-      message: "message",
       name: "name",
+      reason: "reason",
+      message: "message",
+      code: 401,
       info: {
         a: "b",
       },
     });
-    const expected = new SkygearError("message", "name", {
+    const expected = new SkygearError("message", "name", "reason", {
       a: "b",
     });
     expect(actual).toBeInstanceOf(SkygearError);
-    expect(actual.message).toEqual(expected.message);
     expect(actual.name).toEqual(expected.name);
+    expect(actual.message).toEqual(expected.message);
+    expect((actual as any).reason).toEqual(expected.reason);
     expect((actual as any).info).toEqual(expected.info);
   });
 

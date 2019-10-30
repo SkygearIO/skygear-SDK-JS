@@ -20,11 +20,7 @@ import {
   AuthenticateWithOOBOptions,
 } from "./types";
 import { BaseAPIClient, _removeTrailingSlash, encodeQuery } from "./client";
-import {
-  SkygearError,
-  SkygearErrorNames,
-  _extractAuthenticationSession,
-} from "./error";
+import { SkygearError, _extractAuthenticationSession } from "./error";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -156,7 +152,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     // Detect invalid authentication session
     if (
       e instanceof SkygearError &&
-      e.name === SkygearErrorNames.InvalidAuthenticationSession
+      e.reason === "InvalidAuthenticationSession"
     ) {
       await this._clearAuthenticationSession();
       throw e;
@@ -195,7 +191,7 @@ export class AuthContainer<T extends BaseAPIClient> {
         // If the server told us the bearer token is invalid, delete it.
         if (
           bearerTokenError instanceof SkygearError &&
-          bearerTokenError.name === SkygearErrorNames.InvalidMFABearerToken
+          bearerTokenError.reason === "InvalidMFABearerToken"
         ) {
           await this.parent.storage.delMFABearerToken(this.parent.name);
         }
@@ -371,7 +367,10 @@ export class AuthContainer<T extends BaseAPIClient> {
     try {
       accessToken = await this.parent.apiClient.refresh(refreshToken);
     } catch (error) {
-      if (error instanceof SkygearError && error.name === "NotAuthenticated") {
+      if (
+        error instanceof SkygearError &&
+        error.reason === "NotAuthenticated"
+      ) {
         // cannot refresh -> session is gone
         await this._clearSession();
       }

@@ -204,12 +204,18 @@ export abstract class BaseAPIClient {
       jsonBody = await response.json();
     } catch (err) {
       if (response.status < 200 || response.status >= 300) {
-        throw new SkygearError("unexpected status code", "UnexpectedError", {
-          status_code: response.status,
-        });
+        throw new SkygearError(
+          "unexpected status code",
+          "InternalError",
+          "UnexpectedError",
+          {
+            status_code: response.status,
+          }
+        );
       } else {
         throw new SkygearError(
           "failed to decode response JSON",
+          "InternalError",
           "UnexpectedError"
         );
       }
