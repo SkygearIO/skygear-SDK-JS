@@ -419,6 +419,10 @@ export class AuthContainer<T extends BaseAPIClient> {
     return this.parent.apiClient.requestEmailVerification(email);
   }
 
+  async requestPhoneVerification(email: string): Promise<void> {
+    return this.parent.apiClient.requestPhoneVerification(email);
+  }
+
   async verifyWithCode(code: string): Promise<void> {
     return this.parent.apiClient.verifyWithCode(code);
   }
