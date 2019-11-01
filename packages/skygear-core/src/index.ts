@@ -4,6 +4,7 @@ export * from "./client";
 export * from "./container";
 export * from "./encoding";
 export * from "./storage";
+export * from "./imageprocessing";
 /**
  * @public
  */

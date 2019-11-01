@@ -1,4 +1,4 @@
-import { encodeQueryComponent, encodeQuery } from "./client";
+import { encodeQueryComponent, encodeQuery } from "./url";
 
 describe("encodeQueryComponent", () => {
   const f = encodeQueryComponent;

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Asset</title>
+</head>
+<body>
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+  <form class="container" onsubmit="onSubmitUpload(event)">
+    <div class="form-group">
+      <label>File</label>
+      <input id="uploadFile" type="file" class="form-control" placeholder="File" oninput="onInputUpload()">
+    </div>
+    <div class="form-group">
+      <label>Upload Progress</label>
+      <input id="uploadProgress" type="text" class="form-control" placeholder="Upload Progress">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="uploadSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="uploadResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+  <script>
+
+function onInputUpload() {
+  var synopsisTextArea = document.getElementById("uploadSynopsis");
+  var progressTextArea = document.getElementById("uploadProgress");
+  var fileList = document.getElementById("uploadFile").files;
+  if (fileList.length > 0) {
+    synopsisTextArea.value = stringifyFunctionCall("skygear.asset.upload", fileList[0]);
+    progressTextArea.value = "";
+  } else {
+    synopsisTextArea.value = "";
+    progressTextArea.value = "";
+  }
+}
+
+function onSubmitUpload(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var progressTextArea = document.getElementById("uploadProgress");
+  var resultTextArea = document.getElementById("uploadResult");
+
+  var fileList = document.getElementById("uploadFile").files;
+  if (fileList.length <= 0) {
+    return;
+  }
+
+  progressTextArea.value = "";
+  var blob = fileList[0];
+
+  function onUploadProgress(e) {
+    if (e.lengthComputable) {
+      progressTextArea.value = (e.loaded / e.total * 100).toFixed(2);
+    } else {
+      progressTextArea.value = "Does NOT support upload progress";
+    }
+  }
+
+  skygear.asset.upload(blob, { onUploadProgress }).then(function(assetName) {
+    uploadResult.value = JSON.stringify(assetName);
+  }, function(error) {
+    uploadResult.value = JSON.stringify(error);
+  });
+}
+
+skygear.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  onInputUpload();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>

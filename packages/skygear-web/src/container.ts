@@ -8,6 +8,7 @@ import {
   decodeAuthResponse,
   ContainerOptions,
   GlobalJSONContainerStorage,
+  _PresignUploadRequest,
 } from "@skygear/core";
 import { WebAPIClient } from "./client";
 import { localStorageStorageDriver } from "./storage";
@@ -32,6 +33,45 @@ function decodeMessage(message: any) {
     default:
       throw new Error("unknown message type: " + message.type);
   }
+}
+
+function uploadBlob(
+  method: string,
+  url: string,
+  headers: { name: string; value: string }[],
+  blob: Blob,
+  onUploadProgress?: (e: ProgressEvent) => void
+): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      const status = xhr.status;
+      resolve(status);
+    };
+    xhr.onerror = function() {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.ontimeout = function() {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.open(method, url, true);
+    for (const header of headers) {
+      // content-length is considered unsafe by the browser.
+      // We cannot set it.
+      if (header.name.toLowerCase() === "content-length") {
+        continue;
+      }
+      xhr.setRequestHeader(header.name, header.value);
+    }
+    if (xhr.upload != null) {
+      xhr.upload.onprogress = function(e: ProgressEvent) {
+        if (onUploadProgress != null) {
+          onUploadProgress(e);
+        }
+      };
+    }
+    xhr.send(blob);
+  });
 }
 
 /**
@@ -212,8 +252,94 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
 /**
  * @public
  */
+export interface UploadAssetOptions {
+  exactName?: string;
+  prefix?: string;
+  access?: "public" | "private";
+  headers?: {
+    [name: string]: string;
+  };
+  onUploadProgress?: (e: ProgressEvent) => void;
+}
+
+/**
+ * @public
+ */
+export class WebAssetContainer<T extends WebAPIClient> {
+  parent: WebContainer<T>;
+
+  constructor(parent: WebContainer<T>) {
+    this.parent = parent;
+  }
+
+  async upload(blob: Blob, options?: UploadAssetOptions): Promise<string> {
+    // Prepare presignRequest
+    const presignRequest: _PresignUploadRequest = {};
+    if (options != null) {
+      if (options.exactName != null) {
+        presignRequest.exact_name = options.exactName;
+      }
+      presignRequest.prefix = options.prefix;
+      presignRequest.access = options.access;
+      if (options.headers != null) {
+        presignRequest.headers = { ...options.headers };
+      }
+    }
+
+    // Prepare presignRequest.headers
+    const presignRequestHeaders = presignRequest.headers || {};
+    let hasContentLength = false;
+    let hasContentType = false;
+    for (const key of Object.keys(presignRequestHeaders)) {
+      const headerName = key.toLowerCase();
+      switch (headerName) {
+        case "content-length":
+          hasContentLength = true;
+          break;
+        case "content-type":
+          hasContentType = true;
+          break;
+        default:
+          break;
+      }
+    }
+    if (!hasContentLength) {
+      presignRequestHeaders["content-length"] = String(blob.size);
+    }
+    if (!hasContentType && blob.type !== "") {
+      presignRequestHeaders["content-type"] = String(blob.type);
+    }
+    presignRequest.headers = presignRequestHeaders;
+
+    const {
+      asset_name,
+      url,
+      method,
+      headers,
+    } = await this.parent.apiClient._presignUpload(presignRequest);
+
+    const status = await uploadBlob(
+      method,
+      url,
+      headers,
+      blob,
+      options && options.onUploadProgress
+    );
+
+    if (status < 200 || status > 299) {
+      throw new Error("Unexpected upload status: " + status);
+    }
+
+    return asset_name;
+  }
+}
+
+/**
+ * @public
+ */
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
   auth: WebAuthContainer<T>;
+  asset: WebAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = ({
@@ -226,5 +352,6 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
 
     super(o);
     this.auth = new WebAuthContainer(this);
+    this.asset = new WebAssetContainer(this);
   }
 }
