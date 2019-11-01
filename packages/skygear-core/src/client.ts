@@ -397,6 +397,14 @@ export abstract class BaseAPIClient {
     await this.post("/_auth/verify_request", { json: payload });
   }
 
+  async requestPhoneVerification(phone: string): Promise<void> {
+    const payload = {
+      login_id_type: "phone",
+      login_id: phone,
+    };
+    await this.post("/_auth/verify_request", { json: payload });
+  }
+
   async verifyWithCode(code: string): Promise<void> {
     const payload = { code };
     await this.post("/_auth/verify_code", { json: payload });
