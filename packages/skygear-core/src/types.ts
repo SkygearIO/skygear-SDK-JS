@@ -1,21 +1,12 @@
 /**
  * @public
  */
-export type JSONValue = JSONObject | JSONArray | string | boolean | number;
+export type JSONValue = unknown;
 
 /**
  * @public
  */
-export interface JSONArray extends Array<JSONValue> {}
-
-/**
- * @public
- */
-export interface JSONObject {
-  // undefined is not valid json value but it is included
-  // so that undefined value is skipped.
-  [key: string]: JSONValue | undefined;
-}
+export type JSONObject = object;
 
 /**
  * @public

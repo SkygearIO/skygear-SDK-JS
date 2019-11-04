@@ -1,6 +1,7 @@
 import {
   ContainerStorage,
   JSONObject,
+  JSONValue,
   User,
   Identity,
   AuthResponse,
@@ -83,7 +84,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     const options = this.extraSessionInfoOptions;
 
     let hasInfo = false;
-    const info: JSONObject = {};
+    const info: Record<string, JSONValue> = {};
 
     if (options.deviceName) {
       info["device_name"] = options.deviceName;

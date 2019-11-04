@@ -644,7 +644,7 @@ export abstract class BaseAPIClient {
     req: _PresignUploadRequest
   ): Promise<_PresignUploadResponse> {
     return this.post("/_asset/presign_upload", {
-      json: req as any,
+      json: req,
     });
   }
 

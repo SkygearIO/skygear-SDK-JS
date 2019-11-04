@@ -167,7 +167,7 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
   ) {
     await this.storage.safeSetJSON(
       keyAuthenticationSession(namespace),
-      authenticationSession as any
+      authenticationSession
     );
   }
 
@@ -226,7 +226,7 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
       keyAuthenticationSession(namespace)
     );
     if (j !== undefined) {
-      return j as any;
+      return j as AuthenticationSession;
     }
     return null;
   }

@@ -226,7 +226,7 @@ export function encodeIdentity(i: Identity): JSONObject {
         login_id_key: i.loginIDKey,
         login_id: i.loginID,
         realm: i.realm,
-        claims: i.claims as any,
+        claims: i.claims,
       };
     case "oauth":
       return {
@@ -235,7 +235,7 @@ export function encodeIdentity(i: Identity): JSONObject {
         provider_type: i.providerType,
         provider_user_id: i.providerUserID,
         raw_profile: i.rawProfile,
-        claims: i.claims as any,
+        claims: i.claims,
       };
     case "custom_token":
       return {
@@ -243,7 +243,7 @@ export function encodeIdentity(i: Identity): JSONObject {
         type: "custom_token",
         provider_user_id: i.providerUserID,
         raw_profile: i.rawProfile,
-        claims: i.claims as any,
+        claims: i.claims,
       };
     default:
       throw new Error("unknown identity type: ");
