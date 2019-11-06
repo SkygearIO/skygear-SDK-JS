@@ -1,3 +1,5 @@
+## 2.0.0-alpha.13 (2019-10-10)
+
 ### Features
 
 - Add script bundle to published package
