@@ -100,7 +100,7 @@ export abstract class BaseAPIClient {
       throw new Error("missing requestClass in api client");
     }
 
-    const { autoRefreshToken = !!this.refreshTokenFunction } = options || {};
+    const { autoRefreshToken = !!this.refreshTokenFunction } = options;
 
     if (typeof input !== "string") {
       throw new Error("only string path is allowed for fetch input");

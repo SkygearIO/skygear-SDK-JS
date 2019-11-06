@@ -124,9 +124,11 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       return decodeMessage(message);
     } finally {
       newWindow.close();
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (this.oauthWindowObserver) {
         this.oauthWindowObserver.unsubscribe();
       }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (this.oauthResultObserver) {
         this.oauthResultObserver.unsubscribe();
       }

@@ -75,8 +75,7 @@ module.exports = {
     "use-isnan": "error",
     "valid-typeof": "error",
     // not from recommended
-    // TODO: enable this
-    // "no-import-assign": "error",
+    "no-import-assign": "error",
     "no-template-curly-in-string": "error",
     complexity: "error",
     "default-case": "error",
@@ -133,8 +132,7 @@ module.exports = {
     // typescript
     // picked from recommended
     "@typescript-eslint/adjacent-overload-signatures": "error",
-    // TODO: enable this
-    // "@typescript-eslint/consistent-type-assertions": "error",
+    "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/no-array-constructor": "error",
     "@typescript-eslint/no-inferrable-types": [
       "error",
@@ -178,10 +176,12 @@ module.exports = {
     // not from recommended
     "@typescript-eslint/no-extraneous-class": "error",
     "@typescript-eslint/no-parameter-properties": "error",
-    // TODO: enable this
-    // "@typescript-eslint/no-unnecessary-condition": ["error", {
-    //   ignoreRhs: true,
-    // }],
+    "@typescript-eslint/no-unnecessary-condition": [
+      "error",
+      {
+        ignoreRhs: true,
+      },
+    ],
     "@typescript-eslint/no-unnecessary-qualifier": "error",
     "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/unified-signatures": "error",
