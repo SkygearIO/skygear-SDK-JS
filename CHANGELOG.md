@@ -1,3 +1,26 @@
+## 2.0.0-alpha.14 (2019-11-06)
+
+### Bug Fixes
+
+- Add back missing title in CHANGELOG
+
+### Features
+
+- Document how to consume script tag from unpkg.com
+- Update api-documenter
+- Update typescript
+- Update eslint
+- Update build time dependencies
+- Add validation error typings
+- Implement asset gear SDK API
+- Add requestPhoneVerification
+- Allow ignoring error in logout
+
+### Breaking Changes
+
+- Update error shape
+- Use otpauthURI and qrCodeImageURI from server response
+
 ## 2.0.0-alpha.13 (2019-10-10)
 
 ### Features

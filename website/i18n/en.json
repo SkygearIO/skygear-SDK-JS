@@ -80,6 +80,9 @@
       "node-client.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
       },
+      "node-client.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
       "node-client.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
       },
@@ -280,6 +283,9 @@
       },
       "node-client.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
+      },
+      "node-client.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
       },
       "node-client.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
@@ -482,8 +488,8 @@
       "node-client.createnewtotpresult.otpauthuri": {
         "title": "CreateNewTOTPResult.otpauthURI property"
       },
-      "node-client.createnewtotpresult.qrcodeimageurl": {
-        "title": "CreateNewTOTPResult.qrCodeImageURL property"
+      "node-client.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
       },
       "node-client.createnewtotpresult.secret": {
         "title": "CreateNewTOTPResult.secret property"
@@ -529,12 +535,6 @@
       },
       "node-client.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "node-client.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "node-client.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "node-client.encodeuser": {
         "title": "encodeUser() function"
@@ -650,14 +650,56 @@
       "node-client.identity": {
         "title": "Identity type"
       },
+      "node-client.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "node-client.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "node-client.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "node-client.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "node-client.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "node-client.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "node-client.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "node-client.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "node-client.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
       "node-client.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
-      "node-client.jsonarray": {
-        "title": "JSONArray interface"
-      },
       "node-client.jsonobject": {
-        "title": "JSONObject interface"
+        "title": "JSONObject type"
       },
       "node-client.jsonvalue": {
         "title": "JSONValue type"
@@ -710,9 +752,6 @@
       "node-client.mfacontainer.deleteauthenticator": {
         "title": "MFAContainer.deleteAuthenticator() method"
       },
-      "node-client.mfacontainer.generateotpauthuriqrcodeimageurl": {
-        "title": "MFAContainer.generateOTPAuthURIQRCodeImageURL() method"
-      },
       "node-client.mfacontainer.getauthenticators": {
         "title": "MFAContainer.getAuthenticators() method"
       },
@@ -746,8 +785,23 @@
       "node-client.nodeapiclient.useragent": {
         "title": "NodeAPIClient.userAgent property"
       },
+      "node-client.nodeassetcontainer._constructor_": {
+        "title": "NodeAssetContainer.(constructor)"
+      },
+      "node-client.nodeassetcontainer": {
+        "title": "NodeAssetContainer class"
+      },
+      "node-client.nodeassetcontainer.parent": {
+        "title": "NodeAssetContainer.parent property"
+      },
+      "node-client.nodeassetcontainer.upload": {
+        "title": "NodeAssetContainer.upload() method"
+      },
       "node-client.nodecontainer._constructor_": {
         "title": "NodeContainer.(constructor)"
+      },
+      "node-client.nodecontainer.asset": {
+        "title": "NodeContainer.asset property"
       },
       "node-client.nodecontainer": {
         "title": "NodeContainer class"
@@ -923,6 +977,9 @@
       "node-client.skygearerror": {
         "title": "SkygearError class"
       },
+      "node-client.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
       "node-client.skygearerrorname": {
         "title": "SkygearErrorName type"
       },
@@ -967,6 +1024,24 @@
       },
       "node-client.totpauthenticator.type": {
         "title": "TOTPAuthenticator.type property"
+      },
+      "node-client.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "node-client.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "node-client.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "node-client.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "node-client.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "node-client.uploadassetoptions.size": {
+        "title": "UploadAssetOptions.size property"
       },
       "node-client.user.createdat": {
         "title": "User.createdAt property"
@@ -1063,6 +1138,9 @@
       },
       "react-native.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "react-native.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
       },
       "react-native.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
@@ -1265,6 +1343,9 @@
       "react-native.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
       },
+      "react-native.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
+      },
       "react-native.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
@@ -1466,8 +1547,8 @@
       "react-native.createnewtotpresult.otpauthuri": {
         "title": "CreateNewTOTPResult.otpauthURI property"
       },
-      "react-native.createnewtotpresult.qrcodeimageurl": {
-        "title": "CreateNewTOTPResult.qrCodeImageURL property"
+      "react-native.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
       },
       "react-native.createnewtotpresult.secret": {
         "title": "CreateNewTOTPResult.secret property"
@@ -1513,12 +1594,6 @@
       },
       "react-native.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "react-native.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "react-native.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "react-native.encodeuser": {
         "title": "encodeUser() function"
@@ -1631,14 +1706,56 @@
       "react-native.identity": {
         "title": "Identity type"
       },
+      "react-native.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "react-native.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "react-native.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "react-native.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "react-native.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "react-native.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "react-native.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "react-native.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "react-native.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
       "react-native.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
-      "react-native.jsonarray": {
-        "title": "JSONArray interface"
-      },
       "react-native.jsonobject": {
-        "title": "JSONObject interface"
+        "title": "JSONObject type"
       },
       "react-native.jsonvalue": {
         "title": "JSONValue type"
@@ -1672,9 +1789,6 @@
       },
       "react-native.mfacontainer.deleteauthenticator": {
         "title": "MFAContainer.deleteAuthenticator() method"
-      },
-      "react-native.mfacontainer.generateotpauthuriqrcodeimageurl": {
-        "title": "MFAContainer.generateOTPAuthURIQRCodeImageURL() method"
       },
       "react-native.mfacontainer.getauthenticators": {
         "title": "MFAContainer.getAuthenticators() method"
@@ -1814,6 +1928,18 @@
       "react-native.reactnativeapiclient.requestclass": {
         "title": "ReactNativeAPIClient.requestClass property"
       },
+      "react-native.reactnativeassetcontainer._constructor_": {
+        "title": "ReactNativeAssetContainer.(constructor)"
+      },
+      "react-native.reactnativeassetcontainer": {
+        "title": "ReactNativeAssetContainer class"
+      },
+      "react-native.reactnativeassetcontainer.parent": {
+        "title": "ReactNativeAssetContainer.parent property"
+      },
+      "react-native.reactnativeassetcontainer.upload": {
+        "title": "ReactNativeAssetContainer.upload() method"
+      },
       "react-native.reactnativeasyncstoragestoragedriver.del": {
         "title": "ReactNativeAsyncStorageStorageDriver.del() method"
       },
@@ -1828,6 +1954,9 @@
       },
       "react-native.reactnativecontainer._constructor_": {
         "title": "ReactNativeContainer.(constructor)"
+      },
+      "react-native.reactnativecontainer.asset": {
+        "title": "ReactNativeContainer.asset property"
       },
       "react-native.reactnativecontainer": {
         "title": "ReactNativeContainer class"
@@ -1895,6 +2024,9 @@
       "react-native.skygearerror": {
         "title": "SkygearError class"
       },
+      "react-native.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
       "react-native.skygearerrorname": {
         "title": "SkygearErrorName type"
       },
@@ -1939,6 +2071,24 @@
       },
       "react-native.totpauthenticator.type": {
         "title": "TOTPAuthenticator.type property"
+      },
+      "react-native.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "react-native.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "react-native.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "react-native.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "react-native.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "react-native.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
       },
       "react-native.user.createdat": {
         "title": "User.createdAt property"
@@ -2035,6 +2185,9 @@
       },
       "web.authcontainer.requestforgotpasswordemail": {
         "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "web.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
       },
       "web.authcontainer.resetpassword": {
         "title": "AuthContainer.resetPassword() method"
@@ -2237,6 +2390,9 @@
       "web.baseapiclient.requestforgotpasswordemail": {
         "title": "BaseAPIClient.requestForgotPasswordEmail() method"
       },
+      "web.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
+      },
       "web.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
@@ -2438,8 +2594,8 @@
       "web.createnewtotpresult.otpauthuri": {
         "title": "CreateNewTOTPResult.otpauthURI property"
       },
-      "web.createnewtotpresult.qrcodeimageurl": {
-        "title": "CreateNewTOTPResult.qrCodeImageURL property"
+      "web.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
       },
       "web.createnewtotpresult.secret": {
         "title": "CreateNewTOTPResult.secret property"
@@ -2485,12 +2641,6 @@
       },
       "web.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "web.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "web.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "web.encodeuser": {
         "title": "encodeUser() function"
@@ -2603,14 +2753,56 @@
       "web.identity": {
         "title": "Identity type"
       },
+      "web.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "web.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "web.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "web.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "web.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "web.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "web.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "web.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "web.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
       "web.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
-      "web.jsonarray": {
-        "title": "JSONArray interface"
-      },
       "web.jsonobject": {
-        "title": "JSONObject interface"
+        "title": "JSONObject type"
       },
       "web.jsonvalue": {
         "title": "JSONValue type"
@@ -2647,9 +2839,6 @@
       },
       "web.mfacontainer.deleteauthenticator": {
         "title": "MFAContainer.deleteAuthenticator() method"
-      },
-      "web.mfacontainer.generateotpauthuriqrcodeimageurl": {
-        "title": "MFAContainer.generateOTPAuthURIQRCodeImageURL() method"
       },
       "web.mfacontainer.getauthenticators": {
         "title": "MFAContainer.getAuthenticators() method"
@@ -2843,6 +3032,9 @@
       "web.skygearerror": {
         "title": "SkygearError class"
       },
+      "web.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
       "web.skygearerrorname": {
         "title": "SkygearErrorName type"
       },
@@ -2888,6 +3080,24 @@
       "web.totpauthenticator.type": {
         "title": "TOTPAuthenticator.type property"
       },
+      "web.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "web.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "web.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "web.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "web.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "web.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
       "web.user.createdat": {
         "title": "User.createdAt property"
       },
@@ -2921,6 +3131,18 @@
       "web.webapiclient.requestclass": {
         "title": "WebAPIClient.requestClass property"
       },
+      "web.webassetcontainer._constructor_": {
+        "title": "WebAssetContainer.(constructor)"
+      },
+      "web.webassetcontainer": {
+        "title": "WebAssetContainer class"
+      },
+      "web.webassetcontainer.parent": {
+        "title": "WebAssetContainer.parent property"
+      },
+      "web.webassetcontainer.upload": {
+        "title": "WebAssetContainer.upload() method"
+      },
       "web.webauthcontainer._constructor_": {
         "title": "WebAuthContainer.(constructor)"
       },
@@ -2947,6 +3169,9 @@
       },
       "web.webcontainer._constructor_": {
         "title": "WebContainer.(constructor)"
+      },
+      "web.webcontainer.asset": {
+        "title": "WebContainer.asset property"
       },
       "web.webcontainer.auth": {
         "title": "WebContainer.auth property"
@@ -6241,6 +6466,399 @@
       },
       "version-2.0.0-alpha.12/version-2.0.0-alpha.12-web.webauthcontainer.linkoauthproviderwithpopup": {
         "title": "WebAuthContainer.linkOAuthProviderWithPopup() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.baseapiclient.createnewtotp": {
+        "title": "BaseAPIClient.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.jsonobject": {
+        "title": "JSONObject type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodeassetcontainer._constructor_": {
+        "title": "NodeAssetContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodeassetcontainer": {
+        "title": "NodeAssetContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodeassetcontainer.parent": {
+        "title": "NodeAssetContainer.parent property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodeassetcontainer.upload": {
+        "title": "NodeAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodecontainer.asset": {
+        "title": "NodeContainer.asset property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.nodecontainer": {
+        "title": "NodeContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.skygearerrornames": {
+        "title": "SkygearErrorNames variable"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-node-client.uploadassetoptions.size": {
+        "title": "UploadAssetOptions.size property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.baseapiclient.createnewtotp": {
+        "title": "BaseAPIClient.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.jsonobject": {
+        "title": "JSONObject type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativeassetcontainer._constructor_": {
+        "title": "ReactNativeAssetContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativeassetcontainer": {
+        "title": "ReactNativeAssetContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativeassetcontainer.parent": {
+        "title": "ReactNativeAssetContainer.parent property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativeassetcontainer.upload": {
+        "title": "ReactNativeAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativecontainer.asset": {
+        "title": "ReactNativeContainer.asset property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.reactnativecontainer": {
+        "title": "ReactNativeContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.skygearerrornames": {
+        "title": "SkygearErrorNames variable"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-react-native.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.baseapiclient.createnewtotp": {
+        "title": "BaseAPIClient.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.baseapiclient.requestphoneverification": {
+        "title": "BaseAPIClient.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder._constructor_": {
+        "title": "ImageProcessingPipelineBuilder.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.color": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.color property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.longerside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.longerSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.scalingmode": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.scalingMode property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.shorterside": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.shorterSide property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.targetheight": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetHeight property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
+        "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.jsonobject": {
+        "title": "JSONObject type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.jsonvalue": {
+        "title": "JSONValue type"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web": {
+        "title": "web package"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.skygearerror._constructor_": {
+        "title": "SkygearError.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.skygearerrornames": {
+        "title": "SkygearErrorNames variable"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions.exactname": {
+        "title": "UploadAssetOptions.exactName property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webapiclient.fetchfunction": {
+        "title": "WebAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webapiclient": {
+        "title": "WebAPIClient class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webassetcontainer._constructor_": {
+        "title": "WebAssetContainer.(constructor)"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webassetcontainer": {
+        "title": "WebAssetContainer class"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webassetcontainer.parent": {
+        "title": "WebAssetContainer.parent property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webassetcontainer.upload": {
+        "title": "WebAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webcontainer.asset": {
+        "title": "WebContainer.asset property"
+      },
+      "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webcontainer": {
+        "title": "WebContainer class"
       }
     },
     "links": {},
