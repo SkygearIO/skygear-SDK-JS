@@ -82,7 +82,7 @@ export function _extractAuthenticationSession(
     e.reason === "AuthenticationSession" &&
     e.info != null
   ) {
-    const { token, step } = e.info;
+    const { token, step } = e.info as any;
     return {
       token,
       step,
