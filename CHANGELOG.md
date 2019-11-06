@@ -1,3 +1,9 @@
+## 2.0.0-alpha.15 (2019-11-06)
+
+### Bug Fixes
+
+- Export encodeQuery and encodeQueryComponent
+
 ## 2.0.0-alpha.14 (2019-11-06)
 
 ### Bug Fixes

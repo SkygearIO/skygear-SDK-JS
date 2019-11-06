@@ -536,6 +536,12 @@
       "node-client.encodeidentity": {
         "title": "encodeIdentity() function"
       },
+      "node-client.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "node-client.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
+      },
       "node-client.encodeuser": {
         "title": "encodeUser() function"
       },
@@ -1595,6 +1601,12 @@
       "react-native.encodeidentity": {
         "title": "encodeIdentity() function"
       },
+      "react-native.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "react-native.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
+      },
       "react-native.encodeuser": {
         "title": "encodeUser() function"
       },
@@ -2641,6 +2653,12 @@
       },
       "web.encodeidentity": {
         "title": "encodeIdentity() function"
+      },
+      "web.encodequery": {
+        "title": "encodeQuery() function"
+      },
+      "web.encodequerycomponent": {
+        "title": "encodeQueryComponent() function"
       },
       "web.encodeuser": {
         "title": "encodeUser() function"
@@ -6859,6 +6877,15 @@
       },
       "version-2.0.0-alpha.14/version-2.0.0-alpha.14-web.webcontainer": {
         "title": "WebContainer class"
+      },
+      "version-2.0.0-alpha.15/version-2.0.0-alpha.15-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.15/version-2.0.0-alpha.15-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.15/version-2.0.0-alpha.15-web": {
+        "title": "web package"
       }
     },
     "links": {},
