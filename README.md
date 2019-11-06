@@ -35,7 +35,9 @@ $ npm install --save @skygear/react-native
 
 ### Script Tag
 
-TODO
+[https://unpkg.com/@skygear/web@latest/dist/skygear-web.iife.js](https://unpkg.com/@skygear/web@latest/dist/skygear-web.iife.js)
+
+Replace `latest` with the version you want to use.
 
 ## Running the example
 
