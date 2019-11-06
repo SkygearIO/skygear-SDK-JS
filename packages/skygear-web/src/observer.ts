@@ -1,7 +1,7 @@
 export const ErrNewWindowClosed = {};
 
 export class NewWindowObserver {
-  token: ReturnType<typeof window.setInterval> | null;
+  token: number | null;
 
   constructor() {
     this.token = null;
