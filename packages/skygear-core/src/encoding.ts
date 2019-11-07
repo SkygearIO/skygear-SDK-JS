@@ -75,7 +75,6 @@ export function decodeIdentity(i: any): Identity {
         type: "password",
         loginIDKey: i.login_id_key,
         loginID: i.login_id,
-        realm: i.realm,
         claims: i.claims,
       };
     case "oauth":
@@ -225,7 +224,6 @@ export function encodeIdentity(i: Identity): JSONObject {
         type: "password",
         login_id_key: i.loginIDKey,
         login_id: i.loginID,
-        realm: i.realm,
         claims: i.claims,
       };
     case "oauth":

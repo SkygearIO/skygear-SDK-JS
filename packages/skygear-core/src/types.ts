@@ -33,7 +33,6 @@ export interface PasswordIdentity {
   type: "password";
   loginIDKey: string;
   loginID: string;
-  realm: string;
   claims: {
     email?: string;
   };
@@ -166,7 +165,6 @@ export interface StorageDriver {
  * @public
  */
 export interface SSOLoginOptions {
-  mergeRealm?: string;
   onUserDuplicate?: "abort" | "merge" | "create";
 }
 

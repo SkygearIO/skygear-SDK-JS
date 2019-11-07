@@ -24,13 +24,6 @@
       <input id="password" type="password" class="form-control" placeholder="Password" oninput="onInput()">
     </div>
     <div class="form-group">
-      <label>Realm</label>
-      <input id="realm" type="text" class="form-control" placeholder="Realm" oninput="onInput()">
-      <small class="form-text text-muted">
-        Realm is optional
-      </small>
-    </div>
-    <div class="form-group">
       <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     <div class="form-group">
@@ -47,16 +40,10 @@
 function onInput() {
   var loginID = document.getElementById("loginID").value;
   var password = document.getElementById("password").value;
-  var realm = document.getElementById("realm").value;
   var synopsisTextArea = document.getElementById("synopsis");
 
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
-
   var funcExpr = "skygear.auth.login";
-  var s = stringifyFunctionCall(funcExpr, loginID, password, options);
+  var s = stringifyFunctionCall(funcExpr, loginID, password);
 
   synopsisTextArea.value = s;
 }
@@ -67,15 +54,9 @@ function onSubmit(e) {
 
   var loginID = document.getElementById("loginID").value;
   var password = document.getElementById("password").value;
-  var realm = document.getElementById("realm").value;
   var resultTextArea = document.getElementById("result");
 
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
-
-  skygear.auth.login(loginID, password, options).then(function(user) {
+  skygear.auth.login(loginID, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);

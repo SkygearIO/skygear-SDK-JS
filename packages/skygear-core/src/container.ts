@@ -245,7 +245,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     loginIDs: { [key: string]: string }[] | { [key: string]: string },
     password: string,
     options?: {
-      realm?: string;
       metadata?: JSONObject;
     }
   ): Promise<User> {
@@ -261,7 +260,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     email: string,
     password: string,
     options?: {
-      realm?: string;
       metadata?: JSONObject;
     }
   ): Promise<User> {
@@ -281,7 +279,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     username: string,
     password: string,
     options?: {
-      realm?: string;
       metadata?: JSONObject;
     }
   ): Promise<User> {
@@ -297,7 +294,7 @@ export class AuthContainer<T extends BaseAPIClient> {
   async login(
     loginID: string,
     password: string,
-    options?: { loginIDKey?: string; realm?: string }
+    options?: { loginIDKey?: string }
   ): Promise<User> {
     return this.handleAuthResponse(
       this.parent.apiClient.login(loginID, password, options)
