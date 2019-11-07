@@ -35,18 +35,43 @@ function decodeMessage(message: any) {
   }
 }
 
-function uploadBlob(
-  method: string,
+function uploadForm(
   url: string,
-  headers: { name: string; value: string }[],
+  req: _PresignUploadRequest,
   blob: Blob,
   onUploadProgress?: (e: ProgressEvent) => void
-): Promise<number> {
+): Promise<string> {
+  const form = new FormData();
+  if (req.prefix != null) {
+    form.append("prefix", req.prefix);
+  }
+  if (req.access != null) {
+    form.append("access", req.access);
+  }
+  if (req.headers != null) {
+    for (const name of Object.keys(req.headers)) {
+      const value = req.headers[name];
+      form.append(name, value);
+    }
+  }
+  form.append("file", blob, "filename");
+
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
-      const status = xhr.status;
-      resolve(status);
+      const jsonStr = xhr.responseText;
+      try {
+        const jsonBody = JSON.parse(jsonStr);
+        if (jsonBody["result"]) {
+          resolve(jsonBody["result"]["asset_name"]);
+        } else if (jsonBody["error"]) {
+          reject(decodeError(jsonBody["error"]));
+        } else {
+          reject(decodeError());
+        }
+      } catch (e) {
+        reject(e);
+      }
     };
     xhr.onerror = function() {
       reject(new TypeError("Network request failed"));
@@ -54,15 +79,7 @@ function uploadBlob(
     xhr.ontimeout = function() {
       reject(new TypeError("Network request failed"));
     };
-    xhr.open(method, url, true);
-    for (const header of headers) {
-      // content-length is considered unsafe by the browser.
-      // We cannot set it.
-      if (header.name.toLowerCase() === "content-length") {
-        continue;
-      }
-      xhr.setRequestHeader(header.name, header.value);
-    }
+    xhr.open("POST", url, true);
     if (xhr.upload != null) {
       xhr.upload.onprogress = function(e: ProgressEvent) {
         if (onUploadProgress != null) {
@@ -70,7 +87,7 @@ function uploadBlob(
         }
       };
     }
-    xhr.send(blob);
+    xhr.send(form);
   });
 }
 
@@ -290,14 +307,10 @@ export class WebAssetContainer<T extends WebAPIClient> {
 
     // Prepare presignRequest.headers
     const presignRequestHeaders = presignRequest.headers || {};
-    let hasContentLength = false;
     let hasContentType = false;
     for (const key of Object.keys(presignRequestHeaders)) {
       const headerName = key.toLowerCase();
       switch (headerName) {
-        case "content-length":
-          hasContentLength = true;
-          break;
         case "content-type":
           hasContentType = true;
           break;
@@ -305,32 +318,19 @@ export class WebAssetContainer<T extends WebAPIClient> {
           break;
       }
     }
-    if (!hasContentLength) {
-      presignRequestHeaders["content-length"] = String(blob.size);
-    }
     if (!hasContentType && blob.type !== "") {
       presignRequestHeaders["content-type"] = String(blob.type);
     }
     presignRequest.headers = presignRequestHeaders;
 
-    const {
-      asset_name,
-      url,
-      method,
-      headers,
-    } = await this.parent.apiClient._presignUpload(presignRequest);
+    const { url } = await this.parent.apiClient._presignUploadForm();
 
-    const status = await uploadBlob(
-      method,
+    const asset_name = await uploadForm(
       url,
-      headers,
+      presignRequest,
       blob,
       options && options.onUploadProgress
     );
-
-    if (status < 200 || status > 299) {
-      throw new Error("Unexpected upload status: " + status);
-    }
 
     return asset_name;
   }
