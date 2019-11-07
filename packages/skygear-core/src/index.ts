@@ -6,6 +6,7 @@ export * from "./encoding";
 export * from "./storage";
 export * from "./url";
 export * from "./imageprocessing";
+export * from "./validation";
 /**
  * @public
  */

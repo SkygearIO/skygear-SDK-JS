@@ -31,51 +31,84 @@ export const ValidationErrorKinds = {
  */
 export type ValidationErrorKind = (typeof ValidationErrorKinds)[keyof (typeof ValidationErrorKinds)];
 
-interface ValidationErrorCauseBase<Kind, Details> {
+/**
+ * @public
+ */
+export interface ValidationErrorCauseBase<Kind, Details> {
   kind: Kind;
   pointer: string;
   message: string;
   details: Details;
 }
 
-interface ValidationErrorExpectationDetails {
+/**
+ * @public
+ */
+export interface ValidationErrorExpectationDetails {
   expected: unknown;
 }
-interface ValidationErrorRangeDetails {
+/**
+ * @public
+ */
+export interface ValidationErrorRangeDetails {
   lt?: number;
   lte?: number;
   gt?: number;
   gte?: number;
 }
-interface ValidationErrorFormatDetails {
+/**
+ * @public
+ */
+export interface ValidationErrorFormatDetails {
   pattern?: string;
   format?: string;
 }
-type ValidationInvalidTypeCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidTypeCause = ValidationErrorCauseBase<
   "Type",
   ValidationErrorExpectationDetails
 >;
-type ValidationInvalidConstantCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidConstantCause = ValidationErrorCauseBase<
   "Constant",
   ValidationErrorExpectationDetails
 >;
-type ValidationInvalidEnumCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidEnumCause = ValidationErrorCauseBase<
   "Enum",
   ValidationErrorExpectationDetails
 >;
-type ValidationInvalidStringFormatCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidStringFormatCause = ValidationErrorCauseBase<
   "StringFormat",
   ValidationErrorFormatDetails
 >;
-type ValidationInvalidEntryAmountCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidEntryAmountCause = ValidationErrorCauseBase<
   "EntryAmount",
   ValidationErrorRangeDetails
 >;
-type ValidationInvalidStringLengthCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidStringLengthCause = ValidationErrorCauseBase<
   "StringLength",
   ValidationErrorRangeDetails
 >;
-type ValidationInvalidNumberRangeCause = ValidationErrorCauseBase<
+/**
+ * @public
+ */
+export type ValidationInvalidNumberRangeCause = ValidationErrorCauseBase<
   "NumberRange",
   ValidationErrorRangeDetails
 >;
@@ -83,7 +116,7 @@ type ValidationInvalidNumberRangeCause = ValidationErrorCauseBase<
 /**
  * @public
  */
-type ValidationErrorCause =
+export type ValidationErrorCause =
   | ValidationErrorCauseBase<ValidationErrorKind, never>
   | ValidationInvalidTypeCause
   | ValidationInvalidConstantCause
