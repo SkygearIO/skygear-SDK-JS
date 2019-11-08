@@ -6,7 +6,6 @@
     }[] | {
         [key: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">string</span>;
     }, password: <span class="hljs-built_in">string</span>, options?: {
-        realm?: <span class="hljs-built_in">string</span>;
         metadata?: JSONObject;
     }): <span class="hljs-built_in">Promise</span>&lt;User&gt;;
 </code></pre>
@@ -18,7 +17,7 @@
 <tbody>
 <tr><td>loginIDs</td><td><code>{</code><br/><code>        [key: string]: string;</code><br/><code>    }[] | {</code><br/><code>        [key: string]: string;</code><br/><code>    }</code></td><td></td></tr>
 <tr><td>password</td><td><code>string</code></td><td></td></tr>
-<tr><td>options</td><td><code>{</code><br/><code>        realm?: string;</code><br/><code>        metadata?: JSONObject;</code><br/><code>    }</code></td><td></td></tr>
+<tr><td>options</td><td><code>{</code><br/><code>        metadata?: JSONObject;</code><br/><code>    }</code></td><td></td></tr>
 </tbody>
 </table>
 <p><b>Returns:</b></p>
