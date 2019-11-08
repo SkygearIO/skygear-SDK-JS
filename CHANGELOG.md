@@ -1,3 +1,14 @@
+## 2.0.0-alpha.16 (2019-11-08)
+
+### Bug Fixes
+
+- Export validation errors types and functions
+
+### Features
+
+- Remove realm with API
+- Use FormData for uploading asset
+
 ## 2.0.0-alpha.15 (2019-11-06)
 
 ### Bug Fixes

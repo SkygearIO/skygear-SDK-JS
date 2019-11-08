@@ -704,6 +704,9 @@
       "node-client.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
+      "node-client.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
       "node-client.jsonobject": {
         "title": "JSONObject type"
       },
@@ -914,9 +917,6 @@
       "node-client.passwordidentity": {
         "title": "PasswordIdentity interface"
       },
-      "node-client.passwordidentity.realm": {
-        "title": "PasswordIdentity.realm property"
-      },
       "node-client.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
@@ -995,9 +995,6 @@
       "node-client.ssologinoptions": {
         "title": "SSOLoginOptions interface"
       },
-      "node-client.ssologinoptions.mergerealm": {
-        "title": "SSOLoginOptions.mergeRealm property"
-      },
       "node-client.ssologinoptions.onuserduplicate": {
         "title": "SSOLoginOptions.onUserDuplicate property"
       },
@@ -1069,6 +1066,90 @@
       },
       "node-client.user.metadata": {
         "title": "User.metadata property"
+      },
+      "node-client.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "node-client.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "node-client.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "node-client.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "node-client.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "node-client.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "node-client.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "node-client.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "node-client.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "node-client.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "node-client.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "node-client.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "node-client.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "node-client.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "node-client.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "node-client.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "node-client.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "node-client.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "node-client.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "node-client.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "node-client.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "node-client.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "node-client.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "node-client.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "node-client.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "node-client.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "node-client.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "node-client.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
       },
       "node-client.version": {
         "title": "VERSION variable"
@@ -1766,6 +1847,9 @@
       "react-native.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
+      "react-native.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
       "react-native.jsonobject": {
         "title": "JSONObject type"
       },
@@ -1925,9 +2009,6 @@
       "react-native.passwordidentity": {
         "title": "PasswordIdentity interface"
       },
-      "react-native.passwordidentity.realm": {
-        "title": "PasswordIdentity.realm property"
-      },
       "react-native.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
@@ -2048,9 +2129,6 @@
       "react-native.ssologinoptions": {
         "title": "SSOLoginOptions interface"
       },
-      "react-native.ssologinoptions.mergerealm": {
-        "title": "SSOLoginOptions.mergeRealm property"
-      },
       "react-native.ssologinoptions.onuserduplicate": {
         "title": "SSOLoginOptions.onUserDuplicate property"
       },
@@ -2122,6 +2200,90 @@
       },
       "react-native.user.metadata": {
         "title": "User.metadata property"
+      },
+      "react-native.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "react-native.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "react-native.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "react-native.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "react-native.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "react-native.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "react-native.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "react-native.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "react-native.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "react-native.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "react-native.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "react-native.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "react-native.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "react-native.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "react-native.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "react-native.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "react-native.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "react-native.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "react-native.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "react-native.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "react-native.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "react-native.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "react-native.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "react-native.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "react-native.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "react-native.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "react-native.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "react-native.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
       },
       "react-native.version": {
         "title": "VERSION variable"
@@ -2819,6 +2981,9 @@
       "web.ismfarequirederror": {
         "title": "isMFARequiredError() function"
       },
+      "web.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
       "web.jsonobject": {
         "title": "JSONObject type"
       },
@@ -2981,9 +3146,6 @@
       "web.passwordidentity": {
         "title": "PasswordIdentity interface"
       },
-      "web.passwordidentity.realm": {
-        "title": "PasswordIdentity.realm property"
-      },
       "web.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
       },
@@ -3062,9 +3224,6 @@
       "web.ssologinoptions": {
         "title": "SSOLoginOptions interface"
       },
-      "web.ssologinoptions.mergerealm": {
-        "title": "SSOLoginOptions.mergeRealm property"
-      },
       "web.ssologinoptions.onuserduplicate": {
         "title": "SSOLoginOptions.onUserDuplicate property"
       },
@@ -3136,6 +3295,90 @@
       },
       "web.user.metadata": {
         "title": "User.metadata property"
+      },
+      "web.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "web.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "web.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "web.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "web.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "web.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "web.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "web.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "web.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "web.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "web.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "web.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "web.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "web.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "web.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "web.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "web.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "web.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "web.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "web.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "web.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "web.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "web.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "web.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "web.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "web.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "web.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "web.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
       },
       "web.version": {
         "title": "VERSION variable"
@@ -6886,6 +7129,348 @@
       },
       "version-2.0.0-alpha.15/version-2.0.0-alpha.15-web": {
         "title": "web package"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-node-client.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-react-native.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.baseapiclient.login": {
+        "title": "BaseAPIClient.login() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.baseapiclient.signup": {
+        "title": "BaseAPIClient.signup() method"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web": {
+        "title": "web package"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerror.info": {
+        "title": "ValidationError.info property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcause": {
+        "title": "ValidationErrorCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorexpectationdetails.expected": {
+        "title": "ValidationErrorExpectationDetails.expected property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorexpectationdetails": {
+        "title": "ValidationErrorExpectationDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorformatdetails.format": {
+        "title": "ValidationErrorFormatDetails.format property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorformatdetails": {
+        "title": "ValidationErrorFormatDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorformatdetails.pattern": {
+        "title": "ValidationErrorFormatDetails.pattern property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorkind": {
+        "title": "ValidationErrorKind type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorkinds": {
+        "title": "ValidationErrorKinds variable"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorrangedetails.gt": {
+        "title": "ValidationErrorRangeDetails.gt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorrangedetails.gte": {
+        "title": "ValidationErrorRangeDetails.gte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorrangedetails.lt": {
+        "title": "ValidationErrorRangeDetails.lt property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorrangedetails.lte": {
+        "title": "ValidationErrorRangeDetails.lte property"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationerrorrangedetails": {
+        "title": "ValidationErrorRangeDetails interface"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidconstantcause": {
+        "title": "ValidationInvalidConstantCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidentryamountcause": {
+        "title": "ValidationInvalidEntryAmountCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidenumcause": {
+        "title": "ValidationInvalidEnumCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidnumberrangecause": {
+        "title": "ValidationInvalidNumberRangeCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidstringformatcause": {
+        "title": "ValidationInvalidStringFormatCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidstringlengthcause": {
+        "title": "ValidationInvalidStringLengthCause type"
+      },
+      "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidtypecause": {
+        "title": "ValidationInvalidTypeCause type"
       }
     },
     "links": {},
