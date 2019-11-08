@@ -59,7 +59,6 @@ describe("ContainerStorage", () => {
       type: "password",
       loginIDKey: "email",
       loginID: "test@skygeario.com",
-      realm: "default",
       claims: {
         email: "test@skygeario.com",
       },

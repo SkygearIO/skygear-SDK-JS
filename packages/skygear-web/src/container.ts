@@ -112,7 +112,6 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
         {
           action,
           uxMode: "web_popup",
-          mergeRealm: options && options.mergeRealm,
           onUserDuplicate: options && options.onUserDuplicate,
         }
       );
@@ -172,7 +171,6 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
       callbackURL,
       action: "login",
       uxMode: "web_redirect",
-      mergeRealm: options && options.mergeRealm,
       onUserDuplicate: options && options.onUserDuplicate,
     });
     await this.parent.storage.setOAuthRedirectAction(this.parent.name, "login");

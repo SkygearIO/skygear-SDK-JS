@@ -258,7 +258,6 @@ export abstract class BaseAPIClient {
     loginIDs: { [key: string]: string }[] | { [key: string]: string },
     password: string,
     options?: {
-      realm?: string;
       metadata?: JSONObject;
     }
   ): Promise<AuthResponse> {
@@ -279,7 +278,6 @@ export abstract class BaseAPIClient {
     const payload = {
       password,
       login_ids: ids,
-      realm: options && options.realm,
       metadata: options && options.metadata,
     };
     return this.postAndReturnAuthResponse("/_auth/signup", { json: payload });
@@ -288,13 +286,12 @@ export abstract class BaseAPIClient {
   async login(
     loginID: string,
     password: string,
-    options?: { loginIDKey?: string; realm?: string }
+    options?: { loginIDKey?: string }
   ): Promise<AuthResponse> {
     const payload = {
       password,
       login_id: loginID,
       login_id_key: options && options.loginIDKey,
-      realm: options && options.realm,
     };
     return this.postAndReturnAuthResponse("/_auth/login", { json: payload });
   }
@@ -385,7 +382,6 @@ export abstract class BaseAPIClient {
   ): Promise<AuthResponse> {
     const payload = {
       token,
-      merge_realm: options && options.mergeRealm,
       on_user_duplicate: options && options.onUserDuplicate,
     };
     return this.postAndReturnAuthResponse("/_auth/sso/custom_token/login", {
@@ -422,7 +418,6 @@ export abstract class BaseAPIClient {
     const payload = {
       callback_url: callbackURL,
       ux_mode: options.uxMode,
-      merge_realm: options.mergeRealm,
       on_user_duplicate: options.onUserDuplicate,
     };
     return this.post(path, { json: payload });
@@ -441,7 +436,6 @@ export abstract class BaseAPIClient {
     const encoded = encodeURIComponent(providerID);
     const payload = {
       access_token: accessToken,
-      merge_realm: options && options.mergeRealm,
       on_user_duplicate: options && options.onUserDuplicate,
     };
     return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/login`, {

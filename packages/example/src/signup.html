@@ -27,13 +27,6 @@
       <input id="emailPassword" type="password" class="form-control" placeholder="Password" oninput="onInputEmail()">
     </div>
     <div class="form-group">
-      <label>Realm</label>
-      <input id="emailRealm" type="text" class="form-control" placeholder="Realm" oninput="onInputEmail()">
-      <small class="form-text text-muted">
-        Realm is optional
-      </small>
-    </div>
-    <div class="form-group">
       <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     <div class="form-group">
@@ -63,13 +56,6 @@
       <input id="loginIDPassword" type="password" class="form-control" placeholder="Password" oninput="onInputLoginID()">
     </div>
     <div class="form-group">
-      <label>Realm</label>
-      <input id="loginIDRealm" type="text" class="form-control" placeholder="Realm" oninput="onInputLoginID()">
-      <small class="form-text text-muted">
-        Realm is optional
-      </small>
-    </div>
-    <div class="form-group">
       <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     <div class="form-group">
@@ -87,16 +73,10 @@
 function onInputEmail() {
   var email = document.getElementById("email").value;
   var password = document.getElementById("emailPassword").value;
-  var realm = document.getElementById("emailRealm").value;
   var synopsisTextArea = document.getElementById("emailSynopsis");
 
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
-
   var funcExpr = "skygear.auth.signupWithEmail";
-  var s = stringifyFunctionCall(funcExpr, email, password, options);
+  var s = stringifyFunctionCall(funcExpr, email, password);
 
   synopsisTextArea.value = s;
 }
@@ -107,15 +87,9 @@ function onSubmitEmail(e) {
 
   var email = document.getElementById("email").value;
   var password = document.getElementById("emailPassword").value;
-  var realm = document.getElementById("emailRealm").value;
   var resultTextArea = document.getElementById("emailResult");
 
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
-
-  skygear.auth.signupWithEmail(email, password, options).then(function(user) {
+  skygear.auth.signupWithEmail(email, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -126,18 +100,12 @@ function onInputLoginID() {
   var loginIDKey = document.getElementById("loginIDKey").value;
   var loginID = document.getElementById("loginID").value;
   var password = document.getElementById("loginIDPassword").value;
-  var realm = document.getElementById("loginIDRealm").value;
   var synopsisTextArea = document.getElementById("loginIDSynopsis");
-
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
 
   var funcExpr = "skygear.auth.signup";
   var s = stringifyFunctionCall(funcExpr, {
     [loginIDKey]: loginID,
-  }, password, options);
+  }, password);
 
   synopsisTextArea.value = s;
 }
@@ -149,17 +117,11 @@ function onSubmitLoginID(e) {
   var loginIDKey = document.getElementById("loginIDKey").value;
   var loginID = document.getElementById("loginID").value;
   var password = document.getElementById("loginIDPassword").value;
-  var realm = document.getElementById("loginIDRealm").value;
   var resultTextArea = document.getElementById("loginIDResult");
-
-  var options;
-  if (realm) {
-    options = { realm: realm };
-  }
 
   skygear.auth.signup({
     [loginIDKey]: loginID,
-  }, password, options).then(function(user) {
+  }, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
