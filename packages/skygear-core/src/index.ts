@@ -8,6 +8,8 @@ export * from "./url";
 export * from "./imageprocessing";
 export * from "./validation";
 export * from "./utf8";
+export * from "./base64";
+
 /**
  * @public
  */
