@@ -118,6 +118,7 @@ export interface ContainerStorage {
     namespace: string,
     oauthRedirectAction: string
   ): Promise<void>;
+  setOAuthCodeVerifier(namespace: string, code: string): Promise<void>;
   setExtraSessionInfoOptions(
     namespace: string,
     options: ExtraSessionInfoOptions
@@ -134,6 +135,7 @@ export interface ContainerStorage {
   getRefreshToken(namespace: string): Promise<string | null>;
   getSessionID(namespace: string): Promise<string | null>;
   getOAuthRedirectAction(namespace: string): Promise<string | null>;
+  getOAuthCodeVerifier(namespace: string): Promise<string | null>;
   getExtraSessionInfoOptions(
     namespace: string
   ): Promise<Partial<ExtraSessionInfoOptions> | null>;
@@ -148,6 +150,7 @@ export interface ContainerStorage {
   delRefreshToken(namespace: string): Promise<void>;
   delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
+  delOAuthCodeVerifier(namespace: string): Promise<void>;
   delAuthenticationSession(namespace: string): Promise<void>;
   delMFABearerToken(namespace: string): Promise<void>;
 }
@@ -167,6 +170,14 @@ export interface StorageDriver {
 export interface SSOLoginOptions {
   onUserDuplicate?: "abort" | "merge" | "create";
 }
+
+/**
+ * @internal
+ */
+export type _OAuthAuthorizationURLOptions = OAuthAuthorizationURLOptions & {
+  providerID: string;
+  codeChallenge: string;
+};
 
 /**
  * @public

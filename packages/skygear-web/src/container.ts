@@ -5,7 +5,6 @@ import {
   SSOLoginOptions,
   User,
   decodeError,
-  decodeAuthResponse,
   ContainerOptions,
   GlobalJSONContainerStorage,
   _PresignUploadRequest,
@@ -13,8 +12,9 @@ import {
 import { WebAPIClient } from "./client";
 import { localStorageStorageDriver } from "./storage";
 import { NewWindowObserver, WindowMessageObserver } from "./observer";
+import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 
-function decodeMessage(message: any) {
+function decodeMessage(message: any): string {
   if (!message) {
     throw new Error("unknown message");
   }
@@ -104,11 +104,28 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     this.oauthResultObserver = null;
   }
 
+  private async _getAuthResultFromAuthorizationCode(
+    authorizationCode: string
+  ): Promise<AuthResponse> {
+    const codeVerifier = await this.parent.storage.getOAuthCodeVerifier(
+      this.parent.name
+    );
+    if (codeVerifier == null) {
+      throw new Error("expected code verifier to exist");
+    }
+    const authRepsonse = await this.parent.apiClient.getOAuthResult({
+      authorizationCode,
+      codeVerifier,
+    });
+    await this.parent.storage.delOAuthCodeVerifier(this.parent.name);
+    return authRepsonse;
+  }
+
   private async _oauthProviderPopupFlow(
     providerID: string,
     action: "login" | "link",
     options?: SSOLoginOptions
-  ): Promise<any> {
+  ): Promise<string> {
     const newWindow = window.open("", "_blank", "height=700,width=500");
     if (!newWindow) {
       throw new Error("could not open new window");
@@ -124,14 +141,19 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     }
 
     try {
-      const url = await this.parent.apiClient.oauthAuthorizationURL(
-        providerID,
-        {
-          action,
-          uxMode: "web_popup",
-          onUserDuplicate: options && options.onUserDuplicate,
-        }
+      const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await computeCodeChallenge(codeVerifier);
+      await this.parent.storage.setOAuthCodeVerifier(
+        this.parent.name,
+        codeVerifier
       );
+      const url = await this.parent.apiClient.oauthAuthorizationURL({
+        providerID,
+        codeChallenge,
+        action,
+        uxMode: "web_popup",
+        onUserDuplicate: options && options.onUserDuplicate,
+      });
       newWindow.location.href = url;
       const message = await Promise.race([
         this.oauthWindowObserver.subscribe(newWindow),
@@ -156,25 +178,23 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     options?: SSOLoginOptions
   ): Promise<User> {
     const f = async () => {
-      const rawResponse = await this._oauthProviderPopupFlow(
+      const authorizationCode = await this._oauthProviderPopupFlow(
         providerID,
         "login",
         options
       );
-      const response: AuthResponse = decodeAuthResponse(rawResponse);
-      return response;
+      return this._getAuthResultFromAuthorizationCode(authorizationCode);
     };
     return this.handleAuthResponse(f());
   }
 
   async linkOAuthProviderWithPopup(providerID: string): Promise<User> {
     const f = async () => {
-      const rawResponse = await this._oauthProviderPopupFlow(
+      const authorizationCode = await this._oauthProviderPopupFlow(
         providerID,
         "link"
       );
-      const response: AuthResponse = decodeAuthResponse(rawResponse);
-      return response;
+      return this._getAuthResultFromAuthorizationCode(authorizationCode);
     };
     return this.handleAuthResponse(f());
   }
@@ -184,7 +204,15 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     callbackURL: string,
     options?: SSOLoginOptions
   ): Promise<void> {
-    const url = await this.parent.apiClient.oauthAuthorizationURL(providerID, {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    await this.parent.storage.setOAuthCodeVerifier(
+      this.parent.name,
+      codeVerifier
+    );
+    const url = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
       callbackURL,
       action: "login",
       uxMode: "web_redirect",
@@ -198,7 +226,15 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     providerID: string,
     callbackURL: string
   ): Promise<void> {
-    const url = await this.parent.apiClient.oauthAuthorizationURL(providerID, {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    await this.parent.storage.setOAuthCodeVerifier(
+      this.parent.name,
+      codeVerifier
+    );
+    const url = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
       callbackURL,
       action: "link",
       uxMode: "web_redirect",
@@ -207,60 +243,49 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     window.location.href = url;
   }
 
-  private async _getRedirectResult(action: "login" | "link"): Promise<any> {
-    if (this.oauthResultObserver == null) {
-      this.oauthResultObserver = new WindowMessageObserver(
-        this.parent.apiClient.endpoint
-      );
+  private async _getRedirectResult(
+    action: "login" | "link"
+  ): Promise<string | null> {
+    const lastAction = await this.parent.storage.getOAuthRedirectAction(
+      this.parent.name
+    );
+    if (lastAction !== action) {
+      return null;
     }
 
-    let iframe: HTMLIFrameElement | undefined;
-    try {
-      const lastAction = await this.parent.storage.getOAuthRedirectAction(
-        this.parent.name
-      );
-      if (lastAction !== action) {
-        return undefined;
-      }
+    await this.parent.storage.delOAuthRedirectAction(this.parent.name);
 
-      await this.parent.storage.delOAuthRedirectAction(this.parent.name);
-      const messagePromise = this.oauthResultObserver.subscribe();
-
-      iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = this.parent.apiClient.endpoint + "/_auth/sso/iframe_handler";
-      document.body.appendChild(iframe);
-
-      const message = await messagePromise;
-      return decodeMessage(message);
-    } finally {
-      if (iframe) {
-        this.oauthResultObserver.unsubscribe();
-        document.body.removeChild(iframe);
-      }
+    const searchParams = new URLSearchParams(window.location.search.slice(1));
+    const result = searchParams.get("x-skygear-result");
+    if (result == null) {
+      return null;
     }
+    const jsonStr = atob(result);
+    const j = JSON.parse(jsonStr);
+    if (j.result.error) {
+      throw decodeError(j.result.error);
+    }
+    return j.result.result;
   }
 
   async getLoginRedirectResult(): Promise<User | null> {
     const f = async () => {
-      const rawResponse = await this._getRedirectResult("login");
-      if (!rawResponse) {
+      const authorizationCode = await this._getRedirectResult("login");
+      if (!authorizationCode) {
         return null;
       }
-      const response: AuthResponse = decodeAuthResponse(rawResponse);
-      return response;
+      return this._getAuthResultFromAuthorizationCode(authorizationCode);
     };
     return this.handleMaybeAuthResponse(f());
   }
 
   async getLinkRedirectResult(): Promise<User | null> {
     const f = async () => {
-      const rawResponse = await this._getRedirectResult("link");
-      if (!rawResponse) {
+      const authorizationCode = await this._getRedirectResult("link");
+      if (!authorizationCode) {
         return null;
       }
-      const response: AuthResponse = decodeAuthResponse(rawResponse);
-      return response;
+      return this._getAuthResultFromAuthorizationCode(authorizationCode);
     };
     return this.handleMaybeAuthResponse(f());
   }

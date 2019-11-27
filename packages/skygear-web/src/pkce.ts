@@ -32,7 +32,9 @@ function sha256(s: string): Promise<Uint8Array> {
   });
 }
 
-export async function codeChallenge(codeVerifier: string): Promise<string> {
+export async function computeCodeChallenge(
+  codeVerifier: string
+): Promise<string> {
   const hash = await sha256(codeVerifier);
   const base64 = encodeBase64URLFromUint8Array(hash);
   return base64;
