@@ -172,9 +172,9 @@ export interface SSOLoginOptions {
 }
 
 /**
- * @internal
+ * @public
  */
-export type _OAuthAuthorizationURLOptions = OAuthAuthorizationURLOptions & {
+export type FullOAuthAuthorizationURLOptions = OAuthAuthorizationURLOptions & {
   providerID: string;
   codeChallenge: string;
 };

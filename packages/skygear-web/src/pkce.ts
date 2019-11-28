@@ -1,4 +1,4 @@
-import { encodeUTF8, encodeBase64URLFromUint8Array } from "@skygear/core";
+import { _encodeUTF8, _encodeBase64URLFromUint8Array } from "@skygear/core";
 
 function byteToHex(byte: number): string {
   return ("0" + byte.toString(16)).substr(-2);
@@ -13,7 +13,7 @@ function numberArrayToUint8Array(arr: number[]): Uint8Array {
 }
 
 function sha256(s: string): Promise<Uint8Array> {
-  const bytes = numberArrayToUint8Array(encodeUTF8(s));
+  const bytes = numberArrayToUint8Array(_encodeUTF8(s));
   const promiseOrEvent = window.crypto.subtle.digest("SHA-256", bytes.buffer);
   // eslint-disable-next-line
   if (promiseOrEvent.then) {
@@ -36,7 +36,7 @@ export async function computeCodeChallenge(
   codeVerifier: string
 ): Promise<string> {
   const hash = await sha256(codeVerifier);
-  const base64 = encodeBase64URLFromUint8Array(hash);
+  const base64 = _encodeBase64URLFromUint8Array(hash);
   return base64;
 }
 

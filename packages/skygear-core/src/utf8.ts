@@ -2,7 +2,7 @@
 /**
  * @internal
  */
-export function encodeUTF8(input: string): number[] {
+export function _encodeUTF8(input: string): number[] {
   const resArr: number[] = new Array(input.length * 2);
   let resPos = -1;
   for (let i = 0; i !== input.length; i++) {

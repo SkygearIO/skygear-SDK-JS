@@ -3,7 +3,7 @@ import {
   AuthResponse,
   SSOLoginOptions,
   Session,
-  _OAuthAuthorizationURLOptions,
+  FullOAuthAuthorizationURLOptions,
   Authenticator,
   ActivateTOTPResult,
   AuthenticateWithTOTPOptions,
@@ -25,7 +25,7 @@ import {
   decodeSession,
   decodeAuthenticator,
 } from "./encoding";
-import { encodeBase64FromString } from "./base64";
+import { _encodeBase64FromString } from "./base64";
 
 /**
  * @internal
@@ -79,7 +79,7 @@ export abstract class BaseAPIClient {
     if (this.getExtraSessionInfo) {
       const extraSessionInfo = await this.getExtraSessionInfo();
       if (extraSessionInfo) {
-        headers["x-skygear-extra-info"] = encodeBase64FromString(
+        headers["x-skygear-extra-info"] = _encodeBase64FromString(
           JSON.stringify(extraSessionInfo)
         );
       }
@@ -390,7 +390,7 @@ export abstract class BaseAPIClient {
   }
 
   async oauthAuthorizationURL(
-    options: _OAuthAuthorizationURLOptions
+    options: FullOAuthAuthorizationURLOptions
   ): Promise<string> {
     const {
       providerID,

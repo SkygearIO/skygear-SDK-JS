@@ -1,4 +1,4 @@
-import { encodeUTF8 } from "./utf8";
+import { _encodeUTF8 } from "./utf8";
 
 interface ByteArray {
   [index: number]: number;
@@ -81,14 +81,14 @@ function base64URLEncArr(aBytes: ByteArray) {
 /**
  * @internal
  */
-export function encodeBase64FromString(input: string): string {
-  const bytes = encodeUTF8(input);
+export function _encodeBase64FromString(input: string): string {
+  const bytes = _encodeUTF8(input);
   return base64EncArr(bytes);
 }
 
 /**
  * @internal
  */
-export function encodeBase64URLFromUint8Array(bytes: Uint8Array): string {
+export function _encodeBase64URLFromUint8Array(bytes: Uint8Array): string {
   return base64URLEncArr(bytes);
 }

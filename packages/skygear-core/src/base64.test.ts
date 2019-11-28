@@ -1,11 +1,11 @@
 import { TextEncoder } from "util";
 import {
-  encodeBase64FromString,
-  encodeBase64URLFromUint8Array,
+  _encodeBase64FromString,
+  _encodeBase64URLFromUint8Array,
 } from "./base64";
 
 describe("encodeBase64FromString", () => {
-  const f = encodeBase64FromString;
+  const f = _encodeBase64FromString;
 
   it("encode ASCII strings", () => {
     expect(f("test")).toEqual("dGVzdA==");
@@ -22,7 +22,7 @@ describe("encodeBase64FromString", () => {
 
 describe("encodeBase64URLFromUint8Array", () => {
   const encoder = new TextEncoder();
-  const f = encodeBase64URLFromUint8Array;
+  const f = _encodeBase64URLFromUint8Array;
 
   it("encode ASCII strings without padding", () => {
     expect(f(encoder.encode("test"))).toEqual("dGVzdA");
