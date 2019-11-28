@@ -4,7 +4,8 @@ function byteToHex(byte: number): string {
   return ("0" + byte.toString(16)).substr(-2);
 }
 
-function numberArrayToUint8Array(arr: number[]): Uint8Array {
+// uint8ArrayFrom is Uint8Array.from that works everywhere.
+function uint8ArrayFrom(arr: number[]): Uint8Array {
   const output = new Uint8Array(arr.length);
   for (let i = 0; i < arr.length; ++i) {
     output[i] = arr[i];
@@ -12,9 +13,12 @@ function numberArrayToUint8Array(arr: number[]): Uint8Array {
   return output;
 }
 
-function sha256(s: string): Promise<Uint8Array> {
-  const bytes = numberArrayToUint8Array(_encodeUTF8(s));
-  const promiseOrEvent = window.crypto.subtle.digest("SHA-256", bytes.buffer);
+// windowCryptoSubtleDigest is window.crypto.subtle.digest with IE 11 support.
+function windowCryptoSubtleDigest(
+  algorithm: string,
+  data: Uint8Array
+): Promise<Uint8Array> {
+  const promiseOrEvent = window.crypto.subtle.digest(algorithm, data.buffer);
   // eslint-disable-next-line
   if (promiseOrEvent.then) {
     // @ts-ignore
@@ -30,6 +34,11 @@ function sha256(s: string): Promise<Uint8Array> {
       reject(err);
     };
   });
+}
+
+function sha256(s: string): Promise<Uint8Array> {
+  const bytes = uint8ArrayFrom(_encodeUTF8(s));
+  return windowCryptoSubtleDigest("SHA-256", bytes);
 }
 
 export async function computeCodeChallenge(
