@@ -3,7 +3,7 @@ import {
   AuthResponse,
   SSOLoginOptions,
   Session,
-  OAuthAuthorizationURLOptions,
+  FullOAuthAuthorizationURLOptions,
   Authenticator,
   ActivateTOTPResult,
   AuthenticateWithTOTPOptions,
@@ -25,7 +25,7 @@ import {
   decodeSession,
   decodeAuthenticator,
 } from "./encoding";
-import { encodeBase64 } from "./base64";
+import { _encodeBase64FromString } from "./base64";
 
 /**
  * @internal
@@ -79,7 +79,7 @@ export abstract class BaseAPIClient {
     if (this.getExtraSessionInfo) {
       const extraSessionInfo = await this.getExtraSessionInfo();
       if (extraSessionInfo) {
-        headers["x-skygear-extra-info"] = encodeBase64(
+        headers["x-skygear-extra-info"] = _encodeBase64FromString(
           JSON.stringify(extraSessionInfo)
         );
       }
@@ -390,11 +390,16 @@ export abstract class BaseAPIClient {
   }
 
   async oauthAuthorizationURL(
-    providerID: string,
-    options: OAuthAuthorizationURLOptions
+    options: FullOAuthAuthorizationURLOptions
   ): Promise<string> {
+    const {
+      providerID,
+      uxMode,
+      onUserDuplicate,
+      codeChallenge,
+      action,
+    } = options;
     const encoded = encodeURIComponent(providerID);
-    const { action } = options;
     let path = "";
     switch (action) {
       case "login":
@@ -417,10 +422,25 @@ export abstract class BaseAPIClient {
 
     const payload = {
       callback_url: callbackURL,
-      ux_mode: options.uxMode,
-      on_user_duplicate: options.onUserDuplicate,
+      ux_mode: uxMode,
+      on_user_duplicate: onUserDuplicate,
+      code_challenge: codeChallenge,
     };
     return this.post(path, { json: payload });
+  }
+
+  async getOAuthResult(options: {
+    authorizationCode: string;
+    codeVerifier: string;
+  }): Promise<AuthResponse> {
+    const { authorizationCode, codeVerifier } = options;
+    const payload = {
+      authorization_code: authorizationCode,
+      code_verifier: codeVerifier,
+    };
+    return this.postAndReturnAuthResponse("/_auth/sso/auth_result", {
+      json: payload,
+    });
   }
 
   async deleteOAuthProvider(providerID: string): Promise<void> {

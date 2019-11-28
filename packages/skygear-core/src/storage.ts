@@ -45,6 +45,10 @@ function keyOAuthRedirectAction(name: string): string {
   return `${name}_oauthRedirectAction`;
 }
 
+function keyOAuthCodeVerifier(name: string): string {
+  return `${name}_oauthAuthorizationCode`;
+}
+
 function keyExtraSessionInfoOptions(name: string): string {
   return `${name}_extra_session_info_options`;
 }
@@ -151,6 +155,13 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     );
   }
 
+  async setOAuthCodeVerifier(namespace: string, authorizationCode: string) {
+    await this.storage.safeSet(
+      keyOAuthCodeVerifier(namespace),
+      authorizationCode
+    );
+  }
+
   async setExtraSessionInfoOptions(
     namespace: string,
     options: ExtraSessionInfoOptions
@@ -207,6 +218,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keyOAuthRedirectAction(namespace));
   }
 
+  async getOAuthCodeVerifier(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyOAuthCodeVerifier(namespace));
+  }
+
   async getExtraSessionInfoOptions(
     namespace: string
   ): Promise<Partial<ExtraSessionInfoOptions> | null> {
@@ -257,6 +272,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delOAuthRedirectAction(namespace: string) {
     await this.storage.safeDel(keyOAuthRedirectAction(namespace));
+  }
+
+  async delOAuthCodeVerifier(namespace: string) {
+    await this.storage.safeDel(keyOAuthCodeVerifier(namespace));
   }
 
   async delAuthenticationSession(namespace: string) {
