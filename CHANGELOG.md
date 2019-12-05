@@ -1,3 +1,9 @@
+## 2.0.0-alpha.17 (2019-12-05)
+
+### Breaking Changes
+
+- Update for new SSO flow
+
 ## 2.0.0-alpha.16 (2019-11-08)
 
 ### Bug Fixes

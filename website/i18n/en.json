@@ -221,6 +221,9 @@
       "node-client.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
+      "node-client.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
       "node-client.baseapiclient.getsession": {
         "title": "BaseAPIClient.getSession() method"
       },
@@ -362,6 +365,9 @@
       "node-client.containerstorage.delmfabearertoken": {
         "title": "ContainerStorage.delMFABearerToken() method"
       },
+      "node-client.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
       "node-client.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
@@ -388,6 +394,9 @@
       },
       "node-client.containerstorage.getmfabearertoken": {
         "title": "ContainerStorage.getMFABearerToken() method"
+      },
+      "node-client.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
       },
       "node-client.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
@@ -418,6 +427,9 @@
       },
       "node-client.containerstorage.setmfabearertoken": {
         "title": "ContainerStorage.setMFABearerToken() method"
+      },
+      "node-client.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
       },
       "node-client.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
@@ -551,6 +563,9 @@
       "node-client.extrasessioninfooptions": {
         "title": "ExtraSessionInfoOptions interface"
       },
+      "node-client.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
       "node-client.generateotpauthuri": {
         "title": "generateOTPAuthURI() function"
       },
@@ -584,6 +599,9 @@
       "node-client.globaljsoncontainerstorage.delmfabearertoken": {
         "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
       },
+      "node-client.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
       "node-client.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
@@ -610,6 +628,9 @@
       },
       "node-client.globaljsoncontainerstorage.getmfabearertoken": {
         "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
       },
       "node-client.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
@@ -640,6 +661,9 @@
       },
       "node-client.globaljsoncontainerstorage.setmfabearertoken": {
         "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
+      },
+      "node-client.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
       },
       "node-client.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
@@ -1367,6 +1391,9 @@
       "react-native.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
+      "react-native.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
       "react-native.baseapiclient.getsession": {
         "title": "BaseAPIClient.getSession() method"
       },
@@ -1508,6 +1535,9 @@
       "react-native.containerstorage.delmfabearertoken": {
         "title": "ContainerStorage.delMFABearerToken() method"
       },
+      "react-native.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
       "react-native.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
@@ -1534,6 +1564,9 @@
       },
       "react-native.containerstorage.getmfabearertoken": {
         "title": "ContainerStorage.getMFABearerToken() method"
+      },
+      "react-native.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
       },
       "react-native.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
@@ -1564,6 +1597,9 @@
       },
       "react-native.containerstorage.setmfabearertoken": {
         "title": "ContainerStorage.setMFABearerToken() method"
+      },
+      "react-native.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
       },
       "react-native.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
@@ -1697,6 +1733,9 @@
       "react-native.extrasessioninfooptions": {
         "title": "ExtraSessionInfoOptions interface"
       },
+      "react-native.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
       "react-native.generateotpauthuri": {
         "title": "generateOTPAuthURI() function"
       },
@@ -1727,6 +1766,9 @@
       "react-native.globaljsoncontainerstorage.delmfabearertoken": {
         "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
       },
+      "react-native.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
       "react-native.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
@@ -1753,6 +1795,9 @@
       },
       "react-native.globaljsoncontainerstorage.getmfabearertoken": {
         "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
       },
       "react-native.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
@@ -1783,6 +1828,9 @@
       },
       "react-native.globaljsoncontainerstorage.setmfabearertoken": {
         "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
+      },
+      "react-native.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
       },
       "react-native.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
@@ -2501,6 +2549,9 @@
       "web.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
+      "web.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
       "web.baseapiclient.getsession": {
         "title": "BaseAPIClient.getSession() method"
       },
@@ -2642,6 +2693,9 @@
       "web.containerstorage.delmfabearertoken": {
         "title": "ContainerStorage.delMFABearerToken() method"
       },
+      "web.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
       "web.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
@@ -2668,6 +2722,9 @@
       },
       "web.containerstorage.getmfabearertoken": {
         "title": "ContainerStorage.getMFABearerToken() method"
+      },
+      "web.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
       },
       "web.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
@@ -2698,6 +2755,9 @@
       },
       "web.containerstorage.setmfabearertoken": {
         "title": "ContainerStorage.setMFABearerToken() method"
+      },
+      "web.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
       },
       "web.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
@@ -2831,6 +2891,9 @@
       "web.extrasessioninfooptions": {
         "title": "ExtraSessionInfoOptions interface"
       },
+      "web.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
       "web.generateotpauthuri": {
         "title": "generateOTPAuthURI() function"
       },
@@ -2861,6 +2924,9 @@
       "web.globaljsoncontainerstorage.delmfabearertoken": {
         "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
       },
+      "web.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
       "web.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
@@ -2887,6 +2953,9 @@
       },
       "web.globaljsoncontainerstorage.getmfabearertoken": {
         "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
+      },
+      "web.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
       },
       "web.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
@@ -2917,6 +2986,9 @@
       },
       "web.globaljsoncontainerstorage.setmfabearertoken": {
         "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
+      },
+      "web.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
       },
       "web.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
@@ -7471,6 +7543,123 @@
       },
       "version-2.0.0-alpha.16/version-2.0.0-alpha.16-web.validationinvalidtypecause": {
         "title": "ValidationInvalidTypeCause type"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.baseapiclient.getoauthresult": {
+        "title": "BaseAPIClient.getOAuthResult() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.baseapiclient.oauthauthorizationurl": {
+        "title": "BaseAPIClient.oauthAuthorizationURL() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.containerstorage.deloauthcodeverifier": {
+        "title": "ContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.containerstorage.getoauthcodeverifier": {
+        "title": "ContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.containerstorage.setoauthcodeverifier": {
+        "title": "ContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.fulloauthauthorizationurloptions": {
+        "title": "FullOAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.globaljsoncontainerstorage.deloauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.globaljsoncontainerstorage.getoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web.globaljsoncontainerstorage.setoauthcodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
+      },
+      "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web": {
+        "title": "web package"
       }
     },
     "links": {},
