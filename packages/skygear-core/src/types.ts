@@ -12,11 +12,29 @@ export type JSONObject = object;
  * @public
  */
 export interface User {
+  /**
+   * User ID.
+   */
   id: string;
+  /**
+   * User creation time.
+   */
   createdAt: Date;
+  /**
+   * User last login time.
+   */
   lastLoginAt: Date;
+  /**
+   * Indicates whether the user is verified.
+   */
   isVerified: boolean;
+  /**
+   * Indicates whether the user is disabled.
+   */
   isDisabled: boolean;
+  /**
+   * User custom metadata.
+   */
   metadata: JSONObject;
 }
 
@@ -29,11 +47,30 @@ export type Identity = PasswordIdentity | OAuthIdentity | CustomTokenIdentity;
  * @public
  */
 export interface PasswordIdentity {
+  /**
+   * Identity ID.
+   */
   id: string;
+  /**
+   * Identity type.
+   */
   type: "password";
+  /**
+   * Login ID key.
+   */
   loginIDKey: string;
+  /**
+   * Login ID.
+   */
   loginID: string;
+  /**
+   * Identity claims.
+   */
   claims: {
+    /**
+     * The email of this identity. Present only if the login ID key is of email
+     * type.
+     */
     email?: string;
   };
 }
@@ -42,12 +79,34 @@ export interface PasswordIdentity {
  * @public
  */
 export interface OAuthIdentity {
+  /**
+   * Identity ID.
+   */
   id: string;
+  /**
+   * Identity type.
+   */
   type: "oauth";
+  /**
+   * OAuth SSO provider type.
+   */
   providerType: string;
+  /**
+   * OAuth SSO provider ID.
+   */
   providerUserID: string;
+  /**
+   * Raw user profile from the provider.
+   */
   rawProfile: JSONObject;
+  /**
+   * Identity claims.
+   */
   claims: {
+    /**
+     * Email of this identity. Present only if email exists in the provider
+     * user profile.
+     */
     email?: string;
   };
 }
@@ -56,11 +115,30 @@ export interface OAuthIdentity {
  * @public
  */
 export interface CustomTokenIdentity {
+  /**
+   * Identity ID.
+   */
   id: string;
+  /**
+   * Identity type.
+   */
   type: "custom_token";
+  /**
+   * User ID at the provider.
+   */
   providerUserID: string;
+  /**
+   * Raw user profile from the provider.
+   */
   rawProfile: JSONObject;
+  /**
+   * Identity claims.
+   */
   claims: {
+    /**
+     * Email of this identity. Present only if a "email" field exists in the
+     * provider user profile.
+     */
     email?: string;
   };
 }
@@ -69,14 +147,41 @@ export interface CustomTokenIdentity {
  * @public
  */
 export interface Session {
+  /**
+   * Session ID.
+   */
   id: string;
+  /**
+   * Identity ID.
+   */
   identityID: string;
+  /**
+   * Session creation time.
+   */
   createdAt: Date;
+  /**
+   * Session last active time.
+   */
   lastAccessedAt: Date;
+  /**
+   * IP of session creator.
+   */
   createdByIP: string;
+  /**
+   * IP of session last accessor.
+   */
   lastAccessedByIP: string;
+  /**
+   * User agent of the session.
+   */
   userAgent: SessionUserAgent;
+  /**
+   * Session name.
+   */
   name: string;
+  /**
+   * Custom data of session.
+   */
   data: JSONObject;
 }
 
@@ -84,12 +189,33 @@ export interface Session {
  * @public
  */
 export interface SessionUserAgent {
+  /**
+   * Raw user agent string.
+   */
   raw: string;
+  /**
+   * User agent name.
+   */
   name: string;
+  /**
+   * User agent version.
+   */
   version: string;
+  /**
+   * User agent operating system.
+   */
   os: string;
+  /**
+   * User agent operating system version.
+   */
   osVersion: string;
+  /**
+   * User agent device name.
+   */
   deviceName: string;
+  /**
+   * User agent device model.
+   */
   deviceModel: string;
 }
 
@@ -168,6 +294,12 @@ export interface StorageDriver {
  * @public
  */
 export interface SSOLoginOptions {
+  /**
+   * Configures behavior when a duplicated user is detected.
+   *
+   * @remarks
+   * This feature must be enabled in configuration, otherwise it will fail.
+   */
   onUserDuplicate?: "abort" | "merge" | "create";
 }
 
@@ -217,6 +349,9 @@ export interface ContainerOptions<T> {
  * @public
  */
 export interface ExtraSessionInfoOptions {
+  /**
+   * Device name.
+   */
   deviceName?: string;
 }
 
@@ -232,10 +367,25 @@ export type Authenticator =
  * @public
  */
 export interface TOTPAuthenticator {
+  /**
+   * Authenticator ID.
+   */
   id: string;
+  /**
+   * Authenticator type.
+   */
   type: "totp";
+  /**
+   * Authenticator creation time.
+   */
   createdAt: Date;
+  /**
+   * Authenticator activation time.
+   */
   activatedAt: Date;
+  /**
+   * Authenticator display name.
+   */
   displayName: string;
 }
 
@@ -243,11 +393,30 @@ export interface TOTPAuthenticator {
  * @public
  */
 export interface OOBSMSAuthenticator {
+  /**
+   * Authenticator ID.
+   */
   id: string;
+  /**
+   * Authenticator type.
+   */
   type: "oob";
+  /**
+   * Authenticator creation time.
+   */
   createdAt: Date;
+  /**
+   * Authenticator activation time.
+   */
   activatedAt: Date;
+  /**
+   * OOB channel.
+   */
   channel: "sms";
+  /**
+   * Masked SMS phone number, in E.164 format.
+   * @example "+8522345****"
+   */
   maskedPhone: string;
 }
 
@@ -255,11 +424,30 @@ export interface OOBSMSAuthenticator {
  * @public
  */
 export interface OOBEmailAuthenticator {
+  /**
+   * Authenticator ID.
+   */
   id: string;
+  /**
+   * Authenticator type.
+   */
   type: "oob";
+  /**
+   * Authenticator creation time.
+   */
   createdAt: Date;
+  /**
+   * Authenticator activation time.
+   */
   activatedAt: Date;
+  /**
+   * OOB channel.
+   */
   channel: "email";
+  /**
+   * Masked email address, in RFC 5322 format.
+   * @example "joh****\@example.com"
+   */
   maskedEmail: string;
 }
 
@@ -276,8 +464,23 @@ export interface GenerateOTPAuthURIOptions {
  * @public
  */
 export interface CreateNewTOTPOptions {
+  /**
+   * Authenticator display name.
+   */
   displayName: string;
+  /**
+   * Authenticator issuer.
+   *
+   * @remarks
+   * It is not persisted and only used for the result QR code.
+   */
   issuer: string;
+  /**
+   * Authenticator account name.
+   *
+   * @remarks
+   * It is not persisted and only used for the result QR code.
+   */
   accountName: string;
 }
 
@@ -285,10 +488,29 @@ export interface CreateNewTOTPOptions {
  * @public
  */
 export interface CreateNewTOTPResult {
+  /**
+   * Authenticator ID.
+   */
   authenticatorID: string;
+  /**
+   * Authenticator type.
+   */
   authenticatorType: "totp";
+  /**
+   * TOTP secret.
+   *
+   * @remarks
+   * This cannot be retrieved using APIs; users should provide it to TOTP
+   * authenticator.
+   */
   secret: string;
+  /**
+   * Generated OTPAuth URI.
+   */
   otpauthURI: string;
+  /**
+   * URI of QR code image for generated OTPAuth URI.
+   */
   qrCodeImageURI: string;
 }
 
@@ -296,6 +518,10 @@ export interface CreateNewTOTPResult {
  * @public
  */
 export interface ActivateTOTPResult {
+  /**
+   * List of recovery codes. Present only if it is the first activated
+   * authenticator.
+   */
   recoveryCodes?: string[];
 }
 
@@ -303,7 +529,14 @@ export interface ActivateTOTPResult {
  * @public
  */
 export interface AuthenticateWithTOTPOptions {
+  /**
+   * TOTP code.
+   */
   otp: string;
+  /**
+   * Mark the current device as trusted device. MFA would be skipped for
+   * this device for a period.
+   */
   skipMFAForCurrentDevice?: boolean;
 }
 
@@ -318,7 +551,13 @@ export type CreateNewOOBOptions =
  * @public
  */
 export interface CreateNewOOBSMSOptions {
+  /**
+   * OOB channel.
+   */
   channel: "sms";
+  /**
+   * SMS phone number in E.164 format.
+   */
   phone: string;
 }
 
@@ -326,7 +565,13 @@ export interface CreateNewOOBSMSOptions {
  * @public
  */
 export interface CreateNewOOBEmailOptions {
+  /**
+   * OOB channel.
+   */
   channel: "email";
+  /**
+   * Email address in RFC 5322 format.
+   */
   email: string;
 }
 
@@ -334,8 +579,17 @@ export interface CreateNewOOBEmailOptions {
  * @public
  */
 export interface CreateNewOOBResult {
+  /**
+   * Authenticator ID.
+   */
   authenticatorID: string;
+  /**
+   * Authenticator type.
+   */
   authenticatorType: "oob";
+  /**
+   * OOB channel.
+   */
   channel: "sms" | "email";
 }
 
@@ -343,6 +597,10 @@ export interface CreateNewOOBResult {
  * @public
  */
 export interface ActivateOOBResult {
+  /**
+   * List of recovery codes. Present only if it is the first activated
+   * authenticator.
+   */
   recoveryCodes?: string[];
 }
 
@@ -350,7 +608,14 @@ export interface ActivateOOBResult {
  * @public
  */
 export interface AuthenticateWithOOBOptions {
+  /**
+   * MFA code.
+   */
   code: string;
+  /**
+   * Mark the current device as trusted device. MFA would be skipped for
+   * this device for a period.
+   */
   skipMFAForCurrentDevice?: boolean;
 }
 
@@ -358,7 +623,16 @@ export interface AuthenticateWithOOBOptions {
  * @public
  */
 export interface AuthenticationSession {
+  /**
+   * Authentication session token.
+   *
+   * @remarks
+   * This is an opaque token. Clients should not attempt to interpret it.
+   */
   token: string;
+  /**
+   * Current step in authentication session.
+   */
   step: "identity" | "mfa";
 }
 
