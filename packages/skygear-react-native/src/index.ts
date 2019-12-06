@@ -95,16 +95,33 @@ async function uploadForm(
  * @public
  */
 export interface UploadAssetOptions {
+  /**
+   * The exact asset name.
+   */
   exactName?: string;
+  /**
+   * The asset name prefix, if asset name is generated.
+   */
   prefix?: string;
+  /**
+   * The access control type of asset.
+   */
   access?: "public" | "private";
+  /**
+   * Additional HTTP headers to be returned with the asset.
+   */
   headers?: {
     [name: string]: string;
   };
+  /**
+   * Callback for reporting upload progress.
+   */
   onUploadProgress?: (e: ProgressEvent) => void;
 }
 
 /**
+ * Skygear Asset APIs (for React Native).
+ *
  * @public
  */
 export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
@@ -114,6 +131,14 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
     this.parent = parent;
   }
 
+  /**
+   * Uploads new asset.
+   *
+   * @param uri - Asset data URI
+   * @param options - Upload options
+   *
+   * @returns Asset name
+   */
   async upload(uri: string, options?: UploadAssetOptions): Promise<string> {
     // Prepare presignRequest
     const presignRequest: _PresignUploadRequest = {};
@@ -146,6 +171,8 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 }
 
 /**
+ * Skygear APIs container (for React Native).
+ *
  * @public
  */
 export class ReactNativeContainer<
@@ -170,6 +197,11 @@ export class ReactNativeContainer<
 }
 
 /**
+ * Default Skygear APIs container.
+ *
+ * @remarks
+ * This is a global shared container, provided for convenience.
+ *
  * @public
  */
 const defaultContainer: ReactNativeContainer<

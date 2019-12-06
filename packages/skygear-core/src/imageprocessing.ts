@@ -29,6 +29,7 @@ interface ResizeOperation extends ImageProcessingPipelineBuilderResizeOptions {
 }
 
 /**
+ * Image processing pipeline builder.
  * @public
  */
 export class ImageProcessingPipelineBuilder {
@@ -38,6 +39,10 @@ export class ImageProcessingPipelineBuilder {
     this._ops = [];
   }
 
+  /**
+   * Specifies the output format of the image.
+   * @param format - Image format
+   */
   format(format: "jpg" | "png" | "webp"): this {
     this._ops.push({
       op: "format",
@@ -46,6 +51,10 @@ export class ImageProcessingPipelineBuilder {
     return this;
   }
 
+  /**
+   * Specifies the quality of the output image.
+   * @param absoluteQuality - Quality (1 - 100)
+   */
   quality(absoluteQuality: number): this {
     this._ops.push({
       op: "quality",
@@ -54,6 +63,11 @@ export class ImageProcessingPipelineBuilder {
     return this;
   }
 
+  /**
+   * Specifies image resizing operation.
+   *
+   * @param options - Resize options
+   */
   resize(options: ImageProcessingPipelineBuilderResizeOptions): this {
     this._ops.push({
       op: "resize",
@@ -62,10 +76,16 @@ export class ImageProcessingPipelineBuilder {
     return this;
   }
 
+  /**
+   * Returns the query parameter name to be used.
+   */
   getName(): string {
     return "pipeline";
   }
 
+  /**
+   * Returns the built pipeline string to be used as query parameter value.
+   */
   getValue(): string {
     const parts = ["image"];
     for (const op of this._ops) {
@@ -86,6 +106,18 @@ export class ImageProcessingPipelineBuilder {
     return parts.join("/");
   }
 
+  /**
+   * Returns the provided URL with added pipeline parameter.
+   *
+   * @example
+   * ```ts
+   * new ImageProcessingPipelineBuilder()
+   *   .format("jpg")
+   *   .setToURLString("https://example.com");
+   * // http://example.com?pipeline=image%2Fformat%2Cjpg
+   * ```
+   * @param urlStr - input URL
+   */
   setToURLString(urlStr: string): string {
     const fragmentIndex = urlStr.indexOf("#");
     const queryIndex = urlStr.indexOf("?");

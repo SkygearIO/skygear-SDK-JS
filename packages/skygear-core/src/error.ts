@@ -21,10 +21,39 @@ export const SkygearErrorNames = {
 export type SkygearErrorName = (typeof SkygearErrorNames)[keyof (typeof SkygearErrorNames)];
 
 /**
+ * Skygear API error.
+ *
+ * @remarks
+ * All Skygear APIs (e.g. Auth, Asset) functions would throw errors of this
+ * type if server returns failure.
+ *
  * @public
  */
 export class SkygearError extends Error {
+  /**
+   * Error name.
+   *
+   * @remarks
+   * See {@link SkygearErrorNames} for possible values.
+   * New error names may be added in future.
+   */
+  name: string;
+  /**
+   * Error message.
+   *
+   * @remarks
+   * Error messages are provided for convenience, and not stable APIs;
+   * Consumers should use {@link SkygearError.name} or
+   * {@link SkygearError.reason} to distinguish between different errors.
+   */
+  message!: string;
+  /**
+   * Error reason.
+   */
   reason: string;
+  /**
+   * Additional error information.
+   */
   info?: JSONObject;
 
   constructor(
@@ -34,7 +63,6 @@ export class SkygearError extends Error {
     info?: JSONObject
   ) {
     super(message);
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/name
     this.name = name;
     this.reason = reason;
     this.info = info;
@@ -92,6 +120,12 @@ export function _extractAuthenticationSession(
 }
 
 /**
+ * Check if the provided error indicates Multi-Factor-Authentication is
+ * required during authentication.
+ *
+ * @remarks
+ * The error may be thrown when attempting to login/signup if configured.
+ *
  * @public
  */
 export function isMFARequiredError(e: unknown): boolean {

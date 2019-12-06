@@ -49,6 +49,11 @@ export class MemoryStorageDriver implements StorageDriver {
 }
 
 /**
+ * Returns name of the device.
+ *
+ * @remarks
+ * On Node.js platform, it returns `hostname` of the platform.
+ *
  * @public
  */
 export async function getDeviceName(): Promise<string> {
@@ -79,16 +84,33 @@ async function uploadData(
  * @public
  */
 export interface UploadAssetOptions {
+  /**
+   * The exact asset name.
+   */
   exactName?: string;
+  /**
+   * The asset name prefix, if asset name is generated.
+   */
   prefix?: string;
+  /**
+   * The access control type of asset.
+   */
   access?: "public" | "private";
+  /**
+   * Additional HTTP headers to be returned with the asset.
+   */
   headers?: {
     [name: string]: string;
   };
+  /**
+   * Asset size in bytes.
+   */
   size?: number;
 }
 
 /**
+ * Skygear Asset APIs (for Node.js).
+ *
  * @public
  */
 export class NodeAssetContainer<T extends NodeAPIClient> {
@@ -98,6 +120,14 @@ export class NodeAssetContainer<T extends NodeAPIClient> {
     this.parent = parent;
   }
 
+  /**
+   * Uploads new asset.
+   *
+   * @param data - Asset data
+   * @param options - Upload options
+   *
+   * @returns Asset name
+   */
   async upload(
     data: Buffer | Readable,
     options?: UploadAssetOptions
@@ -157,6 +187,8 @@ export class NodeAssetContainer<T extends NodeAPIClient> {
 }
 
 /**
+ * Skygear APIs container (for Node.js).
+ *
  * @public
  */
 export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
@@ -177,6 +209,11 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
 }
 
 /**
+ * Default Skygear APIs container.
+ *
+ * @remarks
+ * This is a global shared container, provided for convenience.
+ *
  * @public
  */
 const defaultContainer: NodeContainer<NodeAPIClient> = new NodeContainer();

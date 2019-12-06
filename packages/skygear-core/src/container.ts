@@ -649,7 +649,7 @@ export class AuthContainer<T extends BaseAPIClient> {
 }
 
 /**
- * Skygear Auth Multi-Factor-Authentication APIs
+ * Skygear Auth Multi-Factor-Authentication APIs.
  *
  * @public
  */
@@ -793,7 +793,8 @@ export class MFAContainer<T extends BaseAPIClient> {
  * Skygear APIs container.
  *
  * @remarks
- * This is the main entrypoint to Skygear APIs.
+ * This is the base class to Skygear APIs.
+ * Consumers should use platform-specific containers instead.
  *
  * @public
  */
