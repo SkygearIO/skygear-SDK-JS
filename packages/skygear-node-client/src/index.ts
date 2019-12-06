@@ -85,11 +85,7 @@ async function uploadData(
  */
 export interface UploadAssetOptions {
   /**
-   * The exact asset name.
-   */
-  exactName?: string;
-  /**
-   * The asset name prefix, if asset name is generated.
+   * The asset name prefix.
    */
   prefix?: string;
   /**
@@ -135,9 +131,6 @@ export class NodeAssetContainer<T extends NodeAPIClient> {
     // Prepare presignRequest
     const presignRequest: _PresignUploadRequest = {};
     if (options != null) {
-      if (options.exactName != null) {
-        presignRequest.exact_name = options.exactName;
-      }
       presignRequest.prefix = options.prefix;
       presignRequest.access = options.access;
       if (options.headers != null) {

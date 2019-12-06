@@ -640,7 +640,6 @@ export interface AuthenticationSession {
  * @internal
  */
 export interface _PresignUploadRequest {
-  exact_name?: string;
   prefix?: string;
   access?: "public" | "private";
   headers?: {
