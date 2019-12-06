@@ -869,12 +869,12 @@ export class Container<T extends BaseAPIClient> {
   }
 
   /**
-   * `fetch` function for calling microservice.
+   * `fetch` function for calling microservices.
    *
    * @remarks
-   * This function can be used same as the standard `fetch` function, except
-   * it will attach Skygear authorization information (e.g. API key, access
-   * token) to the request.
+   * This function has same behavior as the standard `fetch` function, except
+   * it will also handle Skygear authorization mechanism automatically (e.g.
+   * attaching API key, access token, refreshing access token).
    */
   async fetch(input: string, init?: RequestInit): Promise<Response> {
     return this.apiClient.fetch(input, init);
