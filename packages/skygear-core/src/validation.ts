@@ -4,8 +4,14 @@ import { SkygearError } from "./error";
  * @public
  */
 export interface ValidationError extends SkygearError {
+  /**
+   * {@inheritdoc SkygearError.reason}
+   */
   reason: "ValidationFailed";
   info: {
+    /**
+     * Error causes.
+     */
     causes: ValidationErrorCause[];
   };
 }
@@ -35,9 +41,29 @@ export type ValidationErrorKind = (typeof ValidationErrorKinds)[keyof (typeof Va
  * @public
  */
 export interface ValidationErrorCauseBase<Kind, Details> {
+  /**
+   * Validation error kind.
+   */
   kind: Kind;
+  /**
+   * JSON pointer to field causing the error.
+   */
   pointer: string;
+  /**
+   * Error message.
+   *
+   * @remarks
+   * Error messages are provided for convenience, and not stable APIs;
+   * Consumers should use {@link ValidationErrorCauseBase.kind} to distinguish
+   * between different error causes.
+   */
   message: string;
+  /**
+   * Error details.
+   *
+   * @remarks
+   * Error details are specific to each error cause kind.
+   */
   details: Details;
 }
 
@@ -127,6 +153,12 @@ export type ValidationErrorCause =
   | ValidationInvalidNumberRangeCause;
 
 /**
+ * Check if the provided error indicates the server failed to validate input
+ * parameters to API.
+ *
+ * @remarks
+ * The error may be thrown when calling any of the Skygear APIs.
+ *
  * @public
  */
 export function isValidationError(err: unknown): err is ValidationError {

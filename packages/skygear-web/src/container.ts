@@ -92,6 +92,8 @@ function uploadForm(
 }
 
 /**
+ * Skygear Auth APIs (for web platforms).
+ *
  * @public
  */
 export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
@@ -173,6 +175,12 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     }
   }
 
+  /**
+   * Login user with OAuth SSO provider using popup window.
+   *
+   * @param providerID - SSO provider ID
+   * @param options - SSO login options
+   */
   async loginOAuthProviderWithPopup(
     providerID: string,
     options?: SSOLoginOptions
@@ -188,6 +196,11 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return this.handleAuthResponse(f());
   }
 
+  /**
+   * Links user with OAuth SSO provider using popup window.
+   *
+   * @param providerID - SSO provider ID
+   */
   async linkOAuthProviderWithPopup(providerID: string): Promise<User> {
     const f = async () => {
       const authorizationCode = await this._oauthProviderPopupFlow(
@@ -199,6 +212,13 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return this.handleAuthResponse(f());
   }
 
+  /**
+   * Login user with OAuth SSO provider by redirecting user.
+   *
+   * @param providerID - SSO provider ID
+   * @param callbackURL - URL to return when authentication completed
+   * @param options - SSO login options
+   */
   async loginOAuthProviderWithRedirect(
     providerID: string,
     callbackURL: string,
@@ -222,6 +242,12 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     window.location.href = url;
   }
 
+  /**
+   * Links user with OAuth SSO provider by redirecting user.
+   *
+   * @param providerID - SSO provider ID
+   * @param callbackURL - URL to return when authentication completed
+   */
   async linkOAuthProviderWithRedirect(
     providerID: string,
     callbackURL: string
@@ -268,6 +294,13 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return j.result.result;
   }
 
+  /**
+   * Gets SSO login result.
+   *
+   * @remarks
+   * This function should be called by the page at `callbackURL`,
+   * after calling {@link WebAuthContainer.loginOAuthProviderWithRedirect}.
+   */
   async getLoginRedirectResult(): Promise<User | null> {
     const f = async () => {
       const authorizationCode = await this._getRedirectResult("login");
@@ -279,6 +312,13 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     return this.handleMaybeAuthResponse(f());
   }
 
+  /**
+   * Gets SSO link result.
+   *
+   * @remarks
+   * This function should be called by the page at `callbackURL`,
+   * after calling {@link WebAuthContainer.linkOAuthProviderWithRedirect}.
+   */
   async getLinkRedirectResult(): Promise<User | null> {
     const f = async () => {
       const authorizationCode = await this._getRedirectResult("link");
@@ -295,16 +335,29 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
  * @public
  */
 export interface UploadAssetOptions {
-  exactName?: string;
+  /**
+   * The asset name prefix.
+   */
   prefix?: string;
+  /**
+   * The access control type of asset.
+   */
   access?: "public" | "private";
+  /**
+   * Additional HTTP headers to be returned with the asset.
+   */
   headers?: {
     [name: string]: string;
   };
+  /**
+   * Callback for reporting upload progress.
+   */
   onUploadProgress?: (e: ProgressEvent) => void;
 }
 
 /**
+ * Skygear Asset APIs (for web platforms).
+ *
  * @public
  */
 export class WebAssetContainer<T extends WebAPIClient> {
@@ -314,13 +367,18 @@ export class WebAssetContainer<T extends WebAPIClient> {
     this.parent = parent;
   }
 
+  /**
+   * Uploads new asset.
+   *
+   * @param blob - Asset data
+   * @param options - Upload options
+   *
+   * @returns Asset name
+   */
   async upload(blob: Blob, options?: UploadAssetOptions): Promise<string> {
     // Prepare presignRequest
     const presignRequest: _PresignUploadRequest = {};
     if (options != null) {
-      if (options.exactName != null) {
-        presignRequest.exact_name = options.exactName;
-      }
       presignRequest.prefix = options.prefix;
       presignRequest.access = options.access;
       if (options.headers != null) {
@@ -360,6 +418,8 @@ export class WebAssetContainer<T extends WebAPIClient> {
 }
 
 /**
+ * Skygear APIs container (for web platforms).
+ *
  * @public
  */
 export class WebContainer<T extends WebAPIClient> extends Container<T> {

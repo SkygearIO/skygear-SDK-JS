@@ -49,14 +49,32 @@ export function generateOTPAuthURI(options: GenerateOTPAuthURIOptions): string {
 }
 
 /**
+ * Skygear Auth APIs.
+ *
  * @public
  */
 export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
   mfa: MFAContainer<T>;
+
+  /**
+   * Current logged in user.
+   */
   currentUser: User | null;
+
+  /**
+   * Identity of current logged in user.
+   */
   currentIdentity: Identity | null;
+
+  /**
+   * Session ID of current logged in user.
+   */
   currentSessionID: string | null;
+
+  /**
+   * Extra session information to be submitted to server.
+   */
   extraSessionInfoOptions: ExtraSessionInfoOptions = {
     ...defaultExtraSessionInfoOptions,
   };
@@ -70,6 +88,13 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.mfa = new MFAContainer(this);
   }
 
+  /**
+   * Save extra session information.
+   *
+   * @remarks
+   * The SDK would populate extra session information from storage
+   * when calling {@link Container.configure | configure}.
+   */
   async saveExtraSessionInfoOptions() {
     return this.parent.storage.setExtraSessionInfoOptions(
       this.parent.name,
@@ -241,6 +266,32 @@ export class AuthContainer<T extends BaseAPIClient> {
     }
   }
 
+  /**
+   * Sign up new user.
+   *
+   * @example
+   * ```ts
+   * // Signup with email and password
+   * await signup({"email": "test@example.com"}, "password");
+   *
+   * // Signup with email, username, and password
+   * await signup(
+   *   [{"email": "test@example.com"}, {"username": "test"}],
+   *   "password"
+   * );
+   *
+   * // Signup with email, password, and custom metadata
+   * await signup(
+   *   {"email": "test@example.com"},
+   *   "password",
+   *   {"metadata": {"accepted_tos": true}}
+   * );
+   * ```
+   *
+   * @param loginIDs - Login IDs
+   * @param password - Password
+   * @param options - Sign up options
+   */
   async signup(
     loginIDs: { [key: string]: string }[] | { [key: string]: string },
     password: string,
@@ -254,7 +305,10 @@ export class AuthContainer<T extends BaseAPIClient> {
   }
 
   /**
-   * signupWithEmail is a shorthand of {@link AuthContainer.signup | the signup() method}.
+   * Sign up new user with email.
+   *
+   * @remarks
+   * Equivalent to {@link AuthContainer.signup}: `signup({"email": email}, password, options)`.
    */
   async signupWithEmail(
     email: string,
@@ -273,7 +327,10 @@ export class AuthContainer<T extends BaseAPIClient> {
   }
 
   /**
-   * signupWithUsername is a shorthand of {@link AuthContainer.signup | the signup() method}.
+   * Sign up new user with username.
+   *
+   * @remarks
+   * Equivalent to {@link AuthContainer.signup}: `signup({"username": username}, password, options)`.
    */
   async signupWithUsername(
     username: string,
@@ -291,6 +348,20 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Login user with password.
+   *
+   * @example
+   * ```ts
+   * // Login with email
+   * await login("test\@example.com", "password");
+   * // Login with username
+   * await login("test", "password");
+   * ```
+   * @param loginID - Login ID
+   * @param password - Password
+   * @param options - Login options
+   */
   async login(
     loginID: string,
     password: string,
@@ -301,6 +372,15 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Logout current session.
+   *
+   * @remarks
+   * If `force` parameter is set to `true`, all potential errors (e.g. network
+   * error) would be ignored.
+   *
+   * @param options - Logout options
+   */
   async logout(options: { force?: boolean } = {}): Promise<void> {
     const { force = false } = options;
     try {
@@ -382,10 +462,19 @@ export class AuthContainer<T extends BaseAPIClient> {
     return true;
   }
 
+  /**
+   * Refreshes and returns current user information.
+   */
   async me(): Promise<User> {
     return this.handleAuthResponse(this.parent.apiClient.me());
   }
 
+  /**
+   * Changes user password.
+   *
+   * @param newPassword - New password
+   * @param oldPassword - Old password
+   */
   async changePassword(
     newPassword: string,
     oldPassword: string
@@ -395,16 +484,34 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Updates custom metadata of user.
+   *
+   * @remarks
+   * The provided new metadata object would replace the old metadata.
+   *
+   * @param metadata - New custom metadata object
+   */
   async updateMetadata(metadata: JSONObject): Promise<User> {
     return this.handleAuthResponse(
       this.parent.apiClient.updateMetadata(metadata)
     );
   }
 
+  /**
+   * Requests password reset email.
+   *
+   * @param email - Registered email address of the user
+   */
   async requestForgotPasswordEmail(email: string): Promise<void> {
     return this.parent.apiClient.requestForgotPasswordEmail(email);
   }
 
+  /**
+   * Performs password reset.
+   *
+   * @param form - Information from password reset email
+   */
   async resetPassword(form: {
     userID: string;
     code: string;
@@ -414,18 +521,39 @@ export class AuthContainer<T extends BaseAPIClient> {
     return this.parent.apiClient.resetPassword(form);
   }
 
+  /**
+   * Requests user email verification.
+   *
+   * @param email - Registered email address of the user
+   */
   async requestEmailVerification(email: string): Promise<void> {
     return this.parent.apiClient.requestEmailVerification(email);
   }
 
-  async requestPhoneVerification(email: string): Promise<void> {
-    return this.parent.apiClient.requestPhoneVerification(email);
+  /**
+   * Requests user phone SMS verification.
+   *
+   * @param phone - Registered phone number of the user
+   */
+  async requestPhoneVerification(phone: string): Promise<void> {
+    return this.parent.apiClient.requestPhoneVerification(phone);
   }
 
+  /**
+   * Performs user verification.
+   *
+   * @param code - Verification code sent to user
+   */
   async verifyWithCode(code: string): Promise<void> {
     return this.parent.apiClient.verifyWithCode(code);
   }
 
+  /**
+   * Login user with custom token.
+   *
+   * @param token - Custom authentication token
+   * @param options - SSO login options
+   */
   async loginWithCustomToken(
     token: string,
     options?: SSOLoginOptions
@@ -435,10 +563,25 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Deletes OAuth SSO provider.
+   *
+   * @param providerID - SSO provider ID
+   */
   async deleteOAuthProvider(providerID: string): Promise<void> {
     return this.parent.apiClient.deleteOAuthProvider(providerID);
   }
 
+  /**
+   * Login with OAuth SSO provider using access token.
+   *
+   * @remarks
+   * This feature must be enabled in configuration, otherwise it will fail.
+   *
+   * @param providerID - SSO provider ID
+   * @param accessToken - SSO provider access token
+   * @param options - SSO login options
+   */
   async loginOAuthProviderWithAccessToken(
     providerID: string,
     accessToken: string,
@@ -453,6 +596,15 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Links with OAuth SSO provider using access token.
+   *
+   * @remarks
+   * This feature must be enabled in configuration, otherwise it will fail.
+   *
+   * @param providerID - SSO provider ID
+   * @param accessToken - SSO provider access token
+   */
   async linkOAuthProviderWithAccessToken(
     providerID: string,
     accessToken: string
@@ -465,24 +617,40 @@ export class AuthContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Lists all active user sessions.
+   */
   async listSessions(): Promise<Session[]> {
     return this.parent.apiClient.listSessions();
   }
 
+  /**
+   * Gets information on specified active user session.
+   */
   async getSession(id: string): Promise<Session> {
     return this.parent.apiClient.getSession(id);
   }
 
+  /**
+   * Revokes the specified user session.
+   *
+   * @param id - Session ID
+   */
   async revokeSession(id: string): Promise<void> {
     return this.parent.apiClient.revokeSession(id);
   }
 
+  /**
+   * Revokes all other active user sessions.
+   */
   async revokeOtherSessions(): Promise<void> {
     return this.parent.apiClient.revokeOtherSessions();
   }
 }
 
 /**
+ * Skygear Auth Multi-Factor-Authentication APIs.
+ *
  * @public
  */
 export class MFAContainer<T extends BaseAPIClient> {
@@ -492,38 +660,77 @@ export class MFAContainer<T extends BaseAPIClient> {
     this.parent = parent;
   }
 
+  /**
+   * Returns a list of MFA recovery code.
+   *
+   * @remarks
+   * This feature must be enabled in configuration, otherwise it will fail.
+   */
   async listRecoveryCode(): Promise<string[]> {
     return this.parent.parent.apiClient.listRecoveryCode();
   }
 
+  /**
+   * Regenerates MFA recovery codes.
+   *
+   * @returns The newly generated recovery codes
+   */
   async regenerateRecoveryCode(): Promise<string[]> {
     return this.parent.parent.apiClient.regenerateRecoveryCode();
   }
 
+  /**
+   * Perform MFA using recovery code.
+   *
+   * @param code - MFA recovery code
+   */
   async authenticateWithRecoveryCode(code: string): Promise<User> {
     return this.parent.handleAuthResponse(
       this.parent.parent.apiClient.authenticateWithRecoveryCode(code)
     );
   }
 
+  /**
+   * Returns a list of configured MFA authenticators.
+   */
   async getAuthenticators(): Promise<Authenticator[]> {
     return this.parent.parent.apiClient.getAuthenticators();
   }
 
+  /**
+   * Delete the MFA authenticator with specified ID.
+   *
+   * @param id - Authenticator ID
+   */
   async deleteAuthenticator(id: string): Promise<void> {
     return this.parent.parent.apiClient.deleteAuthenticator(id);
   }
 
+  /**
+   * Creates new time-based one time password (TOTP) MFA authenticator.
+   *
+   * @param options - TOTP configuration
+   */
   async createNewTOTP(
     options: CreateNewTOTPOptions
   ): Promise<CreateNewTOTPResult> {
     return this.parent.parent.apiClient.createNewTOTP(options);
   }
 
+  /**
+   * Activates time-based one time password (TOTP) MFA authenticator.
+   *
+   * @param otp - TOTP code
+   */
   async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
     return this.parent.parent.apiClient.activateTOTP(otp);
   }
 
+  /**
+   * Perform MFA using time-based one time password (TOTP) MFA authenticator.
+   *
+   * @param options - Authentication options
+   */
   async authenticateWithTOTP(
     options: AuthenticateWithTOTPOptions
   ): Promise<User> {
@@ -532,20 +739,40 @@ export class MFAContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Creates new out-of-band (OOB) MFA authenticator.
+   *
+   * @param options - OOB configuration
+   */
   async createNewOOB(
     options: CreateNewOOBOptions
   ): Promise<CreateNewOOBResult> {
     return this.parent.parent.apiClient.createNewOOB(options);
   }
 
+  /**
+   * Activates out-of-band (OOB) MFA authenticator.
+   *
+   * @param code - MFA code
+   */
   async activateOOB(code: string): Promise<ActivateOOBResult> {
     return this.parent.parent.apiClient.activateOOB(code);
   }
 
+  /**
+   * Triggers out-of-band (OOB) MFA.
+   *
+   * @param authenticatorID - Authenticator ID
+   */
   async triggerOOB(authenticatorID?: string): Promise<void> {
     return this.parent.parent.apiClient.triggerOOB(authenticatorID);
   }
 
+  /**
+   * Performs MFA using out-of-band (OOB) MFA authenticator.
+   *
+   * @param options - Authentication options
+   */
   async authenticateWithOOB(
     options: AuthenticateWithOOBOptions
   ): Promise<User> {
@@ -554,15 +781,28 @@ export class MFAContainer<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * Revokes all MFA trusted devices.
+   */
   async revokeAllTrustedDevices(): Promise<void> {
     await this.parent.parent.apiClient.revokeAllBearerToken();
   }
 }
 
 /**
+ * Skygear APIs container.
+ *
+ * @remarks
+ * This is the base class to Skygear APIs.
+ * Consumers should use platform-specific containers instead.
+ *
  * @public
  */
 export class Container<T extends BaseAPIClient> {
+  /**
+   * Unique ID for this container.
+   * @defaultValue "default"
+   */
   name: string;
   apiClient: T;
   storage: ContainerStorage;
@@ -583,6 +823,11 @@ export class Container<T extends BaseAPIClient> {
     this.auth = new AuthContainer(this);
   }
 
+  /**
+   * Configure this container with connection information.
+   *
+   * @param options - Skygear connection information
+   */
   async configure(options: {
     apiKey: string;
     endpoint: string;
@@ -623,6 +868,14 @@ export class Container<T extends BaseAPIClient> {
     );
   }
 
+  /**
+   * `fetch` function for calling microservices.
+   *
+   * @remarks
+   * This function has same behavior as the standard `fetch` function, except
+   * it will also handle Skygear authorization mechanism automatically (e.g.
+   * attaching API key, access token, refreshing access token).
+   */
   async fetch(input: string, init?: RequestInit): Promise<Response> {
     return this.apiClient.fetch(input, init);
   }
