@@ -1,9 +1,5 @@
 import { _encodeUTF8 } from "./utf8";
-
-interface ByteArray {
-  [index: number]: number;
-  length: number;
-}
+import { ByteArray } from "./types";
 
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
 function uint6ToB64(nUint6: number) {
@@ -89,6 +85,6 @@ export function _encodeBase64FromString(input: string): string {
 /**
  * @internal
  */
-export function _encodeBase64URLFromUint8Array(bytes: Uint8Array): string {
+export function _encodeBase64URLFromByteArray(bytes: ByteArray): string {
   return base64URLEncArr(bytes);
 }

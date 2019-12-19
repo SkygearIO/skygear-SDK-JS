@@ -1,6 +1,14 @@
 /**
  * @public
  */
+export interface ByteArray {
+  [index: number]: number;
+  length: number;
+}
+
+/**
+ * @public
+ */
 export type JSONValue = unknown;
 
 /**
