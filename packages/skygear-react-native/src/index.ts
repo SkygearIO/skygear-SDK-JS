@@ -3,11 +3,14 @@ import {
   BaseAPIClient,
   StorageDriver,
   Container,
+  AuthContainer,
   GlobalJSONContainerStorage,
   ContainerOptions,
   _PresignUploadRequest,
   decodeError,
+  SSOLoginOptions,
 } from "@skygear/core";
+import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 export * from "@skygear/core";
 
 const globalFetch = fetch;
@@ -164,6 +167,56 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 }
 
 /**
+ * Skygear Auth APIs (for React Native).
+ *
+ * @public
+ */
+export class ReactNativeAuthContainer<
+  T extends ReactNativeAPIClient
+> extends AuthContainer<T> {
+  /**
+   * @internal
+   */
+  _codeVerifier?: string;
+
+  async getLoginOAuthProviderURL(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<string> {
+    return this._getOAuthProviderURL(providerID, callbackURL, "login", options);
+  }
+
+  async getLinkOAuthProviderURL(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<string> {
+    return this._getOAuthProviderURL(providerID, callbackURL, "link", options);
+  }
+
+  async _getOAuthProviderURL(
+    providerID: string,
+    callbackURL: string,
+    action: "login" | "link",
+    options?: SSOLoginOptions
+  ): Promise<string> {
+    const codeVerifier = await generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    this._codeVerifier = codeVerifier;
+    const url = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
+      callbackURL: callbackURL,
+      action,
+      uxMode: "mobile_app",
+      onUserDuplicate: options && options.onUserDuplicate,
+    });
+    return url;
+  }
+}
+
+/**
  * Skygear APIs container (for React Native).
  *
  * @public
@@ -171,6 +224,7 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 export class ReactNativeContainer<
   T extends ReactNativeAPIClient
 > extends Container<T> {
+  auth: ReactNativeAuthContainer<T>;
   asset: ReactNativeAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
@@ -186,6 +240,7 @@ export class ReactNativeContainer<
 
     super(o);
     this.asset = new ReactNativeAssetContainer(this);
+    this.auth = new ReactNativeAuthContainer(this);
   }
 }
 
