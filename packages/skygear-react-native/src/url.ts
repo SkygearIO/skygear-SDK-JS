@@ -21,3 +21,14 @@ export function extractResultFromURL(url: string): any {
   const j = JSON.parse(jsonStr);
   return j;
 }
+
+/**
+ * @internal
+ */
+export function getCallbackURLScheme(url: string): string {
+  const idx = url.indexOf(":");
+  if (idx < 0) {
+    return "";
+  }
+  return url.substring(0, idx);
+}

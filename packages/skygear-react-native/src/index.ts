@@ -13,7 +13,7 @@ import {
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import { openURL } from "./nativemodule";
-import { extractResultFromURL } from "./url";
+import { extractResultFromURL, getCallbackURLScheme } from "./url";
 export * from "@skygear/core";
 
 const globalFetch = fetch;
@@ -199,6 +199,7 @@ export class ReactNativeAuthContainer<
     action: "login" | "link",
     options?: SSOLoginOptions
   ): Promise<User> {
+    const callbackURLScheme = getCallbackURLScheme(callbackURL);
     const codeVerifier = await generateCodeVerifier();
     const codeChallenge = await computeCodeChallenge(codeVerifier);
     const authURL = await this.parent.apiClient.oauthAuthorizationURL({
@@ -209,7 +210,7 @@ export class ReactNativeAuthContainer<
       uxMode: "mobile_app",
       onUserDuplicate: options && options.onUserDuplicate,
     });
-    const redirectURL = await openURL(authURL);
+    const redirectURL = await openURL(authURL, callbackURLScheme);
     const j = extractResultFromURL(redirectURL);
     if (j.result.error) {
       throw decodeError(j.result.error);

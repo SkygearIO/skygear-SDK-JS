@@ -1,6 +1,8 @@
-#import "SGSkygearReactNative.h"
-#import <React/RCTUtils.h>
+#import <AuthenticationServices/AuthenticationServices.h>
+#import <SafariServices/SafariServices.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <React/RCTUtils.h>
+#import "SGSkygearReactNative.h"
 
 static NSString *const kOpenURLNotification = @"SGSkygearReactNativeOpenURLNotification";
 
@@ -12,7 +14,11 @@ static void postNotificationWithURL(NSURL *URL, id sender)
                                                     userInfo:payload];
 }
 
-@interface SGSkygearReactNative()
+@interface SGSkygearReactNative() <ASWebAuthenticationPresentationContextProviding>
+// We must have strong reference to the session otherwise it is closed immediately when
+// it goes out of scope.
+@property (nonatomic, strong) ASWebAuthenticationSession *asSession;
+@property (nonatomic, strong) SFAuthenticationSession *sfSession;
 @property (nonatomic, strong) RCTPromiseResolveBlock openURLResolve;
 @property (nonatomic, strong) RCTPromiseRejectBlock openURLReject;
 @end
@@ -50,7 +56,6 @@ RCT_EXPORT_MODULE()
   return YES;
 }
 
-// Corresponding api deprecated in iOS 9
 + (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)URL
   sourceApplication:(NSString *)sourceApplication
@@ -74,28 +79,72 @@ continueUserActivity:(NSUserActivity *)userActivity
   return YES;
 }
 
-RCT_EXPORT_METHOD(openURL:(NSURL *)URL
+RCT_EXPORT_METHOD(openURL:(NSURL *)url
+                   scheme:(NSString *)scheme
                   resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject)
 {
     self.openURLResolve = resolve;
     self.openURLReject = reject;
 
-    if (@available(iOS 10.0, *)) {
-        [RCTSharedApplication() openURL:URL options:@{} completionHandler:^(BOOL success) {
+    if (@available(iOS 12.0, *)) {
+        self.asSession = [[ASWebAuthenticationSession alloc] initWithURL:url
+                                                                            callbackURLScheme:scheme
+                                                                            completionHandler:^(NSURL *url, NSError *error) {
+            if (error) {
+                if (self.openURLReject) {
+                    self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
+                    self.openURLResolve = nil;
+                    self.openURLReject = nil;
+                }
+            } else {
+                if (self.openURLResolve) {
+                    self.openURLResolve([url absoluteString]);
+                    self.openURLResolve = nil;
+                    self.openURLReject = nil;
+                }
+            }
+            self.asSession = nil;
+        }];
+        if (@available(iOS 13.0, *)) {
+            self.asSession.presentationContextProvider = self;
+        }
+        [self.asSession start];
+    } else if (@available(iOS 11.0, *)) {
+        self.sfSession = [[SFAuthenticationSession alloc] initWithURL:url
+                                                                      callbackURLScheme:scheme
+                                                                      completionHandler:^(NSURL *url, NSError *error) {
+            if (error) {
+                if (self.openURLReject) {
+                    self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
+                    self.openURLResolve = nil;
+                    self.openURLReject = nil;
+                }
+            } else {
+                if (self.openURLResolve) {
+                    self.openURLResolve([url absoluteString]);
+                    self.openURLResolve = nil;
+                    self.openURLReject = nil;
+                }
+            }
+            self.sfSession = nil;
+        }];
+        [self.sfSession start];
+    } else if (@available(iOS 10.0, *)) {
+        [RCTSharedApplication() openURL:url options:@{} completionHandler:^(BOOL success) {
             if (!success) {
                 if (self.openURLReject) {
-                    self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", URL], nil);
+                    self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
                     self.openURLResolve = nil;
                     self.openURLReject = nil;
                 }
             }
         }];
     } else {
-        BOOL opened = [RCTSharedApplication() openURL:URL];
+        BOOL opened = [RCTSharedApplication() openURL:url];
         if (!opened) {
             if (self.openURLReject) {
-                self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", URL], nil);
+                self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
                 self.openURLResolve = nil;
                 self.openURLReject = nil;
             }
@@ -111,6 +160,16 @@ RCT_EXPORT_METHOD(randomBytes:(NSUInteger)length resolver:(RCTPromiseResolveBloc
 RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     resolve([self sha256String:input]);
+}
+
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session
+{
+    for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
+        if ([w isKeyWindow]) {
+            return w;
+        }
+    }
+    return nil;
 }
 
 - (void)handleOpenURLNotification:(NSNotification *)notification
