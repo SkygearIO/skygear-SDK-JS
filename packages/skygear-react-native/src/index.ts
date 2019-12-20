@@ -1,16 +1,19 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import {
-  BaseAPIClient,
-  StorageDriver,
-  Container,
   AuthContainer,
-  GlobalJSONContainerStorage,
+  BaseAPIClient,
+  Container,
   ContainerOptions,
+  GlobalJSONContainerStorage,
+  SSOLoginOptions,
+  StorageDriver,
+  User,
   _PresignUploadRequest,
   decodeError,
-  SSOLoginOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
+import { openURL } from "./nativemodule";
+import { extractResultFromURL } from "./url";
 export * from "@skygear/core";
 
 const globalFetch = fetch;
@@ -174,37 +177,31 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 export class ReactNativeAuthContainer<
   T extends ReactNativeAPIClient
 > extends AuthContainer<T> {
-  /**
-   * @internal
-   */
-  _codeVerifier?: string;
-
-  async getLoginOAuthProviderURL(
+  async loginOAuthProvider(
     providerID: string,
     callbackURL: string,
     options?: SSOLoginOptions
-  ): Promise<string> {
-    return this._getOAuthProviderURL(providerID, callbackURL, "login", options);
+  ): Promise<User> {
+    return this._performOAuth(providerID, callbackURL, "login", options);
   }
 
-  async getLinkOAuthProviderURL(
+  async linkOAuthProvider(
     providerID: string,
     callbackURL: string,
     options?: SSOLoginOptions
-  ): Promise<string> {
-    return this._getOAuthProviderURL(providerID, callbackURL, "link", options);
+  ): Promise<User> {
+    return this._performOAuth(providerID, callbackURL, "link", options);
   }
 
-  async _getOAuthProviderURL(
+  async _performOAuth(
     providerID: string,
     callbackURL: string,
     action: "login" | "link",
     options?: SSOLoginOptions
-  ): Promise<string> {
+  ): Promise<User> {
     const codeVerifier = await generateCodeVerifier();
     const codeChallenge = await computeCodeChallenge(codeVerifier);
-    this._codeVerifier = codeVerifier;
-    const url = await this.parent.apiClient.oauthAuthorizationURL({
+    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
       providerID,
       codeChallenge,
       callbackURL: callbackURL,
@@ -212,7 +209,17 @@ export class ReactNativeAuthContainer<
       uxMode: "mobile_app",
       onUserDuplicate: options && options.onUserDuplicate,
     });
-    return url;
+    const redirectURL = await openURL(authURL);
+    const j = extractResultFromURL(redirectURL);
+    if (j.result.error) {
+      throw decodeError(j.result.error);
+    }
+    const authorizationCode = j.result.result;
+    const p = this.parent.apiClient.getOAuthResult({
+      authorizationCode,
+      codeVerifier,
+    });
+    return this.handleAuthResponse(p);
   }
 }
 
