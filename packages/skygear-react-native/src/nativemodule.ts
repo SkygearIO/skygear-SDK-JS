@@ -9,3 +9,7 @@ export function randomBytes(length: number): Promise<number[]> {
 export function sha256String(input: string): Promise<number[]> {
   return SGSkygearReactNative.sha256String(input);
 }
+
+export function openURL(url: string): Promise<string> {
+  return SGSkygearReactNative.openURL(url);
+}
