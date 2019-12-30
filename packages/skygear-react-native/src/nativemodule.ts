@@ -16,3 +16,9 @@ export function openURL(
 ): Promise<string> {
   return SGSkygearReactNative.openURL(url, callbackURLScheme);
 }
+
+export function signInWithApple(
+  url: string
+): Promise<{ code: string; scope: string; state: string }> {
+  return SGSkygearReactNative.signInWithApple(url);
+}

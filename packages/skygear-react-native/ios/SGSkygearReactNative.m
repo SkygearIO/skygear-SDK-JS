@@ -1,4 +1,6 @@
+#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 12000)
 #import <AuthenticationServices/AuthenticationServices.h>
+#endif
 #import <SafariServices/SafariServices.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <React/RCTUtils.h>
@@ -14,14 +16,37 @@ static void postNotificationWithURL(NSURL *URL, id sender)
                                                     userInfo:payload];
 }
 
+@interface SGSkygearReactNative()
+@property (nonatomic, strong) RCTPromiseResolveBlock openURLResolve;
+@property (nonatomic, strong) RCTPromiseRejectBlock openURLReject;
+@property (nonatomic, strong) NSString *state;
+@property (nonatomic, strong) NSString *nonce;
+@property (nonatomic, strong) RCTPromiseResolveBlock signInWithAppleResolve;
+@property (nonatomic, strong) RCTPromiseRejectBlock signInWithAppleReject;
+@end
+
+#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 11000)
+@interface SGSkygearReactNative()
+// We must have strong reference to the session otherwise it is closed immediately when
+// it goes out of scope.
+@property (nonatomic, strong) SFAuthenticationSession *sfSession API_AVAILABLE(ios(11));
+@end
+#endif
+
+#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 12000)
 @interface SGSkygearReactNative() <ASWebAuthenticationPresentationContextProviding>
 // We must have strong reference to the session otherwise it is closed immediately when
 // it goes out of scope.
-@property (nonatomic, strong) ASWebAuthenticationSession *asSession;
-@property (nonatomic, strong) SFAuthenticationSession *sfSession;
-@property (nonatomic, strong) RCTPromiseResolveBlock openURLResolve;
-@property (nonatomic, strong) RCTPromiseRejectBlock openURLReject;
+@property (nonatomic, strong) ASWebAuthenticationSession *asSession API_AVAILABLE(ios(12));
 @end
+#endif
+
+#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 13000)
+@interface SGSkygearReactNative() <ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate>
+@property (nonatomic, strong) ASAuthorizationAppleIDProvider *provider API_AVAILABLE(ios(13));
+@property (nonatomic, strong) ASAuthorizationController *controller API_AVAILABLE(ios(13));
+@end
+#endif
 
 @implementation SGSkygearReactNative
 
@@ -68,7 +93,7 @@ RCT_EXPORT_MODULE()
 + (BOOL)application:(UIApplication *)application
 continueUserActivity:(NSUserActivity *)userActivity
   restorationHandler:
-    #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 12000) /* __IPHONE_12_0 */
+    #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 12000)
         (nonnull void (^)(NSArray<id<UIUserActivityRestoring>> *_Nullable))restorationHandler {
     #else
         (nonnull void (^)(NSArray *_Nullable))restorationHandler {
@@ -152,6 +177,54 @@ RCT_EXPORT_METHOD(openURL:(NSURL *)url
     }
 }
 
+RCT_EXPORT_METHOD(signInWithApple:(NSString *)url
+                          resolve:(RCTPromiseResolveBlock)resolve
+                           reject:(RCTPromiseRejectBlock)reject)
+{
+  if (@available(iOS 13.0, *)) {
+    NSString *state = nil;
+    NSString *nonce = nil;
+    NSURLComponents *components = [NSURLComponents componentsWithString:url];
+    for (NSURLQueryItem *item in components.queryItems) {
+      if ([item.name isEqualToString:@"state"]) {
+        state = item.value;
+      }
+      if ([item.name isEqualToString:@"nonce"]) {
+        nonce = item.value;
+      }
+    }
+
+    if (!state || !nonce) {
+      reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Invalid URL: %@", url], nil);
+      return;
+    }
+
+    ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
+
+    ASAuthorizationAppleIDRequest *request = [provider createRequest];
+    request.requestedOperation = ASAuthorizationOperationLogin;
+    request.requestedScopes = @[ASAuthorizationScopeEmail];
+    request.state = state;
+    request.nonce = nonce;
+
+    ASAuthorizationController *controller = [[ASAuthorizationController alloc] initWithAuthorizationRequests:@[request]];
+    controller.presentationContextProvider = self;
+    controller.delegate = self;
+
+    self.provider = provider;
+    self.controller = controller;
+    self.state = state;
+    self.nonce = nonce;
+    self.signInWithAppleResolve = resolve;
+    self.signInWithAppleReject = reject;
+
+    [controller performRequests];
+  } else {
+    reject(RCTErrorUnspecified, @"Sign in with Apple requires iOS 13", nil);
+    return;
+  }
+}
+
 RCT_EXPORT_METHOD(randomBytes:(NSUInteger)length resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     resolve([self randomBytes:length]);
@@ -162,14 +235,85 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
     resolve([self sha256String:input]);
 }
 
-- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(12))
 {
-    for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
-        if ([w isKeyWindow]) {
-            return w;
-        }
+  for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
+    if ([w isKeyWindow]) {
+      return w;
     }
-    return nil;
+  }
+  return nil;
+}
+
+- (ASPresentationAnchor)presentationAnchorForAuthorizationController:(ASAuthorizationController *)controller API_AVAILABLE(ios(13))
+{
+  for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
+    if ([w isKeyWindow]) {
+      return w;
+    }
+  }
+  return nil;
+}
+
+- (void)authorizationController:(ASAuthorizationController *)controller
+   didCompleteWithAuthorization:(ASAuthorization *)authorization API_AVAILABLE(ios(13))
+{
+  id credential = authorization.credential;
+  if ([credential isKindOfClass:[ASAuthorizationAppleIDCredential class]]) {
+    ASAuthorizationAppleIDCredential *c = (ASAuthorizationAppleIDCredential *) credential;
+    NSData *authorizationCodeData = c.authorizationCode;
+    NSArray<ASAuthorizationScope> *authorizedScopes = c.authorizedScopes;
+    NSString *authorizationCode = [[NSString alloc] initWithData:authorizationCodeData
+                                                        encoding:NSUTF8StringEncoding];
+    NSString *scope = [authorizedScopes componentsJoinedByString:@" "];
+    if (self.signInWithAppleResolve) {
+      self.signInWithAppleResolve(@{
+        @"state": self.state,
+        @"code": authorizationCode,
+        @"scope": scope,
+      });
+      self.provider = nil;
+      self.controller = nil;
+      self.state = nil;
+      self.nonce = nil;
+      self.signInWithAppleResolve = nil;
+      self.signInWithAppleReject = nil;
+    }
+  }
+}
+
+- (void)authorizationController:(ASAuthorizationController *)controller
+           didCompleteWithError:(NSError *)error API_AVAILABLE(ios(13))
+{
+  if ([ASAuthorizationErrorDomain isEqualToString:error.domain]) {
+    NSString *reason = @"";
+    switch (error.code) {
+    case ASAuthorizationErrorCanceled:
+      reason = @"Canceled";
+      break;
+    case ASAuthorizationErrorFailed:
+      reason = @"Failed";
+      break;
+    case ASAuthorizationErrorInvalidResponse:
+      reason = @"InvalidResponse";
+      break;
+    case ASAuthorizationErrorNotHandled:
+      reason = @"NotHandled";
+      break;
+    case ASAuthorizationErrorUnknown:
+      reason = @"Unknown";
+      break;
+    }
+    if (self.signInWithAppleReject) {
+      self.signInWithAppleReject(RCTErrorUnspecified, reason, error);
+      self.provider = nil;
+      self.controller = nil;
+      self.state = nil;
+      self.nonce = nil;
+      self.signInWithAppleResolve = nil;
+      self.signInWithAppleReject = nil;
+    }
+  }
 }
 
 - (void)handleOpenURLNotification:(NSNotification *)notification
