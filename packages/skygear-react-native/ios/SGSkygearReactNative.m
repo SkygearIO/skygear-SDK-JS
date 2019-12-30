@@ -220,7 +220,7 @@ RCT_EXPORT_METHOD(signInWithApple:(NSString *)url
 
     [controller performRequests];
   } else {
-    reject(RCTErrorUnspecified, @"Sign in with Apple requires iOS 13", nil);
+    reject(RCTErrorUnspecified, @"signInWithApple requires iOS 13. Please use loginOAuthProvider or linkOAuthProvider instead.", nil);
     return;
   }
 }
@@ -255,7 +255,7 @@ RCT_EXPORT_METHOD(getCredentialStateForUserID:(NSString *)userID
       }
     }];
   } else {
-    reject(RCTErrorUnspecified, @"Sign in with Apple requires iOS 13", nil);
+    reject(RCTErrorUnspecified, @"getCredentialStateForUserID requires iOS 13. Please check the device OS version before calling this function.", nil);
   }
 }
 
