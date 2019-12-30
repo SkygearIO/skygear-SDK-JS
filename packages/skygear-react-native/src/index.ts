@@ -12,7 +12,7 @@ import {
   decodeError,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
-import { openURL } from "./nativemodule";
+import { openURL, signInWithApple } from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
 export * from "@skygear/core";
 
@@ -193,6 +193,32 @@ export class ReactNativeAuthContainer<
     return this._performOAuth(providerID, callbackURL, "link", options);
   }
 
+  async loginApple(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    return this._performSignInWithApple(
+      providerID,
+      callbackURL,
+      "login",
+      options
+    );
+  }
+
+  async linkApple(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    return this._performSignInWithApple(
+      providerID,
+      callbackURL,
+      "link",
+      options
+    );
+  }
+
   async _performOAuth(
     providerID: string,
     callbackURL: string,
@@ -216,6 +242,39 @@ export class ReactNativeAuthContainer<
       throw decodeError(j.result.error);
     }
     const authorizationCode = j.result.result;
+    const p = this.parent.apiClient.getOAuthResult({
+      authorizationCode,
+      codeVerifier,
+    });
+    return this.handleAuthResponse(p);
+  }
+
+  async _performSignInWithApple(
+    providerID: string,
+    callbackURL: string,
+    action: "login" | "link",
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    const codeVerifier = await generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
+      callbackURL: callbackURL,
+      action,
+      uxMode: "manual",
+      onUserDuplicate: options && options.onUserDuplicate,
+    });
+    const r1 = await fetch(authURL);
+    const j1 = await r1.json();
+    const appleURL = j1.result;
+    const { code, scope, state } = await signInWithApple(appleURL);
+    const authorizationCode = await this.parent.apiClient.oauthHandler({
+      providerID,
+      code,
+      scope,
+      state,
+    });
     const p = this.parent.apiClient.getOAuthResult({
       authorizationCode,
       codeVerifier,
