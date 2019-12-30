@@ -187,10 +187,9 @@ export class ReactNativeAuthContainer<
 
   async linkOAuthProvider(
     providerID: string,
-    callbackURL: string,
-    options?: SSOLoginOptions
+    callbackURL: string
   ): Promise<User> {
-    return this._performOAuth(providerID, callbackURL, "link", options);
+    return this._performOAuth(providerID, callbackURL, "link");
   }
 
   async loginApple(
@@ -206,17 +205,8 @@ export class ReactNativeAuthContainer<
     );
   }
 
-  async linkApple(
-    providerID: string,
-    callbackURL: string,
-    options?: SSOLoginOptions
-  ): Promise<User> {
-    return this._performSignInWithApple(
-      providerID,
-      callbackURL,
-      "link",
-      options
-    );
+  async linkApple(providerID: string, callbackURL: string): Promise<User> {
+    return this._performSignInWithApple(providerID, callbackURL, "link");
   }
 
   async _performOAuth(
