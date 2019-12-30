@@ -16,9 +16,12 @@ import {
   openURL,
   signInWithApple,
   getCredentialStateForUserID,
+  addAppleIDCredentialRevokedListener,
 } from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
 export * from "@skygear/core";
+
+export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
 
 const globalFetch = fetch;
 
@@ -274,12 +277,6 @@ export class ReactNativeAuthContainer<
       codeVerifier,
     });
     return this.handleAuthResponse(p);
-  }
-
-  async getCredentialStateForAppleUserID(
-    appleUserID: string
-  ): Promise<"Authorized" | "NotFound" | "Revoked" | "Transferred"> {
-    return getCredentialStateForUserID(appleUserID);
   }
 }
 

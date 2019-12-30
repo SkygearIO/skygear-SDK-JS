@@ -1,6 +1,10 @@
-import { NativeModules } from "react-native";
+import { NativeModules, NativeEventEmitter } from "react-native";
 
 const { SGSkygearReactNative } = NativeModules;
+
+const SGSkygearReactNativeEmitter = new NativeEventEmitter(
+  SGSkygearReactNative
+);
 
 export function randomBytes(length: number): Promise<number[]> {
   return SGSkygearReactNative.randomBytes(length);
@@ -23,8 +27,23 @@ export function signInWithApple(
   return SGSkygearReactNative.signInWithApple(url);
 }
 
+/**
+ * @public
+ */
 export function getCredentialStateForUserID(
   userID: string
 ): Promise<"Authorized" | "NotFound" | "Revoked" | "Transferred"> {
   return SGSkygearReactNative.getCredentialStateForUserID(userID);
+}
+
+/**
+ * @public
+ */
+export function addAppleIDCredentialRevokedListener(
+  listener: () => void
+): { remove: () => void } {
+  return SGSkygearReactNativeEmitter.addListener(
+    "SGSkygearReactNativeAppleIDCredentialRevokedNotification",
+    listener
+  );
 }

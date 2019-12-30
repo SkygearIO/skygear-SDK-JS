@@ -7,6 +7,7 @@
 #import "SGSkygearReactNative.h"
 
 static NSString *const kOpenURLNotification = @"SGSkygearReactNativeOpenURLNotification";
+static NSString *const kAppleIDCredentialRevokedNotification = @"SGSkygearReactNativeAppleIDCredentialRevokedNotification";
 
 static void postNotificationWithURL(NSURL *URL, id sender)
 {
@@ -71,6 +72,30 @@ RCT_EXPORT_MODULE()
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[kAppleIDCredentialRevokedNotification];
+}
+
+- (void)startObserving
+{
+  if (@available(iOS 13.0, *)) {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleRevokedNotification:)
+                                                 name:ASAuthorizationAppleIDProviderCredentialRevokedNotification
+                                               object:nil];
+  }
+}
+
+- (void)stopObserving
+{
+  if (@available(iOS 13.0, *)) {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:ASAuthorizationAppleIDProviderCredentialRevokedNotification
+                                                  object:nil];
+  }
 }
 
 + (BOOL)application:(UIApplication *)app
@@ -360,6 +385,11 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
         self.openURLResolve = nil;
         self.openURLReject = nil;
     }
+}
+
+- (void)handleRevokedNotification:(NSNotification *)notification
+{
+  [self sendEventWithName:kAppleIDCredentialRevokedNotification body:@{}];
 }
 
 -(NSArray *)randomBytes:(NSUInteger)length

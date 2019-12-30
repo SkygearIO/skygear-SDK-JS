@@ -3,8 +3,9 @@
 #import <UIKit/UIUserActivity.h>
 #endif
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface SGSkygearReactNative : NSObject <RCTBridgeModule>
+@interface SGSkygearReactNative : RCTEventEmitter <RCTBridgeModule>
 
 + (BOOL)application:(nonnull UIApplication *)app
             openURL:(nonnull NSURL *)URL
