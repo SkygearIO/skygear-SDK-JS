@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Identity and Login ID</title>
+</head>
+<body>
+
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+
+  <form class="container" onsubmit="onSubmitListIdentities(event)">
+    <div class="form-group">
+      <h1>List Identities</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="listIdentitiesSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="listIdentitiesResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitAddLoginID(event)">
+    <div class="form-group">
+      <h1>Add Login ID</h1>
+    </div>
+    <div class="form-group">
+      <label>Login ID Key</label>
+      <input id="addLoginIDLoginIDKey" type="text" class="form-control" placeholder="Login ID Key" oninput="onInputAddLoginID()">
+    </div>
+    <div class="form-group">
+      <label>Login ID</label>
+      <input id="addLoginIDLoginID" type="text" class="form-control" placeholder="Login ID" oninput="onInputAddLoginID()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="addLoginIDSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="addLoginIDResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitRemoveLoginID(event)">
+    <div class="form-group">
+      <h1>Remove Login ID</h1>
+    </div>
+    <div class="form-group">
+      <label>Login ID Key</label>
+      <input id="removeLoginIDLoginIDKey" type="text" class="form-control" placeholder="Login ID Key" oninput="onInputRemoveLoginID()">
+    </div>
+    <div class="form-group">
+      <label>Login ID</label>
+      <input id="removeLoginIDLoginID" type="text" class="form-control" placeholder="Login ID" oninput="onInputRemoveLoginID()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="removeLoginIDSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="removeLoginIDResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <form class="container" onsubmit="onSubmitUpdateLoginID(event)">
+    <div class="form-group">
+      <h1>Update Login ID</h1>
+    </div>
+    <div class="form-group">
+      <label>Old Login ID Key</label>
+      <input id="updateLoginIDOldLoginIDKey" type="text" class="form-control" placeholder="Old Login ID Key" oninput="onInputUpdateLoginID()">
+    </div>
+    <div class="form-group">
+      <label>Old Login ID</label>
+      <input id="updateLoginIDOldLoginID" type="text" class="form-control" placeholder="Old Login ID" oninput="onInputUpdateLoginID()">
+    </div>
+    <div class="form-group">
+      <label>New Login ID Key</label>
+      <input id="updateLoginIDNewLoginIDKey" type="text" class="form-control" placeholder="New Login ID Key" oninput="onInputUpdateLoginID()">
+    </div>
+    <div class="form-group">
+      <label>New Login ID</label>
+      <input id="updateLoginIDNewLoginID" type="text" class="form-control" placeholder="New Login ID" oninput="onInputUpdateLoginID()">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="updateLoginIDSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="updateLoginIDResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+
+  <script>
+
+function setupListIdentitiesSynopsis() {
+  var synopsisTextArea = document.getElementById("listIdentitiesSynopsis");
+  var funcExpr = "skygear.auth.listIdentities";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitListIdentities(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("listIdentitiesResult");
+
+  skygear.auth.listIdentities().then(function(identities) {
+    resultTextArea.value = JSON.stringify(identities);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputAddLoginID() {
+  var loginIDKey = document.getElementById("addLoginIDLoginIDKey").value;
+  var loginID = document.getElementById("addLoginIDLoginID").value;
+  var synopsisTextArea = document.getElementById("addLoginIDSynopsis");
+  var funcExpr = "skygear.auth.addLoginID";
+  var s = stringifyFunctionCall(funcExpr, { [loginIDKey]: loginID });
+  synopsisTextArea.value = s;
+}
+
+function onSubmitAddLoginID(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var loginIDKey = document.getElementById("addLoginIDLoginIDKey").value;
+  var loginID = document.getElementById("addLoginIDLoginID").value;
+  var resultTextArea = document.getElementById("addLoginIDResult");
+
+  skygear.auth.addLoginID({ [loginIDKey]: loginID }).then(function(resp) {
+    resultTextArea.value = JSON.stringify(resp);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputRemoveLoginID() {
+  var loginIDKey = document.getElementById("removeLoginIDLoginIDKey").value;
+  var loginID = document.getElementById("removeLoginIDLoginID").value;
+  var synopsisTextArea = document.getElementById("removeLoginIDSynopsis");
+  var funcExpr = "skygear.auth.removeLoginID";
+  var s = stringifyFunctionCall(funcExpr, { [loginIDKey]: loginID });
+  synopsisTextArea.value = s;
+}
+
+function onSubmitRemoveLoginID(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var loginIDKey = document.getElementById("removeLoginIDLoginIDKey").value;
+  var loginID = document.getElementById("removeLoginIDLoginID").value;
+  var resultTextArea = document.getElementById("removeLoginIDResult");
+
+  skygear.auth.removeLoginID({ [loginIDKey]: loginID }).then(function(resp) {
+    resultTextArea.value = JSON.stringify(resp);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+function onInputUpdateLoginID() {
+  var oldLoginIDKey = document.getElementById("updateLoginIDOldLoginIDKey").value;
+  var oldLoginID = document.getElementById("updateLoginIDOldLoginID").value;
+  var newLoginIDKey = document.getElementById("updateLoginIDNewLoginIDKey").value;
+  var newLoginID = document.getElementById("updateLoginIDNewLoginID").value;
+  var synopsisTextArea = document.getElementById("updateLoginIDSynopsis");
+  var funcExpr = "skygear.auth.updateLoginID";
+  var s = stringifyFunctionCall(funcExpr, { [oldLoginIDKey]: oldLoginID }, { [newLoginIDKey]: newLoginID });
+  synopsisTextArea.value = s;
+}
+
+function onSubmitUpdateLoginID(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var oldLoginIDKey = document.getElementById("updateLoginIDOldLoginIDKey").value;
+  var oldLoginID = document.getElementById("updateLoginIDOldLoginID").value;
+  var newLoginIDKey = document.getElementById("updateLoginIDNewLoginIDKey").value;
+  var newLoginID = document.getElementById("updateLoginIDNewLoginID").value;
+  var resultTextArea = document.getElementById("updateLoginIDResult");
+
+  skygear.auth.updateLoginID({ [oldLoginIDKey]: oldLoginID }, { [newLoginIDKey]: newLoginID }).then(function(user) {
+    resultTextArea.value = JSON.stringify(user);
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+skygear.configure({
+  endpoint: "__SKYGEAR_ENDPOINT__",
+  apiKey: "__SKYGEAR_API_KEY__"
+}).then(function() {
+  setupListIdentitiesSynopsis();
+  onInputAddLoginID();
+  onInputRemoveLoginID();
+  onInputUpdateLoginID();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
