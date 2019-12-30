@@ -107,6 +107,11 @@ public class SGSkygearReactNativeModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void signInWithApple(String urlString, Promise promise) {
+        promise.reject("EUNSPECIFIED", "Android does not support Sign in with Apple");
+    }
+
     private WritableArray bytesToArray(byte[] bytes) {
         WritableArray arr = Arguments.createArray();
         for (int i = 0; i < bytes.length; i++) {
