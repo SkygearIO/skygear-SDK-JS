@@ -3,6 +3,7 @@ import {
   AuthResponse,
   SSOLoginOptions,
   Session,
+  Identity,
   FullOAuthAuthorizationURLOptions,
   Authenticator,
   ActivateTOTPResult,
@@ -24,6 +25,7 @@ import {
   decodeAuthResponse,
   decodeSession,
   decodeAuthenticator,
+  decodeIdentity,
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
 
@@ -494,6 +496,51 @@ export abstract class BaseAPIClient {
 
   async revokeOtherSessions(): Promise<void> {
     return this.post("/_auth/session/revoke_all", { json: {} });
+  }
+
+  async listIdentities(): Promise<Identity[]> {
+    const response = await this.post("/_auth/identity/list", { json: {} });
+    return (response.identities as any[]).map(decodeIdentity);
+  }
+
+  async addLoginID(loginID: { [key: string]: string }): Promise<void> {
+    const keys = Object.keys(loginID);
+    if (keys.length !== 1) {
+      throw new Error("must provide exactly one login ID");
+    }
+    return this.post("/_auth/login_id/add", {
+      json: { key: keys[0], value: loginID[keys[0]] },
+    });
+  }
+
+  async removeLoginID(loginID: { [key: string]: string }): Promise<void> {
+    const keys = Object.keys(loginID);
+    if (keys.length !== 1) {
+      throw new Error("must provide exactly one login ID");
+    }
+    return this.post("/_auth/login_id/remove", {
+      json: { key: keys[0], value: loginID[keys[0]] },
+    });
+  }
+
+  async updateLoginID(
+    oldLoginID: { [key: string]: string },
+    newLoginID: { [key: string]: string }
+  ): Promise<AuthResponse> {
+    const oldKeys = Object.keys(oldLoginID);
+    if (oldKeys.length !== 1) {
+      throw new Error("must provide exactly one old login ID");
+    }
+    const newKeys = Object.keys(newLoginID);
+    if (newKeys.length !== 1) {
+      throw new Error("must provide exactly one new login ID");
+    }
+    return this.postAndReturnAuthResponse("/_auth/login_id/update", {
+      json: {
+        old_login_id: { key: oldKeys[0], value: oldLoginID[oldKeys[0]] },
+        new_login_id: { key: newKeys[0], value: newLoginID[newKeys[0]] },
+      },
+    });
   }
 
   async listRecoveryCode(): Promise<string[]> {

@@ -646,6 +646,39 @@ export class AuthContainer<T extends BaseAPIClient> {
   async revokeOtherSessions(): Promise<void> {
     return this.parent.apiClient.revokeOtherSessions();
   }
+
+  /**
+   * Lists all identities of current user.
+   */
+  async listIdentities(): Promise<Identity[]> {
+    return this.parent.apiClient.listIdentities();
+  }
+
+  /**
+   * Adds new login ID to current user.
+   */
+  async addLoginID(loginID: { [key: string]: string }): Promise<void> {
+    return this.parent.apiClient.addLoginID(loginID);
+  }
+
+  /**
+   * Removes login ID from current user.
+   */
+  async removeLoginID(loginID: { [key: string]: string }): Promise<void> {
+    return this.parent.apiClient.removeLoginID(loginID);
+  }
+
+  /**
+   * Updates specified login ID for current user.
+   */
+  async updateLoginID(
+    oldLoginID: { [key: string]: string },
+    newLoginID: { [key: string]: string }
+  ): Promise<User> {
+    return this.handleAuthResponse(
+      this.parent.apiClient.updateLoginID(oldLoginID, newLoginID)
+    );
+  }
 }
 
 /**
