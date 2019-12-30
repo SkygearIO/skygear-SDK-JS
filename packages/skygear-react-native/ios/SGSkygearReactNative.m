@@ -225,6 +225,40 @@ RCT_EXPORT_METHOD(signInWithApple:(NSString *)url
   }
 }
 
+RCT_EXPORT_METHOD(getCredentialStateForUserID:(NSString *)userID
+                                      resolve:(RCTPromiseResolveBlock)resolve
+                                       reject:(RCTPromiseRejectBlock)reject)
+{
+  if (@available(iOS 13.0, *)) {
+    ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
+    [provider getCredentialStateForUserID:userID completion:^(ASAuthorizationAppleIDProviderCredentialState credentialState, NSError *error) {
+      if (error) {
+        reject(RCTErrorUnspecified, @"getCredentialStateForUserID", error);
+      } else {
+        switch (credentialState) {
+        case ASAuthorizationAppleIDProviderCredentialAuthorized:
+          resolve(@"Authorized");
+          break;
+        case ASAuthorizationAppleIDProviderCredentialNotFound:
+          resolve(@"NotFound");
+          break;
+        case ASAuthorizationAppleIDProviderCredentialRevoked:
+          resolve(@"Revoked");
+          break;
+        case ASAuthorizationAppleIDProviderCredentialTransferred:
+          resolve(@"Transferred");
+          break;
+        default:
+          reject(RCTErrorUnspecified, @"unexpected credential state", nil);
+          break;
+        }
+      }
+    }];
+  } else {
+    reject(RCTErrorUnspecified, @"Sign in with Apple requires iOS 13", nil);
+  }
+}
+
 RCT_EXPORT_METHOD(randomBytes:(NSUInteger)length resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     resolve([self randomBytes:length]);
@@ -286,7 +320,7 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
            didCompleteWithError:(NSError *)error API_AVAILABLE(ios(13))
 {
   if ([ASAuthorizationErrorDomain isEqualToString:error.domain]) {
-    NSString *reason = @"";
+    NSString *reason = @"unexpected error code";
     switch (error.code) {
     case ASAuthorizationErrorCanceled:
       reason = @"Canceled";
@@ -302,6 +336,8 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
       break;
     case ASAuthorizationErrorUnknown:
       reason = @"Unknown";
+      break;
+    default:
       break;
     }
     if (self.signInWithAppleReject) {

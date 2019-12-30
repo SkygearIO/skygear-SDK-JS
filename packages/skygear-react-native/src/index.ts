@@ -12,7 +12,11 @@ import {
   decodeError,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
-import { openURL, signInWithApple } from "./nativemodule";
+import {
+  openURL,
+  signInWithApple,
+  getCredentialStateForUserID,
+} from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
 export * from "@skygear/core";
 
@@ -270,6 +274,12 @@ export class ReactNativeAuthContainer<
       codeVerifier,
     });
     return this.handleAuthResponse(p);
+  }
+
+  async getCredentialStateForAppleUserID(
+    appleUserID: string
+  ): Promise<"Authorized" | "NotFound" | "Revoked" | "Transferred"> {
+    return getCredentialStateForUserID(appleUserID);
   }
 }
 

@@ -22,3 +22,9 @@ export function signInWithApple(
 ): Promise<{ code: string; scope: string; state: string }> {
   return SGSkygearReactNative.signInWithApple(url);
 }
+
+export function getCredentialStateForUserID(
+  userID: string
+): Promise<"Authorized" | "NotFound" | "Revoked" | "Transferred"> {
+  return SGSkygearReactNative.getCredentialStateForUserID(userID);
+}
