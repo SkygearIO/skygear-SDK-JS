@@ -41,6 +41,17 @@ function shouldRefreshToken(r: Response): boolean {
   return h === "true";
 }
 
+function extractSingleKeyValue(
+  o: { [key: string]: string },
+  errorMessage: string
+): [string, string] {
+  const keys = Object.keys(o);
+  if (keys.length !== 1) {
+    throw new Error(errorMessage);
+  }
+  return [keys[0], o[keys[0]]];
+}
+
 /**
  * @public
  */
@@ -504,22 +515,22 @@ export abstract class BaseAPIClient {
   }
 
   async addLoginID(loginID: { [key: string]: string }): Promise<void> {
-    const keys = Object.keys(loginID);
-    if (keys.length !== 1) {
-      throw new Error("must provide exactly one login ID");
-    }
+    const [key, value] = extractSingleKeyValue(
+      loginID,
+      "must provide exactly one login ID"
+    );
     return this.post("/_auth/login_id/add", {
-      json: { key: keys[0], value: loginID[keys[0]] },
+      json: { key, value },
     });
   }
 
   async removeLoginID(loginID: { [key: string]: string }): Promise<void> {
-    const keys = Object.keys(loginID);
-    if (keys.length !== 1) {
-      throw new Error("must provide exactly one login ID");
-    }
+    const [key, value] = extractSingleKeyValue(
+      loginID,
+      "must provide exactly one login ID"
+    );
     return this.post("/_auth/login_id/remove", {
-      json: { key: keys[0], value: loginID[keys[0]] },
+      json: { key, value },
     });
   }
 
@@ -527,18 +538,18 @@ export abstract class BaseAPIClient {
     oldLoginID: { [key: string]: string },
     newLoginID: { [key: string]: string }
   ): Promise<AuthResponse> {
-    const oldKeys = Object.keys(oldLoginID);
-    if (oldKeys.length !== 1) {
-      throw new Error("must provide exactly one old login ID");
-    }
-    const newKeys = Object.keys(newLoginID);
-    if (newKeys.length !== 1) {
-      throw new Error("must provide exactly one new login ID");
-    }
+    const [oldKey, oldValue] = extractSingleKeyValue(
+      oldLoginID,
+      "must provide exactly one old login ID"
+    );
+    const [newKey, newValue] = extractSingleKeyValue(
+      newLoginID,
+      "must provide exactly one new login ID"
+    );
     return this.postAndReturnAuthResponse("/_auth/login_id/update", {
       json: {
-        old_login_id: { key: oldKeys[0], value: oldLoginID[oldKeys[0]] },
-        new_login_id: { key: newKeys[0], value: newLoginID[newKeys[0]] },
+        old_login_id: { key: oldKey, value: oldValue },
+        new_login_id: { key: newKey, value: newValue },
       },
     });
   }
