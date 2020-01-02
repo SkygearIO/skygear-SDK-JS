@@ -3,6 +3,7 @@ import {
   AuthResponse,
   SSOLoginOptions,
   Session,
+  Identity,
   FullOAuthAuthorizationURLOptions,
   Authenticator,
   ActivateTOTPResult,
@@ -24,6 +25,7 @@ import {
   decodeAuthResponse,
   decodeSession,
   decodeAuthenticator,
+  decodeIdentity,
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
 
@@ -37,6 +39,17 @@ export function _removeTrailingSlash(s: string): string {
 function shouldRefreshToken(r: Response): boolean {
   const h = r.headers.get("x-skygear-try-refresh-token");
   return h === "true";
+}
+
+function extractSingleKeyValue(
+  o: { [key: string]: string },
+  errorMessage: string
+): [string, string] {
+  const keys = Object.keys(o);
+  if (keys.length !== 1) {
+    throw new Error(errorMessage);
+  }
+  return [keys[0], o[keys[0]]];
 }
 
 /**
@@ -494,6 +507,51 @@ export abstract class BaseAPIClient {
 
   async revokeOtherSessions(): Promise<void> {
     return this.post("/_auth/session/revoke_all", { json: {} });
+  }
+
+  async listIdentities(): Promise<Identity[]> {
+    const response = await this.post("/_auth/identity/list", { json: {} });
+    return (response.identities as any[]).map(decodeIdentity);
+  }
+
+  async addLoginID(loginID: { [key: string]: string }): Promise<void> {
+    const [key, value] = extractSingleKeyValue(
+      loginID,
+      "must provide exactly one login ID"
+    );
+    return this.post("/_auth/login_id/add", {
+      json: { key, value },
+    });
+  }
+
+  async removeLoginID(loginID: { [key: string]: string }): Promise<void> {
+    const [key, value] = extractSingleKeyValue(
+      loginID,
+      "must provide exactly one login ID"
+    );
+    return this.post("/_auth/login_id/remove", {
+      json: { key, value },
+    });
+  }
+
+  async updateLoginID(
+    oldLoginID: { [key: string]: string },
+    newLoginID: { [key: string]: string }
+  ): Promise<AuthResponse> {
+    const [oldKey, oldValue] = extractSingleKeyValue(
+      oldLoginID,
+      "must provide exactly one old login ID"
+    );
+    const [newKey, newValue] = extractSingleKeyValue(
+      newLoginID,
+      "must provide exactly one new login ID"
+    );
+    return this.postAndReturnAuthResponse("/_auth/login_id/update", {
+      json: {
+        old_login_id: { key: oldKey, value: oldValue },
+        new_login_id: { key: newKey, value: newValue },
+      },
+    });
   }
 
   async listRecoveryCode(): Promise<string[]> {
