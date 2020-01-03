@@ -1,14 +1,27 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import {
+  AuthContainer,
   BaseAPIClient,
-  StorageDriver,
   Container,
-  GlobalJSONContainerStorage,
   ContainerOptions,
+  GlobalJSONContainerStorage,
+  SSOLoginOptions,
+  StorageDriver,
+  User,
   _PresignUploadRequest,
   decodeError,
 } from "@skygear/core";
+import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
+import {
+  openURL,
+  signInWithApple,
+  getCredentialStateForUserID,
+  addAppleIDCredentialRevokedListener,
+} from "./nativemodule";
+import { extractResultFromURL, getCallbackURLScheme } from "./url";
 export * from "@skygear/core";
+
+export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
 
 const globalFetch = fetch;
 
@@ -164,6 +177,110 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 }
 
 /**
+ * Skygear Auth APIs (for React Native).
+ *
+ * @public
+ */
+export class ReactNativeAuthContainer<
+  T extends ReactNativeAPIClient
+> extends AuthContainer<T> {
+  async loginOAuthProvider(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    return this._performOAuth(providerID, callbackURL, "login", options);
+  }
+
+  async linkOAuthProvider(
+    providerID: string,
+    callbackURL: string
+  ): Promise<User> {
+    return this._performOAuth(providerID, callbackURL, "link");
+  }
+
+  async loginApple(
+    providerID: string,
+    callbackURL: string,
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    return this._performSignInWithApple(
+      providerID,
+      callbackURL,
+      "login",
+      options
+    );
+  }
+
+  async linkApple(providerID: string, callbackURL: string): Promise<User> {
+    return this._performSignInWithApple(providerID, callbackURL, "link");
+  }
+
+  async _performOAuth(
+    providerID: string,
+    callbackURL: string,
+    action: "login" | "link",
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    const callbackURLScheme = getCallbackURLScheme(callbackURL);
+    const codeVerifier = await generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
+      callbackURL: callbackURL,
+      action,
+      uxMode: "mobile_app",
+      onUserDuplicate: options && options.onUserDuplicate,
+    });
+    const redirectURL = await openURL(authURL, callbackURLScheme);
+    const j = extractResultFromURL(redirectURL);
+    if (j.result.error) {
+      throw decodeError(j.result.error);
+    }
+    const authorizationCode = j.result.result;
+    const p = this.parent.apiClient.getOAuthResult({
+      authorizationCode,
+      codeVerifier,
+    });
+    return this.handleAuthResponse(p);
+  }
+
+  async _performSignInWithApple(
+    providerID: string,
+    callbackURL: string,
+    action: "login" | "link",
+    options?: SSOLoginOptions
+  ): Promise<User> {
+    const codeVerifier = await generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
+      providerID,
+      codeChallenge,
+      callbackURL: callbackURL,
+      action,
+      uxMode: "manual",
+      onUserDuplicate: options && options.onUserDuplicate,
+    });
+    const r1 = await fetch(authURL);
+    const j1 = await r1.json();
+    const appleURL = j1.result;
+    const { code, scope, state } = await signInWithApple(appleURL);
+    const authorizationCode = await this.parent.apiClient.oauthHandler({
+      providerID,
+      code,
+      scope,
+      state,
+    });
+    const p = this.parent.apiClient.getOAuthResult({
+      authorizationCode,
+      codeVerifier,
+    });
+    return this.handleAuthResponse(p);
+  }
+}
+
+/**
  * Skygear APIs container (for React Native).
  *
  * @public
@@ -171,6 +288,7 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 export class ReactNativeContainer<
   T extends ReactNativeAPIClient
 > extends Container<T> {
+  auth: ReactNativeAuthContainer<T>;
   asset: ReactNativeAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
@@ -186,6 +304,7 @@ export class ReactNativeContainer<
 
     super(o);
     this.asset = new ReactNativeAssetContainer(this);
+    this.auth = new ReactNativeAuthContainer(this);
   }
 }
 

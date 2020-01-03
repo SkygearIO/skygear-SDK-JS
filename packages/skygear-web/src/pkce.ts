@@ -1,4 +1,4 @@
-import { _encodeUTF8, _encodeBase64URLFromUint8Array } from "@skygear/core";
+import { _encodeUTF8, _encodeBase64URLFromByteArray } from "@skygear/core";
 
 function byteToHex(byte: number): string {
   return ("0" + byte.toString(16)).substr(-2);
@@ -45,7 +45,7 @@ export async function computeCodeChallenge(
   codeVerifier: string
 ): Promise<string> {
   const hash = await sha256(codeVerifier);
-  const base64 = _encodeBase64URLFromUint8Array(hash);
+  const base64 = _encodeBase64URLFromByteArray(hash);
   return base64;
 }
 

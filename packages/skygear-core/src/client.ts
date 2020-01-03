@@ -442,6 +442,20 @@ export abstract class BaseAPIClient {
     return this.post(path, { json: payload });
   }
 
+  async oauthHandler(options: {
+    providerID: string;
+    code: string;
+    scope: string;
+    state: string;
+  }): Promise<string> {
+    const { providerID, code, scope, state } = options;
+    const encoded = encodeURIComponent(providerID);
+    const path = `/_auth/sso/${encoded}/auth_handler`;
+    return this.get(path, {
+      query: [["code", code], ["scope", scope], ["state", state]],
+    });
+  }
+
   async getOAuthResult(options: {
     authorizationCode: string;
     codeVerifier: string;

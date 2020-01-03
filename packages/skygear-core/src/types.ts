@@ -1,6 +1,14 @@
 /**
  * @public
  */
+export interface ByteArray {
+  [index: number]: number;
+  length: number;
+}
+
+/**
+ * @public
+ */
 export type JSONValue = unknown;
 
 /**
@@ -316,7 +324,9 @@ export type FullOAuthAuthorizationURLOptions = OAuthAuthorizationURLOptions & {
  */
 export type OAuthAuthorizationURLOptions =
   | OAuthWebRedirectAuthorizationURLOptions
-  | OAuthWebPopupAuthorizationURLOptions;
+  | OAuthWebPopupAuthorizationURLOptions
+  | OAuthMobileAppAuthorizationURLOptions
+  | OAuthManualAuthorizationURLOptions;
 
 /**
  * @public
@@ -334,6 +344,24 @@ export interface OAuthWebRedirectAuthorizationURLOptions
 export interface OAuthWebPopupAuthorizationURLOptions extends SSOLoginOptions {
   action: "login" | "link";
   uxMode: "web_popup";
+}
+
+/**
+ * @public
+ */
+export interface OAuthMobileAppAuthorizationURLOptions extends SSOLoginOptions {
+  action: "login" | "link";
+  callbackURL: string;
+  uxMode: "mobile_app";
+}
+
+/**
+ * @public
+ */
+export interface OAuthManualAuthorizationURLOptions extends SSOLoginOptions {
+  uxMode: "manual";
+  callbackURL: string;
+  action: "login" | "link";
 }
 
 /**
