@@ -528,13 +528,16 @@ export abstract class BaseAPIClient {
     return (response.identities as any[]).map(decodeIdentity);
   }
 
-  async addLoginID(loginID: { [key: string]: string }): Promise<void> {
-    const [key, value] = extractSingleKeyValue(
-      loginID,
-      "must provide exactly one login ID"
-    );
+  async addLoginID(...loginIDs: { [key: string]: string }[]): Promise<void> {
+    const mappedLoginIDs = loginIDs.map(loginID => {
+      const [key, value] = extractSingleKeyValue(
+        loginID,
+        "must provide exactly one login ID"
+      );
+      return { key, value };
+    });
     return this.post("/_auth/login_id/add", {
-      json: { key, value },
+      json: { login_ids: mappedLoginIDs },
     });
   }
 
