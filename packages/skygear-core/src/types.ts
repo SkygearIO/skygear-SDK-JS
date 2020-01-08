@@ -33,6 +33,10 @@ export interface User {
    */
   lastLoginAt: Date;
   /**
+   * Indicates whether the user is verified manually.
+   */
+  isManuallyVerified: boolean;
+  /**
    * Indicates whether the user is verified.
    */
   isVerified: boolean;
