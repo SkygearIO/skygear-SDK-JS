@@ -6,17 +6,17 @@
 <tr><th>Class</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.authcontainer">AuthContainer</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.authcontainer">AuthContainer</a></td><td>Skygear Auth APIs.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient">BaseAPIClient</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.container">Container</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.container">Container</a></td><td>Skygear APIs container.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.globaljsoncontainerstorage">GlobalJSONContainerStorage</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.imageprocessingpipelinebuilder">ImageProcessingPipelineBuilder</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.imageprocessingpipelinebuilder">ImageProcessingPipelineBuilder</a></td><td>Image processing pipeline builder.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.memorystoragedriver">MemoryStorageDriver</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.mfacontainer">MFAContainer</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.mfacontainer">MFAContainer</a></td><td>Skygear Auth Multi-Factor-Authentication APIs.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.nodeapiclient">NodeAPIClient</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.nodeassetcontainer">NodeAssetContainer</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.nodecontainer">NodeContainer</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.skygearerror">SkygearError</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.nodeassetcontainer">NodeAssetContainer</a></td><td>Skygear Asset APIs (for Node.js).</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.nodecontainer">NodeContainer</a></td><td>Skygear APIs container (for Node.js).</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.skygearerror">SkygearError</a></td><td>Skygear API error.</td></tr>
 </tbody>
 </table>
 <h2><a class="anchor" aria-hidden="true" id="functions"></a><a href="#functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Functions</h2>
@@ -36,9 +36,9 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.encodequerycomponent">encodeQueryComponent(s)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.encodeuser">encodeUser(u)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.generateotpauthuri">generateOTPAuthURI(options)</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.getdevicename">getDeviceName()</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.ismfarequirederror">isMFARequiredError(e)</a></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.isvalidationerror">isValidationError(err)</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.getdevicename">getDeviceName()</a></td><td>Returns name of the device.</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.ismfarequirederror">isMFARequiredError(e)</a></td><td>Check if the provided error indicates Multi-Factor-Authentication is required during authentication.</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.isvalidationerror">isValidationError(err)</a></td><td>Check if the provided error indicates the server failed to validate input parameters to API.</td></tr>
 </tbody>
 </table>
 <h2><a class="anchor" aria-hidden="true" id="interfaces"></a><a href="#interfaces" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Interfaces</h2>
@@ -53,6 +53,7 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.authenticatewithtotpoptions">AuthenticateWithTOTPOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.authenticationsession">AuthenticationSession</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.authresponse">AuthResponse</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.bytearray">ByteArray</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.containeroptions">ContainerOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.containerstorage">ContainerStorage</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.createnewoobemailoptions">CreateNewOOBEmailOptions</a></td><td></td></tr>
@@ -65,6 +66,8 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.generateotpauthurioptions">GenerateOTPAuthURIOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.imageprocessingpipelinebuilderresizeoptions">ImageProcessingPipelineBuilderResizeOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oauthidentity">OAuthIdentity</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oauthmanualauthorizationurloptions">OAuthManualAuthorizationURLOptions</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oauthmobileappauthorizationurloptions">OAuthMobileAppAuthorizationURLOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oauthwebpopupauthorizationurloptions">OAuthWebPopupAuthorizationURLOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oauthwebredirectauthorizationurloptions">OAuthWebRedirectAuthorizationURLOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.oobemailauthenticator">OOBEmailAuthenticator</a></td><td></td></tr>
@@ -90,7 +93,7 @@
 <tr><th>Variable</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.defaultcontainer">defaultContainer</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.defaultcontainer">defaultContainer</a></td><td>Default Skygear APIs container.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.skygearerrornames">SkygearErrorNames</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.validationerrorkinds">ValidationErrorKinds</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.version">VERSION</a></td><td></td></tr>
@@ -121,4 +124,4 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.validationinvalidtypecause">ValidationInvalidTypeCause</a></td><td></td></tr>
 </tbody>
 </table>
-</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#node-client-package">node-client package</a></li><li><a href="#classes">Classes</a></li><li><a href="#functions">Functions</a></li><li><a href="#interfaces">Interfaces</a></li><li><a href="#variables">Variables</a></li><li><a href="#type-aliases">Type Aliases</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/skygear-SDK-JS/" class="nav-home"><img src="/skygear-SDK-JS/img/favicon.ico" alt="Skygear SDK JS" width="66" height="58"/></a><div><h5>Docs</h5><a href="/skygear-SDK-JS/docs/en/index.html">API Reference</a></div></section><section class="copyright">Copyright © 2019 Oursky Ltd.</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#node-client-package">node-client package</a></li><li><a href="#classes">Classes</a></li><li><a href="#functions">Functions</a></li><li><a href="#interfaces">Interfaces</a></li><li><a href="#variables">Variables</a></li><li><a href="#type-aliases">Type Aliases</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/skygear-SDK-JS/" class="nav-home"><img src="/skygear-SDK-JS/img/favicon.ico" alt="Skygear SDK JS" width="66" height="58"/></a><div><h5>Docs</h5><a href="/skygear-SDK-JS/docs/en/index.html">API Reference</a></div></section><section class="copyright">Copyright © 2020 Oursky Ltd.</section></footer></div></body></html>

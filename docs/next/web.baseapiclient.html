@@ -35,6 +35,7 @@
 <tbody>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.activateoob">activateOOB(code)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.activatetotp">activateTOTP(otp)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.addloginid">addLoginID(loginIDs)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.authenticatewithbearertoken">authenticateWithBearerToken(bearerToken)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.authenticatewithoob">authenticateWithOOB(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.authenticatewithrecoverycode">authenticateWithRecoveryCode(code)</a></td><td></td><td></td></tr>
@@ -51,6 +52,7 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.getoauthresult">getOAuthResult(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.getsession">getSession(id)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.linkoauthproviderwithaccesstoken">linkOAuthProviderWithAccessToken(providerID, accessToken)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.listidentities">listIdentities()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.listrecoverycode">listRecoveryCode()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.listsessions">listSessions()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.login">login(loginID, password, options)</a></td><td></td><td></td></tr>
@@ -59,11 +61,13 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.logout">logout()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.me">me()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.oauthauthorizationurl">oauthAuthorizationURL(options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.oauthhandler">oauthHandler(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.post">post(path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.postandreturnauthresponse">postAndReturnAuthResponse(path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.prepareheaders">prepareHeaders()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.refresh">refresh(refreshToken)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.regeneraterecoverycode">regenerateRecoveryCode()</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.removeloginid">removeLoginID(loginID)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.request">request(method, path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.requestemailverification">requestEmailVerification(email)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.requestforgotpasswordemail">requestForgotPasswordEmail(email)</a></td><td></td><td></td></tr>
@@ -74,8 +78,9 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.revokesession">revokeSession(id)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.signup">signup(loginIDs, password, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.triggeroob">triggerOOB(authenticatorID)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.updateloginid">updateLoginID(oldLoginID, newLoginID)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.updatemetadata">updateMetadata(metadata)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.baseapiclient.verifywithcode">verifyWithCode(code)</a></td><td></td><td></td></tr>
 </tbody>
 </table>
-</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#baseapiclient-class">BaseAPIClient class</a></li><li><a href="#constructors">Constructors</a></li><li><a href="#properties">Properties</a></li><li><a href="#methods">Methods</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/skygear-SDK-JS/" class="nav-home"><img src="/skygear-SDK-JS/img/favicon.ico" alt="Skygear SDK JS" width="66" height="58"/></a><div><h5>Docs</h5><a href="/skygear-SDK-JS/docs/en/index.html">API Reference</a></div></section><section class="copyright">Copyright © 2019 Oursky Ltd.</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#baseapiclient-class">BaseAPIClient class</a></li><li><a href="#constructors">Constructors</a></li><li><a href="#properties">Properties</a></li><li><a href="#methods">Methods</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/skygear-SDK-JS/" class="nav-home"><img src="/skygear-SDK-JS/img/favicon.ico" alt="Skygear SDK JS" width="66" height="58"/></a><div><h5>Docs</h5><a href="/skygear-SDK-JS/docs/en/index.html">API Reference</a></div></section><section class="copyright">Copyright © 2020 Oursky Ltd.</section></footer></div></body></html>
