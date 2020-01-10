@@ -23,6 +23,9 @@
       "node-client.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
+      "node-client.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
+      },
       "node-client.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
@@ -46,6 +49,9 @@
       },
       "node-client.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "node-client.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
       },
       "node-client.authcontainer.listsessions": {
         "title": "AuthContainer.listSessions() method"
@@ -73,6 +79,9 @@
       },
       "node-client.authcontainer.parent": {
         "title": "AuthContainer.parent property"
+      },
+      "node-client.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
       },
       "node-client.authcontainer.requestemailverification": {
         "title": "AuthContainer.requestEmailVerification() method"
@@ -103,6 +112,9 @@
       },
       "node-client.authcontainer.signupwithusername": {
         "title": "AuthContainer.signupWithUsername() method"
+      },
+      "node-client.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
       },
       "node-client.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
@@ -170,6 +182,9 @@
       "node-client.baseapiclient.activatetotp": {
         "title": "BaseAPIClient.activateTOTP() method"
       },
+      "node-client.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
       "node-client.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
@@ -230,6 +245,9 @@
       "node-client.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
+      "node-client.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
       "node-client.baseapiclient.listrecoverycode": {
         "title": "BaseAPIClient.listRecoveryCode() method"
       },
@@ -257,6 +275,9 @@
       "node-client.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "node-client.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
       "node-client.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -274,6 +295,9 @@
       },
       "node-client.baseapiclient.regeneraterecoverycode": {
         "title": "BaseAPIClient.regenerateRecoveryCode() method"
+      },
+      "node-client.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
       },
       "node-client.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
@@ -308,6 +332,9 @@
       "node-client.baseapiclient.triggeroob": {
         "title": "BaseAPIClient.triggerOOB() method"
       },
+      "node-client.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
       "node-client.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
       },
@@ -316,6 +343,12 @@
       },
       "node-client.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "node-client.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "node-client.bytearray": {
+        "title": "ByteArray interface"
       },
       "node-client.container._constructor_": {
         "title": "Container.(constructor)"
@@ -863,6 +896,30 @@
       "node-client.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
       },
+      "node-client.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "node-client.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "node-client.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "node-client.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "node-client.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "node-client.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "node-client.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "node-client.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
       "node-client.oauthwebpopupauthorizationurloptions.action": {
         "title": "OAuthWebPopupAuthorizationURLOptions.action property"
       },
@@ -1007,6 +1064,12 @@
       "node-client.skygearerror": {
         "title": "SkygearError class"
       },
+      "node-client.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "node-client.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
       "node-client.skygearerror.reason": {
         "title": "SkygearError.reason property"
       },
@@ -1054,9 +1117,6 @@
       },
       "node-client.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
-      },
-      "node-client.uploadassetoptions.exactname": {
-        "title": "UploadAssetOptions.exactName property"
       },
       "node-client.uploadassetoptions.headers": {
         "title": "UploadAssetOptions.headers property"
@@ -1190,8 +1250,14 @@
       "react-native.activatetotpresult.recoverycodes": {
         "title": "ActivateTOTPResult.recoveryCodes property"
       },
+      "react-native.addappleidcredentialrevokedlistener": {
+        "title": "addAppleIDCredentialRevokedListener() function"
+      },
       "react-native.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
+      },
+      "react-native.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
       },
       "react-native.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
@@ -1216,6 +1282,9 @@
       },
       "react-native.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "react-native.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
       },
       "react-native.authcontainer.listsessions": {
         "title": "AuthContainer.listSessions() method"
@@ -1243,6 +1312,9 @@
       },
       "react-native.authcontainer.parent": {
         "title": "AuthContainer.parent property"
+      },
+      "react-native.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
       },
       "react-native.authcontainer.requestemailverification": {
         "title": "AuthContainer.requestEmailVerification() method"
@@ -1273,6 +1345,9 @@
       },
       "react-native.authcontainer.signupwithusername": {
         "title": "AuthContainer.signupWithUsername() method"
+      },
+      "react-native.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
       },
       "react-native.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
@@ -1340,6 +1415,9 @@
       "react-native.baseapiclient.activatetotp": {
         "title": "BaseAPIClient.activateTOTP() method"
       },
+      "react-native.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
       "react-native.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
@@ -1400,6 +1478,9 @@
       "react-native.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
+      "react-native.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
       "react-native.baseapiclient.listrecoverycode": {
         "title": "BaseAPIClient.listRecoveryCode() method"
       },
@@ -1427,6 +1508,9 @@
       "react-native.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "react-native.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
       "react-native.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -1444,6 +1528,9 @@
       },
       "react-native.baseapiclient.regeneraterecoverycode": {
         "title": "BaseAPIClient.regenerateRecoveryCode() method"
+      },
+      "react-native.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
       },
       "react-native.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
@@ -1478,6 +1565,9 @@
       "react-native.baseapiclient.triggeroob": {
         "title": "BaseAPIClient.triggerOOB() method"
       },
+      "react-native.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
       "react-native.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
       },
@@ -1486,6 +1576,12 @@
       },
       "react-native.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "react-native.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "react-native.bytearray": {
+        "title": "ByteArray interface"
       },
       "react-native.container._constructor_": {
         "title": "Container.(constructor)"
@@ -1751,6 +1847,9 @@
       "react-native.generateotpauthurioptions.secret": {
         "title": "GenerateOTPAuthURIOptions.secret property"
       },
+      "react-native.getcredentialstateforuserid": {
+        "title": "getCredentialStateForUserID() function"
+      },
       "react-native.globaljsoncontainerstorage._constructor_": {
         "title": "GlobalJSONContainerStorage.(constructor)"
       },
@@ -1979,6 +2078,30 @@
       "react-native.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
       },
+      "react-native.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "react-native.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "react-native.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "react-native.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "react-native.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "react-native.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "react-native.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "react-native.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
       "react-native.oauthwebpopupauthorizationurloptions.action": {
         "title": "OAuthWebPopupAuthorizationURLOptions.action property"
       },
@@ -2093,11 +2216,35 @@
       "react-native.reactnativeasyncstoragestoragedriver.set": {
         "title": "ReactNativeAsyncStorageStorageDriver.set() method"
       },
+      "react-native.reactnativeauthcontainer._performoauth": {
+        "title": "ReactNativeAuthContainer.\\_performOAuth() method"
+      },
+      "react-native.reactnativeauthcontainer._performsigninwithapple": {
+        "title": "ReactNativeAuthContainer.\\_performSignInWithApple() method"
+      },
+      "react-native.reactnativeauthcontainer.linkapple": {
+        "title": "ReactNativeAuthContainer.linkApple() method"
+      },
+      "react-native.reactnativeauthcontainer.linkoauthprovider": {
+        "title": "ReactNativeAuthContainer.linkOAuthProvider() method"
+      },
+      "react-native.reactnativeauthcontainer.loginapple": {
+        "title": "ReactNativeAuthContainer.loginApple() method"
+      },
+      "react-native.reactnativeauthcontainer.loginoauthprovider": {
+        "title": "ReactNativeAuthContainer.loginOAuthProvider() method"
+      },
+      "react-native.reactnativeauthcontainer": {
+        "title": "ReactNativeAuthContainer class"
+      },
       "react-native.reactnativecontainer._constructor_": {
         "title": "ReactNativeContainer.(constructor)"
       },
       "react-native.reactnativecontainer.asset": {
         "title": "ReactNativeContainer.asset property"
+      },
+      "react-native.reactnativecontainer.auth": {
+        "title": "ReactNativeContainer.auth property"
       },
       "react-native.reactnativecontainer": {
         "title": "ReactNativeContainer class"
@@ -2165,6 +2312,12 @@
       "react-native.skygearerror": {
         "title": "SkygearError class"
       },
+      "react-native.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "react-native.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
       "react-native.skygearerror.reason": {
         "title": "SkygearError.reason property"
       },
@@ -2212,9 +2365,6 @@
       },
       "react-native.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
-      },
-      "react-native.uploadassetoptions.exactname": {
-        "title": "UploadAssetOptions.exactName property"
       },
       "react-native.uploadassetoptions.headers": {
         "title": "UploadAssetOptions.headers property"
@@ -2351,6 +2501,9 @@
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
+      "web.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
+      },
       "web.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
       },
@@ -2374,6 +2527,9 @@
       },
       "web.authcontainer.linkoauthproviderwithaccesstoken": {
         "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "web.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
       },
       "web.authcontainer.listsessions": {
         "title": "AuthContainer.listSessions() method"
@@ -2401,6 +2557,9 @@
       },
       "web.authcontainer.parent": {
         "title": "AuthContainer.parent property"
+      },
+      "web.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
       },
       "web.authcontainer.requestemailverification": {
         "title": "AuthContainer.requestEmailVerification() method"
@@ -2431,6 +2590,9 @@
       },
       "web.authcontainer.signupwithusername": {
         "title": "AuthContainer.signupWithUsername() method"
+      },
+      "web.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
       },
       "web.authcontainer.updatemetadata": {
         "title": "AuthContainer.updateMetadata() method"
@@ -2498,6 +2660,9 @@
       "web.baseapiclient.activatetotp": {
         "title": "BaseAPIClient.activateTOTP() method"
       },
+      "web.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
       "web.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
@@ -2558,6 +2723,9 @@
       "web.baseapiclient.linkoauthproviderwithaccesstoken": {
         "title": "BaseAPIClient.linkOAuthProviderWithAccessToken() method"
       },
+      "web.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
       "web.baseapiclient.listrecoverycode": {
         "title": "BaseAPIClient.listRecoveryCode() method"
       },
@@ -2585,6 +2753,9 @@
       "web.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "web.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
       "web.baseapiclient.post": {
         "title": "BaseAPIClient.post() method"
       },
@@ -2602,6 +2773,9 @@
       },
       "web.baseapiclient.regeneraterecoverycode": {
         "title": "BaseAPIClient.regenerateRecoveryCode() method"
+      },
+      "web.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
       },
       "web.baseapiclient.request": {
         "title": "BaseAPIClient.request() method"
@@ -2636,6 +2810,9 @@
       "web.baseapiclient.triggeroob": {
         "title": "BaseAPIClient.triggerOOB() method"
       },
+      "web.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
       "web.baseapiclient.updatemetadata": {
         "title": "BaseAPIClient.updateMetadata() method"
       },
@@ -2644,6 +2821,12 @@
       },
       "web.baseapiclient.verifywithcode": {
         "title": "BaseAPIClient.verifyWithCode() method"
+      },
+      "web.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "web.bytearray": {
+        "title": "ByteArray interface"
       },
       "web.container._constructor_": {
         "title": "Container.(constructor)"
@@ -3140,6 +3323,30 @@
       "web.oauthidentity.type": {
         "title": "OAuthIdentity.type property"
       },
+      "web.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "web.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "web.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "web.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "web.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "web.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "web.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "web.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
       "web.oauthwebpopupauthorizationurloptions.action": {
         "title": "OAuthWebPopupAuthorizationURLOptions.action property"
       },
@@ -3284,6 +3491,12 @@
       "web.skygearerror": {
         "title": "SkygearError class"
       },
+      "web.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "web.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
       "web.skygearerror.reason": {
         "title": "SkygearError.reason property"
       },
@@ -3331,9 +3544,6 @@
       },
       "web.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
-      },
-      "web.uploadassetoptions.exactname": {
-        "title": "UploadAssetOptions.exactName property"
       },
       "web.uploadassetoptions.headers": {
         "title": "UploadAssetOptions.headers property"
@@ -7660,6 +7870,1848 @@
       },
       "version-2.0.0-alpha.17/version-2.0.0-alpha.17-web": {
         "title": "web package"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.activateoobresult": {
+        "title": "ActivateOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.activateoobresult.recoverycodes": {
+        "title": "ActivateOOBResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.activatetotpresult": {
+        "title": "ActivateTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.activatetotpresult.recoverycodes": {
+        "title": "ActivateTOTPResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithooboptions.code": {
+        "title": "AuthenticateWithOOBOptions.code property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithooboptions": {
+        "title": "AuthenticateWithOOBOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithooboptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithtotpoptions": {
+        "title": "AuthenticateWithTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithtotpoptions.otp": {
+        "title": "AuthenticateWithTOTPOptions.otp property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.authenticationsession.token": {
+        "title": "AuthenticationSession.token property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.bytearray": {
+        "title": "ByteArray interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobemailoptions.channel": {
+        "title": "CreateNewOOBEmailOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobemailoptions.email": {
+        "title": "CreateNewOOBEmailOptions.email property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobemailoptions": {
+        "title": "CreateNewOOBEmailOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobresult.authenticatorid": {
+        "title": "CreateNewOOBResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobresult.authenticatortype": {
+        "title": "CreateNewOOBResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobresult.channel": {
+        "title": "CreateNewOOBResult.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobresult": {
+        "title": "CreateNewOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobsmsoptions.channel": {
+        "title": "CreateNewOOBSMSOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobsmsoptions": {
+        "title": "CreateNewOOBSMSOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewoobsmsoptions.phone": {
+        "title": "CreateNewOOBSMSOptions.phone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpoptions.accountname": {
+        "title": "CreateNewTOTPOptions.accountName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpoptions.displayname": {
+        "title": "CreateNewTOTPOptions.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpoptions.issuer": {
+        "title": "CreateNewTOTPOptions.issuer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpoptions": {
+        "title": "CreateNewTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult.authenticatorid": {
+        "title": "CreateNewTOTPResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult.authenticatortype": {
+        "title": "CreateNewTOTPResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult.otpauthuri": {
+        "title": "CreateNewTOTPResult.otpauthURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.createnewtotpresult.secret": {
+        "title": "CreateNewTOTPResult.secret property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.getdevicename": {
+        "title": "getDeviceName() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.ismfarequirederror": {
+        "title": "isMFARequiredError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.activateoob": {
+        "title": "MFAContainer.activateOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.activatetotp": {
+        "title": "MFAContainer.activateTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.authenticatewithoob": {
+        "title": "MFAContainer.authenticateWithOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.authenticatewithrecoverycode": {
+        "title": "MFAContainer.authenticateWithRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.authenticatewithtotp": {
+        "title": "MFAContainer.authenticateWithTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.createnewoob": {
+        "title": "MFAContainer.createNewOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.createnewtotp": {
+        "title": "MFAContainer.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.deleteauthenticator": {
+        "title": "MFAContainer.deleteAuthenticator() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.getauthenticators": {
+        "title": "MFAContainer.getAuthenticators() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.listrecoverycode": {
+        "title": "MFAContainer.listRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.regeneraterecoverycode": {
+        "title": "MFAContainer.regenerateRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.revokealltrusteddevices": {
+        "title": "MFAContainer.revokeAllTrustedDevices() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.mfacontainer.triggeroob": {
+        "title": "MFAContainer.triggerOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.nodeassetcontainer": {
+        "title": "NodeAssetContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.nodeassetcontainer.upload": {
+        "title": "NodeAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.nodecontainer": {
+        "title": "NodeContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.activatedat": {
+        "title": "OOBEmailAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.channel": {
+        "title": "OOBEmailAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.createdat": {
+        "title": "OOBEmailAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.id": {
+        "title": "OOBEmailAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.maskedemail": {
+        "title": "OOBEmailAuthenticator.maskedEmail property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator": {
+        "title": "OOBEmailAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobemailauthenticator.type": {
+        "title": "OOBEmailAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.activatedat": {
+        "title": "OOBSMSAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.channel": {
+        "title": "OOBSMSAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.createdat": {
+        "title": "OOBSMSAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.id": {
+        "title": "OOBSMSAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.maskedphone": {
+        "title": "OOBSMSAuthenticator.maskedPhone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator": {
+        "title": "OOBSMSAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.oobsmsauthenticator.type": {
+        "title": "OOBSMSAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator.activatedat": {
+        "title": "TOTPAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator.createdat": {
+        "title": "TOTPAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator.displayname": {
+        "title": "TOTPAuthenticator.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator.id": {
+        "title": "TOTPAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator": {
+        "title": "TOTPAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.totpauthenticator.type": {
+        "title": "TOTPAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.uploadassetoptions.size": {
+        "title": "UploadAssetOptions.size property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-node-client.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.activateoobresult": {
+        "title": "ActivateOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.activateoobresult.recoverycodes": {
+        "title": "ActivateOOBResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.activatetotpresult": {
+        "title": "ActivateTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.activatetotpresult.recoverycodes": {
+        "title": "ActivateTOTPResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.addappleidcredentialrevokedlistener": {
+        "title": "addAppleIDCredentialRevokedListener() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithooboptions.code": {
+        "title": "AuthenticateWithOOBOptions.code property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithooboptions": {
+        "title": "AuthenticateWithOOBOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithooboptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithtotpoptions": {
+        "title": "AuthenticateWithTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithtotpoptions.otp": {
+        "title": "AuthenticateWithTOTPOptions.otp property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.authenticationsession.token": {
+        "title": "AuthenticationSession.token property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.bytearray": {
+        "title": "ByteArray interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobemailoptions.channel": {
+        "title": "CreateNewOOBEmailOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobemailoptions.email": {
+        "title": "CreateNewOOBEmailOptions.email property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobemailoptions": {
+        "title": "CreateNewOOBEmailOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobresult.authenticatorid": {
+        "title": "CreateNewOOBResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobresult.authenticatortype": {
+        "title": "CreateNewOOBResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobresult.channel": {
+        "title": "CreateNewOOBResult.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobresult": {
+        "title": "CreateNewOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobsmsoptions.channel": {
+        "title": "CreateNewOOBSMSOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobsmsoptions": {
+        "title": "CreateNewOOBSMSOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewoobsmsoptions.phone": {
+        "title": "CreateNewOOBSMSOptions.phone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpoptions.accountname": {
+        "title": "CreateNewTOTPOptions.accountName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpoptions.displayname": {
+        "title": "CreateNewTOTPOptions.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpoptions.issuer": {
+        "title": "CreateNewTOTPOptions.issuer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpoptions": {
+        "title": "CreateNewTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult.authenticatorid": {
+        "title": "CreateNewTOTPResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult.authenticatortype": {
+        "title": "CreateNewTOTPResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult.otpauthuri": {
+        "title": "CreateNewTOTPResult.otpauthURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.createnewtotpresult.secret": {
+        "title": "CreateNewTOTPResult.secret property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.getcredentialstateforuserid": {
+        "title": "getCredentialStateForUserID() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.ismfarequirederror": {
+        "title": "isMFARequiredError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.activateoob": {
+        "title": "MFAContainer.activateOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.activatetotp": {
+        "title": "MFAContainer.activateTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.authenticatewithoob": {
+        "title": "MFAContainer.authenticateWithOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.authenticatewithrecoverycode": {
+        "title": "MFAContainer.authenticateWithRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.authenticatewithtotp": {
+        "title": "MFAContainer.authenticateWithTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.createnewoob": {
+        "title": "MFAContainer.createNewOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.createnewtotp": {
+        "title": "MFAContainer.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.deleteauthenticator": {
+        "title": "MFAContainer.deleteAuthenticator() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.getauthenticators": {
+        "title": "MFAContainer.getAuthenticators() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.listrecoverycode": {
+        "title": "MFAContainer.listRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.regeneraterecoverycode": {
+        "title": "MFAContainer.regenerateRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.revokealltrusteddevices": {
+        "title": "MFAContainer.revokeAllTrustedDevices() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.mfacontainer.triggeroob": {
+        "title": "MFAContainer.triggerOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.activatedat": {
+        "title": "OOBEmailAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.channel": {
+        "title": "OOBEmailAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.createdat": {
+        "title": "OOBEmailAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.id": {
+        "title": "OOBEmailAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.maskedemail": {
+        "title": "OOBEmailAuthenticator.maskedEmail property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator": {
+        "title": "OOBEmailAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobemailauthenticator.type": {
+        "title": "OOBEmailAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.activatedat": {
+        "title": "OOBSMSAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.channel": {
+        "title": "OOBSMSAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.createdat": {
+        "title": "OOBSMSAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.id": {
+        "title": "OOBSMSAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.maskedphone": {
+        "title": "OOBSMSAuthenticator.maskedPhone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator": {
+        "title": "OOBSMSAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.oobsmsauthenticator.type": {
+        "title": "OOBSMSAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeassetcontainer": {
+        "title": "ReactNativeAssetContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeassetcontainer.upload": {
+        "title": "ReactNativeAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer._performoauth": {
+        "title": "ReactNativeAuthContainer.\\_performOAuth() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer._performsigninwithapple": {
+        "title": "ReactNativeAuthContainer.\\_performSignInWithApple() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer.linkapple": {
+        "title": "ReactNativeAuthContainer.linkApple() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer.linkoauthprovider": {
+        "title": "ReactNativeAuthContainer.linkOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer.loginapple": {
+        "title": "ReactNativeAuthContainer.loginApple() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer.loginoauthprovider": {
+        "title": "ReactNativeAuthContainer.loginOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativeauthcontainer": {
+        "title": "ReactNativeAuthContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativecontainer.auth": {
+        "title": "ReactNativeContainer.auth property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.reactnativecontainer": {
+        "title": "ReactNativeContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator.activatedat": {
+        "title": "TOTPAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator.createdat": {
+        "title": "TOTPAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator.displayname": {
+        "title": "TOTPAuthenticator.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator.id": {
+        "title": "TOTPAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator": {
+        "title": "TOTPAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.totpauthenticator.type": {
+        "title": "TOTPAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-react-native.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.activateoobresult": {
+        "title": "ActivateOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.activateoobresult.recoverycodes": {
+        "title": "ActivateOOBResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.activatetotpresult": {
+        "title": "ActivateTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.activatetotpresult.recoverycodes": {
+        "title": "ActivateTOTPResult.recoveryCodes property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.addloginid": {
+        "title": "AuthContainer.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.changepassword": {
+        "title": "AuthContainer.changePassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.currentidentity": {
+        "title": "AuthContainer.currentIdentity property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.currentsessionid": {
+        "title": "AuthContainer.currentSessionID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.currentuser": {
+        "title": "AuthContainer.currentUser property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.deleteoauthprovider": {
+        "title": "AuthContainer.deleteOAuthProvider() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.extrasessioninfooptions": {
+        "title": "AuthContainer.extraSessionInfoOptions property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.getsession": {
+        "title": "AuthContainer.getSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.linkoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.linkOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.listidentities": {
+        "title": "AuthContainer.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.listsessions": {
+        "title": "AuthContainer.listSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.login": {
+        "title": "AuthContainer.login() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.loginoauthproviderwithaccesstoken": {
+        "title": "AuthContainer.loginOAuthProviderWithAccessToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.loginwithcustomtoken": {
+        "title": "AuthContainer.loginWithCustomToken() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.logout": {
+        "title": "AuthContainer.logout() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.me": {
+        "title": "AuthContainer.me() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.removeloginid": {
+        "title": "AuthContainer.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.requestemailverification": {
+        "title": "AuthContainer.requestEmailVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.requestforgotpasswordemail": {
+        "title": "AuthContainer.requestForgotPasswordEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.requestphoneverification": {
+        "title": "AuthContainer.requestPhoneVerification() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.resetpassword": {
+        "title": "AuthContainer.resetPassword() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.revokeothersessions": {
+        "title": "AuthContainer.revokeOtherSessions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.revokesession": {
+        "title": "AuthContainer.revokeSession() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.signup": {
+        "title": "AuthContainer.signup() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.signupwithemail": {
+        "title": "AuthContainer.signupWithEmail() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.signupwithusername": {
+        "title": "AuthContainer.signupWithUsername() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.updateloginid": {
+        "title": "AuthContainer.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.updatemetadata": {
+        "title": "AuthContainer.updateMetadata() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authcontainer.verifywithcode": {
+        "title": "AuthContainer.verifyWithCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithooboptions.code": {
+        "title": "AuthenticateWithOOBOptions.code property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithooboptions": {
+        "title": "AuthenticateWithOOBOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithooboptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithtotpoptions": {
+        "title": "AuthenticateWithTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithtotpoptions.otp": {
+        "title": "AuthenticateWithTOTPOptions.otp property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
+        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.authenticationsession.token": {
+        "title": "AuthenticationSession.token property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient.addloginid": {
+        "title": "BaseAPIClient.addLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient.listidentities": {
+        "title": "BaseAPIClient.listIdentities() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient.oauthhandler": {
+        "title": "BaseAPIClient.oauthHandler() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient.removeloginid": {
+        "title": "BaseAPIClient.removeLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.baseapiclient.updateloginid": {
+        "title": "BaseAPIClient.updateLoginID() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.bytearray.length": {
+        "title": "ByteArray.length property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.bytearray": {
+        "title": "ByteArray interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.container.configure": {
+        "title": "Container.configure() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.container.fetch": {
+        "title": "Container.fetch() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.container": {
+        "title": "Container class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.container.name": {
+        "title": "Container.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobemailoptions.channel": {
+        "title": "CreateNewOOBEmailOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobemailoptions.email": {
+        "title": "CreateNewOOBEmailOptions.email property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobemailoptions": {
+        "title": "CreateNewOOBEmailOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobresult.authenticatorid": {
+        "title": "CreateNewOOBResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobresult.authenticatortype": {
+        "title": "CreateNewOOBResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobresult.channel": {
+        "title": "CreateNewOOBResult.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobresult": {
+        "title": "CreateNewOOBResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobsmsoptions.channel": {
+        "title": "CreateNewOOBSMSOptions.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobsmsoptions": {
+        "title": "CreateNewOOBSMSOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewoobsmsoptions.phone": {
+        "title": "CreateNewOOBSMSOptions.phone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpoptions.accountname": {
+        "title": "CreateNewTOTPOptions.accountName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpoptions.displayname": {
+        "title": "CreateNewTOTPOptions.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpoptions.issuer": {
+        "title": "CreateNewTOTPOptions.issuer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpoptions": {
+        "title": "CreateNewTOTPOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult.authenticatorid": {
+        "title": "CreateNewTOTPResult.authenticatorID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult.authenticatortype": {
+        "title": "CreateNewTOTPResult.authenticatorType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult": {
+        "title": "CreateNewTOTPResult interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult.otpauthuri": {
+        "title": "CreateNewTOTPResult.otpauthURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult.qrcodeimageuri": {
+        "title": "CreateNewTOTPResult.qrCodeImageURI property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.createnewtotpresult.secret": {
+        "title": "CreateNewTOTPResult.secret property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity.claims": {
+        "title": "CustomTokenIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity.id": {
+        "title": "CustomTokenIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity": {
+        "title": "CustomTokenIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity.provideruserid": {
+        "title": "CustomTokenIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity.rawprofile": {
+        "title": "CustomTokenIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.customtokenidentity.type": {
+        "title": "CustomTokenIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.defaultcontainer": {
+        "title": "defaultContainer variable"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.extrasessioninfooptions.devicename": {
+        "title": "ExtraSessionInfoOptions.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.extrasessioninfooptions": {
+        "title": "ExtraSessionInfoOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.format": {
+        "title": "ImageProcessingPipelineBuilder.format() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.getname": {
+        "title": "ImageProcessingPipelineBuilder.getName() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.getvalue": {
+        "title": "ImageProcessingPipelineBuilder.getValue() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder": {
+        "title": "ImageProcessingPipelineBuilder class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.quality": {
+        "title": "ImageProcessingPipelineBuilder.quality() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.resize": {
+        "title": "ImageProcessingPipelineBuilder.resize() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.imageprocessingpipelinebuilder.settourlstring": {
+        "title": "ImageProcessingPipelineBuilder.setToURLString() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.ismfarequirederror": {
+        "title": "isMFARequiredError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.isvalidationerror": {
+        "title": "isValidationError() function"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web": {
+        "title": "web package"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.activateoob": {
+        "title": "MFAContainer.activateOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.activatetotp": {
+        "title": "MFAContainer.activateTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.authenticatewithoob": {
+        "title": "MFAContainer.authenticateWithOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.authenticatewithrecoverycode": {
+        "title": "MFAContainer.authenticateWithRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.authenticatewithtotp": {
+        "title": "MFAContainer.authenticateWithTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.createnewoob": {
+        "title": "MFAContainer.createNewOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.createnewtotp": {
+        "title": "MFAContainer.createNewTOTP() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.deleteauthenticator": {
+        "title": "MFAContainer.deleteAuthenticator() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.getauthenticators": {
+        "title": "MFAContainer.getAuthenticators() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.listrecoverycode": {
+        "title": "MFAContainer.listRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer": {
+        "title": "MFAContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.regeneraterecoverycode": {
+        "title": "MFAContainer.regenerateRecoveryCode() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.revokealltrusteddevices": {
+        "title": "MFAContainer.revokeAllTrustedDevices() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.mfacontainer.triggeroob": {
+        "title": "MFAContainer.triggerOOB() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthauthorizationurloptions": {
+        "title": "OAuthAuthorizationURLOptions type"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.claims": {
+        "title": "OAuthIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.id": {
+        "title": "OAuthIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity": {
+        "title": "OAuthIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.providertype": {
+        "title": "OAuthIdentity.providerType property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.provideruserid": {
+        "title": "OAuthIdentity.providerUserID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.rawprofile": {
+        "title": "OAuthIdentity.rawProfile property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthidentity.type": {
+        "title": "OAuthIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmanualauthorizationurloptions.action": {
+        "title": "OAuthManualAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmanualauthorizationurloptions.callbackurl": {
+        "title": "OAuthManualAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmanualauthorizationurloptions": {
+        "title": "OAuthManualAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmanualauthorizationurloptions.uxmode": {
+        "title": "OAuthManualAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmobileappauthorizationurloptions.action": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.action property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmobileappauthorizationurloptions.callbackurl": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.callbackURL property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmobileappauthorizationurloptions": {
+        "title": "OAuthMobileAppAuthorizationURLOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oauthmobileappauthorizationurloptions.uxmode": {
+        "title": "OAuthMobileAppAuthorizationURLOptions.uxMode property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.activatedat": {
+        "title": "OOBEmailAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.channel": {
+        "title": "OOBEmailAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.createdat": {
+        "title": "OOBEmailAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.id": {
+        "title": "OOBEmailAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.maskedemail": {
+        "title": "OOBEmailAuthenticator.maskedEmail property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator": {
+        "title": "OOBEmailAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobemailauthenticator.type": {
+        "title": "OOBEmailAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.activatedat": {
+        "title": "OOBSMSAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.channel": {
+        "title": "OOBSMSAuthenticator.channel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.createdat": {
+        "title": "OOBSMSAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.id": {
+        "title": "OOBSMSAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.maskedphone": {
+        "title": "OOBSMSAuthenticator.maskedPhone property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator": {
+        "title": "OOBSMSAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.oobsmsauthenticator.type": {
+        "title": "OOBSMSAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity.claims": {
+        "title": "PasswordIdentity.claims property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity.id": {
+        "title": "PasswordIdentity.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity.loginid": {
+        "title": "PasswordIdentity.loginID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity.loginidkey": {
+        "title": "PasswordIdentity.loginIDKey property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity": {
+        "title": "PasswordIdentity interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.passwordidentity.type": {
+        "title": "PasswordIdentity.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.createdat": {
+        "title": "Session.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.createdbyip": {
+        "title": "Session.createdByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.data": {
+        "title": "Session.data property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.id": {
+        "title": "Session.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.identityid": {
+        "title": "Session.identityID property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.lastaccessedat": {
+        "title": "Session.lastAccessedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.lastaccessedbyip": {
+        "title": "Session.lastAccessedByIP property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session": {
+        "title": "Session interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.name": {
+        "title": "Session.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.session.useragent": {
+        "title": "Session.userAgent property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.devicemodel": {
+        "title": "SessionUserAgent.deviceModel property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.devicename": {
+        "title": "SessionUserAgent.deviceName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent": {
+        "title": "SessionUserAgent interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.name": {
+        "title": "SessionUserAgent.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.os": {
+        "title": "SessionUserAgent.os property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.osversion": {
+        "title": "SessionUserAgent.osVersion property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.raw": {
+        "title": "SessionUserAgent.raw property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.sessionuseragent.version": {
+        "title": "SessionUserAgent.version property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.skygearerror.info": {
+        "title": "SkygearError.info property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.skygearerror": {
+        "title": "SkygearError class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.skygearerror.message": {
+        "title": "SkygearError.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.skygearerror.name": {
+        "title": "SkygearError.name property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.skygearerror.reason": {
+        "title": "SkygearError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.ssologinoptions": {
+        "title": "SSOLoginOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.ssologinoptions.onuserduplicate": {
+        "title": "SSOLoginOptions.onUserDuplicate property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator.activatedat": {
+        "title": "TOTPAuthenticator.activatedAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator.createdat": {
+        "title": "TOTPAuthenticator.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator.displayname": {
+        "title": "TOTPAuthenticator.displayName property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator.id": {
+        "title": "TOTPAuthenticator.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator": {
+        "title": "TOTPAuthenticator interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.totpauthenticator.type": {
+        "title": "TOTPAuthenticator.type property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.uploadassetoptions.access": {
+        "title": "UploadAssetOptions.access property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.uploadassetoptions.onuploadprogress": {
+        "title": "UploadAssetOptions.onUploadProgress property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.uploadassetoptions.prefix": {
+        "title": "UploadAssetOptions.prefix property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.createdat": {
+        "title": "User.createdAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.id": {
+        "title": "User.id property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.isdisabled": {
+        "title": "User.isDisabled property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.isverified": {
+        "title": "User.isVerified property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.lastloginat": {
+        "title": "User.lastLoginAt property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user": {
+        "title": "User interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.user.metadata": {
+        "title": "User.metadata property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerror": {
+        "title": "ValidationError interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerror.reason": {
+        "title": "ValidationError.reason property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerrorcausebase.details": {
+        "title": "ValidationErrorCauseBase.details property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerrorcausebase.kind": {
+        "title": "ValidationErrorCauseBase.kind property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerrorcausebase": {
+        "title": "ValidationErrorCauseBase interface"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerrorcausebase.message": {
+        "title": "ValidationErrorCauseBase.message property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.validationerrorcausebase.pointer": {
+        "title": "ValidationErrorCauseBase.pointer property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webapiclient.fetchfunction": {
+        "title": "WebAPIClient.fetchFunction property"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webapiclient": {
+        "title": "WebAPIClient class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webassetcontainer": {
+        "title": "WebAssetContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webassetcontainer.upload": {
+        "title": "WebAssetContainer.upload() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.getlinkredirectresult": {
+        "title": "WebAuthContainer.getLinkRedirectResult() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.getloginredirectresult": {
+        "title": "WebAuthContainer.getLoginRedirectResult() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.linkoauthproviderwithpopup": {
+        "title": "WebAuthContainer.linkOAuthProviderWithPopup() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.linkoauthproviderwithredirect": {
+        "title": "WebAuthContainer.linkOAuthProviderWithRedirect() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.loginoauthproviderwithpopup": {
+        "title": "WebAuthContainer.loginOAuthProviderWithPopup() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer.loginoauthproviderwithredirect": {
+        "title": "WebAuthContainer.loginOAuthProviderWithRedirect() method"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webauthcontainer": {
+        "title": "WebAuthContainer class"
+      },
+      "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webcontainer": {
+        "title": "WebContainer class"
       }
     },
     "links": {},

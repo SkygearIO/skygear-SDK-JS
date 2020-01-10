@@ -1,3 +1,10 @@
+## 2.0.0-alpha.18 (2020-01-10)
+
+### Features
+
+- Support Sign in with Apple SSO
+- Add identity APIs
+
 ## 2.0.0-alpha.17 (2019-12-05)
 
 ### Breaking Changes
