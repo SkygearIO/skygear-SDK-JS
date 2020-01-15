@@ -50,12 +50,14 @@ export function decodeUser(u: any): User {
   const createdAt = new Date(u.created_at);
   const lastLoginAt = new Date(u.last_login_at);
   const isVerified = u.is_verified;
+  const isManuallyVerified = u.is_manually_verified;
   const isDisabled = u.is_disabled;
   const metadata = u.metadata;
   return {
     id,
     createdAt,
     lastLoginAt,
+    isManuallyVerified,
     isVerified,
     isDisabled,
     metadata,
@@ -207,6 +209,7 @@ export function encodeUser(u: User): JSONObject {
     id: u.id,
     created_at,
     last_login_at,
+    is_manually_verified: u.isManuallyVerified,
     is_verified: u.isVerified,
     is_disabled: u.isDisabled,
     metadata: u.metadata,

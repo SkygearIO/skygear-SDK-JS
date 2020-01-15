@@ -36,6 +36,7 @@ describe("ContainerStorage", () => {
       id: "userid",
       createdAt: new Date(0),
       lastLoginAt: new Date(0),
+      isManuallyVerified: true,
       isVerified: false,
       isDisabled: false,
       metadata: {},
