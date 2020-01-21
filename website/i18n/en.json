@@ -1139,6 +1139,9 @@
       "node-client.user.isdisabled": {
         "title": "User.isDisabled property"
       },
+      "node-client.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
+      },
       "node-client.user.isverified": {
         "title": "User.isVerified property"
       },
@@ -2387,6 +2390,9 @@
       "react-native.user.isdisabled": {
         "title": "User.isDisabled property"
       },
+      "react-native.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
+      },
       "react-native.user.isverified": {
         "title": "User.isVerified property"
       },
@@ -3565,6 +3571,9 @@
       },
       "web.user.isdisabled": {
         "title": "User.isDisabled property"
+      },
+      "web.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
       },
       "web.user.isverified": {
         "title": "User.isVerified property"
@@ -9712,6 +9721,24 @@
       },
       "version-2.0.0-alpha.18/version-2.0.0-alpha.18-web.webcontainer": {
         "title": "WebContainer class"
+      },
+      "version-2.1.0/version-2.1.0-node-client.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
+      },
+      "version-2.1.0/version-2.1.0-node-client.user": {
+        "title": "User interface"
+      },
+      "version-2.1.0/version-2.1.0-react-native.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
+      },
+      "version-2.1.0/version-2.1.0-react-native.user": {
+        "title": "User interface"
+      },
+      "version-2.1.0/version-2.1.0-web.user.ismanuallyverified": {
+        "title": "User.isManuallyVerified property"
+      },
+      "version-2.1.0/version-2.1.0-web.user": {
+        "title": "User interface"
       }
     },
     "links": {},

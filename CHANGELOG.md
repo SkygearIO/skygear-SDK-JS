@@ -1,3 +1,9 @@
+## 2.1.0 (2020-01-21)
+
+### Features
+
+- Add isManuallyVerified flag
+
 ## 2.0.0-alpha.18 (2020-01-10)
 
 ### Features
