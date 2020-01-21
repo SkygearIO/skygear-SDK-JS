@@ -427,13 +427,13 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
   asset: WebAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
-    const o = ({
+    const o = {
       ...options,
       apiClient: (options && options.apiClient) || new WebAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(localStorageStorageDriver),
-    } as any) as ContainerOptions<T>;
+    } as ContainerOptions<T>;
 
     super(o);
     this.auth = new WebAuthContainer(this);

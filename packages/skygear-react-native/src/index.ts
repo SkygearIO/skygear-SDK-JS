@@ -292,7 +292,7 @@ export class ReactNativeContainer<
   asset: ReactNativeAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
-    const o = ({
+    const o = {
       ...options,
       apiClient: (options && options.apiClient) || new ReactNativeAPIClient(),
       storage:
@@ -300,7 +300,7 @@ export class ReactNativeContainer<
         new GlobalJSONContainerStorage(
           new ReactNativeAsyncStorageStorageDriver()
         ),
-    } as any) as ContainerOptions<T>;
+    } as ContainerOptions<T>;
 
     super(o);
     this.asset = new ReactNativeAssetContainer(this);

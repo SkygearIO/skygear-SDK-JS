@@ -188,13 +188,13 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
   asset: NodeAssetContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
-    const o = ({
+    const o = {
       ...options,
       apiClient: (options && options.apiClient) || new NodeAPIClient(),
       storage:
         (options && options.storage) ||
         new GlobalJSONContainerStorage(new MemoryStorageDriver()),
-    } as any) as ContainerOptions<T>;
+    } as ContainerOptions<T>;
 
     super(o);
     this.asset = new NodeAssetContainer(this);
