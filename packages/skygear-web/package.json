@@ -1,6 +1,6 @@
 {
   "name": "@skygear/web",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "Apache-2.0",
   "main": "dist/skygear-web.cjs.js",
   "module": "dist/skygear-web.module.js",
@@ -12,6 +12,6 @@
     "dist/skygear-web.iife.js"
   ],
   "devDependencies": {
-    "@skygear/core": "2.1.0"
+    "@skygear/core": "2.2.0"
   }
 }
