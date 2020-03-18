@@ -19,6 +19,7 @@ import {
   CreateNewOOBResult,
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
+  _OIDCConfiguration,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
 import { BaseAPIClient } from "./client";
@@ -819,6 +820,86 @@ export class MFAContainer<T extends BaseAPIClient> {
    */
   async revokeAllTrustedDevices(): Promise<void> {
     await this.parent.parent.apiClient.revokeAllBearerToken();
+  }
+}
+
+/**
+ * Auth UI authorization options
+ *
+ * @public
+ */
+export interface AuthorizeOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
+}
+
+/**
+ * Skygear Auth OIDC client APIs.
+ *
+ * @internal
+ */
+export abstract class _OIDCContainer<T extends BaseAPIClient> {
+  parent: AuthContainer<T>;
+  private config?: _OIDCConfiguration;
+
+  abstract clientID: string;
+  abstract isThirdParty: boolean;
+  abstract async _setupCodeVerifier(): Promise<{
+    verifier: string;
+    challenge: string;
+  }>;
+
+  constructor(parent: AuthContainer<T>) {
+    this.parent = parent;
+  }
+
+  async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
+    const config = await this._fetchConfiguration();
+    const stateQuery = options.state ? `state=${options.state}` : "";
+    if (this.isThirdParty) {
+      const codeVerifier = await this._setupCodeVerifier();
+      await this.parent.parent.storage.setOIDCCodeVerifier(
+        this.parent.parent.name,
+        codeVerifier.verifier
+      );
+
+      return (
+        `${config.authorization_endpoint}?` +
+        `response_type=code&` +
+        `scope=openid%20offline_access&` +
+        `client_id=${this.clientID}&` +
+        `redirect_uri=${options.redirectURI}&` +
+        `${stateQuery}&` +
+        `code_challenge_method=S256&` +
+        `code_challenge=${codeVerifier.challenge}`
+      );
+    }
+
+    // for first party app
+    return (
+      `${config.authorization_endpoint}?` +
+      `response_type=none&` +
+      `scope=openid&` +
+      `client_id=${this.clientID}&` +
+      `redirect_uri=${options.redirectURI}&` +
+      `${stateQuery}`
+    );
+  }
+
+  /**
+   * @internal
+   */
+  async _fetchConfiguration(): Promise<_OIDCConfiguration> {
+    if (!this.config) {
+      this.config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
+    }
+    return this.config;
   }
 }
 

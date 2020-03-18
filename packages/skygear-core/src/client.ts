@@ -18,6 +18,8 @@ import {
   _PresignUploadRequest,
   _PresignUploadResponse,
   _PresignUploadFormResponse,
+  _OIDCConfiguration,
+  OAuthError,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -139,6 +141,21 @@ export abstract class BaseAPIClient {
       }
     }
     return headers;
+  }
+
+  /**
+   * @internal
+   */
+  async _fetch(url: string, init?: RequestInit): Promise<Response> {
+    if (!this.fetchFunction) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
+    if (!this.requestClass) {
+      throw new Error("missing requestClass in api client");
+    }
+    const request = new this.requestClass(url, init);
+    return this.fetchFunction(request);
   }
 
   async fetch(
@@ -856,5 +873,42 @@ export abstract class BaseAPIClient {
     return this.postAsset("/_asset/presign_upload_form", {
       json: {},
     });
+  }
+
+  /**
+   * @internal
+   */
+  async _fetchOIDCRequest(url: string, init?: RequestInit): Promise<any> {
+    const resp = await this._fetch(url, init);
+    let jsonBody;
+    try {
+      jsonBody = await resp.json();
+    } catch {
+      throw new SkygearError(
+        "failed to decode response JSON",
+        "InternalError",
+        "UnexpectedError",
+        {
+          status_code: resp.status,
+        }
+      );
+    }
+    if (resp.status === 200) {
+      return jsonBody;
+    }
+    const oauthError: OAuthError = {
+      error: jsonBody["error"],
+      error_description: jsonBody["error_description"],
+    };
+    throw oauthError;
+  }
+
+  /**
+   * @internal
+   */
+  async _fetchOIDCConfiguration(): Promise<_OIDCConfiguration> {
+    return this._fetchOIDCRequest(
+      `${this.authEndpoint}/.well-known/openid-configuration`
+    );
   }
 }

@@ -8,6 +8,8 @@ import {
   ContainerOptions,
   GlobalJSONContainerStorage,
   _PresignUploadRequest,
+  _OIDCContainer,
+  AuthorizeOptions,
 } from "@skygear/core";
 import { WebAPIClient } from "./client";
 import { localStorageStorageDriver } from "./storage";
@@ -92,6 +94,31 @@ function uploadForm(
 }
 
 /**
+ * @internal
+ */
+export class _WebOIDCContainer<T extends WebAPIClient> extends _OIDCContainer<
+  T
+> {
+  clientID: string;
+  isThirdParty: boolean;
+
+  constructor(parent: WebAuthContainer<T>) {
+    super(parent);
+    this.clientID = "";
+    this.isThirdParty = false;
+  }
+
+  async _setupCodeVerifier() {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    return {
+      verifier: codeVerifier,
+      challenge: codeChallenge,
+    };
+  }
+}
+
+/**
  * Skygear Auth APIs (for web platforms).
  *
  * @public
@@ -99,11 +126,16 @@ function uploadForm(
 export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   private oauthWindowObserver: NewWindowObserver | null;
   private oauthResultObserver: WindowMessageObserver | null;
+  /**
+   * @internal
+   */
+  _oidc: _WebOIDCContainer<T>;
 
   constructor(parent: WebContainer<T>) {
     super(parent);
     this.oauthWindowObserver = null;
     this.oauthResultObserver = null;
+    this._oidc = new _WebOIDCContainer(this);
   }
 
   private async _getAuthResultFromAuthorizationCode(
@@ -329,6 +361,16 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     };
     return this.handleMaybeAuthResponse(f());
   }
+
+  /**
+   * Open authorize page
+   *
+   * @param options - authorize options
+   */
+  async authorize(options: AuthorizeOptions): Promise<void> {
+    const authorizeEndpoint = await this._oidc.authorizeEndpoint(options);
+    window.location.href = authorizeEndpoint;
+  }
 }
 
 /**
@@ -480,5 +522,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
+    this.auth._oidc.clientID = options.clientID;
+    this.auth._oidc.isThirdParty = !!options.isThirdPartyApp;
   }
 }

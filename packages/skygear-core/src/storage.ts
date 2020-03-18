@@ -61,6 +61,10 @@ function keyMFABearerToken(name: string): string {
   return `${name}_mfaBearerToken`;
 }
 
+function keyOIDCCodeVerifier(name: string): string {
+  return `${name}_oidcCodeVerifier`;
+}
+
 /**
  * @internal
  */
@@ -186,6 +190,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSet(keyMFABearerToken(namespace), mfaBearerToken);
   }
 
+  async setOIDCCodeVerifier(namespace: string, code: string) {
+    await this.storage.safeSet(keyOIDCCodeVerifier(namespace), code);
+  }
+
   async getUser(namespace: string): Promise<User | null> {
     const userJSON = await this.storage.safeGetJSON(keyUser(namespace));
     if (userJSON) {
@@ -250,6 +258,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keyMFABearerToken(namespace));
   }
 
+  async getOIDCCodeVerifier(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyOIDCCodeVerifier(namespace));
+  }
+
   async delUser(namespace: string) {
     await this.storage.safeDel(keyUser(namespace));
   }
@@ -284,5 +296,9 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delMFABearerToken(namespace: string) {
     await this.storage.safeDel(keyMFABearerToken(namespace));
+  }
+
+  async delOIDCCodeVerifier(namespace: string) {
+    await this.storage.safeDel(keyOIDCCodeVerifier(namespace));
   }
 }
