@@ -180,6 +180,28 @@ export class NodeAssetContainer<T extends NodeAPIClient> {
 }
 
 /**
+ * @public
+ */
+export interface ConfigureOptions {
+  /**
+   * The OAuth client ID.
+   */
+  clientID: string;
+  /**
+   * The app endpoint.
+   */
+  appEndpoint: string;
+  /**
+   * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
+   */
+  authEndpoint?: string;
+  /**
+   * The Skygear asset endpoint. If it is omitted, it is derived by pre-pending `assets.` to the domain of the app endpoint.
+   */
+  assetEndpoint?: string;
+}
+
+/**
  * Skygear APIs container (for Node.js).
  *
  * @public
@@ -198,6 +220,20 @@ export class NodeContainer<T extends NodeAPIClient> extends Container<T> {
 
     super(o);
     this.asset = new NodeAssetContainer(this);
+  }
+
+  /**
+   * Configure this container with connection information.
+   *
+   * @param options - Skygear connection information
+   */
+  async configure(options: ConfigureOptions) {
+    await this._configure({
+      apiKey: options.clientID,
+      endpoint: options.appEndpoint,
+      authEndpoint: options.authEndpoint,
+      assetEndpoint: options.assetEndpoint,
+    });
   }
 }
 

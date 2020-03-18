@@ -856,16 +856,14 @@ export class Container<T extends BaseAPIClient> {
     this.auth = new AuthContainer(this);
   }
 
-  /**
-   * Configure this container with connection information.
-   *
-   * @param options - Skygear connection information
-   */
-  async configure(options: {
+  protected async _configure(options: {
     apiKey: string;
     endpoint: string;
+    authEndpoint?: string;
+    assetEndpoint?: string;
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
+    // TODO: support gears endpoint in apiClient
     this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
 
     const authenticationSession = await this.storage.getAuthenticationSession(
