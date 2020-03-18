@@ -78,6 +78,8 @@ function extractSingleKeyValue(
 export abstract class BaseAPIClient {
   apiKey: string;
   endpoint: string;
+  authEndpoint: string;
+  assetEndpoint: string;
   /**
    * @internal
    */
@@ -95,8 +97,26 @@ export abstract class BaseAPIClient {
   constructor() {
     this.apiKey = "";
     this.endpoint = "";
+    this.authEndpoint = "";
+    this.assetEndpoint = "";
     this._accessToken = null;
     this._authenticationSession = null;
+  }
+
+  async setEndpoint(
+    appEndpoint: string,
+    authEndpoint?: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    assetEndpoint?: string
+  ) {
+    // TODO: support gears endpoint in apiClient
+    this.endpoint = _removeTrailingSlash(appEndpoint);
+    this.authEndpoint = authEndpoint
+      ? authEndpoint
+      : _gearEndpoint(this.endpoint, "accounts");
+    this.assetEndpoint = assetEndpoint
+      ? assetEndpoint
+      : _gearEndpoint(this.endpoint, "assets");
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {

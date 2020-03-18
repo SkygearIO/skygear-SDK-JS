@@ -21,7 +21,7 @@ import {
   AuthenticateWithOOBOptions,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
-import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { BaseAPIClient } from "./client";
 import { encodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
@@ -93,7 +93,7 @@ export class AuthContainer<T extends BaseAPIClient> {
    *
    * @remarks
    * The SDK would populate extra session information from storage
-   * when calling {@link Container.configure | configure}.
+   * when calling Container.configure.
    */
   async saveExtraSessionInfoOptions() {
     return this.parent.storage.setExtraSessionInfoOptions(
@@ -863,8 +863,11 @@ export class Container<T extends BaseAPIClient> {
     assetEndpoint?: string;
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
-    // TODO: support gears endpoint in apiClient
-    this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
+    await this.apiClient.setEndpoint(
+      options.endpoint,
+      options.authEndpoint,
+      options.assetEndpoint
+    );
 
     const authenticationSession = await this.storage.getAuthenticationSession(
       this.name
