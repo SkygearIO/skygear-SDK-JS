@@ -36,6 +36,26 @@ export function _removeTrailingSlash(s: string): string {
   return s.replace(/\/+$/g, "");
 }
 
+/**
+ * @internal
+ * @param appEndpoint - app default endpoint, support url with protocol https, http or empty.
+ * @param gearSubdomain - gear subdomain, e.g. accounts, assets
+ */
+export function _gearEndpoint(
+  appEndpoint: string,
+  gearSubdomain: string
+): string {
+  const gearEndpoint = appEndpoint.replace(
+    /^(http:\/\/|https:\/\/|\/\/)(.*)$/g,
+    `$1${gearSubdomain}.$2`
+  );
+  if (gearEndpoint === appEndpoint) {
+    throw new Error("invalid app endpoint");
+  }
+
+  return gearEndpoint;
+}
+
 function shouldRefreshToken(r: Response): boolean {
   const h = r.headers.get("x-skygear-try-refresh-token");
   return h === "true";
