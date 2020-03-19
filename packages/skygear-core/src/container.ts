@@ -19,7 +19,6 @@ import {
   CreateNewOOBResult,
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
-  _OIDCConfiguration,
   OAuthError,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
@@ -847,7 +846,6 @@ export interface AuthorizeOptions {
  */
 export abstract class _OIDCContainer<T extends BaseAPIClient> {
   parent: AuthContainer<T>;
-  private config?: _OIDCConfiguration;
 
   abstract clientID: string;
   abstract isThirdParty: boolean;
@@ -861,7 +859,7 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
   }
 
   async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
-    const config = await this._fetchConfiguration();
+    const config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
     const stateQuery = options.state ? `state=${options.state}` : "";
     if (this.isThirdParty) {
       const codeVerifier = await this._setupCodeVerifier();
@@ -918,22 +916,17 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       throw missingCodeError;
     }
 
-    const config = await this._fetchConfiguration();
     const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
       this.parent.parent.name
     );
-    const tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest(
-      config.token_endpoint,
-      {
-        grant_type: "authorization_code",
-        code: queryMap.code,
-        redirect_uri: redirectURI,
-        client_id: this.clientID,
-        code_verifier: codeVerifier || "",
-      }
-    );
+    const tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest({
+      grant_type: "authorization_code",
+      code: queryMap.code,
+      redirect_uri: redirectURI,
+      client_id: this.clientID,
+      code_verifier: codeVerifier || "",
+    });
     const user = await this.parent.parent.apiClient._oidcUserInfoRequest(
-      config.userinfo_endpoint,
       tokenResponse.token_type,
       tokenResponse.access_token
     );
@@ -942,16 +935,6 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       user: user,
       state: queryMap.state,
     };
-  }
-
-  /**
-   * @internal
-   */
-  async _fetchConfiguration(): Promise<_OIDCConfiguration> {
-    if (!this.config) {
-      this.config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
-    }
-    return this.config;
   }
 }
 

@@ -100,6 +100,8 @@ export abstract class BaseAPIClient {
   userAgent?: string;
   getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
+  private config?: _OIDCConfiguration;
+
   constructor() {
     this.apiKey = "";
     this.appEndpoint = "";
@@ -911,18 +913,19 @@ export abstract class BaseAPIClient {
    * @internal
    */
   async _fetchOIDCConfiguration(): Promise<_OIDCConfiguration> {
-    return this._fetchOIDCRequest(
-      `${this.authEndpoint}/.well-known/openid-configuration`
-    );
+    if (!this.config) {
+      this.config = (await this._fetchOIDCRequest(
+        `${this.authEndpoint}/.well-known/openid-configuration`
+      )) as _OIDCConfiguration;
+    }
+    return this.config;
   }
 
   /**
    * @internal
    */
-  async _oidcTokenRequest(
-    tokenEndpoint: string,
-    req: _OIDCTokenRequest
-  ): Promise<_OIDCTokenResponse> {
+  async _oidcTokenRequest(req: _OIDCTokenRequest): Promise<_OIDCTokenResponse> {
+    const config = await this._fetchOIDCConfiguration();
     const query = encodeQuery([
       ["grant_type", req.grant_type],
       ["code", req.code],
@@ -930,7 +933,7 @@ export abstract class BaseAPIClient {
       ["client_id", req.client_id],
       ["code_verifier", req.code_verifier],
     ]);
-    return this._fetchOIDCRequest(tokenEndpoint, {
+    return this._fetchOIDCRequest(config.token_endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
@@ -943,11 +946,11 @@ export abstract class BaseAPIClient {
    * @internal
    */
   async _oidcUserInfoRequest(
-    userinfoEndpoint: string,
     accessTokenType: string,
     accessToken: string
   ): Promise<User> {
-    const userinfo = await this._fetchOIDCRequest(userinfoEndpoint, {
+    const config = await this._fetchOIDCConfiguration();
+    const userinfo = await this._fetchOIDCRequest(config.userinfo_endpoint, {
       method: "GET",
       headers: {
         authorization: `${accessTokenType} ${accessToken}`,
