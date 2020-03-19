@@ -19,7 +19,10 @@ import {
   _PresignUploadResponse,
   _PresignUploadFormResponse,
   _OIDCConfiguration,
+  _OIDCTokenResponse,
+  _OIDCTokenRequest,
   OAuthError,
+  User,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -28,6 +31,7 @@ import {
   decodeSession,
   decodeAuthenticator,
   decodeIdentity,
+  _decodeUserFromOIDCUserinfo,
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
 
@@ -910,5 +914,45 @@ export abstract class BaseAPIClient {
     return this._fetchOIDCRequest(
       `${this.authEndpoint}/.well-known/openid-configuration`
     );
+  }
+
+  /**
+   * @internal
+   */
+  async _oidcTokenRequest(
+    tokenEndpoint: string,
+    req: _OIDCTokenRequest
+  ): Promise<_OIDCTokenResponse> {
+    const query = encodeQuery([
+      ["grant_type", req.grant_type],
+      ["code", req.code],
+      ["redirect_uri", req.redirect_uri],
+      ["client_id", req.client_id],
+      ["code_verifier", req.code_verifier],
+    ]);
+    return this._fetchOIDCRequest(tokenEndpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: query.substring(1),
+    });
+  }
+
+  /**
+   * @internal
+   */
+  async _oidcUserInfoRequest(
+    userinfoEndpoint: string,
+    accessTokenType: string,
+    accessToken: string
+  ): Promise<User> {
+    const userinfo = await this._fetchOIDCRequest(userinfoEndpoint, {
+      method: "GET",
+      headers: {
+        authorization: `${accessTokenType} ${accessToken}`,
+      },
+    });
+    return _decodeUserFromOIDCUserinfo(userinfo);
   }
 }

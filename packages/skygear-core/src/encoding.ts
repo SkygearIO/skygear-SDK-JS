@@ -261,3 +261,26 @@ export function _encodeExtraSessionInfoOptions(
     device_name: o.deviceName,
   };
 }
+
+/**
+ * @internal
+ */
+export function _decodeUserFromOIDCUserinfo(u: any): User {
+  // TODO: confirm userinfo return attributes
+  const id = u.sub;
+  const createdAt = new Date(u.created_at || 0);
+  const lastLoginAt = new Date(u.last_login_at || 0);
+  const isVerified = u.is_verified;
+  const isManuallyVerified = u.is_manually_verified;
+  const isDisabled = u.is_disabled;
+  const metadata = u.metadata;
+  return {
+    id,
+    createdAt,
+    lastLoginAt,
+    isManuallyVerified,
+    isVerified,
+    isDisabled,
+    metadata,
+  };
+}

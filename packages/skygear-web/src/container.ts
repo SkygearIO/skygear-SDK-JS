@@ -371,6 +371,17 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     const authorizeEndpoint = await this._oidc.authorizeEndpoint(options);
     window.location.href = authorizeEndpoint;
   }
+
+  /**
+   * Exchange access token
+   *
+   * exchangeToken read window.location.
+   * It checks if error is present and rejects with OAuthError.
+   * Otherwise assume code is present, make a token request.
+   */
+  async exchangeToken(): Promise<{ user: User; state?: string }> {
+    return this._oidc.exchangeTokenFromCode(window.location.href);
+  }
 }
 
 /**

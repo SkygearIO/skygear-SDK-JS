@@ -32,3 +32,36 @@ export function encodeQuery(query?: [string, string][]): string {
   }
   return output;
 }
+
+/**
+ * @public
+ */
+export function decodeQueryComponent(s: string): string {
+  return decodeURIComponent(s.replace(/\+/g, "%20"));
+}
+
+/**
+ * @public
+ */
+export function decodeQuery(query?: string): [string, string][] {
+  if (!query) {
+    return [];
+  }
+  const vars = query.split("&");
+  const result: [string, string][] = [];
+  for (let i = 0; i < vars.length; i++) {
+    const idx = vars[i].indexOf("=");
+    let key = "";
+    let value = "";
+    if (idx === -1) {
+      key = vars[i];
+      value = "";
+    } else {
+      key = vars[i].slice(0, idx);
+      value = vars[i].slice(idx + 1);
+    }
+    result.push([decodeQueryComponent(key), decodeQueryComponent(value)]);
+  }
+
+  return result;
+}

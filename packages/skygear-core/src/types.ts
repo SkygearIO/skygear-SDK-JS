@@ -672,6 +672,19 @@ export interface AuthenticationSession {
 }
 
 /**
+ * OAuthError represents the oauth error response.
+ * https://tools.ietf.org/html/rfc6749#section-4.1.2.1
+ *
+ * @public
+ */
+export interface OAuthError {
+  state?: string;
+  error: string;
+  error_description?: string;
+  error_uri?: string;
+}
+
+/**
  * @internal
  */
 export interface _OIDCConfiguration {
@@ -688,6 +701,28 @@ export interface _OIDCConfiguration {
   claims_supported: string;
   code_challenge_methods_supported: string;
   revocation_endpoint: string;
+}
+
+/**
+ * @internal
+ */
+export interface _OIDCTokenRequest {
+  grant_type: string;
+  code: string;
+  redirect_uri: string;
+  client_id: string;
+  code_verifier: string;
+}
+
+/**
+ * @internal
+ */
+export interface _OIDCTokenResponse {
+  id_token: string;
+  token_type: string;
+  access_token: string;
+  expires_in: number;
+  refresh_token?: string;
 }
 
 /**

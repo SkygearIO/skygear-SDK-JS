@@ -20,10 +20,11 @@ import {
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
   _OIDCConfiguration,
+  OAuthError,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
 import { BaseAPIClient } from "./client";
-import { encodeQuery } from "./url";
+import { encodeQuery, decodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -890,6 +891,57 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       `redirect_uri=${options.redirectURI}&` +
       `${stateQuery}`
     );
+  }
+
+  async exchangeTokenFromCode(
+    url: string
+  ): Promise<{ user: User; state?: string }> {
+    const missingCodeError = {
+      error: "invalid_request",
+      error_description: "Missing parameter: code",
+    } as OAuthError;
+    const idx = url.indexOf("?");
+    if (idx === -1) {
+      throw missingCodeError;
+    }
+    const redirectURI = url.slice(0, idx);
+    const query = url.slice(idx + 1);
+    const queryList = decodeQuery(query);
+    const queryMap = queryList.reduce(
+      (acc, pair) => {
+        acc[pair[0]] = pair[1];
+        return acc;
+      },
+      {} as { [key: string]: string }
+    );
+    if (!queryMap.code) {
+      throw missingCodeError;
+    }
+
+    const config = await this._fetchConfiguration();
+    const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
+      this.parent.parent.name
+    );
+    const tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest(
+      config.token_endpoint,
+      {
+        grant_type: "authorization_code",
+        code: queryMap.code,
+        redirect_uri: redirectURI,
+        client_id: this.clientID,
+        code_verifier: codeVerifier || "",
+      }
+    );
+    const user = await this.parent.parent.apiClient._oidcUserInfoRequest(
+      config.userinfo_endpoint,
+      tokenResponse.token_type,
+      tokenResponse.access_token
+    );
+
+    return {
+      user: user,
+      state: queryMap.state,
+    };
   }
 
   /**
