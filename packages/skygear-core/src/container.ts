@@ -134,6 +134,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       refreshToken,
       sessionID,
       mfaBearerToken,
+      expires_in,
     } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
@@ -166,7 +167,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.currentIdentity = identity;
     }
     if (accessToken) {
-      this.parent.apiClient._accessToken = accessToken;
+      this.parent.apiClient.setAccessTokenAndExpiresIn(accessToken, expires_in);
     }
     if (sessionID) {
       this.currentSessionID = sessionID;
@@ -421,45 +422,59 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async _refreshAccessToken(): Promise<boolean> {
-    // The server only includes x-skygear-try-refresh-token if
-    // the access token in the request is invalid.
+    // api client determine whether the token need to be refresh or not by
+    // shouldRefreshTokenAt timeout
     //
-    // If the request does not have access token at all,
-    // the server simply returns NotAuthenticated error without the header.
+    // The value of shouldRefreshTokenAt will be updated based on expires_in in
+    // the token response
     //
-    // Therefore, we have to keep the invalid token so that
-    // if refresh fails due to other reasons, the whole process
-    // can be retried.
+    // The session will be cleared only if token request return invalid_grant
+    // which indicate the refresh token is no longer valid
     //
-    // await this.parent.storage.delAccessToken(this.parent.name);
-    // this.parent.apiClient._accessToken = null;
+    // If token request fails due to other reasons, session will be kept and
+    // the whole process can be retried.
 
     const refreshToken = await this.parent.storage.getRefreshToken(
       this.parent.name
     );
     if (!refreshToken) {
-      // no refresh token -> session is gone
-      await this._clearSession();
+      // no refresh token -> cannot refresh
+      this.parent.apiClient.setShouldNotRefreshToken();
       return false;
     }
 
-    let accessToken;
+    let tokenResponse;
     try {
-      accessToken = await this.parent.apiClient.refresh(refreshToken);
+      tokenResponse = await this.parent.apiClient._oidcTokenRequest({
+        grant_type: "refresh_token",
+        client_id: this.parent.apiClient.apiKey,
+        refresh_token: refreshToken,
+      });
     } catch (error) {
-      if (
-        error instanceof SkygearError &&
-        error.reason === "NotAuthenticated"
-      ) {
-        // cannot refresh -> session is gone
+      // When the error is `invalid_grant`, that means the refresh is
+      // no longer invalid, clear the session in this case.
+      // https://tools.ietf.org/html/rfc6749#section-5.2
+      if (error.error === "invalid_grant") {
         await this._clearSession();
+        return false;
       }
       throw error;
     }
 
-    await this.parent.storage.setAccessToken(this.parent.name, accessToken);
-    this.parent.apiClient._accessToken = accessToken;
-
+    await this.parent.storage.setAccessToken(
+      this.parent.name,
+      tokenResponse.access_token
+    );
+    if (tokenResponse.refresh_token) {
+      await this.parent.storage.setRefreshToken(
+        this.parent.name,
+        tokenResponse.refresh_token
+      );
+    }
+    this.parent.apiClient.setAccessTokenAndExpiresIn(
+      tokenResponse.access_token,
+      tokenResponse.expires_in
+    );
     return true;
   }
 
@@ -931,6 +946,13 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       tokenResponse.access_token
     );
 
+    await this.parent.persistAuthResponse({
+      user: user,
+      accessToken: tokenResponse.access_token,
+      refreshToken: tokenResponse.refresh_token,
+      expires_in: tokenResponse.expires_in,
+    });
+
     return {
       user: user,
       state: queryMap.state,
@@ -992,6 +1014,8 @@ export class Container<T extends BaseAPIClient> {
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient._accessToken = accessToken;
+    // should refresh token when app start
+    this.apiClient.setShouldRefreshTokenNow();
 
     const user = await this.storage.getUser(this.name);
     this.auth.currentUser = user;

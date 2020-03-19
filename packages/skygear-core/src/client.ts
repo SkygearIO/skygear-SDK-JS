@@ -35,6 +35,8 @@ import {
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
 
+const refreshTokenWindow = 0.7;
+
 /**
  * @internal
  */
@@ -62,11 +64,6 @@ export function _gearEndpoint(
   return gearEndpoint;
 }
 
-function shouldRefreshToken(r: Response): boolean {
-  const h = r.headers.get("x-skygear-try-refresh-token");
-  return h === "true";
-}
-
 function extractSingleKeyValue(
   o: { [key: string]: string },
   errorMessage: string
@@ -92,6 +89,13 @@ export abstract class BaseAPIClient {
   _accessToken: string | null;
   /**
    * @internal
+   *
+   * _shouldRefreshTokenAt is the timestamp that the sdk should refresh token
+   * 0 means doesn't need to refresh
+   */
+  _shouldRefreshTokenAt: number;
+  /**
+   * @internal
    */
   _authenticationSession: AuthenticationSession | null;
   fetchFunction?: typeof fetch;
@@ -109,6 +113,25 @@ export abstract class BaseAPIClient {
     this.assetEndpoint = "";
     this._accessToken = null;
     this._authenticationSession = null;
+    this._shouldRefreshTokenAt = 0;
+  }
+
+  setShouldNotRefreshToken() {
+    this._shouldRefreshTokenAt = 0;
+  }
+
+  setShouldRefreshTokenNow() {
+    this._shouldRefreshTokenAt = new Date().getTime();
+  }
+
+  setAccessTokenAndExpiresIn(accessToken: string, expires_in?: number) {
+    this._accessToken = accessToken;
+    if (expires_in) {
+      this._shouldRefreshTokenAt =
+        new Date().getTime() + expires_in * 1000 * refreshTokenWindow;
+    } else {
+      this._shouldRefreshTokenAt = 0;
+    }
   }
 
   async setEndpoint(
@@ -184,6 +207,18 @@ export abstract class BaseAPIClient {
       throw new Error("only string path is allowed for fetch input");
     }
 
+    // check if need to refresh token
+    const shouldRefreshToken =
+      this._accessToken &&
+      this._shouldRefreshTokenAt &&
+      this._shouldRefreshTokenAt < new Date().getTime();
+    if (shouldRefreshToken && autoRefreshToken) {
+      if (!this.refreshTokenFunction) {
+        throw new Error("missing refreshTokenFunction in api client");
+      }
+      await this.refreshTokenFunction();
+    }
+
     const url = endpoint + "/" + input.replace(/^\//, "");
     const request = new this.requestClass(url, init);
 
@@ -192,26 +227,7 @@ export abstract class BaseAPIClient {
       request.headers.set(key, headers[key]);
     }
 
-    let response = await this.fetchFunction(request.clone());
-    if (shouldRefreshToken(response) && autoRefreshToken) {
-      if (!this.refreshTokenFunction) {
-        throw new Error("missing refreshTokenFunction in api client");
-      }
-
-      const tokenRefreshed = await this.refreshTokenFunction();
-      if (tokenRefreshed) {
-        const retryRequest = request.clone();
-        // use latest access token
-        const headers = await this.prepareHeaders();
-        for (const key of Object.keys(headers)) {
-          retryRequest.headers.set(key, headers[key]);
-        }
-
-        response = await this.fetchFunction(retryRequest);
-      }
-    }
-
-    return response;
+    return this.fetchFunction(request);
   }
 
   protected async request(
@@ -439,17 +455,6 @@ export abstract class BaseAPIClient {
 
   async logout(): Promise<void> {
     await this.postAuth("/_auth/logout", { json: {} });
-  }
-
-  async refresh(refreshToken: string): Promise<string> {
-    const payload = {
-      refresh_token: refreshToken,
-    };
-    const response = await this.postAuth("/_auth/refresh", {
-      json: payload,
-      autoRefreshToken: false,
-    });
-    return response.access_token;
   }
 
   async me(): Promise<AuthResponse> {
@@ -926,19 +931,27 @@ export abstract class BaseAPIClient {
    */
   async _oidcTokenRequest(req: _OIDCTokenRequest): Promise<_OIDCTokenResponse> {
     const config = await this._fetchOIDCConfiguration();
-    const query = encodeQuery([
-      ["grant_type", req.grant_type],
-      ["code", req.code],
-      ["redirect_uri", req.redirect_uri],
-      ["client_id", req.client_id],
-      ["code_verifier", req.code_verifier],
-    ]);
+    const query: [string, string][] = [];
+    query.push(["grant_type", req.grant_type]);
+    query.push(["client_id", req.client_id]);
+    if (req.code) {
+      query.push(["code", req.code]);
+    }
+    if (req.redirect_uri) {
+      query.push(["redirect_uri", req.redirect_uri]);
+    }
+    if (req.code_verifier) {
+      query.push(["code_verifier", req.code_verifier]);
+    }
+    if (req.refresh_token) {
+      query.push(["refresh_token", req.refresh_token]);
+    }
     return this._fetchOIDCRequest(config.token_endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
-      body: query.substring(1),
+      body: encodeQuery(query).substring(1),
     });
   }
 

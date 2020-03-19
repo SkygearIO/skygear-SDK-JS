@@ -241,6 +241,7 @@ export interface AuthResponse {
   refreshToken?: string;
   sessionID?: string;
   mfaBearerToken?: string;
+  expires_in?: number;
 }
 
 /**
@@ -707,11 +708,12 @@ export interface _OIDCConfiguration {
  * @internal
  */
 export interface _OIDCTokenRequest {
-  grant_type: string;
-  code: string;
-  redirect_uri: string;
+  grant_type: "authorization_code" | "refresh_token";
   client_id: string;
-  code_verifier: string;
+  redirect_uri?: string;
+  code?: string;
+  code_verifier?: string;
+  refresh_token?: string;
 }
 
 /**
