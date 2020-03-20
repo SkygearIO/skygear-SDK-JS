@@ -47,7 +47,16 @@ $ cd skygear-SDK-JS
 $ npm install
 $ npm run lerna bootstrap
 $ npm run build
-$ SKYGEAR_ENDPOINT=<endpoint> SKYGEAR_API_KEY=<apikey> npm run example
+$ SKYGEAR_APP_ENDPOINT=<endpoint> SKYGEAR_CLIENT_ID=<clientid> npm run example
+```
+
+## Running example with custom gears endpoint
+```
+$ SKYGEAR_APP_ENDPOINT=<endpoint> \
+$ SKYGEAR_AUTH_ENDPOINT=<auth_endpoint> \
+$ SKYGEAR_ASSET_ENDPOINT=<asset_endpoint> \
+$ SKYGEAR_CLIENT_ID=<clientid> \
+$ npm run example
 ```
 
 ## Contributing
