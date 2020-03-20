@@ -875,7 +875,8 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
 
   async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
     const config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
-    const stateQuery = options.state ? `state=${options.state}` : "";
+    const query: [string, string][] = [];
+
     if (this.isThirdParty) {
       const codeVerifier = await this._setupCodeVerifier();
       await this.parent.parent.storage.setOIDCCodeVerifier(
@@ -883,27 +884,23 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
         codeVerifier.verifier
       );
 
-      return (
-        `${config.authorization_endpoint}?` +
-        `response_type=code&` +
-        `scope=openid%20offline_access&` +
-        `client_id=${this.clientID}&` +
-        `redirect_uri=${options.redirectURI}&` +
-        `${stateQuery}&` +
-        `code_challenge_method=S256&` +
-        `code_challenge=${codeVerifier.challenge}`
-      );
+      query.push(["response_type", "code"]);
+      query.push(["scope", "openid offline_access"]);
+      query.push(["code_challenge_method", "S256"]);
+      query.push(["code_challenge", codeVerifier.challenge]);
+    } else {
+      // for first party app
+      query.push(["response_type", "none"]);
+      query.push(["scope", "openid"]);
     }
 
-    // for first party app
-    return (
-      `${config.authorization_endpoint}?` +
-      `response_type=none&` +
-      `scope=openid&` +
-      `client_id=${this.clientID}&` +
-      `redirect_uri=${options.redirectURI}&` +
-      `${stateQuery}`
-    );
+    query.push(["client_id", this.clientID]);
+    query.push(["redirect_uri", options.redirectURI]);
+    if (options.state) {
+      query.push(["state", options.state]);
+    }
+
+    return `${config.authorization_endpoint}${encodeQuery(query)}`;
   }
 
   async exchangeTokenFromCode(
