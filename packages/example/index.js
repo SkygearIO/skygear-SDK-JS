@@ -9,6 +9,7 @@ const APP_ENDPOINT = process.env.SKYGEAR_APP_ENDPOINT || "http://localhost:3000"
 const AUTH_ENDPOINT = process.env.SKYGEAR_AUTH_ENDPOINT || "";
 const ASSET_ENDPOINT = process.env.SKYGEAR_ASSET_ENDPOINT || "";
 const CLIENT_ID = process.env.SKYGEAR_CLIENT_ID || "api_key";
+const IS_THIRD_PARTY_APP = process.env.SKYGEAR_IS_THIRD_PARTY_APP === 'true';
 const PORT = parseInt(process.env.PORT || "9999", 10);
 
 const dist = path.join(__dirname, "./dist");
@@ -22,7 +23,8 @@ function compileFile(basename) {
     .replace(/__SKYGEAR_APP_ENDPOINT__/g, APP_ENDPOINT)
     .replace(/__SKYGEAR_AUTH_ENDPOINT__/g, AUTH_ENDPOINT)
     .replace(/__SKYGEAR_ASSET_ENDPOINT__/g, ASSET_ENDPOINT)
-    .replace(/__SKYGEAR_CLIENT_ID__/g, CLIENT_ID);
+    .replace(/__SKYGEAR_CLIENT_ID__/g, CLIENT_ID)
+    .replace(/__SKYGEAR_IS_THIRD_PARTY_APP__/g, IS_THIRD_PARTY_APP);
   fs.writeFileSync(distPath, content);
 }
 

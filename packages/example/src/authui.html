@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="/skygear-web.iife.js"></script>
+  <script src="/helper.js"></script>
+  <title>Auth UI</title>
+</head>
+<body>
+  <div class="container">
+    <a href="/">
+      <h2>Back to Index</h2>
+    </a>
+  </div>
+  <form class="container" onsubmit="onSubmitAuthorize(event)">
+    <div class="form-group">
+      <h1>Authorize</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Authorize</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="authorizeSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="authorizeResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+  <form class="container" onsubmit="onSubmitExchangeToken(event)">
+    <div class="form-group">
+      <h1>ExchangeToken</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Exchange Token</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="exchangeTokenSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="exchangeTokenResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
+  <script>
+
+function getRedirectURI() {
+  var redirectURI = window.location.href;
+  var idx = redirectURI.indexOf("?");
+  if (idx !== -1 ){
+    // remove query part if needed
+    redirectURI = redirectURI.slice(0, idx);
+  }
+  return redirectURI;
+}
+
+function setupAuthorizeSynopsis() {
+  var synopsisTextArea = document.getElementById("authorizeSynopsis");
+  var funcExpr = "skygear.auth.authorize";
+  var redirectURI = getRedirectURI();
+  var s = stringifyFunctionCall(funcExpr, {
+    redirectURI: redirectURI,
+  });
+  synopsisTextArea.value = s;
+}
+
+function onSubmitAuthorize(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("authorizeResult");
+  var redirectURI = getRedirectURI();
+  skygear.auth.authorize({
+    redirectURI: redirectURI
+  }).then(function() {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+
+function setupExchangeTokenSynopsis() {
+  var synopsisTextArea = document.getElementById("exchangeTokenSynopsis");
+  var funcExpr = "skygear.auth.exchangeToken";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitExchangeToken(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var resultTextArea = document.getElementById("exchangeTokenResult");
+
+  skygear.auth.exchangeToken().then(function(result) {
+    resultTextArea.value = JSON.stringify(result);
+  }, function(e) {
+    console.log(e);
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
+skygear.configure({
+  appEndpoint: "__SKYGEAR_APP_ENDPOINT__",
+  authEndpoint: "__SKYGEAR_AUTH_ENDPOINT__",
+  assetEndpoint: "__SKYGEAR_ASSET_ENDPOINT__",
+  clientID: "__SKYGEAR_CLIENT_ID__",
+  isThirdPartyApp: __SKYGEAR_IS_THIRD_PARTY_APP__,
+}).then(function() {
+  setupAuthorizeSynopsis();
+  setupExchangeTokenSynopsis();
+}, function(e) {
+  console.error(e);
+});
+  </script>
+</body>
+</html>
