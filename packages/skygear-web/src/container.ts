@@ -138,7 +138,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     }
     if (this.oauthResultObserver == null) {
       this.oauthResultObserver = new WindowMessageObserver(
-        this.parent.apiClient.endpoint
+        this.parent.apiClient.authEndpoint
       );
     }
 

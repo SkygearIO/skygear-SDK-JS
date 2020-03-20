@@ -911,6 +911,6 @@ export class Container<T extends BaseAPIClient> {
    * attaching API key, access token, refreshing access token).
    */
   async fetch(input: string, init?: RequestInit): Promise<Response> {
-    return this.apiClient.fetch(input, init);
+    return this.apiClient.fetch(this.apiClient.appEndpoint, input, init);
   }
 }
