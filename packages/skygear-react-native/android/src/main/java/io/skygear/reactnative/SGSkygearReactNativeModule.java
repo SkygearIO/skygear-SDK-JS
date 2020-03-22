@@ -59,7 +59,7 @@ public class SGSkygearReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void openURL(String urlString, String scheme, Promise promise) {
+    public void openAuthorizeURL(String urlString, String scheme, Promise promise) {
         this.openURLPromise = promise;
 
         if (this.openURLReceiver != null) {

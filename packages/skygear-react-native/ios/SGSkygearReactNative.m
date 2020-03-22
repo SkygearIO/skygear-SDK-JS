@@ -129,10 +129,10 @@ continueUserActivity:(NSUserActivity *)userActivity
   return YES;
 }
 
-RCT_EXPORT_METHOD(openURL:(NSURL *)url
-                   scheme:(NSString *)scheme
-                  resolve:(RCTPromiseResolveBlock)resolve
-                   reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
+                            scheme:(NSString *)scheme
+                           resolve:(RCTPromiseResolveBlock)resolve
+                            reject:(RCTPromiseRejectBlock)reject)
 {
     self.openURLResolve = resolve;
     self.openURLReject = reject;

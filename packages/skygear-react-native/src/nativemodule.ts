@@ -14,11 +14,11 @@ export function sha256String(input: string): Promise<number[]> {
   return SGSkygearReactNative.sha256String(input);
 }
 
-export function openURL(
+export function openAuthorizeURL(
   url: string,
   callbackURLScheme: string
 ): Promise<string> {
-  return SGSkygearReactNative.openURL(url, callbackURLScheme);
+  return SGSkygearReactNative.openAuthorizeURL(url, callbackURLScheme);
 }
 
 export function signInWithApple(

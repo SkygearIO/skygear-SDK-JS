@@ -13,7 +13,7 @@ import {
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import {
-  openURL,
+  openAuthorizeURL,
   signInWithApple,
   getCredentialStateForUserID,
   addAppleIDCredentialRevokedListener,
@@ -233,7 +233,7 @@ export class ReactNativeAuthContainer<
       uxMode: "mobile_app",
       onUserDuplicate: options && options.onUserDuplicate,
     });
-    const redirectURL = await openURL(authURL, callbackURLScheme);
+    const redirectURL = await openAuthorizeURL(authURL, callbackURLScheme);
     const j = extractResultFromURL(redirectURL);
     if (j.result.error) {
       throw decodeError(j.result.error);
