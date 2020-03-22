@@ -15,6 +15,7 @@ import {
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import {
+  openURL,
   openAuthorizeURL,
   signInWithApple,
   getCredentialStateForUserID,
@@ -328,6 +329,13 @@ export class ReactNativeAuthContainer<
     const authorizeURL = await this._oidc.authorizeEndpoint(options);
     const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
     return this._oidc.finishAuthorization(redirectURL);
+  }
+
+  /**
+   * Open the URL with the user agent that is used to perform authentication.
+   */
+  async openURL(url: string): Promise<void> {
+    await openURL(url);
   }
 }
 

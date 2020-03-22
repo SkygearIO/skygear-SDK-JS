@@ -14,6 +14,10 @@ export function sha256String(input: string): Promise<number[]> {
   return SGSkygearReactNative.sha256String(input);
 }
 
+export function openURL(url: string): Promise<void> {
+  return SGSkygearReactNative.openURL(url);
+}
+
 export function openAuthorizeURL(
   url: string,
   callbackURLScheme: string

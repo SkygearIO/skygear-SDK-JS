@@ -129,6 +129,71 @@ continueUserActivity:(NSUserActivity *)userActivity
   return YES;
 }
 
+RCT_EXPORT_METHOD(openURL:(NSURL *)url
+                  resolve:(RCTPromiseResolveBlock)resolve
+                   reject:(RCTPromiseRejectBlock)reject)
+{
+    if (@available(iOS 12.0, *)) {
+        self.asSession = [[ASWebAuthenticationSession alloc] initWithURL:url
+                                                       callbackURLScheme:nil
+                                                       completionHandler:^(NSURL *url, NSError *error) {
+            self.asSession = nil;
+        }];
+        if (@available(iOS 13.0, *)) {
+            self.asSession.presentationContextProvider = self;
+        }
+        BOOL started = [self.asSession start];
+        if (!started) {
+            if (reject) {
+                reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
+            }
+        } else {
+            if (resolve) {
+                resolve(nil);
+            }
+        }
+    } else if (@available(iOS 11.0, *)) {
+        self.sfSession = [[SFAuthenticationSession alloc] initWithURL:url
+                                                    callbackURLScheme:nil
+                                                    completionHandler:^(NSURL *url, NSError *error){
+            self.sfSession = nil;
+        }];
+        BOOL started = [self.sfSession start];
+        if (!started) {
+            if (reject) {
+                reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
+            }
+        } else {
+            if (resolve) {
+                resolve(nil);
+            }
+        }
+    } else if (@available(iOS 10.0, *)) {
+        [RCTSharedApplication() openURL:url options:@{} completionHandler:^(BOOL success) {
+            if (!success) {
+                if (reject) {
+                    reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
+                }
+            } else {
+                if (resolve) {
+                    resolve(nil);
+                }
+            }
+        }];
+    } else {
+        bool started = [RCTSharedApplication() openURL:url];
+        if (!started) {
+            if (reject) {
+                reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
+            }
+        } else {
+            if (resolve) {
+                resolve(nil);
+            }
+        }
+    }
+}
+
 RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
                             scheme:(NSString *)scheme
                            resolve:(RCTPromiseResolveBlock)resolve

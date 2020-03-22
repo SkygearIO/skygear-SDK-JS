@@ -59,6 +59,21 @@ public class SGSkygearReactNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void openURL(String urlString, Promise promise) {
+        try {
+            Activity currentActivity = getCurrentActivity();
+            Uri uri = Uri.parse(urlString).normalizeScheme();
+            Context context = currentActivity != null ? currentActivity : getReactApplicationContext();
+            SGCustomTabsHelper.openURL(context, uri);
+            promise.resolve(null);
+        } catch (Exception e) {
+            if (promise != null) {
+                promise.reject(e);
+            }
+        }
+    }
+
+    @ReactMethod
     public void openAuthorizeURL(String urlString, String scheme, Promise promise) {
         this.openURLPromise = promise;
 
