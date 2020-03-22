@@ -10,6 +10,8 @@ import {
   User,
   _PresignUploadRequest,
   decodeError,
+  _OIDCContainer,
+  AuthorizeOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import {
@@ -177,6 +179,31 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 }
 
 /**
+ * @internal
+ */
+export class _ReactNativeOIDCContainer<
+  T extends ReactNativeAPIClient
+> extends _OIDCContainer<T> {
+  clientID: string;
+  isThirdParty: boolean;
+
+  constructor(parent: ReactNativeAuthContainer<T>) {
+    super(parent);
+    this.clientID = "";
+    this.isThirdParty = true;
+  }
+
+  async _setupCodeVerifier() {
+    const codeVerifier = await generateCodeVerifier();
+    const codeChallenge = await computeCodeChallenge(codeVerifier);
+    return {
+      verifier: codeVerifier,
+      challenge: codeChallenge,
+    };
+  }
+}
+
+/**
  * Skygear Auth APIs (for React Native).
  *
  * @public
@@ -184,6 +211,16 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 export class ReactNativeAuthContainer<
   T extends ReactNativeAPIClient
 > extends AuthContainer<T> {
+  /**
+   * @internal
+   */
+  _oidc: _ReactNativeOIDCContainer<T>;
+
+  constructor(parent: ReactNativeContainer<T>) {
+    super(parent);
+    this._oidc = new _ReactNativeOIDCContainer(this);
+  }
+
   async loginOAuthProvider(
     providerID: string,
     callbackURL: string,
@@ -278,6 +315,20 @@ export class ReactNativeAuthContainer<
     });
     return this.handleAuthResponse(p);
   }
+
+  /**
+   * Open authorize page
+   *
+   * @param options - authorize options
+   */
+  async authorize(
+    options: AuthorizeOptions
+  ): Promise<{ user: User; state?: string }> {
+    const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
+    const authorizeURL = await this._oidc.authorizeEndpoint(options);
+    const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
+    return this._oidc.finishAuthorization(redirectURL);
+  }
 }
 
 /**
@@ -341,6 +392,7 @@ export class ReactNativeContainer<
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
+    this.auth._oidc.clientID = options.clientID;
   }
 }
 
