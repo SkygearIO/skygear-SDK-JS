@@ -36,6 +36,26 @@ export function _removeTrailingSlash(s: string): string {
   return s.replace(/\/+$/g, "");
 }
 
+/**
+ * @internal
+ * @param appEndpoint - app default endpoint, support url with protocol https, http or empty.
+ * @param gearSubdomain - gear subdomain, e.g. accounts, assets
+ */
+export function _gearEndpoint(
+  appEndpoint: string,
+  gearSubdomain: string
+): string {
+  const gearEndpoint = appEndpoint.replace(
+    /^(http:\/\/|https:\/\/|\/\/)(.*)$/g,
+    `$1${gearSubdomain}.$2`
+  );
+  if (gearEndpoint === appEndpoint) {
+    throw new Error("invalid app endpoint");
+  }
+
+  return gearEndpoint;
+}
+
 function shouldRefreshToken(r: Response): boolean {
   const h = r.headers.get("x-skygear-try-refresh-token");
   return h === "true";
@@ -57,7 +77,9 @@ function extractSingleKeyValue(
  */
 export abstract class BaseAPIClient {
   apiKey: string;
-  endpoint: string;
+  appEndpoint: string;
+  authEndpoint: string;
+  assetEndpoint: string;
   /**
    * @internal
    */
@@ -74,9 +96,28 @@ export abstract class BaseAPIClient {
 
   constructor() {
     this.apiKey = "";
-    this.endpoint = "";
+    this.appEndpoint = "";
+    this.authEndpoint = "";
+    this.assetEndpoint = "";
     this._accessToken = null;
     this._authenticationSession = null;
+  }
+
+  async setEndpoint(
+    appEndpoint: string,
+    authEndpoint?: string,
+    assetEndpoint?: string
+  ) {
+    if (!appEndpoint) {
+      throw new Error("appEndpoint is required");
+    }
+    this.appEndpoint = _removeTrailingSlash(appEndpoint);
+    this.authEndpoint = authEndpoint
+      ? authEndpoint
+      : _gearEndpoint(this.appEndpoint, "accounts");
+    this.assetEndpoint = assetEndpoint
+      ? assetEndpoint
+      : _gearEndpoint(this.appEndpoint, "assets");
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
@@ -101,6 +142,7 @@ export abstract class BaseAPIClient {
   }
 
   async fetch(
+    endpoint: string,
     input: string,
     init?: RequestInit,
     options: { autoRefreshToken?: boolean } = {}
@@ -119,7 +161,7 @@ export abstract class BaseAPIClient {
       throw new Error("only string path is allowed for fetch input");
     }
 
-    const url = this.endpoint + "/" + input.replace(/^\//, "");
+    const url = endpoint + "/" + input.replace(/^\//, "");
     const request = new this.requestClass(url, init);
 
     const headers = await this.prepareHeaders();
@@ -151,6 +193,7 @@ export abstract class BaseAPIClient {
 
   protected async request(
     method: "GET" | "POST" | "DELETE",
+    endpoint: string,
     path: string,
     options: {
       json?: JSONObject;
@@ -170,6 +213,7 @@ export abstract class BaseAPIClient {
     }
 
     const response = await this.fetch(
+      endpoint,
       p,
       {
         method,
@@ -213,6 +257,7 @@ export abstract class BaseAPIClient {
   }
 
   protected async post(
+    endpoint: string,
     path: string,
     options?: {
       json?: JSONObject;
@@ -220,17 +265,19 @@ export abstract class BaseAPIClient {
       autoRefreshToken?: boolean;
     }
   ): Promise<any> {
-    return this.request("POST", path, options);
+    return this.request("POST", endpoint, path, options);
   }
 
   protected async get(
+    endpoint: string,
     path: string,
     options?: { query?: [string, string][]; autoRefreshToken?: boolean }
   ): Promise<any> {
-    return this.request("GET", path, options);
+    return this.request("GET", endpoint, path, options);
   }
 
   protected async del(
+    endpoint: string,
     path: string,
     options: {
       json?: JSONObject;
@@ -238,7 +285,65 @@ export abstract class BaseAPIClient {
       autoRefreshToken?: boolean;
     }
   ): Promise<any> {
-    return this.request("DELETE", path, options);
+    return this.request("DELETE", endpoint, path, options);
+  }
+
+  protected async postAuth(
+    path: string,
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
+  ): Promise<any> {
+    return this.request("POST", this.authEndpoint, path, options);
+  }
+
+  protected async getAuth(
+    path: string,
+    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
+  ): Promise<any> {
+    return this.request("GET", this.authEndpoint, path, options);
+  }
+
+  protected async delAuth(
+    path: string,
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
+  ): Promise<any> {
+    return this.request("DELETE", this.authEndpoint, path, options);
+  }
+
+  protected async postAsset(
+    path: string,
+    options?: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
+  ): Promise<any> {
+    return this.request("POST", this.assetEndpoint, path, options);
+  }
+
+  protected async getAsset(
+    path: string,
+    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
+  ): Promise<any> {
+    return this.request("GET", this.assetEndpoint, path, options);
+  }
+
+  protected async delAsset(
+    path: string,
+    options: {
+      json?: JSONObject;
+      query?: [string, string][];
+      autoRefreshToken?: boolean;
+    }
+  ): Promise<any> {
+    return this.request("DELETE", this.assetEndpoint, path, options);
   }
 
   protected async postAndReturnAuthResponse(
@@ -249,7 +354,7 @@ export abstract class BaseAPIClient {
       autoRefreshToken?: boolean;
     }
   ): Promise<AuthResponse> {
-    const response = await this.post(path, options);
+    const response = await this.postAuth(path, options);
     return decodeAuthResponse(response);
   }
 
@@ -310,14 +415,14 @@ export abstract class BaseAPIClient {
   }
 
   async logout(): Promise<void> {
-    await this.post("/_auth/logout", { json: {} });
+    await this.postAuth("/_auth/logout", { json: {} });
   }
 
   async refresh(refreshToken: string): Promise<string> {
     const payload = {
       refresh_token: refreshToken,
     };
-    const response = await this.post("/_auth/refresh", {
+    const response = await this.postAuth("/_auth/refresh", {
       json: payload,
       autoRefreshToken: false,
     });
@@ -350,7 +455,7 @@ export abstract class BaseAPIClient {
 
   async requestForgotPasswordEmail(email: string): Promise<void> {
     const payload = { email };
-    await this.post("/_auth/forgot_password", { json: payload });
+    await this.postAuth("/_auth/forgot_password", { json: payload });
   }
 
   async resetPassword(form: {
@@ -365,7 +470,9 @@ export abstract class BaseAPIClient {
       expire_at: form.expireAt,
       new_password: form.newPassword,
     };
-    await this.post("/_auth/forgot_password/reset_password", { json: payload });
+    await this.postAuth("/_auth/forgot_password/reset_password", {
+      json: payload,
+    });
   }
 
   async requestEmailVerification(email: string): Promise<void> {
@@ -373,7 +480,7 @@ export abstract class BaseAPIClient {
       login_id_type: "email",
       login_id: email,
     };
-    await this.post("/_auth/verify_request", { json: payload });
+    await this.postAuth("/_auth/verify_request", { json: payload });
   }
 
   async requestPhoneVerification(phone: string): Promise<void> {
@@ -381,12 +488,12 @@ export abstract class BaseAPIClient {
       login_id_type: "phone",
       login_id: phone,
     };
-    await this.post("/_auth/verify_request", { json: payload });
+    await this.postAuth("/_auth/verify_request", { json: payload });
   }
 
   async verifyWithCode(code: string): Promise<void> {
     const payload = { code };
-    await this.post("/_auth/verify_code", { json: payload });
+    await this.postAuth("/_auth/verify_code", { json: payload });
   }
 
   async loginWithCustomToken(
@@ -439,7 +546,7 @@ export abstract class BaseAPIClient {
       on_user_duplicate: onUserDuplicate,
       code_challenge: codeChallenge,
     };
-    return this.post(path, { json: payload });
+    return this.postAuth(path, { json: payload });
   }
 
   async oauthHandler(options: {
@@ -451,7 +558,7 @@ export abstract class BaseAPIClient {
     const { providerID, code, scope, state } = options;
     const encoded = encodeURIComponent(providerID);
     const path = `/_auth/sso/${encoded}/auth_handler`;
-    return this.get(path, {
+    return this.getAuth(path, {
       query: [["code", code], ["scope", scope], ["state", state]],
     });
   }
@@ -472,7 +579,7 @@ export abstract class BaseAPIClient {
 
   async deleteOAuthProvider(providerID: string): Promise<void> {
     const encoded = encodeURIComponent(providerID);
-    await this.post(`/_auth/sso/${encoded}/unlink`, { json: {} });
+    await this.postAuth(`/_auth/sso/${encoded}/unlink`, { json: {} });
   }
 
   async loginOAuthProviderWithAccessToken(
@@ -504,27 +611,29 @@ export abstract class BaseAPIClient {
   }
 
   async listSessions(): Promise<Session[]> {
-    const response = await this.post("/_auth/session/list", { json: {} });
+    const response = await this.postAuth("/_auth/session/list", { json: {} });
     return (response.sessions as any[]).map(decodeSession);
   }
 
   async getSession(id: string): Promise<Session> {
     const payload = { session_id: id };
-    const response = await this.post("/_auth/session/get", { json: payload });
+    const response = await this.postAuth("/_auth/session/get", {
+      json: payload,
+    });
     return decodeSession(response.session);
   }
 
   async revokeSession(id: string): Promise<void> {
     const payload = { session_id: id };
-    return this.post("/_auth/session/revoke", { json: payload });
+    return this.postAuth("/_auth/session/revoke", { json: payload });
   }
 
   async revokeOtherSessions(): Promise<void> {
-    return this.post("/_auth/session/revoke_all", { json: {} });
+    return this.postAuth("/_auth/session/revoke_all", { json: {} });
   }
 
   async listIdentities(): Promise<Identity[]> {
-    const response = await this.post("/_auth/identity/list", { json: {} });
+    const response = await this.postAuth("/_auth/identity/list", { json: {} });
     return (response.identities as any[]).map(decodeIdentity);
   }
 
@@ -536,7 +645,7 @@ export abstract class BaseAPIClient {
       );
       return { key, value };
     });
-    return this.post("/_auth/login_id/add", {
+    return this.postAuth("/_auth/login_id/add", {
       json: { login_ids: mappedLoginIDs },
     });
   }
@@ -546,7 +655,7 @@ export abstract class BaseAPIClient {
       loginID,
       "must provide exactly one login ID"
     );
-    return this.post("/_auth/login_id/remove", {
+    return this.postAuth("/_auth/login_id/remove", {
       json: { key, value },
     });
   }
@@ -572,16 +681,19 @@ export abstract class BaseAPIClient {
   }
 
   async listRecoveryCode(): Promise<string[]> {
-    const response = await this.post("/_auth/mfa/recovery_code/list", {
+    const response = await this.postAuth("/_auth/mfa/recovery_code/list", {
       json: {},
     });
     return response.recovery_codes;
   }
 
   async regenerateRecoveryCode(): Promise<string[]> {
-    const response = await this.post("/_auth/mfa/recovery_code/regenerate", {
-      json: {},
-    });
+    const response = await this.postAuth(
+      "/_auth/mfa/recovery_code/regenerate",
+      {
+        json: {},
+      }
+    );
     return response.recovery_codes;
   }
 
@@ -597,14 +709,14 @@ export abstract class BaseAPIClient {
 
   async getAuthenticators(): Promise<Authenticator[]> {
     const payload = this.makePayloadWithAuthenticationSessionToken({});
-    const response = await this.post("/_auth/mfa/authenticator/list", {
+    const response = await this.postAuth("/_auth/mfa/authenticator/list", {
       json: payload,
     });
     return (response.authenticators as any[]).map(decodeAuthenticator);
   }
 
   async deleteAuthenticator(id: string): Promise<void> {
-    await this.post("/_auth/mfa/authenticator/delete", {
+    await this.postAuth("/_auth/mfa/authenticator/delete", {
       json: {
         authenticator_id: id,
       },
@@ -619,7 +731,7 @@ export abstract class BaseAPIClient {
       issuer: options.issuer,
       account_name: options.accountName,
     });
-    const response = await this.post("/_auth/mfa/totp/new", {
+    const response = await this.postAuth("/_auth/mfa/totp/new", {
       json: payload,
     });
     return {
@@ -635,7 +747,7 @@ export abstract class BaseAPIClient {
     const payload = this.makePayloadWithAuthenticationSessionToken({
       otp,
     });
-    const response = await this.post("/_auth/mfa/totp/activate", {
+    const response = await this.postAuth("/_auth/mfa/totp/activate", {
       json: payload,
     });
     return {
@@ -663,7 +775,7 @@ export abstract class BaseAPIClient {
       phone: (options as any).phone,
       email: (options as any).email,
     });
-    const response = await this.post("/_auth/mfa/oob/new", {
+    const response = await this.postAuth("/_auth/mfa/oob/new", {
       json: payload,
     });
     return {
@@ -677,7 +789,7 @@ export abstract class BaseAPIClient {
     const payload = this.makePayloadWithAuthenticationSessionToken({
       code,
     });
-    const response = await this.post("/_auth/mfa/oob/activate", {
+    const response = await this.postAuth("/_auth/mfa/oob/activate", {
       json: payload,
     });
     return {
@@ -689,7 +801,7 @@ export abstract class BaseAPIClient {
     const payload = this.makePayloadWithAuthenticationSessionToken({
       authenticator_id: authenticatorID,
     });
-    await this.post("/_auth/mfa/oob/trigger", {
+    await this.postAuth("/_auth/mfa/oob/trigger", {
       json: payload,
     });
   }
@@ -721,7 +833,7 @@ export abstract class BaseAPIClient {
   }
 
   async revokeAllBearerToken(): Promise<void> {
-    await this.post("/_auth/mfa/bearer_token/revoke_all", {
+    await this.postAuth("/_auth/mfa/bearer_token/revoke_all", {
       json: {},
     });
   }
@@ -732,7 +844,7 @@ export abstract class BaseAPIClient {
   async _presignUpload(
     req: _PresignUploadRequest
   ): Promise<_PresignUploadResponse> {
-    return this.post("/_asset/presign_upload", {
+    return this.postAsset("/_asset/presign_upload", {
       json: req,
     });
   }
@@ -741,7 +853,7 @@ export abstract class BaseAPIClient {
    * @internal
    */
   async _presignUploadForm(): Promise<_PresignUploadFormResponse> {
-    return this.post("/_asset/presign_upload_form", {
+    return this.postAsset("/_asset/presign_upload_form", {
       json: {},
     });
   }

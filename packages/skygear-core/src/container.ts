@@ -21,7 +21,7 @@ import {
   AuthenticateWithOOBOptions,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
-import { BaseAPIClient, _removeTrailingSlash } from "./client";
+import { BaseAPIClient } from "./client";
 import { encodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
@@ -93,7 +93,7 @@ export class AuthContainer<T extends BaseAPIClient> {
    *
    * @remarks
    * The SDK would populate extra session information from storage
-   * when calling {@link Container.configure | configure}.
+   * when calling Container.configure.
    */
   async saveExtraSessionInfoOptions() {
     return this.parent.storage.setExtraSessionInfoOptions(
@@ -856,17 +856,18 @@ export class Container<T extends BaseAPIClient> {
     this.auth = new AuthContainer(this);
   }
 
-  /**
-   * Configure this container with connection information.
-   *
-   * @param options - Skygear connection information
-   */
-  async configure(options: {
+  protected async _configure(options: {
     apiKey: string;
     endpoint: string;
+    authEndpoint?: string;
+    assetEndpoint?: string;
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
-    this.apiClient.endpoint = _removeTrailingSlash(options.endpoint);
+    await this.apiClient.setEndpoint(
+      options.endpoint,
+      options.authEndpoint,
+      options.assetEndpoint
+    );
 
     const authenticationSession = await this.storage.getAuthenticationSession(
       this.name
@@ -910,6 +911,6 @@ export class Container<T extends BaseAPIClient> {
    * attaching API key, access token, refreshing access token).
    */
   async fetch(input: string, init?: RequestInit): Promise<Response> {
-    return this.apiClient.fetch(input, init);
+    return this.apiClient.fetch(this.apiClient.appEndpoint, input, init);
   }
 }

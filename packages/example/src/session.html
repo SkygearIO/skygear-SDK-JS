@@ -208,8 +208,10 @@ function onSubmitRevokeOther(e) {
 }
 
 skygear.configure({
-  endpoint: "__SKYGEAR_ENDPOINT__",
-  apiKey: "__SKYGEAR_API_KEY__"
+  appEndpoint: "__SKYGEAR_APP_ENDPOINT__",
+  authEndpoint: "__SKYGEAR_AUTH_ENDPOINT__",
+  assetEndpoint: "__SKYGEAR_ASSET_ENDPOINT__",
+  clientID: "__SKYGEAR_CLIENT_ID__"
 }).then(function() {
   setupListSynopsis();
   onInputGet();

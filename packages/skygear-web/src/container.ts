@@ -138,7 +138,7 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     }
     if (this.oauthResultObserver == null) {
       this.oauthResultObserver = new WindowMessageObserver(
-        this.parent.apiClient.endpoint
+        this.parent.apiClient.authEndpoint
       );
     }
 
@@ -418,6 +418,34 @@ export class WebAssetContainer<T extends WebAPIClient> {
 }
 
 /**
+ * @public
+ */
+export interface ConfigureOptions {
+  /**
+   * The OAuth client ID.
+   */
+  clientID: string;
+  /**
+   * The app endpoint.
+   */
+  appEndpoint: string;
+  /**
+   * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
+   */
+  authEndpoint?: string;
+  /**
+   * The Skygear asset endpoint. If it is omitted, it is derived by pre-pending `assets.` to the domain of the app endpoint.
+   */
+  assetEndpoint?: string;
+  /**
+   * isThirdPartyApp indicate if the application a third party app.
+   * A third party app means the app doesn't share common-domain with Skygear Auth thus the session cookie cannot be shared.
+   * If not specified, default to false. So by default the application is considered first party.
+   */
+  isThirdPartyApp?: boolean;
+}
+
+/**
  * Skygear APIs container (for web platforms).
  *
  * @public
@@ -438,5 +466,19 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
     super(o);
     this.auth = new WebAuthContainer(this);
     this.asset = new WebAssetContainer(this);
+  }
+
+  /**
+   * Configure this container with connection information.
+   *
+   * @param options - Skygear connection information
+   */
+  async configure(options: ConfigureOptions) {
+    await this._configure({
+      apiKey: options.clientID,
+      endpoint: options.appEndpoint,
+      authEndpoint: options.authEndpoint,
+      assetEndpoint: options.assetEndpoint,
+    });
   }
 }
