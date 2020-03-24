@@ -241,7 +241,7 @@ export interface AuthResponse {
   refreshToken?: string;
   sessionID?: string;
   mfaBearerToken?: string;
-  expires_in?: number;
+  expiresIn?: number;
 }
 
 /**

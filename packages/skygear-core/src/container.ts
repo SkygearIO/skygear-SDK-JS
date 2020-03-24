@@ -134,7 +134,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       refreshToken,
       sessionID,
       mfaBearerToken,
-      expires_in,
+      expiresIn,
     } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
@@ -167,7 +167,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.currentIdentity = identity;
     }
     if (accessToken) {
-      this.parent.apiClient.setAccessTokenAndExpiresIn(accessToken, expires_in);
+      this.parent.apiClient.setAccessTokenAndExpiresIn(accessToken, expiresIn);
     }
     if (sessionID) {
       this.currentSessionID = sessionID;
@@ -885,13 +885,16 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       );
 
       query.push(["response_type", "code"]);
-      query.push(["scope", "openid offline_access"]);
+      query.push([
+        "scope",
+        "openid offline_access https://skygear.io/auth-api/full-access",
+      ]);
       query.push(["code_challenge_method", "S256"]);
       query.push(["code_challenge", codeVerifier.challenge]);
     } else {
       // for first party app
       query.push(["response_type", "none"]);
-      query.push(["scope", "openid"]);
+      query.push(["scope", "openid https://skygear.io/auth-api/full-access"]);
     }
 
     query.push(["client_id", this.clientID]);
@@ -903,9 +906,15 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
     return `${config.authorization_endpoint}${encodeQuery(query)}`;
   }
 
-  async exchangeTokenFromCode(
+  async finishAuthorization(
     url: string
   ): Promise<{ user: User; state?: string }> {
+    if (!this.isThirdParty) {
+      // if the app is first party app, use session cookie for authorization
+      // no code exchange is needed.
+      return this.parent.parent.apiClient._oidcUserInfoRequest();
+    }
+
     const missingCodeError = {
       error: "invalid_request",
       error_description: "Missing parameter: code",
@@ -938,20 +947,20 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       client_id: this.clientID,
       code_verifier: codeVerifier || "",
     });
-    const user = await this.parent.parent.apiClient._oidcUserInfoRequest(
-      tokenResponse.token_type,
+    const result = await this.parent.parent.apiClient._oidcUserInfoRequest(
       tokenResponse.access_token
     );
-
     await this.parent.persistAuthResponse({
-      user: user,
+      user: result.user,
+      identity: result.identity,
+      sessionID: result.sessionID,
       accessToken: tokenResponse.access_token,
       refreshToken: tokenResponse.refresh_token,
-      expires_in: tokenResponse.expires_in,
+      expiresIn: tokenResponse.expires_in,
     });
 
     return {
-      user: user,
+      user: result.user,
       state: queryMap.state,
     };
   }

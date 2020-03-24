@@ -265,22 +265,27 @@ export function _encodeExtraSessionInfoOptions(
 /**
  * @internal
  */
-export function _decodeUserFromOIDCUserinfo(u: any): User {
-  // TODO: confirm userinfo return attributes
-  const id = u.sub;
-  const createdAt = new Date(u.created_at || 0);
-  const lastLoginAt = new Date(u.last_login_at || 0);
-  const isVerified = u.is_verified;
-  const isManuallyVerified = u.is_manually_verified;
-  const isDisabled = u.is_disabled;
-  const metadata = u.metadata;
-  return {
-    id,
-    createdAt,
-    lastLoginAt,
-    isManuallyVerified,
-    isVerified,
-    isDisabled,
-    metadata,
+export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
+  const { sub, skygear_user, skygear_identity, skygear_session_id } = u;
+
+  if (!skygear_user) {
+    throw new Error("missing skygear_user in userinfo");
+  }
+
+  const user = decodeUser(skygear_user);
+  user.id = sub;
+
+  const response: AuthResponse = {
+    user: user,
   };
+
+  if (skygear_session_id) {
+    response.sessionID = skygear_session_id;
+  }
+
+  if (skygear_identity) {
+    response.identity = decodeIdentity(skygear_identity);
+  }
+
+  return response;
 }

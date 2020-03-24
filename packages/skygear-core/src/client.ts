@@ -22,7 +22,6 @@ import {
   _OIDCTokenResponse,
   _OIDCTokenRequest,
   OAuthError,
-  User,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -31,7 +30,7 @@ import {
   decodeSession,
   decodeAuthenticator,
   decodeIdentity,
-  _decodeUserFromOIDCUserinfo,
+  _decodeAuthResponseFromOIDCUserinfo,
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
 
@@ -958,17 +957,17 @@ export abstract class BaseAPIClient {
   /**
    * @internal
    */
-  async _oidcUserInfoRequest(
-    accessTokenType: string,
-    accessToken: string
-  ): Promise<User> {
+  async _oidcUserInfoRequest(accessToken?: string): Promise<AuthResponse> {
+    const headers: { [name: string]: string } = {};
+    if (accessToken) {
+      headers["authorization"] = `bearer ${accessToken}`;
+    }
     const config = await this._fetchOIDCConfiguration();
     const userinfo = await this._fetchOIDCRequest(config.userinfo_endpoint, {
       method: "GET",
-      headers: {
-        authorization: `${accessTokenType} ${accessToken}`,
-      },
+      headers: headers,
     });
-    return _decodeUserFromOIDCUserinfo(userinfo);
+    const result = _decodeAuthResponseFromOIDCUserinfo(userinfo);
+    return result;
   }
 }

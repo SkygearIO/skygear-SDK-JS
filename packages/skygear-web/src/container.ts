@@ -363,24 +363,24 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   }
 
   /**
-   * Open authorize page
+   * Start authorization by opening authorize page
    *
    * @param options - authorize options
    */
-  async authorize(options: AuthorizeOptions): Promise<void> {
+  async startAuthorization(options: AuthorizeOptions): Promise<void> {
     const authorizeEndpoint = await this._oidc.authorizeEndpoint(options);
     window.location.href = authorizeEndpoint;
   }
 
   /**
-   * Exchange access token
+   * Finish authorization
    *
    * exchangeToken read window.location.
    * It checks if error is present and rejects with OAuthError.
    * Otherwise assume code is present, make a token request.
    */
-  async exchangeToken(): Promise<{ user: User; state?: string }> {
-    return this._oidc.exchangeTokenFromCode(window.location.href);
+  async finishAuthorization(): Promise<{ user: User; state?: string }> {
+    return this._oidc.finishAuthorization(window.location.href);
   }
 }
 
