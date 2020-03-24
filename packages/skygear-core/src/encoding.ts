@@ -20,6 +20,7 @@ export function decodeAuthResponse(r: any): AuthResponse {
     refresh_token,
     session_id,
     mfa_bearer_token,
+    expires_in,
   } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
@@ -38,6 +39,9 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (mfa_bearer_token) {
     response.mfaBearerToken = mfa_bearer_token;
+  }
+  if (expires_in) {
+    response.expiresIn = expires_in;
   }
   return response;
 }
