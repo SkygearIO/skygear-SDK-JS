@@ -71,6 +71,8 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
+
+    implementation 'androidx.browser:browser:1.2.0'
 }
 
 afterEvaluate { project ->
