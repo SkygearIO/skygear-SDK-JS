@@ -81,24 +81,9 @@ public class SGSkygearReactNativeModule extends ReactContextBaseJavaModule {
 
         try {
             Activity currentActivity = getCurrentActivity();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString).normalizeScheme());
-
-            String selfPackageName = getReactApplicationContext().getPackageName();
-            ComponentName componentName =
-                          intent.resolveActivity(getReactApplicationContext().getPackageManager());
-            String otherPackageName = (componentName != null ? componentName.getPackageName() : "");
-            // If there is no currentActivity or we are launching to a different package we need to set
-            // the FLAG_ACTIVITY_NEW_TASK flag
-            if (currentActivity == null || !selfPackageName.equals(otherPackageName)) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            }
-
-
-            if (currentActivity != null) {
-                currentActivity.startActivity(intent);
-            } else {
-                getReactApplicationContext().startActivity(intent);
-            }
+            Uri uri = Uri.parse(urlString).normalizeScheme();
+            Context context = currentActivity != null ? currentActivity : getReactApplicationContext();
+            SGCustomTabsHelper.openURL(context, uri);
         } catch (Exception e) {
             if (this.openURLPromise != null) {
                 this.openURLPromise.reject(e);
