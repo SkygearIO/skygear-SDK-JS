@@ -966,6 +966,8 @@ export abstract class BaseAPIClient {
     const userinfo = await this._fetchOIDCRequest(config.userinfo_endpoint, {
       method: "GET",
       headers: headers,
+      mode: "cors",
+      credentials: "include",
     });
     const result = _decodeAuthResponseFromOIDCUserinfo(userinfo);
     return result;
