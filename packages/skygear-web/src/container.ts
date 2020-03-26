@@ -137,6 +137,26 @@ export class WebOIDCContainer<T extends WebAPIClient> extends OIDCContainer<T> {
   async finishAuthorization(): Promise<{ user: User; state?: string }> {
     return this._finishAuthorization(window.location.href);
   }
+
+  /**
+   * Logout.
+   *
+   * @remarks
+   * If `force` parameter is set to `true`, all potential errors (e.g. network
+   * error) would be ignored.
+   *
+   * `redirectURI` will be used only for the first party app
+   *
+   * @param options - Logout options
+   */
+  async logout(
+    options: {
+      force?: boolean;
+      redirectURI?: string;
+    } = {}
+  ): Promise<void> {
+    return this._logout(options);
+  }
 }
 
 /**

@@ -979,6 +979,44 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       state: queryMap.state,
     };
   }
+
+  /**
+   * Logout current session.
+   *
+   * @remarks
+   * If `force` parameter is set to `true`, all potential errors (e.g. network
+   * error) would be ignored.
+   *
+   * `redirectURI` will be used only for the first party app
+   *
+   * @param options - Logout options
+   */
+  async _logout(
+    options: { force?: boolean; redirectURI?: string } = {}
+  ): Promise<void> {
+    if (this.isThirdParty) {
+      try {
+        const refreshToken =
+          (await this.parent.storage.getRefreshToken(this.parent.name)) || "";
+        await this.parent.apiClient._oidcRevocationRequest(refreshToken);
+      } catch (error) {
+        if (!options.force) {
+          throw error;
+        }
+      }
+      await this.auth._clearSession();
+    } else {
+      const config = await this.parent.apiClient._fetchOIDCConfiguration();
+      const query: [string, string][] = [];
+      if (options.redirectURI) {
+        query.push(["post_logout_redirect_uri", options.redirectURI]);
+      }
+      const endSessionEndpoint = `${config.end_session_endpoint}${encodeQuery(
+        query
+      )}`;
+      window.location.href = endSessionEndpoint;
+    }
+  }
 }
 
 /**

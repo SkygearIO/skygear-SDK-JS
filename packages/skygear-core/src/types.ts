@@ -702,6 +702,7 @@ export interface _OIDCConfiguration {
   claims_supported: string;
   code_challenge_methods_supported: string;
   revocation_endpoint: string;
+  end_session_endpoint: string;
 }
 
 /**

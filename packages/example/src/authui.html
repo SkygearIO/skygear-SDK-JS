@@ -46,6 +46,22 @@
       <textarea id="finishAuthorizationResult" class="form-control" readonly=""></textarea>
     </div>
   </form>
+  <form class="container" onsubmit="onSubmitLogout(event)">
+    <div class="form-group">
+      <h1>Logout</h1>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </div>
+    <div class="form-group">
+      <label>Synopsis</label>
+      <textarea id="logoutSynopsis" class="form-control" readonly=""></textarea>
+    </div>
+    <div class="form-group">
+      <label>Result</label>
+      <textarea id="logoutResult" class="form-control" readonly=""></textarea>
+    </div>
+  </form>
   <script>
 
 function getRedirectURI() {
@@ -105,6 +121,29 @@ function onSubmitFinishAuthorization(e) {
   });
 }
 
+function setupLogoutSynopsis() {
+  var synopsisTextArea = document.getElementById("logoutSynopsis");
+  var funcExpr = "skygear.authui.logout";
+  var s = stringifyFunctionCall(funcExpr);
+  synopsisTextArea.value = s;
+}
+
+function onSubmitLogout(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var redirectURI = getRedirectURI();
+  var resultTextArea = document.getElementById("logoutResult");
+  skygear.authui.logout({
+    redirectURI: redirectURI,
+  }).then(function() {
+    resultTextArea.value = "OK";
+  }, function(e) {
+    console.log(e);
+    resultTextArea.value = JSON.stringify(e);
+  });
+}
+
 skygear.configure({
   appEndpoint: "__SKYGEAR_APP_ENDPOINT__",
   authEndpoint: "__SKYGEAR_AUTH_ENDPOINT__",
@@ -114,6 +153,7 @@ skygear.configure({
 }).then(function() {
   setupStartAuthorizationSynopsis();
   setupFinishAuthorizationSynopsis();
+  setupLogoutSynopsis();
 }, function(e) {
   console.error(e);
 });

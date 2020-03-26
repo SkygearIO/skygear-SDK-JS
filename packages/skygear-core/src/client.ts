@@ -888,11 +888,14 @@ export abstract class BaseAPIClient {
   /**
    * @internal
    */
-  async _fetchOIDCRequest(url: string, init?: RequestInit): Promise<any> {
+  async _fetchOIDCRequest(url: string, init?: RequestInit): Promise<Response> {
     const resp = await this._fetch(url, init);
-    let jsonBody;
+    if (resp.status === 200) {
+      return resp;
+    }
+    let errJSON;
     try {
-      jsonBody = await resp.json();
+      errJSON = await resp.json();
     } catch {
       throw new SkygearError(
         "failed to decode response JSON",
@@ -903,12 +906,9 @@ export abstract class BaseAPIClient {
         }
       );
     }
-    if (resp.status === 200) {
-      return jsonBody;
-    }
     const oauthError: OAuthError = {
-      error: jsonBody["error"],
-      error_description: jsonBody["error_description"],
+      error: errJSON["error"],
+      error_description: errJSON["error_description"],
     };
     throw oauthError;
   }
@@ -916,9 +916,27 @@ export abstract class BaseAPIClient {
   /**
    * @internal
    */
+  async _fetchOIDCJSON(url: string, init?: RequestInit): Promise<any> {
+    const resp = await this._fetchOIDCRequest(url, init);
+    let jsonBody;
+    try {
+      jsonBody = await resp.json();
+    } catch {
+      throw new SkygearError(
+        "failed to decode response JSON",
+        "InternalError",
+        "UnexpectedError"
+      );
+    }
+    return jsonBody;
+  }
+
+  /**
+   * @internal
+   */
   async _fetchOIDCConfiguration(): Promise<_OIDCConfiguration> {
     if (!this.config) {
-      this.config = (await this._fetchOIDCRequest(
+      this.config = (await this._fetchOIDCJSON(
         `${this.authEndpoint}/.well-known/openid-configuration`
       )) as _OIDCConfiguration;
     }
@@ -945,7 +963,7 @@ export abstract class BaseAPIClient {
     if (req.refresh_token) {
       query.push(["refresh_token", req.refresh_token]);
     }
-    return this._fetchOIDCRequest(config.token_endpoint, {
+    return this._fetchOIDCJSON(config.token_endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
@@ -963,7 +981,7 @@ export abstract class BaseAPIClient {
       headers["authorization"] = `bearer ${accessToken}`;
     }
     const config = await this._fetchOIDCConfiguration();
-    const userinfo = await this._fetchOIDCRequest(config.userinfo_endpoint, {
+    const userinfo = await this._fetchOIDCJSON(config.userinfo_endpoint, {
       method: "GET",
       headers: headers,
       mode: "cors",
@@ -971,5 +989,20 @@ export abstract class BaseAPIClient {
     });
     const result = _decodeAuthResponseFromOIDCUserinfo(userinfo);
     return result;
+  }
+
+  /**
+   * @internal
+   */
+  async _oidcRevocationRequest(refreshToken: string): Promise<void> {
+    const config = await this._fetchOIDCConfiguration();
+    const query: [string, string][] = [["token", refreshToken]];
+    await this._fetchOIDCRequest(config.revocation_endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: encodeQuery(query).substring(1),
+    });
   }
 }
