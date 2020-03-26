@@ -857,10 +857,11 @@ export interface AuthorizeOptions {
 /**
  * Skygear Auth OIDC client APIs.
  *
- * @internal
+ * @public
  */
-export abstract class _OIDCContainer<T extends BaseAPIClient> {
-  parent: AuthContainer<T>;
+export abstract class OIDCContainer<T extends BaseAPIClient> {
+  parent: Container<T>;
+  auth: AuthContainer<T>;
 
   abstract clientID: string;
   abstract isThirdParty: boolean;
@@ -869,18 +870,19 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
     challenge: string;
   }>;
 
-  constructor(parent: AuthContainer<T>) {
+  constructor(parent: Container<T>, auth: AuthContainer<T>) {
     this.parent = parent;
+    this.auth = auth;
   }
 
   async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
-    const config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
+    const config = await this.parent.apiClient._fetchOIDCConfiguration();
     const query: [string, string][] = [];
 
     if (this.isThirdParty) {
       const codeVerifier = await this._setupCodeVerifier();
-      await this.parent.parent.storage.setOIDCCodeVerifier(
-        this.parent.parent.name,
+      await this.parent.storage.setOIDCCodeVerifier(
+        this.parent.name,
         codeVerifier.verifier
       );
 
@@ -906,7 +908,7 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
     return `${config.authorization_endpoint}${encodeQuery(query)}`;
   }
 
-  async finishAuthorization(
+  async _finishAuthorization(
     url: string
   ): Promise<{ user: User; state?: string }> {
     const idx = url.indexOf("?");
@@ -940,7 +942,7 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
     if (!this.isThirdParty) {
       // if the app is first party app, use session cookie for authorization
       // no code exchange is needed.
-      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest();
+      authResponse = await this.parent.apiClient._oidcUserInfoRequest();
     } else {
       if (!queryMap.code) {
         const missingCodeError = {
@@ -949,17 +951,17 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
         } as OAuthError;
         throw missingCodeError;
       }
-      const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
-        this.parent.parent.name
+      const codeVerifier = await this.parent.storage.getOIDCCodeVerifier(
+        this.parent.name
       );
-      tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest({
+      tokenResponse = await this.parent.apiClient._oidcTokenRequest({
         grant_type: "authorization_code",
         code: queryMap.code,
         redirect_uri: redirectURI,
         client_id: this.clientID,
         code_verifier: codeVerifier || "",
       });
-      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest(
+      authResponse = await this.parent.apiClient._oidcUserInfoRequest(
         tokenResponse.access_token
       );
     }
@@ -971,7 +973,7 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
       ar.refreshToken = tokenResponse.refresh_token;
       ar.expiresIn = tokenResponse.expires_in;
     }
-    await this.parent.persistAuthResponse(ar);
+    await this.auth.persistAuthResponse(ar);
     return {
       user: authResponse.user,
       state: queryMap.state,

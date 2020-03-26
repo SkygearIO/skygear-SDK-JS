@@ -60,7 +60,7 @@ function getRedirectURI() {
 
 function setupStartAuthorizationSynopsis() {
   var synopsisTextArea = document.getElementById("startAuthorizationSynopsis");
-  var funcExpr = "skygear.auth.startAuthorization";
+  var funcExpr = "skygear.authui.startAuthorization";
   var redirectURI = getRedirectURI();
   var s = stringifyFunctionCall(funcExpr, {
     redirectURI: redirectURI,
@@ -74,7 +74,7 @@ function onSubmitStartAuthorization(e) {
 
   var resultTextArea = document.getElementById("startAuthorizationResult");
   var redirectURI = getRedirectURI();
-  skygear.auth.startAuthorization({
+  skygear.authui.startAuthorization({
     redirectURI: redirectURI
   }).then(function() {
     resultTextArea.value = "OK";
@@ -86,7 +86,7 @@ function onSubmitStartAuthorization(e) {
 
 function setupFinishAuthorizationSynopsis() {
   var synopsisTextArea = document.getElementById("finishAuthorizationSynopsis");
-  var funcExpr = "skygear.auth.finishAuthorization";
+  var funcExpr = "skygear.authui.finishAuthorization";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -97,7 +97,7 @@ function onSubmitFinishAuthorization(e) {
 
   var resultTextArea = document.getElementById("finishAuthorizationResult");
 
-  skygear.auth.finishAuthorization().then(function(result) {
+  skygear.authui.finishAuthorization().then(function(result) {
     resultTextArea.value = JSON.stringify(result);
   }, function(e) {
     console.log(e);
