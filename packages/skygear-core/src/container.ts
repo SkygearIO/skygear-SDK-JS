@@ -909,58 +909,71 @@ export abstract class _OIDCContainer<T extends BaseAPIClient> {
   async finishAuthorization(
     url: string
   ): Promise<{ user: User; state?: string }> {
+    const idx = url.indexOf("?");
+    let redirectURI: string;
+    let queryMap: { [key: string]: string };
+    if (idx === -1) {
+      redirectURI = url;
+      queryMap = {};
+    } else {
+      redirectURI = url.slice(0, idx);
+      const query = url.slice(idx + 1);
+      const queryList = decodeQuery(query);
+      queryMap = queryList.reduce(
+        (acc, pair) => {
+          acc[pair[0]] = pair[1];
+          return acc;
+        },
+        {} as { [key: string]: string }
+      );
+    }
+    if (queryMap.error) {
+      const err = {
+        error: queryMap.error,
+        error_description: queryMap.error_description,
+      } as OAuthError;
+      throw err;
+    }
+
+    let authResponse;
+    let tokenResponse;
     if (!this.isThirdParty) {
       // if the app is first party app, use session cookie for authorization
       // no code exchange is needed.
-      return this.parent.parent.apiClient._oidcUserInfoRequest();
+      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest();
+    } else {
+      if (!queryMap.code) {
+        const missingCodeError = {
+          error: "invalid_request",
+          error_description: "Missing parameter: code",
+        } as OAuthError;
+        throw missingCodeError;
+      }
+      const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
+        this.parent.parent.name
+      );
+      tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest({
+        grant_type: "authorization_code",
+        code: queryMap.code,
+        redirect_uri: redirectURI,
+        client_id: this.clientID,
+        code_verifier: codeVerifier || "",
+      });
+      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest(
+        tokenResponse.access_token
+      );
     }
 
-    const missingCodeError = {
-      error: "invalid_request",
-      error_description: "Missing parameter: code",
-    } as OAuthError;
-    const idx = url.indexOf("?");
-    if (idx === -1) {
-      throw missingCodeError;
+    const ar = { ...authResponse };
+    // only third party app has token reponse
+    if (tokenResponse) {
+      ar.accessToken = tokenResponse.access_token;
+      ar.refreshToken = tokenResponse.refresh_token;
+      ar.expiresIn = tokenResponse.expires_in;
     }
-    const redirectURI = url.slice(0, idx);
-    const query = url.slice(idx + 1);
-    const queryList = decodeQuery(query);
-    const queryMap = queryList.reduce(
-      (acc, pair) => {
-        acc[pair[0]] = pair[1];
-        return acc;
-      },
-      {} as { [key: string]: string }
-    );
-    if (!queryMap.code) {
-      throw missingCodeError;
-    }
-
-    const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
-      this.parent.parent.name
-    );
-    const tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest({
-      grant_type: "authorization_code",
-      code: queryMap.code,
-      redirect_uri: redirectURI,
-      client_id: this.clientID,
-      code_verifier: codeVerifier || "",
-    });
-    const result = await this.parent.parent.apiClient._oidcUserInfoRequest(
-      tokenResponse.access_token
-    );
-    await this.parent.persistAuthResponse({
-      user: result.user,
-      identity: result.identity,
-      sessionID: result.sessionID,
-      accessToken: tokenResponse.access_token,
-      refreshToken: tokenResponse.refresh_token,
-      expiresIn: tokenResponse.expires_in,
-    });
-
+    await this.parent.persistAuthResponse(ar);
     return {
-      user: result.user,
+      user: authResponse.user,
       state: queryMap.state,
     };
   }
