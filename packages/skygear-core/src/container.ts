@@ -1014,6 +1014,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       const endSessionEndpoint = `${config.end_session_endpoint}${encodeQuery(
         query
       )}`;
+      await this.auth._clearSession();
       window.location.href = endSessionEndpoint;
     }
   }
