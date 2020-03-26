@@ -241,6 +241,7 @@ export interface AuthResponse {
   refreshToken?: string;
   sessionID?: string;
   mfaBearerToken?: string;
+  expiresIn?: number;
 }
 
 /**
@@ -266,6 +267,7 @@ export interface ContainerStorage {
     authenticationSession: AuthenticationSession
   ): Promise<void>;
   setMFABearerToken(namespace: string, mfaBearerToken: string): Promise<void>;
+  setOIDCCodeVerifier(namespace: string, code: string): Promise<void>;
 
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
@@ -281,6 +283,7 @@ export interface ContainerStorage {
     namespace: string
   ): Promise<AuthenticationSession | null>;
   getMFABearerToken(namespace: string): Promise<string | null>;
+  getOIDCCodeVerifier(namespace: string): Promise<string | null>;
 
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
@@ -291,6 +294,7 @@ export interface ContainerStorage {
   delOAuthCodeVerifier(namespace: string): Promise<void>;
   delAuthenticationSession(namespace: string): Promise<void>;
   delMFABearerToken(namespace: string): Promise<void>;
+  delOIDCCodeVerifier(namespace: string): Promise<void>;
 }
 
 /**
@@ -666,6 +670,61 @@ export interface AuthenticationSession {
    * Current step in authentication session.
    */
   step: "identity" | "mfa";
+}
+
+/**
+ * OAuthError represents the oauth error response.
+ * https://tools.ietf.org/html/rfc6749#section-4.1.2.1
+ *
+ * @public
+ */
+export interface OAuthError {
+  state?: string;
+  error: string;
+  error_description?: string;
+  error_uri?: string;
+}
+
+/**
+ * @internal
+ */
+export interface _OIDCConfiguration {
+  issuer: string;
+  authorization_endpoint: string;
+  token_endpoint: string;
+  userinfo_endpoint: string;
+  jwks_uri: string;
+  scopes_supported: string;
+  response_types_supported: string;
+  grant_types_supported: string;
+  subject_types_supported: string;
+  id_token_signing_alg_values_supported: string;
+  claims_supported: string;
+  code_challenge_methods_supported: string;
+  revocation_endpoint: string;
+}
+
+/**
+ * @internal
+ */
+export interface _OIDCTokenRequest {
+  grant_type: "authorization_code" | "refresh_token";
+  client_id: string;
+  redirect_uri?: string;
+  code?: string;
+  code_verifier?: string;
+  refresh_token?: string;
+}
+
+/**
+ * @internal
+ */
+export interface _OIDCTokenResponse {
+  id_token: string;
+  token_type: string;
+  access_token: string;
+  expires_in: number;
+  refresh_token?: string;
 }
 
 /**

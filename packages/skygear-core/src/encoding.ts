@@ -20,6 +20,7 @@ export function decodeAuthResponse(r: any): AuthResponse {
     refresh_token,
     session_id,
     mfa_bearer_token,
+    expires_in,
   } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
@@ -38,6 +39,9 @@ export function decodeAuthResponse(r: any): AuthResponse {
   }
   if (mfa_bearer_token) {
     response.mfaBearerToken = mfa_bearer_token;
+  }
+  if (expires_in) {
+    response.expiresIn = expires_in;
   }
   return response;
 }
@@ -260,4 +264,32 @@ export function _encodeExtraSessionInfoOptions(
   return {
     device_name: o.deviceName,
   };
+}
+
+/**
+ * @internal
+ */
+export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
+  const { sub, skygear_user, skygear_identity, skygear_session_id } = u;
+
+  if (!skygear_user) {
+    throw new Error("missing skygear_user in userinfo");
+  }
+
+  const user = decodeUser(skygear_user);
+  user.id = sub;
+
+  const response: AuthResponse = {
+    user: user,
+  };
+
+  if (skygear_session_id) {
+    response.sessionID = skygear_session_id;
+  }
+
+  if (skygear_identity) {
+    response.identity = decodeIdentity(skygear_identity);
+  }
+
+  return response;
 }

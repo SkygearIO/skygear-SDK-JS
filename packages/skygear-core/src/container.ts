@@ -19,10 +19,11 @@ import {
   CreateNewOOBResult,
   ActivateOOBResult,
   AuthenticateWithOOBOptions,
+  OAuthError,
 } from "./types";
 import { SkygearError, _extractAuthenticationSession } from "./error";
 import { BaseAPIClient } from "./client";
-import { encodeQuery } from "./url";
+import { encodeQuery, decodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -133,6 +134,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       refreshToken,
       sessionID,
       mfaBearerToken,
+      expiresIn,
     } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
@@ -165,7 +167,7 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.currentIdentity = identity;
     }
     if (accessToken) {
-      this.parent.apiClient._accessToken = accessToken;
+      this.parent.apiClient.setAccessTokenAndExpiresIn(accessToken, expiresIn);
     }
     if (sessionID) {
       this.currentSessionID = sessionID;
@@ -420,45 +422,59 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async _refreshAccessToken(): Promise<boolean> {
-    // The server only includes x-skygear-try-refresh-token if
-    // the access token in the request is invalid.
+    // api client determine whether the token need to be refresh or not by
+    // shouldRefreshTokenAt timeout
     //
-    // If the request does not have access token at all,
-    // the server simply returns NotAuthenticated error without the header.
+    // The value of shouldRefreshTokenAt will be updated based on expires_in in
+    // the token response
     //
-    // Therefore, we have to keep the invalid token so that
-    // if refresh fails due to other reasons, the whole process
-    // can be retried.
+    // The session will be cleared only if token request return invalid_grant
+    // which indicate the refresh token is no longer valid
     //
-    // await this.parent.storage.delAccessToken(this.parent.name);
-    // this.parent.apiClient._accessToken = null;
+    // If token request fails due to other reasons, session will be kept and
+    // the whole process can be retried.
 
     const refreshToken = await this.parent.storage.getRefreshToken(
       this.parent.name
     );
     if (!refreshToken) {
-      // no refresh token -> session is gone
-      await this._clearSession();
+      // no refresh token -> cannot refresh
+      this.parent.apiClient.setShouldNotRefreshToken();
       return false;
     }
 
-    let accessToken;
+    let tokenResponse;
     try {
-      accessToken = await this.parent.apiClient.refresh(refreshToken);
+      tokenResponse = await this.parent.apiClient._oidcTokenRequest({
+        grant_type: "refresh_token",
+        client_id: this.parent.apiClient.apiKey,
+        refresh_token: refreshToken,
+      });
     } catch (error) {
-      if (
-        error instanceof SkygearError &&
-        error.reason === "NotAuthenticated"
-      ) {
-        // cannot refresh -> session is gone
+      // When the error is `invalid_grant`, that means the refresh is
+      // no longer invalid, clear the session in this case.
+      // https://tools.ietf.org/html/rfc6749#section-5.2
+      if (error.error === "invalid_grant") {
         await this._clearSession();
+        return false;
       }
       throw error;
     }
 
-    await this.parent.storage.setAccessToken(this.parent.name, accessToken);
-    this.parent.apiClient._accessToken = accessToken;
-
+    await this.parent.storage.setAccessToken(
+      this.parent.name,
+      tokenResponse.access_token
+    );
+    if (tokenResponse.refresh_token) {
+      await this.parent.storage.setRefreshToken(
+        this.parent.name,
+        tokenResponse.refresh_token
+      );
+    }
+    this.parent.apiClient.setAccessTokenAndExpiresIn(
+      tokenResponse.access_token,
+      tokenResponse.expires_in
+    );
     return true;
   }
 
@@ -823,6 +839,147 @@ export class MFAContainer<T extends BaseAPIClient> {
 }
 
 /**
+ * Auth UI authorization options
+ *
+ * @public
+ */
+export interface AuthorizeOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
+}
+
+/**
+ * Skygear Auth OIDC client APIs.
+ *
+ * @internal
+ */
+export abstract class _OIDCContainer<T extends BaseAPIClient> {
+  parent: AuthContainer<T>;
+
+  abstract clientID: string;
+  abstract isThirdParty: boolean;
+  abstract async _setupCodeVerifier(): Promise<{
+    verifier: string;
+    challenge: string;
+  }>;
+
+  constructor(parent: AuthContainer<T>) {
+    this.parent = parent;
+  }
+
+  async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
+    const config = await this.parent.parent.apiClient._fetchOIDCConfiguration();
+    const query: [string, string][] = [];
+
+    if (this.isThirdParty) {
+      const codeVerifier = await this._setupCodeVerifier();
+      await this.parent.parent.storage.setOIDCCodeVerifier(
+        this.parent.parent.name,
+        codeVerifier.verifier
+      );
+
+      query.push(["response_type", "code"]);
+      query.push([
+        "scope",
+        "openid offline_access https://skygear.io/auth-api/full-access",
+      ]);
+      query.push(["code_challenge_method", "S256"]);
+      query.push(["code_challenge", codeVerifier.challenge]);
+    } else {
+      // for first party app
+      query.push(["response_type", "none"]);
+      query.push(["scope", "openid https://skygear.io/auth-api/full-access"]);
+    }
+
+    query.push(["client_id", this.clientID]);
+    query.push(["redirect_uri", options.redirectURI]);
+    if (options.state) {
+      query.push(["state", options.state]);
+    }
+
+    return `${config.authorization_endpoint}${encodeQuery(query)}`;
+  }
+
+  async finishAuthorization(
+    url: string
+  ): Promise<{ user: User; state?: string }> {
+    const idx = url.indexOf("?");
+    let redirectURI: string;
+    let queryMap: { [key: string]: string };
+    if (idx === -1) {
+      redirectURI = url;
+      queryMap = {};
+    } else {
+      redirectURI = url.slice(0, idx);
+      const query = url.slice(idx + 1);
+      const queryList = decodeQuery(query);
+      queryMap = queryList.reduce(
+        (acc, pair) => {
+          acc[pair[0]] = pair[1];
+          return acc;
+        },
+        {} as { [key: string]: string }
+      );
+    }
+    if (queryMap.error) {
+      const err = {
+        error: queryMap.error,
+        error_description: queryMap.error_description,
+      } as OAuthError;
+      throw err;
+    }
+
+    let authResponse;
+    let tokenResponse;
+    if (!this.isThirdParty) {
+      // if the app is first party app, use session cookie for authorization
+      // no code exchange is needed.
+      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest();
+    } else {
+      if (!queryMap.code) {
+        const missingCodeError = {
+          error: "invalid_request",
+          error_description: "Missing parameter: code",
+        } as OAuthError;
+        throw missingCodeError;
+      }
+      const codeVerifier = await this.parent.parent.storage.getOIDCCodeVerifier(
+        this.parent.parent.name
+      );
+      tokenResponse = await this.parent.parent.apiClient._oidcTokenRequest({
+        grant_type: "authorization_code",
+        code: queryMap.code,
+        redirect_uri: redirectURI,
+        client_id: this.clientID,
+        code_verifier: codeVerifier || "",
+      });
+      authResponse = await this.parent.parent.apiClient._oidcUserInfoRequest(
+        tokenResponse.access_token
+      );
+    }
+
+    const ar = { ...authResponse };
+    // only third party app has token reponse
+    if (tokenResponse) {
+      ar.accessToken = tokenResponse.access_token;
+      ar.refreshToken = tokenResponse.refresh_token;
+      ar.expiresIn = tokenResponse.expires_in;
+    }
+    await this.parent.persistAuthResponse(ar);
+    return {
+      user: authResponse.user,
+      state: queryMap.state,
+    };
+  }
+}
+
+/**
  * Skygear APIs container.
  *
  * @remarks
@@ -876,6 +1033,8 @@ export class Container<T extends BaseAPIClient> {
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient._accessToken = accessToken;
+    // should refresh token when app start
+    this.apiClient.setShouldRefreshTokenNow();
 
     const user = await this.storage.getUser(this.name);
     this.auth.currentUser = user;

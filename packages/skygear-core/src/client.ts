@@ -18,6 +18,10 @@ import {
   _PresignUploadRequest,
   _PresignUploadResponse,
   _PresignUploadFormResponse,
+  _OIDCConfiguration,
+  _OIDCTokenResponse,
+  _OIDCTokenRequest,
+  OAuthError,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -26,8 +30,11 @@ import {
   decodeSession,
   decodeAuthenticator,
   decodeIdentity,
+  _decodeAuthResponseFromOIDCUserinfo,
 } from "./encoding";
 import { _encodeBase64FromString } from "./base64";
+
+const refreshTokenWindow = 0.7;
 
 /**
  * @internal
@@ -56,11 +63,6 @@ export function _gearEndpoint(
   return gearEndpoint;
 }
 
-function shouldRefreshToken(r: Response): boolean {
-  const h = r.headers.get("x-skygear-try-refresh-token");
-  return h === "true";
-}
-
 function extractSingleKeyValue(
   o: { [key: string]: string },
   errorMessage: string
@@ -86,6 +88,13 @@ export abstract class BaseAPIClient {
   _accessToken: string | null;
   /**
    * @internal
+   *
+   * _shouldRefreshTokenAt is the timestamp that the sdk should refresh token
+   * 0 means doesn't need to refresh
+   */
+  _shouldRefreshTokenAt: number;
+  /**
+   * @internal
    */
   _authenticationSession: AuthenticationSession | null;
   fetchFunction?: typeof fetch;
@@ -94,6 +103,8 @@ export abstract class BaseAPIClient {
   userAgent?: string;
   getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
+  private config?: _OIDCConfiguration;
+
   constructor() {
     this.apiKey = "";
     this.appEndpoint = "";
@@ -101,6 +112,25 @@ export abstract class BaseAPIClient {
     this.assetEndpoint = "";
     this._accessToken = null;
     this._authenticationSession = null;
+    this._shouldRefreshTokenAt = 0;
+  }
+
+  setShouldNotRefreshToken() {
+    this._shouldRefreshTokenAt = 0;
+  }
+
+  setShouldRefreshTokenNow() {
+    this._shouldRefreshTokenAt = new Date().getTime();
+  }
+
+  setAccessTokenAndExpiresIn(accessToken: string, expires_in?: number) {
+    this._accessToken = accessToken;
+    if (expires_in) {
+      this._shouldRefreshTokenAt =
+        new Date().getTime() + expires_in * 1000 * refreshTokenWindow;
+    } else {
+      this._shouldRefreshTokenAt = 0;
+    }
   }
 
   async setEndpoint(
@@ -141,6 +171,21 @@ export abstract class BaseAPIClient {
     return headers;
   }
 
+  /**
+   * @internal
+   */
+  async _fetch(url: string, init?: RequestInit): Promise<Response> {
+    if (!this.fetchFunction) {
+      throw new Error("missing fetchFunction in api client");
+    }
+
+    if (!this.requestClass) {
+      throw new Error("missing requestClass in api client");
+    }
+    const request = new this.requestClass(url, init);
+    return this.fetchFunction(request);
+  }
+
   async fetch(
     endpoint: string,
     input: string,
@@ -161,6 +206,18 @@ export abstract class BaseAPIClient {
       throw new Error("only string path is allowed for fetch input");
     }
 
+    // check if need to refresh token
+    const shouldRefreshToken =
+      this._accessToken &&
+      this._shouldRefreshTokenAt &&
+      this._shouldRefreshTokenAt < new Date().getTime();
+    if (shouldRefreshToken && autoRefreshToken) {
+      if (!this.refreshTokenFunction) {
+        throw new Error("missing refreshTokenFunction in api client");
+      }
+      await this.refreshTokenFunction();
+    }
+
     const url = endpoint + "/" + input.replace(/^\//, "");
     const request = new this.requestClass(url, init);
 
@@ -169,26 +226,7 @@ export abstract class BaseAPIClient {
       request.headers.set(key, headers[key]);
     }
 
-    let response = await this.fetchFunction(request.clone());
-    if (shouldRefreshToken(response) && autoRefreshToken) {
-      if (!this.refreshTokenFunction) {
-        throw new Error("missing refreshTokenFunction in api client");
-      }
-
-      const tokenRefreshed = await this.refreshTokenFunction();
-      if (tokenRefreshed) {
-        const retryRequest = request.clone();
-        // use latest access token
-        const headers = await this.prepareHeaders();
-        for (const key of Object.keys(headers)) {
-          retryRequest.headers.set(key, headers[key]);
-        }
-
-        response = await this.fetchFunction(retryRequest);
-      }
-    }
-
-    return response;
+    return this.fetchFunction(request);
   }
 
   protected async request(
@@ -416,17 +454,6 @@ export abstract class BaseAPIClient {
 
   async logout(): Promise<void> {
     await this.postAuth("/_auth/logout", { json: {} });
-  }
-
-  async refresh(refreshToken: string): Promise<string> {
-    const payload = {
-      refresh_token: refreshToken,
-    };
-    const response = await this.postAuth("/_auth/refresh", {
-      json: payload,
-      autoRefreshToken: false,
-    });
-    return response.access_token;
   }
 
   async me(): Promise<AuthResponse> {
@@ -856,5 +883,93 @@ export abstract class BaseAPIClient {
     return this.postAsset("/_asset/presign_upload_form", {
       json: {},
     });
+  }
+
+  /**
+   * @internal
+   */
+  async _fetchOIDCRequest(url: string, init?: RequestInit): Promise<any> {
+    const resp = await this._fetch(url, init);
+    let jsonBody;
+    try {
+      jsonBody = await resp.json();
+    } catch {
+      throw new SkygearError(
+        "failed to decode response JSON",
+        "InternalError",
+        "UnexpectedError",
+        {
+          status_code: resp.status,
+        }
+      );
+    }
+    if (resp.status === 200) {
+      return jsonBody;
+    }
+    const oauthError: OAuthError = {
+      error: jsonBody["error"],
+      error_description: jsonBody["error_description"],
+    };
+    throw oauthError;
+  }
+
+  /**
+   * @internal
+   */
+  async _fetchOIDCConfiguration(): Promise<_OIDCConfiguration> {
+    if (!this.config) {
+      this.config = (await this._fetchOIDCRequest(
+        `${this.authEndpoint}/.well-known/openid-configuration`
+      )) as _OIDCConfiguration;
+    }
+    return this.config;
+  }
+
+  /**
+   * @internal
+   */
+  async _oidcTokenRequest(req: _OIDCTokenRequest): Promise<_OIDCTokenResponse> {
+    const config = await this._fetchOIDCConfiguration();
+    const query: [string, string][] = [];
+    query.push(["grant_type", req.grant_type]);
+    query.push(["client_id", req.client_id]);
+    if (req.code) {
+      query.push(["code", req.code]);
+    }
+    if (req.redirect_uri) {
+      query.push(["redirect_uri", req.redirect_uri]);
+    }
+    if (req.code_verifier) {
+      query.push(["code_verifier", req.code_verifier]);
+    }
+    if (req.refresh_token) {
+      query.push(["refresh_token", req.refresh_token]);
+    }
+    return this._fetchOIDCRequest(config.token_endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: encodeQuery(query).substring(1),
+    });
+  }
+
+  /**
+   * @internal
+   */
+  async _oidcUserInfoRequest(accessToken?: string): Promise<AuthResponse> {
+    const headers: { [name: string]: string } = {};
+    if (accessToken) {
+      headers["authorization"] = `bearer ${accessToken}`;
+    }
+    const config = await this._fetchOIDCConfiguration();
+    const userinfo = await this._fetchOIDCRequest(config.userinfo_endpoint, {
+      method: "GET",
+      headers: headers,
+      mode: "cors",
+      credentials: "include",
+    });
+    const result = _decodeAuthResponseFromOIDCUserinfo(userinfo);
+    return result;
   }
 }
