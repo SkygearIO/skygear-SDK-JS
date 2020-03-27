@@ -8,7 +8,7 @@ import {
   ContainerOptions,
   GlobalJSONContainerStorage,
   _PresignUploadRequest,
-  _OIDCContainer,
+  OIDCContainer,
   AuthorizeOptions,
 } from "@skygear/core";
 import { WebAPIClient } from "./client";
@@ -94,16 +94,16 @@ function uploadForm(
 }
 
 /**
- * @internal
+ * Skygear OIDC APIs (for web platforms).
+ *
+ * @public
  */
-export class _WebOIDCContainer<T extends WebAPIClient> extends _OIDCContainer<
-  T
-> {
+export class WebOIDCContainer<T extends WebAPIClient> extends OIDCContainer<T> {
   clientID: string;
   isThirdParty: boolean;
 
-  constructor(parent: WebAuthContainer<T>) {
-    super(parent);
+  constructor(parent: WebContainer<T>, auth: WebAuthContainer<T>) {
+    super(parent, auth);
     this.clientID = "";
     this.isThirdParty = false;
   }
@@ -116,6 +116,27 @@ export class _WebOIDCContainer<T extends WebAPIClient> extends _OIDCContainer<
       challenge: codeChallenge,
     };
   }
+
+  /**
+   * Start authorization by opening authorize page
+   *
+   * @param options - authorize options
+   */
+  async startAuthorization(options: AuthorizeOptions): Promise<void> {
+    const authorizeEndpoint = await this.authorizeEndpoint(options);
+    window.location.href = authorizeEndpoint;
+  }
+
+  /**
+   * Finish authorization
+   *
+   * exchangeToken read window.location.
+   * It checks if error is present and rejects with OAuthError.
+   * Otherwise assume code is present, make a token request.
+   */
+  async finishAuthorization(): Promise<{ user: User; state?: string }> {
+    return this._finishAuthorization(window.location.href);
+  }
 }
 
 /**
@@ -126,16 +147,11 @@ export class _WebOIDCContainer<T extends WebAPIClient> extends _OIDCContainer<
 export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
   private oauthWindowObserver: NewWindowObserver | null;
   private oauthResultObserver: WindowMessageObserver | null;
-  /**
-   * @internal
-   */
-  _oidc: _WebOIDCContainer<T>;
 
   constructor(parent: WebContainer<T>) {
     super(parent);
     this.oauthWindowObserver = null;
     this.oauthResultObserver = null;
-    this._oidc = new _WebOIDCContainer(this);
   }
 
   private async _getAuthResultFromAuthorizationCode(
@@ -361,27 +377,6 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
     };
     return this.handleMaybeAuthResponse(f());
   }
-
-  /**
-   * Start authorization by opening authorize page
-   *
-   * @param options - authorize options
-   */
-  async startAuthorization(options: AuthorizeOptions): Promise<void> {
-    const authorizeEndpoint = await this._oidc.authorizeEndpoint(options);
-    window.location.href = authorizeEndpoint;
-  }
-
-  /**
-   * Finish authorization
-   *
-   * exchangeToken read window.location.
-   * It checks if error is present and rejects with OAuthError.
-   * Otherwise assume code is present, make a token request.
-   */
-  async finishAuthorization(): Promise<{ user: User; state?: string }> {
-    return this._oidc.finishAuthorization(window.location.href);
-  }
 }
 
 /**
@@ -506,6 +501,7 @@ export interface ConfigureOptions {
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
   auth: WebAuthContainer<T>;
   asset: WebAssetContainer<T>;
+  authui: WebOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = {
@@ -519,6 +515,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
     super(o);
     this.auth = new WebAuthContainer(this);
     this.asset = new WebAssetContainer(this);
+    this.authui = new WebOIDCContainer(this, this.auth);
   }
 
   /**
@@ -533,7 +530,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
-    this.auth._oidc.clientID = options.clientID;
-    this.auth._oidc.isThirdParty = !!options.isThirdPartyApp;
+    this.authui.clientID = options.clientID;
+    this.authui.isThirdParty = !!options.isThirdPartyApp;
   }
 }

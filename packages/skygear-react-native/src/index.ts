@@ -10,7 +10,7 @@ import {
   User,
   _PresignUploadRequest,
   decodeError,
-  _OIDCContainer,
+  OIDCContainer,
   AuthorizeOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
@@ -180,16 +180,21 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
 }
 
 /**
- * @internal
+ * Skygear OIDC APIs (for React Native).
+ *
+ * @public
  */
-export class _ReactNativeOIDCContainer<
+export class ReactNativeOIDCContainer<
   T extends ReactNativeAPIClient
-> extends _OIDCContainer<T> {
+> extends OIDCContainer<T> {
   clientID: string;
   isThirdParty: boolean;
 
-  constructor(parent: ReactNativeAuthContainer<T>) {
-    super(parent);
+  constructor(
+    parent: ReactNativeContainer<T>,
+    auth: ReactNativeAuthContainer<T>
+  ) {
+    super(parent, auth);
     this.clientID = "";
     this.isThirdParty = true;
   }
@@ -202,6 +207,27 @@ export class _ReactNativeOIDCContainer<
       challenge: codeChallenge,
     };
   }
+
+  /**
+   * Open authorize page
+   *
+   * @param options - authorize options
+   */
+  async authorize(
+    options: AuthorizeOptions
+  ): Promise<{ user: User; state?: string }> {
+    const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
+    const authorizeURL = await this.authorizeEndpoint(options);
+    const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
+    return this._finishAuthorization(redirectURL);
+  }
+
+  /**
+   * Open the URL with the user agent that is used to perform authentication.
+   */
+  async openURL(url: string): Promise<void> {
+    await openURL(url);
+  }
 }
 
 /**
@@ -212,16 +238,6 @@ export class _ReactNativeOIDCContainer<
 export class ReactNativeAuthContainer<
   T extends ReactNativeAPIClient
 > extends AuthContainer<T> {
-  /**
-   * @internal
-   */
-  _oidc: _ReactNativeOIDCContainer<T>;
-
-  constructor(parent: ReactNativeContainer<T>) {
-    super(parent);
-    this._oidc = new _ReactNativeOIDCContainer(this);
-  }
-
   async loginOAuthProvider(
     providerID: string,
     callbackURL: string,
@@ -316,27 +332,6 @@ export class ReactNativeAuthContainer<
     });
     return this.handleAuthResponse(p);
   }
-
-  /**
-   * Open authorize page
-   *
-   * @param options - authorize options
-   */
-  async authorize(
-    options: AuthorizeOptions
-  ): Promise<{ user: User; state?: string }> {
-    const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
-    const authorizeURL = await this._oidc.authorizeEndpoint(options);
-    const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
-    return this._oidc.finishAuthorization(redirectURL);
-  }
-
-  /**
-   * Open the URL with the user agent that is used to perform authentication.
-   */
-  async openURL(url: string): Promise<void> {
-    await openURL(url);
-  }
 }
 
 /**
@@ -371,6 +366,7 @@ export class ReactNativeContainer<
 > extends Container<T> {
   auth: ReactNativeAuthContainer<T>;
   asset: ReactNativeAssetContainer<T>;
+  authui: ReactNativeOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = {
@@ -386,6 +382,7 @@ export class ReactNativeContainer<
     super(o);
     this.asset = new ReactNativeAssetContainer(this);
     this.auth = new ReactNativeAuthContainer(this);
+    this.authui = new ReactNativeOIDCContainer(this, this.auth);
   }
 
   /**
@@ -400,7 +397,7 @@ export class ReactNativeContainer<
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
-    this.auth._oidc.clientID = options.clientID;
+    this.authui.clientID = options.clientID;
   }
 }
 
