@@ -228,6 +228,23 @@ export class ReactNativeOIDCContainer<
   async openURL(url: string): Promise<void> {
     await openURL(url);
   }
+
+  /**
+   * Logout.
+   *
+   * @remarks
+   * If `force` parameter is set to `true`, all potential errors (e.g. network
+   * error) would be ignored.
+   *
+   * @param options - Logout options
+   */
+  async logout(
+    options: {
+      force?: boolean;
+    } = {}
+  ): Promise<void> {
+    return this._logout(options);
+  }
 }
 
 /**
