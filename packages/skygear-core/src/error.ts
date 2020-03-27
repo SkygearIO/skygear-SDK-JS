@@ -130,5 +130,9 @@ export function _extractAuthenticationSession(
  */
 export function isMFARequiredError(e: unknown): boolean {
   const authenticationSession = _extractAuthenticationSession(e);
-  return authenticationSession != null && authenticationSession.step === "mfa";
+  return (
+    authenticationSession != null &&
+    (authenticationSession.step === "mfa.setup" ||
+      authenticationSession.step === "mfa.authn")
+  );
 }

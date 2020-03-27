@@ -201,7 +201,10 @@ export class AuthContainer<T extends BaseAPIClient> {
       this.parent.apiClient._authenticationSession = authenticationSession;
 
       // If the step is MFA, try bearer token
-      if (authenticationSession.step !== "mfa") {
+      if (
+        authenticationSession.step !== "mfa.setup" &&
+        authenticationSession.step !== "mfa.authn"
+      ) {
         throw e;
       }
 

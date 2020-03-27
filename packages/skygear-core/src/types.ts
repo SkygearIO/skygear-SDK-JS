@@ -669,7 +669,7 @@ export interface AuthenticationSession {
   /**
    * Current step in authentication session.
    */
-  step: "identity" | "mfa";
+  step: "identity" | "mfa.setup" | "mfa.authn";
 }
 
 /**
