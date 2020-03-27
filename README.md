@@ -41,13 +41,15 @@ Replace `latest` with the version you want to use.
 
 ## Running the example
 
+The example assumes a local DNS server that is able to resolve `.localhost`. On macOS, you can install `dnsmasq`.
+
 ```sh
 $ git clone --branch next https://github.com/SkygearIO/skygear-SDK-JS.git
 $ cd skygear-SDK-JS
 $ npm install
 $ npm run lerna bootstrap
 $ npm run build
-$ SKYGEAR_APP_ENDPOINT=<endpoint> SKYGEAR_CLIENT_ID=<clientid> npm run example
+$ npm run example
 ```
 
 ## Running example with custom gears endpoint
