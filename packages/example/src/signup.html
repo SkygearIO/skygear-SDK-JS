@@ -75,7 +75,7 @@ function onInputEmail() {
   var password = document.getElementById("emailPassword").value;
   var synopsisTextArea = document.getElementById("emailSynopsis");
 
-  var funcExpr = "skygear.auth.signupWithEmail";
+  var funcExpr = "skygear.classicAuth.signupWithEmail";
   var s = stringifyFunctionCall(funcExpr, email, password);
 
   synopsisTextArea.value = s;
@@ -89,7 +89,7 @@ function onSubmitEmail(e) {
   var password = document.getElementById("emailPassword").value;
   var resultTextArea = document.getElementById("emailResult");
 
-  skygear.auth.signupWithEmail(email, password).then(function(user) {
+  skygear.classicAuth.signupWithEmail(email, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -102,7 +102,7 @@ function onInputLoginID() {
   var password = document.getElementById("loginIDPassword").value;
   var synopsisTextArea = document.getElementById("loginIDSynopsis");
 
-  var funcExpr = "skygear.auth.signup";
+  var funcExpr = "skygear.classicAuth.signup";
   var s = stringifyFunctionCall(funcExpr, {
     [loginIDKey]: loginID,
   }, password);
@@ -119,7 +119,7 @@ function onSubmitLoginID(e) {
   var password = document.getElementById("loginIDPassword").value;
   var resultTextArea = document.getElementById("loginIDResult");
 
-  skygear.auth.signup({
+  skygear.classicAuth.signup({
     [loginIDKey]: loginID,
   }, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);

@@ -42,7 +42,7 @@ function onInput() {
   var password = document.getElementById("password").value;
   var synopsisTextArea = document.getElementById("synopsis");
 
-  var funcExpr = "skygear.auth.login";
+  var funcExpr = "skygear.classicAuth.login";
   var s = stringifyFunctionCall(funcExpr, loginID, password);
 
   synopsisTextArea.value = s;
@@ -56,7 +56,7 @@ function onSubmit(e) {
   var password = document.getElementById("password").value;
   var resultTextArea = document.getElementById("result");
 
-  skygear.auth.login(loginID, password).then(function(user) {
+  skygear.classicAuth.login(loginID, password).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);

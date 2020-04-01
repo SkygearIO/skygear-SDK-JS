@@ -102,7 +102,7 @@ function onInputCreate() {
 
   var synopsisTextArea = document.getElementById("createSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.createNewTOTP";
+  var funcExpr = "skygear.classicAuth.mfa.createNewTOTP";
   var s = stringifyFunctionCall(funcExpr, {
     displayName,
     issuer,
@@ -122,7 +122,7 @@ function onSubmitCreate(e) {
   var resultTextArea = document.getElementById("createResult");
   var qrCode = document.getElementById("qrCode");
 
-  skygear.auth.mfa.createNewTOTP({
+  skygear.classicAuth.mfa.createNewTOTP({
     displayName,
     issuer,
     accountName,
@@ -139,7 +139,7 @@ function onInputActivate() {
 
   var synopsisTextArea = document.getElementById("activateSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.activateTOTP";
+  var funcExpr = "skygear.classicAuth.mfa.activateTOTP";
   var s = stringifyFunctionCall(funcExpr, otp);
 
   synopsisTextArea.value = s;
@@ -152,7 +152,7 @@ function onSubmitActivate(e) {
   var otp = document.getElementById("activateOTP").value;
   var resultTextArea = document.getElementById("activateResult");
 
-  skygear.auth.mfa.activateTOTP(otp).then(function(result) {
+  skygear.classicAuth.mfa.activateTOTP(otp).then(function(result) {
     resultTextArea.value = JSON.stringify(result);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -165,7 +165,7 @@ function onInputAuthenticate() {
 
   var synopsisTextArea = document.getElementById("authenticateSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.authenticateWithTOTP";
+  var funcExpr = "skygear.classicAuth.mfa.authenticateWithTOTP";
   var s = stringifyFunctionCall(funcExpr, {
     otp,
     skipMFAForCurrentDevice,
@@ -182,7 +182,7 @@ function onSubmitAuthenticate(e) {
   var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
   var resultTextArea = document.getElementById("authenticateResult");
 
-  skygear.auth.mfa.authenticateWithTOTP({
+  skygear.classicAuth.mfa.authenticateWithTOTP({
     otp,
     skipMFAForCurrentDevice,
   }).then(function(user) {

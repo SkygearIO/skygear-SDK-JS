@@ -180,7 +180,7 @@ function onInputOAuth() {
   var invocation = makeOAuthInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "skygear.auth." + funcName;
+  var funcExpr = "skygear.classicAuth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -231,7 +231,7 @@ function onInputAccessToken() {
   var invocation = makeAccessTokenInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "skygear.auth." + funcName;
+  var funcExpr = "skygear.classicAuth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -259,7 +259,7 @@ function onInputDeleteOAuth() {
   var providerID = document.getElementById("deleteOAuthProviderID").value;
   var synopsisTextArea = document.getElementById("deleteOAuthSynopsis");
 
-  synopsisTextArea.value = stringifyFunctionCall("skygear.auth.deleteOAuthProvider", providerID);
+  synopsisTextArea.value = stringifyFunctionCall("skygear.classicAuth.deleteOAuthProvider", providerID);
 }
 
 function onSubmitDeleteOAuth(e) {
@@ -269,7 +269,7 @@ function onSubmitDeleteOAuth(e) {
   var providerID = document.getElementById("deleteOAuthProviderID").value;
   var resultTextArea = document.getElementById("deleteOAuthResult");
 
-  skygear.auth.deleteOAuthProvider(providerID).then(function() {
+  skygear.classicAuth.deleteOAuthProvider(providerID).then(function() {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -295,7 +295,7 @@ function onInputCustomToken() {
   var invocation = makeCustomTokenInvocation();
   var funcName = invocation[0];
   var args = invocation[1];
-  var funcExpr = "skygear.auth." + funcName;
+  var funcExpr = "skygear.classicAuth." + funcName;
   args.unshift(funcExpr);
 
   synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
@@ -331,11 +331,11 @@ skygear.configure({
 
   var resultTextArea = document.getElementById("oauthResult");
 
-  skygear.auth.getLinkRedirectResult().then(function(result) {
+  skygear.classicAuth.getLinkRedirectResult().then(function(result) {
     if (result) {
       resultTextArea.value = "Link success";
     } else {
-      skygear.auth.getLoginRedirectResult().then(function(maybeUser) {
+      skygear.classicAuth.getLoginRedirectResult().then(function(maybeUser) {
         if (maybeUser) {
           resultTextArea.value = JSON.stringify(maybeUser);
         }

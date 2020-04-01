@@ -69,7 +69,7 @@ function onInputEmail() {
   var email = document.getElementById("email").value;
   var synopsisTextArea = document.getElementById("emailSynopsis");
 
-  var funcExpr = "skygear.auth.requestEmailVerification";
+  var funcExpr = "skygear.classicAuth.requestEmailVerification";
   var s = stringifyFunctionCall(funcExpr, email);
 
   synopsisTextArea.value = s;
@@ -82,7 +82,7 @@ function onSubmitEmail(e) {
   var email = document.getElementById("email").value;
   var resultTextArea = document.getElementById("emailResult");
 
-  skygear.auth.requestEmailVerification(email).then(function() {
+  skygear.classicAuth.requestEmailVerification(email).then(function() {
     resultTextArea.value = "OK";
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -93,7 +93,7 @@ function onInputPhone() {
   var phone = document.getElementById("phone").value;
   var synopsisTextArea = document.getElementById("phoneSynopsis");
 
-  var funcExpr = "skygear.auth.requestPhoneVerification";
+  var funcExpr = "skygear.classicAuth.requestPhoneVerification";
   var s = stringifyFunctionCall(funcExpr, phone);
 
   synopsisTextArea.value = s;
@@ -107,7 +107,7 @@ function onSubmitPhone(e) {
   var phone = document.getElementById("phone").value;
   var resultTextArea = document.getElementById("phoneResult");
 
-  skygear.auth.requestPhoneVerification(phone).then(function() {
+  skygear.classicAuth.requestPhoneVerification(phone).then(function() {
     resultTextArea.value = "OK";
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);

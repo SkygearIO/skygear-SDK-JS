@@ -1040,7 +1040,7 @@ export class Container<T extends BaseAPIClient> {
   name: string;
   apiClient: T;
   storage: ContainerStorage;
-  auth: AuthContainer<T>;
+  classicAuth: AuthContainer<T>;
 
   constructor(options: ContainerOptions<T>) {
     if (!options.apiClient) {
@@ -1054,7 +1054,7 @@ export class Container<T extends BaseAPIClient> {
     this.name = options.name || "default";
     this.apiClient = options.apiClient;
     this.storage = options.storage;
-    this.auth = new AuthContainer(this);
+    this.classicAuth = new AuthContainer(this);
   }
 
   protected async _configure(options: {
@@ -1081,27 +1081,27 @@ export class Container<T extends BaseAPIClient> {
     this.apiClient.setShouldRefreshTokenNow();
 
     const user = await this.storage.getUser(this.name);
-    this.auth.currentUser = user;
+    this.classicAuth.currentUser = user;
 
     const identity = await this.storage.getIdentity(this.name);
-    this.auth.currentIdentity = identity;
+    this.classicAuth.currentIdentity = identity;
 
     const sessionID = await this.storage.getSessionID(this.name);
-    this.auth.currentSessionID = sessionID;
+    this.classicAuth.currentSessionID = sessionID;
 
     const extraSessionInfoOptions = await this.storage.getExtraSessionInfoOptions(
       this.name
     );
-    this.auth.extraSessionInfoOptions = {
+    this.classicAuth.extraSessionInfoOptions = {
       ...defaultExtraSessionInfoOptions,
       ...extraSessionInfoOptions,
     };
 
-    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
-      this.auth
+    this.apiClient.refreshTokenFunction = this.classicAuth._refreshAccessToken.bind(
+      this.classicAuth
     );
-    this.apiClient.getExtraSessionInfo = this.auth._getExtraSessionInfo.bind(
-      this.auth
+    this.apiClient.getExtraSessionInfo = this.classicAuth._getExtraSessionInfo.bind(
+      this.classicAuth
     );
   }
 

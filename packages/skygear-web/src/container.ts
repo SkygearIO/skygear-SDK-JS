@@ -519,9 +519,9 @@ export interface ConfigureOptions {
  * @public
  */
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
-  auth: WebAuthContainer<T>;
+  classicAuth: WebAuthContainer<T>;
   asset: WebAssetContainer<T>;
-  authui: WebOIDCContainer<T>;
+  auth: WebOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = {
@@ -533,9 +533,9 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
     } as ContainerOptions<T>;
 
     super(o);
-    this.auth = new WebAuthContainer(this);
+    this.classicAuth = new WebAuthContainer(this);
     this.asset = new WebAssetContainer(this);
-    this.authui = new WebOIDCContainer(this, this.auth);
+    this.auth = new WebOIDCContainer(this, this.classicAuth);
   }
 
   /**
@@ -550,7 +550,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
-    this.authui.clientID = options.clientID;
-    this.authui.isThirdParty = !!options.isThirdPartyApp;
+    this.auth.clientID = options.clientID;
+    this.auth.isThirdParty = !!options.isThirdPartyApp;
   }
 }

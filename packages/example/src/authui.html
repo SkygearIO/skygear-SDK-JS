@@ -76,7 +76,7 @@ function getRedirectURI() {
 
 function setupStartAuthorizationSynopsis() {
   var synopsisTextArea = document.getElementById("startAuthorizationSynopsis");
-  var funcExpr = "skygear.authui.startAuthorization";
+  var funcExpr = "skygear.auth.startAuthorization";
   var redirectURI = getRedirectURI();
   var s = stringifyFunctionCall(funcExpr, {
     redirectURI: redirectURI,
@@ -90,7 +90,7 @@ function onSubmitStartAuthorization(e) {
 
   var resultTextArea = document.getElementById("startAuthorizationResult");
   var redirectURI = getRedirectURI();
-  skygear.authui.startAuthorization({
+  skygear.auth.startAuthorization({
     redirectURI: redirectURI
   }).then(function() {
     resultTextArea.value = "OK";
@@ -102,7 +102,7 @@ function onSubmitStartAuthorization(e) {
 
 function setupFinishAuthorizationSynopsis() {
   var synopsisTextArea = document.getElementById("finishAuthorizationSynopsis");
-  var funcExpr = "skygear.authui.finishAuthorization";
+  var funcExpr = "skygear.auth.finishAuthorization";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -113,7 +113,7 @@ function onSubmitFinishAuthorization(e) {
 
   var resultTextArea = document.getElementById("finishAuthorizationResult");
 
-  skygear.authui.finishAuthorization().then(function(result) {
+  skygear.auth.finishAuthorization().then(function(result) {
     resultTextArea.value = JSON.stringify(result);
   }, function(e) {
     console.log(e);
@@ -123,7 +123,7 @@ function onSubmitFinishAuthorization(e) {
 
 function setupLogoutSynopsis() {
   var synopsisTextArea = document.getElementById("logoutSynopsis");
-  var funcExpr = "skygear.authui.logout";
+  var funcExpr = "skygear.auth.logout";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -134,7 +134,7 @@ function onSubmitLogout(e) {
 
   var redirectURI = getRedirectURI();
   var resultTextArea = document.getElementById("logoutResult");
-  skygear.authui.logout({
+  skygear.auth.logout({
     redirectURI: redirectURI,
   }).then(function() {
     resultTextArea.value = "OK";

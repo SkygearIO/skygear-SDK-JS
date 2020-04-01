@@ -58,7 +58,7 @@
 
 function setupListSynopsis() {
   var synopsisTextArea = document.getElementById("listSynopsis");
-  var funcExpr = "skygear.auth.mfa.getAuthenticators";
+  var funcExpr = "skygear.classicAuth.mfa.getAuthenticators";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -69,7 +69,7 @@ function onSubmitList(e) {
 
   var resultTextArea = document.getElementById("listResult");
 
-  skygear.auth.mfa.getAuthenticators().then(function(authenticators) {
+  skygear.classicAuth.mfa.getAuthenticators().then(function(authenticators) {
     resultTextArea.value = JSON.stringify(authenticators);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -79,7 +79,7 @@ function onSubmitList(e) {
 function onInput() {
   var authenticatorID = document.getElementById("authenticatorID").value;
   var synopsisTextArea = document.getElementById("deleteSynopsis");
-  var funcExpr = "skygear.auth.mfa.deleteAuthenticator";
+  var funcExpr = "skygear.classicAuth.mfa.deleteAuthenticator";
   var s = stringifyFunctionCall(funcExpr, authenticatorID);
   synopsisTextArea.value = s;
 }
@@ -91,7 +91,7 @@ function onSubmitDelete(e) {
   var authenticatorID = document.getElementById("authenticatorID").value;
   var resultTextArea = document.getElementById("deleteResult");
 
-  skygear.auth.mfa.deleteAuthenticator(authenticatorID).then(function() {
+  skygear.classicAuth.mfa.deleteAuthenticator(authenticatorID).then(function() {
     resultTextArea.value = "Delete Success";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
