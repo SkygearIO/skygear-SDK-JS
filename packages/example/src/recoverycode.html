@@ -75,7 +75,7 @@
 
 function setupListSynopsis() {
   var synopsisTextArea = document.getElementById("listSynopsis");
-  var funcExpr = "skygear.auth.mfa.listRecoveryCode";
+  var funcExpr = "skygear.classicAuth.mfa.listRecoveryCode";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -86,7 +86,7 @@ function onSubmitList(e) {
 
   var resultTextArea = document.getElementById("listResult");
 
-  skygear.auth.mfa.listRecoveryCode().then(function(codes) {
+  skygear.classicAuth.mfa.listRecoveryCode().then(function(codes) {
     resultTextArea.value = JSON.stringify(codes);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -95,7 +95,7 @@ function onSubmitList(e) {
 
 function setupRegenerateSynopsis() {
   var synopsisTextArea = document.getElementById("regenerateSynopsis");
-  var funcExpr = "skygear.auth.mfa.regenerateRecoveryCode";
+  var funcExpr = "skygear.classicAuth.mfa.regenerateRecoveryCode";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -106,7 +106,7 @@ function onSubmitRegenerate(e) {
 
   var resultTextArea = document.getElementById("regenerateResult");
 
-  skygear.auth.mfa.regenerateRecoveryCode().then(function(codes) {
+  skygear.classicAuth.mfa.regenerateRecoveryCode().then(function(codes) {
     resultTextArea.value = JSON.stringify(codes);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -116,7 +116,7 @@ function onSubmitRegenerate(e) {
 function onInputCode() {
   var code = document.getElementById("code").value;
   var synopsisTextArea = document.getElementById("authenticateSynopsis");
-  var funcExpr = "skygear.auth.mfa.authenticateWithRecoveryCode";
+  var funcExpr = "skygear.classicAuth.mfa.authenticateWithRecoveryCode";
   var s = stringifyFunctionCall(funcExpr, code);
   synopsisTextArea.value = s;
 }
@@ -128,7 +128,7 @@ function onSubmitAuthenticate(e) {
   var code = document.getElementById("code").value;
   var resultTextArea = document.getElementById("authenticateResult");
 
-  skygear.auth.mfa.authenticateWithRecoveryCode(code).then(function(user) {
+  skygear.classicAuth.mfa.authenticateWithRecoveryCode(code).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);

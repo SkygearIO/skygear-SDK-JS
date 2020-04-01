@@ -140,7 +140,7 @@ function onInputCreate() {
     };
   }
 
-  var funcExpr = "skygear.auth.mfa.createNewOOB";
+  var funcExpr = "skygear.classicAuth.mfa.createNewOOB";
   var s = stringifyFunctionCall(funcExpr, options);
 
   synopsisTextArea.value = s;
@@ -155,7 +155,7 @@ function onSubmitCreate(e) {
   var email = document.getElementById("email").value;
   var resultTextArea = document.getElementById("createResult");
 
-  skygear.auth.mfa.createNewOOB({
+  skygear.classicAuth.mfa.createNewOOB({
     channel,
     phone,
     email,
@@ -171,7 +171,7 @@ function onInputActivate() {
 
   var synopsisTextArea = document.getElementById("activateSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.activateOOB";
+  var funcExpr = "skygear.classicAuth.mfa.activateOOB";
   var s = stringifyFunctionCall(funcExpr, code);
 
   synopsisTextArea.value = s;
@@ -184,7 +184,7 @@ function onSubmitActivate(e) {
   var code = document.getElementById("activateCode").value;
   var resultTextArea = document.getElementById("activateResult");
 
-  skygear.auth.mfa.activateOOB(code).then(function(result) {
+  skygear.classicAuth.mfa.activateOOB(code).then(function(result) {
     resultTextArea.value = JSON.stringify(result);
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -199,7 +199,7 @@ function onInputTrigger() {
 
   var synopsisTextArea = document.getElementById("triggerSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.triggerOOB";
+  var funcExpr = "skygear.classicAuth.mfa.triggerOOB";
   var s = stringifyFunctionCall(funcExpr, authenticatorID);
 
   synopsisTextArea.value = s;
@@ -212,7 +212,7 @@ function onSubmitTrigger(e) {
   var authenticatorID = document.getElementById("triggerID").value;
   var resultTextArea = document.getElementById("triggerResult");
 
-  skygear.auth.mfa.triggerOOB(authenticatorID).then(function() {
+  skygear.classicAuth.mfa.triggerOOB(authenticatorID).then(function() {
     resultTextArea.value = "SUCCESS";
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);
@@ -225,7 +225,7 @@ function onInputAuthenticate() {
 
   var synopsisTextArea = document.getElementById("authenticateSynopsis");
 
-  var funcExpr = "skygear.auth.mfa.authenticateWithOOB";
+  var funcExpr = "skygear.classicAuth.mfa.authenticateWithOOB";
   var s = stringifyFunctionCall(funcExpr, {
     code,
     skipMFAForCurrentDevice,
@@ -242,7 +242,7 @@ function onSubmitAuthenticate(e) {
   var skipMFAForCurrentDevice = document.getElementById("skipMFAForCurrentDevice").checked;
   var resultTextArea = document.getElementById("authenticateResult");
 
-  skygear.auth.mfa.authenticateWithOOB({
+  skygear.classicAuth.mfa.authenticateWithOOB({
     code,
     skipMFAForCurrentDevice,
   }).then(function(user) {

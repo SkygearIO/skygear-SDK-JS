@@ -381,9 +381,9 @@ export interface ConfigureOptions {
 export class ReactNativeContainer<
   T extends ReactNativeAPIClient
 > extends Container<T> {
-  auth: ReactNativeAuthContainer<T>;
+  classicAuth: ReactNativeAuthContainer<T>;
   asset: ReactNativeAssetContainer<T>;
-  authui: ReactNativeOIDCContainer<T>;
+  auth: ReactNativeOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
     const o = {
@@ -398,8 +398,8 @@ export class ReactNativeContainer<
 
     super(o);
     this.asset = new ReactNativeAssetContainer(this);
-    this.auth = new ReactNativeAuthContainer(this);
-    this.authui = new ReactNativeOIDCContainer(this, this.auth);
+    this.classicAuth = new ReactNativeAuthContainer(this);
+    this.auth = new ReactNativeOIDCContainer(this, this.classicAuth);
   }
 
   /**
@@ -414,7 +414,7 @@ export class ReactNativeContainer<
       authEndpoint: options.authEndpoint,
       assetEndpoint: options.assetEndpoint,
     });
-    this.authui.clientID = options.clientID;
+    this.auth.clientID = options.clientID;
   }
 }
 

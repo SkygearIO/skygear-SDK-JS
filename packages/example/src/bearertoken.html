@@ -36,7 +36,7 @@
 
 function onInputRevoke() {
   var synopsisTextArea = document.getElementById("revokeSynopsis");
-  var funcExpr = "skygear.auth.mfa.revokeAllTrustedDevices";
+  var funcExpr = "skygear.classicAuth.mfa.revokeAllTrustedDevices";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -47,7 +47,7 @@ function onSubmitRevoke(e) {
 
   var resultTextArea = document.getElementById("revokeResult");
 
-  skygear.auth.mfa.revokeAllTrustedDevices().then(function() {
+  skygear.classicAuth.mfa.revokeAllTrustedDevices().then(function() {
     resultTextArea.value = "SUCCESS";
   }, function(error) {
     resultTextArea.value = JSON.stringify(error);

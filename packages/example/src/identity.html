@@ -120,7 +120,7 @@
 
 function setupListIdentitiesSynopsis() {
   var synopsisTextArea = document.getElementById("listIdentitiesSynopsis");
-  var funcExpr = "skygear.auth.listIdentities";
+  var funcExpr = "skygear.classicAuth.listIdentities";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -131,7 +131,7 @@ function onSubmitListIdentities(e) {
 
   var resultTextArea = document.getElementById("listIdentitiesResult");
 
-  skygear.auth.listIdentities().then(function(identities) {
+  skygear.classicAuth.listIdentities().then(function(identities) {
     resultTextArea.value = JSON.stringify(identities);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -142,7 +142,7 @@ function onInputAddLoginID() {
   var loginIDKey = document.getElementById("addLoginIDLoginIDKey").value;
   var loginID = document.getElementById("addLoginIDLoginID").value;
   var synopsisTextArea = document.getElementById("addLoginIDSynopsis");
-  var funcExpr = "skygear.auth.addLoginID";
+  var funcExpr = "skygear.classicAuth.addLoginID";
   var s = stringifyFunctionCall(funcExpr, { [loginIDKey]: loginID });
   synopsisTextArea.value = s;
 }
@@ -155,7 +155,7 @@ function onSubmitAddLoginID(e) {
   var loginID = document.getElementById("addLoginIDLoginID").value;
   var resultTextArea = document.getElementById("addLoginIDResult");
 
-  skygear.auth.addLoginID({ [loginIDKey]: loginID }).then(function(resp) {
+  skygear.classicAuth.addLoginID({ [loginIDKey]: loginID }).then(function(resp) {
     resultTextArea.value = JSON.stringify(resp);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -166,7 +166,7 @@ function onInputRemoveLoginID() {
   var loginIDKey = document.getElementById("removeLoginIDLoginIDKey").value;
   var loginID = document.getElementById("removeLoginIDLoginID").value;
   var synopsisTextArea = document.getElementById("removeLoginIDSynopsis");
-  var funcExpr = "skygear.auth.removeLoginID";
+  var funcExpr = "skygear.classicAuth.removeLoginID";
   var s = stringifyFunctionCall(funcExpr, { [loginIDKey]: loginID });
   synopsisTextArea.value = s;
 }
@@ -179,7 +179,7 @@ function onSubmitRemoveLoginID(e) {
   var loginID = document.getElementById("removeLoginIDLoginID").value;
   var resultTextArea = document.getElementById("removeLoginIDResult");
 
-  skygear.auth.removeLoginID({ [loginIDKey]: loginID }).then(function(resp) {
+  skygear.classicAuth.removeLoginID({ [loginIDKey]: loginID }).then(function(resp) {
     resultTextArea.value = JSON.stringify(resp);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -192,7 +192,7 @@ function onInputUpdateLoginID() {
   var newLoginIDKey = document.getElementById("updateLoginIDNewLoginIDKey").value;
   var newLoginID = document.getElementById("updateLoginIDNewLoginID").value;
   var synopsisTextArea = document.getElementById("updateLoginIDSynopsis");
-  var funcExpr = "skygear.auth.updateLoginID";
+  var funcExpr = "skygear.classicAuth.updateLoginID";
   var s = stringifyFunctionCall(funcExpr, { [oldLoginIDKey]: oldLoginID }, { [newLoginIDKey]: newLoginID });
   synopsisTextArea.value = s;
 }
@@ -207,7 +207,7 @@ function onSubmitUpdateLoginID(e) {
   var newLoginID = document.getElementById("updateLoginIDNewLoginID").value;
   var resultTextArea = document.getElementById("updateLoginIDResult");
 
-  skygear.auth.updateLoginID({ [oldLoginIDKey]: oldLoginID }, { [newLoginIDKey]: newLoginID }).then(function(user) {
+  skygear.classicAuth.updateLoginID({ [oldLoginIDKey]: oldLoginID }, { [newLoginIDKey]: newLoginID }).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);

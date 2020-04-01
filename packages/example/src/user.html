@@ -100,7 +100,7 @@
 
 function setupMeSynopsis() {
   var synopsisTextArea = document.getElementById("meSynopsis");
-  var funcExpr = "skygear.auth.me";
+  var funcExpr = "skygear.classicAuth.me";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -111,7 +111,7 @@ function onSubmitMe(e) {
 
   var resultTextArea = document.getElementById("meResult");
 
-  skygear.auth.me().then(function(user) {
+  skygear.classicAuth.me().then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -120,7 +120,7 @@ function onSubmitMe(e) {
 
 function setupLogoutSynopsis() {
   var synopsisTextArea = document.getElementById("logoutSynopsis");
-  var funcExpr = "skygear.auth.logout";
+  var funcExpr = "skygear.classicAuth.logout";
   var s = stringifyFunctionCall(funcExpr);
   synopsisTextArea.value = s;
 }
@@ -131,7 +131,7 @@ function onSubmitLogout(e) {
 
   var resultTextArea = document.getElementById("logoutResult");
 
-  skygear.auth.logout().then(function() {
+  skygear.classicAuth.logout().then(function() {
     resultTextArea.value = "OK";
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -142,7 +142,7 @@ function onInputChangePassword() {
   var newPassword = document.getElementById("changePasswordNewPassword").value;
   var oldPassword = document.getElementById("changePasswordOldPassword").value;
   var synopsisTextArea = document.getElementById("changePasswordSynopsis");
-  var funcExpr = "skygear.auth.changePassword";
+  var funcExpr = "skygear.classicAuth.changePassword";
   var s = stringifyFunctionCall(funcExpr, newPassword, oldPassword);
   synopsisTextArea.value = s;
 }
@@ -155,7 +155,7 @@ function onSubmitChangePassword(e) {
   var oldPassword = document.getElementById("changePasswordOldPassword").value;
   var resultTextArea = document.getElementById("changePasswordResult");
 
-  skygear.auth.changePassword(newPassword, oldPassword).then(function(user) {
+  skygear.classicAuth.changePassword(newPassword, oldPassword).then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
     resultTextArea.value = JSON.stringify(e);
@@ -166,7 +166,7 @@ function onInputMetadata() {
   var metadataStr = document.getElementById("updateMetadataMetadata").value;
   var synopsisTextArea = document.getElementById("updateMetadataSynopsis");
 
-  var funcExpr = "skygear.auth.updateMetadata";
+  var funcExpr = "skygear.classicAuth.updateMetadata";
   var s = !metadataStr ? "" : "ERROR";
   try {
     var metadata = JSON.parse(metadataStr);
@@ -191,7 +191,7 @@ function onSubmitUpdateMetadata(e) {
     if (typeof metadata !== "object" || metadata == null) {
       throw "invalid";
     }
-    skygear.auth.updateMetadata(metadata).then(function(user) {
+    skygear.classicAuth.updateMetadata(metadata).then(function(user) {
       resultTextArea.value = JSON.stringify(user);
     }, function(e) {
       resultTextArea.value = JSON.stringify(e);
