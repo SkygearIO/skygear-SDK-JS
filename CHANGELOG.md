@@ -1,3 +1,21 @@
+## 2.3.0 (2020-04-02)
+
+### Features
+
+- New auth ui support
+- Use Chrome Custom Tabs for SSO in React Native Android
+
+### Other notes
+
+- Update example instructions
+- Update MFA step names
+
+### Breaking Changes
+
+- Support server version >= 2.3.0 only
+- Updated container.configure functions with app and gears endpoint support
+- Rename api namespace from `auth` to `classAuth`, developer should call `skygear.classAuth` for auth api. Use `skygear.auth` for new auth ui.
+
 ## 2.2.0 (2020-03-02)
 
 - No changes

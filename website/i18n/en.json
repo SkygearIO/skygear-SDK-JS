@@ -152,8 +152,20 @@
       "node-client.authenticator": {
         "title": "Authenticator type"
       },
+      "node-client.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "node-client.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "node-client.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
       "node-client.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
+      },
+      "node-client.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
       },
       "node-client.authresponse.identity": {
         "title": "AuthResponse.identity property"
@@ -188,6 +200,15 @@
       "node-client.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
+      "node-client.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "node-client.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "node-client.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
       "node-client.baseapiclient.authenticatewithbearertoken": {
         "title": "BaseAPIClient.authenticateWithBearerToken() method"
       },
@@ -212,14 +233,17 @@
       "node-client.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
       },
+      "node-client.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "node-client.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
       "node-client.baseapiclient.deleteauthenticator": {
         "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "node-client.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
-      },
-      "node-client.baseapiclient.endpoint": {
-        "title": "BaseAPIClient.endpoint property"
       },
       "node-client.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
@@ -229,6 +253,12 @@
       },
       "node-client.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
+      },
+      "node-client.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "node-client.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
       },
       "node-client.baseapiclient.getauthenticators": {
         "title": "BaseAPIClient.getAuthenticators() method"
@@ -284,11 +314,14 @@
       "node-client.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
       },
+      "node-client.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "node-client.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
       "node-client.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
-      },
-      "node-client.baseapiclient.refresh": {
-        "title": "BaseAPIClient.refresh() method"
       },
       "node-client.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
@@ -326,6 +359,18 @@
       "node-client.baseapiclient.revokesession": {
         "title": "BaseAPIClient.revokeSession() method"
       },
+      "node-client.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "node-client.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "node-client.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "node-client.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
       "node-client.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
@@ -350,17 +395,32 @@
       "node-client.bytearray": {
         "title": "ByteArray interface"
       },
+      "node-client.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "node-client.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "node-client.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "node-client.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "node-client.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "node-client.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
       "node-client.container._constructor_": {
         "title": "Container.(constructor)"
       },
       "node-client.container.apiclient": {
         "title": "Container.apiClient property"
       },
-      "node-client.container.auth": {
-        "title": "Container.auth property"
-      },
-      "node-client.container.configure": {
-        "title": "Container.configure() method"
+      "node-client.container.classicauth": {
+        "title": "Container.classicAuth property"
       },
       "node-client.container.fetch": {
         "title": "Container.fetch() method"
@@ -404,6 +464,9 @@
       "node-client.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "node-client.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
       "node-client.containerstorage.delrefreshtoken": {
         "title": "ContainerStorage.delRefreshToken() method"
       },
@@ -433,6 +496,9 @@
       },
       "node-client.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
       },
       "node-client.containerstorage.getrefreshtoken": {
         "title": "ContainerStorage.getRefreshToken() method"
@@ -466,6 +532,9 @@
       },
       "node-client.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "node-client.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
       },
       "node-client.containerstorage.setrefreshtoken": {
         "title": "ContainerStorage.setRefreshToken() method"
@@ -569,6 +638,12 @@
       "node-client.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "node-client.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "node-client.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
       "node-client.decodesession": {
         "title": "decodeSession() function"
       },
@@ -638,6 +713,9 @@
       "node-client.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "node-client.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
       "node-client.globaljsoncontainerstorage.delrefreshtoken": {
         "title": "GlobalJSONContainerStorage.delRefreshToken() method"
       },
@@ -667,6 +745,9 @@
       },
       "node-client.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
       },
       "node-client.globaljsoncontainerstorage.getrefreshtoken": {
         "title": "GlobalJSONContainerStorage.getRefreshToken() method"
@@ -700,6 +781,9 @@
       },
       "node-client.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "node-client.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
       },
       "node-client.globaljsoncontainerstorage.setrefreshtoken": {
         "title": "GlobalJSONContainerStorage.setRefreshToken() method"
@@ -869,11 +953,29 @@
       "node-client.nodecontainer.asset": {
         "title": "NodeContainer.asset property"
       },
+      "node-client.nodecontainer.configure": {
+        "title": "NodeContainer.configure() method"
+      },
       "node-client.nodecontainer": {
         "title": "NodeContainer class"
       },
       "node-client.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
+      },
+      "node-client.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "node-client.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "node-client.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "node-client.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "node-client.oautherror.state": {
+        "title": "OAuthError.state property"
       },
       "node-client.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
@@ -940,6 +1042,36 @@
       },
       "node-client.oauthwebredirectauthorizationurloptions.uxmode": {
         "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "node-client.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "node-client.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "node-client.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "node-client.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "node-client.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "node-client.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "node-client.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "node-client.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "node-client.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "node-client.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
       },
       "node-client.oobemailauthenticator.activatedat": {
         "title": "OOBEmailAuthenticator.activatedAt property"
@@ -1388,8 +1520,20 @@
       "react-native.authenticator": {
         "title": "Authenticator type"
       },
+      "react-native.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "react-native.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "react-native.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
       "react-native.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
+      },
+      "react-native.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
       },
       "react-native.authresponse.identity": {
         "title": "AuthResponse.identity property"
@@ -1424,6 +1568,15 @@
       "react-native.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
+      "react-native.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "react-native.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "react-native.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
       "react-native.baseapiclient.authenticatewithbearertoken": {
         "title": "BaseAPIClient.authenticateWithBearerToken() method"
       },
@@ -1448,14 +1601,17 @@
       "react-native.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
       },
+      "react-native.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "react-native.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
       "react-native.baseapiclient.deleteauthenticator": {
         "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "react-native.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
-      },
-      "react-native.baseapiclient.endpoint": {
-        "title": "BaseAPIClient.endpoint property"
       },
       "react-native.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
@@ -1465,6 +1621,12 @@
       },
       "react-native.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
+      },
+      "react-native.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "react-native.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
       },
       "react-native.baseapiclient.getauthenticators": {
         "title": "BaseAPIClient.getAuthenticators() method"
@@ -1520,11 +1682,14 @@
       "react-native.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
       },
+      "react-native.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "react-native.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
       "react-native.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
-      },
-      "react-native.baseapiclient.refresh": {
-        "title": "BaseAPIClient.refresh() method"
       },
       "react-native.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
@@ -1562,6 +1727,18 @@
       "react-native.baseapiclient.revokesession": {
         "title": "BaseAPIClient.revokeSession() method"
       },
+      "react-native.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "react-native.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "react-native.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "react-native.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
       "react-native.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
@@ -1586,17 +1763,32 @@
       "react-native.bytearray": {
         "title": "ByteArray interface"
       },
+      "react-native.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "react-native.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "react-native.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "react-native.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "react-native.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "react-native.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
       "react-native.container._constructor_": {
         "title": "Container.(constructor)"
       },
       "react-native.container.apiclient": {
         "title": "Container.apiClient property"
       },
-      "react-native.container.auth": {
-        "title": "Container.auth property"
-      },
-      "react-native.container.configure": {
-        "title": "Container.configure() method"
+      "react-native.container.classicauth": {
+        "title": "Container.classicAuth property"
       },
       "react-native.container.fetch": {
         "title": "Container.fetch() method"
@@ -1640,6 +1832,9 @@
       "react-native.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "react-native.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
       "react-native.containerstorage.delrefreshtoken": {
         "title": "ContainerStorage.delRefreshToken() method"
       },
@@ -1669,6 +1864,9 @@
       },
       "react-native.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
       },
       "react-native.containerstorage.getrefreshtoken": {
         "title": "ContainerStorage.getRefreshToken() method"
@@ -1702,6 +1900,9 @@
       },
       "react-native.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "react-native.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
       },
       "react-native.containerstorage.setrefreshtoken": {
         "title": "ContainerStorage.setRefreshToken() method"
@@ -1805,6 +2006,12 @@
       "react-native.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "react-native.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "react-native.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
       "react-native.decodesession": {
         "title": "decodeSession() function"
       },
@@ -1874,6 +2081,9 @@
       "react-native.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "react-native.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
       "react-native.globaljsoncontainerstorage.delrefreshtoken": {
         "title": "GlobalJSONContainerStorage.delRefreshToken() method"
       },
@@ -1903,6 +2113,9 @@
       },
       "react-native.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
       },
       "react-native.globaljsoncontainerstorage.getrefreshtoken": {
         "title": "GlobalJSONContainerStorage.getRefreshToken() method"
@@ -1936,6 +2149,9 @@
       },
       "react-native.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "react-native.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
       },
       "react-native.globaljsoncontainerstorage.setrefreshtoken": {
         "title": "GlobalJSONContainerStorage.setRefreshToken() method"
@@ -2060,6 +2276,21 @@
       "react-native.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
       },
+      "react-native.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "react-native.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "react-native.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "react-native.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "react-native.oautherror.state": {
+        "title": "OAuthError.state property"
+      },
       "react-native.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
       },
@@ -2125,6 +2356,36 @@
       },
       "react-native.oauthwebredirectauthorizationurloptions.uxmode": {
         "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "react-native.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "react-native.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "react-native.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "react-native.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "react-native.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "react-native.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "react-native.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "react-native.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "react-native.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "react-native.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
       },
       "react-native.oobemailauthenticator.activatedat": {
         "title": "OOBEmailAuthenticator.activatedAt property"
@@ -2249,8 +2510,38 @@
       "react-native.reactnativecontainer.auth": {
         "title": "ReactNativeContainer.auth property"
       },
+      "react-native.reactnativecontainer.classicauth": {
+        "title": "ReactNativeContainer.classicAuth property"
+      },
+      "react-native.reactnativecontainer.configure": {
+        "title": "ReactNativeContainer.configure() method"
+      },
       "react-native.reactnativecontainer": {
         "title": "ReactNativeContainer class"
+      },
+      "react-native.reactnativeoidccontainer._constructor_": {
+        "title": "ReactNativeOIDCContainer.(constructor)"
+      },
+      "react-native.reactnativeoidccontainer._setupcodeverifier": {
+        "title": "ReactNativeOIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "react-native.reactnativeoidccontainer.authorize": {
+        "title": "ReactNativeOIDCContainer.authorize() method"
+      },
+      "react-native.reactnativeoidccontainer.clientid": {
+        "title": "ReactNativeOIDCContainer.clientID property"
+      },
+      "react-native.reactnativeoidccontainer.isthirdparty": {
+        "title": "ReactNativeOIDCContainer.isThirdParty property"
+      },
+      "react-native.reactnativeoidccontainer.logout": {
+        "title": "ReactNativeOIDCContainer.logout() method"
+      },
+      "react-native.reactnativeoidccontainer": {
+        "title": "ReactNativeOIDCContainer class"
+      },
+      "react-native.reactnativeoidccontainer.openurl": {
+        "title": "ReactNativeOIDCContainer.openURL() method"
       },
       "react-native.session.createdat": {
         "title": "Session.createdAt property"
@@ -2636,8 +2927,20 @@
       "web.authenticator": {
         "title": "Authenticator type"
       },
+      "web.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "web.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "web.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
       "web.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
+      },
+      "web.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
       },
       "web.authresponse.identity": {
         "title": "AuthResponse.identity property"
@@ -2672,6 +2975,15 @@
       "web.baseapiclient.apikey": {
         "title": "BaseAPIClient.apiKey property"
       },
+      "web.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "web.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "web.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
       "web.baseapiclient.authenticatewithbearertoken": {
         "title": "BaseAPIClient.authenticateWithBearerToken() method"
       },
@@ -2696,14 +3008,17 @@
       "web.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
       },
+      "web.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "web.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
       "web.baseapiclient.deleteauthenticator": {
         "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "web.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
-      },
-      "web.baseapiclient.endpoint": {
-        "title": "BaseAPIClient.endpoint property"
       },
       "web.baseapiclient.fetch": {
         "title": "BaseAPIClient.fetch() method"
@@ -2713,6 +3028,12 @@
       },
       "web.baseapiclient.get": {
         "title": "BaseAPIClient.get() method"
+      },
+      "web.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "web.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
       },
       "web.baseapiclient.getauthenticators": {
         "title": "BaseAPIClient.getAuthenticators() method"
@@ -2768,11 +3089,14 @@
       "web.baseapiclient.postandreturnauthresponse": {
         "title": "BaseAPIClient.postAndReturnAuthResponse() method"
       },
+      "web.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "web.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
       "web.baseapiclient.prepareheaders": {
         "title": "BaseAPIClient.prepareHeaders() method"
-      },
-      "web.baseapiclient.refresh": {
-        "title": "BaseAPIClient.refresh() method"
       },
       "web.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
@@ -2810,6 +3134,18 @@
       "web.baseapiclient.revokesession": {
         "title": "BaseAPIClient.revokeSession() method"
       },
+      "web.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "web.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "web.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "web.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
       "web.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
@@ -2834,17 +3170,35 @@
       "web.bytearray": {
         "title": "ByteArray interface"
       },
+      "web.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "web.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "web.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "web.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "web.configureoptions.isthirdpartyapp": {
+        "title": "ConfigureOptions.isThirdPartyApp property"
+      },
+      "web.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "web.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
       "web.container._constructor_": {
         "title": "Container.(constructor)"
       },
       "web.container.apiclient": {
         "title": "Container.apiClient property"
       },
-      "web.container.auth": {
-        "title": "Container.auth property"
-      },
-      "web.container.configure": {
-        "title": "Container.configure() method"
+      "web.container.classicauth": {
+        "title": "Container.classicAuth property"
       },
       "web.container.fetch": {
         "title": "Container.fetch() method"
@@ -2888,6 +3242,9 @@
       "web.containerstorage.deloauthredirectaction": {
         "title": "ContainerStorage.delOAuthRedirectAction() method"
       },
+      "web.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
       "web.containerstorage.delrefreshtoken": {
         "title": "ContainerStorage.delRefreshToken() method"
       },
@@ -2917,6 +3274,9 @@
       },
       "web.containerstorage.getoauthredirectaction": {
         "title": "ContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
       },
       "web.containerstorage.getrefreshtoken": {
         "title": "ContainerStorage.getRefreshToken() method"
@@ -2950,6 +3310,9 @@
       },
       "web.containerstorage.setoauthredirectaction": {
         "title": "ContainerStorage.setOAuthRedirectAction() method"
+      },
+      "web.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
       },
       "web.containerstorage.setrefreshtoken": {
         "title": "ContainerStorage.setRefreshToken() method"
@@ -3053,6 +3416,12 @@
       "web.decodeidentity": {
         "title": "decodeIdentity() function"
       },
+      "web.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "web.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
       "web.decodesession": {
         "title": "decodeSession() function"
       },
@@ -3119,6 +3488,9 @@
       "web.globaljsoncontainerstorage.deloauthredirectaction": {
         "title": "GlobalJSONContainerStorage.delOAuthRedirectAction() method"
       },
+      "web.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
       "web.globaljsoncontainerstorage.delrefreshtoken": {
         "title": "GlobalJSONContainerStorage.delRefreshToken() method"
       },
@@ -3148,6 +3520,9 @@
       },
       "web.globaljsoncontainerstorage.getoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.getOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
       },
       "web.globaljsoncontainerstorage.getrefreshtoken": {
         "title": "GlobalJSONContainerStorage.getRefreshToken() method"
@@ -3181,6 +3556,9 @@
       },
       "web.globaljsoncontainerstorage.setoauthredirectaction": {
         "title": "GlobalJSONContainerStorage.setOAuthRedirectAction() method"
+      },
+      "web.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
       },
       "web.globaljsoncontainerstorage.setrefreshtoken": {
         "title": "GlobalJSONContainerStorage.setRefreshToken() method"
@@ -3308,6 +3686,21 @@
       "web.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
       },
+      "web.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "web.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "web.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "web.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "web.oautherror.state": {
+        "title": "OAuthError.state property"
+      },
       "web.oauthidentity.claims": {
         "title": "OAuthIdentity.claims property"
       },
@@ -3373,6 +3766,36 @@
       },
       "web.oauthwebredirectauthorizationurloptions.uxmode": {
         "title": "OAuthWebRedirectAuthorizationURLOptions.uxMode property"
+      },
+      "web.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "web.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "web.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "web.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "web.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "web.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "web.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "web.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "web.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "web.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
       },
       "web.oobemailauthenticator.activatedat": {
         "title": "OOBEmailAuthenticator.activatedAt property"
@@ -3728,8 +4151,38 @@
       "web.webcontainer.auth": {
         "title": "WebContainer.auth property"
       },
+      "web.webcontainer.classicauth": {
+        "title": "WebContainer.classicAuth property"
+      },
+      "web.webcontainer.configure": {
+        "title": "WebContainer.configure() method"
+      },
       "web.webcontainer": {
         "title": "WebContainer class"
+      },
+      "web.weboidccontainer._constructor_": {
+        "title": "WebOIDCContainer.(constructor)"
+      },
+      "web.weboidccontainer._setupcodeverifier": {
+        "title": "WebOIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "web.weboidccontainer.clientid": {
+        "title": "WebOIDCContainer.clientID property"
+      },
+      "web.weboidccontainer.finishauthorization": {
+        "title": "WebOIDCContainer.finishAuthorization() method"
+      },
+      "web.weboidccontainer.isthirdparty": {
+        "title": "WebOIDCContainer.isThirdParty property"
+      },
+      "web.weboidccontainer.logout": {
+        "title": "WebOIDCContainer.logout() method"
+      },
+      "web.weboidccontainer": {
+        "title": "WebOIDCContainer class"
+      },
+      "web.weboidccontainer.startauthorization": {
+        "title": "WebOIDCContainer.startAuthorization() method"
       },
       "version-2.0.0-alpha.10/version-2.0.0-alpha.10-node-client.authcontainer.accesstoken": {
         "title": "AuthContainer.accessToken property"
@@ -9739,6 +10192,636 @@
       },
       "version-2.1.0/version-2.1.0-web.user": {
         "title": "User interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.container.classicauth": {
+        "title": "Container.classicAuth property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.container": {
+        "title": "Container class"
+      },
+      "version-2.3.0/version-2.3.0-node-client.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "version-2.3.0/version-2.3.0-node-client.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
+      "version-2.3.0/version-2.3.0-node-client.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.3.0/version-2.3.0-node-client.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.3.0/version-2.3.0-node-client.nodecontainer.configure": {
+        "title": "NodeContainer.configure() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.nodecontainer": {
+        "title": "NodeContainer class"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oautherror.state": {
+        "title": "OAuthError.state property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "version-2.3.0/version-2.3.0-node-client.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.container.classicauth": {
+        "title": "Container.classicAuth property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.container": {
+        "title": "Container class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "version-2.3.0/version-2.3.0-react-native.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
+      "version-2.3.0/version-2.3.0-react-native.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oautherror.state": {
+        "title": "OAuthError.state property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativecontainer.auth": {
+        "title": "ReactNativeContainer.auth property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativecontainer.classicauth": {
+        "title": "ReactNativeContainer.classicAuth property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativecontainer.configure": {
+        "title": "ReactNativeContainer.configure() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativecontainer": {
+        "title": "ReactNativeContainer class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer._constructor_": {
+        "title": "ReactNativeOIDCContainer.(constructor)"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer._setupcodeverifier": {
+        "title": "ReactNativeOIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer.authorize": {
+        "title": "ReactNativeOIDCContainer.authorize() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer.clientid": {
+        "title": "ReactNativeOIDCContainer.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer.isthirdparty": {
+        "title": "ReactNativeOIDCContainer.isThirdParty property"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer.logout": {
+        "title": "ReactNativeOIDCContainer.logout() method"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer": {
+        "title": "ReactNativeOIDCContainer class"
+      },
+      "version-2.3.0/version-2.3.0-react-native.reactnativeoidccontainer.openurl": {
+        "title": "ReactNativeOIDCContainer.openURL() method"
+      },
+      "version-2.3.0/version-2.3.0-web.authcontainer.saveextrasessioninfooptions": {
+        "title": "AuthContainer.saveExtraSessionInfoOptions() method"
+      },
+      "version-2.3.0/version-2.3.0-web.authenticationsession": {
+        "title": "AuthenticationSession interface"
+      },
+      "version-2.3.0/version-2.3.0-web.authenticationsession.step": {
+        "title": "AuthenticationSession.step property"
+      },
+      "version-2.3.0/version-2.3.0-web.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-web.authorizeoptions.redirecturi": {
+        "title": "AuthorizeOptions.redirectURI property"
+      },
+      "version-2.3.0/version-2.3.0-web.authorizeoptions.state": {
+        "title": "AuthorizeOptions.state property"
+      },
+      "version-2.3.0/version-2.3.0-web.authresponse.expiresin": {
+        "title": "AuthResponse.expiresIn property"
+      },
+      "version-2.3.0/version-2.3.0-web.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.appendpoint": {
+        "title": "BaseAPIClient.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.assetendpoint": {
+        "title": "BaseAPIClient.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.authendpoint": {
+        "title": "BaseAPIClient.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.del": {
+        "title": "BaseAPIClient.del() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.delasset": {
+        "title": "BaseAPIClient.delAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.delauth": {
+        "title": "BaseAPIClient.delAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.fetch": {
+        "title": "BaseAPIClient.fetch() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.get": {
+        "title": "BaseAPIClient.get() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.getasset": {
+        "title": "BaseAPIClient.getAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.getauth": {
+        "title": "BaseAPIClient.getAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.post": {
+        "title": "BaseAPIClient.post() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.postasset": {
+        "title": "BaseAPIClient.postAsset() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.postauth": {
+        "title": "BaseAPIClient.postAuth() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.request": {
+        "title": "BaseAPIClient.request() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.setaccesstokenandexpiresin": {
+        "title": "BaseAPIClient.setAccessTokenAndExpiresIn() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.setendpoint": {
+        "title": "BaseAPIClient.setEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.setshouldnotrefreshtoken": {
+        "title": "BaseAPIClient.setShouldNotRefreshToken() method"
+      },
+      "version-2.3.0/version-2.3.0-web.baseapiclient.setshouldrefreshtokennow": {
+        "title": "BaseAPIClient.setShouldRefreshTokenNow() method"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions.appendpoint": {
+        "title": "ConfigureOptions.appEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions.assetendpoint": {
+        "title": "ConfigureOptions.assetEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions.authendpoint": {
+        "title": "ConfigureOptions.authEndpoint property"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions.clientid": {
+        "title": "ConfigureOptions.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions.isthirdpartyapp": {
+        "title": "ConfigureOptions.isThirdPartyApp property"
+      },
+      "version-2.3.0/version-2.3.0-web.configureoptions": {
+        "title": "ConfigureOptions interface"
+      },
+      "version-2.3.0/version-2.3.0-web.container._configure": {
+        "title": "Container.\\_configure() method"
+      },
+      "version-2.3.0/version-2.3.0-web.container.classicauth": {
+        "title": "Container.classicAuth property"
+      },
+      "version-2.3.0/version-2.3.0-web.container": {
+        "title": "Container class"
+      },
+      "version-2.3.0/version-2.3.0-web.containerstorage.deloidccodeverifier": {
+        "title": "ContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.containerstorage.getoidccodeverifier": {
+        "title": "ContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.3.0/version-2.3.0-web.containerstorage.setoidccodeverifier": {
+        "title": "ContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.decodequery": {
+        "title": "decodeQuery() function"
+      },
+      "version-2.3.0/version-2.3.0-web.decodequerycomponent": {
+        "title": "decodeQueryComponent() function"
+      },
+      "version-2.3.0/version-2.3.0-web.globaljsoncontainerstorage.deloidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.delOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.globaljsoncontainerstorage.getoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.getOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.3.0/version-2.3.0-web.globaljsoncontainerstorage.setoidccodeverifier": {
+        "title": "GlobalJSONContainerStorage.setOIDCCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web": {
+        "title": "web package"
+      },
+      "version-2.3.0/version-2.3.0-web.oautherror.error_description": {
+        "title": "OAuthError.error\\_description property"
+      },
+      "version-2.3.0/version-2.3.0-web.oautherror.error_uri": {
+        "title": "OAuthError.error\\_uri property"
+      },
+      "version-2.3.0/version-2.3.0-web.oautherror.error": {
+        "title": "OAuthError.error property"
+      },
+      "version-2.3.0/version-2.3.0-web.oautherror": {
+        "title": "OAuthError interface"
+      },
+      "version-2.3.0/version-2.3.0-web.oautherror.state": {
+        "title": "OAuthError.state property"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer._constructor_": {
+        "title": "OIDCContainer.(constructor)"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer._finishauthorization": {
+        "title": "OIDCContainer.\\_finishAuthorization() method"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer._logout": {
+        "title": "OIDCContainer.\\_logout() method"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer._setupcodeverifier": {
+        "title": "OIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer.auth": {
+        "title": "OIDCContainer.auth property"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer.authorizeendpoint": {
+        "title": "OIDCContainer.authorizeEndpoint() method"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer.clientid": {
+        "title": "OIDCContainer.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer.isthirdparty": {
+        "title": "OIDCContainer.isThirdParty property"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer": {
+        "title": "OIDCContainer class"
+      },
+      "version-2.3.0/version-2.3.0-web.oidccontainer.parent": {
+        "title": "OIDCContainer.parent property"
+      },
+      "version-2.3.0/version-2.3.0-web.webcontainer.auth": {
+        "title": "WebContainer.auth property"
+      },
+      "version-2.3.0/version-2.3.0-web.webcontainer.classicauth": {
+        "title": "WebContainer.classicAuth property"
+      },
+      "version-2.3.0/version-2.3.0-web.webcontainer.configure": {
+        "title": "WebContainer.configure() method"
+      },
+      "version-2.3.0/version-2.3.0-web.webcontainer": {
+        "title": "WebContainer class"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer._constructor_": {
+        "title": "WebOIDCContainer.(constructor)"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer._setupcodeverifier": {
+        "title": "WebOIDCContainer.\\_setupCodeVerifier() method"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer.clientid": {
+        "title": "WebOIDCContainer.clientID property"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer.finishauthorization": {
+        "title": "WebOIDCContainer.finishAuthorization() method"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer.isthirdparty": {
+        "title": "WebOIDCContainer.isThirdParty property"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer.logout": {
+        "title": "WebOIDCContainer.logout() method"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer": {
+        "title": "WebOIDCContainer class"
+      },
+      "version-2.3.0/version-2.3.0-web.weboidccontainer.startauthorization": {
+        "title": "WebOIDCContainer.startAuthorization() method"
       }
     },
     "links": {},
