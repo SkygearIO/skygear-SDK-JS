@@ -19,7 +19,9 @@
 </thead>
 <tbody>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.apikey">apiKey</a></td><td></td><td><code>string</code></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.endpoint">endpoint</a></td><td></td><td><code>string</code></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.appendpoint">appEndpoint</a></td><td></td><td><code>string</code></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.assetendpoint">assetEndpoint</a></td><td></td><td><code>string</code></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.authendpoint">authEndpoint</a></td><td></td><td><code>string</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.fetchfunction">fetchFunction</a></td><td></td><td><code>typeof fetch</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getextrasessioninfo">getExtraSessionInfo</a></td><td></td><td><code>() =&gt; Promise&lt;JSONObject | null&gt;</code></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.refreshtokenfunction">refreshTokenFunction</a></td><td></td><td><code>() =&gt; Promise&lt;boolean&gt;</code></td><td></td></tr>
@@ -43,11 +45,15 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.changepassword">changePassword(newPassword, oldPassword)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.createnewoob">createNewOOB(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.createnewtotp">createNewTOTP(options)</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.del">del(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.del">del(endpoint, path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.delasset">delAsset(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.delauth">delAuth(path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.deleteauthenticator">deleteAuthenticator(id)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.deleteoauthprovider">deleteOAuthProvider(providerID)</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.fetch">fetch(input, init, options)</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.get">get(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.fetch">fetch(endpoint, input, init, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.get">get(endpoint, path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getasset">getAsset(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getauth">getAuth(path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getauthenticators">getAuthenticators()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getoauthresult">getOAuthResult(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.getsession">getSession(id)</a></td><td></td><td></td></tr>
@@ -62,13 +68,14 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.me">me()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.oauthauthorizationurl">oauthAuthorizationURL(options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.oauthhandler">oauthHandler(options)</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.post">post(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.post">post(endpoint, path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.postandreturnauthresponse">postAndReturnAuthResponse(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.postasset">postAsset(path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.postauth">postAuth(path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.prepareheaders">prepareHeaders()</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.refresh">refresh(refreshToken)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.regeneraterecoverycode">regenerateRecoveryCode()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.removeloginid">removeLoginID(loginID)</a></td><td></td><td></td></tr>
-<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.request">request(method, path, options)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.request">request(method, endpoint, path, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.requestemailverification">requestEmailVerification(email)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.requestforgotpasswordemail">requestForgotPasswordEmail(email)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.requestphoneverification">requestPhoneVerification(phone)</a></td><td></td><td></td></tr>
@@ -76,6 +83,10 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.revokeallbearertoken">revokeAllBearerToken()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.revokeothersessions">revokeOtherSessions()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.revokesession">revokeSession(id)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.setaccesstokenandexpiresin">setAccessTokenAndExpiresIn(accessToken, expires_in)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.setendpoint">setEndpoint(appEndpoint, authEndpoint, assetEndpoint)</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.setshouldnotrefreshtoken">setShouldNotRefreshToken()</a></td><td></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.setshouldrefreshtokennow">setShouldRefreshTokenNow()</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.signup">signup(loginIDs, password, options)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.triggeroob">triggerOOB(authenticatorID)</a></td><td></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/node-client.baseapiclient.updateloginid">updateLoginID(oldLoginID, newLoginID)</a></td><td></td><td></td></tr>

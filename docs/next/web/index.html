@@ -12,11 +12,13 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.globaljsoncontainerstorage">GlobalJSONContainerStorage</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.imageprocessingpipelinebuilder">ImageProcessingPipelineBuilder</a></td><td>Image processing pipeline builder.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.mfacontainer">MFAContainer</a></td><td>Skygear Auth Multi-Factor-Authentication APIs.</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.oidccontainer">OIDCContainer</a></td><td>Skygear Auth OIDC client APIs.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.skygearerror">SkygearError</a></td><td>Skygear API error.</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.webapiclient">WebAPIClient</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.webassetcontainer">WebAssetContainer</a></td><td>Skygear Asset APIs (for web platforms).</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.webauthcontainer">WebAuthContainer</a></td><td>Skygear Auth APIs (for web platforms).</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.webcontainer">WebContainer</a></td><td>Skygear APIs container (for web platforms).</td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.weboidccontainer">WebOIDCContainer</a></td><td>Skygear OIDC APIs (for web platforms).</td></tr>
 </tbody>
 </table>
 <h2><a class="anchor" aria-hidden="true" id="functions"></a><a href="#functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Functions</h2>
@@ -29,6 +31,8 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.decodeauthresponse">decodeAuthResponse(r)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.decodeerror">decodeError(err)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.decodeidentity">decodeIdentity(i)</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.decodequery">decodeQuery(query)</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.decodequerycomponent">decodeQueryComponent(s)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.decodesession">decodeSession(s)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.decodeuser">decodeUser(u)</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.encodeidentity">encodeIdentity(i)</a></td><td></td></tr>
@@ -51,8 +55,10 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.authenticatewithooboptions">AuthenticateWithOOBOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.authenticatewithtotpoptions">AuthenticateWithTOTPOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.authenticationsession">AuthenticationSession</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.authorizeoptions">AuthorizeOptions</a></td><td>Auth UI authorization options</td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.authresponse">AuthResponse</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.bytearray">ByteArray</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.configureoptions">ConfigureOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.containeroptions">ContainerOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.containerstorage">ContainerStorage</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.createnewoobemailoptions">CreateNewOOBEmailOptions</a></td><td></td></tr>
@@ -64,6 +70,7 @@
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.extrasessioninfooptions">ExtraSessionInfoOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.generateotpauthurioptions">GenerateOTPAuthURIOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.imageprocessingpipelinebuilderresizeoptions">ImageProcessingPipelineBuilderResizeOptions</a></td><td></td></tr>
+<tr><td><a href="/skygear-SDK-JS/docs/next/web.oautherror">OAuthError</a></td><td>OAuthError represents the oauth error response. <a href="https://tools.ietf.org/html/rfc6749#section-4.1.2.1">https://tools.ietf.org/html/rfc6749#section-4.1.2.1</a></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.oauthidentity">OAuthIdentity</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.oauthmanualauthorizationurloptions">OAuthManualAuthorizationURLOptions</a></td><td></td></tr>
 <tr><td><a href="/skygear-SDK-JS/docs/next/web.oauthmobileappauthorizationurloptions">OAuthMobileAppAuthorizationURLOptions</a></td><td></td></tr>
