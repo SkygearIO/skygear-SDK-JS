@@ -196,7 +196,7 @@ function onSubmitOAuth(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var result = skygear.auth[funcName].apply(skygear.auth, args);
+  var result = skygear.classicAuth[funcName].apply(skygear.classicAuth, args);
   if (result && result.then) {
     result.then(function(maybeUser) {
       if (!maybeUser) {
@@ -247,7 +247,7 @@ function onSubmitAccessToken(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var p = skygear.auth[funcName].apply(skygear.auth, args);
+  var p = skygear.classicAuth[funcName].apply(skygear.classicAuth, args);
   p.then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
