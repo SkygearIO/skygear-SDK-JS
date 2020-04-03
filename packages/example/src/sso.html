@@ -121,39 +121,6 @@
       <textarea id="deleteOAuthResult" class="form-control" readonly=""></textarea>
     </div>
   </form>
-
-  <form class="container" onsubmit="onSubmitCustomToken(event)">
-    <div class="form-group">
-      <h1>Login with Custom Token</h1>
-    </div>
-    <div class="form-group">
-      <label>On User Duplicate</label>
-      <select id="customTokenOnUserDuplicate" class="form-control" oninput="onInputCustomToken()">
-        <option value="abort" selected="">Abort</option>
-        <option value="merge">Merge</option>
-        <option value="create">Create</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Token</label>
-      <input id="customTokenToken" type="text" class="form-control" oninput="onInputCustomToken()">
-      <small class="form-text text-muted">
-        Custom Token is disabled by default. You have to enable it first.
-      </small>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-    <div class="form-group">
-      <label>Synopsis</label>
-      <textarea id="customTokenSynopsis" class="form-control" readonly=""></textarea>
-    </div>
-    <div class="form-group">
-      <label>Result</label>
-      <textarea id="customTokenResult" class="form-control" readonly=""></textarea>
-    </div>
-  </form>
-
   <script>
 
 function makeOAuthInvocation() {
@@ -196,7 +163,7 @@ function onSubmitOAuth(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var result = skygear.auth[funcName].apply(skygear.auth, args);
+  var result = skygear.classicAuth[funcName].apply(skygear.classicAuth, args);
   if (result && result.then) {
     result.then(function(maybeUser) {
       if (!maybeUser) {
@@ -247,7 +214,7 @@ function onSubmitAccessToken(e) {
   var funcName = invocation[0];
   var args = invocation[1];
 
-  var p = skygear.auth[funcName].apply(skygear.auth, args);
+  var p = skygear.classicAuth[funcName].apply(skygear.classicAuth, args);
   p.then(function(user) {
     resultTextArea.value = JSON.stringify(user);
   }, function(e) {
@@ -276,48 +243,6 @@ function onSubmitDeleteOAuth(e) {
   });
 }
 
-function makeCustomTokenInvocation() {
-  var token = document.getElementById("customTokenToken").value;
-  var onUserDuplicate = document.getElementById("customTokenOnUserDuplicate").value;
-
-  var funcName = "loginWithCustomToken";
-  var args = [token];
-  if (onUserDuplicate !== "abort") {
-    args.push({ onUserDuplicate: onUserDuplicate });
-  }
-
-  return [funcName, args];
-}
-
-function onInputCustomToken() {
-  var synopsisTextArea = document.getElementById("customTokenSynopsis");
-
-  var invocation = makeCustomTokenInvocation();
-  var funcName = invocation[0];
-  var args = invocation[1];
-  var funcExpr = "skygear.classicAuth." + funcName;
-  args.unshift(funcExpr);
-
-  synopsisTextArea.value = stringifyFunctionCall.apply(undefined, args);
-}
-
-function onSubmitCustomToken(e) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  var resultTextArea = document.getElementById("customTokenResult");
-
-  var invocation = makeCustomTokenInvocation();
-  var funcName = invocation[0];
-  var args = invocation[1];
-
-  skygear.auth[funcName].apply(skygear.auth, args).then(function(user) {
-    resultTextArea.value = JSON.stringify(user);
-  }, function(e) {
-    resultTextArea.value = JSON.stringify(e);
-  });
-}
-
 skygear.configure({
   appEndpoint: "__SKYGEAR_APP_ENDPOINT__",
   authEndpoint: "__SKYGEAR_AUTH_ENDPOINT__",
@@ -327,7 +252,6 @@ skygear.configure({
   onInputOAuth();
   onInputAccessToken();
   onInputDeleteOAuth();
-  onInputCustomToken();
 
   var resultTextArea = document.getElementById("oauthResult");
 
