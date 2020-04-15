@@ -878,7 +878,10 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     this.auth = auth;
   }
 
-  async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
+  async authorizeEndpoint(
+    options: AuthorizeOptions,
+    responseMode?: string
+  ): Promise<string> {
     const config = await this.parent.apiClient._fetchOIDCConfiguration();
     const query: [string, string][] = [];
 
@@ -906,6 +909,9 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     query.push(["redirect_uri", options.redirectURI]);
     if (options.state) {
       query.push(["state", options.state]);
+    }
+    if (responseMode) {
+      query.push(["response_mode", responseMode]);
     }
 
     return `${config.authorization_endpoint}${encodeQuery(query)}`;

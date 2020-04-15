@@ -22,8 +22,8 @@ import {
   addAppleIDCredentialRevokedListener,
 } from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
+import { getResponseMode } from "./oidc";
 export * from "@skygear/core";
-
 export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
 
 const globalFetch = fetch;
@@ -217,7 +217,10 @@ export class ReactNativeOIDCContainer<
     options: AuthorizeOptions
   ): Promise<{ user: User; state?: string }> {
     const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
-    const authorizeURL = await this.authorizeEndpoint(options);
+    const authorizeURL = await this.authorizeEndpoint(
+      options,
+      getResponseMode()
+    );
     const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
     return this._finishAuthorization(redirectURL);
   }
