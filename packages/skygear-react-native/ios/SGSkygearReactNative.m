@@ -207,18 +207,18 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
                                                                             callbackURLScheme:scheme
                                                                             completionHandler:^(NSURL *url, NSError *error) {
             if (error) {
-                if (self.openURLReject) {
+                BOOL isUserCancelled = ([[error domain] isEqualToString:ASWebAuthenticationSessionErrorDomain] &&
+                [error code] == ASWebAuthenticationSessionErrorCodeCanceledLogin);
+                if (!isUserCancelled && self.openURLReject) {
                     self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
-                    self.openURLResolve = nil;
-                    self.openURLReject = nil;
                 }
             } else {
                 if (self.openURLResolve) {
                     self.openURLResolve([url absoluteString]);
-                    self.openURLResolve = nil;
-                    self.openURLReject = nil;
                 }
             }
+            self.openURLResolve = nil;
+            self.openURLReject = nil;
             self.asSession = nil;
         }];
         if (@available(iOS 13.0, *)) {
@@ -230,18 +230,18 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
                                                                       callbackURLScheme:scheme
                                                                       completionHandler:^(NSURL *url, NSError *error) {
             if (error) {
-                if (self.openURLReject) {
+                BOOL isUserCancelled = ([[error domain] isEqualToString:SFAuthenticationErrorDomain] &&
+                [error code] == SFAuthenticationErrorCanceledLogin);
+                if (!isUserCancelled && self.openURLReject) {
                     self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
-                    self.openURLResolve = nil;
-                    self.openURLReject = nil;
                 }
             } else {
                 if (self.openURLResolve) {
                     self.openURLResolve([url absoluteString]);
-                    self.openURLResolve = nil;
-                    self.openURLReject = nil;
                 }
             }
+            self.openURLResolve = nil;
+            self.openURLReject = nil;
             self.sfSession = nil;
         }];
         [self.sfSession start];
