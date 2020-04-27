@@ -1,3 +1,9 @@
+## 2.3.1 (2020-04-27)
+
+### Bug Fixes
+
+- Do not reject promise if user cancels authorization #573
+
 ## 2.3.0 (2020-04-02)
 
 ### Features

@@ -1,6 +1,6 @@
 {
   "name": "@skygear/react-native",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "license": "Apache-2.0",
   "main": "dist/skygear-react-native.js",
   "files": [
