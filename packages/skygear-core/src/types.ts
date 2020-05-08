@@ -247,6 +247,14 @@ export interface AuthResponse {
 /**
  * @public
  */
+export interface ChallengeResponse {
+  token: string;
+  expire_at: string;
+}
+
+/**
+ * @public
+ */
 export interface ContainerStorage {
   setUser(namespace: string, user: User): Promise<void>;
   setIdentity(namespace: string, identity: Identity): Promise<void>;
@@ -268,6 +276,7 @@ export interface ContainerStorage {
   ): Promise<void>;
   setMFABearerToken(namespace: string, mfaBearerToken: string): Promise<void>;
   setOIDCCodeVerifier(namespace: string, code: string): Promise<void>;
+  setAnonymousKeyID(namespace: string, kid: string): Promise<void>;
 
   getUser(namespace: string): Promise<User | null>;
   getIdentity(namespace: string): Promise<Identity | null>;
@@ -284,6 +293,7 @@ export interface ContainerStorage {
   ): Promise<AuthenticationSession | null>;
   getMFABearerToken(namespace: string): Promise<string | null>;
   getOIDCCodeVerifier(namespace: string): Promise<string | null>;
+  getAnonymousKeyID(namespace: string): Promise<string | null>;
 
   delUser(namespace: string): Promise<void>;
   delIdentity(namespace: string): Promise<void>;
@@ -295,6 +305,7 @@ export interface ContainerStorage {
   delAuthenticationSession(namespace: string): Promise<void>;
   delMFABearerToken(namespace: string): Promise<void>;
   delOIDCCodeVerifier(namespace: string): Promise<void>;
+  delAnonymousKeyID(namespace: string): Promise<void>;
 }
 
 /**
@@ -700,12 +711,16 @@ export interface _OIDCConfiguration {
  * @internal
  */
 export interface _OIDCTokenRequest {
-  grant_type: "authorization_code" | "refresh_token";
+  grant_type:
+    | "authorization_code"
+    | "refresh_token"
+    | "urn:skygear-auth:params:oauth:grant-type:anonymous-request";
   client_id: string;
   redirect_uri?: string;
   code?: string;
   code_verifier?: string;
   refresh_token?: string;
+  jwt?: string;
 }
 
 /**

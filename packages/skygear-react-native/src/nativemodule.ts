@@ -31,6 +31,19 @@ export function signInWithApple(
   return SGSkygearReactNative.signInWithApple(url);
 }
 
+export function getAnonymousKey(
+  kid: string | null
+): Promise<{ kid: string; alg: string; jwk?: any }> {
+  return SGSkygearReactNative.getAnonymousKey(kid);
+}
+
+export function signAnonymousToken(
+  kid: string,
+  tokenData: string
+): Promise<string> {
+  return SGSkygearReactNative.signAnonymousToken(kid, tokenData);
+}
+
 /**
  * @public
  */

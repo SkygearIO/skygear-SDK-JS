@@ -22,6 +22,7 @@ import {
   addAppleIDCredentialRevokedListener,
 } from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
+import { getAnonymousJWK, signAnonymousJWT } from "./jwt";
 export * from "@skygear/core";
 
 export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
@@ -244,6 +245,43 @@ export class ReactNativeOIDCContainer<
     } = {}
   ): Promise<void> {
     return this._logout(options);
+  }
+
+  async authenticateAnonymously(): Promise<{ user: User }> {
+    const { token } = await this.parent.apiClient.oauthChallenge(
+      "anonymous_request"
+    );
+
+    const keyID = await this.parent.storage.getAnonymousKeyID(this.parent.name);
+    const key = await getAnonymousJWK(keyID);
+
+    const now = Math.floor(+new Date() / 1000);
+    const header = { typ: "vnd.skygear.auth.anonymous-request", ...key };
+    const payload = {
+      iat: +now,
+      exp: +now + 60,
+      challenge: token,
+      action: "auth",
+    };
+    const jwt = await signAnonymousJWT(key.kid, header, payload);
+
+    const tokenResponse = await this.parent.apiClient._oidcTokenRequest({
+      grant_type: "urn:skygear-auth:params:oauth:grant-type:anonymous-request",
+      client_id: this.parent.apiClient.apiKey,
+      jwt,
+    });
+
+    const authResponse = await this.parent.apiClient._oidcUserInfoRequest(
+      tokenResponse.access_token
+    );
+    const ar = { ...authResponse };
+    ar.accessToken = tokenResponse.access_token;
+    ar.refreshToken = tokenResponse.refresh_token;
+    ar.expiresIn = tokenResponse.expires_in;
+    await this.auth.persistAuthResponse(ar);
+
+    await this.parent.storage.setAnonymousKeyID(this.parent.name, key.kid);
+    return { user: authResponse.user };
   }
 }
 

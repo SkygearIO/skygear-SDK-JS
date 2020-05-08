@@ -65,6 +65,10 @@ function keyOIDCCodeVerifier(name: string): string {
   return `${name}_oidcCodeVerifier`;
 }
 
+function keyAnonymousKeyID(name: string): string {
+  return `${name}_anonymousKeyID`;
+}
+
 /**
  * @internal
  */
@@ -194,6 +198,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSet(keyOIDCCodeVerifier(namespace), code);
   }
 
+  async setAnonymousKeyID(namespace: string, kid: string) {
+    await this.storage.safeSet(keyAnonymousKeyID(namespace), kid);
+  }
+
   async getUser(namespace: string): Promise<User | null> {
     const userJSON = await this.storage.safeGetJSON(keyUser(namespace));
     if (userJSON) {
@@ -262,6 +270,10 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keyOIDCCodeVerifier(namespace));
   }
 
+  async getAnonymousKeyID(namespace: string): Promise<string | null> {
+    return this.storage.safeGet(keyAnonymousKeyID(namespace));
+  }
+
   async delUser(namespace: string) {
     await this.storage.safeDel(keyUser(namespace));
   }
@@ -300,5 +312,9 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delOIDCCodeVerifier(namespace: string) {
     await this.storage.safeDel(keyOIDCCodeVerifier(namespace));
+  }
+
+  async delAnonymousKeyID(namespace: string) {
+    await this.storage.safeDel(keyAnonymousKeyID(namespace));
   }
 }
