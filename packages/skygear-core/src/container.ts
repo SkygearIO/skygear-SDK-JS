@@ -855,6 +855,10 @@ export interface AuthorizeOptions {
    * OAuth 2.0 state value.
    */
   state?: string;
+  /**
+   * OIDC prompt parameter.
+   */
+  prompt?: string;
 }
 
 /**
@@ -906,6 +910,9 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     query.push(["redirect_uri", options.redirectURI]);
     if (options.state) {
       query.push(["state", options.state]);
+    }
+    if (options.prompt) {
+      query.push(["prompt", options.prompt]);
     }
 
     return `${config.authorization_endpoint}${encodeQuery(query)}`;
