@@ -896,14 +896,17 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       query.push(["response_type", "code"]);
       query.push([
         "scope",
-        "openid offline_access https://skygear.io/auth-api/full-access",
+        "openid offline_access https://auth.skygear.io/scopes/full-access",
       ]);
       query.push(["code_challenge_method", "S256"]);
       query.push(["code_challenge", codeVerifier.challenge]);
     } else {
       // for first party app
       query.push(["response_type", "none"]);
-      query.push(["scope", "openid https://skygear.io/auth-api/full-access"]);
+      query.push([
+        "scope",
+        "openid https://auth.skygear.io/scopes/full-access",
+      ]);
     }
 
     query.push(["client_id", this.clientID]);
