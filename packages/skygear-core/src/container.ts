@@ -859,6 +859,26 @@ export interface AuthorizeOptions {
    * OIDC prompt parameter.
    */
   prompt?: string;
+  /**
+   * OIDC login hint parameter
+   */
+  loginHint?: string;
+}
+
+/**
+ * Auth UI anonymous user promotion options
+ *
+ * @public
+ */
+export interface PromoteOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
 }
 
 /**
@@ -916,6 +936,9 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     }
     if (options.prompt) {
       query.push(["prompt", options.prompt]);
+    }
+    if (options.loginHint) {
+      query.push(["login_hint", options.loginHint]);
     }
 
     return `${config.authorization_endpoint}${encodeQuery(query)}`;

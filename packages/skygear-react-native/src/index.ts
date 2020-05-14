@@ -12,6 +12,7 @@ import {
   decodeError,
   OIDCContainer,
   AuthorizeOptions,
+  PromoteOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import {
@@ -247,6 +248,9 @@ export class ReactNativeOIDCContainer<
     return this._logout(options);
   }
 
+  /**
+   * Authenticate as an anonymous user.
+   */
   async authenticateAnonymously(): Promise<{ user: User }> {
     const { token } = await this.parent.apiClient.oauthChallenge(
       "anonymous_request"
@@ -282,6 +286,50 @@ export class ReactNativeOIDCContainer<
 
     await this.parent.storage.setAnonymousKeyID(this.parent.name, key.kid);
     return { user: authResponse.user };
+  }
+
+  /**
+   * Open promote anonymous user page
+   *
+   * @param options - promote options
+   */
+  async promoteAnonymousUser(
+    options: PromoteOptions
+  ): Promise<{ user: User; state?: string }> {
+    const keyID = await this.parent.storage.getAnonymousKeyID(this.parent.name);
+    if (!keyID) {
+      throw new Error("anonymous user credentials not found");
+    }
+    const key = await getAnonymousJWK(keyID);
+
+    const { token } = await this.parent.apiClient.oauthChallenge(
+      "anonymous_request"
+    );
+
+    const now = Math.floor(+new Date() / 1000);
+    const header = { typ: "vnd.skygear.auth.anonymous-request", ...key };
+    const payload = {
+      iat: +now,
+      exp: +now + 60,
+      challenge: token,
+      action: "promote",
+    };
+    const jwt = await signAnonymousJWT(key.kid, header, payload);
+    const loginHint = `https://auth.skygear.io/login_hint?type=anonymous&jwt=${encodeURIComponent(
+      jwt
+    )}`;
+
+    const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
+    const authorizeURL = await this.authorizeEndpoint({
+      ...options,
+      prompt: "login",
+      loginHint,
+    });
+    const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
+    const result = await this._finishAuthorization(redirectURL);
+
+    await this.parent.storage.delAnonymousKeyID(this.parent.name);
+    return result;
   }
 }
 
