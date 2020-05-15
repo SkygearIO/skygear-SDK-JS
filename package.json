@@ -66,6 +66,7 @@
     "@types/jest": "24.0.22",
     "@typescript-eslint/eslint-plugin": "2.6.1",
     "@typescript-eslint/parser": "2.6.1",
+    "builtins": "3.0.1",
     "core-js": "3.3.6",
     "eslint": "6.6.0",
     "eslint-plugin-tsdoc": "0.2.0",
