@@ -22,6 +22,7 @@ import {
   _OIDCTokenResponse,
   _OIDCTokenRequest,
   OAuthError,
+  ChallengeResponse,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
 import { encodeQuery } from "./url";
@@ -963,6 +964,9 @@ export abstract class BaseAPIClient {
     if (req.refresh_token) {
       query.push(["refresh_token", req.refresh_token]);
     }
+    if (req.jwt) {
+      query.push(["jwt", req.jwt]);
+    }
     return this._fetchOIDCJSON(config.token_endpoint, {
       method: "POST",
       headers: {
@@ -1004,5 +1008,9 @@ export abstract class BaseAPIClient {
       },
       body: encodeQuery(query).substring(1),
     });
+  }
+
+  async oauthChallenge(purpose: string): Promise<ChallengeResponse> {
+    return this.postAuth("/oauth2/challenge", { json: { purpose } });
   }
 }

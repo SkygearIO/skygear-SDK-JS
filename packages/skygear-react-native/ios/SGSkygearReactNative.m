@@ -359,6 +359,53 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
     resolve([self sha256String:input]);
 }
 
+RCT_EXPORT_METHOD(getAnonymousKey:(NSString *)kid resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  if (@available(iOS 10.0, *)) {
+    if (!kid) {
+      kid = [[NSUUID UUID] UUIDString];
+    }
+
+    NSString *tag = [@"io.skygear.keys.anonymous." stringByAppendingString:kid];
+
+    NSMutableDictionary *jwk = [NSMutableDictionary dictionary];
+    NSError *error = [self loadKey:tag keyRef:nil];
+    if (error) {
+      error = [self generateKey:tag jwk:jwk];
+    }
+
+    if (error) {
+      reject(RCTErrorUnspecified, @"getAnonymousKey", error);
+      return;
+    }
+    if ([jwk count] == 0) {
+      resolve(@{@"kid": kid, @"alg": @"RS256"});
+    } else {
+      [jwk setValue:kid forKey:@"kid"];
+      resolve(@{@"kid": kid, @"alg": @"RS256", @"jwk": jwk});
+    }
+  } else {
+    reject(RCTErrorUnspecified, @"getAnonymousKey requires iOS 10. Please check the device OS version before calling this function.", nil);
+  }
+}
+
+RCT_EXPORT_METHOD(signAnonymousToken:(NSString *)kid data:(NSString *)s resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  if (@available(iOS 10.0, *)) {
+    NSData *data = [s dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *tag = [@"io.skygear.keys.anonymous." stringByAppendingString:kid];
+    NSData *sig = nil;
+    NSError *error = [self signData:tag data:data psig:&sig];
+    if (error) {
+      reject(RCTErrorUnspecified, @"signAnonymousToken", error);
+      return;
+    }
+    resolve([sig base64EncodedStringWithOptions: 0]);
+  } else {
+    reject(RCTErrorUnspecified, @"signData requires iOS 10. Please check the device OS version before calling this function.", nil);
+  }
+}
+
 - (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(12))
 {
   for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
@@ -480,5 +527,96 @@ RCT_EXPORT_METHOD(sha256String:(NSString *)input resolver:(RCTPromiseResolveBloc
     }
     return arr;
 }
+
+-(NSError *)loadKey:(NSString *)tag keyRef:(SecKeyRef *)keyRef API_AVAILABLE(ios(10))
+{
+  NSData* tagData = [tag dataUsingEncoding:NSUTF8StringEncoding];
+  NSDictionary* query = @{
+    (id)kSecClass: (id)kSecClassKey,
+    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeRSA,
+    (id)kSecAttrKeyClass: (id)kSecAttrKeyClassPrivate,
+    (id)kSecAttrKeySizeInBits: @2048,
+    (id)kSecAttrIsPermanent: @YES,
+    (id)kSecAttrApplicationTag: tagData,
+    (id)kSecReturnRef: @YES,
+  };
+  SecKeyRef privKey;
+  OSStatus status = SecItemCopyMatching(
+    (__bridge CFDictionaryRef)query,
+    (CFTypeRef *) &privKey
+  );
+  if (status != errSecSuccess) {
+    return [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+  }
+
+  if (keyRef) {
+    *keyRef = privKey;
+  }
+  return nil;
+}
+
+-(NSError *)generateKey:(NSString *)tag jwk:(NSMutableDictionary *)jwk API_AVAILABLE(ios(10))
+{
+  CFErrorRef error = NULL;
+
+  NSData* tagData = [tag dataUsingEncoding:NSUTF8StringEncoding];
+  NSDictionary* attributes = @{
+    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeRSA,
+    (id)kSecAttrKeySizeInBits: @2048,
+    (id)kSecAttrIsPermanent: @YES,
+    (id)kSecAttrApplicationTag: tagData,
+  };
+  SecKeyRef privKey = SecKeyCreateRandomKey(
+    (__bridge CFDictionaryRef)attributes,
+    &error
+  );
+  if (error) {
+    return CFBridgingRelease(error);
+  }
+
+  SecKeyRef pubKey = SecKeyCopyPublicKey(privKey);
+  CFDataRef dataRef = SecKeyCopyExternalRepresentation(pubKey, &error);
+  if (error) {
+    return CFBridgingRelease(error);
+  }
+
+  NSData *data = (__bridge NSData*)dataRef;
+  NSUInteger size = data.length;
+  NSData *modulus = [data subdataWithRange:NSMakeRange(size > 269 ? 9 : 8, 256)];
+  NSData *exponent = [data subdataWithRange:NSMakeRange(size - 3, 3)];
+  [jwk setValue:@"RSA" forKey:@"kty"];
+  [jwk setValue:[modulus base64EncodedStringWithOptions:0] forKey:@"n"];
+  [jwk setValue:[exponent base64EncodedStringWithOptions:0] forKey:@"e"];
+  return nil;
+}
+
+-(NSError *)signData:(NSString *)tag data:(NSData *)data psig:(NSData **)psig API_AVAILABLE(ios(10))
+{
+  CFErrorRef error = NULL;
+
+  SecKeyRef privKey;
+  NSError *err = [self loadKey:tag keyRef:&privKey];
+  if (err) {
+    return err;
+  }
+
+  NSMutableData *hash = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+  CC_SHA256(data.bytes, (unsigned int)data.length, hash.mutableBytes);
+
+  NSData *sig = (__bridge NSData*)SecKeyCreateSignature(
+    privKey,
+    kSecKeyAlgorithmRSASignatureDigestPKCS1v15SHA256,
+    (__bridge CFDataRef)hash,
+    &error
+  );
+  CFRelease(privKey);
+  if (error) {
+    return CFBridgingRelease(error);
+  }
+
+  *psig = sig;
+  return nil;
+}
+
 
 @end

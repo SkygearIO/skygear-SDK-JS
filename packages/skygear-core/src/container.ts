@@ -859,6 +859,26 @@ export interface AuthorizeOptions {
    * OIDC prompt parameter.
    */
   prompt?: string;
+  /**
+   * OIDC login hint parameter
+   */
+  loginHint?: string;
+}
+
+/**
+ * Auth UI anonymous user promotion options
+ *
+ * @public
+ */
+export interface PromoteOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
 }
 
 /**
@@ -896,14 +916,17 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       query.push(["response_type", "code"]);
       query.push([
         "scope",
-        "openid offline_access https://skygear.io/auth-api/full-access",
+        "openid offline_access https://auth.skygear.io/scopes/full-access",
       ]);
       query.push(["code_challenge_method", "S256"]);
       query.push(["code_challenge", codeVerifier.challenge]);
     } else {
       // for first party app
       query.push(["response_type", "none"]);
-      query.push(["scope", "openid https://skygear.io/auth-api/full-access"]);
+      query.push([
+        "scope",
+        "openid https://auth.skygear.io/scopes/full-access",
+      ]);
     }
 
     query.push(["client_id", this.clientID]);
@@ -913,6 +936,9 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     }
     if (options.prompt) {
       query.push(["prompt", options.prompt]);
+    }
+    if (options.loginHint) {
+      query.push(["login_hint", options.loginHint]);
     }
 
     return `${config.authorization_endpoint}${encodeQuery(query)}`;

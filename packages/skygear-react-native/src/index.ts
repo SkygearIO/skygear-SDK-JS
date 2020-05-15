@@ -12,6 +12,7 @@ import {
   decodeError,
   OIDCContainer,
   AuthorizeOptions,
+  PromoteOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
 import {
@@ -22,6 +23,7 @@ import {
   addAppleIDCredentialRevokedListener,
 } from "./nativemodule";
 import { extractResultFromURL, getCallbackURLScheme } from "./url";
+import { getAnonymousJWK, signAnonymousJWT } from "./jwt";
 export * from "@skygear/core";
 
 export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
@@ -244,6 +246,90 @@ export class ReactNativeOIDCContainer<
     } = {}
   ): Promise<void> {
     return this._logout(options);
+  }
+
+  /**
+   * Authenticate as an anonymous user.
+   */
+  async authenticateAnonymously(): Promise<{ user: User }> {
+    const { token } = await this.parent.apiClient.oauthChallenge(
+      "anonymous_request"
+    );
+
+    const keyID = await this.parent.storage.getAnonymousKeyID(this.parent.name);
+    const key = await getAnonymousJWK(keyID);
+
+    const now = Math.floor(+new Date() / 1000);
+    const header = { typ: "vnd.skygear.auth.anonymous-request", ...key };
+    const payload = {
+      iat: +now,
+      exp: +now + 60,
+      challenge: token,
+      action: "auth",
+    };
+    const jwt = await signAnonymousJWT(key.kid, header, payload);
+
+    const tokenResponse = await this.parent.apiClient._oidcTokenRequest({
+      grant_type: "urn:skygear-auth:params:oauth:grant-type:anonymous-request",
+      client_id: this.parent.apiClient.apiKey,
+      jwt,
+    });
+
+    const authResponse = await this.parent.apiClient._oidcUserInfoRequest(
+      tokenResponse.access_token
+    );
+    const ar = { ...authResponse };
+    ar.accessToken = tokenResponse.access_token;
+    ar.refreshToken = tokenResponse.refresh_token;
+    ar.expiresIn = tokenResponse.expires_in;
+    await this.auth.persistAuthResponse(ar);
+
+    await this.parent.storage.setAnonymousKeyID(this.parent.name, key.kid);
+    return { user: authResponse.user };
+  }
+
+  /**
+   * Open promote anonymous user page
+   *
+   * @param options - promote options
+   */
+  async promoteAnonymousUser(
+    options: PromoteOptions
+  ): Promise<{ user: User; state?: string }> {
+    const keyID = await this.parent.storage.getAnonymousKeyID(this.parent.name);
+    if (!keyID) {
+      throw new Error("anonymous user credentials not found");
+    }
+    const key = await getAnonymousJWK(keyID);
+
+    const { token } = await this.parent.apiClient.oauthChallenge(
+      "anonymous_request"
+    );
+
+    const now = Math.floor(+new Date() / 1000);
+    const header = { typ: "vnd.skygear.auth.anonymous-request", ...key };
+    const payload = {
+      iat: +now,
+      exp: +now + 60,
+      challenge: token,
+      action: "promote",
+    };
+    const jwt = await signAnonymousJWT(key.kid, header, payload);
+    const loginHint = `https://auth.skygear.io/login_hint?type=anonymous&jwt=${encodeURIComponent(
+      jwt
+    )}`;
+
+    const redirectURIScheme = getCallbackURLScheme(options.redirectURI);
+    const authorizeURL = await this.authorizeEndpoint({
+      ...options,
+      prompt: "login",
+      loginHint,
+    });
+    const redirectURL = await openAuthorizeURL(authorizeURL, redirectURIScheme);
+    const result = await this._finishAuthorization(redirectURL);
+
+    await this.parent.storage.delAnonymousKeyID(this.parent.name);
+    return result;
   }
 }
 
