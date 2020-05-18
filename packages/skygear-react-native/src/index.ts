@@ -72,8 +72,15 @@ async function uploadForm(
       form.append(name, value);
     }
   }
+
+  const contentType = (req.headers || {})["content-type"];
+  if (contentType == null) {
+    throw new Error("content-type is required to upload asset");
+  }
+
   form.append("file", {
     uri,
+    type: contentType,
     name: "filename",
   } as any);
 
@@ -124,7 +131,8 @@ export interface UploadAssetOptions {
   /**
    * Additional HTTP headers to be returned with the asset.
    */
-  headers?: {
+  headers: {
+    "content-type": string;
     [name: string]: string;
   };
   /**
@@ -153,7 +161,7 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
    *
    * @returns Asset name
    */
-  async upload(uri: string, options?: UploadAssetOptions): Promise<string> {
+  async upload(uri: string, options: UploadAssetOptions): Promise<string> {
     // Prepare presignRequest
     const presignRequest: _PresignUploadRequest = {};
     if (options != null) {
@@ -174,7 +182,7 @@ export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
       url,
       presignRequest,
       uri,
-      options && options.onUploadProgress
+      options.onUploadProgress
     );
 
     return asset_name;
