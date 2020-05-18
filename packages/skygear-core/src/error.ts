@@ -1,4 +1,4 @@
-import { JSONObject, AuthenticationSession } from "./types";
+import { JSONObject } from "./types";
 
 /**
  * @public
@@ -97,42 +97,4 @@ export function decodeError(err?: any): Error {
   }
   // Otherwise cast it to string and use it as message.
   return new Error(String(err));
-}
-
-/**
- * @internal
- */
-export function _extractAuthenticationSession(
-  e: unknown
-): AuthenticationSession | null {
-  if (
-    e instanceof SkygearError &&
-    e.reason === "AuthenticationSession" &&
-    e.info != null
-  ) {
-    const { token, step } = e.info as any;
-    return {
-      token,
-      step,
-    } as AuthenticationSession;
-  }
-  return null;
-}
-
-/**
- * Check if the provided error indicates Multi-Factor-Authentication is
- * required during authentication.
- *
- * @remarks
- * The error may be thrown when attempting to login/signup if configured.
- *
- * @public
- */
-export function isMFARequiredError(e: unknown): boolean {
-  const authenticationSession = _extractAuthenticationSession(e);
-  return (
-    authenticationSession != null &&
-    (authenticationSession.step === "mfa.setup" ||
-      authenticationSession.step === "mfa.authn")
-  );
 }

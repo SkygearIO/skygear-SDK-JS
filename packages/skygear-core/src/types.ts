@@ -240,7 +240,6 @@ export interface AuthResponse {
   accessToken?: string;
   refreshToken?: string;
   sessionID?: string;
-  mfaBearerToken?: string;
   expiresIn?: number;
 }
 
@@ -270,11 +269,6 @@ export interface ContainerStorage {
     namespace: string,
     options: ExtraSessionInfoOptions
   ): Promise<void>;
-  setAuthenticationSession(
-    namespace: string,
-    authenticationSession: AuthenticationSession
-  ): Promise<void>;
-  setMFABearerToken(namespace: string, mfaBearerToken: string): Promise<void>;
   setOIDCCodeVerifier(namespace: string, code: string): Promise<void>;
   setAnonymousKeyID(namespace: string, kid: string): Promise<void>;
 
@@ -288,10 +282,6 @@ export interface ContainerStorage {
   getExtraSessionInfoOptions(
     namespace: string
   ): Promise<Partial<ExtraSessionInfoOptions> | null>;
-  getAuthenticationSession(
-    namespace: string
-  ): Promise<AuthenticationSession | null>;
-  getMFABearerToken(namespace: string): Promise<string | null>;
   getOIDCCodeVerifier(namespace: string): Promise<string | null>;
   getAnonymousKeyID(namespace: string): Promise<string | null>;
 
@@ -302,8 +292,6 @@ export interface ContainerStorage {
   delSessionID(namespace: string): Promise<void>;
   delOAuthRedirectAction(namespace: string): Promise<void>;
   delOAuthCodeVerifier(namespace: string): Promise<void>;
-  delAuthenticationSession(namespace: string): Promise<void>;
-  delMFABearerToken(namespace: string): Promise<void>;
   delOIDCCodeVerifier(namespace: string): Promise<void>;
   delAnonymousKeyID(namespace: string): Promise<void>;
 }
@@ -400,287 +388,6 @@ export interface ExtraSessionInfoOptions {
    * Device name.
    */
   deviceName?: string;
-}
-
-/**
- * @public
- */
-export type Authenticator =
-  | TOTPAuthenticator
-  | OOBSMSAuthenticator
-  | OOBEmailAuthenticator;
-
-/**
- * @public
- */
-export interface TOTPAuthenticator {
-  /**
-   * Authenticator ID.
-   */
-  id: string;
-  /**
-   * Authenticator type.
-   */
-  type: "totp";
-  /**
-   * Authenticator creation time.
-   */
-  createdAt: Date;
-  /**
-   * Authenticator activation time.
-   */
-  activatedAt: Date;
-  /**
-   * Authenticator display name.
-   */
-  displayName: string;
-}
-
-/**
- * @public
- */
-export interface OOBSMSAuthenticator {
-  /**
-   * Authenticator ID.
-   */
-  id: string;
-  /**
-   * Authenticator type.
-   */
-  type: "oob";
-  /**
-   * Authenticator creation time.
-   */
-  createdAt: Date;
-  /**
-   * Authenticator activation time.
-   */
-  activatedAt: Date;
-  /**
-   * OOB channel.
-   */
-  channel: "sms";
-  /**
-   * Masked SMS phone number, in E.164 format.
-   * @example "+8522345****"
-   */
-  maskedPhone: string;
-}
-
-/**
- * @public
- */
-export interface OOBEmailAuthenticator {
-  /**
-   * Authenticator ID.
-   */
-  id: string;
-  /**
-   * Authenticator type.
-   */
-  type: "oob";
-  /**
-   * Authenticator creation time.
-   */
-  createdAt: Date;
-  /**
-   * Authenticator activation time.
-   */
-  activatedAt: Date;
-  /**
-   * OOB channel.
-   */
-  channel: "email";
-  /**
-   * Masked email address, in RFC 5322 format.
-   * @example "joh****\@example.com"
-   */
-  maskedEmail: string;
-}
-
-/**
- * @public
- */
-export interface GenerateOTPAuthURIOptions {
-  secret: string;
-  issuer: string;
-  accountName: string;
-}
-
-/**
- * @public
- */
-export interface CreateNewTOTPOptions {
-  /**
-   * Authenticator display name.
-   */
-  displayName: string;
-  /**
-   * Authenticator issuer.
-   *
-   * @remarks
-   * It is not persisted and only used for the result QR code.
-   */
-  issuer: string;
-  /**
-   * Authenticator account name.
-   *
-   * @remarks
-   * It is not persisted and only used for the result QR code.
-   */
-  accountName: string;
-}
-
-/**
- * @public
- */
-export interface CreateNewTOTPResult {
-  /**
-   * Authenticator ID.
-   */
-  authenticatorID: string;
-  /**
-   * Authenticator type.
-   */
-  authenticatorType: "totp";
-  /**
-   * TOTP secret.
-   *
-   * @remarks
-   * This cannot be retrieved using APIs; users should provide it to TOTP
-   * authenticator.
-   */
-  secret: string;
-  /**
-   * Generated OTPAuth URI.
-   */
-  otpauthURI: string;
-  /**
-   * URI of QR code image for generated OTPAuth URI.
-   */
-  qrCodeImageURI: string;
-}
-
-/**
- * @public
- */
-export interface ActivateTOTPResult {
-  /**
-   * List of recovery codes. Present only if it is the first activated
-   * authenticator.
-   */
-  recoveryCodes?: string[];
-}
-
-/**
- * @public
- */
-export interface AuthenticateWithTOTPOptions {
-  /**
-   * TOTP code.
-   */
-  otp: string;
-  /**
-   * Mark the current device as trusted device. MFA would be skipped for
-   * this device for a period.
-   */
-  skipMFAForCurrentDevice?: boolean;
-}
-
-/**
- * @public
- */
-export type CreateNewOOBOptions =
-  | CreateNewOOBSMSOptions
-  | CreateNewOOBEmailOptions;
-
-/**
- * @public
- */
-export interface CreateNewOOBSMSOptions {
-  /**
-   * OOB channel.
-   */
-  channel: "sms";
-  /**
-   * SMS phone number in E.164 format.
-   */
-  phone: string;
-}
-
-/**
- * @public
- */
-export interface CreateNewOOBEmailOptions {
-  /**
-   * OOB channel.
-   */
-  channel: "email";
-  /**
-   * Email address in RFC 5322 format.
-   */
-  email: string;
-}
-
-/**
- * @public
- */
-export interface CreateNewOOBResult {
-  /**
-   * Authenticator ID.
-   */
-  authenticatorID: string;
-  /**
-   * Authenticator type.
-   */
-  authenticatorType: "oob";
-  /**
-   * OOB channel.
-   */
-  channel: "sms" | "email";
-}
-
-/**
- * @public
- */
-export interface ActivateOOBResult {
-  /**
-   * List of recovery codes. Present only if it is the first activated
-   * authenticator.
-   */
-  recoveryCodes?: string[];
-}
-
-/**
- * @public
- */
-export interface AuthenticateWithOOBOptions {
-  /**
-   * MFA code.
-   */
-  code: string;
-  /**
-   * Mark the current device as trusted device. MFA would be skipped for
-   * this device for a period.
-   */
-  skipMFAForCurrentDevice?: boolean;
-}
-
-/**
- * @public
- */
-export interface AuthenticationSession {
-  /**
-   * Authentication session token.
-   *
-   * @remarks
-   * This is an opaque token. Clients should not attempt to interpret it.
-   */
-  token: string;
-  /**
-   * Current step in authentication session.
-   */
-  step: "identity" | "mfa.setup" | "mfa.authn";
 }
 
 /**

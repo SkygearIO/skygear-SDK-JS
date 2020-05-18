@@ -5,7 +5,6 @@ import {
   User,
   Identity,
   ExtraSessionInfoOptions,
-  AuthenticationSession,
 } from "./types";
 
 import {
@@ -51,14 +50,6 @@ function keyOAuthCodeVerifier(name: string): string {
 
 function keyExtraSessionInfoOptions(name: string): string {
   return `${name}_extra_session_info_options`;
-}
-
-function keyAuthenticationSession(name: string): string {
-  return `${name}_authenticationSession`;
-}
-
-function keyMFABearerToken(name: string): string {
-  return `${name}_mfaBearerToken`;
 }
 
 function keyOIDCCodeVerifier(name: string): string {
@@ -180,20 +171,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     );
   }
 
-  async setAuthenticationSession(
-    namespace: string,
-    authenticationSession: AuthenticationSession
-  ) {
-    await this.storage.safeSetJSON(
-      keyAuthenticationSession(namespace),
-      authenticationSession
-    );
-  }
-
-  async setMFABearerToken(namespace: string, mfaBearerToken: string) {
-    await this.storage.safeSet(keyMFABearerToken(namespace), mfaBearerToken);
-  }
-
   async setOIDCCodeVerifier(namespace: string, code: string) {
     await this.storage.safeSet(keyOIDCCodeVerifier(namespace), code);
   }
@@ -250,22 +227,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return null;
   }
 
-  async getAuthenticationSession(
-    namespace: string
-  ): Promise<AuthenticationSession | null> {
-    const j = await this.storage.safeGetJSON(
-      keyAuthenticationSession(namespace)
-    );
-    if (j !== undefined) {
-      return j as AuthenticationSession;
-    }
-    return null;
-  }
-
-  async getMFABearerToken(namespace: string): Promise<string | null> {
-    return this.storage.safeGet(keyMFABearerToken(namespace));
-  }
-
   async getOIDCCodeVerifier(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOIDCCodeVerifier(namespace));
   }
@@ -300,14 +261,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delOAuthCodeVerifier(namespace: string) {
     await this.storage.safeDel(keyOAuthCodeVerifier(namespace));
-  }
-
-  async delAuthenticationSession(namespace: string) {
-    await this.storage.safeDel(keyAuthenticationSession(namespace));
-  }
-
-  async delMFABearerToken(namespace: string) {
-    await this.storage.safeDel(keyMFABearerToken(namespace));
   }
 
   async delOIDCCodeVerifier(namespace: string) {

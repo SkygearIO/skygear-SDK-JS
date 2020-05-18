@@ -5,16 +5,6 @@ import {
   Session,
   Identity,
   FullOAuthAuthorizationURLOptions,
-  Authenticator,
-  ActivateTOTPResult,
-  AuthenticateWithTOTPOptions,
-  CreateNewTOTPOptions,
-  CreateNewTOTPResult,
-  CreateNewOOBOptions,
-  CreateNewOOBResult,
-  ActivateOOBResult,
-  AuthenticateWithOOBOptions,
-  AuthenticationSession,
   _PresignUploadRequest,
   _PresignUploadResponse,
   _PresignUploadFormResponse,
@@ -29,7 +19,6 @@ import { encodeQuery } from "./url";
 import {
   decodeAuthResponse,
   decodeSession,
-  decodeAuthenticator,
   decodeIdentity,
   _decodeAuthResponseFromOIDCUserinfo,
 } from "./encoding";
@@ -94,10 +83,6 @@ export abstract class BaseAPIClient {
    * 0 means doesn't need to refresh
    */
   _shouldRefreshTokenAt: number;
-  /**
-   * @internal
-   */
-  _authenticationSession: AuthenticationSession | null;
   fetchFunction?: typeof fetch;
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
@@ -112,7 +97,6 @@ export abstract class BaseAPIClient {
     this.authEndpoint = "";
     this.assetEndpoint = "";
     this._accessToken = null;
-    this._authenticationSession = null;
     this._shouldRefreshTokenAt = 0;
   }
 
@@ -395,20 +379,6 @@ export abstract class BaseAPIClient {
   ): Promise<AuthResponse> {
     const response = await this.postAuth(path, options);
     return decodeAuthResponse(response);
-  }
-
-  /**
-   * @internal
-   */
-  makePayloadWithAuthenticationSessionToken(payload: JSONObject): JSONObject {
-    if (this._authenticationSession != null) {
-      const newPayload = {
-        ...payload,
-        authn_session_token: this._authenticationSession.token,
-      };
-      return newPayload;
-    }
-    return payload;
   }
 
   async signup(
@@ -705,164 +675,6 @@ export abstract class BaseAPIClient {
         old_login_id: { key: oldKey, value: oldValue },
         new_login_id: { key: newKey, value: newValue },
       },
-    });
-  }
-
-  async listRecoveryCode(): Promise<string[]> {
-    const response = await this.postAuth("/_auth/mfa/recovery_code/list", {
-      json: {},
-    });
-    return response.recovery_codes;
-  }
-
-  async regenerateRecoveryCode(): Promise<string[]> {
-    const response = await this.postAuth(
-      "/_auth/mfa/recovery_code/regenerate",
-      {
-        json: {},
-      }
-    );
-    return response.recovery_codes;
-  }
-
-  async authenticateWithRecoveryCode(code: string): Promise<AuthResponse> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      code,
-    });
-    return this.postAndReturnAuthResponse(
-      "/_auth/mfa/recovery_code/authenticate",
-      { json: payload }
-    );
-  }
-
-  async getAuthenticators(): Promise<Authenticator[]> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({});
-    const response = await this.postAuth("/_auth/mfa/authenticator/list", {
-      json: payload,
-    });
-    return (response.authenticators as any[]).map(decodeAuthenticator);
-  }
-
-  async deleteAuthenticator(id: string): Promise<void> {
-    await this.postAuth("/_auth/mfa/authenticator/delete", {
-      json: {
-        authenticator_id: id,
-      },
-    });
-  }
-
-  async createNewTOTP(
-    options: CreateNewTOTPOptions
-  ): Promise<CreateNewTOTPResult> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      display_name: options.displayName,
-      issuer: options.issuer,
-      account_name: options.accountName,
-    });
-    const response = await this.postAuth("/_auth/mfa/totp/new", {
-      json: payload,
-    });
-    return {
-      authenticatorID: response.authenticator_id,
-      authenticatorType: response.authenticator_type,
-      secret: response.secret,
-      otpauthURI: response.otpauth_uri,
-      qrCodeImageURI: response.qr_code_image_uri,
-    };
-  }
-
-  async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      otp,
-    });
-    const response = await this.postAuth("/_auth/mfa/totp/activate", {
-      json: payload,
-    });
-    return {
-      recoveryCodes: response.recovery_codes,
-    };
-  }
-
-  async authenticateWithTOTP(
-    options: AuthenticateWithTOTPOptions
-  ): Promise<AuthResponse> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      request_bearer_token: options.skipMFAForCurrentDevice,
-      otp: options.otp,
-    });
-    return this.postAndReturnAuthResponse("/_auth/mfa/totp/authenticate", {
-      json: payload,
-    });
-  }
-
-  async createNewOOB(
-    options: CreateNewOOBOptions
-  ): Promise<CreateNewOOBResult> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      channel: options.channel,
-      phone: (options as any).phone,
-      email: (options as any).email,
-    });
-    const response = await this.postAuth("/_auth/mfa/oob/new", {
-      json: payload,
-    });
-    return {
-      authenticatorID: response.authenticator_id,
-      authenticatorType: response.authenticator_type,
-      channel: response.channel,
-    };
-  }
-
-  async activateOOB(code: string): Promise<ActivateOOBResult> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      code,
-    });
-    const response = await this.postAuth("/_auth/mfa/oob/activate", {
-      json: payload,
-    });
-    return {
-      recoveryCodes: response.recovery_codes,
-    };
-  }
-
-  async triggerOOB(authenticatorID?: string): Promise<void> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      authenticator_id: authenticatorID,
-    });
-    await this.postAuth("/_auth/mfa/oob/trigger", {
-      json: payload,
-    });
-  }
-
-  async authenticateWithOOB(
-    options: AuthenticateWithOOBOptions
-  ): Promise<AuthResponse> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      request_bearer_token: options.skipMFAForCurrentDevice,
-      code: options.code,
-    });
-    return this.postAndReturnAuthResponse("/_auth/mfa/oob/authenticate", {
-      json: payload,
-    });
-  }
-
-  async authenticateWithBearerToken(
-    bearerToken?: string
-  ): Promise<AuthResponse> {
-    const payload = this.makePayloadWithAuthenticationSessionToken({
-      bearer_token: bearerToken,
-    });
-    return this.postAndReturnAuthResponse(
-      "/_auth/mfa/bearer_token/authenticate",
-      {
-        json: payload,
-      }
-    );
-  }
-
-  async revokeAllBearerToken(): Promise<void> {
-    await this.postAuth("/_auth/mfa/bearer_token/revoke_all", {
-      json: {},
     });
   }
 
