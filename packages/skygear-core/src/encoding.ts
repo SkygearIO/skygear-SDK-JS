@@ -12,20 +12,10 @@ import {
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const {
-    user,
-    identity,
-    access_token,
-    refresh_token,
-    session_id,
-    expires_in,
-  } = r;
+  const { user, access_token, refresh_token, session_id, expires_in } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
-  if (identity) {
-    response.identity = decodeIdentity(identity);
-  }
   if (access_token) {
     response.accessToken = access_token;
   }
@@ -218,7 +208,7 @@ export function _encodeExtraSessionInfoOptions(
  * @internal
  */
 export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
-  const { sub, skygear_user, skygear_identity, skygear_session_id } = u;
+  const { sub, skygear_user, skygear_session_id } = u;
 
   if (!skygear_user) {
     throw new Error("missing skygear_user in userinfo");
@@ -233,10 +223,6 @@ export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
 
   if (skygear_session_id) {
     response.sessionID = skygear_session_id;
-  }
-
-  if (skygear_identity) {
-    response.identity = decodeIdentity(skygear_identity);
   }
 
   return response;

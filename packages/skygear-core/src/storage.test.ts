@@ -1,10 +1,5 @@
 import { GlobalJSONContainerStorage, _GlobalJSONStorage } from "./storage";
-import {
-  StorageDriver,
-  User,
-  Identity,
-  ExtraSessionInfoOptions,
-} from "./types";
+import { StorageDriver, User, ExtraSessionInfoOptions } from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
   backingStore: { [key: string]: string };
@@ -49,29 +44,6 @@ describe("ContainerStorage", () => {
 
     await storage.delUser(ns);
     restored = await storage.getUser(ns);
-    expect(restored).toEqual(null);
-  });
-
-  it("should set, get and delete identity", async () => {
-    const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONContainerStorage(driver);
-    const pwIdentity: Identity = {
-      id: "id",
-      type: "password",
-      loginIDKey: "email",
-      loginID: "test@skygeario.com",
-      claims: {
-        email: "test@skygeario.com",
-      },
-    };
-    const ns = "test";
-
-    await storage.setIdentity(ns, pwIdentity);
-    let restored = await storage.getIdentity(ns);
-    expect(restored).toEqual(pwIdentity);
-
-    await storage.delIdentity(ns);
-    restored = await storage.getIdentity(ns);
     expect(restored).toEqual(null);
   });
 
