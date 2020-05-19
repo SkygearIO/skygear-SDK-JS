@@ -53,7 +53,18 @@ export interface User {
 /**
  * @public
  */
-export type Identity = PasswordIdentity | OAuthIdentity | CustomTokenIdentity;
+export interface Identity {
+  type: string;
+  claims: IdentityClaims;
+}
+
+/**
+ * @public
+ */
+export interface IdentityClaims {
+  [claim: string]: unknown;
+  email?: string;
+}
 
 /**
  * @public
