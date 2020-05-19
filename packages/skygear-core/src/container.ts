@@ -9,19 +9,8 @@ import {
   ContainerOptions,
   Session,
   ExtraSessionInfoOptions,
-  Authenticator,
-  GenerateOTPAuthURIOptions,
-  CreateNewTOTPOptions,
-  CreateNewTOTPResult,
-  ActivateTOTPResult,
-  AuthenticateWithTOTPOptions,
-  CreateNewOOBOptions,
-  CreateNewOOBResult,
-  ActivateOOBResult,
-  AuthenticateWithOOBOptions,
   OAuthError,
 } from "./types";
-import { SkygearError, _extractAuthenticationSession } from "./error";
 import { BaseAPIClient } from "./client";
 import { encodeQuery, decodeQuery } from "./url";
 
@@ -30,33 +19,12 @@ const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
 };
 
 /**
- * @public
- */
-export function generateOTPAuthURI(options: GenerateOTPAuthURIOptions): string {
-  let issuer = "";
-  if (options.issuer) {
-    issuer = encodeURI(options.issuer);
-  }
-
-  const accountName = encodeURI(options.accountName);
-  const path = issuer === "" ? accountName : issuer + ":" + accountName;
-  const host = "totp";
-  const queryInput: [string, string][] = [["secret", options.secret]];
-  if (options.issuer !== "") {
-    queryInput.push(["issuer", options.issuer]);
-  }
-  const query = encodeQuery(queryInput);
-  return `otpauth://${host}/${path}${query}`;
-}
-
-/**
  * Skygear Auth APIs.
  *
  * @public
  */
 export class AuthContainer<T extends BaseAPIClient> {
   parent: Container<T>;
-  mfa: MFAContainer<T>;
 
   /**
    * Current logged in user.
@@ -85,8 +53,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.currentUser = null;
     this.currentIdentity = null;
     this.currentSessionID = null;
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    this.mfa = new MFAContainer(this);
   }
 
   /**
@@ -124,16 +90,12 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async persistAuthResponse(response: AuthResponse): Promise<void> {
-    // Ensure authentication session and access token are mutually exclusive
-    await this._clearAuthenticationSession();
-
     const {
       user,
       identity,
       accessToken,
       refreshToken,
       sessionID,
-      mfaBearerToken,
       expiresIn,
     } = response;
 
@@ -155,13 +117,6 @@ export class AuthContainer<T extends BaseAPIClient> {
       await this.parent.storage.setSessionID(this.parent.name, sessionID);
     }
 
-    if (mfaBearerToken) {
-      await this.parent.storage.setMFABearerToken(
-        this.parent.name,
-        mfaBearerToken
-      );
-    }
-
     this.currentUser = user;
     if (identity) {
       this.currentIdentity = identity;
@@ -177,78 +132,10 @@ export class AuthContainer<T extends BaseAPIClient> {
   /**
    * @internal
    */
-  async handleAuthenticationSession(e: unknown): Promise<AuthResponse> {
-    // Detect invalid authentication session
-    if (
-      e instanceof SkygearError &&
-      e.reason === "InvalidAuthenticationSession"
-    ) {
-      await this._clearAuthenticationSession();
-      throw e;
-    }
-
-    // The error is AuthenticationSession
-    const authenticationSession = _extractAuthenticationSession(e);
-    if (authenticationSession != null) {
-      // Ensure authentication session and access token are mutually exclusive
-      await this._clearSession();
-
-      // Persist authentication session
-      await this.parent.storage.setAuthenticationSession(
-        this.parent.name,
-        authenticationSession
-      );
-      this.parent.apiClient._authenticationSession = authenticationSession;
-
-      // If the step is MFA, try bearer token
-      if (
-        authenticationSession.step !== "mfa.setup" &&
-        authenticationSession.step !== "mfa.authn"
-      ) {
-        throw e;
-      }
-
-      const mfaBearerToken = await this.parent.storage.getMFABearerToken(
-        this.parent.name
-      );
-      const bearerToken = mfaBearerToken === null ? undefined : mfaBearerToken;
-      try {
-        // NOTE(louis): It is very important that we use await here.
-        // If we simply return the promise, the catch block cannot catch anything.
-        const response = await this.parent.apiClient.authenticateWithBearerToken(
-          bearerToken
-        );
-        return response;
-      } catch (bearerTokenError) {
-        // If the server told us the bearer token is invalid, delete it.
-        if (
-          bearerTokenError instanceof SkygearError &&
-          bearerTokenError.reason === "InvalidMFABearerToken"
-        ) {
-          await this.parent.storage.delMFABearerToken(this.parent.name);
-        }
-        // re-throw the original error
-        throw e;
-      }
-    }
-
-    // For any other error, re-throw it.
-    throw e;
-  }
-
-  /**
-   * @internal
-   */
   async handleAuthResponse(p: Promise<AuthResponse>): Promise<User> {
-    try {
-      const response = await p;
-      await this.persistAuthResponse(response);
-      return response.user;
-    } catch (e) {
-      const response = await this.handleAuthenticationSession(e);
-      await this.persistAuthResponse(response);
-      return response.user;
-    }
+    const response = await p;
+    await this.persistAuthResponse(response);
+    return response.user;
   }
 
   /**
@@ -257,18 +144,12 @@ export class AuthContainer<T extends BaseAPIClient> {
   async handleMaybeAuthResponse(
     p: Promise<AuthResponse | null>
   ): Promise<User | null> {
-    try {
-      const response = await p;
-      if (!response) {
-        return null;
-      }
-      await this.persistAuthResponse(response);
-      return response.user;
-    } catch (e) {
-      const response = await this.handleAuthenticationSession(e);
-      await this.persistAuthResponse(response);
-      return response.user;
+    const response = await p;
+    if (!response) {
+      return null;
     }
+    await this.persistAuthResponse(response);
+    return response.user;
   }
 
   /**
@@ -411,14 +292,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     this.currentIdentity = null;
     this.parent.apiClient._accessToken = null;
     this.currentSessionID = null;
-  }
-
-  /**
-   * @internal
-   */
-  async _clearAuthenticationSession() {
-    await this.parent.storage.delAuthenticationSession(this.parent.name);
-    this.parent.apiClient._authenticationSession = null;
   }
 
   /**
@@ -701,147 +574,6 @@ export class AuthContainer<T extends BaseAPIClient> {
 }
 
 /**
- * Skygear Auth Multi-Factor-Authentication APIs.
- *
- * @public
- */
-export class MFAContainer<T extends BaseAPIClient> {
-  parent: AuthContainer<T>;
-
-  constructor(parent: AuthContainer<T>) {
-    this.parent = parent;
-  }
-
-  /**
-   * Returns a list of MFA recovery code.
-   *
-   * @remarks
-   * This feature must be enabled in configuration, otherwise it will fail.
-   */
-  async listRecoveryCode(): Promise<string[]> {
-    return this.parent.parent.apiClient.listRecoveryCode();
-  }
-
-  /**
-   * Regenerates MFA recovery codes.
-   *
-   * @returns The newly generated recovery codes
-   */
-  async regenerateRecoveryCode(): Promise<string[]> {
-    return this.parent.parent.apiClient.regenerateRecoveryCode();
-  }
-
-  /**
-   * Perform MFA using recovery code.
-   *
-   * @param code - MFA recovery code
-   */
-  async authenticateWithRecoveryCode(code: string): Promise<User> {
-    return this.parent.handleAuthResponse(
-      this.parent.parent.apiClient.authenticateWithRecoveryCode(code)
-    );
-  }
-
-  /**
-   * Returns a list of configured MFA authenticators.
-   */
-  async getAuthenticators(): Promise<Authenticator[]> {
-    return this.parent.parent.apiClient.getAuthenticators();
-  }
-
-  /**
-   * Delete the MFA authenticator with specified ID.
-   *
-   * @param id - Authenticator ID
-   */
-  async deleteAuthenticator(id: string): Promise<void> {
-    return this.parent.parent.apiClient.deleteAuthenticator(id);
-  }
-
-  /**
-   * Creates new time-based one time password (TOTP) MFA authenticator.
-   *
-   * @param options - TOTP configuration
-   */
-  async createNewTOTP(
-    options: CreateNewTOTPOptions
-  ): Promise<CreateNewTOTPResult> {
-    return this.parent.parent.apiClient.createNewTOTP(options);
-  }
-
-  /**
-   * Activates time-based one time password (TOTP) MFA authenticator.
-   *
-   * @param otp - TOTP code
-   */
-  async activateTOTP(otp: string): Promise<ActivateTOTPResult> {
-    return this.parent.parent.apiClient.activateTOTP(otp);
-  }
-
-  /**
-   * Perform MFA using time-based one time password (TOTP) MFA authenticator.
-   *
-   * @param options - Authentication options
-   */
-  async authenticateWithTOTP(
-    options: AuthenticateWithTOTPOptions
-  ): Promise<User> {
-    return this.parent.handleAuthResponse(
-      this.parent.parent.apiClient.authenticateWithTOTP(options)
-    );
-  }
-
-  /**
-   * Creates new out-of-band (OOB) MFA authenticator.
-   *
-   * @param options - OOB configuration
-   */
-  async createNewOOB(
-    options: CreateNewOOBOptions
-  ): Promise<CreateNewOOBResult> {
-    return this.parent.parent.apiClient.createNewOOB(options);
-  }
-
-  /**
-   * Activates out-of-band (OOB) MFA authenticator.
-   *
-   * @param code - MFA code
-   */
-  async activateOOB(code: string): Promise<ActivateOOBResult> {
-    return this.parent.parent.apiClient.activateOOB(code);
-  }
-
-  /**
-   * Triggers out-of-band (OOB) MFA.
-   *
-   * @param authenticatorID - Authenticator ID
-   */
-  async triggerOOB(authenticatorID?: string): Promise<void> {
-    return this.parent.parent.apiClient.triggerOOB(authenticatorID);
-  }
-
-  /**
-   * Performs MFA using out-of-band (OOB) MFA authenticator.
-   *
-   * @param options - Authentication options
-   */
-  async authenticateWithOOB(
-    options: AuthenticateWithOOBOptions
-  ): Promise<User> {
-    return this.parent.handleAuthResponse(
-      this.parent.parent.apiClient.authenticateWithOOB(options)
-    );
-  }
-
-  /**
-   * Revokes all MFA trusted devices.
-   */
-  async revokeAllTrustedDevices(): Promise<void> {
-    await this.parent.parent.apiClient.revokeAllBearerToken();
-  }
-}
-
-/**
  * Auth UI authorization options
  *
  * @public
@@ -1102,11 +834,6 @@ export class Container<T extends BaseAPIClient> {
       options.authEndpoint,
       options.assetEndpoint
     );
-
-    const authenticationSession = await this.storage.getAuthenticationSession(
-      this.name
-    );
-    this.apiClient._authenticationSession = authenticationSession;
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient._accessToken = accessToken;
