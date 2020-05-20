@@ -12,20 +12,10 @@ import {
  * @public
  */
 export function decodeAuthResponse(r: any): AuthResponse {
-  const {
-    user,
-    identity,
-    access_token,
-    refresh_token,
-    session_id,
-    expires_in,
-  } = r;
+  const { user, access_token, refresh_token, session_id, expires_in } = r;
   const response: AuthResponse = {
     user: decodeUser(user),
   };
-  if (identity) {
-    response.identity = decodeIdentity(identity);
-  }
   if (access_token) {
     response.accessToken = access_token;
   }
@@ -67,37 +57,8 @@ export function decodeUser(u: any): User {
  * @public
  */
 export function decodeIdentity(i: any): Identity {
-  const id = i.id;
-  const type = i.type;
-  switch (type) {
-    case "password":
-      return {
-        id,
-        type: "password",
-        loginIDKey: i.login_id_key,
-        loginID: i.login_id,
-        claims: i.claims,
-      };
-    case "oauth":
-      return {
-        id,
-        type: "oauth",
-        providerType: i.provider_type,
-        providerUserID: i.provider_user_id,
-        rawProfile: i.raw_profile,
-        claims: i.claims,
-      };
-    case "custom_token":
-      return {
-        id,
-        type: "custom_token",
-        providerUserID: i.provider_user_id,
-        rawProfile: i.raw_profile,
-        claims: i.claims,
-      };
-    default:
-      throw new Error("unknown identity type: " + type);
-  }
+  const { type, claims } = i;
+  return { type, claims };
 }
 
 /**
@@ -172,35 +133,10 @@ export function encodeUser(u: User): JSONObject {
  * @public
  */
 export function encodeIdentity(i: Identity): JSONObject {
-  switch (i.type) {
-    case "password":
-      return {
-        id: i.id,
-        type: "password",
-        login_id_key: i.loginIDKey,
-        login_id: i.loginID,
-        claims: i.claims,
-      };
-    case "oauth":
-      return {
-        id: i.id,
-        type: "oauth",
-        provider_type: i.providerType,
-        provider_user_id: i.providerUserID,
-        raw_profile: i.rawProfile,
-        claims: i.claims,
-      };
-    case "custom_token":
-      return {
-        id: i.id,
-        type: "custom_token",
-        provider_user_id: i.providerUserID,
-        raw_profile: i.rawProfile,
-        claims: i.claims,
-      };
-    default:
-      throw new Error("unknown identity type: ");
-  }
+  return {
+    type: i.type,
+    claims: i.claims,
+  };
 }
 
 /**
@@ -218,7 +154,7 @@ export function _encodeExtraSessionInfoOptions(
  * @internal
  */
 export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
-  const { sub, skygear_user, skygear_identity, skygear_session_id } = u;
+  const { sub, skygear_user, skygear_session_id } = u;
 
   if (!skygear_user) {
     throw new Error("missing skygear_user in userinfo");
@@ -233,10 +169,6 @@ export function _decodeAuthResponseFromOIDCUserinfo(u: any): AuthResponse {
 
   if (skygear_session_id) {
     response.sessionID = skygear_session_id;
-  }
-
-  if (skygear_identity) {
-    response.identity = decodeIdentity(skygear_identity);
   }
 
   return response;

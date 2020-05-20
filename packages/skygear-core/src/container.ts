@@ -32,11 +32,6 @@ export class AuthContainer<T extends BaseAPIClient> {
   currentUser: User | null;
 
   /**
-   * Identity of current logged in user.
-   */
-  currentIdentity: Identity | null;
-
-  /**
    * Session ID of current logged in user.
    */
   currentSessionID: string | null;
@@ -51,7 +46,6 @@ export class AuthContainer<T extends BaseAPIClient> {
   constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
-    this.currentIdentity = null;
     this.currentSessionID = null;
   }
 
@@ -90,20 +84,9 @@ export class AuthContainer<T extends BaseAPIClient> {
    * @internal
    */
   async persistAuthResponse(response: AuthResponse): Promise<void> {
-    const {
-      user,
-      identity,
-      accessToken,
-      refreshToken,
-      sessionID,
-      expiresIn,
-    } = response;
+    const { user, accessToken, refreshToken, sessionID, expiresIn } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
-
-    if (identity) {
-      await this.parent.storage.setIdentity(this.parent.name, identity);
-    }
 
     if (accessToken) {
       await this.parent.storage.setAccessToken(this.parent.name, accessToken);
@@ -118,9 +101,6 @@ export class AuthContainer<T extends BaseAPIClient> {
     }
 
     this.currentUser = user;
-    if (identity) {
-      this.currentIdentity = identity;
-    }
     if (accessToken) {
       this.parent.apiClient.setAccessTokenAndExpiresIn(accessToken, expiresIn);
     }
@@ -284,12 +264,10 @@ export class AuthContainer<T extends BaseAPIClient> {
    */
   async _clearSession() {
     await this.parent.storage.delUser(this.parent.name);
-    await this.parent.storage.delIdentity(this.parent.name);
     await this.parent.storage.delAccessToken(this.parent.name);
     await this.parent.storage.delRefreshToken(this.parent.name);
     await this.parent.storage.delSessionID(this.parent.name);
     this.currentUser = null;
-    this.currentIdentity = null;
     this.parent.apiClient._accessToken = null;
     this.currentSessionID = null;
   }
@@ -842,9 +820,6 @@ export class Container<T extends BaseAPIClient> {
 
     const user = await this.storage.getUser(this.name);
     this.classicAuth.currentUser = user;
-
-    const identity = await this.storage.getIdentity(this.name);
-    this.classicAuth.currentIdentity = identity;
 
     const sessionID = await this.storage.getSessionID(this.name);
     this.classicAuth.currentSessionID = sessionID;

@@ -3,15 +3,12 @@ import {
   StorageDriver,
   JSONValue,
   User,
-  Identity,
   ExtraSessionInfoOptions,
 } from "./types";
 
 import {
   encodeUser,
-  encodeIdentity,
   decodeUser,
-  decodeIdentity,
   _encodeExtraSessionInfoOptions,
   _decodeExtraSessionInfoOptions,
 } from "./encoding";
@@ -34,10 +31,6 @@ function keySessionID(name: string): string {
 
 function keyUser(name: string): string {
   return `${name}_user`;
-}
-
-function keyIdentity(name: string): string {
-  return `${name}_identity`;
 }
 
 function keyOAuthRedirectAction(name: string): string {
@@ -130,11 +123,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSetJSON(keyUser(namespace), userJSON);
   }
 
-  async setIdentity(namespace: string, identity: Identity) {
-    const identityJSON = encodeIdentity(identity);
-    await this.storage.safeSetJSON(keyIdentity(namespace), identityJSON);
-  }
-
   async setAccessToken(namespace: string, accessToken: string) {
     await this.storage.safeSet(keyAccessToken(namespace), accessToken);
   }
@@ -187,14 +175,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return null;
   }
 
-  async getIdentity(namespace: string): Promise<Identity | null> {
-    const identityJSON = await this.storage.safeGetJSON(keyIdentity(namespace));
-    if (identityJSON) {
-      return decodeIdentity(identityJSON);
-    }
-    return null;
-  }
-
   async getAccessToken(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyAccessToken(namespace));
   }
@@ -237,10 +217,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delUser(namespace: string) {
     await this.storage.safeDel(keyUser(namespace));
-  }
-
-  async delIdentity(namespace: string) {
-    await this.storage.safeDel(keyIdentity(namespace));
   }
 
   async delAccessToken(namespace: string) {

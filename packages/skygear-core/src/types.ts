@@ -53,7 +53,18 @@ export interface User {
 /**
  * @public
  */
-export type Identity = PasswordIdentity | OAuthIdentity | CustomTokenIdentity;
+export interface Identity {
+  type: string;
+  claims: IdentityClaims;
+}
+
+/**
+ * @public
+ */
+export interface IdentityClaims {
+  [claim: string]: unknown;
+  email?: string;
+}
 
 /**
  * @public
@@ -236,7 +247,6 @@ export interface SessionUserAgent {
  */
 export interface AuthResponse {
   user: User;
-  identity?: Identity;
   accessToken?: string;
   refreshToken?: string;
   sessionID?: string;
@@ -256,7 +266,6 @@ export interface ChallengeResponse {
  */
 export interface ContainerStorage {
   setUser(namespace: string, user: User): Promise<void>;
-  setIdentity(namespace: string, identity: Identity): Promise<void>;
   setAccessToken(namespace: string, accessToken: string): Promise<void>;
   setRefreshToken(namespace: string, refreshToken: string): Promise<void>;
   setSessionID(namespace: string, sessionID: string): Promise<void>;
@@ -273,7 +282,6 @@ export interface ContainerStorage {
   setAnonymousKeyID(namespace: string, kid: string): Promise<void>;
 
   getUser(namespace: string): Promise<User | null>;
-  getIdentity(namespace: string): Promise<Identity | null>;
   getAccessToken(namespace: string): Promise<string | null>;
   getRefreshToken(namespace: string): Promise<string | null>;
   getSessionID(namespace: string): Promise<string | null>;
@@ -286,7 +294,6 @@ export interface ContainerStorage {
   getAnonymousKeyID(namespace: string): Promise<string | null>;
 
   delUser(namespace: string): Promise<void>;
-  delIdentity(namespace: string): Promise<void>;
   delAccessToken(namespace: string): Promise<void>;
   delRefreshToken(namespace: string): Promise<void>;
   delSessionID(namespace: string): Promise<void>;
