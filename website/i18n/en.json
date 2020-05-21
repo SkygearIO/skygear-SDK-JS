@@ -8,18 +8,6 @@
       "index": {
         "title": "Index"
       },
-      "node-client.activateoobresult": {
-        "title": "ActivateOOBResult interface"
-      },
-      "node-client.activateoobresult.recoverycodes": {
-        "title": "ActivateOOBResult.recoveryCodes property"
-      },
-      "node-client.activatetotpresult": {
-        "title": "ActivateTOTPResult interface"
-      },
-      "node-client.activatetotpresult.recoverycodes": {
-        "title": "ActivateTOTPResult.recoveryCodes property"
-      },
       "node-client.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -28,9 +16,6 @@
       },
       "node-client.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
-      },
-      "node-client.authcontainer.currentidentity": {
-        "title": "AuthContainer.currentIdentity property"
       },
       "node-client.authcontainer.currentsessionid": {
         "title": "AuthContainer.currentSessionID property"
@@ -73,9 +58,6 @@
       },
       "node-client.authcontainer.me": {
         "title": "AuthContainer.me() method"
-      },
-      "node-client.authcontainer.mfa": {
-        "title": "AuthContainer.mfa property"
       },
       "node-client.authcontainer.parent": {
         "title": "AuthContainer.parent property"
@@ -122,38 +104,14 @@
       "node-client.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
       },
-      "node-client.authenticatewithooboptions.code": {
-        "title": "AuthenticateWithOOBOptions.code property"
-      },
-      "node-client.authenticatewithooboptions": {
-        "title": "AuthenticateWithOOBOptions interface"
-      },
-      "node-client.authenticatewithooboptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
-      },
-      "node-client.authenticatewithtotpoptions": {
-        "title": "AuthenticateWithTOTPOptions interface"
-      },
-      "node-client.authenticatewithtotpoptions.otp": {
-        "title": "AuthenticateWithTOTPOptions.otp property"
-      },
-      "node-client.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
-      },
-      "node-client.authenticationsession": {
-        "title": "AuthenticationSession interface"
-      },
-      "node-client.authenticationsession.step": {
-        "title": "AuthenticationSession.step property"
-      },
-      "node-client.authenticationsession.token": {
-        "title": "AuthenticationSession.token property"
-      },
-      "node-client.authenticator": {
-        "title": "Authenticator type"
+      "node-client.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
       },
       "node-client.authorizeoptions": {
         "title": "AuthorizeOptions interface"
+      },
+      "node-client.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
       },
       "node-client.authorizeoptions.redirecturi": {
         "title": "AuthorizeOptions.redirectURI property"
@@ -167,14 +125,8 @@
       "node-client.authresponse.expiresin": {
         "title": "AuthResponse.expiresIn property"
       },
-      "node-client.authresponse.identity": {
-        "title": "AuthResponse.identity property"
-      },
       "node-client.authresponse": {
         "title": "AuthResponse interface"
-      },
-      "node-client.authresponse.mfabearertoken": {
-        "title": "AuthResponse.mfaBearerToken property"
       },
       "node-client.authresponse.refreshtoken": {
         "title": "AuthResponse.refreshToken property"
@@ -187,12 +139,6 @@
       },
       "node-client.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "node-client.baseapiclient.activateoob": {
-        "title": "BaseAPIClient.activateOOB() method"
-      },
-      "node-client.baseapiclient.activatetotp": {
-        "title": "BaseAPIClient.activateTOTP() method"
       },
       "node-client.baseapiclient.addloginid": {
         "title": "BaseAPIClient.addLoginID() method"
@@ -209,26 +155,8 @@
       "node-client.baseapiclient.authendpoint": {
         "title": "BaseAPIClient.authEndpoint property"
       },
-      "node-client.baseapiclient.authenticatewithbearertoken": {
-        "title": "BaseAPIClient.authenticateWithBearerToken() method"
-      },
-      "node-client.baseapiclient.authenticatewithoob": {
-        "title": "BaseAPIClient.authenticateWithOOB() method"
-      },
-      "node-client.baseapiclient.authenticatewithrecoverycode": {
-        "title": "BaseAPIClient.authenticateWithRecoveryCode() method"
-      },
-      "node-client.baseapiclient.authenticatewithtotp": {
-        "title": "BaseAPIClient.authenticateWithTOTP() method"
-      },
       "node-client.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
-      },
-      "node-client.baseapiclient.createnewoob": {
-        "title": "BaseAPIClient.createNewOOB() method"
-      },
-      "node-client.baseapiclient.createnewtotp": {
-        "title": "BaseAPIClient.createNewTOTP() method"
       },
       "node-client.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
@@ -238,9 +166,6 @@
       },
       "node-client.baseapiclient.delauth": {
         "title": "BaseAPIClient.delAuth() method"
-      },
-      "node-client.baseapiclient.deleteauthenticator": {
-        "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "node-client.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
@@ -260,9 +185,6 @@
       "node-client.baseapiclient.getauth": {
         "title": "BaseAPIClient.getAuth() method"
       },
-      "node-client.baseapiclient.getauthenticators": {
-        "title": "BaseAPIClient.getAuthenticators() method"
-      },
       "node-client.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
@@ -277,9 +199,6 @@
       },
       "node-client.baseapiclient.listidentities": {
         "title": "BaseAPIClient.listIdentities() method"
-      },
-      "node-client.baseapiclient.listrecoverycode": {
-        "title": "BaseAPIClient.listRecoveryCode() method"
       },
       "node-client.baseapiclient.listsessions": {
         "title": "BaseAPIClient.listSessions() method"
@@ -305,6 +224,9 @@
       "node-client.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "node-client.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
       "node-client.baseapiclient.oauthhandler": {
         "title": "BaseAPIClient.oauthHandler() method"
       },
@@ -325,9 +247,6 @@
       },
       "node-client.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
-      },
-      "node-client.baseapiclient.regeneraterecoverycode": {
-        "title": "BaseAPIClient.regenerateRecoveryCode() method"
       },
       "node-client.baseapiclient.removeloginid": {
         "title": "BaseAPIClient.removeLoginID() method"
@@ -350,9 +269,6 @@
       "node-client.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
-      "node-client.baseapiclient.revokeallbearertoken": {
-        "title": "BaseAPIClient.revokeAllBearerToken() method"
-      },
       "node-client.baseapiclient.revokeothersessions": {
         "title": "BaseAPIClient.revokeOtherSessions() method"
       },
@@ -374,9 +290,6 @@
       "node-client.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
-      "node-client.baseapiclient.triggeroob": {
-        "title": "BaseAPIClient.triggerOOB() method"
-      },
       "node-client.baseapiclient.updateloginid": {
         "title": "BaseAPIClient.updateLoginID() method"
       },
@@ -394,6 +307,15 @@
       },
       "node-client.bytearray": {
         "title": "ByteArray interface"
+      },
+      "node-client.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "node-client.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "node-client.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
       },
       "node-client.configureoptions.appendpoint": {
         "title": "ConfigureOptions.appEndpoint property"
@@ -449,14 +371,8 @@
       "node-client.containerstorage.delaccesstoken": {
         "title": "ContainerStorage.delAccessToken() method"
       },
-      "node-client.containerstorage.delauthenticationsession": {
-        "title": "ContainerStorage.delAuthenticationSession() method"
-      },
-      "node-client.containerstorage.delidentity": {
-        "title": "ContainerStorage.delIdentity() method"
-      },
-      "node-client.containerstorage.delmfabearertoken": {
-        "title": "ContainerStorage.delMFABearerToken() method"
+      "node-client.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
       },
       "node-client.containerstorage.deloauthcodeverifier": {
         "title": "ContainerStorage.delOAuthCodeVerifier() method"
@@ -479,17 +395,11 @@
       "node-client.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
-      "node-client.containerstorage.getauthenticationsession": {
-        "title": "ContainerStorage.getAuthenticationSession() method"
+      "node-client.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
       },
       "node-client.containerstorage.getextrasessioninfooptions": {
         "title": "ContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "node-client.containerstorage.getidentity": {
-        "title": "ContainerStorage.getIdentity() method"
-      },
-      "node-client.containerstorage.getmfabearertoken": {
-        "title": "ContainerStorage.getMFABearerToken() method"
       },
       "node-client.containerstorage.getoauthcodeverifier": {
         "title": "ContainerStorage.getOAuthCodeVerifier() method"
@@ -515,17 +425,11 @@
       "node-client.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
-      "node-client.containerstorage.setauthenticationsession": {
-        "title": "ContainerStorage.setAuthenticationSession() method"
+      "node-client.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
       },
       "node-client.containerstorage.setextrasessioninfooptions": {
         "title": "ContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "node-client.containerstorage.setidentity": {
-        "title": "ContainerStorage.setIdentity() method"
-      },
-      "node-client.containerstorage.setmfabearertoken": {
-        "title": "ContainerStorage.setMFABearerToken() method"
       },
       "node-client.containerstorage.setoauthcodeverifier": {
         "title": "ContainerStorage.setOAuthCodeVerifier() method"
@@ -545,69 +449,6 @@
       "node-client.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
       },
-      "node-client.createnewoobemailoptions.channel": {
-        "title": "CreateNewOOBEmailOptions.channel property"
-      },
-      "node-client.createnewoobemailoptions.email": {
-        "title": "CreateNewOOBEmailOptions.email property"
-      },
-      "node-client.createnewoobemailoptions": {
-        "title": "CreateNewOOBEmailOptions interface"
-      },
-      "node-client.createnewooboptions": {
-        "title": "CreateNewOOBOptions type"
-      },
-      "node-client.createnewoobresult.authenticatorid": {
-        "title": "CreateNewOOBResult.authenticatorID property"
-      },
-      "node-client.createnewoobresult.authenticatortype": {
-        "title": "CreateNewOOBResult.authenticatorType property"
-      },
-      "node-client.createnewoobresult.channel": {
-        "title": "CreateNewOOBResult.channel property"
-      },
-      "node-client.createnewoobresult": {
-        "title": "CreateNewOOBResult interface"
-      },
-      "node-client.createnewoobsmsoptions.channel": {
-        "title": "CreateNewOOBSMSOptions.channel property"
-      },
-      "node-client.createnewoobsmsoptions": {
-        "title": "CreateNewOOBSMSOptions interface"
-      },
-      "node-client.createnewoobsmsoptions.phone": {
-        "title": "CreateNewOOBSMSOptions.phone property"
-      },
-      "node-client.createnewtotpoptions.accountname": {
-        "title": "CreateNewTOTPOptions.accountName property"
-      },
-      "node-client.createnewtotpoptions.displayname": {
-        "title": "CreateNewTOTPOptions.displayName property"
-      },
-      "node-client.createnewtotpoptions.issuer": {
-        "title": "CreateNewTOTPOptions.issuer property"
-      },
-      "node-client.createnewtotpoptions": {
-        "title": "CreateNewTOTPOptions interface"
-      },
-      "node-client.createnewtotpresult.authenticatorid": {
-        "title": "CreateNewTOTPResult.authenticatorID property"
-      },
-      "node-client.createnewtotpresult.authenticatortype": {
-        "title": "CreateNewTOTPResult.authenticatorType property"
-      },
-      "node-client.createnewtotpresult": {
-        "title": "CreateNewTOTPResult interface"
-      },
-      "node-client.createnewtotpresult.otpauthuri": {
-        "title": "CreateNewTOTPResult.otpauthURI property"
-      },
-      "node-client.createnewtotpresult.qrcodeimageuri": {
-        "title": "CreateNewTOTPResult.qrCodeImageURI property"
-      },
-      "node-client.createnewtotpresult.secret": {
-        "title": "CreateNewTOTPResult.secret property"
-      },
       "node-client.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
       },
@@ -625,9 +466,6 @@
       },
       "node-client.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
-      },
-      "node-client.decodeauthenticator": {
-        "title": "decodeAuthenticator() function"
       },
       "node-client.decodeauthresponse": {
         "title": "decodeAuthResponse() function"
@@ -674,21 +512,6 @@
       "node-client.fulloauthauthorizationurloptions": {
         "title": "FullOAuthAuthorizationURLOptions type"
       },
-      "node-client.generateotpauthuri": {
-        "title": "generateOTPAuthURI() function"
-      },
-      "node-client.generateotpauthurioptions.accountname": {
-        "title": "GenerateOTPAuthURIOptions.accountName property"
-      },
-      "node-client.generateotpauthurioptions.issuer": {
-        "title": "GenerateOTPAuthURIOptions.issuer property"
-      },
-      "node-client.generateotpauthurioptions": {
-        "title": "GenerateOTPAuthURIOptions interface"
-      },
-      "node-client.generateotpauthurioptions.secret": {
-        "title": "GenerateOTPAuthURIOptions.secret property"
-      },
       "node-client.getdevicename": {
         "title": "getDeviceName() function"
       },
@@ -698,14 +521,8 @@
       "node-client.globaljsoncontainerstorage.delaccesstoken": {
         "title": "GlobalJSONContainerStorage.delAccessToken() method"
       },
-      "node-client.globaljsoncontainerstorage.delauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.delAuthenticationSession() method"
-      },
-      "node-client.globaljsoncontainerstorage.delidentity": {
-        "title": "GlobalJSONContainerStorage.delIdentity() method"
-      },
-      "node-client.globaljsoncontainerstorage.delmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
+      "node-client.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
       },
       "node-client.globaljsoncontainerstorage.deloauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
@@ -728,17 +545,11 @@
       "node-client.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
-      "node-client.globaljsoncontainerstorage.getauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.getAuthenticationSession() method"
+      "node-client.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
       },
       "node-client.globaljsoncontainerstorage.getextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "node-client.globaljsoncontainerstorage.getidentity": {
-        "title": "GlobalJSONContainerStorage.getIdentity() method"
-      },
-      "node-client.globaljsoncontainerstorage.getmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
       },
       "node-client.globaljsoncontainerstorage.getoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
@@ -764,17 +575,11 @@
       "node-client.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
-      "node-client.globaljsoncontainerstorage.setauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.setAuthenticationSession() method"
+      "node-client.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
       },
       "node-client.globaljsoncontainerstorage.setextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "node-client.globaljsoncontainerstorage.setidentity": {
-        "title": "GlobalJSONContainerStorage.setIdentity() method"
-      },
-      "node-client.globaljsoncontainerstorage.setmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
       },
       "node-client.globaljsoncontainerstorage.setoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
@@ -794,8 +599,20 @@
       "node-client.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
       },
+      "node-client.identity.claims": {
+        "title": "Identity.claims property"
+      },
       "node-client.identity": {
-        "title": "Identity type"
+        "title": "Identity interface"
+      },
+      "node-client.identity.type": {
+        "title": "Identity.type property"
+      },
+      "node-client.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "node-client.identityclaims": {
+        "title": "IdentityClaims interface"
       },
       "node-client.imageprocessingpipelinebuilder._constructor_": {
         "title": "ImageProcessingPipelineBuilder.(constructor)"
@@ -842,9 +659,6 @@
       "node-client.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
         "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
       },
-      "node-client.ismfarequirederror": {
-        "title": "isMFARequiredError() function"
-      },
       "node-client.isvalidationerror": {
         "title": "isValidationError() function"
       },
@@ -874,54 +688,6 @@
       },
       "node-client.memorystoragedriver.set": {
         "title": "MemoryStorageDriver.set() method"
-      },
-      "node-client.mfacontainer._constructor_": {
-        "title": "MFAContainer.(constructor)"
-      },
-      "node-client.mfacontainer.activateoob": {
-        "title": "MFAContainer.activateOOB() method"
-      },
-      "node-client.mfacontainer.activatetotp": {
-        "title": "MFAContainer.activateTOTP() method"
-      },
-      "node-client.mfacontainer.authenticatewithoob": {
-        "title": "MFAContainer.authenticateWithOOB() method"
-      },
-      "node-client.mfacontainer.authenticatewithrecoverycode": {
-        "title": "MFAContainer.authenticateWithRecoveryCode() method"
-      },
-      "node-client.mfacontainer.authenticatewithtotp": {
-        "title": "MFAContainer.authenticateWithTOTP() method"
-      },
-      "node-client.mfacontainer.createnewoob": {
-        "title": "MFAContainer.createNewOOB() method"
-      },
-      "node-client.mfacontainer.createnewtotp": {
-        "title": "MFAContainer.createNewTOTP() method"
-      },
-      "node-client.mfacontainer.deleteauthenticator": {
-        "title": "MFAContainer.deleteAuthenticator() method"
-      },
-      "node-client.mfacontainer.getauthenticators": {
-        "title": "MFAContainer.getAuthenticators() method"
-      },
-      "node-client.mfacontainer.listrecoverycode": {
-        "title": "MFAContainer.listRecoveryCode() method"
-      },
-      "node-client.mfacontainer": {
-        "title": "MFAContainer class"
-      },
-      "node-client.mfacontainer.parent": {
-        "title": "MFAContainer.parent property"
-      },
-      "node-client.mfacontainer.regeneraterecoverycode": {
-        "title": "MFAContainer.regenerateRecoveryCode() method"
-      },
-      "node-client.mfacontainer.revokealltrusteddevices": {
-        "title": "MFAContainer.revokeAllTrustedDevices() method"
-      },
-      "node-client.mfacontainer.triggeroob": {
-        "title": "MFAContainer.triggerOOB() method"
       },
       "node-client.nodeapiclient.fetchfunction": {
         "title": "NodeAPIClient.fetchFunction property"
@@ -1073,48 +839,6 @@
       "node-client.oidccontainer.parent": {
         "title": "OIDCContainer.parent property"
       },
-      "node-client.oobemailauthenticator.activatedat": {
-        "title": "OOBEmailAuthenticator.activatedAt property"
-      },
-      "node-client.oobemailauthenticator.channel": {
-        "title": "OOBEmailAuthenticator.channel property"
-      },
-      "node-client.oobemailauthenticator.createdat": {
-        "title": "OOBEmailAuthenticator.createdAt property"
-      },
-      "node-client.oobemailauthenticator.id": {
-        "title": "OOBEmailAuthenticator.id property"
-      },
-      "node-client.oobemailauthenticator.maskedemail": {
-        "title": "OOBEmailAuthenticator.maskedEmail property"
-      },
-      "node-client.oobemailauthenticator": {
-        "title": "OOBEmailAuthenticator interface"
-      },
-      "node-client.oobemailauthenticator.type": {
-        "title": "OOBEmailAuthenticator.type property"
-      },
-      "node-client.oobsmsauthenticator.activatedat": {
-        "title": "OOBSMSAuthenticator.activatedAt property"
-      },
-      "node-client.oobsmsauthenticator.channel": {
-        "title": "OOBSMSAuthenticator.channel property"
-      },
-      "node-client.oobsmsauthenticator.createdat": {
-        "title": "OOBSMSAuthenticator.createdAt property"
-      },
-      "node-client.oobsmsauthenticator.id": {
-        "title": "OOBSMSAuthenticator.id property"
-      },
-      "node-client.oobsmsauthenticator.maskedphone": {
-        "title": "OOBSMSAuthenticator.maskedPhone property"
-      },
-      "node-client.oobsmsauthenticator": {
-        "title": "OOBSMSAuthenticator interface"
-      },
-      "node-client.oobsmsauthenticator.type": {
-        "title": "OOBSMSAuthenticator.type property"
-      },
       "node-client.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
       },
@@ -1132,6 +856,15 @@
       },
       "node-client.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
+      },
+      "node-client.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "node-client.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "node-client.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
       },
       "node-client.session.createdat": {
         "title": "Session.createdAt property"
@@ -1228,24 +961,6 @@
       },
       "node-client.storagedriver.set": {
         "title": "StorageDriver.set() method"
-      },
-      "node-client.totpauthenticator.activatedat": {
-        "title": "TOTPAuthenticator.activatedAt property"
-      },
-      "node-client.totpauthenticator.createdat": {
-        "title": "TOTPAuthenticator.createdAt property"
-      },
-      "node-client.totpauthenticator.displayname": {
-        "title": "TOTPAuthenticator.displayName property"
-      },
-      "node-client.totpauthenticator.id": {
-        "title": "TOTPAuthenticator.id property"
-      },
-      "node-client.totpauthenticator": {
-        "title": "TOTPAuthenticator interface"
-      },
-      "node-client.totpauthenticator.type": {
-        "title": "TOTPAuthenticator.type property"
       },
       "node-client.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
@@ -1373,18 +1088,6 @@
       "node-client.version": {
         "title": "VERSION variable"
       },
-      "react-native.activateoobresult": {
-        "title": "ActivateOOBResult interface"
-      },
-      "react-native.activateoobresult.recoverycodes": {
-        "title": "ActivateOOBResult.recoveryCodes property"
-      },
-      "react-native.activatetotpresult": {
-        "title": "ActivateTOTPResult interface"
-      },
-      "react-native.activatetotpresult.recoverycodes": {
-        "title": "ActivateTOTPResult.recoveryCodes property"
-      },
       "react-native.addappleidcredentialrevokedlistener": {
         "title": "addAppleIDCredentialRevokedListener() function"
       },
@@ -1396,9 +1099,6 @@
       },
       "react-native.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
-      },
-      "react-native.authcontainer.currentidentity": {
-        "title": "AuthContainer.currentIdentity property"
       },
       "react-native.authcontainer.currentsessionid": {
         "title": "AuthContainer.currentSessionID property"
@@ -1441,9 +1141,6 @@
       },
       "react-native.authcontainer.me": {
         "title": "AuthContainer.me() method"
-      },
-      "react-native.authcontainer.mfa": {
-        "title": "AuthContainer.mfa property"
       },
       "react-native.authcontainer.parent": {
         "title": "AuthContainer.parent property"
@@ -1490,38 +1187,14 @@
       "react-native.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
       },
-      "react-native.authenticatewithooboptions.code": {
-        "title": "AuthenticateWithOOBOptions.code property"
-      },
-      "react-native.authenticatewithooboptions": {
-        "title": "AuthenticateWithOOBOptions interface"
-      },
-      "react-native.authenticatewithooboptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
-      },
-      "react-native.authenticatewithtotpoptions": {
-        "title": "AuthenticateWithTOTPOptions interface"
-      },
-      "react-native.authenticatewithtotpoptions.otp": {
-        "title": "AuthenticateWithTOTPOptions.otp property"
-      },
-      "react-native.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
-      },
-      "react-native.authenticationsession": {
-        "title": "AuthenticationSession interface"
-      },
-      "react-native.authenticationsession.step": {
-        "title": "AuthenticationSession.step property"
-      },
-      "react-native.authenticationsession.token": {
-        "title": "AuthenticationSession.token property"
-      },
-      "react-native.authenticator": {
-        "title": "Authenticator type"
+      "react-native.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
       },
       "react-native.authorizeoptions": {
         "title": "AuthorizeOptions interface"
+      },
+      "react-native.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
       },
       "react-native.authorizeoptions.redirecturi": {
         "title": "AuthorizeOptions.redirectURI property"
@@ -1535,14 +1208,8 @@
       "react-native.authresponse.expiresin": {
         "title": "AuthResponse.expiresIn property"
       },
-      "react-native.authresponse.identity": {
-        "title": "AuthResponse.identity property"
-      },
       "react-native.authresponse": {
         "title": "AuthResponse interface"
-      },
-      "react-native.authresponse.mfabearertoken": {
-        "title": "AuthResponse.mfaBearerToken property"
       },
       "react-native.authresponse.refreshtoken": {
         "title": "AuthResponse.refreshToken property"
@@ -1555,12 +1222,6 @@
       },
       "react-native.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "react-native.baseapiclient.activateoob": {
-        "title": "BaseAPIClient.activateOOB() method"
-      },
-      "react-native.baseapiclient.activatetotp": {
-        "title": "BaseAPIClient.activateTOTP() method"
       },
       "react-native.baseapiclient.addloginid": {
         "title": "BaseAPIClient.addLoginID() method"
@@ -1577,26 +1238,8 @@
       "react-native.baseapiclient.authendpoint": {
         "title": "BaseAPIClient.authEndpoint property"
       },
-      "react-native.baseapiclient.authenticatewithbearertoken": {
-        "title": "BaseAPIClient.authenticateWithBearerToken() method"
-      },
-      "react-native.baseapiclient.authenticatewithoob": {
-        "title": "BaseAPIClient.authenticateWithOOB() method"
-      },
-      "react-native.baseapiclient.authenticatewithrecoverycode": {
-        "title": "BaseAPIClient.authenticateWithRecoveryCode() method"
-      },
-      "react-native.baseapiclient.authenticatewithtotp": {
-        "title": "BaseAPIClient.authenticateWithTOTP() method"
-      },
       "react-native.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
-      },
-      "react-native.baseapiclient.createnewoob": {
-        "title": "BaseAPIClient.createNewOOB() method"
-      },
-      "react-native.baseapiclient.createnewtotp": {
-        "title": "BaseAPIClient.createNewTOTP() method"
       },
       "react-native.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
@@ -1606,9 +1249,6 @@
       },
       "react-native.baseapiclient.delauth": {
         "title": "BaseAPIClient.delAuth() method"
-      },
-      "react-native.baseapiclient.deleteauthenticator": {
-        "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "react-native.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
@@ -1628,9 +1268,6 @@
       "react-native.baseapiclient.getauth": {
         "title": "BaseAPIClient.getAuth() method"
       },
-      "react-native.baseapiclient.getauthenticators": {
-        "title": "BaseAPIClient.getAuthenticators() method"
-      },
       "react-native.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
@@ -1645,9 +1282,6 @@
       },
       "react-native.baseapiclient.listidentities": {
         "title": "BaseAPIClient.listIdentities() method"
-      },
-      "react-native.baseapiclient.listrecoverycode": {
-        "title": "BaseAPIClient.listRecoveryCode() method"
       },
       "react-native.baseapiclient.listsessions": {
         "title": "BaseAPIClient.listSessions() method"
@@ -1673,6 +1307,9 @@
       "react-native.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "react-native.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
       "react-native.baseapiclient.oauthhandler": {
         "title": "BaseAPIClient.oauthHandler() method"
       },
@@ -1693,9 +1330,6 @@
       },
       "react-native.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
-      },
-      "react-native.baseapiclient.regeneraterecoverycode": {
-        "title": "BaseAPIClient.regenerateRecoveryCode() method"
       },
       "react-native.baseapiclient.removeloginid": {
         "title": "BaseAPIClient.removeLoginID() method"
@@ -1718,9 +1352,6 @@
       "react-native.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
-      "react-native.baseapiclient.revokeallbearertoken": {
-        "title": "BaseAPIClient.revokeAllBearerToken() method"
-      },
       "react-native.baseapiclient.revokeothersessions": {
         "title": "BaseAPIClient.revokeOtherSessions() method"
       },
@@ -1742,9 +1373,6 @@
       "react-native.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
-      "react-native.baseapiclient.triggeroob": {
-        "title": "BaseAPIClient.triggerOOB() method"
-      },
       "react-native.baseapiclient.updateloginid": {
         "title": "BaseAPIClient.updateLoginID() method"
       },
@@ -1762,6 +1390,15 @@
       },
       "react-native.bytearray": {
         "title": "ByteArray interface"
+      },
+      "react-native.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "react-native.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "react-native.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
       },
       "react-native.configureoptions.appendpoint": {
         "title": "ConfigureOptions.appEndpoint property"
@@ -1817,14 +1454,8 @@
       "react-native.containerstorage.delaccesstoken": {
         "title": "ContainerStorage.delAccessToken() method"
       },
-      "react-native.containerstorage.delauthenticationsession": {
-        "title": "ContainerStorage.delAuthenticationSession() method"
-      },
-      "react-native.containerstorage.delidentity": {
-        "title": "ContainerStorage.delIdentity() method"
-      },
-      "react-native.containerstorage.delmfabearertoken": {
-        "title": "ContainerStorage.delMFABearerToken() method"
+      "react-native.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
       },
       "react-native.containerstorage.deloauthcodeverifier": {
         "title": "ContainerStorage.delOAuthCodeVerifier() method"
@@ -1847,17 +1478,11 @@
       "react-native.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
-      "react-native.containerstorage.getauthenticationsession": {
-        "title": "ContainerStorage.getAuthenticationSession() method"
+      "react-native.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
       },
       "react-native.containerstorage.getextrasessioninfooptions": {
         "title": "ContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "react-native.containerstorage.getidentity": {
-        "title": "ContainerStorage.getIdentity() method"
-      },
-      "react-native.containerstorage.getmfabearertoken": {
-        "title": "ContainerStorage.getMFABearerToken() method"
       },
       "react-native.containerstorage.getoauthcodeverifier": {
         "title": "ContainerStorage.getOAuthCodeVerifier() method"
@@ -1883,17 +1508,11 @@
       "react-native.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
-      "react-native.containerstorage.setauthenticationsession": {
-        "title": "ContainerStorage.setAuthenticationSession() method"
+      "react-native.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
       },
       "react-native.containerstorage.setextrasessioninfooptions": {
         "title": "ContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "react-native.containerstorage.setidentity": {
-        "title": "ContainerStorage.setIdentity() method"
-      },
-      "react-native.containerstorage.setmfabearertoken": {
-        "title": "ContainerStorage.setMFABearerToken() method"
       },
       "react-native.containerstorage.setoauthcodeverifier": {
         "title": "ContainerStorage.setOAuthCodeVerifier() method"
@@ -1913,69 +1532,6 @@
       "react-native.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
       },
-      "react-native.createnewoobemailoptions.channel": {
-        "title": "CreateNewOOBEmailOptions.channel property"
-      },
-      "react-native.createnewoobemailoptions.email": {
-        "title": "CreateNewOOBEmailOptions.email property"
-      },
-      "react-native.createnewoobemailoptions": {
-        "title": "CreateNewOOBEmailOptions interface"
-      },
-      "react-native.createnewooboptions": {
-        "title": "CreateNewOOBOptions type"
-      },
-      "react-native.createnewoobresult.authenticatorid": {
-        "title": "CreateNewOOBResult.authenticatorID property"
-      },
-      "react-native.createnewoobresult.authenticatortype": {
-        "title": "CreateNewOOBResult.authenticatorType property"
-      },
-      "react-native.createnewoobresult.channel": {
-        "title": "CreateNewOOBResult.channel property"
-      },
-      "react-native.createnewoobresult": {
-        "title": "CreateNewOOBResult interface"
-      },
-      "react-native.createnewoobsmsoptions.channel": {
-        "title": "CreateNewOOBSMSOptions.channel property"
-      },
-      "react-native.createnewoobsmsoptions": {
-        "title": "CreateNewOOBSMSOptions interface"
-      },
-      "react-native.createnewoobsmsoptions.phone": {
-        "title": "CreateNewOOBSMSOptions.phone property"
-      },
-      "react-native.createnewtotpoptions.accountname": {
-        "title": "CreateNewTOTPOptions.accountName property"
-      },
-      "react-native.createnewtotpoptions.displayname": {
-        "title": "CreateNewTOTPOptions.displayName property"
-      },
-      "react-native.createnewtotpoptions.issuer": {
-        "title": "CreateNewTOTPOptions.issuer property"
-      },
-      "react-native.createnewtotpoptions": {
-        "title": "CreateNewTOTPOptions interface"
-      },
-      "react-native.createnewtotpresult.authenticatorid": {
-        "title": "CreateNewTOTPResult.authenticatorID property"
-      },
-      "react-native.createnewtotpresult.authenticatortype": {
-        "title": "CreateNewTOTPResult.authenticatorType property"
-      },
-      "react-native.createnewtotpresult": {
-        "title": "CreateNewTOTPResult interface"
-      },
-      "react-native.createnewtotpresult.otpauthuri": {
-        "title": "CreateNewTOTPResult.otpauthURI property"
-      },
-      "react-native.createnewtotpresult.qrcodeimageuri": {
-        "title": "CreateNewTOTPResult.qrCodeImageURI property"
-      },
-      "react-native.createnewtotpresult.secret": {
-        "title": "CreateNewTOTPResult.secret property"
-      },
       "react-native.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
       },
@@ -1993,9 +1549,6 @@
       },
       "react-native.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
-      },
-      "react-native.decodeauthenticator": {
-        "title": "decodeAuthenticator() function"
       },
       "react-native.decodeauthresponse": {
         "title": "decodeAuthResponse() function"
@@ -2042,21 +1595,6 @@
       "react-native.fulloauthauthorizationurloptions": {
         "title": "FullOAuthAuthorizationURLOptions type"
       },
-      "react-native.generateotpauthuri": {
-        "title": "generateOTPAuthURI() function"
-      },
-      "react-native.generateotpauthurioptions.accountname": {
-        "title": "GenerateOTPAuthURIOptions.accountName property"
-      },
-      "react-native.generateotpauthurioptions.issuer": {
-        "title": "GenerateOTPAuthURIOptions.issuer property"
-      },
-      "react-native.generateotpauthurioptions": {
-        "title": "GenerateOTPAuthURIOptions interface"
-      },
-      "react-native.generateotpauthurioptions.secret": {
-        "title": "GenerateOTPAuthURIOptions.secret property"
-      },
       "react-native.getcredentialstateforuserid": {
         "title": "getCredentialStateForUserID() function"
       },
@@ -2066,14 +1604,8 @@
       "react-native.globaljsoncontainerstorage.delaccesstoken": {
         "title": "GlobalJSONContainerStorage.delAccessToken() method"
       },
-      "react-native.globaljsoncontainerstorage.delauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.delAuthenticationSession() method"
-      },
-      "react-native.globaljsoncontainerstorage.delidentity": {
-        "title": "GlobalJSONContainerStorage.delIdentity() method"
-      },
-      "react-native.globaljsoncontainerstorage.delmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
+      "react-native.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
       },
       "react-native.globaljsoncontainerstorage.deloauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
@@ -2096,17 +1628,11 @@
       "react-native.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
-      "react-native.globaljsoncontainerstorage.getauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.getAuthenticationSession() method"
+      "react-native.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
       },
       "react-native.globaljsoncontainerstorage.getextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "react-native.globaljsoncontainerstorage.getidentity": {
-        "title": "GlobalJSONContainerStorage.getIdentity() method"
-      },
-      "react-native.globaljsoncontainerstorage.getmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
       },
       "react-native.globaljsoncontainerstorage.getoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
@@ -2132,17 +1658,11 @@
       "react-native.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
-      "react-native.globaljsoncontainerstorage.setauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.setAuthenticationSession() method"
+      "react-native.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
       },
       "react-native.globaljsoncontainerstorage.setextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "react-native.globaljsoncontainerstorage.setidentity": {
-        "title": "GlobalJSONContainerStorage.setIdentity() method"
-      },
-      "react-native.globaljsoncontainerstorage.setmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
       },
       "react-native.globaljsoncontainerstorage.setoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
@@ -2162,8 +1682,20 @@
       "react-native.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
       },
+      "react-native.identity.claims": {
+        "title": "Identity.claims property"
+      },
       "react-native.identity": {
-        "title": "Identity type"
+        "title": "Identity interface"
+      },
+      "react-native.identity.type": {
+        "title": "Identity.type property"
+      },
+      "react-native.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "react-native.identityclaims": {
+        "title": "IdentityClaims interface"
       },
       "react-native.imageprocessingpipelinebuilder._constructor_": {
         "title": "ImageProcessingPipelineBuilder.(constructor)"
@@ -2210,9 +1742,6 @@
       "react-native.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
         "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
       },
-      "react-native.ismfarequirederror": {
-        "title": "isMFARequiredError() function"
-      },
       "react-native.isvalidationerror": {
         "title": "isValidationError() function"
       },
@@ -2224,54 +1753,6 @@
       },
       "react-native": {
         "title": "react-native package"
-      },
-      "react-native.mfacontainer._constructor_": {
-        "title": "MFAContainer.(constructor)"
-      },
-      "react-native.mfacontainer.activateoob": {
-        "title": "MFAContainer.activateOOB() method"
-      },
-      "react-native.mfacontainer.activatetotp": {
-        "title": "MFAContainer.activateTOTP() method"
-      },
-      "react-native.mfacontainer.authenticatewithoob": {
-        "title": "MFAContainer.authenticateWithOOB() method"
-      },
-      "react-native.mfacontainer.authenticatewithrecoverycode": {
-        "title": "MFAContainer.authenticateWithRecoveryCode() method"
-      },
-      "react-native.mfacontainer.authenticatewithtotp": {
-        "title": "MFAContainer.authenticateWithTOTP() method"
-      },
-      "react-native.mfacontainer.createnewoob": {
-        "title": "MFAContainer.createNewOOB() method"
-      },
-      "react-native.mfacontainer.createnewtotp": {
-        "title": "MFAContainer.createNewTOTP() method"
-      },
-      "react-native.mfacontainer.deleteauthenticator": {
-        "title": "MFAContainer.deleteAuthenticator() method"
-      },
-      "react-native.mfacontainer.getauthenticators": {
-        "title": "MFAContainer.getAuthenticators() method"
-      },
-      "react-native.mfacontainer.listrecoverycode": {
-        "title": "MFAContainer.listRecoveryCode() method"
-      },
-      "react-native.mfacontainer": {
-        "title": "MFAContainer class"
-      },
-      "react-native.mfacontainer.parent": {
-        "title": "MFAContainer.parent property"
-      },
-      "react-native.mfacontainer.regeneraterecoverycode": {
-        "title": "MFAContainer.regenerateRecoveryCode() method"
-      },
-      "react-native.mfacontainer.revokealltrusteddevices": {
-        "title": "MFAContainer.revokeAllTrustedDevices() method"
-      },
-      "react-native.mfacontainer.triggeroob": {
-        "title": "MFAContainer.triggerOOB() method"
       },
       "react-native.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
@@ -2387,48 +1868,6 @@
       "react-native.oidccontainer.parent": {
         "title": "OIDCContainer.parent property"
       },
-      "react-native.oobemailauthenticator.activatedat": {
-        "title": "OOBEmailAuthenticator.activatedAt property"
-      },
-      "react-native.oobemailauthenticator.channel": {
-        "title": "OOBEmailAuthenticator.channel property"
-      },
-      "react-native.oobemailauthenticator.createdat": {
-        "title": "OOBEmailAuthenticator.createdAt property"
-      },
-      "react-native.oobemailauthenticator.id": {
-        "title": "OOBEmailAuthenticator.id property"
-      },
-      "react-native.oobemailauthenticator.maskedemail": {
-        "title": "OOBEmailAuthenticator.maskedEmail property"
-      },
-      "react-native.oobemailauthenticator": {
-        "title": "OOBEmailAuthenticator interface"
-      },
-      "react-native.oobemailauthenticator.type": {
-        "title": "OOBEmailAuthenticator.type property"
-      },
-      "react-native.oobsmsauthenticator.activatedat": {
-        "title": "OOBSMSAuthenticator.activatedAt property"
-      },
-      "react-native.oobsmsauthenticator.channel": {
-        "title": "OOBSMSAuthenticator.channel property"
-      },
-      "react-native.oobsmsauthenticator.createdat": {
-        "title": "OOBSMSAuthenticator.createdAt property"
-      },
-      "react-native.oobsmsauthenticator.id": {
-        "title": "OOBSMSAuthenticator.id property"
-      },
-      "react-native.oobsmsauthenticator.maskedphone": {
-        "title": "OOBSMSAuthenticator.maskedPhone property"
-      },
-      "react-native.oobsmsauthenticator": {
-        "title": "OOBSMSAuthenticator interface"
-      },
-      "react-native.oobsmsauthenticator.type": {
-        "title": "OOBSMSAuthenticator.type property"
-      },
       "react-native.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
       },
@@ -2446,6 +1885,15 @@
       },
       "react-native.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
+      },
+      "react-native.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "react-native.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "react-native.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
       },
       "react-native.reactnativeapiclient.fetchfunction": {
         "title": "ReactNativeAPIClient.fetchFunction property"
@@ -2525,6 +1973,9 @@
       "react-native.reactnativeoidccontainer._setupcodeverifier": {
         "title": "ReactNativeOIDCContainer.\\_setupCodeVerifier() method"
       },
+      "react-native.reactnativeoidccontainer.authenticateanonymously": {
+        "title": "ReactNativeOIDCContainer.authenticateAnonymously() method"
+      },
       "react-native.reactnativeoidccontainer.authorize": {
         "title": "ReactNativeOIDCContainer.authorize() method"
       },
@@ -2542,6 +1993,9 @@
       },
       "react-native.reactnativeoidccontainer.openurl": {
         "title": "ReactNativeOIDCContainer.openURL() method"
+      },
+      "react-native.reactnativeoidccontainer.promoteanonymoususer": {
+        "title": "ReactNativeOIDCContainer.promoteAnonymousUser() method"
       },
       "react-native.session.createdat": {
         "title": "Session.createdAt property"
@@ -2638,24 +2092,6 @@
       },
       "react-native.storagedriver.set": {
         "title": "StorageDriver.set() method"
-      },
-      "react-native.totpauthenticator.activatedat": {
-        "title": "TOTPAuthenticator.activatedAt property"
-      },
-      "react-native.totpauthenticator.createdat": {
-        "title": "TOTPAuthenticator.createdAt property"
-      },
-      "react-native.totpauthenticator.displayname": {
-        "title": "TOTPAuthenticator.displayName property"
-      },
-      "react-native.totpauthenticator.id": {
-        "title": "TOTPAuthenticator.id property"
-      },
-      "react-native.totpauthenticator": {
-        "title": "TOTPAuthenticator interface"
-      },
-      "react-native.totpauthenticator.type": {
-        "title": "TOTPAuthenticator.type property"
       },
       "react-native.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
@@ -2783,18 +2219,6 @@
       "react-native.version": {
         "title": "VERSION variable"
       },
-      "web.activateoobresult": {
-        "title": "ActivateOOBResult interface"
-      },
-      "web.activateoobresult.recoverycodes": {
-        "title": "ActivateOOBResult.recoveryCodes property"
-      },
-      "web.activatetotpresult": {
-        "title": "ActivateTOTPResult interface"
-      },
-      "web.activatetotpresult.recoverycodes": {
-        "title": "ActivateTOTPResult.recoveryCodes property"
-      },
       "web.authcontainer._constructor_": {
         "title": "AuthContainer.(constructor)"
       },
@@ -2803,9 +2227,6 @@
       },
       "web.authcontainer.changepassword": {
         "title": "AuthContainer.changePassword() method"
-      },
-      "web.authcontainer.currentidentity": {
-        "title": "AuthContainer.currentIdentity property"
       },
       "web.authcontainer.currentsessionid": {
         "title": "AuthContainer.currentSessionID property"
@@ -2848,9 +2269,6 @@
       },
       "web.authcontainer.me": {
         "title": "AuthContainer.me() method"
-      },
-      "web.authcontainer.mfa": {
-        "title": "AuthContainer.mfa property"
       },
       "web.authcontainer.parent": {
         "title": "AuthContainer.parent property"
@@ -2897,38 +2315,14 @@
       "web.authcontainer.verifywithcode": {
         "title": "AuthContainer.verifyWithCode() method"
       },
-      "web.authenticatewithooboptions.code": {
-        "title": "AuthenticateWithOOBOptions.code property"
-      },
-      "web.authenticatewithooboptions": {
-        "title": "AuthenticateWithOOBOptions interface"
-      },
-      "web.authenticatewithooboptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithOOBOptions.skipMFAForCurrentDevice property"
-      },
-      "web.authenticatewithtotpoptions": {
-        "title": "AuthenticateWithTOTPOptions interface"
-      },
-      "web.authenticatewithtotpoptions.otp": {
-        "title": "AuthenticateWithTOTPOptions.otp property"
-      },
-      "web.authenticatewithtotpoptions.skipmfaforcurrentdevice": {
-        "title": "AuthenticateWithTOTPOptions.skipMFAForCurrentDevice property"
-      },
-      "web.authenticationsession": {
-        "title": "AuthenticationSession interface"
-      },
-      "web.authenticationsession.step": {
-        "title": "AuthenticationSession.step property"
-      },
-      "web.authenticationsession.token": {
-        "title": "AuthenticationSession.token property"
-      },
-      "web.authenticator": {
-        "title": "Authenticator type"
+      "web.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
       },
       "web.authorizeoptions": {
         "title": "AuthorizeOptions interface"
+      },
+      "web.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
       },
       "web.authorizeoptions.redirecturi": {
         "title": "AuthorizeOptions.redirectURI property"
@@ -2942,14 +2336,8 @@
       "web.authresponse.expiresin": {
         "title": "AuthResponse.expiresIn property"
       },
-      "web.authresponse.identity": {
-        "title": "AuthResponse.identity property"
-      },
       "web.authresponse": {
         "title": "AuthResponse interface"
-      },
-      "web.authresponse.mfabearertoken": {
-        "title": "AuthResponse.mfaBearerToken property"
       },
       "web.authresponse.refreshtoken": {
         "title": "AuthResponse.refreshToken property"
@@ -2962,12 +2350,6 @@
       },
       "web.baseapiclient._constructor_": {
         "title": "BaseAPIClient.(constructor)"
-      },
-      "web.baseapiclient.activateoob": {
-        "title": "BaseAPIClient.activateOOB() method"
-      },
-      "web.baseapiclient.activatetotp": {
-        "title": "BaseAPIClient.activateTOTP() method"
       },
       "web.baseapiclient.addloginid": {
         "title": "BaseAPIClient.addLoginID() method"
@@ -2984,26 +2366,8 @@
       "web.baseapiclient.authendpoint": {
         "title": "BaseAPIClient.authEndpoint property"
       },
-      "web.baseapiclient.authenticatewithbearertoken": {
-        "title": "BaseAPIClient.authenticateWithBearerToken() method"
-      },
-      "web.baseapiclient.authenticatewithoob": {
-        "title": "BaseAPIClient.authenticateWithOOB() method"
-      },
-      "web.baseapiclient.authenticatewithrecoverycode": {
-        "title": "BaseAPIClient.authenticateWithRecoveryCode() method"
-      },
-      "web.baseapiclient.authenticatewithtotp": {
-        "title": "BaseAPIClient.authenticateWithTOTP() method"
-      },
       "web.baseapiclient.changepassword": {
         "title": "BaseAPIClient.changePassword() method"
-      },
-      "web.baseapiclient.createnewoob": {
-        "title": "BaseAPIClient.createNewOOB() method"
-      },
-      "web.baseapiclient.createnewtotp": {
-        "title": "BaseAPIClient.createNewTOTP() method"
       },
       "web.baseapiclient.del": {
         "title": "BaseAPIClient.del() method"
@@ -3013,9 +2377,6 @@
       },
       "web.baseapiclient.delauth": {
         "title": "BaseAPIClient.delAuth() method"
-      },
-      "web.baseapiclient.deleteauthenticator": {
-        "title": "BaseAPIClient.deleteAuthenticator() method"
       },
       "web.baseapiclient.deleteoauthprovider": {
         "title": "BaseAPIClient.deleteOAuthProvider() method"
@@ -3035,9 +2396,6 @@
       "web.baseapiclient.getauth": {
         "title": "BaseAPIClient.getAuth() method"
       },
-      "web.baseapiclient.getauthenticators": {
-        "title": "BaseAPIClient.getAuthenticators() method"
-      },
       "web.baseapiclient.getextrasessioninfo": {
         "title": "BaseAPIClient.getExtraSessionInfo property"
       },
@@ -3052,9 +2410,6 @@
       },
       "web.baseapiclient.listidentities": {
         "title": "BaseAPIClient.listIdentities() method"
-      },
-      "web.baseapiclient.listrecoverycode": {
-        "title": "BaseAPIClient.listRecoveryCode() method"
       },
       "web.baseapiclient.listsessions": {
         "title": "BaseAPIClient.listSessions() method"
@@ -3080,6 +2435,9 @@
       "web.baseapiclient.oauthauthorizationurl": {
         "title": "BaseAPIClient.oauthAuthorizationURL() method"
       },
+      "web.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
       "web.baseapiclient.oauthhandler": {
         "title": "BaseAPIClient.oauthHandler() method"
       },
@@ -3100,9 +2458,6 @@
       },
       "web.baseapiclient.refreshtokenfunction": {
         "title": "BaseAPIClient.refreshTokenFunction property"
-      },
-      "web.baseapiclient.regeneraterecoverycode": {
-        "title": "BaseAPIClient.regenerateRecoveryCode() method"
       },
       "web.baseapiclient.removeloginid": {
         "title": "BaseAPIClient.removeLoginID() method"
@@ -3125,9 +2480,6 @@
       "web.baseapiclient.resetpassword": {
         "title": "BaseAPIClient.resetPassword() method"
       },
-      "web.baseapiclient.revokeallbearertoken": {
-        "title": "BaseAPIClient.revokeAllBearerToken() method"
-      },
       "web.baseapiclient.revokeothersessions": {
         "title": "BaseAPIClient.revokeOtherSessions() method"
       },
@@ -3149,9 +2501,6 @@
       "web.baseapiclient.signup": {
         "title": "BaseAPIClient.signup() method"
       },
-      "web.baseapiclient.triggeroob": {
-        "title": "BaseAPIClient.triggerOOB() method"
-      },
       "web.baseapiclient.updateloginid": {
         "title": "BaseAPIClient.updateLoginID() method"
       },
@@ -3169,6 +2518,15 @@
       },
       "web.bytearray": {
         "title": "ByteArray interface"
+      },
+      "web.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "web.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "web.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
       },
       "web.configureoptions.appendpoint": {
         "title": "ConfigureOptions.appEndpoint property"
@@ -3227,14 +2585,8 @@
       "web.containerstorage.delaccesstoken": {
         "title": "ContainerStorage.delAccessToken() method"
       },
-      "web.containerstorage.delauthenticationsession": {
-        "title": "ContainerStorage.delAuthenticationSession() method"
-      },
-      "web.containerstorage.delidentity": {
-        "title": "ContainerStorage.delIdentity() method"
-      },
-      "web.containerstorage.delmfabearertoken": {
-        "title": "ContainerStorage.delMFABearerToken() method"
+      "web.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
       },
       "web.containerstorage.deloauthcodeverifier": {
         "title": "ContainerStorage.delOAuthCodeVerifier() method"
@@ -3257,17 +2609,11 @@
       "web.containerstorage.getaccesstoken": {
         "title": "ContainerStorage.getAccessToken() method"
       },
-      "web.containerstorage.getauthenticationsession": {
-        "title": "ContainerStorage.getAuthenticationSession() method"
+      "web.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
       },
       "web.containerstorage.getextrasessioninfooptions": {
         "title": "ContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "web.containerstorage.getidentity": {
-        "title": "ContainerStorage.getIdentity() method"
-      },
-      "web.containerstorage.getmfabearertoken": {
-        "title": "ContainerStorage.getMFABearerToken() method"
       },
       "web.containerstorage.getoauthcodeverifier": {
         "title": "ContainerStorage.getOAuthCodeVerifier() method"
@@ -3293,17 +2639,11 @@
       "web.containerstorage.setaccesstoken": {
         "title": "ContainerStorage.setAccessToken() method"
       },
-      "web.containerstorage.setauthenticationsession": {
-        "title": "ContainerStorage.setAuthenticationSession() method"
+      "web.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
       },
       "web.containerstorage.setextrasessioninfooptions": {
         "title": "ContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "web.containerstorage.setidentity": {
-        "title": "ContainerStorage.setIdentity() method"
-      },
-      "web.containerstorage.setmfabearertoken": {
-        "title": "ContainerStorage.setMFABearerToken() method"
       },
       "web.containerstorage.setoauthcodeverifier": {
         "title": "ContainerStorage.setOAuthCodeVerifier() method"
@@ -3323,69 +2663,6 @@
       "web.containerstorage.setuser": {
         "title": "ContainerStorage.setUser() method"
       },
-      "web.createnewoobemailoptions.channel": {
-        "title": "CreateNewOOBEmailOptions.channel property"
-      },
-      "web.createnewoobemailoptions.email": {
-        "title": "CreateNewOOBEmailOptions.email property"
-      },
-      "web.createnewoobemailoptions": {
-        "title": "CreateNewOOBEmailOptions interface"
-      },
-      "web.createnewooboptions": {
-        "title": "CreateNewOOBOptions type"
-      },
-      "web.createnewoobresult.authenticatorid": {
-        "title": "CreateNewOOBResult.authenticatorID property"
-      },
-      "web.createnewoobresult.authenticatortype": {
-        "title": "CreateNewOOBResult.authenticatorType property"
-      },
-      "web.createnewoobresult.channel": {
-        "title": "CreateNewOOBResult.channel property"
-      },
-      "web.createnewoobresult": {
-        "title": "CreateNewOOBResult interface"
-      },
-      "web.createnewoobsmsoptions.channel": {
-        "title": "CreateNewOOBSMSOptions.channel property"
-      },
-      "web.createnewoobsmsoptions": {
-        "title": "CreateNewOOBSMSOptions interface"
-      },
-      "web.createnewoobsmsoptions.phone": {
-        "title": "CreateNewOOBSMSOptions.phone property"
-      },
-      "web.createnewtotpoptions.accountname": {
-        "title": "CreateNewTOTPOptions.accountName property"
-      },
-      "web.createnewtotpoptions.displayname": {
-        "title": "CreateNewTOTPOptions.displayName property"
-      },
-      "web.createnewtotpoptions.issuer": {
-        "title": "CreateNewTOTPOptions.issuer property"
-      },
-      "web.createnewtotpoptions": {
-        "title": "CreateNewTOTPOptions interface"
-      },
-      "web.createnewtotpresult.authenticatorid": {
-        "title": "CreateNewTOTPResult.authenticatorID property"
-      },
-      "web.createnewtotpresult.authenticatortype": {
-        "title": "CreateNewTOTPResult.authenticatorType property"
-      },
-      "web.createnewtotpresult": {
-        "title": "CreateNewTOTPResult interface"
-      },
-      "web.createnewtotpresult.otpauthuri": {
-        "title": "CreateNewTOTPResult.otpauthURI property"
-      },
-      "web.createnewtotpresult.qrcodeimageuri": {
-        "title": "CreateNewTOTPResult.qrCodeImageURI property"
-      },
-      "web.createnewtotpresult.secret": {
-        "title": "CreateNewTOTPResult.secret property"
-      },
       "web.customtokenidentity.claims": {
         "title": "CustomTokenIdentity.claims property"
       },
@@ -3403,9 +2680,6 @@
       },
       "web.customtokenidentity.type": {
         "title": "CustomTokenIdentity.type property"
-      },
-      "web.decodeauthenticator": {
-        "title": "decodeAuthenticator() function"
       },
       "web.decodeauthresponse": {
         "title": "decodeAuthResponse() function"
@@ -3452,35 +2726,14 @@
       "web.fulloauthauthorizationurloptions": {
         "title": "FullOAuthAuthorizationURLOptions type"
       },
-      "web.generateotpauthuri": {
-        "title": "generateOTPAuthURI() function"
-      },
-      "web.generateotpauthurioptions.accountname": {
-        "title": "GenerateOTPAuthURIOptions.accountName property"
-      },
-      "web.generateotpauthurioptions.issuer": {
-        "title": "GenerateOTPAuthURIOptions.issuer property"
-      },
-      "web.generateotpauthurioptions": {
-        "title": "GenerateOTPAuthURIOptions interface"
-      },
-      "web.generateotpauthurioptions.secret": {
-        "title": "GenerateOTPAuthURIOptions.secret property"
-      },
       "web.globaljsoncontainerstorage._constructor_": {
         "title": "GlobalJSONContainerStorage.(constructor)"
       },
       "web.globaljsoncontainerstorage.delaccesstoken": {
         "title": "GlobalJSONContainerStorage.delAccessToken() method"
       },
-      "web.globaljsoncontainerstorage.delauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.delAuthenticationSession() method"
-      },
-      "web.globaljsoncontainerstorage.delidentity": {
-        "title": "GlobalJSONContainerStorage.delIdentity() method"
-      },
-      "web.globaljsoncontainerstorage.delmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.delMFABearerToken() method"
+      "web.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
       },
       "web.globaljsoncontainerstorage.deloauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.delOAuthCodeVerifier() method"
@@ -3503,17 +2756,11 @@
       "web.globaljsoncontainerstorage.getaccesstoken": {
         "title": "GlobalJSONContainerStorage.getAccessToken() method"
       },
-      "web.globaljsoncontainerstorage.getauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.getAuthenticationSession() method"
+      "web.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
       },
       "web.globaljsoncontainerstorage.getextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.getExtraSessionInfoOptions() method"
-      },
-      "web.globaljsoncontainerstorage.getidentity": {
-        "title": "GlobalJSONContainerStorage.getIdentity() method"
-      },
-      "web.globaljsoncontainerstorage.getmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.getMFABearerToken() method"
       },
       "web.globaljsoncontainerstorage.getoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.getOAuthCodeVerifier() method"
@@ -3539,17 +2786,11 @@
       "web.globaljsoncontainerstorage.setaccesstoken": {
         "title": "GlobalJSONContainerStorage.setAccessToken() method"
       },
-      "web.globaljsoncontainerstorage.setauthenticationsession": {
-        "title": "GlobalJSONContainerStorage.setAuthenticationSession() method"
+      "web.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
       },
       "web.globaljsoncontainerstorage.setextrasessioninfooptions": {
         "title": "GlobalJSONContainerStorage.setExtraSessionInfoOptions() method"
-      },
-      "web.globaljsoncontainerstorage.setidentity": {
-        "title": "GlobalJSONContainerStorage.setIdentity() method"
-      },
-      "web.globaljsoncontainerstorage.setmfabearertoken": {
-        "title": "GlobalJSONContainerStorage.setMFABearerToken() method"
       },
       "web.globaljsoncontainerstorage.setoauthcodeverifier": {
         "title": "GlobalJSONContainerStorage.setOAuthCodeVerifier() method"
@@ -3569,8 +2810,20 @@
       "web.globaljsoncontainerstorage.setuser": {
         "title": "GlobalJSONContainerStorage.setUser() method"
       },
+      "web.identity.claims": {
+        "title": "Identity.claims property"
+      },
       "web.identity": {
-        "title": "Identity type"
+        "title": "Identity interface"
+      },
+      "web.identity.type": {
+        "title": "Identity.type property"
+      },
+      "web.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "web.identityclaims": {
+        "title": "IdentityClaims interface"
       },
       "web.imageprocessingpipelinebuilder._constructor_": {
         "title": "ImageProcessingPipelineBuilder.(constructor)"
@@ -3617,9 +2870,6 @@
       "web.imageprocessingpipelinebuilderresizeoptions.targetwidth": {
         "title": "ImageProcessingPipelineBuilderResizeOptions.targetWidth property"
       },
-      "web.ismfarequirederror": {
-        "title": "isMFARequiredError() function"
-      },
       "web.isvalidationerror": {
         "title": "isValidationError() function"
       },
@@ -3634,54 +2884,6 @@
       },
       "web": {
         "title": "web package"
-      },
-      "web.mfacontainer._constructor_": {
-        "title": "MFAContainer.(constructor)"
-      },
-      "web.mfacontainer.activateoob": {
-        "title": "MFAContainer.activateOOB() method"
-      },
-      "web.mfacontainer.activatetotp": {
-        "title": "MFAContainer.activateTOTP() method"
-      },
-      "web.mfacontainer.authenticatewithoob": {
-        "title": "MFAContainer.authenticateWithOOB() method"
-      },
-      "web.mfacontainer.authenticatewithrecoverycode": {
-        "title": "MFAContainer.authenticateWithRecoveryCode() method"
-      },
-      "web.mfacontainer.authenticatewithtotp": {
-        "title": "MFAContainer.authenticateWithTOTP() method"
-      },
-      "web.mfacontainer.createnewoob": {
-        "title": "MFAContainer.createNewOOB() method"
-      },
-      "web.mfacontainer.createnewtotp": {
-        "title": "MFAContainer.createNewTOTP() method"
-      },
-      "web.mfacontainer.deleteauthenticator": {
-        "title": "MFAContainer.deleteAuthenticator() method"
-      },
-      "web.mfacontainer.getauthenticators": {
-        "title": "MFAContainer.getAuthenticators() method"
-      },
-      "web.mfacontainer.listrecoverycode": {
-        "title": "MFAContainer.listRecoveryCode() method"
-      },
-      "web.mfacontainer": {
-        "title": "MFAContainer class"
-      },
-      "web.mfacontainer.parent": {
-        "title": "MFAContainer.parent property"
-      },
-      "web.mfacontainer.regeneraterecoverycode": {
-        "title": "MFAContainer.regenerateRecoveryCode() method"
-      },
-      "web.mfacontainer.revokealltrusteddevices": {
-        "title": "MFAContainer.revokeAllTrustedDevices() method"
-      },
-      "web.mfacontainer.triggeroob": {
-        "title": "MFAContainer.triggerOOB() method"
       },
       "web.oauthauthorizationurloptions": {
         "title": "OAuthAuthorizationURLOptions type"
@@ -3797,48 +2999,6 @@
       "web.oidccontainer.parent": {
         "title": "OIDCContainer.parent property"
       },
-      "web.oobemailauthenticator.activatedat": {
-        "title": "OOBEmailAuthenticator.activatedAt property"
-      },
-      "web.oobemailauthenticator.channel": {
-        "title": "OOBEmailAuthenticator.channel property"
-      },
-      "web.oobemailauthenticator.createdat": {
-        "title": "OOBEmailAuthenticator.createdAt property"
-      },
-      "web.oobemailauthenticator.id": {
-        "title": "OOBEmailAuthenticator.id property"
-      },
-      "web.oobemailauthenticator.maskedemail": {
-        "title": "OOBEmailAuthenticator.maskedEmail property"
-      },
-      "web.oobemailauthenticator": {
-        "title": "OOBEmailAuthenticator interface"
-      },
-      "web.oobemailauthenticator.type": {
-        "title": "OOBEmailAuthenticator.type property"
-      },
-      "web.oobsmsauthenticator.activatedat": {
-        "title": "OOBSMSAuthenticator.activatedAt property"
-      },
-      "web.oobsmsauthenticator.channel": {
-        "title": "OOBSMSAuthenticator.channel property"
-      },
-      "web.oobsmsauthenticator.createdat": {
-        "title": "OOBSMSAuthenticator.createdAt property"
-      },
-      "web.oobsmsauthenticator.id": {
-        "title": "OOBSMSAuthenticator.id property"
-      },
-      "web.oobsmsauthenticator.maskedphone": {
-        "title": "OOBSMSAuthenticator.maskedPhone property"
-      },
-      "web.oobsmsauthenticator": {
-        "title": "OOBSMSAuthenticator interface"
-      },
-      "web.oobsmsauthenticator.type": {
-        "title": "OOBSMSAuthenticator.type property"
-      },
       "web.passwordidentity.claims": {
         "title": "PasswordIdentity.claims property"
       },
@@ -3856,6 +3016,15 @@
       },
       "web.passwordidentity.type": {
         "title": "PasswordIdentity.type property"
+      },
+      "web.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "web.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "web.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
       },
       "web.session.createdat": {
         "title": "Session.createdAt property"
@@ -3952,24 +3121,6 @@
       },
       "web.storagedriver.set": {
         "title": "StorageDriver.set() method"
-      },
-      "web.totpauthenticator.activatedat": {
-        "title": "TOTPAuthenticator.activatedAt property"
-      },
-      "web.totpauthenticator.createdat": {
-        "title": "TOTPAuthenticator.createdAt property"
-      },
-      "web.totpauthenticator.displayname": {
-        "title": "TOTPAuthenticator.displayName property"
-      },
-      "web.totpauthenticator.id": {
-        "title": "TOTPAuthenticator.id property"
-      },
-      "web.totpauthenticator": {
-        "title": "TOTPAuthenticator interface"
-      },
-      "web.totpauthenticator.type": {
-        "title": "TOTPAuthenticator.type property"
       },
       "web.uploadassetoptions.access": {
         "title": "UploadAssetOptions.access property"
@@ -10822,6 +9973,267 @@
       },
       "version-2.3.0/version-2.3.0-web.weboidccontainer.startauthorization": {
         "title": "WebOIDCContainer.startAuthorization() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.4.0/version-2.4.0-node-client.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.4.0/version-2.4.0-node-client.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.4.0/version-2.4.0-node-client.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-node-client.identity.claims": {
+        "title": "Identity.claims property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.identity": {
+        "title": "Identity interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.identity.type": {
+        "title": "Identity.type property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.identityclaims": {
+        "title": "IdentityClaims interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.4.0/version-2.4.0-node-client.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-node-client.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "version-2.4.0/version-2.4.0-node-client.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.4.0/version-2.4.0-react-native.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.4.0/version-2.4.0-react-native.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.4.0/version-2.4.0-react-native.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.identity.claims": {
+        "title": "Identity.claims property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.identity": {
+        "title": "Identity interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.identity.type": {
+        "title": "Identity.type property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.identityclaims": {
+        "title": "IdentityClaims interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.4.0/version-2.4.0-react-native.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-react-native.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.reactnativeassetcontainer.upload": {
+        "title": "ReactNativeAssetContainer.upload() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.reactnativeoidccontainer.authenticateanonymously": {
+        "title": "ReactNativeOIDCContainer.authenticateAnonymously() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.reactnativeoidccontainer": {
+        "title": "ReactNativeOIDCContainer class"
+      },
+      "version-2.4.0/version-2.4.0-react-native.reactnativeoidccontainer.promoteanonymoususer": {
+        "title": "ReactNativeOIDCContainer.promoteAnonymousUser() method"
+      },
+      "version-2.4.0/version-2.4.0-react-native.uploadassetoptions.headers": {
+        "title": "UploadAssetOptions.headers property"
+      },
+      "version-2.4.0/version-2.4.0-react-native.uploadassetoptions": {
+        "title": "UploadAssetOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-web.authcontainer": {
+        "title": "AuthContainer class"
+      },
+      "version-2.4.0/version-2.4.0-web.authorizeoptions.loginhint": {
+        "title": "AuthorizeOptions.loginHint property"
+      },
+      "version-2.4.0/version-2.4.0-web.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-web.authorizeoptions.prompt": {
+        "title": "AuthorizeOptions.prompt property"
+      },
+      "version-2.4.0/version-2.4.0-web.authresponse": {
+        "title": "AuthResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-web.baseapiclient": {
+        "title": "BaseAPIClient class"
+      },
+      "version-2.4.0/version-2.4.0-web.baseapiclient.oauthchallenge": {
+        "title": "BaseAPIClient.oauthChallenge() method"
+      },
+      "version-2.4.0/version-2.4.0-web.challengeresponse.expire_at": {
+        "title": "ChallengeResponse.expire\\_at property"
+      },
+      "version-2.4.0/version-2.4.0-web.challengeresponse": {
+        "title": "ChallengeResponse interface"
+      },
+      "version-2.4.0/version-2.4.0-web.challengeresponse.token": {
+        "title": "ChallengeResponse.token property"
+      },
+      "version-2.4.0/version-2.4.0-web.containerstorage.delanonymouskeyid": {
+        "title": "ContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.containerstorage.getanonymouskeyid": {
+        "title": "ContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.containerstorage": {
+        "title": "ContainerStorage interface"
+      },
+      "version-2.4.0/version-2.4.0-web.containerstorage.setanonymouskeyid": {
+        "title": "ContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.globaljsoncontainerstorage.delanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.delAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.globaljsoncontainerstorage.getanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.getAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.globaljsoncontainerstorage": {
+        "title": "GlobalJSONContainerStorage class"
+      },
+      "version-2.4.0/version-2.4.0-web.globaljsoncontainerstorage.setanonymouskeyid": {
+        "title": "GlobalJSONContainerStorage.setAnonymousKeyID() method"
+      },
+      "version-2.4.0/version-2.4.0-web.identity.claims": {
+        "title": "Identity.claims property"
+      },
+      "version-2.4.0/version-2.4.0-web.identity": {
+        "title": "Identity interface"
+      },
+      "version-2.4.0/version-2.4.0-web.identity.type": {
+        "title": "Identity.type property"
+      },
+      "version-2.4.0/version-2.4.0-web.identityclaims.email": {
+        "title": "IdentityClaims.email property"
+      },
+      "version-2.4.0/version-2.4.0-web.identityclaims": {
+        "title": "IdentityClaims interface"
+      },
+      "version-2.4.0/version-2.4.0-web": {
+        "title": "web package"
+      },
+      "version-2.4.0/version-2.4.0-web.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.0/version-2.4.0-web.promoteoptions.redirecturi": {
+        "title": "PromoteOptions.redirectURI property"
+      },
+      "version-2.4.0/version-2.4.0-web.promoteoptions.state": {
+        "title": "PromoteOptions.state property"
       }
     },
     "links": {},

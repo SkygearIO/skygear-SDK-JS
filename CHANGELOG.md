@@ -1,3 +1,26 @@
+## 2.4.0 (2020-05-21)
+
+### Features
+
+- Allow configuring OIDC `prompt`
+- Support anonymous user
+
+### Bug Fixes
+
+- Fix asset upload on React Native Android
+
+### Other notes
+
+- Fix rollup bundle warning
+
+### Breaking Changes
+
+- Content-Type is required while uploading asset in React Native
+- Remove MFA API
+- Rename full access scope name
+- Remove currentIdentity
+- Change shape Identity
+
 ## 2.3.1 (2020-04-27)
 
 ### Bug Fixes
