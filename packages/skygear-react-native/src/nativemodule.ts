@@ -18,11 +18,20 @@ export function openURL(url: string): Promise<void> {
   return SGSkygearReactNative.openURL(url);
 }
 
-export function openAuthorizeURL(
+export async function openAuthorizeURL(
   url: string,
   callbackURLScheme: string
 ): Promise<string> {
-  return SGSkygearReactNative.openAuthorizeURL(url, callbackURLScheme);
+  const redirectURI = await SGSkygearReactNative.openAuthorizeURL(
+    url,
+    callbackURLScheme
+  );
+  await dismiss();
+  return redirectURI;
+}
+
+export function dismiss(): Promise<void> {
+  return SGSkygearReactNative.dismiss();
 }
 
 export function signInWithApple(
