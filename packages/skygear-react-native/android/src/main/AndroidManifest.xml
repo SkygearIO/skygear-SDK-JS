@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.skygear.reactnative">
 
+    <application>
+        <activity android:name=".OAuthCoordinatorActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+    </application>
+
 </manifest>
