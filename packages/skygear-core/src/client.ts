@@ -1,3 +1,5 @@
+import URLSearchParams from "core-js-pure/features/url-search-params";
+
 import {
   JSONObject,
   AuthResponse,
@@ -15,7 +17,6 @@ import {
   ChallengeResponse,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
-import { encodeQuery } from "./url";
 import {
   decodeAuthResponse,
   decodeSession,
@@ -226,8 +227,12 @@ export abstract class BaseAPIClient {
   ): Promise<any> {
     const { json, query, autoRefreshToken } = options;
     let p = path;
-    if (query != null) {
-      p += encodeQuery(query);
+    if (query != null && query.length > 0) {
+      const params = new URLSearchParams();
+      for (let i = 0; i < query.length; ++i) {
+        params.append(query[i][0], query[i][1]);
+      }
+      p += "?" + params.toString();
     }
 
     const headers: { [name: string]: string } = {};
@@ -761,30 +766,30 @@ export abstract class BaseAPIClient {
    */
   async _oidcTokenRequest(req: _OIDCTokenRequest): Promise<_OIDCTokenResponse> {
     const config = await this._fetchOIDCConfiguration();
-    const query: [string, string][] = [];
-    query.push(["grant_type", req.grant_type]);
-    query.push(["client_id", req.client_id]);
+    const query = new URLSearchParams();
+    query.append("grant_type", req.grant_type);
+    query.append("client_id", req.client_id);
     if (req.code) {
-      query.push(["code", req.code]);
+      query.append("code", req.code);
     }
     if (req.redirect_uri) {
-      query.push(["redirect_uri", req.redirect_uri]);
+      query.append("redirect_uri", req.redirect_uri);
     }
     if (req.code_verifier) {
-      query.push(["code_verifier", req.code_verifier]);
+      query.append("code_verifier", req.code_verifier);
     }
     if (req.refresh_token) {
-      query.push(["refresh_token", req.refresh_token]);
+      query.append("refresh_token", req.refresh_token);
     }
     if (req.jwt) {
-      query.push(["jwt", req.jwt]);
+      query.append("jwt", req.jwt);
     }
     return this._fetchOIDCJSON(config.token_endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
-      body: encodeQuery(query).substring(1),
+      body: query.toString(),
     });
   }
 
@@ -812,13 +817,15 @@ export abstract class BaseAPIClient {
    */
   async _oidcRevocationRequest(refreshToken: string): Promise<void> {
     const config = await this._fetchOIDCConfiguration();
-    const query: [string, string][] = [["token", refreshToken]];
+    const query = new URLSearchParams({
+      token: refreshToken,
+    });
     await this._fetchOIDCRequest(config.revocation_endpoint, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
-      body: encodeQuery(query).substring(1),
+      body: query.toString(),
     });
   }
 
