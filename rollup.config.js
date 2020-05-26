@@ -68,11 +68,11 @@ const plugins = [
     extensions,
   }),
   commonjs({
-    include: "node_modules/**",
+    include: ["node_modules/**", "packages/**/node_modules/**"],
   }),
   babel({
     extensions,
-    exclude: "node_modules/**",
+    exclude: ["node_modules/**", "packages/**/node_modules/**"],
     runtimeHelpers: true,
   }),
   json({
