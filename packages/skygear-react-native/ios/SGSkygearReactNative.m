@@ -191,16 +191,7 @@ RCT_EXPORT_METHOD(openURL:(NSURL *)url
         [rootViewController presentViewController:vc animated:YES completion:nil];
         resolve(nil);
     } else {
-        bool started = [RCTSharedApplication() openURL:url];
-        if (!started) {
-            if (reject) {
-                reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
-            }
-        } else {
-            if (resolve) {
-                resolve(nil);
-            }
-        }
+        reject(RCTErrorUnspecified, @"iOS >= 9 is required", nil);
     }
 }
 
@@ -266,13 +257,10 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
         UIViewController *rootViewController = RCTPresentedViewController();
         [rootViewController presentViewController:vc animated:YES completion:nil];
     } else {
-        BOOL opened = [RCTSharedApplication() openURL:url];
-        if (!opened) {
-            if (self.openURLReject) {
-                self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], nil);
-                [self cleanup];
-            }
+        if (self.openURLReject) {
+            self.openURLReject(RCTErrorUnspecified, @"iOS >= 9 is required", nil);
         }
+        [self cleanup];
     }
 }
 
