@@ -1,3 +1,4 @@
+import URL from "core-js-pure/features/url";
 import {
   ContainerStorage,
   JSONObject,
@@ -12,7 +13,7 @@ import {
   OAuthError,
 } from "./types";
 import { BaseAPIClient } from "./client";
-import { encodeQuery, decodeQuery } from "./url";
+import { encodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -657,28 +658,16 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
   async _finishAuthorization(
     url: string
   ): Promise<{ user: User; state?: string }> {
-    const idx = url.indexOf("?");
-    let redirectURI: string;
-    let queryMap: { [key: string]: string };
-    if (idx === -1) {
-      redirectURI = url;
-      queryMap = {};
-    } else {
-      redirectURI = url.slice(0, idx);
-      const query = url.slice(idx + 1);
-      const queryList = decodeQuery(query);
-      queryMap = queryList.reduce(
-        (acc, pair) => {
-          acc[pair[0]] = pair[1];
-          return acc;
-        },
-        {} as { [key: string]: string }
-      );
-    }
-    if (queryMap.error) {
+    const u = new URL(url);
+    const params = u.searchParams;
+    const uu = new URL(url);
+    uu.hash = "";
+    uu.search = "";
+    const redirectURI: string = uu.toString();
+    if (params.get("error")) {
       const err = {
-        error: queryMap.error,
-        error_description: queryMap.error_description,
+        error: params.get("error"),
+        error_description: params.get("error_description"),
       } as OAuthError;
       throw err;
     }
@@ -690,7 +679,8 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       // no code exchange is needed.
       authResponse = await this.parent.apiClient._oidcUserInfoRequest();
     } else {
-      if (!queryMap.code) {
+      const code = params.get("code");
+      if (!code) {
         const missingCodeError = {
           error: "invalid_request",
           error_description: "Missing parameter: code",
@@ -702,7 +692,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       );
       tokenResponse = await this.parent.apiClient._oidcTokenRequest({
         grant_type: "authorization_code",
-        code: queryMap.code,
+        code: code,
         redirect_uri: redirectURI,
         client_id: this.clientID,
         code_verifier: codeVerifier || "",
@@ -722,7 +712,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     await this.auth.persistAuthResponse(ar);
     return {
       user: authResponse.user,
-      state: queryMap.state,
+      state: params.get("state") || undefined,
     };
   }
 

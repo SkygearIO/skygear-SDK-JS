@@ -1,9 +1,4 @@
-import {
-  encodeQueryComponent,
-  encodeQuery,
-  decodeQueryComponent,
-  decodeQuery,
-} from "./url";
+import { encodeQueryComponent, encodeQuery } from "./url";
 
 describe("encodeQueryComponent", () => {
   const f = encodeQueryComponent;
@@ -50,28 +45,5 @@ describe("encodeQuery", () => {
 
   it("support empty key", () => {
     expect(f([["", "a"], ["", "b"]])).toEqual("?=a&=b");
-  });
-});
-
-describe("decodeQueryComponent", () => {
-  const f = decodeQueryComponent;
-
-  it("decode space", () => {
-    expect(f("a+b%20c")).toEqual("a b c");
-  });
-});
-
-describe("decodeQuery", () => {
-  const f = decodeQuery;
-
-  it("support key and value", () => {
-    expect(f("a=aValue&b=bValue")).toEqual([["a", "aValue"], ["b", "bValue"]]);
-  });
-
-  it("support decode value", () => {
-    expect(f("key1=a+b%20c&key2=d")).toEqual([
-      ["key1", "a b c"],
-      ["key2", "d"],
-    ]);
   });
 });
