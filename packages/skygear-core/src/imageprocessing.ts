@@ -1,4 +1,4 @@
-import { encodeQueryComponent } from "./url";
+import URL from "core-js-pure/features/url";
 
 /**
  * @public
@@ -119,46 +119,10 @@ export class ImageProcessingPipelineBuilder {
    * @param urlStr - input URL
    */
   setToURLString(urlStr: string): string {
-    const fragmentIndex = urlStr.indexOf("#");
-    const queryIndex = urlStr.indexOf("?");
-    const queryParam =
-      this.getName() + "=" + encodeQueryComponent(this.getValue());
-
-    let anythingElse = "";
-    let query = "";
-    let fragment = "";
-
-    if (fragmentIndex < 0) {
-      fragment = "";
-      if (queryIndex < 0) {
-        anythingElse = urlStr;
-        query = "";
-      } else {
-        anythingElse = urlStr.slice(0, queryIndex);
-        query = urlStr.slice(queryIndex + 1);
-      }
-    } else {
-      fragment = urlStr.slice(fragmentIndex + 1);
-      if (queryIndex < 0) {
-        anythingElse = urlStr.slice(0, fragmentIndex);
-        query = "";
-      } else {
-        anythingElse = urlStr.slice(0, queryIndex);
-        query = urlStr.slice(queryIndex + 1, fragmentIndex);
-      }
-    }
-
-    const queryParams = query
-      .split("&")
-      .filter(q => q !== "" && !/^pipeline=/.test(q));
-    queryParams.push(queryParam);
-
-    let result = anythingElse + "?" + queryParams.join("&");
-    if (fragment !== "") {
-      result += "#" + fragment;
-    }
-
-    return result;
+    const u = new URL(urlStr);
+    u.searchParams.delete("pipeline");
+    u.searchParams.append(this.getName(), this.getValue());
+    return u.toString();
   }
 }
 
