@@ -21,6 +21,20 @@ export const SkygearErrorNames = {
 export type SkygearErrorName = (typeof SkygearErrorNames)[keyof (typeof SkygearErrorNames)];
 
 /**
+ * CancelError is an error to represent cancel.
+ *
+ * @public
+ */
+export class CancelError extends Error {}
+
+/**
+ * CANCEL is sentinel value for cancel.
+ *
+ * @public
+ */
+export const CANCEL = new CancelError();
+
+/**
  * Skygear API error.
  *
  * @remarks
