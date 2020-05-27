@@ -1,3 +1,13 @@
+## 2.4.1 (2020-05-27)
+
+### Features
+
+- Support detect cancel in authorization flow #575
+
+### Bug Fixes
+
+- Ignore fragment when parsing redirect_uri to obtain correct authorization code #584
+
 ## 2.4.0 (2020-05-21)
 
 ### Features

@@ -308,6 +308,12 @@
       "node-client.bytearray": {
         "title": "ByteArray interface"
       },
+      "node-client.cancel": {
+        "title": "CANCEL variable"
+      },
+      "node-client.cancelerror": {
+        "title": "CancelError class"
+      },
       "node-client.challengeresponse.expire_at": {
         "title": "ChallengeResponse.expire\\_at property"
       },
@@ -476,12 +482,6 @@
       "node-client.decodeidentity": {
         "title": "decodeIdentity() function"
       },
-      "node-client.decodequery": {
-        "title": "decodeQuery() function"
-      },
-      "node-client.decodequerycomponent": {
-        "title": "decodeQueryComponent() function"
-      },
       "node-client.decodesession": {
         "title": "decodeSession() function"
       },
@@ -493,12 +493,6 @@
       },
       "node-client.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "node-client.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "node-client.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "node-client.encodeuser": {
         "title": "encodeUser() function"
@@ -1391,6 +1385,12 @@
       "react-native.bytearray": {
         "title": "ByteArray interface"
       },
+      "react-native.cancel": {
+        "title": "CANCEL variable"
+      },
+      "react-native.cancelerror": {
+        "title": "CancelError class"
+      },
       "react-native.challengeresponse.expire_at": {
         "title": "ChallengeResponse.expire\\_at property"
       },
@@ -1559,12 +1559,6 @@
       "react-native.decodeidentity": {
         "title": "decodeIdentity() function"
       },
-      "react-native.decodequery": {
-        "title": "decodeQuery() function"
-      },
-      "react-native.decodequerycomponent": {
-        "title": "decodeQueryComponent() function"
-      },
       "react-native.decodesession": {
         "title": "decodeSession() function"
       },
@@ -1576,12 +1570,6 @@
       },
       "react-native.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "react-native.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "react-native.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "react-native.encodeuser": {
         "title": "encodeUser() function"
@@ -2519,6 +2507,12 @@
       "web.bytearray": {
         "title": "ByteArray interface"
       },
+      "web.cancel": {
+        "title": "CANCEL variable"
+      },
+      "web.cancelerror": {
+        "title": "CancelError class"
+      },
       "web.challengeresponse.expire_at": {
         "title": "ChallengeResponse.expire\\_at property"
       },
@@ -2690,12 +2684,6 @@
       "web.decodeidentity": {
         "title": "decodeIdentity() function"
       },
-      "web.decodequery": {
-        "title": "decodeQuery() function"
-      },
-      "web.decodequerycomponent": {
-        "title": "decodeQueryComponent() function"
-      },
       "web.decodesession": {
         "title": "decodeSession() function"
       },
@@ -2707,12 +2695,6 @@
       },
       "web.encodeidentity": {
         "title": "encodeIdentity() function"
-      },
-      "web.encodequery": {
-        "title": "encodeQuery() function"
-      },
-      "web.encodequerycomponent": {
-        "title": "encodeQueryComponent() function"
       },
       "web.encodeuser": {
         "title": "encodeUser() function"
@@ -10234,6 +10216,33 @@
       },
       "version-2.4.0/version-2.4.0-web.promoteoptions.state": {
         "title": "PromoteOptions.state property"
+      },
+      "version-2.4.1/version-2.4.1-node-client.cancel": {
+        "title": "CANCEL variable"
+      },
+      "version-2.4.1/version-2.4.1-node-client.cancelerror": {
+        "title": "CancelError class"
+      },
+      "version-2.4.1/version-2.4.1-node-client": {
+        "title": "node-client package"
+      },
+      "version-2.4.1/version-2.4.1-react-native.cancel": {
+        "title": "CANCEL variable"
+      },
+      "version-2.4.1/version-2.4.1-react-native.cancelerror": {
+        "title": "CancelError class"
+      },
+      "version-2.4.1/version-2.4.1-react-native": {
+        "title": "react-native package"
+      },
+      "version-2.4.1/version-2.4.1-web.cancel": {
+        "title": "CANCEL variable"
+      },
+      "version-2.4.1/version-2.4.1-web.cancelerror": {
+        "title": "CancelError class"
+      },
+      "version-2.4.1/version-2.4.1-web": {
+        "title": "web package"
       }
     },
     "links": {},
