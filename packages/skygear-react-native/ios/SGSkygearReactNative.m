@@ -212,7 +212,7 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
                 [error code] == ASWebAuthenticationSessionErrorCodeCanceledLogin);
                 if (self.openURLReject) {
                     if (isUserCancelled) {
-                        self.openURLReject(RCTErrorUnspecified, @"CANCEL", error);
+                        self.openURLReject(@"CANCEL", @"CANCEL", error);
                     } else {
                         self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
                     }
@@ -237,7 +237,7 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
                 [error code] == SFAuthenticationErrorCanceledLogin);
                 if (self.openURLReject) {
                     if (isUserCancelled) {
-                        self.openURLReject(RCTErrorUnspecified, @"CANCEL", error);
+                        self.openURLReject(@"CANCEL", @"CANCEL", error);
                     } else {
                         self.openURLReject(RCTErrorUnspecified, [NSString stringWithFormat:@"Unable to open URL: %@", url], error);
                     }
@@ -429,7 +429,7 @@ RCT_EXPORT_METHOD(signAnonymousToken:(NSString *)kid data:(NSString *)s resolver
     }
 
     if (self.openURLReject) {
-        self.openURLReject(RCTErrorUnspecified, @"CANCEL", nil);
+        self.openURLReject(@"CANCEL", @"CANCEL", nil);
         [self cleanup];
     }
 }
