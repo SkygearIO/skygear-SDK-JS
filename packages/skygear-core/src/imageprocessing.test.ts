@@ -83,7 +83,7 @@ describe("ImageProcessingPipelineBuilder", () => {
         .quality(85)
         .setToURLString("http://example.com")
     ).toEqual(
-      "http://example.com?pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85"
+      "http://example.com/?pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85"
     );
 
     expect(
@@ -134,7 +134,7 @@ describe("ImageProcessingPipelineBuilder", () => {
         .quality(85)
         .setToURLString("http://example.com#a")
     ).toEqual(
-      "http://example.com?pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
+      "http://example.com/?pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
     );
 
     expect(
@@ -151,7 +151,7 @@ describe("ImageProcessingPipelineBuilder", () => {
         .quality(85)
         .setToURLString("http://example.com?a=b#a")
     ).toEqual(
-      "http://example.com?a=b&pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
+      "http://example.com/?a=b&pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
     );
 
     expect(
@@ -168,7 +168,7 @@ describe("ImageProcessingPipelineBuilder", () => {
         .quality(85)
         .setToURLString("http://example.com?a=b&pipeline=c#a")
     ).toEqual(
-      "http://example.com?a=b&pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
+      "http://example.com/?a=b&pipeline=image%2Fresize%2Cm_pad%2Cl_3%2Cs_4%2Cw_1%2Ch_2%2Ccolor_556677%2Fformat%2Cjpg%2Fquality%2CQ_85#a"
     );
   });
 });

@@ -1,3 +1,5 @@
+import URL from "core-js-pure/features/url";
+import URLSearchParams from "core-js-pure/features/url-search-params";
 import {
   ContainerStorage,
   JSONObject,
@@ -12,7 +14,6 @@ import {
   OAuthError,
 } from "./types";
 import { BaseAPIClient } from "./client";
-import { encodeQuery, decodeQuery } from "./url";
 
 const defaultExtraSessionInfoOptions: ExtraSessionInfoOptions = {
   deviceName: undefined,
@@ -614,7 +615,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
 
   async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
     const config = await this.parent.apiClient._fetchOIDCConfiguration();
-    const query: [string, string][] = [];
+    const query = new URLSearchParams();
 
     if (this.isThirdParty) {
       const codeVerifier = await this._setupCodeVerifier();
@@ -623,62 +624,50 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
         codeVerifier.verifier
       );
 
-      query.push(["response_type", "code"]);
-      query.push([
+      query.append("response_type", "code");
+      query.append(
         "scope",
-        "openid offline_access https://auth.skygear.io/scopes/full-access",
-      ]);
-      query.push(["code_challenge_method", "S256"]);
-      query.push(["code_challenge", codeVerifier.challenge]);
+        "openid offline_access https://auth.skygear.io/scopes/full-access"
+      );
+      query.append("code_challenge_method", "S256");
+      query.append("code_challenge", codeVerifier.challenge);
     } else {
       // for first party app
-      query.push(["response_type", "none"]);
-      query.push([
+      query.append("response_type", "none");
+      query.append(
         "scope",
-        "openid https://auth.skygear.io/scopes/full-access",
-      ]);
+        "openid https://auth.skygear.io/scopes/full-access"
+      );
     }
 
-    query.push(["client_id", this.clientID]);
-    query.push(["redirect_uri", options.redirectURI]);
+    query.append("client_id", this.clientID);
+    query.append("redirect_uri", options.redirectURI);
     if (options.state) {
-      query.push(["state", options.state]);
+      query.append("state", options.state);
     }
     if (options.prompt) {
-      query.push(["prompt", options.prompt]);
+      query.append("prompt", options.prompt);
     }
     if (options.loginHint) {
-      query.push(["login_hint", options.loginHint]);
+      query.append("login_hint", options.loginHint);
     }
 
-    return `${config.authorization_endpoint}${encodeQuery(query)}`;
+    return `${config.authorization_endpoint}?${query.toString()}`;
   }
 
   async _finishAuthorization(
     url: string
   ): Promise<{ user: User; state?: string }> {
-    const idx = url.indexOf("?");
-    let redirectURI: string;
-    let queryMap: { [key: string]: string };
-    if (idx === -1) {
-      redirectURI = url;
-      queryMap = {};
-    } else {
-      redirectURI = url.slice(0, idx);
-      const query = url.slice(idx + 1);
-      const queryList = decodeQuery(query);
-      queryMap = queryList.reduce(
-        (acc, pair) => {
-          acc[pair[0]] = pair[1];
-          return acc;
-        },
-        {} as { [key: string]: string }
-      );
-    }
-    if (queryMap.error) {
+    const u = new URL(url);
+    const params = u.searchParams;
+    const uu = new URL(url);
+    uu.hash = "";
+    uu.search = "";
+    const redirectURI: string = uu.toString();
+    if (params.get("error")) {
       const err = {
-        error: queryMap.error,
-        error_description: queryMap.error_description,
+        error: params.get("error"),
+        error_description: params.get("error_description"),
       } as OAuthError;
       throw err;
     }
@@ -690,7 +679,8 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       // no code exchange is needed.
       authResponse = await this.parent.apiClient._oidcUserInfoRequest();
     } else {
-      if (!queryMap.code) {
+      const code = params.get("code");
+      if (!code) {
         const missingCodeError = {
           error: "invalid_request",
           error_description: "Missing parameter: code",
@@ -702,7 +692,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       );
       tokenResponse = await this.parent.apiClient._oidcTokenRequest({
         grant_type: "authorization_code",
-        code: queryMap.code,
+        code: code,
         redirect_uri: redirectURI,
         client_id: this.clientID,
         code_verifier: codeVerifier || "",
@@ -722,7 +712,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     await this.auth.persistAuthResponse(ar);
     return {
       user: authResponse.user,
-      state: queryMap.state,
+      state: params.get("state") || undefined,
     };
   }
 
@@ -753,13 +743,13 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       await this.auth._clearSession();
     } else {
       const config = await this.parent.apiClient._fetchOIDCConfiguration();
-      const query: [string, string][] = [];
+      const query = new URLSearchParams();
       if (options.redirectURI) {
-        query.push(["post_logout_redirect_uri", options.redirectURI]);
+        query.append("post_logout_redirect_uri", options.redirectURI);
       }
-      const endSessionEndpoint = `${config.end_session_endpoint}${encodeQuery(
-        query
-      )}`;
+      const endSessionEndpoint = `${
+        config.end_session_endpoint
+      }?${query.toString()}`;
       await this.auth._clearSession();
       window.location.href = endSessionEndpoint;
     }

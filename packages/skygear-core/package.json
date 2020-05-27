@@ -2,5 +2,8 @@
   "name": "@skygear/core",
   "version": "2.4.0",
   "license": "Apache-2.0",
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "devDependencies": {
+    "core-js-pure": "^3.6.5"
+  }
 }
