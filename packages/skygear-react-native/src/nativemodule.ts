@@ -1,4 +1,5 @@
 import { NativeModules, NativeEventEmitter } from "react-native";
+import { CANCEL } from "@skygear/core";
 
 const { SGSkygearReactNative } = NativeModules;
 
@@ -22,12 +23,19 @@ export async function openAuthorizeURL(
   url: string,
   callbackURLScheme: string
 ): Promise<string> {
-  const redirectURI = await SGSkygearReactNative.openAuthorizeURL(
-    url,
-    callbackURLScheme
-  );
-  await dismiss();
-  return redirectURI;
+  try {
+    const redirectURI = await SGSkygearReactNative.openAuthorizeURL(
+      url,
+      callbackURLScheme
+    );
+    await dismiss();
+    return redirectURI;
+  } catch (e) {
+    if (e.message === "CANCEL") {
+      throw CANCEL;
+    }
+    throw e;
+  }
 }
 
 export function dismiss(): Promise<void> {
