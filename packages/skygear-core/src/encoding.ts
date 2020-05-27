@@ -41,6 +41,7 @@ export function decodeUser(u: any): User {
   const isVerified = u.is_verified;
   const isManuallyVerified = u.is_manually_verified;
   const isDisabled = u.is_disabled;
+  const isAnonymous = u.is_anonymous;
   const metadata = u.metadata;
   return {
     id,
@@ -49,6 +50,7 @@ export function decodeUser(u: any): User {
     isManuallyVerified,
     isVerified,
     isDisabled,
+    isAnonymous,
     metadata,
   };
 }
@@ -125,6 +127,7 @@ export function encodeUser(u: User): JSONObject {
     is_manually_verified: u.isManuallyVerified,
     is_verified: u.isVerified,
     is_disabled: u.isDisabled,
+    is_anonymous: u.isAnonymous,
     metadata: u.metadata,
   };
 }

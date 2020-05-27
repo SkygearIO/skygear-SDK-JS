@@ -34,6 +34,7 @@ describe("ContainerStorage", () => {
       isManuallyVerified: true,
       isVerified: false,
       isDisabled: false,
+      isAnonymous: false,
       metadata: {},
     };
     const ns = "test";
