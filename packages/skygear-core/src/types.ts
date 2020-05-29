@@ -45,6 +45,10 @@ export interface User {
    */
   isDisabled: boolean;
   /**
+   * Indicates whether the user is anonymous user.
+   */
+  isAnonymous: boolean;
+  /**
    * User custom metadata.
    */
   metadata: JSONObject;
