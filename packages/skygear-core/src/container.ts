@@ -574,6 +574,10 @@ export interface AuthorizeOptions {
    * OIDC login hint parameter
    */
   loginHint?: string;
+  /**
+   * UI locale tags
+   */
+  uiLocales?: string[];
 }
 
 /**
@@ -590,6 +594,10 @@ export interface PromoteOptions {
    * OAuth 2.0 state value.
    */
   state?: string;
+  /**
+   * UI locale tags
+   */
+  uiLocales?: string[];
 }
 
 /**
@@ -650,6 +658,9 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
     }
     if (options.loginHint) {
       query.append("login_hint", options.loginHint);
+    }
+    if (options.uiLocales) {
+      query.append("ui_locales", options.uiLocales.join(" "));
     }
 
     return `${config.authorization_endpoint}?${query.toString()}`;
