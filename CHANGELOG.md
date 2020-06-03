@@ -1,3 +1,10 @@
+## 2.4.2 (2020-06-03)
+
+### Features
+
+- Add anonymous user flag
+- Add options for UI locales
+
 ## 2.4.1 (2020-05-27)
 
 ### Features

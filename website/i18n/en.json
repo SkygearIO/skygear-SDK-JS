@@ -119,6 +119,9 @@
       "node-client.authorizeoptions.state": {
         "title": "AuthorizeOptions.state property"
       },
+      "node-client.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
+      },
       "node-client.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
       },
@@ -860,6 +863,9 @@
       "node-client.promoteoptions.state": {
         "title": "PromoteOptions.state property"
       },
+      "node-client.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
       "node-client.session.createdat": {
         "title": "Session.createdAt property"
       },
@@ -976,6 +982,9 @@
       },
       "node-client.user.id": {
         "title": "User.id property"
+      },
+      "node-client.user.isanonymous": {
+        "title": "User.isAnonymous property"
       },
       "node-client.user.isdisabled": {
         "title": "User.isDisabled property"
@@ -1195,6 +1204,9 @@
       },
       "react-native.authorizeoptions.state": {
         "title": "AuthorizeOptions.state property"
+      },
+      "react-native.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
       },
       "react-native.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
@@ -1883,6 +1895,9 @@
       "react-native.promoteoptions.state": {
         "title": "PromoteOptions.state property"
       },
+      "react-native.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
       "react-native.reactnativeapiclient.fetchfunction": {
         "title": "ReactNativeAPIClient.fetchFunction property"
       },
@@ -2102,6 +2117,9 @@
       "react-native.user.id": {
         "title": "User.id property"
       },
+      "react-native.user.isanonymous": {
+        "title": "User.isAnonymous property"
+      },
       "react-native.user.isdisabled": {
         "title": "User.isDisabled property"
       },
@@ -2317,6 +2335,9 @@
       },
       "web.authorizeoptions.state": {
         "title": "AuthorizeOptions.state property"
+      },
+      "web.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
       },
       "web.authresponse.accesstoken": {
         "title": "AuthResponse.accessToken property"
@@ -3008,6 +3029,9 @@
       "web.promoteoptions.state": {
         "title": "PromoteOptions.state property"
       },
+      "web.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
       "web.session.createdat": {
         "title": "Session.createdAt property"
       },
@@ -3124,6 +3148,9 @@
       },
       "web.user.id": {
         "title": "User.id property"
+      },
+      "web.user.isanonymous": {
+        "title": "User.isAnonymous property"
       },
       "web.user.isdisabled": {
         "title": "User.isDisabled property"
@@ -10243,6 +10270,60 @@
       },
       "version-2.4.1/version-2.4.1-web": {
         "title": "web package"
+      },
+      "version-2.4.2/version-2.4.2-node-client.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-node-client.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-node-client.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-node-client.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-node-client.user.isanonymous": {
+        "title": "User.isAnonymous property"
+      },
+      "version-2.4.2/version-2.4.2-node-client.user": {
+        "title": "User interface"
+      },
+      "version-2.4.2/version-2.4.2-react-native.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-react-native.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-react-native.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-react-native.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-react-native.user.isanonymous": {
+        "title": "User.isAnonymous property"
+      },
+      "version-2.4.2/version-2.4.2-react-native.user": {
+        "title": "User interface"
+      },
+      "version-2.4.2/version-2.4.2-web.authorizeoptions": {
+        "title": "AuthorizeOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-web.authorizeoptions.uilocales": {
+        "title": "AuthorizeOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-web.promoteoptions": {
+        "title": "PromoteOptions interface"
+      },
+      "version-2.4.2/version-2.4.2-web.promoteoptions.uilocales": {
+        "title": "PromoteOptions.uiLocales property"
+      },
+      "version-2.4.2/version-2.4.2-web.user.isanonymous": {
+        "title": "User.isAnonymous property"
+      },
+      "version-2.4.2/version-2.4.2-web.user": {
+        "title": "User interface"
       }
     },
     "links": {},
