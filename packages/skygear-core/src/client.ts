@@ -1,7 +1,6 @@
 import URLSearchParams from "core-js-pure/features/url-search-params";
 
 import {
-  JSONObject,
   AuthResponse,
   _OIDCConfiguration,
   _OIDCTokenResponse,
@@ -149,7 +148,7 @@ export abstract class BaseAPIClient {
     endpoint: string,
     path: string,
     options: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     } = {}
@@ -217,7 +216,7 @@ export abstract class BaseAPIClient {
     endpoint: string,
     path: string,
     options?: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     }
@@ -237,7 +236,7 @@ export abstract class BaseAPIClient {
     endpoint: string,
     path: string,
     options: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     }
@@ -248,7 +247,7 @@ export abstract class BaseAPIClient {
   protected async postAuth(
     path: string,
     options?: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     }
@@ -266,7 +265,7 @@ export abstract class BaseAPIClient {
   protected async delAuth(
     path: string,
     options: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     }
@@ -277,7 +276,7 @@ export abstract class BaseAPIClient {
   protected async postAndReturnAuthResponse(
     path: string,
     options?: {
-      json?: JSONObject;
+      json?: unknown;
       query?: [string, string][];
       autoRefreshToken?: boolean;
     }

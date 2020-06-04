@@ -1,5 +1,3 @@
-import { JSONObject } from "./types";
-
 /**
  * @public
  */
@@ -68,14 +66,9 @@ export class SkygearError extends Error {
   /**
    * Additional error information.
    */
-  info?: JSONObject;
+  info?: unknown;
 
-  constructor(
-    message: string,
-    name: string,
-    reason: string,
-    info?: JSONObject
-  ) {
+  constructor(message: string, name: string, reason: string, info?: unknown) {
     super(message);
     this.name = name;
     this.reason = reason;

@@ -1,4 +1,4 @@
-import { ContainerStorage, StorageDriver, JSONValue, User } from "./types";
+import { ContainerStorage, StorageDriver, User } from "./types";
 
 import { encodeUser, decodeUser } from "./encoding";
 
@@ -56,7 +56,7 @@ export class _GlobalJSONStorage {
     }
   }
 
-  async safeGetJSON(key: string): Promise<JSONValue | undefined> {
+  async safeGetJSON(key: string): Promise<unknown | undefined> {
     // No need to scope the key because safeGet does that.
     const jsonString = await this.safeGet(key);
     if (jsonString == null) {
@@ -76,7 +76,7 @@ export class _GlobalJSONStorage {
     } catch {}
   }
 
-  async safeSetJSON(key: string, value: JSONValue): Promise<void> {
+  async safeSetJSON(key: string, value: unknown): Promise<void> {
     // No need to scope the key because safeSet does that.
     try {
       const jsonString = JSON.stringify(value);

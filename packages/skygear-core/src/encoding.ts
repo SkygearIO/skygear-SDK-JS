@@ -1,4 +1,4 @@
-import { User, JSONObject, AuthResponse } from "./types";
+import { User, AuthResponse } from "./types";
 
 /**
  * @public
@@ -50,7 +50,7 @@ export function decodeUser(u: any): User {
 /**
  * @public
  */
-export function encodeUser(u: User): JSONObject {
+export function encodeUser(u: User): unknown {
   const created_at = u.createdAt.toISOString();
   const last_login_at = u.lastLoginAt.toISOString();
   return {

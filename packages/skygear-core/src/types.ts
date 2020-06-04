@@ -9,16 +9,6 @@ export interface ByteArray {
 /**
  * @public
  */
-export type JSONValue = unknown;
-
-/**
- * @public
- */
-export type JSONObject = object;
-
-/**
- * @public
- */
 export interface User {
   /**
    * User ID.
@@ -51,7 +41,7 @@ export interface User {
   /**
    * User custom metadata.
    */
-  metadata: JSONObject;
+  metadata: unknown;
 }
 
 /**
