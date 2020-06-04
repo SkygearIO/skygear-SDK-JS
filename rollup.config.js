@@ -139,17 +139,6 @@ function makeReactNativeExternal() {
 export default function makeConfig(commandLineArgs) {
   const configBundleType = commandLineArgs.configBundleType;
   switch (configBundleType) {
-    case "web-script":
-      return {
-        plugins: plugins.concat([closurePlugin]),
-        input: "packages/skygear-web/src/index.iife.ts",
-        output: {
-          file: "packages/skygear-web/dist/skygear-web.iife.js",
-          format: "iife",
-          name: "skygear",
-          exports: "default",
-        },
-      };
     case "web-cjs":
       return {
         plugins,

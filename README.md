@@ -33,12 +33,6 @@ $ npm install --save @skygear/node-client
 $ npm install --save @skygear/react-native
 ```
 
-### Script Tag
-
-[https://unpkg.com/@skygear/web@latest/dist/skygear-web.iife.js](https://unpkg.com/@skygear/web@latest/dist/skygear-web.iife.js)
-
-Replace `latest` with the version you want to use.
-
 ## Contributing
 
 First, fork the repository.
