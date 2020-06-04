@@ -25,31 +25,9 @@ export function _removeTrailingSlash(s: string): string {
 }
 
 /**
- * @internal
- * @param appEndpoint - app default endpoint, support url with protocol https, http or empty.
- * @param gearSubdomain - gear subdomain, e.g. accounts, assets
- */
-export function _gearEndpoint(
-  appEndpoint: string,
-  gearSubdomain: string
-): string {
-  const gearEndpoint = appEndpoint.replace(
-    /^(http:\/\/|https:\/\/|\/\/)(.*)$/g,
-    `$1${gearSubdomain}.$2`
-  );
-  if (gearEndpoint === appEndpoint) {
-    throw new Error("invalid app endpoint");
-  }
-
-  return gearEndpoint;
-}
-
-/**
  * @public
  */
 export abstract class BaseAPIClient {
-  apiKey: string;
-  appEndpoint: string;
   authEndpoint: string;
   /**
    * @internal
@@ -70,8 +48,6 @@ export abstract class BaseAPIClient {
   private config?: _OIDCConfiguration;
 
   constructor() {
-    this.apiKey = "";
-    this.appEndpoint = "";
     this.authEndpoint = "";
     this._accessToken = null;
     this._shouldRefreshTokenAt = 0;
@@ -95,20 +71,12 @@ export abstract class BaseAPIClient {
     }
   }
 
-  async setEndpoint(appEndpoint: string, authEndpoint?: string) {
-    if (!appEndpoint) {
-      throw new Error("appEndpoint is required");
-    }
-    this.appEndpoint = _removeTrailingSlash(appEndpoint);
-    this.authEndpoint = authEndpoint
-      ? authEndpoint
-      : _gearEndpoint(this.appEndpoint, "accounts");
+  setEndpoint(authEndpoint: string) {
+    this.authEndpoint = _removeTrailingSlash(authEndpoint);
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
-    const headers: { [name: string]: string } = {
-      "x-skygear-api-key": this.apiKey,
-    };
+    const headers: { [name: string]: string } = {};
     if (this._accessToken) {
       headers["authorization"] = `bearer ${this._accessToken}`;
     }

@@ -10,11 +10,59 @@ import {
 import { BaseAPIClient } from "./client";
 
 /**
- * Skygear Auth APIs.
+ * Auth UI authorization options
  *
  * @public
  */
-export class AuthContainer<T extends BaseAPIClient> {
+export interface AuthorizeOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
+  /**
+   * OIDC prompt parameter.
+   */
+  prompt?: string;
+  /**
+   * OIDC login hint parameter
+   */
+  loginHint?: string;
+  /**
+   * UI locale tags
+   */
+  uiLocales?: string[];
+}
+
+/**
+ * Auth UI anonymous user promotion options
+ *
+ * @public
+ */
+export interface PromoteOptions {
+  /**
+   * Redirect uri. Redirection URI to which the response will be sent after authorization.
+   */
+  redirectURI: string;
+  /**
+   * OAuth 2.0 state value.
+   */
+  state?: string;
+  /**
+   * UI locale tags
+   */
+  uiLocales?: string[];
+}
+
+/**
+ * Skygear Auth OIDC client APIs.
+ *
+ * @public
+ */
+export abstract class OIDCContainer<T extends BaseAPIClient> {
   parent: Container<T>;
 
   /**
@@ -27,6 +75,13 @@ export class AuthContainer<T extends BaseAPIClient> {
    */
   currentSessionID: string | null;
 
+  abstract clientID: string;
+  abstract isThirdParty: boolean;
+  abstract async _setupCodeVerifier(): Promise<{
+    verifier: string;
+    challenge: string;
+  }>;
+
   constructor(parent: Container<T>) {
     this.parent = parent;
     this.currentUser = null;
@@ -36,7 +91,7 @@ export class AuthContainer<T extends BaseAPIClient> {
   /**
    * @internal
    */
-  async persistAuthResponse(response: AuthResponse): Promise<void> {
+  async _persistAuthResponse(response: AuthResponse): Promise<void> {
     const { user, accessToken, refreshToken, sessionID, expiresIn } = response;
 
     await this.parent.storage.setUser(this.parent.name, user);
@@ -104,7 +159,7 @@ export class AuthContainer<T extends BaseAPIClient> {
     try {
       tokenResponse = await this.parent.apiClient._oidcTokenRequest({
         grant_type: "refresh_token",
-        client_id: this.parent.apiClient.apiKey,
+        client_id: this.clientID,
         refresh_token: refreshToken,
       });
     } catch (error) {
@@ -133,76 +188,6 @@ export class AuthContainer<T extends BaseAPIClient> {
       tokenResponse.expires_in
     );
     return true;
-  }
-}
-
-/**
- * Auth UI authorization options
- *
- * @public
- */
-export interface AuthorizeOptions {
-  /**
-   * Redirect uri. Redirection URI to which the response will be sent after authorization.
-   */
-  redirectURI: string;
-  /**
-   * OAuth 2.0 state value.
-   */
-  state?: string;
-  /**
-   * OIDC prompt parameter.
-   */
-  prompt?: string;
-  /**
-   * OIDC login hint parameter
-   */
-  loginHint?: string;
-  /**
-   * UI locale tags
-   */
-  uiLocales?: string[];
-}
-
-/**
- * Auth UI anonymous user promotion options
- *
- * @public
- */
-export interface PromoteOptions {
-  /**
-   * Redirect uri. Redirection URI to which the response will be sent after authorization.
-   */
-  redirectURI: string;
-  /**
-   * OAuth 2.0 state value.
-   */
-  state?: string;
-  /**
-   * UI locale tags
-   */
-  uiLocales?: string[];
-}
-
-/**
- * Skygear Auth OIDC client APIs.
- *
- * @public
- */
-export abstract class OIDCContainer<T extends BaseAPIClient> {
-  parent: Container<T>;
-  auth: AuthContainer<T>;
-
-  abstract clientID: string;
-  abstract isThirdParty: boolean;
-  abstract async _setupCodeVerifier(): Promise<{
-    verifier: string;
-    challenge: string;
-  }>;
-
-  constructor(parent: Container<T>, auth: AuthContainer<T>) {
-    this.parent = parent;
-    this.auth = auth;
   }
 
   async authorizeEndpoint(options: AuthorizeOptions): Promise<string> {
@@ -304,7 +289,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       ar.refreshToken = tokenResponse.refresh_token;
       ar.expiresIn = tokenResponse.expires_in;
     }
-    await this.auth.persistAuthResponse(ar);
+    await this._persistAuthResponse(ar);
     return {
       user: authResponse.user,
       state: params.get("state") || undefined,
@@ -335,7 +320,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
           throw error;
         }
       }
-      await this.auth._clearSession();
+      await this._clearSession();
     } else {
       const config = await this.parent.apiClient._fetchOIDCConfiguration();
       const query = new URLSearchParams();
@@ -345,7 +330,7 @@ export abstract class OIDCContainer<T extends BaseAPIClient> {
       const endSessionEndpoint = `${
         config.end_session_endpoint
       }?${query.toString()}`;
-      await this.auth._clearSession();
+      await this._clearSession();
       window.location.href = endSessionEndpoint;
     }
   }
@@ -368,7 +353,6 @@ export class Container<T extends BaseAPIClient> {
   name: string;
   apiClient: T;
   storage: ContainerStorage;
-  classicAuth: AuthContainer<T>;
 
   constructor(options: ContainerOptions<T>) {
     if (!options.apiClient) {
@@ -382,42 +366,5 @@ export class Container<T extends BaseAPIClient> {
     this.name = options.name || "default";
     this.apiClient = options.apiClient;
     this.storage = options.storage;
-    this.classicAuth = new AuthContainer(this);
-  }
-
-  protected async _configure(options: {
-    apiKey: string;
-    endpoint: string;
-    authEndpoint?: string;
-  }): Promise<void> {
-    this.apiClient.apiKey = options.apiKey;
-    await this.apiClient.setEndpoint(options.endpoint, options.authEndpoint);
-
-    const accessToken = await this.storage.getAccessToken(this.name);
-    this.apiClient._accessToken = accessToken;
-    // should refresh token when app start
-    this.apiClient.setShouldRefreshTokenNow();
-
-    const user = await this.storage.getUser(this.name);
-    this.classicAuth.currentUser = user;
-
-    const sessionID = await this.storage.getSessionID(this.name);
-    this.classicAuth.currentSessionID = sessionID;
-
-    this.apiClient.refreshTokenFunction = this.classicAuth._refreshAccessToken.bind(
-      this.classicAuth
-    );
-  }
-
-  /**
-   * `fetch` function for calling microservices.
-   *
-   * @remarks
-   * This function has same behavior as the standard `fetch` function, except
-   * it will also handle Skygear authorization mechanism automatically (e.g.
-   * attaching API key, access token, refreshing access token).
-   */
-  async fetch(input: string, init?: RequestInit): Promise<Response> {
-    return this.apiClient.fetch(this.apiClient.appEndpoint, input, init);
   }
 }

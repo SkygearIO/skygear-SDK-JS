@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import {
-  AuthContainer,
   BaseAPIClient,
   Container,
   ContainerOptions,
@@ -53,11 +52,8 @@ export class ReactNativeOIDCContainer<
   clientID: string;
   isThirdParty: boolean;
 
-  constructor(
-    parent: ReactNativeContainer<T>,
-    auth: ReactNativeAuthContainer<T>
-  ) {
-    super(parent, auth);
+  constructor(parent: ReactNativeContainer<T>) {
+    super(parent);
     this.clientID = "";
     this.isThirdParty = true;
   }
@@ -132,7 +128,7 @@ export class ReactNativeOIDCContainer<
 
     const tokenResponse = await this.parent.apiClient._oidcTokenRequest({
       grant_type: "urn:skygear-auth:params:oauth:grant-type:anonymous-request",
-      client_id: this.parent.apiClient.apiKey,
+      client_id: this.clientID,
       jwt,
     });
 
@@ -143,7 +139,7 @@ export class ReactNativeOIDCContainer<
     ar.accessToken = tokenResponse.access_token;
     ar.refreshToken = tokenResponse.refresh_token;
     ar.expiresIn = tokenResponse.expires_in;
-    await this.auth.persistAuthResponse(ar);
+    await this._persistAuthResponse(ar);
 
     await this.parent.storage.setAnonymousKeyID(this.parent.name, key.kid);
     return { user: authResponse.user };
@@ -195,15 +191,6 @@ export class ReactNativeOIDCContainer<
 }
 
 /**
- * Skygear Auth APIs (for React Native).
- *
- * @public
- */
-export class ReactNativeAuthContainer<
-  T extends ReactNativeAPIClient
-> extends AuthContainer<T> {}
-
-/**
  * @public
  */
 export interface ConfigureOptions {
@@ -212,13 +199,9 @@ export interface ConfigureOptions {
    */
   clientID: string;
   /**
-   * The app endpoint.
+   * The Skygear Auth endpoint.
    */
-  appEndpoint: string;
-  /**
-   * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
-   */
-  authEndpoint?: string;
+  authEndpoint: string;
 }
 
 /**
@@ -243,10 +226,7 @@ export class ReactNativeContainer<
     } as ContainerOptions<T>;
 
     super(o);
-    this.auth = new ReactNativeOIDCContainer(
-      this,
-      new ReactNativeAuthContainer(this)
-    );
+    this.auth = new ReactNativeOIDCContainer(this);
   }
 
   /**
@@ -255,11 +235,22 @@ export class ReactNativeContainer<
    * @param options - Skygear connection information
    */
   async configure(options: ConfigureOptions) {
-    await this._configure({
-      apiKey: options.clientID,
-      endpoint: options.appEndpoint,
-      authEndpoint: options.authEndpoint,
-    });
+    this.apiClient.setEndpoint(options.authEndpoint);
+
+    const accessToken = await this.storage.getAccessToken(this.name);
+    this.apiClient._accessToken = accessToken;
+    // should refresh token when app start
+    this.apiClient.setShouldRefreshTokenNow();
+
+    const user = await this.storage.getUser(this.name);
+    this.auth.currentUser = user;
+
+    const sessionID = await this.storage.getSessionID(this.name);
+    this.auth.currentSessionID = sessionID;
+
+    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
+      this.auth
+    );
     this.auth.clientID = options.clientID;
   }
 }

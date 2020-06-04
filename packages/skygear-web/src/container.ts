@@ -1,5 +1,4 @@
 import {
-  AuthContainer,
   Container,
   User,
   ContainerOptions,
@@ -20,8 +19,8 @@ export class WebOIDCContainer<T extends WebAPIClient> extends OIDCContainer<T> {
   clientID: string;
   isThirdParty: boolean;
 
-  constructor(parent: WebContainer<T>, auth: WebAuthContainer<T>) {
-    super(parent, auth);
+  constructor(parent: WebContainer<T>) {
+    super(parent);
     this.clientID = "";
     this.isThirdParty = false;
   }
@@ -78,15 +77,6 @@ export class WebOIDCContainer<T extends WebAPIClient> extends OIDCContainer<T> {
 }
 
 /**
- * Skygear Auth APIs (for web platforms).
- *
- * @public
- */
-export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<
-  T
-> {}
-
-/**
  * @public
  */
 export interface ConfigureOptions {
@@ -95,13 +85,9 @@ export interface ConfigureOptions {
    */
   clientID: string;
   /**
-   * The app endpoint.
+   * The Skygear Auth endpoint.
    */
-  appEndpoint: string;
-  /**
-   * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
-   */
-  authEndpoint?: string;
+  authEndpoint: string;
   /**
    * isThirdPartyApp indicate if the application a third party app.
    * A third party app means the app doesn't share common-domain with Skygear Auth thus the session cookie cannot be shared.
@@ -128,7 +114,7 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
     } as ContainerOptions<T>;
 
     super(o);
-    this.auth = new WebOIDCContainer(this, new WebAuthContainer(this));
+    this.auth = new WebOIDCContainer(this);
   }
 
   /**
@@ -137,11 +123,23 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
    * @param options - Skygear connection information
    */
   async configure(options: ConfigureOptions) {
-    await this._configure({
-      apiKey: options.clientID,
-      endpoint: options.appEndpoint,
-      authEndpoint: options.authEndpoint,
-    });
+    this.apiClient.setEndpoint(options.authEndpoint);
+
+    const accessToken = await this.storage.getAccessToken(this.name);
+    this.apiClient._accessToken = accessToken;
+    // should refresh token when app start
+    this.apiClient.setShouldRefreshTokenNow();
+
+    const user = await this.storage.getUser(this.name);
+    this.auth.currentUser = user;
+
+    const sessionID = await this.storage.getSessionID(this.name);
+    this.auth.currentSessionID = sessionID;
+
+    this.apiClient.refreshTokenFunction = this.auth._refreshAccessToken.bind(
+      this.auth
+    );
+
     this.auth.clientID = options.clientID;
     this.auth.isThirdParty = !!options.isThirdPartyApp;
   }
