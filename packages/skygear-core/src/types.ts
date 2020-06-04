@@ -451,34 +451,3 @@ export interface _OIDCTokenResponse {
   expires_in: number;
   refresh_token?: string;
 }
-
-/**
- * @internal
- */
-export interface _PresignUploadRequest {
-  prefix?: string;
-  access?: "public" | "private";
-  headers?: {
-    [name: string]: string;
-  };
-}
-
-/**
- * @internal
- */
-export interface _PresignUploadResponse {
-  asset_name: string;
-  url: string;
-  method: string;
-  headers: {
-    name: string;
-    value: string;
-  }[];
-}
-
-/**
- * @internal
- */
-export interface _PresignUploadFormResponse {
-  url: string;
-}

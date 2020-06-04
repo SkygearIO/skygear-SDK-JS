@@ -805,14 +805,9 @@ export class Container<T extends BaseAPIClient> {
     apiKey: string;
     endpoint: string;
     authEndpoint?: string;
-    assetEndpoint?: string;
   }): Promise<void> {
     this.apiClient.apiKey = options.apiKey;
-    await this.apiClient.setEndpoint(
-      options.endpoint,
-      options.authEndpoint,
-      options.assetEndpoint
-    );
+    await this.apiClient.setEndpoint(options.endpoint, options.authEndpoint);
 
     const accessToken = await this.storage.getAccessToken(this.name);
     this.apiClient._accessToken = accessToken;

@@ -4,7 +4,6 @@ export * from "./client";
 export * from "./container";
 export * from "./encoding";
 export * from "./storage";
-export * from "./imageprocessing";
 export * from "./validation";
 export * from "./utf8";
 export * from "./base64";

@@ -8,7 +8,6 @@ import {
   SSOLoginOptions,
   StorageDriver,
   User,
-  _PresignUploadRequest,
   decodeError,
   OIDCContainer,
   AuthorizeOptions,
@@ -50,142 +49,6 @@ export class ReactNativeAsyncStorageStorageDriver implements StorageDriver {
   }
   del(key: string): Promise<void> {
     return AsyncStorage.removeItem(key);
-  }
-}
-
-async function uploadForm(
-  url: string,
-  req: _PresignUploadRequest,
-  uri: string,
-  onUploadProgress?: (e: ProgressEvent) => void
-): Promise<string> {
-  const form = new FormData();
-  if (req.prefix != null) {
-    form.append("prefix", req.prefix);
-  }
-  if (req.access != null) {
-    form.append("access", req.access);
-  }
-  if (req.headers != null) {
-    for (const name of Object.keys(req.headers)) {
-      const value = req.headers[name];
-      form.append(name, value);
-    }
-  }
-
-  const contentType = (req.headers || {})["content-type"];
-  if (contentType == null) {
-    throw new Error("content-type is required to upload asset");
-  }
-
-  form.append("file", {
-    uri,
-    type: contentType,
-    name: "filename",
-  } as any);
-
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = "json";
-    xhr.onload = function() {
-      const jsonBody = xhr.response;
-      if (jsonBody["result"]) {
-        resolve(jsonBody["result"]["asset_name"]);
-      } else if (jsonBody["error"]) {
-        reject(decodeError(jsonBody["error"]));
-      } else {
-        reject(decodeError());
-      }
-    };
-    xhr.onerror = function() {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.ontimeout = function() {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "multipart/form-data");
-    if (xhr.upload != null) {
-      xhr.upload.onprogress = function(e: ProgressEvent) {
-        if (onUploadProgress != null) {
-          onUploadProgress(e);
-        }
-      };
-    }
-    xhr.send(form);
-  });
-}
-
-/**
- * @public
- */
-export interface UploadAssetOptions {
-  /**
-   * The asset name prefix.
-   */
-  prefix?: string;
-  /**
-   * The access control type of asset.
-   */
-  access?: "public" | "private";
-  /**
-   * Additional HTTP headers to be returned with the asset.
-   */
-  headers: {
-    "content-type": string;
-    [name: string]: string;
-  };
-  /**
-   * Callback for reporting upload progress.
-   */
-  onUploadProgress?: (e: ProgressEvent) => void;
-}
-
-/**
- * Skygear Asset APIs (for React Native).
- *
- * @public
- */
-export class ReactNativeAssetContainer<T extends ReactNativeAPIClient> {
-  parent: ReactNativeContainer<T>;
-
-  constructor(parent: ReactNativeContainer<T>) {
-    this.parent = parent;
-  }
-
-  /**
-   * Uploads new asset.
-   *
-   * @param uri - Asset data URI
-   * @param options - Upload options
-   *
-   * @returns Asset name
-   */
-  async upload(uri: string, options: UploadAssetOptions): Promise<string> {
-    // Prepare presignRequest
-    const presignRequest: _PresignUploadRequest = {};
-    if (options != null) {
-      presignRequest.prefix = options.prefix;
-      presignRequest.access = options.access;
-      if (options.headers != null) {
-        presignRequest.headers = { ...options.headers };
-      }
-    }
-
-    // Prepare presignRequest.headers
-    const presignRequestHeaders = presignRequest.headers || {};
-    presignRequest.headers = presignRequestHeaders;
-
-    const { url } = await this.parent.apiClient._presignUploadForm();
-
-    const asset_name = await uploadForm(
-      url,
-      presignRequest,
-      uri,
-      options.onUploadProgress
-    );
-
-    return asset_name;
   }
 }
 
@@ -461,10 +324,6 @@ export interface ConfigureOptions {
    * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
    */
   authEndpoint?: string;
-  /**
-   * The Skygear asset endpoint. If it is omitted, it is derived by pre-pending `assets.` to the domain of the app endpoint.
-   */
-  assetEndpoint?: string;
 }
 
 /**
@@ -476,7 +335,6 @@ export class ReactNativeContainer<
   T extends ReactNativeAPIClient
 > extends Container<T> {
   classicAuth: ReactNativeAuthContainer<T>;
-  asset: ReactNativeAssetContainer<T>;
   auth: ReactNativeOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
@@ -491,7 +349,6 @@ export class ReactNativeContainer<
     } as ContainerOptions<T>;
 
     super(o);
-    this.asset = new ReactNativeAssetContainer(this);
     this.classicAuth = new ReactNativeAuthContainer(this);
     this.auth = new ReactNativeOIDCContainer(this, this.classicAuth);
   }
@@ -506,7 +363,6 @@ export class ReactNativeContainer<
       apiKey: options.clientID,
       endpoint: options.appEndpoint,
       authEndpoint: options.authEndpoint,
-      assetEndpoint: options.assetEndpoint,
     });
     this.auth.clientID = options.clientID;
   }

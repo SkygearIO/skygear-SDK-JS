@@ -7,7 +7,6 @@ import {
   decodeError,
   ContainerOptions,
   GlobalJSONContainerStorage,
-  _PresignUploadRequest,
   OIDCContainer,
   AuthorizeOptions,
 } from "@skygear/core";
@@ -35,62 +34,6 @@ function decodeMessage(message: any): string {
     default:
       throw new Error("unknown message type: " + message.type);
   }
-}
-
-function uploadForm(
-  url: string,
-  req: _PresignUploadRequest,
-  blob: Blob,
-  onUploadProgress?: (e: ProgressEvent) => void
-): Promise<string> {
-  const form = new FormData();
-  if (req.prefix != null) {
-    form.append("prefix", req.prefix);
-  }
-  if (req.access != null) {
-    form.append("access", req.access);
-  }
-  if (req.headers != null) {
-    for (const name of Object.keys(req.headers)) {
-      const value = req.headers[name];
-      form.append(name, value);
-    }
-  }
-  form.append("file", blob, "filename");
-
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      const jsonStr = xhr.responseText;
-      try {
-        const jsonBody = JSON.parse(jsonStr);
-        if (jsonBody["result"]) {
-          resolve(jsonBody["result"]["asset_name"]);
-        } else if (jsonBody["error"]) {
-          reject(decodeError(jsonBody["error"]));
-        } else {
-          reject(decodeError());
-        }
-      } catch (e) {
-        reject(e);
-      }
-    };
-    xhr.onerror = function() {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.ontimeout = function() {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.open("POST", url, true);
-    if (xhr.upload != null) {
-      xhr.upload.onprogress = function(e: ProgressEvent) {
-        if (onUploadProgress != null) {
-          onUploadProgress(e);
-        }
-      };
-    }
-    xhr.send(form);
-  });
 }
 
 /**
@@ -402,92 +345,6 @@ export class WebAuthContainer<T extends WebAPIClient> extends AuthContainer<T> {
 /**
  * @public
  */
-export interface UploadAssetOptions {
-  /**
-   * The asset name prefix.
-   */
-  prefix?: string;
-  /**
-   * The access control type of asset.
-   */
-  access?: "public" | "private";
-  /**
-   * Additional HTTP headers to be returned with the asset.
-   */
-  headers?: {
-    [name: string]: string;
-  };
-  /**
-   * Callback for reporting upload progress.
-   */
-  onUploadProgress?: (e: ProgressEvent) => void;
-}
-
-/**
- * Skygear Asset APIs (for web platforms).
- *
- * @public
- */
-export class WebAssetContainer<T extends WebAPIClient> {
-  parent: WebContainer<T>;
-
-  constructor(parent: WebContainer<T>) {
-    this.parent = parent;
-  }
-
-  /**
-   * Uploads new asset.
-   *
-   * @param blob - Asset data
-   * @param options - Upload options
-   *
-   * @returns Asset name
-   */
-  async upload(blob: Blob, options?: UploadAssetOptions): Promise<string> {
-    // Prepare presignRequest
-    const presignRequest: _PresignUploadRequest = {};
-    if (options != null) {
-      presignRequest.prefix = options.prefix;
-      presignRequest.access = options.access;
-      if (options.headers != null) {
-        presignRequest.headers = { ...options.headers };
-      }
-    }
-
-    // Prepare presignRequest.headers
-    const presignRequestHeaders = presignRequest.headers || {};
-    let hasContentType = false;
-    for (const key of Object.keys(presignRequestHeaders)) {
-      const headerName = key.toLowerCase();
-      switch (headerName) {
-        case "content-type":
-          hasContentType = true;
-          break;
-        default:
-          break;
-      }
-    }
-    if (!hasContentType && blob.type !== "") {
-      presignRequestHeaders["content-type"] = String(blob.type);
-    }
-    presignRequest.headers = presignRequestHeaders;
-
-    const { url } = await this.parent.apiClient._presignUploadForm();
-
-    const asset_name = await uploadForm(
-      url,
-      presignRequest,
-      blob,
-      options && options.onUploadProgress
-    );
-
-    return asset_name;
-  }
-}
-
-/**
- * @public
- */
 export interface ConfigureOptions {
   /**
    * The OAuth client ID.
@@ -501,10 +358,6 @@ export interface ConfigureOptions {
    * The Skygear Auth endpoint. If it is omitted, it is derived by pre-pending `accounts.` to the domain of the app endpoint.
    */
   authEndpoint?: string;
-  /**
-   * The Skygear asset endpoint. If it is omitted, it is derived by pre-pending `assets.` to the domain of the app endpoint.
-   */
-  assetEndpoint?: string;
   /**
    * isThirdPartyApp indicate if the application a third party app.
    * A third party app means the app doesn't share common-domain with Skygear Auth thus the session cookie cannot be shared.
@@ -520,7 +373,6 @@ export interface ConfigureOptions {
  */
 export class WebContainer<T extends WebAPIClient> extends Container<T> {
   classicAuth: WebAuthContainer<T>;
-  asset: WebAssetContainer<T>;
   auth: WebOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
@@ -534,7 +386,6 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
 
     super(o);
     this.classicAuth = new WebAuthContainer(this);
-    this.asset = new WebAssetContainer(this);
     this.auth = new WebOIDCContainer(this, this.classicAuth);
   }
 
@@ -548,7 +399,6 @@ export class WebContainer<T extends WebAPIClient> extends Container<T> {
       apiKey: options.clientID,
       endpoint: options.appEndpoint,
       authEndpoint: options.authEndpoint,
-      assetEndpoint: options.assetEndpoint,
     });
     this.auth.clientID = options.clientID;
     this.auth.isThirdParty = !!options.isThirdPartyApp;

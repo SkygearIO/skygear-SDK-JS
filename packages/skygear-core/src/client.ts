@@ -7,9 +7,6 @@ import {
   Session,
   Identity,
   FullOAuthAuthorizationURLOptions,
-  _PresignUploadRequest,
-  _PresignUploadResponse,
-  _PresignUploadFormResponse,
   _OIDCConfiguration,
   _OIDCTokenResponse,
   _OIDCTokenRequest,
@@ -72,7 +69,6 @@ export abstract class BaseAPIClient {
   apiKey: string;
   appEndpoint: string;
   authEndpoint: string;
-  assetEndpoint: string;
   /**
    * @internal
    */
@@ -96,7 +92,6 @@ export abstract class BaseAPIClient {
     this.apiKey = "";
     this.appEndpoint = "";
     this.authEndpoint = "";
-    this.assetEndpoint = "";
     this._accessToken = null;
     this._shouldRefreshTokenAt = 0;
   }
@@ -119,11 +114,7 @@ export abstract class BaseAPIClient {
     }
   }
 
-  async setEndpoint(
-    appEndpoint: string,
-    authEndpoint?: string,
-    assetEndpoint?: string
-  ) {
+  async setEndpoint(appEndpoint: string, authEndpoint?: string) {
     if (!appEndpoint) {
       throw new Error("appEndpoint is required");
     }
@@ -131,9 +122,6 @@ export abstract class BaseAPIClient {
     this.authEndpoint = authEndpoint
       ? authEndpoint
       : _gearEndpoint(this.appEndpoint, "accounts");
-    this.assetEndpoint = assetEndpoint
-      ? assetEndpoint
-      : _gearEndpoint(this.appEndpoint, "assets");
   }
 
   protected async prepareHeaders(): Promise<{ [name: string]: string }> {
@@ -343,35 +331,6 @@ export abstract class BaseAPIClient {
     }
   ): Promise<any> {
     return this.request("DELETE", this.authEndpoint, path, options);
-  }
-
-  protected async postAsset(
-    path: string,
-    options?: {
-      json?: JSONObject;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<any> {
-    return this.request("POST", this.assetEndpoint, path, options);
-  }
-
-  protected async getAsset(
-    path: string,
-    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
-  ): Promise<any> {
-    return this.request("GET", this.assetEndpoint, path, options);
-  }
-
-  protected async delAsset(
-    path: string,
-    options: {
-      json?: JSONObject;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<any> {
-    return this.request("DELETE", this.assetEndpoint, path, options);
   }
 
   protected async postAndReturnAuthResponse(
@@ -680,26 +639,6 @@ export abstract class BaseAPIClient {
         old_login_id: { key: oldKey, value: oldValue },
         new_login_id: { key: newKey, value: newValue },
       },
-    });
-  }
-
-  /**
-   * @internal
-   */
-  async _presignUpload(
-    req: _PresignUploadRequest
-  ): Promise<_PresignUploadResponse> {
-    return this.postAsset("/_asset/presign_upload", {
-      json: req,
-    });
-  }
-
-  /**
-   * @internal
-   */
-  async _presignUploadForm(): Promise<_PresignUploadFormResponse> {
-    return this.postAsset("/_asset/presign_upload_form", {
-      json: {},
     });
   }
 
