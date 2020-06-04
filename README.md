@@ -39,28 +39,6 @@ $ npm install --save @skygear/react-native
 
 Replace `latest` with the version you want to use.
 
-## Running the example
-
-The example assumes a local DNS server that is able to resolve `.localhost`. On macOS, you can install `dnsmasq`.
-
-```sh
-$ git clone --branch next https://github.com/SkygearIO/skygear-SDK-JS.git
-$ cd skygear-SDK-JS
-$ npm install
-$ npm run lerna bootstrap
-$ npm run build
-$ npm run example
-```
-
-## Running example with custom gears endpoint
-```
-$ SKYGEAR_APP_ENDPOINT=<endpoint> \
-$ SKYGEAR_AUTH_ENDPOINT=<auth_endpoint> \
-$ SKYGEAR_ASSET_ENDPOINT=<asset_endpoint> \
-$ SKYGEAR_CLIENT_ID=<clientid> \
-$ npm run example
-```
-
 ## Contributing
 
 First, fork the repository.
