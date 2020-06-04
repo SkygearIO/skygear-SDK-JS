@@ -1,17 +1,6 @@
-import {
-  ContainerStorage,
-  StorageDriver,
-  JSONValue,
-  User,
-  ExtraSessionInfoOptions,
-} from "./types";
+import { ContainerStorage, StorageDriver, JSONValue, User } from "./types";
 
-import {
-  encodeUser,
-  decodeUser,
-  _encodeExtraSessionInfoOptions,
-  _decodeExtraSessionInfoOptions,
-} from "./encoding";
+import { encodeUser, decodeUser } from "./encoding";
 
 function scopedKey(key: string): string {
   return `skygear2_${key}`;
@@ -31,18 +20,6 @@ function keySessionID(name: string): string {
 
 function keyUser(name: string): string {
   return `${name}_user`;
-}
-
-function keyOAuthRedirectAction(name: string): string {
-  return `${name}_oauthRedirectAction`;
-}
-
-function keyOAuthCodeVerifier(name: string): string {
-  return `${name}_oauthAuthorizationCode`;
-}
-
-function keyExtraSessionInfoOptions(name: string): string {
-  return `${name}_extra_session_info_options`;
 }
 
 function keyOIDCCodeVerifier(name: string): string {
@@ -135,30 +112,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     await this.storage.safeSet(keySessionID(namespace), sessionID);
   }
 
-  async setOAuthRedirectAction(namespace: string, oauthRedirectAction: string) {
-    await this.storage.safeSet(
-      keyOAuthRedirectAction(namespace),
-      oauthRedirectAction
-    );
-  }
-
-  async setOAuthCodeVerifier(namespace: string, authorizationCode: string) {
-    await this.storage.safeSet(
-      keyOAuthCodeVerifier(namespace),
-      authorizationCode
-    );
-  }
-
-  async setExtraSessionInfoOptions(
-    namespace: string,
-    options: ExtraSessionInfoOptions
-  ) {
-    await this.storage.safeSetJSON(
-      keyExtraSessionInfoOptions(namespace),
-      _encodeExtraSessionInfoOptions(options)
-    );
-  }
-
   async setOIDCCodeVerifier(namespace: string, code: string) {
     await this.storage.safeSet(keyOIDCCodeVerifier(namespace), code);
   }
@@ -187,26 +140,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
     return this.storage.safeGet(keySessionID(namespace));
   }
 
-  async getOAuthRedirectAction(namespace: string): Promise<string | null> {
-    return this.storage.safeGet(keyOAuthRedirectAction(namespace));
-  }
-
-  async getOAuthCodeVerifier(namespace: string): Promise<string | null> {
-    return this.storage.safeGet(keyOAuthCodeVerifier(namespace));
-  }
-
-  async getExtraSessionInfoOptions(
-    namespace: string
-  ): Promise<Partial<ExtraSessionInfoOptions> | null> {
-    const optionJSON = await this.storage.safeGetJSON(
-      keyExtraSessionInfoOptions(namespace)
-    );
-    if (optionJSON) {
-      return _decodeExtraSessionInfoOptions(optionJSON);
-    }
-    return null;
-  }
-
   async getOIDCCodeVerifier(namespace: string): Promise<string | null> {
     return this.storage.safeGet(keyOIDCCodeVerifier(namespace));
   }
@@ -229,14 +162,6 @@ export class GlobalJSONContainerStorage implements ContainerStorage {
 
   async delSessionID(namespace: string) {
     await this.storage.safeDel(keySessionID(namespace));
-  }
-
-  async delOAuthRedirectAction(namespace: string) {
-    await this.storage.safeDel(keyOAuthRedirectAction(namespace));
-  }
-
-  async delOAuthCodeVerifier(namespace: string) {
-    await this.storage.safeDel(keyOAuthCodeVerifier(namespace));
   }
 
   async delOIDCCodeVerifier(namespace: string) {

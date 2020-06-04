@@ -5,27 +5,17 @@ import {
   Container,
   ContainerOptions,
   GlobalJSONContainerStorage,
-  SSOLoginOptions,
   StorageDriver,
   User,
-  decodeError,
   OIDCContainer,
   AuthorizeOptions,
   PromoteOptions,
 } from "@skygear/core";
 import { generateCodeVerifier, computeCodeChallenge } from "./pkce";
-import {
-  openURL,
-  openAuthorizeURL,
-  signInWithApple,
-  getCredentialStateForUserID,
-  addAppleIDCredentialRevokedListener,
-} from "./nativemodule";
-import { extractResultFromURL, getCallbackURLScheme } from "./url";
+import { openURL, openAuthorizeURL } from "./nativemodule";
+import { getCallbackURLScheme } from "./url";
 import { getAnonymousJWK, signAnonymousJWT } from "./jwt";
 export * from "@skygear/core";
-
-export { addAppleIDCredentialRevokedListener, getCredentialStateForUserID };
 
 const globalFetch = fetch;
 
@@ -211,102 +201,7 @@ export class ReactNativeOIDCContainer<
  */
 export class ReactNativeAuthContainer<
   T extends ReactNativeAPIClient
-> extends AuthContainer<T> {
-  async loginOAuthProvider(
-    providerID: string,
-    callbackURL: string,
-    options?: SSOLoginOptions
-  ): Promise<User> {
-    return this._performOAuth(providerID, callbackURL, "login", options);
-  }
-
-  async linkOAuthProvider(
-    providerID: string,
-    callbackURL: string
-  ): Promise<User> {
-    return this._performOAuth(providerID, callbackURL, "link");
-  }
-
-  async loginApple(
-    providerID: string,
-    callbackURL: string,
-    options?: SSOLoginOptions
-  ): Promise<User> {
-    return this._performSignInWithApple(
-      providerID,
-      callbackURL,
-      "login",
-      options
-    );
-  }
-
-  async linkApple(providerID: string, callbackURL: string): Promise<User> {
-    return this._performSignInWithApple(providerID, callbackURL, "link");
-  }
-
-  async _performOAuth(
-    providerID: string,
-    callbackURL: string,
-    action: "login" | "link",
-    options?: SSOLoginOptions
-  ): Promise<User> {
-    const callbackURLScheme = getCallbackURLScheme(callbackURL);
-    const codeVerifier = await generateCodeVerifier();
-    const codeChallenge = await computeCodeChallenge(codeVerifier);
-    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
-      providerID,
-      codeChallenge,
-      callbackURL: callbackURL,
-      action,
-      uxMode: "mobile_app",
-      onUserDuplicate: options && options.onUserDuplicate,
-    });
-    const redirectURL = await openAuthorizeURL(authURL, callbackURLScheme);
-    const j = extractResultFromURL(redirectURL);
-    if (j.result.error) {
-      throw decodeError(j.result.error);
-    }
-    const authorizationCode = j.result.result;
-    const p = this.parent.apiClient.getOAuthResult({
-      authorizationCode,
-      codeVerifier,
-    });
-    return this.handleAuthResponse(p);
-  }
-
-  async _performSignInWithApple(
-    providerID: string,
-    callbackURL: string,
-    action: "login" | "link",
-    options?: SSOLoginOptions
-  ): Promise<User> {
-    const codeVerifier = await generateCodeVerifier();
-    const codeChallenge = await computeCodeChallenge(codeVerifier);
-    const authURL = await this.parent.apiClient.oauthAuthorizationURL({
-      providerID,
-      codeChallenge,
-      callbackURL: callbackURL,
-      action,
-      uxMode: "manual",
-      onUserDuplicate: options && options.onUserDuplicate,
-    });
-    const r1 = await fetch(authURL);
-    const j1 = await r1.json();
-    const appleURL = j1.result;
-    const { code, scope, state } = await signInWithApple(appleURL);
-    const authorizationCode = await this.parent.apiClient.oauthHandler({
-      providerID,
-      code,
-      scope,
-      state,
-    });
-    const p = this.parent.apiClient.getOAuthResult({
-      authorizationCode,
-      codeVerifier,
-    });
-    return this.handleAuthResponse(p);
-  }
-}
+> extends AuthContainer<T> {}
 
 /**
  * @public
@@ -334,7 +229,6 @@ export interface ConfigureOptions {
 export class ReactNativeContainer<
   T extends ReactNativeAPIClient
 > extends Container<T> {
-  classicAuth: ReactNativeAuthContainer<T>;
   auth: ReactNativeOIDCContainer<T>;
 
   constructor(options?: ContainerOptions<T>) {
@@ -349,8 +243,10 @@ export class ReactNativeContainer<
     } as ContainerOptions<T>;
 
     super(o);
-    this.classicAuth = new ReactNativeAuthContainer(this);
-    this.auth = new ReactNativeOIDCContainer(this, this.classicAuth);
+    this.auth = new ReactNativeOIDCContainer(
+      this,
+      new ReactNativeAuthContainer(this)
+    );
   }
 
   /**

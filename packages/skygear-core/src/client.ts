@@ -3,10 +3,6 @@ import URLSearchParams from "core-js-pure/features/url-search-params";
 import {
   JSONObject,
   AuthResponse,
-  SSOLoginOptions,
-  Session,
-  Identity,
-  FullOAuthAuthorizationURLOptions,
   _OIDCConfiguration,
   _OIDCTokenResponse,
   _OIDCTokenRequest,
@@ -16,11 +12,8 @@ import {
 import { decodeError, SkygearError } from "./error";
 import {
   decodeAuthResponse,
-  decodeSession,
-  decodeIdentity,
   _decodeAuthResponseFromOIDCUserinfo,
 } from "./encoding";
-import { _encodeBase64FromString } from "./base64";
 
 const refreshTokenWindow = 0.7;
 
@@ -51,17 +44,6 @@ export function _gearEndpoint(
   return gearEndpoint;
 }
 
-function extractSingleKeyValue(
-  o: { [key: string]: string },
-  errorMessage: string
-): [string, string] {
-  const keys = Object.keys(o);
-  if (keys.length !== 1) {
-    throw new Error(errorMessage);
-  }
-  return [keys[0], o[keys[0]]];
-}
-
 /**
  * @public
  */
@@ -84,7 +66,6 @@ export abstract class BaseAPIClient {
   requestClass?: typeof Request;
   refreshTokenFunction?: () => Promise<boolean>;
   userAgent?: string;
-  getExtraSessionInfo?: () => Promise<JSONObject | null>;
 
   private config?: _OIDCConfiguration;
 
@@ -133,14 +114,6 @@ export abstract class BaseAPIClient {
     }
     if (this.userAgent !== undefined) {
       headers["user-agent"] = this.userAgent;
-    }
-    if (this.getExtraSessionInfo) {
-      const extraSessionInfo = await this.getExtraSessionInfo();
-      if (extraSessionInfo) {
-        headers["x-skygear-extra-info"] = _encodeBase64FromString(
-          JSON.stringify(extraSessionInfo)
-        );
-      }
     }
     return headers;
   }
@@ -343,303 +316,6 @@ export abstract class BaseAPIClient {
   ): Promise<AuthResponse> {
     const response = await this.postAuth(path, options);
     return decodeAuthResponse(response);
-  }
-
-  async signup(
-    loginIDs: { [key: string]: string }[] | { [key: string]: string },
-    password: string,
-    options?: {
-      metadata?: JSONObject;
-    }
-  ): Promise<AuthResponse> {
-    const ids: { key: string; value: string }[] = [];
-    if (Array.isArray(loginIDs)) {
-      for (const obj of loginIDs) {
-        for (const key of Object.keys(obj)) {
-          const value = obj[key];
-          ids.push({ key, value });
-        }
-      }
-    } else {
-      for (const key of Object.keys(loginIDs)) {
-        const value = loginIDs[key];
-        ids.push({ key, value });
-      }
-    }
-    const payload = {
-      password,
-      login_ids: ids,
-      metadata: options && options.metadata,
-    };
-    return this.postAndReturnAuthResponse("/_auth/signup", { json: payload });
-  }
-
-  async login(
-    loginID: string,
-    password: string,
-    options?: { loginIDKey?: string }
-  ): Promise<AuthResponse> {
-    const payload = {
-      password,
-      login_id: loginID,
-      login_id_key: options && options.loginIDKey,
-    };
-    return this.postAndReturnAuthResponse("/_auth/login", { json: payload });
-  }
-
-  async logout(): Promise<void> {
-    await this.postAuth("/_auth/logout", { json: {} });
-  }
-
-  async me(): Promise<AuthResponse> {
-    return this.postAndReturnAuthResponse("/_auth/me", { json: {} });
-  }
-
-  async changePassword(
-    newPassword: string,
-    oldPassword: string
-  ): Promise<AuthResponse> {
-    const payload = {
-      password: newPassword,
-      old_password: oldPassword,
-    };
-    return this.postAndReturnAuthResponse("/_auth/change_password", {
-      json: payload,
-    });
-  }
-
-  async updateMetadata(metadata: JSONObject): Promise<AuthResponse> {
-    const payload = { metadata };
-    return this.postAndReturnAuthResponse("/_auth/update_metadata", {
-      json: payload,
-    });
-  }
-
-  async requestForgotPasswordEmail(email: string): Promise<void> {
-    const payload = { email };
-    await this.postAuth("/_auth/forgot_password", { json: payload });
-  }
-
-  async resetPassword(form: {
-    userID: string;
-    code: string;
-    expireAt: number;
-    newPassword: string;
-  }): Promise<void> {
-    const payload = {
-      user_id: form.userID,
-      code: form.code,
-      expire_at: form.expireAt,
-      new_password: form.newPassword,
-    };
-    await this.postAuth("/_auth/forgot_password/reset_password", {
-      json: payload,
-    });
-  }
-
-  async requestEmailVerification(email: string): Promise<void> {
-    const payload = {
-      login_id_type: "email",
-      login_id: email,
-    };
-    await this.postAuth("/_auth/verify_request", { json: payload });
-  }
-
-  async requestPhoneVerification(phone: string): Promise<void> {
-    const payload = {
-      login_id_type: "phone",
-      login_id: phone,
-    };
-    await this.postAuth("/_auth/verify_request", { json: payload });
-  }
-
-  async verifyWithCode(code: string): Promise<void> {
-    const payload = { code };
-    await this.postAuth("/_auth/verify_code", { json: payload });
-  }
-
-  async loginWithCustomToken(
-    token: string,
-    options?: SSOLoginOptions
-  ): Promise<AuthResponse> {
-    const payload = {
-      token,
-      on_user_duplicate: options && options.onUserDuplicate,
-    };
-    return this.postAndReturnAuthResponse("/_auth/sso/custom_token/login", {
-      json: payload,
-    });
-  }
-
-  async oauthAuthorizationURL(
-    options: FullOAuthAuthorizationURLOptions
-  ): Promise<string> {
-    const {
-      providerID,
-      uxMode,
-      onUserDuplicate,
-      codeChallenge,
-      action,
-    } = options;
-    const encoded = encodeURIComponent(providerID);
-    let path = "";
-    switch (action) {
-      case "login":
-        path = `/_auth/sso/${encoded}/login_auth_url`;
-        break;
-      case "link":
-        path = `/_auth/sso/${encoded}/link_auth_url`;
-        break;
-      default:
-        throw new Error("unreachable");
-    }
-
-    const callbackURL =
-      ("callbackURL" in options && options.callbackURL) ||
-      (typeof window !== "undefined" && window.location.href);
-
-    if (!callbackURL) {
-      throw new Error("callbackURL is required");
-    }
-
-    const payload = {
-      callback_url: callbackURL,
-      ux_mode: uxMode,
-      on_user_duplicate: onUserDuplicate,
-      code_challenge: codeChallenge,
-    };
-    return this.postAuth(path, { json: payload });
-  }
-
-  async oauthHandler(options: {
-    providerID: string;
-    code: string;
-    scope: string;
-    state: string;
-  }): Promise<string> {
-    const { providerID, code, scope, state } = options;
-    const encoded = encodeURIComponent(providerID);
-    const path = `/_auth/sso/${encoded}/auth_handler`;
-    return this.getAuth(path, {
-      query: [["code", code], ["scope", scope], ["state", state]],
-    });
-  }
-
-  async getOAuthResult(options: {
-    authorizationCode: string;
-    codeVerifier: string;
-  }): Promise<AuthResponse> {
-    const { authorizationCode, codeVerifier } = options;
-    const payload = {
-      authorization_code: authorizationCode,
-      code_verifier: codeVerifier,
-    };
-    return this.postAndReturnAuthResponse("/_auth/sso/auth_result", {
-      json: payload,
-    });
-  }
-
-  async deleteOAuthProvider(providerID: string): Promise<void> {
-    const encoded = encodeURIComponent(providerID);
-    await this.postAuth(`/_auth/sso/${encoded}/unlink`, { json: {} });
-  }
-
-  async loginOAuthProviderWithAccessToken(
-    providerID: string,
-    accessToken: string,
-    options?: SSOLoginOptions
-  ): Promise<AuthResponse> {
-    const encoded = encodeURIComponent(providerID);
-    const payload = {
-      access_token: accessToken,
-      on_user_duplicate: options && options.onUserDuplicate,
-    };
-    return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/login`, {
-      json: payload,
-    });
-  }
-
-  async linkOAuthProviderWithAccessToken(
-    providerID: string,
-    accessToken: string
-  ): Promise<AuthResponse> {
-    const encoded = encodeURIComponent(providerID);
-    const payload = {
-      access_token: accessToken,
-    };
-    return this.postAndReturnAuthResponse(`/_auth/sso/${encoded}/link`, {
-      json: payload,
-    });
-  }
-
-  async listSessions(): Promise<Session[]> {
-    const response = await this.postAuth("/_auth/session/list", { json: {} });
-    return (response.sessions as any[]).map(decodeSession);
-  }
-
-  async getSession(id: string): Promise<Session> {
-    const payload = { session_id: id };
-    const response = await this.postAuth("/_auth/session/get", {
-      json: payload,
-    });
-    return decodeSession(response.session);
-  }
-
-  async revokeSession(id: string): Promise<void> {
-    const payload = { session_id: id };
-    return this.postAuth("/_auth/session/revoke", { json: payload });
-  }
-
-  async revokeOtherSessions(): Promise<void> {
-    return this.postAuth("/_auth/session/revoke_all", { json: {} });
-  }
-
-  async listIdentities(): Promise<Identity[]> {
-    const response = await this.postAuth("/_auth/identity/list", { json: {} });
-    return (response.identities as any[]).map(decodeIdentity);
-  }
-
-  async addLoginID(...loginIDs: { [key: string]: string }[]): Promise<void> {
-    const mappedLoginIDs = loginIDs.map(loginID => {
-      const [key, value] = extractSingleKeyValue(
-        loginID,
-        "must provide exactly one login ID"
-      );
-      return { key, value };
-    });
-    return this.postAuth("/_auth/login_id/add", {
-      json: { login_ids: mappedLoginIDs },
-    });
-  }
-
-  async removeLoginID(loginID: { [key: string]: string }): Promise<void> {
-    const [key, value] = extractSingleKeyValue(
-      loginID,
-      "must provide exactly one login ID"
-    );
-    return this.postAuth("/_auth/login_id/remove", {
-      json: { key, value },
-    });
-  }
-
-  async updateLoginID(
-    oldLoginID: { [key: string]: string },
-    newLoginID: { [key: string]: string }
-  ): Promise<AuthResponse> {
-    const [oldKey, oldValue] = extractSingleKeyValue(
-      oldLoginID,
-      "must provide exactly one old login ID"
-    );
-    const [newKey, newValue] = extractSingleKeyValue(
-      newLoginID,
-      "must provide exactly one new login ID"
-    );
-    return this.postAndReturnAuthResponse("/_auth/login_id/update", {
-      json: {
-        old_login_id: { key: oldKey, value: oldValue },
-        new_login_id: { key: newKey, value: newValue },
-      },
-    });
   }
 
   /**

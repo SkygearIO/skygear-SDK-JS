@@ -1,5 +1,5 @@
 import { GlobalJSONContainerStorage, _GlobalJSONStorage } from "./storage";
-import { StorageDriver, User, ExtraSessionInfoOptions } from "./types";
+import { StorageDriver, User } from "./types";
 
 class MemoryStorageDriver implements StorageDriver {
   backingStore: { [key: string]: string };
@@ -92,35 +92,6 @@ describe("ContainerStorage", () => {
     restored = await storage.getSessionID(ns);
     expect(restored).toEqual(null);
   });
-
-  it("should set, get and delete oauth redirect action", async () => {
-    const driver = new MemoryStorageDriver();
-    const storage = new GlobalJSONContainerStorage(driver);
-    const action = "login";
-    const ns = "test";
-
-    await storage.setOAuthRedirectAction(ns, action);
-    let restored = await storage.getOAuthRedirectAction(ns);
-    expect(restored).toEqual(action);
-
-    await storage.delOAuthRedirectAction(ns);
-    restored = await storage.getOAuthRedirectAction(ns);
-    expect(restored).toEqual(null);
-  });
-});
-
-it("should set and get extra session info options", async () => {
-  const driver = new MemoryStorageDriver();
-  const storage = new GlobalJSONContainerStorage(driver);
-  const options: ExtraSessionInfoOptions = {
-    deviceName: undefined,
-  };
-  const ns = "test";
-
-  await storage.setExtraSessionInfoOptions(ns, options);
-  const restored = await storage.getExtraSessionInfoOptions(ns);
-  expect(restored).toEqual(options);
-  expect(restored).not.toHaveProperty("deviceName");
 });
 
 describe("GlobalJSONStorage", () => {

@@ -121,16 +121,6 @@ public class SGSkygearReactNativeModule extends ReactContextBaseJavaModule imple
     }
 
     @ReactMethod
-    public void signInWithApple(String urlString, Promise promise) {
-        promise.reject("EUNSPECIFIED", "Sign in with Apple is not supported on Android. Please use loginOAuthProvider or linkOAuthProvider instead.");
-    }
-
-    @ReactMethod
-    public void getCredentialStateForUserID(String userID, Promise promise) {
-        promise.reject("EUNSPECIFIED", "Sign in with Apple is not supported on Android. Please use loginOAuthProvider or linkOAuthProvider instead.");
-    }
-
-    @ReactMethod
     public void getAnonymousKey(String kid, Promise promise) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             promise.reject("EUNSPECIFIED", "Anonymous authentication is not supported on Android before version M.");

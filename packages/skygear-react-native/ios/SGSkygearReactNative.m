@@ -7,7 +7,6 @@
 #import "SGSkygearReactNative.h"
 
 static NSString *const kOpenURLNotification = @"SGSkygearReactNativeOpenURLNotification";
-static NSString *const kAppleIDCredentialRevokedNotification = @"SGSkygearReactNativeAppleIDCredentialRevokedNotification";
 
 static void postNotificationWithURL(NSURL *URL, id sender)
 {
@@ -20,11 +19,6 @@ static void postNotificationWithURL(NSURL *URL, id sender)
 @interface SGSkygearReactNative()
 @property (nonatomic, strong) RCTPromiseResolveBlock openURLResolve;
 @property (nonatomic, strong) RCTPromiseRejectBlock openURLReject;
-
-@property (nonatomic, strong) NSString *state;
-@property (nonatomic, strong) NSString *nonce;
-@property (nonatomic, strong) RCTPromiseResolveBlock signInWithAppleResolve;
-@property (nonatomic, strong) RCTPromiseRejectBlock signInWithAppleReject;
 @end
 
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 9000)
@@ -51,13 +45,6 @@ static void postNotificationWithURL(NSURL *URL, id sender)
 @end
 #endif
 
-#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 13000)
-@interface SGSkygearReactNative() <ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate>
-@property (nonatomic, strong) ASAuthorizationAppleIDProvider *provider API_AVAILABLE(ios(13));
-@property (nonatomic, strong) ASAuthorizationController *controller API_AVAILABLE(ios(13));
-@end
-#endif
-
 @implementation SGSkygearReactNative
 
 RCT_EXPORT_MODULE()
@@ -81,30 +68,6 @@ RCT_EXPORT_MODULE()
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
-}
-
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[kAppleIDCredentialRevokedNotification];
-}
-
-- (void)startObserving
-{
-  if (@available(iOS 13.0, *)) {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleRevokedNotification:)
-                                                 name:ASAuthorizationAppleIDProviderCredentialRevokedNotification
-                                               object:nil];
-  }
-}
-
-- (void)stopObserving
-{
-  if (@available(iOS 13.0, *)) {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:ASAuthorizationAppleIDProviderCredentialRevokedNotification
-                                                  object:nil];
-  }
 }
 
 + (BOOL)application:(UIApplication *)app
@@ -264,88 +227,6 @@ RCT_EXPORT_METHOD(openAuthorizeURL:(NSURL *)url
     }
 }
 
-RCT_EXPORT_METHOD(signInWithApple:(NSString *)url
-                          resolve:(RCTPromiseResolveBlock)resolve
-                           reject:(RCTPromiseRejectBlock)reject)
-{
-  if (@available(iOS 13.0, *)) {
-    NSString *state = nil;
-    NSString *nonce = nil;
-    NSURLComponents *components = [NSURLComponents componentsWithString:url];
-    for (NSURLQueryItem *item in components.queryItems) {
-      if ([item.name isEqualToString:@"state"]) {
-        state = item.value;
-      }
-      if ([item.name isEqualToString:@"nonce"]) {
-        nonce = item.value;
-      }
-    }
-
-    if (!state || !nonce) {
-      reject(RCTErrorUnspecified, [NSString stringWithFormat:@"Invalid URL: %@", url], nil);
-      return;
-    }
-
-    ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
-
-    ASAuthorizationAppleIDRequest *request = [provider createRequest];
-    request.requestedOperation = ASAuthorizationOperationLogin;
-    request.requestedScopes = @[ASAuthorizationScopeEmail];
-    request.state = state;
-    request.nonce = nonce;
-
-    ASAuthorizationController *controller = [[ASAuthorizationController alloc] initWithAuthorizationRequests:@[request]];
-    controller.presentationContextProvider = self;
-    controller.delegate = self;
-
-    self.provider = provider;
-    self.controller = controller;
-    self.state = state;
-    self.nonce = nonce;
-    self.signInWithAppleResolve = resolve;
-    self.signInWithAppleReject = reject;
-
-    [controller performRequests];
-  } else {
-    reject(RCTErrorUnspecified, @"signInWithApple requires iOS 13. Please use loginOAuthProvider or linkOAuthProvider instead.", nil);
-    return;
-  }
-}
-
-RCT_EXPORT_METHOD(getCredentialStateForUserID:(NSString *)userID
-                                      resolve:(RCTPromiseResolveBlock)resolve
-                                       reject:(RCTPromiseRejectBlock)reject)
-{
-  if (@available(iOS 13.0, *)) {
-    ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
-    [provider getCredentialStateForUserID:userID completion:^(ASAuthorizationAppleIDProviderCredentialState credentialState, NSError *error) {
-      if (error) {
-        reject(RCTErrorUnspecified, @"getCredentialStateForUserID", error);
-      } else {
-        switch (credentialState) {
-        case ASAuthorizationAppleIDProviderCredentialAuthorized:
-          resolve(@"Authorized");
-          break;
-        case ASAuthorizationAppleIDProviderCredentialNotFound:
-          resolve(@"NotFound");
-          break;
-        case ASAuthorizationAppleIDProviderCredentialRevoked:
-          resolve(@"Revoked");
-          break;
-        case ASAuthorizationAppleIDProviderCredentialTransferred:
-          resolve(@"Transferred");
-          break;
-        default:
-          reject(RCTErrorUnspecified, @"unexpected credential state", nil);
-          break;
-        }
-      }
-    }];
-  } else {
-    reject(RCTErrorUnspecified, @"getCredentialStateForUserID requires iOS 13. Please check the device OS version before calling this function.", nil);
-  }
-}
-
 RCT_EXPORT_METHOD(randomBytes:(NSUInteger)length resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     resolve([self randomBytes:length]);
@@ -444,79 +325,6 @@ RCT_EXPORT_METHOD(signAnonymousToken:(NSString *)kid data:(NSString *)s resolver
   return nil;
 }
 
-- (ASPresentationAnchor)presentationAnchorForAuthorizationController:(ASAuthorizationController *)controller API_AVAILABLE(ios(13))
-{
-  for (__kindof UIWindow *w in [RCTSharedApplication() windows]) {
-    if ([w isKeyWindow]) {
-      return w;
-    }
-  }
-  return nil;
-}
-
-- (void)authorizationController:(ASAuthorizationController *)controller
-   didCompleteWithAuthorization:(ASAuthorization *)authorization API_AVAILABLE(ios(13))
-{
-  id credential = authorization.credential;
-  if ([credential isKindOfClass:[ASAuthorizationAppleIDCredential class]]) {
-    ASAuthorizationAppleIDCredential *c = (ASAuthorizationAppleIDCredential *) credential;
-    NSData *authorizationCodeData = c.authorizationCode;
-    NSArray<ASAuthorizationScope> *authorizedScopes = c.authorizedScopes;
-    NSString *authorizationCode = [[NSString alloc] initWithData:authorizationCodeData
-                                                        encoding:NSUTF8StringEncoding];
-    NSString *scope = [authorizedScopes componentsJoinedByString:@" "];
-    if (self.signInWithAppleResolve) {
-      self.signInWithAppleResolve(@{
-        @"state": self.state,
-        @"code": authorizationCode,
-        @"scope": scope,
-      });
-      self.provider = nil;
-      self.controller = nil;
-      self.state = nil;
-      self.nonce = nil;
-      self.signInWithAppleResolve = nil;
-      self.signInWithAppleReject = nil;
-    }
-  }
-}
-
-- (void)authorizationController:(ASAuthorizationController *)controller
-           didCompleteWithError:(NSError *)error API_AVAILABLE(ios(13))
-{
-  if ([ASAuthorizationErrorDomain isEqualToString:error.domain]) {
-    NSString *reason = @"unexpected error code";
-    switch (error.code) {
-    case ASAuthorizationErrorCanceled:
-      reason = @"Canceled";
-      break;
-    case ASAuthorizationErrorFailed:
-      reason = @"Failed";
-      break;
-    case ASAuthorizationErrorInvalidResponse:
-      reason = @"InvalidResponse";
-      break;
-    case ASAuthorizationErrorNotHandled:
-      reason = @"NotHandled";
-      break;
-    case ASAuthorizationErrorUnknown:
-      reason = @"Unknown";
-      break;
-    default:
-      break;
-    }
-    if (self.signInWithAppleReject) {
-      self.signInWithAppleReject(RCTErrorUnspecified, reason, error);
-      self.provider = nil;
-      self.controller = nil;
-      self.state = nil;
-      self.nonce = nil;
-      self.signInWithAppleResolve = nil;
-      self.signInWithAppleReject = nil;
-    }
-  }
-}
-
 - (void)handleOpenURLNotification:(NSNotification *)notification
 {
     NSString *urlString = notification.userInfo[@"url"];
@@ -524,11 +332,6 @@ RCT_EXPORT_METHOD(signAnonymousToken:(NSString *)kid data:(NSString *)s resolver
         self.openURLResolve(urlString);
         [self cleanup];
     }
-}
-
-- (void)handleRevokedNotification:(NSNotification *)notification
-{
-  [self sendEventWithName:kAppleIDCredentialRevokedNotification body:@{}];
 }
 
 -(NSArray *)randomBytes:(NSUInteger)length
@@ -644,6 +447,5 @@ RCT_EXPORT_METHOD(signAnonymousToken:(NSString *)kid data:(NSString *)s resolver
   *psig = sig;
   return nil;
 }
-
 
 @end

@@ -1,11 +1,7 @@
-import { NativeModules, NativeEventEmitter } from "react-native";
+import { NativeModules } from "react-native";
 import { CANCEL } from "@skygear/core";
 
 const { SGSkygearReactNative } = NativeModules;
-
-const SGSkygearReactNativeEmitter = new NativeEventEmitter(
-  SGSkygearReactNative
-);
 
 export function randomBytes(length: number): Promise<number[]> {
   return SGSkygearReactNative.randomBytes(length);
@@ -42,12 +38,6 @@ export function dismiss(): Promise<void> {
   return SGSkygearReactNative.dismiss();
 }
 
-export function signInWithApple(
-  url: string
-): Promise<{ code: string; scope: string; state: string }> {
-  return SGSkygearReactNative.signInWithApple(url);
-}
-
 export function getAnonymousKey(
   kid: string | null
 ): Promise<{ kid: string; alg: string; jwk?: any }> {
@@ -59,25 +49,4 @@ export function signAnonymousToken(
   tokenData: string
 ): Promise<string> {
   return SGSkygearReactNative.signAnonymousToken(kid, tokenData);
-}
-
-/**
- * @public
- */
-export function getCredentialStateForUserID(
-  userID: string
-): Promise<"Authorized" | "NotFound" | "Revoked" | "Transferred"> {
-  return SGSkygearReactNative.getCredentialStateForUserID(userID);
-}
-
-/**
- * @public
- */
-export function addAppleIDCredentialRevokedListener(
-  listener: () => void
-): { remove: () => void } {
-  return SGSkygearReactNativeEmitter.addListener(
-    "SGSkygearReactNativeAppleIDCredentialRevokedNotification",
-    listener
-  );
 }
