@@ -3,29 +3,6 @@ import { User, AuthResponse } from "./types";
 /**
  * @public
  */
-export function decodeAuthResponse(r: any): AuthResponse {
-  const { user, access_token, refresh_token, session_id, expires_in } = r;
-  const response: AuthResponse = {
-    user: decodeUser(user),
-  };
-  if (access_token) {
-    response.accessToken = access_token;
-  }
-  if (refresh_token) {
-    response.refreshToken = refresh_token;
-  }
-  if (session_id) {
-    response.sessionID = session_id;
-  }
-  if (expires_in) {
-    response.expiresIn = expires_in;
-  }
-  return response;
-}
-
-/**
- * @public
- */
 export function decodeUser(u: any): User {
   const id = u.id;
   const createdAt = new Date(u.created_at);

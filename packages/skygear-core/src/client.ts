@@ -9,10 +9,7 @@ import {
   ChallengeResponse,
 } from "./types";
 import { decodeError, SkygearError } from "./error";
-import {
-  decodeAuthResponse,
-  _decodeAuthResponseFromOIDCUserinfo,
-} from "./encoding";
+import { _decodeAuthResponseFromOIDCUserinfo } from "./encoding";
 
 const refreshTokenWindow = 0.7;
 
@@ -212,38 +209,6 @@ export abstract class BaseAPIClient {
     throw decodeError();
   }
 
-  protected async post(
-    endpoint: string,
-    path: string,
-    options?: {
-      json?: unknown;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<any> {
-    return this.request("POST", endpoint, path, options);
-  }
-
-  protected async get(
-    endpoint: string,
-    path: string,
-    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
-  ): Promise<any> {
-    return this.request("GET", endpoint, path, options);
-  }
-
-  protected async del(
-    endpoint: string,
-    path: string,
-    options: {
-      json?: unknown;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<any> {
-    return this.request("DELETE", endpoint, path, options);
-  }
-
   protected async postAuth(
     path: string,
     options?: {
@@ -253,36 +218,6 @@ export abstract class BaseAPIClient {
     }
   ): Promise<any> {
     return this.request("POST", this.authEndpoint, path, options);
-  }
-
-  protected async getAuth(
-    path: string,
-    options?: { query?: [string, string][]; autoRefreshToken?: boolean }
-  ): Promise<any> {
-    return this.request("GET", this.authEndpoint, path, options);
-  }
-
-  protected async delAuth(
-    path: string,
-    options: {
-      json?: unknown;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<any> {
-    return this.request("DELETE", this.authEndpoint, path, options);
-  }
-
-  protected async postAndReturnAuthResponse(
-    path: string,
-    options?: {
-      json?: unknown;
-      query?: [string, string][];
-      autoRefreshToken?: boolean;
-    }
-  ): Promise<AuthResponse> {
-    const response = await this.postAuth(path, options);
-    return decodeAuthResponse(response);
   }
 
   /**
