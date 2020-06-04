@@ -4,11 +4,7 @@ const { Extractor, ExtractorConfig } = require("@microsoft/api-extractor");
 
 const projectRoot = path.join(__dirname, "..");
 
-const publishedPackages = [
-  "skygear-web",
-  "skygear-node-client",
-  "skygear-react-native",
-];
+const publishedPackages = ["skygear-web", "skygear-react-native"];
 const packages = ["skygear-core", ...publishedPackages];
 
 const coreDtsPath = path.join(projectRoot, `packages/skygear-core/index.d.ts`);

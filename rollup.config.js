@@ -89,30 +89,6 @@ function makeBabelExternal(id) {
   return /^@babel/.test(id);
 }
 
-function makeNodeExternal() {
-  const nodePackageJSONString = readFileSync(
-    "packages/skygear-node-client/package.json",
-    { encoding: "utf8" }
-  );
-  const nodePackageJSON = JSON.parse(nodePackageJSONString);
-
-  const peerDeps = Object.keys(nodePackageJSON["peerDependencies"] || {});
-  if (peerDeps.length > 0) {
-    throw new Error(
-      "@skygear/node-client should not have any peerDependencies"
-    );
-  }
-
-  const deps = Object.keys(nodePackageJSON["dependencies"] || {});
-  const builtins = getBuiltins();
-
-  function external(id) {
-    return deps.indexOf(id) >= 0 || builtins.indexOf(id) >= 0;
-  }
-
-  return external;
-}
-
 function makeReactNativeExternal() {
   const reactNativePackageJSONString = readFileSync(
     "packages/skygear-react-native/package.json",
@@ -159,17 +135,6 @@ export default function makeConfig(commandLineArgs) {
           format: "esm",
         },
         // external: makeBabelExternal,
-      };
-    case "node-client":
-      return {
-        plugins,
-        input: "packages/skygear-node-client/src/index.ts",
-        output: {
-          file: "packages/skygear-node-client/dist/skygear-node-client.js",
-          format: "cjs",
-          exports: "named",
-        },
-        external: makeNodeExternal(),
       };
     case "react-native":
       return {

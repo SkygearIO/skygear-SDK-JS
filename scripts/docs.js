@@ -68,7 +68,6 @@ function writeIndex() {
     "---",
     "",
     "- [@skygear/web](./web.md)",
-    "- [@skygear/node-client](./node-client.md)",
     "- [@skygear/react-native](./react-native.md)",
     "",
   ];
