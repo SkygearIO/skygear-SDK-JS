@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - '*'
+    - '!gh-pages'
+  pull_request:
+    branches:
+    - '*'
+    - '!gh-pages'
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "12"
+    - run: npm ci
+    - run: npm run lerna bootstrap
+    - run: npm run format
+      if: ${{ always() }}
+    - run: npm run lint
+      if: ${{ always() }}
+    - run: npm run typecheck
+      if: ${{ always() }}
+    - run: npm run test
+      if: ${{ always() }}
+    - run: npm run build
+      if: ${{ always() }}
